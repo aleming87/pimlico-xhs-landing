@@ -91,20 +91,20 @@ export default function Page() {
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Regulatory updates parsed annually</dt>
-              <dd className="order-first text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-                750k+
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
+                <span id="counter-750k">0</span>k+
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Global jurisdictions monitored</dt>
-              <dd className="order-first text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-                90+
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
+                <span id="counter-90">0</span>+
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Regulatory topics covered</dt>
-              <dd className="order-first text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-                50+
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
+                <span id="counter-50">0</span>+
               </dd>
             </div>
           </dl>
