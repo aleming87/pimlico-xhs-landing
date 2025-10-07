@@ -112,7 +112,7 @@ export default function Page() {
       </div>
 
       {/* Launch Notification Signup */}
-      <div className="overflow-hidden bg-gray-900 py-16 sm:py-24">
+      <div id="contact" className="overflow-hidden bg-gray-900 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
@@ -177,7 +177,7 @@ export default function Page() {
             <li className="rounded-2xl bg-gray-100 px-8 py-10">
               <img src="/Ashley.png" alt="Ashley Burghardt" className="mx-auto size-48 rounded-full outline-1 -outline-offset-1 outline-black/5 md:size-56" />
               <h3 className="mt-6 text-base/7 font-semibold tracking-tight text-gray-900">Ashley Burghardt</h3>
-              <p className="text-sm/6 text-gray-600">Chief Regulatory Officer</p>
+              <p className="text-sm/6 text-gray-600">COPO</p>
               <div className="mt-4 flex justify-center">
                 <a href="https://www.linkedin.com/in/ashley-burghardt-b7051a21/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600">
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">

@@ -25,7 +25,7 @@ export default function Hero() {
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="mailto:contact@pimlicosolutions.com" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
+            <a href="#contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
           </div>
         </nav>
       </header>
@@ -48,7 +48,6 @@ export default function Hero() {
             <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline compliance workflows with intelligent automation.</p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a href="#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Request early access</a>
-              <a href="/one-pager.pdf" className="text-sm/6 font-semibold text-white">Download one-pager <span aria-hidden="true">→</span></a>
             </div>
           </div>
         </div>
