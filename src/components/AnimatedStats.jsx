@@ -31,15 +31,15 @@ export default function AnimatedStats() {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Improved counter animation with proper number formatting
+    // Ultra-smooth counter animation with stable width
     const animateCounter = (id, target, delay = 0) => {
       setTimeout(() => {
         const element = document.getElementById(id);
         if (!element) return;
 
         let current = 0;
-        const duration = 2500; // Total animation duration in ms
-        const fps = 30; // Frames per second for smoother animation
+        const duration = 3000; // Slightly longer for smoother animation
+        const fps = 20; // Lower FPS for more stable increments
         const totalFrames = (duration / 1000) * fps;
         const increment = target / totalFrames;
         
@@ -50,9 +50,12 @@ export default function AnimatedStats() {
             clearInterval(timer);
           }
           
-          // Format numbers with commas and ensure sequential display
+          // Ensure stable, sequential counting
           const displayValue = Math.floor(current);
-          if (target >= 1000) {
+          
+          // Format numbers consistently for stable width
+          if (target >= 100000) {
+            // For large numbers, always show with consistent formatting
             element.textContent = displayValue.toLocaleString();
           } else {
             element.textContent = displayValue.toString();
@@ -93,21 +96,24 @@ export default function AnimatedStats() {
       <div id="stats-section" className="bg-white py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-20 text-center lg:grid-cols-3">
-            <div className="mx-auto flex max-w-xs flex-col gap-y-6">
+            <div className="mx-auto flex max-w-sm flex-col gap-y-6">
               <dt className="text-base/7 text-gray-600">Regulatory updates parsed annually</dt>
-              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl ${getNumberClass()}`}>
+              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl font-mono ${getNumberClass()}`}
+                  style={{ minWidth: '100%', textAlign: 'center' }}>
                 <span id="counter-750k">0</span>+
               </dd>
             </div>
-            <div className="mx-auto flex max-w-xs flex-col gap-y-6">
+            <div className="mx-auto flex max-w-sm flex-col gap-y-6">
               <dt className="text-base/7 text-gray-600">Global jurisdictions monitored</dt>
-              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl ${getNumberClass()}`}>
+              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl font-mono ${getNumberClass()}`}
+                  style={{ minWidth: '100%', textAlign: 'center' }}>
                 <span id="counter-90">0</span>+
               </dd>
             </div>
-            <div className="mx-auto flex max-w-xs flex-col gap-y-6">
+            <div className="mx-auto flex max-w-sm flex-col gap-y-6">
               <dt className="text-base/7 text-gray-600">Regulatory topics covered</dt>
-              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl ${getNumberClass()}`}>
+              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl font-mono ${getNumberClass()}`}
+                  style={{ minWidth: '100%', textAlign: 'center' }}>
                 <span id="counter-50">0</span>+
               </dd>
             </div>
