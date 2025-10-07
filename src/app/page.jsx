@@ -163,8 +163,8 @@ export default function Page() {
               </div>
             </li>
             <li className="rounded-2xl bg-gray-100 px-8 py-10">
-              <img src="/Urjit.png" alt="Urjit Bhatia" className="mx-auto size-48 rounded-full outline-1 -outline-offset-1 outline-black/5 md:size-56" />
-              <h3 className="mt-6 text-base/7 font-semibold tracking-tight text-gray-900">Urjit Bhatia</h3>
+              <img src="/Urjit.png" alt="Urjit Singh Bhatia" className="mx-auto size-48 rounded-full outline-1 -outline-offset-1 outline-black/5 md:size-56" />
+              <h3 className="mt-6 text-base/7 font-semibold tracking-tight text-gray-900">Urjit Singh Bhatia</h3>
               <p className="text-sm/6 text-gray-600">CTO + Cofounder</p>
               <div className="mt-4 flex justify-center">
                 <a href="https://www.linkedin.com/in/urjitsinghbhatia/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600">
