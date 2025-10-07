@@ -31,22 +31,27 @@ export default function AnimatedStats() {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Counter animation with staggered timing
+    // Improved counter animation with smoother progression
     const animateCounter = (id, target, suffix = '', delay = 0) => {
       setTimeout(() => {
         const element = document.getElementById(id);
         if (!element) return;
 
         let current = 0;
-        const increment = target / 80; // Slower animation for more effect
+        const duration = 2500; // Total animation duration in ms
+        const steps = 60; // Number of animation steps
+        const increment = target / steps;
+        const stepDuration = duration / steps;
+        
         const timer = setInterval(() => {
           current += increment;
           if (current >= target) {
             current = target;
             clearInterval(timer);
           }
-          element.textContent = Math.floor(current) + suffix;
-        }, 40);
+          // Use Math.round for smoother sequential progression
+          element.textContent = Math.round(current) + suffix;
+        }, stepDuration);
       }, delay);
     };
 
@@ -84,19 +89,19 @@ export default function AnimatedStats() {
           <dl className="grid grid-cols-1 gap-x-8 gap-y-20 text-center lg:grid-cols-3">
             <div className="mx-auto flex max-w-xs flex-col gap-y-6">
               <dt className="text-base/7 text-gray-600">Regulatory updates parsed annually</dt>
-              <dd className={`order-first text-7xl font-bold tracking-tight sm:text-8xl lg:text-9xl ${getNumberClass()}`}>
+              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl ${getNumberClass()}`}>
                 <span id="counter-750k">0</span>
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-6">
               <dt className="text-base/7 text-gray-600">Global jurisdictions monitored</dt>
-              <dd className={`order-first text-7xl font-bold tracking-tight sm:text-8xl lg:text-9xl ${getNumberClass()}`}>
+              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl ${getNumberClass()}`}>
                 <span id="counter-90">0</span>
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-6">
               <dt className="text-base/7 text-gray-600">Regulatory topics covered</dt>
-              <dd className={`order-first text-7xl font-bold tracking-tight sm:text-8xl lg:text-9xl ${getNumberClass()}`}>
+              <dd className={`order-first text-6xl font-bold tracking-tight sm:text-7xl lg:text-8xl ${getNumberClass()}`}>
                 <span id="counter-50">0</span>
               </dd>
             </div>
