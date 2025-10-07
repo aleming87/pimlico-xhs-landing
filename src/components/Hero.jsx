@@ -1,6 +1,11 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Hero() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="bg-gray-900">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -12,7 +17,11 @@ export default function Hero() {
             </a>
           </div>
           <div className="flex lg:hidden">
-            <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200">
+            <button 
+              type="button" 
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
               <span className="sr-only">Open main menu</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="size-6">
                 <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -28,6 +37,67 @@ export default function Hero() {
             <a href="#contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
           </div>
         </nav>
+        
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden">
+            <div className="fixed inset-0 z-50"></div>
+            <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+              <div className="flex items-center justify-between">
+                <a href="#" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Pimlico XHS</span>
+                  <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-8 w-auto" />
+                </a>
+                <button
+                  type="button"
+                  className="-m-2.5 rounded-md p-2.5 text-gray-200"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="sr-only">Close menu</span>
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-6 flow-root">
+                <div className="-my-6 divide-y divide-gray-500/10">
+                  <div className="space-y-2 py-6">
+                    <a 
+                      href="#differentiators" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      How it works
+                    </a>
+                    <a 
+                      href="#use-cases" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Use cases
+                    </a>
+                    <a 
+                      href="#team" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Team
+                    </a>
+                  </div>
+                  <div className="py-6">
+                    <a
+                      href="#contact"
+                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Book a demo
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       <div className="relative isolate px-6 pt-14 lg:px-8">
@@ -42,12 +112,12 @@ export default function Hero() {
             <div className="mb-4 flex justify-center">
               <Image src="/XHS_Logo_White.png" alt="XHS" width={350} height={175} className="h-32 w-auto sm:h-36 lg:h-40" />
             </div>
-            <h1 className="text-5xl font-semibold tracking-tight text-white sm:text-7xl whitespace-nowrap">
+            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               The platform for<br />Regulatory AI&nbsp;workspaces
             </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline compliance workflows with intelligent automation.</p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a href="#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Request early access</a>
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
+              <a href="#contact" className="w-full sm:w-auto rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center">Request early access</a>
             </div>
           </div>
         </div>

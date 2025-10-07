@@ -21,7 +21,7 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="lg:ml-auto lg:pt-4 lg:pl-4">
               <div className="lg:max-w-lg">
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl">Build <span className="text-blue-400">AI-agentic</span> workspaces with XHS™</p>
+                <p className="mt-2 text-3xl font-semibold tracking-tight text-pretty text-white sm:text-4xl lg:text-5xl">Build <span className="text-blue-400">AI-agentic</span> workspaces with XHS™</p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-400 lg:max-w-none">
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
@@ -117,9 +117,9 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
               <div className="lg:max-w-lg mx-auto text-center">
-                <h2 className="text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl">Get notified when XHS™ is <span className="text-blue-400">launching</span></h2>
-                <p className="mt-6 text-lg/8 text-gray-400">Be first to experience XHS™ regulatory AI workspaces.</p>
-                <form className="mt-10 flex max-w-md gap-x-4 mx-auto" action="mailto:contact@pimlicosolutions.com" method="post" encType="text/plain">
+                <h2 className="text-3xl font-semibold tracking-tight text-pretty text-white sm:text-4xl lg:text-5xl">Get notified when XHS™ is <span className="text-blue-400">launching</span></h2>
+                <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Be first to experience XHS™ regulatory AI workspaces.</p>
+                <form className="mt-10 flex flex-col sm:flex-row max-w-md gap-3 sm:gap-x-4 mx-auto" action="mailto:contact@pimlicosolutions.com" method="post" encType="text/plain">
                   <label htmlFor="email-address" className="sr-only">Email address</label>
                   <input
                     id="email-address"
@@ -128,11 +128,11 @@ export default function Page() {
                     required
                     placeholder="Enter your email"
                     autoComplete="email"
-                    className="min-w-0 flex-auto rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/20 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 sm:text-sm/6 border-0"
+                    className="w-full sm:min-w-0 sm:flex-auto rounded-md bg-white/10 px-3.5 py-3 text-base text-white outline-1 -outline-offset-1 outline-white/20 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 border-0"
                   />
                   <button
                     type="submit"
-                    className="flex-none rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                    className="w-full sm:w-auto sm:flex-none rounded-md bg-blue-500 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
                   >
                     Notify me
                   </button>
