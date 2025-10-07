@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Differentiators from "@/components/Differentiators";
 import DeploySection from "@/components/DeploySection";
+import AnimatedStats from "@/components/AnimatedStats";
 import DatamapScripts from "@/components/DatamapScripts";
 
 export const metadata = {
@@ -86,30 +87,7 @@ export default function Page() {
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-white py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
-            <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Regulatory updates parsed annually</dt>
-              <dd className="order-first text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-                <span id="counter-750k">0</span>k+
-              </dd>
-            </div>
-            <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Global jurisdictions monitored</dt>
-              <dd className="order-first text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-                <span id="counter-90">0</span>+
-              </dd>
-            </div>
-            <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Regulatory topics covered</dt>
-              <dd className="order-first text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
-                <span id="counter-50">0</span>+
-              </dd>
-            </div>
-          </dl>
-        </div>
-      </div>
+      <AnimatedStats />
 
       {/* Launch Notification Signup */}
       <div id="contact" className="overflow-hidden bg-gray-900 py-16 sm:py-24">
