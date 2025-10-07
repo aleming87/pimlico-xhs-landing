@@ -116,8 +116,8 @@ export default function Page() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
-              <div className="lg:max-w-xl mx-auto text-center">
-                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl whitespace-nowrap">Get notified when XHS™ <span className="text-blue-400">launches</span>.</h2>
+              <div className="w-full mx-auto text-center">
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl whitespace-nowrap">Get notified when <span className="text-blue-400">XHS™</span> launches.</h2>
                 <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Be first to experience XHS™ regulatory AI workspaces.</p>
                 <form className="mt-10 flex flex-col sm:flex-row max-w-md gap-3 sm:gap-x-4 mx-auto" action="mailto:contact@pimlicosolutions.com" method="post" encType="text/plain">
                   <label htmlFor="email-address" className="sr-only">Email address</label>
