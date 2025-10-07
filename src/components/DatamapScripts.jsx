@@ -65,45 +65,6 @@ export default function DatamapScripts() {
         }
       })
     }
-
-    // Counter animation
-    function animateCounter(elementId, targetValue, duration = 2000) {
-      const element = document.getElementById(elementId)
-      if (!element) return
-      
-      const startValue = 0
-      const increment = targetValue / (duration / 16)
-      let currentValue = startValue
-      
-      const timer = setInterval(() => {
-        currentValue += increment
-        if (currentValue >= targetValue) {
-          currentValue = targetValue
-          clearInterval(timer)
-        }
-        element.textContent = Math.floor(currentValue)
-      }, 16)
-    }
-    
-    function initializeCounters() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setTimeout(() => animateCounter('counter-750k', 750, 2000), 200)
-            setTimeout(() => animateCounter('counter-90', 90, 2000), 400)
-            setTimeout(() => animateCounter('counter-50', 50, 2000), 600)
-            observer.disconnect()
-          }
-        })
-      }, { threshold: 0.5 })
-      
-      const statsSection = document.querySelector('#counter-750k')?.closest('.bg-white')
-      if (statsSection) {
-        observer.observe(statsSection)
-      }
-    }
-    
-    initializeCounters()
   }, [])
 
   return null
