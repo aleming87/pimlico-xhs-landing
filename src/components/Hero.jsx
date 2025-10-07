@@ -25,7 +25,7 @@ export default function Hero() {
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
+            <a href="mailto:contact@pimlicosolutions.com" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
           </div>
         </nav>
       </header>
