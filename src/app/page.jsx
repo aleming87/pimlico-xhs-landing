@@ -39,7 +39,7 @@ export default function Page() {
                       </svg>
                       User Experience.
                     </dt>
-                    <dd className="inline"> Intuitive, customisable user journeys, intelligent workflows, and adaptive interfaces</dd>
+                    <dd className="inline"> Intuitive user journeys, customisable workflows, and adaptive interfaces</dd>
                   </div>
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
