@@ -11,7 +11,7 @@ export default function PaymentsPage() {
   const features = [
     {
       name: 'Licensing & Authorisations',
-      description: 'Track payment service licensing requirements and authorization processes across global jurisdictions.',
+      description: 'Track payment service licensing requirements and authorization processes.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -20,7 +20,7 @@ export default function PaymentsPage() {
     },
     {
       name: 'Crypto & Digital Assets',
-      description: 'Monitor cryptocurrency and digital asset regulations, licensing requirements, and evolving compliance frameworks.',
+      description: 'Monitor cryptocurrency and digital asset regulations and compliance frameworks.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
@@ -29,7 +29,7 @@ export default function PaymentsPage() {
     },
     {
       name: 'AML/CTF & Sanctions',
-      description: 'Navigate anti-money laundering, counter-terrorism financing, and international sanctions compliance requirements.',
+      description: 'Navigate anti-money laundering and counter-terrorism financing compliance requirements.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
@@ -38,7 +38,7 @@ export default function PaymentsPage() {
     },
     {
       name: 'Operational Resilience & ICT Risk',
-      description: 'Track operational resilience standards, ICT risk management requirements, and business continuity regulations for payment systems.',
+      description: 'Track operational resilience and ICT risk management requirements for payment systems.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z" />
@@ -50,15 +50,15 @@ export default function PaymentsPage() {
   const useCases = [
     {
       title: 'Payment Service Providers',
-      description: 'Navigate complex licensing and compliance requirements across jurisdictions with purpose-built regulatory intelligence.',
+      description: 'Navigate licensing and compliance requirements with purpose-built regulatory intelligence.',
     },
     {
       title: 'Fintech Platforms',
-      description: 'Monitor evolving payment regulations and maintain compliance across multiple markets and regulatory frameworks.',
+      description: 'Monitor evolving payment regulations and maintain compliance across markets.',
     },
     {
       title: 'Financial Institutions',
-      description: 'Centralized workspace for tracking payment regulatory changes and managing multi-jurisdiction compliance workflows.',
+      description: 'Track payment regulatory changes and manage multi-jurisdiction compliance workflows.',
     },
   ];
 
@@ -203,7 +203,7 @@ export default function PaymentsPage() {
                 Payments Regulatory Compliance with <span className="text-blue-600">XHS™</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Monitor, analyze, and collaborate on payment regulatory developments across global jurisdictions. Navigate complex compliance requirements from licensing to operational resilience.
+                Monitor payment regulatory developments across global jurisdictions.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -227,7 +227,7 @@ export default function PaymentsPage() {
               Track payment regulations across jurisdictions
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Stay informed on regulatory developments globally, from established frameworks to emerging legislation impacting payment services.
+              Stay informed on regulatory developments from established frameworks to emerging legislation.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -289,7 +289,7 @@ export default function PaymentsPage() {
               Built for regulated teams
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Purpose-built solutions supporting teams navigating complex payment compliance requirements across industries.
+              Purpose-built for teams navigating payment compliance requirements.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -317,7 +317,7 @@ export default function PaymentsPage() {
               Ready to streamline payment compliance?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Experience comprehensive regulatory monitoring and collaboration for payment compliance teams.
+              Comprehensive regulatory monitoring and collaboration for payment compliance teams.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">

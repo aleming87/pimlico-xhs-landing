@@ -11,7 +11,7 @@ export default function AIPage() {
   const features = [
     {
       name: 'AI Legislation & Governance',
-      description: 'Stay informed on evolving AI governance frameworks and legislative developments across global jurisdictions.',
+      description: 'Stay informed on evolving AI governance frameworks and legislative developments.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
@@ -20,7 +20,7 @@ export default function AIPage() {
     },
     {
       name: 'Compute & Infrastructure',
-      description: 'Track technical requirements, infrastructure standards, and compute compliance for AI systems.',
+      description: 'Track technical requirements and infrastructure standards for AI systems.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m19.5 0a3 3 0 01-3 3H5.25a3 3 0 01-3-3m19.5 0a3 3 0 00-3-3H5.25a3 3 0 00-3 3m16.5 0h.008v.008h-.008v-.008zm-3 0h.008v.008h-.008v-.008z" />
@@ -29,7 +29,7 @@ export default function AIPage() {
     },
     {
       name: 'Data Protection',
-      description: 'Navigate privacy regulations governing AI training data, model outputs, and personal data processing.',
+      description: 'Navigate privacy regulations governing AI training data and model outputs.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
@@ -38,7 +38,7 @@ export default function AIPage() {
     },
     {
       name: 'Technical Standards',
-      description: 'Monitor compliance with technical specifications, testing protocols, and AI safety requirements.',
+      description: 'Monitor compliance with technical specifications and AI safety requirements.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
@@ -47,7 +47,7 @@ export default function AIPage() {
     },
     {
       name: 'National Security & Export Controls',
-      description: 'Track national security restrictions and export control requirements for AI technologies and capabilities.',
+      description: 'Track national security restrictions and export control requirements for AI technologies.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
@@ -56,7 +56,7 @@ export default function AIPage() {
     },
     {
       name: 'Consumer Protection & Conduct',
-      description: 'Stay current on consumer protection requirements and conduct rules for AI-powered products and services.',
+      description: 'Stay current on consumer protection requirements and conduct rules for AI products.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -68,15 +68,15 @@ export default function AIPage() {
   const useCases = [
     {
       title: 'Regulated Industries',
-      description: 'Navigate complex AI compliance requirements across jurisdictions with centralized regulatory intelligence and collaboration tools.',
+      description: 'Navigate AI compliance requirements across jurisdictions with centralized regulatory intelligence.',
     },
     {
       title: 'AI Development Teams',
-      description: 'Monitor regulatory changes and maintain compliance throughout the AI lifecycle from development through deployment.',
+      description: 'Monitor regulatory changes and maintain compliance throughout the AI lifecycle.',
     },
     {
       title: 'Compliance & Legal',
-      description: 'Centralized workspace for tracking AI-related regulatory developments and managing compliance workflows efficiently.',
+      description: 'Track AI regulatory developments and manage compliance workflows efficiently.',
     },
   ];
 
@@ -221,7 +221,7 @@ export default function AIPage() {
                 AI Regulatory Compliance with <span className="text-blue-600">XHS™</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Monitor, analyze, and collaborate on AI regulatory developments across global jurisdictions. Navigate complex governance frameworks with comprehensive regulatory intelligence.
+                Monitor AI regulatory developments across global jurisdictions.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -245,7 +245,7 @@ export default function AIPage() {
               Track AI regulations across jurisdictions
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Stay informed on regulatory developments globally, from established frameworks to emerging legislation impacting your organization.
+              Stay informed on regulatory developments from established frameworks to emerging legislation.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -307,7 +307,7 @@ export default function AIPage() {
               Built for regulated teams
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Purpose-built solutions supporting teams navigating complex AI compliance requirements across industries.
+              Purpose-built for teams navigating AI compliance requirements.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -335,7 +335,7 @@ export default function AIPage() {
               Ready to streamline AI compliance?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Experience comprehensive regulatory monitoring and collaboration for AI compliance teams.
+              Comprehensive regulatory monitoring and collaboration for AI compliance teams.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
