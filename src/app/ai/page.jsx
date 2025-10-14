@@ -161,12 +161,13 @@ export default function AIPage() {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
+            <a href="/" className="text-sm/6 font-semibold text-gray-900">Home</a>
             <a href="/#differentiators" className="text-sm/6 font-semibold text-gray-900">How it works</a>
-            <a href="/ai" className="text-sm/6 font-semibold text-blue-600">AI Sector</a>
-            <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments Sector</a>
+            <a href="/ai" className="text-sm/6 font-semibold text-blue-600">AI</a>
+            <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/#contact" className="text-sm/6 font-semibold text-gray-900">Book a demo <span aria-hidden="true">&rarr;</span></a>
+            <a href="/#contact" className="text-sm/6 font-semibold text-gray-900">Book a demo <span aria-hidden="true">→</span></a>
           </div>
         </nav>
         
@@ -194,9 +195,10 @@ export default function AIPage() {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
+                    <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Home</a>
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">How it works</a>
-                    <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50">AI Sector</a>
-                    <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Payments Sector</a>
+                    <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50">AI</a>
+                    <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Payments</a>
                   </div>
                   <div className="py-6">
                     <a href="/#contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Book a demo</a>
