@@ -66,6 +66,18 @@ export default function DeploySection() {
                 </div>
               </div>
             </div>
+            
+            <div className="mt-8 text-center">
+              <a 
+                href="/ai" 
+                className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200"
+              >
+                Learn more
+                <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+            </div>
           </div>
 
           {/* Payments Column */}
@@ -120,6 +132,18 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <a 
+                href="/payments" 
+                className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200"
+              >
+                Learn more
+                <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>

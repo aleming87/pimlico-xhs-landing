@@ -2,7 +2,6 @@ import Hero from "@/components/Hero";
 import Differentiators from "@/components/Differentiators";
 import DeploySection from "@/components/DeploySection";
 import DatamapScripts from "@/components/DatamapScripts";
-import UseCases from "@/components/UseCases";
 
 export const metadata = {
   title: "Pimlico XHS — Regulatory AI workspaces",
@@ -15,7 +14,6 @@ export default function Page() {
       <main className="bg-white text-slate-900">
         <Hero />
         <Differentiators />
-        <UseCases />
         <DeploySection />
         
       <div className="overflow-hidden bg-gray-900 py-24 sm:py-32">
