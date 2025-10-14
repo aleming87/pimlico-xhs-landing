@@ -1,0 +1,308 @@
+"use client";
+
+import Image from "next/image";
+import { useState } from "react";
+import { Container } from '@/components/container';
+import { Footer } from '@/components/footer';
+
+export default function AIPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const features = [
+    {
+      name: 'AI Model Governance',
+      description: 'Monitor and manage AI model lifecycles, ensuring compliance with evolving regulations across jurisdictions.',
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+        </svg>
+      ),
+    },
+    {
+      name: 'Algorithmic Transparency',
+      description: 'Track decision-making processes and maintain audit trails for AI-driven decisions in regulated environments.',
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      ),
+    },
+    {
+      name: 'Risk Assessment',
+      description: 'Automated monitoring of AI systems for bias, fairness, and compliance with ethical AI frameworks.',
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+        </svg>
+      ),
+    },
+    {
+      name: 'Data Privacy Compliance',
+      description: 'Ensure AI training data and outputs comply with GDPR, CCPA, and other privacy regulations.',
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+      ),
+    },
+    {
+      name: 'Regulatory Reporting',
+      description: 'Generate compliance reports for AI systems as required by EU AI Act, SEC, and other regulatory bodies.',
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        </svg>
+      ),
+    },
+    {
+      name: 'Third-Party AI Monitoring',
+      description: 'Track and assess AI systems from vendors and partners to ensure they meet your compliance standards.',
+      icon: (
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+      ),
+    },
+  ];
+
+  const useCases = [
+    {
+      title: 'Financial Services',
+      description: 'Monitor AI-driven trading algorithms, credit scoring models, and fraud detection systems for regulatory compliance.',
+      stats: '150+ AI models tracked',
+    },
+    {
+      title: 'Healthcare & Life Sciences',
+      description: 'Ensure AI diagnostic tools and treatment recommendation systems meet FDA and EMA requirements.',
+      stats: '99.9% audit trail accuracy',
+    },
+    {
+      title: 'Technology Companies',
+      description: 'Manage compliance for consumer-facing AI products under EU AI Act and other emerging regulations.',
+      stats: '24/7 monitoring',
+    },
+  ];
+
+  const regulations = [
+    { name: 'EU AI Act', icon: '🇪🇺' },
+    { name: 'GDPR', icon: '🔒' },
+    { name: 'CCPA', icon: '📊' },
+    { name: 'SEC AI Guidelines', icon: '💼' },
+    { name: 'FDA AI/ML Framework', icon: '⚕️' },
+    { name: 'NIST AI RMF', icon: '🛡️' },
+  ];
+
+  return (
+    <div className="bg-white">
+      {/* Navigation */}
+      <header className="absolute inset-x-0 top-0 z-50">
+        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
+          <div className="flex lg:flex-1">
+            <a href="/" className="-m-1.5 p-1.5">
+              <span className="sr-only">Pimlico XHS</span>
+              <Image src="/Pimlico_Logo.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
+            </a>
+          </div>
+          <div className="flex lg:hidden">
+            <button 
+              type="button" 
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="size-6">
+                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <div className="hidden lg:flex lg:gap-x-12">
+            <a href="/#differentiators" className="text-sm/6 font-semibold text-gray-900">How it works</a>
+            <a href="/ai" className="text-sm/6 font-semibold text-blue-600">AI Sector</a>
+            <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments Sector</a>
+          </div>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <a href="/#contact" className="text-sm/6 font-semibold text-gray-900">Book a demo <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </nav>
+        
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden">
+            <div className="fixed inset-0 z-50 bg-black/30" onClick={() => setMobileMenuOpen(false)}></div>
+            <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+              <div className="flex items-center justify-between">
+                <a href="/" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Pimlico XHS</span>
+                  <Image src="/Pimlico_Logo.png" alt="Pimlico" width={100} height={27} className="h-8 w-auto" />
+                </a>
+                <button
+                  type="button"
+                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="sr-only">Close menu</span>
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-6 flow-root">
+                <div className="-my-6 divide-y divide-gray-500/10">
+                  <div className="space-y-2 py-6">
+                    <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">How it works</a>
+                    <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50">AI Sector</a>
+                    <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Payments Sector</a>
+                  </div>
+                  <div className="py-6">
+                    <a href="/#contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Book a demo</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Hero Section */}
+      <div className="relative isolate pt-14">
+        <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+          <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-blue-400 to-blue-600 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
+        </div>
+        
+        <div className="py-24 sm:py-32 lg:pb-40">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl text-center">
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                AI Regulatory <span className="text-blue-600">Compliance</span> Coverage
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Navigate the complex landscape of AI regulations with comprehensive monitoring, risk assessment, and compliance reporting for artificial intelligence systems.
+              </p>
+              <div className="mt-10 flex items-center justify-center gap-x-6">
+                <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  Get started
+                </a>
+                <a href="#features" className="text-sm font-semibold leading-6 text-gray-900">
+                  Learn more <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Regulatory Coverage */}
+      <div className="bg-gray-50 py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:text-center">
+            <h2 className="text-base font-semibold leading-7 text-blue-600">Comprehensive Coverage</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Monitor compliance across all major AI regulations
+            </p>
+          </div>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
+              {regulations.map((regulation) => (
+                <div key={regulation.name} className="relative pl-16">
+                  <dt className="text-base font-semibold leading-7 text-gray-900">
+                    <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                      <span className="text-2xl">{regulation.icon}</span>
+                    </div>
+                    {regulation.name}
+                  </dt>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div id="features" className="bg-white py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:text-center">
+            <h2 className="text-base font-semibold leading-7 text-blue-600">Advanced Capabilities</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Everything you need for AI compliance
+            </p>
+            <p className="mt-6 text-lg leading-8 text-gray-600">
+              Our platform provides comprehensive tools to monitor, assess, and report on AI systems across your organization.
+            </p>
+          </div>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+              {features.map((feature) => (
+                <div key={feature.name} className="flex flex-col">
+                  <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                    <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 text-white">
+                      {feature.icon}
+                    </div>
+                    {feature.name}
+                  </dt>
+                  <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                    <p className="flex-auto">{feature.description}</p>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* Use Cases Section */}
+      <div className="bg-gray-900 py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:text-center">
+            <h2 className="text-base font-semibold leading-7 text-blue-400">Industry Applications</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Trusted by leading organizations
+            </p>
+            <p className="mt-6 text-lg leading-8 text-gray-300">
+              See how organizations across industries use Pimlico XHS to maintain AI compliance.
+            </p>
+          </div>
+          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+              {useCases.map((useCase) => (
+                <div key={useCase.title} className="flex flex-col border border-gray-700 rounded-2xl p-8 bg-gray-800/50">
+                  <dt className="text-xl font-semibold leading-7 text-white">
+                    {useCase.title}
+                  </dt>
+                  <dd className="mt-4 flex flex-auto flex-col">
+                    <p className="flex-auto text-base leading-7 text-gray-300">{useCase.description}</p>
+                    <p className="mt-6 text-sm font-semibold text-blue-400">{useCase.stats}</p>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-white">
+        <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Ready to ensure AI compliance?
+            </h2>
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
+              Join organizations using Pimlico XHS to navigate the evolving landscape of AI regulations.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                Book a demo
+              </a>
+              <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
+                Back to home <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
