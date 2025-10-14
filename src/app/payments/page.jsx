@@ -11,7 +11,7 @@ export default function PaymentsPage() {
   const features = [
     {
       name: 'Licensing & Authorisations',
-      description: 'Track payment service licensing requirements and authorization processes across jurisdictions with XHS™.',
+      description: 'Track payment service licensing requirements and authorization processes across global jurisdictions.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -20,7 +20,7 @@ export default function PaymentsPage() {
     },
     {
       name: 'Crypto & Digital Assets',
-      description: 'Monitor cryptocurrency and digital asset regulations, licensing requirements, and compliance frameworks.',
+      description: 'Monitor cryptocurrency and digital asset regulations, licensing requirements, and evolving compliance frameworks.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
@@ -29,7 +29,7 @@ export default function PaymentsPage() {
     },
     {
       name: 'AML/CTF & Sanctions',
-      description: 'Navigate anti-money laundering, counter-terrorism financing, and sanctions compliance requirements.',
+      description: 'Navigate anti-money laundering, counter-terrorism financing, and international sanctions compliance requirements.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
@@ -38,7 +38,7 @@ export default function PaymentsPage() {
     },
     {
       name: 'Operational Resilience & ICT Risk',
-      description: 'Track operational resilience standards and ICT risk management requirements for payment systems.',
+      description: 'Track operational resilience standards, ICT risk management requirements, and business continuity regulations for payment systems.',
       icon: (
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z" />
@@ -50,25 +50,73 @@ export default function PaymentsPage() {
   const useCases = [
     {
       title: 'Payment Service Providers',
-      description: 'Regulatory AI workspaces for payment processors navigating complex licensing and compliance requirements.',
+      description: 'Navigate complex licensing and compliance requirements across jurisdictions with purpose-built regulatory intelligence.',
     },
     {
       title: 'Fintech Platforms',
-      description: 'XHS™ helps fintech teams monitor evolving payment regulations and maintain compliance across markets.',
+      description: 'Monitor evolving payment regulations and maintain compliance across multiple markets and regulatory frameworks.',
     },
     {
       title: 'Financial Institutions',
-      description: 'Centralized workspace for tracking payment regulatory changes and managing compliance workflows.',
+      description: 'Centralized workspace for tracking payment regulatory changes and managing multi-jurisdiction compliance workflows.',
     },
   ];
 
   const regulations = [
-    { name: 'PSD2 (Payment Services Directive 2)', icon: '�', description: 'EU payment services' },
-    { name: 'PSD3 (Payment Services Directive 3)', icon: '�', description: 'Upcoming EU regulation' },
-    { name: 'MiCA (Markets in Crypto-Assets)', icon: '🔐', description: 'EU crypto regulation' },
-    { name: 'BSA/AML (Bank Secrecy Act)', icon: '�️', description: 'US anti-money laundering' },
-    { name: 'OFAC (Office of Foreign Assets Control)', icon: '🌍', description: 'US sanctions program' },
-    { name: 'DORA (Digital Operational Resilience Act)', icon: '🔄', description: 'EU ICT risk framework' },
+    { 
+      name: 'PSD2 (Payment Services Directive 2)', 
+      icon: (
+        <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+        </svg>
+      ),
+      description: 'EU payment services' 
+    },
+    { 
+      name: 'PSD3 (Payment Services Directive 3)', 
+      icon: (
+        <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
+        </svg>
+      ),
+      description: 'Upcoming EU regulation' 
+    },
+    { 
+      name: 'MiCA (Markets in Crypto-Assets)', 
+      icon: (
+        <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+        </svg>
+      ),
+      description: 'EU crypto regulation' 
+    },
+    { 
+      name: 'BSA/AML (Bank Secrecy Act)', 
+      icon: (
+        <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+        </svg>
+      ),
+      description: 'US anti-money laundering' 
+    },
+    { 
+      name: 'OFAC (Office of Foreign Assets Control)', 
+      icon: (
+        <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+        </svg>
+      ),
+      description: 'US sanctions program' 
+    },
+    { 
+      name: 'DORA (Digital Operational Resilience Act)', 
+      icon: (
+        <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+      ),
+      description: 'EU ICT risk framework' 
+    },
   ];
 
   return (
@@ -152,10 +200,10 @@ export default function PaymentsPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Payments Regulatory Workspaces with <span className="text-blue-600">XHS™</span>
+                Payments Regulatory Compliance with <span className="text-blue-600">XHS™</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Monitor, analyze, and collaborate on payment regulatory developments with XHS™ regulatory AI workspaces. Navigate complex payment compliance across global jurisdictions.
+                Monitor, analyze, and collaborate on payment regulatory developments across global jurisdictions. Navigate complex compliance requirements from licensing to operational resilience.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -179,7 +227,7 @@ export default function PaymentsPage() {
               Track payment regulations across jurisdictions
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              XHS™ monitors payment regulatory developments globally, keeping you informed of changes that impact your organization.
+              Stay informed on regulatory developments globally, from established frameworks to emerging legislation impacting payment services.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -187,8 +235,8 @@ export default function PaymentsPage() {
               {regulations.map((regulation) => (
                 <div key={regulation.name} className="relative pl-16">
                   <dt className="text-base font-semibold leading-7 text-gray-900">
-                    <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
-                      <span className="text-2xl">{regulation.icon}</span>
+                    <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
+                      {regulation.icon}
                     </div>
                     {regulation.name}
                   </dt>
@@ -241,7 +289,7 @@ export default function PaymentsPage() {
               Built for regulated teams
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              XHS™ regulatory AI workspaces support teams navigating complex payment compliance requirements.
+              Purpose-built solutions supporting teams navigating complex payment compliance requirements across industries.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -269,7 +317,7 @@ export default function PaymentsPage() {
               Ready to streamline payment compliance?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Experience XHS™ regulatory AI workspaces for payment compliance monitoring and collaboration.
+              Experience comprehensive regulatory monitoring and collaboration for payment compliance teams.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
