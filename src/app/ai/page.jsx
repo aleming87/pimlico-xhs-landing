@@ -92,11 +92,6 @@ export default function AIPage() {
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Manage <span className="text-blue-600">AI</span> regulation with XHS™
               </h1>
-              <div className="mt-10 flex items-center justify-center gap-x-6">
-                <a href="/#contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                  Request early access
-                </a>
-              </div>
             </div>
           </div>
         </div>
