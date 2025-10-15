@@ -6,6 +6,40 @@ import { Footer } from '@/components/footer';
 
 export default function AIPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState(null);
+
+  const categories = [
+    {
+      id: 1,
+      name: 'AI Legislation & Governance',
+      description: 'Track national and international AI laws, regulatory frameworks, and governance policies shaping how AI systems can be developed and deployed.'
+    },
+    {
+      id: 2,
+      name: 'Compute & Infrastructure',
+      description: 'Monitor requirements for AI computing resources, hardware restrictions, and infrastructure standards including chip export controls and data center regulations.'
+    },
+    {
+      id: 3,
+      name: 'Data Protection',
+      description: 'Navigate privacy regulations governing AI training data, model outputs, and personal data processing requirements across jurisdictions.'
+    },
+    {
+      id: 4,
+      name: 'Technical Standards',
+      description: 'Stay current on AI safety requirements, testing protocols, transparency standards, and technical compliance specifications.'
+    },
+    {
+      id: 5,
+      name: 'National Security & Export Controls',
+      description: 'Track restrictions on AI technology transfers, export controls, and national security requirements affecting AI development and deployment.'
+    },
+    {
+      id: 6,
+      name: 'Consumer Protection & Conduct',
+      description: 'Monitor consumer rights, disclosure requirements, fairness standards, and conduct rules for AI-powered products and services.'
+    }
+  ];
 
   return (
     <div className="bg-white">
@@ -139,54 +173,31 @@ export default function AIPage() {
               </div>
               
               <div className="space-y-4">
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">AI Legislation & Governance</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                {categories.map((category) => (
+                  <div key={category.id} className="bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl border border-gray-600 overflow-hidden transition-all duration-200">
+                    <button
+                      onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                      className="w-full px-6 py-5 flex items-center justify-between hover:from-gray-600 hover:to-gray-650 transition-all duration-200"
+                    >
+                      <span className="text-white font-semibold text-base text-left">{category.name}</span>
+                      <svg 
+                        className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${expandedCategory === category.id ? 'rotate-90' : ''}`}
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                    {expandedCategory === category.id && (
+                      <div className="px-6 pb-5 pt-0">
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {category.description}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Compute & Infrastructure</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Data Protection</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Technical Standards</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">National Security & Export Controls</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Consumer Protection & Conduct</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>

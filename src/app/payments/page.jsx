@@ -6,6 +6,30 @@ import { Footer } from '@/components/footer';
 
 export default function PaymentsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState(null);
+
+  const categories = [
+    {
+      id: 1,
+      name: 'Licensing & Authorisations',
+      description: 'Monitor payment service provider licenses, e-money institution authorisations, and regulatory permissions required to operate payment systems across global jurisdictions.'
+    },
+    {
+      id: 2,
+      name: 'Crypto & Digital Assets',
+      description: 'Stay updated on cryptocurrency regulations, digital asset frameworks, stablecoin requirements, and emerging rules governing blockchain-based payment systems.'
+    },
+    {
+      id: 3,
+      name: 'AML/CTF & Sanctions',
+      description: 'Track anti-money laundering obligations, counter-terrorism financing requirements, sanctions compliance, and transaction monitoring standards for payment providers.'
+    },
+    {
+      id: 4,
+      name: 'Operational Resilience & ICT Risk',
+      description: 'Navigate operational resilience requirements, ICT security standards, incident reporting obligations, and business continuity mandates for payment infrastructure.'
+    }
+  ];
 
   return (
     <div className="bg-white">
@@ -139,38 +163,31 @@ export default function PaymentsPage() {
               </div>
               
               <div className="space-y-4">
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Licensing & Authorisations</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                {categories.map((category) => (
+                  <div key={category.id} className="bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl border border-gray-600 overflow-hidden transition-all duration-200">
+                    <button
+                      onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                      className="w-full px-6 py-5 flex items-center justify-between hover:from-gray-600 hover:to-gray-650 transition-all duration-200"
+                    >
+                      <span className="text-white font-semibold text-base text-left">{category.name}</span>
+                      <svg 
+                        className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${expandedCategory === category.id ? 'rotate-90' : ''}`}
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                    {expandedCategory === category.id && (
+                      <div className="px-6 pb-5 pt-0">
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {category.description}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Crypto & Digital Assets</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">AML/CTF & Sanctions</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-6 py-5 transition-all duration-200 border border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-semibold text-base">Operational Resilience & ICT Risk</span>
-                    <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
