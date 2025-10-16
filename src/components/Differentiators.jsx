@@ -67,7 +67,7 @@ export default function Differentiators() {
                     alt="Integration partners" 
                     width={200} 
                     height={40} 
-                    className="w-full h-auto opacity-70 hover:opacity-100 transition-opacity"
+                    className="w-full h-auto"
                   />
                 </div>
               )}

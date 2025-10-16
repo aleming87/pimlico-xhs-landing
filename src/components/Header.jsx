@@ -14,6 +14,7 @@ export default function Header() {
             <a href="#how" className="hover:text-brand-700">How it works</a>
             <a href="#use-cases" className="hover:text-brand-700">Use cases</a>
             <a href="#icp" className="hover:text-brand-700">ICP</a>
+            <a href="/pricing" className="hover:text-brand-700">Pricing</a>
             <a href="#contact" className="inline-flex items-center rounded-xl border border-slate-300 px-3 py-1.5 hover:border-brand-600 hover:text-brand-700">
               Book a demo
             </a>
