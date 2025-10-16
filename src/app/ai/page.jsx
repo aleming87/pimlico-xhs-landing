@@ -341,7 +341,7 @@ export default function AIPage() {
                     <img
                       src="/AI4.png"
                       alt="AI Regulatory Monitoring Dashboard"
-                      className="w-full h-auto min-h-full object-cover object-top rounded-lg"
+                      className="w-full h-auto min-h-full object-cover object-left-top rounded-lg"
                     />
                   </div>
                 </div>
