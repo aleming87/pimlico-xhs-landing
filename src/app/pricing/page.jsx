@@ -89,10 +89,10 @@ export default function PricingPage() {
         <div className="bg-gray-900 pt-24 sm:pt-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-4xl text-center">
-              <h2 className="text-base/7 font-semibold text-indigo-400">Pricing</h2>
-              <p className="mt-2 text-5xl font-semibold tracking-tight text-balance text-white sm:text-6xl">Pricing that grows with you</p>
+              <h2 className="text-base/7 font-semibold text-indigo-400">Beta Pricing</h2>
+              <p className="mt-2 text-5xl font-semibold tracking-tight text-balance text-white sm:text-6xl">Early Access Pricing</p>
             </div>
-            <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Choose an affordable plan that's packed with the best features for regulatory compliance, creating team efficiency, and driving business outcomes.</p>
+            <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Join our beta program and get special pricing on AI-powered regulatory compliance workspaces. Annual plans save 5%.</p>
             <div className="mt-16 flex justify-center">
               <fieldset aria-label="Payment frequency">
                 <div className="grid grid-cols-2 gap-x-1 rounded-full p-1 text-center text-xs/5 font-semibold ring-1 ring-inset ring-white/10">
@@ -107,79 +107,67 @@ export default function PricingPage() {
                 </div>
               </fieldset>
             </div>
-            <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 md:max-w-2xl md:grid-cols-2 lg:max-w-4xl xl:mx-0 xl:max-w-none xl:grid-cols-4">
-              {/* Starter Tier */}
+            <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:max-w-5xl lg:grid-cols-3">
+              {/* Professional Tier */}
               <div className="rounded-3xl bg-gray-800/50 p-8 ring-1 ring-white/15">
-                <h3 className="text-lg/8 font-semibold text-white">Starter</h3>
-                <p className="mt-4 text-sm/6 text-gray-300">Perfect for small teams getting started with regulatory compliance.</p>
+                <h3 className="text-lg/8 font-semibold text-white">Professional</h3>
+                <p className="mt-4 text-sm/6 text-gray-300">Ideal for individuals and small teams starting with AI compliance.</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '499' : '4,990'}</span>
+                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '250' : '2,850'}</span>
                   <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
                 </p>
+                {frequency === 'annually' && (
+                  <p className="mt-2 text-xs text-gray-400">Save 5% annually</p>
+                )}
                 <a href="/#contact" className="mt-6 block w-full rounded-md bg-white/10 px-3 py-2 text-center text-sm/6 font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20">Get started</a>
                 <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Up to 5 users</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>2 regulatory domains</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Basic analytics</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>500 AI credits per month</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>All regulatory domains</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Monitor & analyse features</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Email support</li>
                 </ul>
               </div>
 
-              {/* Professional Tier */}
-              <div className="rounded-3xl bg-gray-800/50 p-8 ring-1 ring-white/15">
-                <h3 className="text-lg/8 font-semibold text-white">Professional</h3>
-                <p className="mt-4 text-sm/6 text-gray-300">For growing teams managing multiple regulatory requirements.</p>
+              {/* Team Tier - Featured */}
+              <div className="rounded-3xl bg-gray-800/50 p-8 ring-2 ring-indigo-400">
+                <div className="flex items-center justify-between gap-x-4">
+                  <h3 className="text-lg/8 font-semibold text-indigo-400">Team</h3>
+                  <p className="rounded-full bg-indigo-500 px-2.5 py-1 text-xs/5 font-semibold text-white">Most popular</p>
+                </div>
+                <p className="mt-4 text-sm/6 text-gray-300">Perfect for teams collaborating on regulatory compliance projects.</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '999' : '9,990'}</span>
+                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '750' : '8,550'}</span>
                   <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
                 </p>
-                <a href="/#contact" className="mt-6 block w-full rounded-md bg-white/10 px-3 py-2 text-center text-sm/6 font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20">Get started</a>
+                {frequency === 'annually' && (
+                  <p className="mt-2 text-xs text-gray-400">Save 5% annually</p>
+                )}
+                <a href="/#contact" className="mt-6 block w-full rounded-md bg-indigo-500 px-3 py-2 text-center text-sm/6 font-semibold text-white hover:bg-indigo-400">Get started</a>
                 <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Up to 15 users</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>1,500 AI credits per month</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>All regulatory domains</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Advanced analytics</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>API access</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Full platform access</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Collaborate workspaces</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>API access & integrations</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Priority support</li>
                 </ul>
               </div>
 
-              {/* Enterprise Tier - Featured */}
-              <div className="rounded-3xl bg-gray-800/50 p-8 ring-2 ring-indigo-400">
-                <div className="flex items-center justify-between gap-x-4">
-                  <h3 className="text-lg/8 font-semibold text-indigo-400">Enterprise</h3>
-                  <p className="rounded-full bg-indigo-500 px-2.5 py-1 text-xs/5 font-semibold text-white">Most popular</p>
-                </div>
-                <p className="mt-4 text-sm/6 text-gray-300">Comprehensive solution for large organizations with complex needs.</p>
-                <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '2,499' : '24,990'}</span>
-                  <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
-                </p>
-                <a href="/#contact" className="mt-6 block w-full rounded-md bg-indigo-500 px-3 py-2 text-center text-sm/6 font-semibold text-white hover:bg-indigo-400">Get started</a>
-                <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Unlimited users</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>All regulatory domains</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Custom analytics & reporting</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Full API access & webhooks</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Dedicated support & CSM</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>SLA & uptime guarantee</li>
-                </ul>
-              </div>
-
-              {/* Custom Tier */}
+              {/* Enterprise Tier */}
               <div className="rounded-3xl bg-gray-800/50 p-8 ring-1 ring-white/15">
-                <h3 className="text-lg/8 font-semibold text-white">Custom</h3>
-                <p className="mt-4 text-sm/6 text-gray-300">Tailored solutions for unique regulatory and compliance challenges.</p>
+                <h3 className="text-lg/8 font-semibold text-white">Enterprise</h3>
+                <p className="mt-4 text-sm/6 text-gray-300">Custom solutions for large organizations with specific compliance needs.</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-4xl font-semibold tracking-tight text-white">Contact us</span>
+                  <span className="text-4xl font-semibold tracking-tight text-white">Custom</span>
                 </p>
-                <a href="/#contact" className="mt-6 block w-full rounded-md bg-white/10 px-3 py-2 text-center text-sm/6 font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20">Contact sales</a>
+                <a href="/#contact" className="mt-6 block w-full rounded-md bg-blue-600 px-3 py-2 text-center text-sm/6 font-semibold text-white hover:bg-blue-500">Talk to sales team</a>
                 <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Everything in Enterprise</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Unlimited AI credits</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Unlimited users</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Custom integrations</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>On-premise deployment</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Custom training & onboarding</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>White-label options</li>
-                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Flexible contract terms</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Dedicated account manager</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>SLA & uptime guarantee</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>On-premise deployment options</li>
                 </ul>
               </div>
             </div>
@@ -192,24 +180,24 @@ export default function PricingPage() {
             <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Frequently asked questions</h2>
             <dl className="mt-16 divide-y divide-white/10">
               <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">What's included in all plans?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">All plans include access to our AI-powered regulatory monitoring platform, real-time updates, collaborative workspaces, and basic analytics. Higher-tier plans add more users, domains, and advanced features.</p></dd>
+                <dt className="text-base/7 font-semibold text-white">What are AI credits and how do they work?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">AI credits power your regulatory analysis and monitoring. Each credit represents an AI-powered action like analysing a regulation, generating insights, or monitoring updates. Professional gets 500 credits/month, Team gets 1,500 credits/month, and Enterprise gets unlimited.</p></dd>
               </div>
               <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">Can I switch plans later?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle, and we'll prorate any differences.</p></dd>
+                <dt className="text-base/7 font-semibold text-white">Which regulatory domains are covered?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">XHS™ covers AI regulations (including EU AI Act, NIST framework) and Payments regulations (PSD3, MiCA, PSR) across 90+ jurisdictions. All plans include access to both AI and Payments regulatory domains.</p></dd>
               </div>
               <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">Do you offer a free trial?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">We offer a 14-day free trial for all new customers on any plan. No credit card required to start your trial.</p></dd>
+                <dt className="text-base/7 font-semibold text-white">What's included in the Beta program?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Beta participants get early access to XHS™ at special pricing, direct input into product development, priority support, and the opportunity to shape the future of regulatory compliance AI workspaces.</p></dd>
               </div>
               <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">What payment methods do you accept?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">We accept all major credit cards (Visa, Mastercard, American Express), bank transfers, and can accommodate invoicing for Enterprise and Custom plans.</p></dd>
+                <dt className="text-base/7 font-semibold text-white">Can I upgrade or change plans later?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Yes! You can upgrade from Professional to Team or Enterprise at any time. Changes take effect immediately, and you'll be prorated for the remainder of your billing period.</p></dd>
               </div>
               <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">Is there a setup fee?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">No setup fees for Starter, Professional, and Enterprise plans. Custom plans may include implementation services priced separately based on your specific requirements.</p></dd>
+                <dt className="text-base/7 font-semibold text-white">How does the annual discount work?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Annual plans save 5% compared to monthly billing. For example, Professional at $250/month = $3,000/year, but with annual billing you pay only $2,850/year, saving $150.</p></dd>
               </div>
             </dl>
           </div>

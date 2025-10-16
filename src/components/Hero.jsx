@@ -32,6 +32,7 @@ export default function Hero() {
             <a href="#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
+            <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
             <a href="#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
@@ -98,6 +99,13 @@ export default function Hero() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Team
+                    </a>
+                    <a 
+                      href="/pricing" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Pricing
                     </a>
                   </div>
                   <div className="py-6">
