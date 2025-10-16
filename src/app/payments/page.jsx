@@ -7,6 +7,7 @@ import { Footer } from '@/components/footer';
 export default function PaymentsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const [expandedJurisdiction, setExpandedJurisdiction] = useState(null);
 
   const categories = [
     {
@@ -28,6 +29,54 @@ export default function PaymentsPage() {
       id: 4,
       name: 'Operational Resilience & ICT Risk',
       description: 'Navigate operational resilience requirements, ICT security standards, incident reporting obligations, and business continuity mandates for payment infrastructure.'
+    }
+  ];
+
+  const jurisdictions = [
+    {
+      id: 1,
+      name: 'United States',
+      regulations: ['Bank Secrecy Act (BSA)', 'Dodd-Frank Act', 'State Money Transmitter Licenses']
+    },
+    {
+      id: 2,
+      name: 'US States',
+      regulations: ['New York BitLicense', 'California DFPI Requirements', 'Texas Money Services Act']
+    },
+    {
+      id: 3,
+      name: 'European Union',
+      regulations: ['Payment Services Directive 2 (PSD2)', 'Markets in Crypto-Assets (MiCA)', 'Digital Operational Resilience Act (DORA)']
+    },
+    {
+      id: 4,
+      name: 'United Kingdom',
+      regulations: ['Payment Services Regulations 2017', 'Electronic Money Regulations', 'FCA Cryptoasset Rules']
+    },
+    {
+      id: 5,
+      name: 'Singapore',
+      regulations: ['Payment Services Act', 'MAS Digital Token Framework', 'Cross-Border Payment Regulations']
+    },
+    {
+      id: 6,
+      name: 'China',
+      regulations: ['PBOC Payment Regulations', 'Anti-Money Laundering Law', 'Digital Yuan Framework']
+    },
+    {
+      id: 7,
+      name: 'Brazil',
+      regulations: ['PIX Instant Payments Regulation', 'Central Bank Resolution 4.656', 'Open Banking Rules']
+    },
+    {
+      id: 8,
+      name: 'United Arab Emirates',
+      regulations: ['UAE Payment Systems Law', 'VARA Crypto Regulations', 'DFSA Payment Rules']
+    },
+    {
+      id: 9,
+      name: 'India',
+      regulations: ['Payment and Settlement Systems Act', 'UPI Framework', 'RBI Master Direction on PPIs']
     }
   ];
 
@@ -114,8 +163,11 @@ export default function PaymentsPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Manage <span className="text-blue-600">Payments</span> regulation with XHS™
+                Manage <span className="text-blue-600">Payments</span> Regulations with XHS
               </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Monitor, analyse, collaborate, and integrate regulatory intelligence into your workflow
+              </p>
             </div>
           </div>
         </div>
@@ -124,6 +176,11 @@ export default function PaymentsPage() {
       {/* Stats Section */}
       <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Stay ahead of emerging risks and opportunities
+            </h2>
+          </div>
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Payment regulations tracked</dt>
@@ -146,7 +203,7 @@ export default function PaymentsPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
             <h2 className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
-              Stay ahead of emerging trends
+              Track regulation across domains
             </h2>
           </div>
           
@@ -206,140 +263,171 @@ export default function PaymentsPage() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* US Federal - BSA/AML */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+          <div className="max-w-4xl mx-auto space-y-4">
+            {jurisdictions.map((jurisdiction) => (
+              <div key={jurisdiction.id} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 overflow-hidden">
+                <button
+                  onClick={() => setExpandedJurisdiction(expandedJurisdiction === jurisdiction.id ? null : jurisdiction.id)}
+                  className="w-full p-6 flex items-center justify-between hover:bg-gray-100 transition-all duration-200"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
+                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 text-lg">{jurisdiction.name}</h3>
+                  </div>
+                  <svg 
+                    className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${expandedJurisdiction === jurisdiction.id ? 'rotate-90' : ''}`}
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
+                </button>
+                {expandedJurisdiction === jurisdiction.id && (
+                  <div className="px-6 pb-6 pt-0">
+                    <div className="border-t border-gray-200 pt-4">
+                      <p className="text-sm font-semibold text-gray-700 mb-3">Key Legislation:</p>
+                      <ul className="space-y-2">
+                        {jurisdiction.regulations.map((regulation, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <svg className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-sm text-gray-700">{regulation}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bento Grid - Product Breakdown */}
+      <div className="bg-gray-900 py-24 sm:py-32">
+        <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+          <h2 className="text-center text-base/7 font-semibold text-indigo-400">Everything you need</h2>
+          <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
+            Monitor, Analyse, Collaborate, and Integrate
+          </p>
+          <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
+            {/* Monitor - Large left column */}
+            <div className="relative lg:row-span-2">
+              <div className="absolute inset-px rounded-lg bg-gray-800 lg:rounded-l-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Monitor</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    Real-time regulatory updates across all jurisdictions in a unified feed
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">United States</h3>
-                  <p className="text-sm text-gray-600">BSA/AML, OFAC sanctions</p>
+                <div className="relative min-h-[30rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
+                  <div className="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
+                    <div className="p-4 space-y-3 bg-gradient-to-b from-gray-900 to-gray-800 h-full overflow-hidden">
+                      {/* XHS Feed Simulation */}
+                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-blue-500">
+                        <p className="text-xs font-semibold text-blue-400">EU MiCA Update</p>
+                        <p className="text-xs text-gray-300 mt-1">New stablecoin requirements...</p>
+                      </div>
+                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-green-500">
+                        <p className="text-xs font-semibold text-green-400">US Federal</p>
+                        <p className="text-xs text-gray-300 mt-1">FinCEN proposes new AML rules...</p>
+                      </div>
+                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-yellow-500">
+                        <p className="text-xs font-semibold text-yellow-400">UK FCA</p>
+                        <p className="text-xs text-gray-300 mt-1">Payment services consultation...</p>
+                      </div>
+                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-purple-500">
+                        <p className="text-xs font-semibold text-purple-400">Singapore MAS</p>
+                        <p className="text-xs text-gray-300 mt-1">Digital payment token framework...</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 lg:rounded-l-[2rem]"></div>
             </div>
 
-            {/* New York State */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                  </svg>
+            {/* Analyse - Top right */}
+            <div className="relative max-lg:row-start-1">
+              <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-t-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Analyse</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    AI-powered insights identify regulatory impacts and obligations
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">New York</h3>
-                  <p className="text-sm text-gray-600">DFS Part 504, BitLicense</p>
+                <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
+                  <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-4">
+                    <div className="space-y-2">
+                      <div className="h-2 bg-blue-500 rounded w-3/4"></div>
+                      <div className="h-2 bg-blue-400 rounded w-1/2"></div>
+                      <div className="h-2 bg-blue-300 rounded w-2/3"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 max-lg:rounded-t-[2rem]"></div>
             </div>
 
-            {/* European Union - PSD2/PSD3 */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
-                  </svg>
+            {/* Collaborate - Middle right */}
+            <div className="relative max-lg:row-start-3 lg:col-start-2 lg:row-start-2">
+              <div className="absolute inset-px rounded-lg bg-gray-800"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
+                <div className="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Collaborate</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    Team workspaces for shared regulatory intelligence
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">European Union</h3>
-                  <p className="text-sm text-gray-600">PSD2, PSD3, MiCA, DORA</p>
+                <div className="flex flex-1 items-center max-lg:py-6 lg:pb-2">
+                  <div className="flex gap-2 px-8">
+                    <div className="h-8 w-8 rounded-full bg-blue-500"></div>
+                    <div className="h-8 w-8 rounded-full bg-green-500"></div>
+                    <div className="h-8 w-8 rounded-full bg-purple-500"></div>
+                  </div>
                 </div>
               </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
             </div>
 
-            {/* UK */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                  </svg>
+            {/* Integrate - Large right column */}
+            <div className="relative lg:row-span-2">
+              <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Integrate</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    API access to embed regulatory data into your existing systems
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">United Kingdom</h3>
-                  <p className="text-sm text-gray-600">PSRs, FCA regulations</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Singapore */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Singapore</h3>
-                  <p className="text-sm text-gray-600">MAS Payment Services Act</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Hong Kong */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Hong Kong</h3>
-                  <p className="text-sm text-gray-600">HKMA payment regulation</p>
+                <div className="relative min-h-[30rem] w-full grow">
+                  <div className="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl ring-1 ring-white/10">
+                    <div className="flex bg-gray-800 ring-1 ring-white/5">
+                      <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
+                        <div className="border-r border-b border-r-white/20 border-b-white/20 bg-white/5 px-4 py-2 text-white">api.js</div>
+                        <div className="border-r border-gray-600/10 px-4 py-2">index.js</div>
+                      </div>
+                    </div>
+                    <div className="px-6 pt-6 pb-14 font-mono text-xs text-white">
+                      <div className="text-purple-400">import</div>
+                      <div className="text-gray-300">{`{ XHSClient }`}</div>
+                      <div className="text-purple-400 mt-2">const</div>
+                      <div className="text-gray-300 mt-1">{`regulations =`}</div>
+                      <div className="text-blue-400 ml-4">{`await xhs.getUpdates()`}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Brazil */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Brazil</h3>
-                  <p className="text-sm text-gray-600">PIX, Open Finance regulations</p>
-                </div>
-              </div>
-            </div>
-
-            {/* UAE */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">United Arab Emirates</h3>
-                  <p className="text-sm text-gray-600">CBUAE payment regulations</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Australia */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Australia</h3>
-                  <p className="text-sm text-gray-600">NPP, Consumer Data Right</p>
-                </div>
-              </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
             </div>
           </div>
         </div>
