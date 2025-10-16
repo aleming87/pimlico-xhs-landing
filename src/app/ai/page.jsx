@@ -335,13 +335,13 @@ export default function AIPage() {
                   </p>
                 </div>
                 <div className="relative min-h-[30rem] w-full grow">
-                  <div className="absolute left-0 right-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
+                  <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
                     <Image
                       src="/AIProductII.png"
                       alt="AI Regulatory Monitoring Dashboard"
                       width={1200}
                       height={800}
-                      className="w-full h-full object-cover object-left rounded-lg"
+                      className="w-full h-full object-cover object-center rounded-lg"
                     />
                   </div>
                 </div>
@@ -353,13 +353,13 @@ export default function AIPage() {
             <div className="relative max-lg:row-start-1">
               <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-t-[2rem]"></div>
               <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
-                <div className="px-8 pt-8 sm:px-10 sm:pt-10">
+                <div className="px-8 pt-8 pb-4 sm:px-10 sm:pt-10 sm:pb-6">
                   <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Analyse</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
                     AI-powered insights identify regulatory impacts and obligations
                   </p>
                 </div>
-                <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
+                <div className="flex flex-1 items-center justify-center px-8 pb-8 sm:px-10 lg:pb-10">
                   <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-6 border border-gray-600/50">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
