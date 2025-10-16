@@ -62,7 +62,7 @@ export default function PaymentsPage() {
     {
       id: 2,
       name: 'European Union',
-      regulations: ['Payment Services Directive 2 (PSD2)', 'Markets in Crypto-Assets (MiCA)', 'Digital Operational Resilience Act (DORA)']
+      regulations: ['Payment Services Directive 3 (PSD3)', 'Payment Services Regulation (PSR)', 'Instant Payments Regulation (IPR)', 'Payment Services Directive 2 (PSD2)', 'Markets in Crypto-Assets (MiCA)', 'Digital Operational Resilience Act (DORA)']
     },
     {
       id: 3,
