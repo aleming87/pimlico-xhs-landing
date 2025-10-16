@@ -321,7 +321,7 @@ export default function AIPage() {
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
           <h2 className="text-center text-base/7 font-semibold text-indigo-400">Everything you need</h2>
           <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
-            Monitor, Analyse, Collaborate, and Integrate
+            End-to-end AI-native regulatory workflows
           </p>
           <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
             {/* Monitor - Large left column */}
@@ -334,14 +334,14 @@ export default function AIPage() {
                     Real-time regulatory updates across all jurisdictions in a unified feed
                   </p>
                 </div>
-                <div className="relative min-h-[30rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
-                  <div className="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
+                <div className="relative min-h-[30rem] w-full grow">
+                  <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
                     <Image
                       src="/AIProduct.png"
                       alt="AI Regulatory Monitoring Dashboard"
                       width={1200}
                       height={800}
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-cover object-top rounded-lg"
                     />
                   </div>
                 </div>
@@ -443,66 +443,104 @@ export default function AIPage() {
                 <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
                   <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Integrate</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
-                    API access to embed regulatory data into your existing systems
+                    Connect with your existing workflow tools and systems
                   </p>
                 </div>
                 <div className="relative min-h-[30rem] w-full grow">
                   <div className="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl ring-1 ring-white/10">
-                    <div className="flex bg-gray-800 ring-1 ring-white/5">
+                    <div className="flex bg-gray-800 ring-1 ring-white/5 border-b border-gray-700">
                       <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
-                        <div className="border-r border-b border-r-white/20 border-b-white/20 bg-white/5 px-4 py-2 text-white">api.js</div>
-                        <div className="border-r border-gray-600/10 px-4 py-2">config.js</div>
+                        <div className="border-r border-b border-r-white/20 border-b-transparent bg-gray-900 px-4 py-2 text-white flex items-center gap-2">
+                          <span>integrations.js</span>
+                        </div>
+                        <div className="border-r border-gray-600/10 px-4 py-2">webhooks.js</div>
                         <div className="border-r border-gray-600/10 px-4 py-2">README.md</div>
                       </div>
                     </div>
-                    <div className="px-6 pt-6 pb-14 font-mono text-xs leading-relaxed">
-                      <div className="text-gray-500">// Initialize XHS Client</div>
-                      <div className="text-purple-400">import</div>
-                      <span className="text-gray-300">{` { XHSClient } `}</span>
-                      <span className="text-purple-400">from</span>
-                      <span className="text-green-400">{` '@xhs/sdk'`}</span>
-                      
-                      <div className="mt-3 text-purple-400">const</div>
-                      <span className="text-blue-300">{` client `}</span>
-                      <span className="text-gray-300">{`= `}</span>
-                      <span className="text-purple-400">new</span>
-                      <span className="text-blue-300">{` XHSClient`}</span>
-                      <span className="text-gray-300">{`({`}</span>
-                      <div className="ml-4 text-gray-300">
-                        <span className="text-blue-300">apiKey:</span>
-                        <span className="text-green-400">{` 'xhs_live_abc123...'`}</span>
-                        <span>,</span>
-                      </div>
-                      <div className="ml-4 text-gray-300">
-                        <span className="text-blue-300">region:</span>
-                        <span className="text-green-400">{` 'us-east-1'`}</span>
-                      </div>
-                      <div className="text-gray-300">{`})`}</div>
-                      
-                      <div className="mt-3 text-gray-500">// Fetch AI regulations</div>
-                      <div className="text-purple-400">const</div>
-                      <span className="text-blue-300">{` regulations `}</span>
-                      <span className="text-gray-300">{`= `}</span>
-                      <span className="text-purple-400">await</span>
-                      <div className="ml-2 text-gray-300">
-                        <span className="text-blue-300">client</span>
-                        <span>.getRegulations(</span>
+                    <div className="px-6 pt-4 pb-6 overflow-auto h-full">
+                      <div className="font-mono text-xs leading-relaxed">
+                        <div className="text-gray-500">// XHS API Integration</div>
+                        <div className="text-purple-400">import</div>
+                        <span className="text-gray-300">{` { XHSClient } `}</span>
+                        <span className="text-purple-400">from</span>
+                        <span className="text-green-400">{` '@xhs/sdk'`}</span>
+                        
+                        <div className="mt-3 text-purple-400">const</div>
+                        <span className="text-blue-300">{` client `}</span>
+                        <span className="text-gray-300">{`= `}</span>
+                        <span className="text-purple-400">new</span>
+                        <span className="text-blue-300">{` XHSClient`}</span>
+                        <span className="text-gray-300">{`({`}</span>
+                        <div className="ml-4 text-gray-300">
+                          <span className="text-blue-300">apiKey:</span>
+                          <span className="text-green-400">{` 'xhs_live_k8s9d...'`}</span>
+                          <span>,</span>
+                        </div>
+                        <div className="ml-4 text-gray-300">
+                          <span className="text-blue-300">environment:</span>
+                          <span className="text-green-400">{` 'production'`}</span>
+                        </div>
+                        <div className="text-gray-300">{`})`}</div>
+                        
+                        <div className="mt-4 text-gray-500">// Fetch regulations by domain</div>
+                        <div className="text-purple-400">const</div>
+                        <span className="text-blue-300">{` data `}</span>
+                        <span className="text-gray-300">{`= `}</span>
+                        <span className="text-purple-400">await</span>
+                        <span className="text-blue-300">{` client`}</span>
+                        <span className="text-gray-300">.regulations.list(</span>
                         <span className="text-gray-300">{`{`}</span>
+                        <div className="ml-4">
+                          <span className="text-blue-300">domain:</span>
+                          <span className="text-green-400">{` 'ai'`}</span>
+                          <span className="text-gray-300">,</span>
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-blue-300">jurisdictions:</span>
+                          <span className="text-gray-300">{` [`}</span>
+                          <span className="text-green-400">'US'</span>
+                          <span className="text-gray-300">, </span>
+                          <span className="text-green-400">'EU'</span>
+                          <span className="text-gray-300">, </span>
+                          <span className="text-green-400">'UK'</span>
+                          <span className="text-gray-300">{`],`}</span>
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-blue-300">limit:</span>
+                          <span className="text-yellow-400">{` 50`}</span>
+                        </div>
+                        <div className="text-gray-300">{`})`}</div>
+
+                        <div className="mt-4 border-t border-gray-700 pt-4">
+                          <div className="text-gray-500">// Slack Integration</div>
+                          <div className="flex items-center gap-2 mt-2 mb-2">
+                            <Image
+                              src="/logo-timeline/slack.svg"
+                              alt="Slack"
+                              width={16}
+                              height={16}
+                              className="opacity-80"
+                            />
+                            <span className="text-gray-400 text-xs">Push alerts to Slack channels</span>
+                          </div>
+                          <div className="text-purple-400">await</div>
+                          <span className="text-blue-300">{` client`}</span>
+                          <span className="text-gray-300">.webhooks.create(</span>
+                          <span className="text-gray-300">{`{`}</span>
+                          <div className="ml-4">
+                            <span className="text-blue-300">url:</span>
+                            <span className="text-green-400">{` 'https://hooks.slack.com/...'`}</span>
+                            <span className="text-gray-300">,</span>
+                          </div>
+                          <div className="ml-4">
+                            <span className="text-blue-300">events:</span>
+                            <span className="text-gray-300">{` [`}</span>
+                            <span className="text-green-400">'regulation.updated'</span>
+                            <span className="text-gray-300">{`]`}</span>
+                          </div>
+                          <div className="text-gray-300">{`})`}</div>
+                        </div>
                       </div>
-                      <div className="ml-6">
-                        <span className="text-blue-300">domain:</span>
-                        <span className="text-green-400">{` 'ai'`}</span>
-                        <span className="text-gray-300">,</span>
-                      </div>
-                      <div className="ml-6">
-                        <span className="text-blue-300">jurisdictions:</span>
-                        <span className="text-gray-300">{` [`}</span>
-                        <span className="text-green-400">'US'</span>
-                        <span className="text-gray-300">, </span>
-                        <span className="text-green-400">'EU'</span>
-                        <span className="text-gray-300">{`]`}</span>
-                      </div>
-                      <div className="ml-4 text-gray-300">{`})`}</div>
                     </div>
                   </div>
                 </div>
