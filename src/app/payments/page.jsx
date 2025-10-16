@@ -348,13 +348,15 @@ export default function PaymentsPage() {
                 </div>
                 <div className="relative min-h-[30rem] w-full grow">
                   <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
-                    <Image
-                      src="/AIProductIII.png"
-                      alt="Payments Regulatory Monitoring Dashboard"
-                      width={1200}
-                      height={800}
-                      className="w-full h-full object-cover object-[center_top] rounded-lg scale-95"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src="/AIProductIII.png"
+                        alt="Payments Regulatory Monitoring Dashboard"
+                        fill
+                        className="object-cover object-[center_top] rounded-lg scale-95"
+                        priority
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
