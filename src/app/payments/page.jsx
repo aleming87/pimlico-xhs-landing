@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Footer } from '@/components/footer';
+import { AnimatedNumber } from '@/components/animated-number';
 
 export default function PaymentsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -159,40 +160,46 @@ export default function PaymentsPage() {
           <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-emerald-400 to-blue-600 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
         </div>
         
-        <div className="py-24 sm:py-32 lg:pb-40">
+        <div className="py-32 sm:py-48 lg:py-56">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Manage <span className="text-blue-600">Payments</span> Regulations with XHS
+                Manage <span className="text-blue-600">Payments</span> Regulations with XHS™
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Monitor, analyse, collaborate, and integrate regulatory intelligence into your workflow
+                Monitor, analyse, collaborate, integrate
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="bg-white py-12 sm:py-16">
+      {/* Stay Ahead Section */}
+      <div className="bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center mb-12">
+          <div className="mx-auto max-w-2xl lg:text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Stay ahead of emerging risks and opportunities
+              Stay ahead of emerging <span className="text-blue-600">risks</span> and <span className="text-blue-600">opportunities</span>
             </h2>
           </div>
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Payment regulations tracked</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">200+</dd>
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+                <AnimatedNumber start={0} end={750} />+
+              </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Jurisdictions monitored</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">60+</dd>
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+                <AnimatedNumber start={0} end={90} />+
+              </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Payment subcategories covered</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">4</dd>
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+                <AnimatedNumber start={0} end={4} />
+              </dd>
             </div>
           </dl>
         </div>
@@ -201,14 +208,8 @@ export default function PaymentsPage() {
       {/* Payments Categories Section */}
       <div id="features" className="bg-gray-900 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
-              Track regulation across domains
-            </h2>
-          </div>
-          
           {/* Payments Category Box */}
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-10 border border-gray-700 shadow-2xl">
               <div className="flex items-center mb-10">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 mr-6 shadow-lg">
@@ -216,10 +217,10 @@ export default function PaymentsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                   </svg>
                 </div>
-                <h3 className="text-3xl font-bold text-white">Payments Regulatory Categories</h3>
+                <h3 className="text-3xl font-bold text-white">Payment Regulation Trends</h3>
               </div>
               
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {categories.map((category) => (
                   <div key={category.id} className="bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl border border-gray-600 overflow-hidden transition-all duration-200">
                     <button
@@ -263,7 +264,7 @@ export default function PaymentsPage() {
             </p>
           </div>
           
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
             {jurisdictions.map((jurisdiction) => (
               <div key={jurisdiction.id} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 overflow-hidden">
                 <button
