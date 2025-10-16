@@ -77,10 +77,13 @@ export function AnimatedCollaborate() {
     const interval = setInterval(() => {
       if (index < newActivities.length) {
         setActivities(prev => {
-          const updated = [newActivities[index], ...prev];
+          const newItem = { ...newActivities[index], id: Date.now() };
+          const updated = [newItem, ...prev];
           return updated.slice(0, 3); // Keep only 3 items
         });
         index++;
+      } else {
+        clearInterval(interval);
       }
     }, 3000);
     
@@ -107,13 +110,10 @@ export function AnimatedCollaborate() {
         <span className="text-xs text-gray-400">8 team members</span>
       </div>
       <div className="space-y-2 overflow-hidden">
-        {activities.map((activity, index) => (
+        {activities.map((activity) => (
           <div 
             key={activity.id}
-            className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50 animate-slideIn"
-            style={{ 
-              animation: index === 0 ? 'slideIn 0.5s ease-out' : 'none',
-            }}
+            className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50 transition-all duration-500"
           >
             <div className="flex items-start gap-2">
               <div className={`h-6 w-6 rounded-full ${colorClasses[activity.color]} flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white`}>
@@ -134,20 +134,28 @@ export function AnimatedCollaborate() {
 // Animated Code Scrolling Component
 export function AnimatedCodeIntegration() {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   
   useEffect(() => {
+    if (isPaused) return;
+    
     const interval = setInterval(() => {
       setScrollPosition(prev => {
-        if (prev >= 200) return 0; // Reset after scrolling
-        return prev + 1;
+        const newPos = prev + 1;
+        if (newPos >= 200) return 0; // Reset after scrolling
+        return newPos;
       });
     }, 50);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
   
   return (
-    <div className="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl ring-1 ring-white/10">
+    <div 
+      className="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl ring-1 ring-white/10"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="flex bg-gray-800 ring-1 ring-white/5 border-b border-gray-700">
         <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
           <div className="border-r border-b border-r-white/20 border-b-transparent bg-gray-900 px-4 py-2 text-white flex items-center gap-2">
@@ -159,8 +167,12 @@ export function AnimatedCodeIntegration() {
       </div>
       <div className="relative h-full overflow-hidden">
         <div 
-          className="px-6 pt-4 pb-6 transition-transform duration-100 ease-linear"
-          style={{ transform: `translateY(-${scrollPosition}px)` }}
+          className="px-6 pt-4 pb-6"
+          style={{ 
+            transform: `translateY(-${scrollPosition}px)`,
+            transition: 'transform 0.1s linear',
+            willChange: 'transform'
+          }}
         >
           <div className="font-mono text-xs leading-relaxed">
             <div className="text-gray-500">// XHS API Integration</div>
