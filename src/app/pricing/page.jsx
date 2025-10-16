@@ -1,502 +1,220 @@
-import { Button } from '@/components/button'
-import { Container } from '@/components/container'
-import { Footer } from '@/components/footer'
-import { Gradient, GradientBackground } from '@/components/gradient'
-import { Link } from '@/components/link'
-import { LogoCloud } from '@/components/logo-cloud'
-import { Navbar } from '@/components/navbar'
-import { Heading, Lead, Subheading } from '@/components/text'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import {
-  CheckIcon,
-  ChevronUpDownIcon,
-  MinusIcon,
-} from '@heroicons/react/16/solid'
+"use client";
 
-export const metadata = {
-  title: 'Pricing',
-  description:
-    'Companies all over the world have closed millions of deals with Radiant. Sign up today and start selling smarter.',
-}
+import Image from "next/image";
+import { useState } from "react";
+import { Footer } from '@/components/footer';
 
-const tiers = [
-  {
-    name: 'Starter',
-    slug: 'starter',
-    description: 'Everything you need to start selling.',
-    priceMonthly: 99,
-    href: '#',
-    highlights: [
-      { description: 'Up to 3 team members' },
-      { description: 'Up to 5 deal progress boards' },
-      { description: 'Source leads from select platforms' },
-      { description: 'RadiantAI integrations', disabled: true },
-      { description: 'Competitor analysis', disabled: true },
-    ],
-    features: [
-      { section: 'Features', name: 'Accounts', value: 3 },
-      { section: 'Features', name: 'Deal progress boards', value: 5 },
-      { section: 'Features', name: 'Sourcing platforms', value: 'Select' },
-      { section: 'Features', name: 'Contacts', value: 100 },
-      { section: 'Features', name: 'AI assisted outreach', value: false },
-      { section: 'Analysis', name: 'Competitor analysis', value: false },
-      { section: 'Analysis', name: 'Dashboard reporting', value: false },
-      { section: 'Analysis', name: 'Community insights', value: false },
-      { section: 'Analysis', name: 'Performance analysis', value: false },
-      { section: 'Support', name: 'Email support', value: true },
-      { section: 'Support', name: '24 / 7 call center support', value: false },
-      { section: 'Support', name: 'Dedicated account manager', value: false },
-    ],
-  },
-  {
-    name: 'Growth',
-    slug: 'growth',
-    description: 'All the extras for your growing team.',
-    priceMonthly: 149,
-    href: '#',
-    highlights: [
-      { description: 'Up to 10 team members' },
-      { description: 'Unlimited deal progress boards' },
-      { description: 'Source leads from over 50 verified platforms' },
-      { description: 'RadiantAI integrations' },
-      { description: '5 competitor analyses per month' },
-    ],
-    features: [
-      { section: 'Features', name: 'Accounts', value: 10 },
-      { section: 'Features', name: 'Deal progress boards', value: 'Unlimited' },
-      { section: 'Features', name: 'Sourcing platforms', value: '100+' },
-      { section: 'Features', name: 'Contacts', value: 1000 },
-      { section: 'Features', name: 'AI assisted outreach', value: true },
-      { section: 'Analysis', name: 'Competitor analysis', value: '5 / month' },
-      { section: 'Analysis', name: 'Dashboard reporting', value: true },
-      { section: 'Analysis', name: 'Community insights', value: true },
-      { section: 'Analysis', name: 'Performance analysis', value: true },
-      { section: 'Support', name: 'Email support', value: true },
-      { section: 'Support', name: '24 / 7 call center support', value: true },
-      { section: 'Support', name: 'Dedicated account manager', value: false },
-    ],
-  },
-  {
-    name: 'Enterprise',
-    slug: 'enterprise',
-    description: 'Added flexibility to close deals at scale.',
-    priceMonthly: 299,
-    href: '#',
-    highlights: [
-      { description: 'Unlimited active team members' },
-      { description: 'Unlimited deal progress boards' },
-      { description: 'Source leads from over 100 verified platforms' },
-      { description: 'RadiantAI integrations' },
-      { description: 'Unlimited competitor analyses' },
-    ],
-    features: [
-      { section: 'Features', name: 'Accounts', value: 'Unlimited' },
-      { section: 'Features', name: 'Deal progress boards', value: 'Unlimited' },
-      { section: 'Features', name: 'Sourcing platforms', value: '100+' },
-      { section: 'Features', name: 'Contacts', value: 'Unlimited' },
-      { section: 'Features', name: 'AI assisted outreach', value: true },
-      { section: 'Analysis', name: 'Competitor analysis', value: 'Unlimited' },
-      { section: 'Analysis', name: 'Dashboard reporting', value: true },
-      { section: 'Analysis', name: 'Community insights', value: true },
-      { section: 'Analysis', name: 'Performance analysis', value: true },
-      { section: 'Support', name: 'Email support', value: true },
-      { section: 'Support', name: '24 / 7 call center support', value: true },
-      { section: 'Support', name: 'Dedicated account manager', value: true },
-    ],
-  },
-]
+export default function PricingPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [frequency, setFrequency] = useState('monthly');
 
-function Header() {
   return (
-    <Container className="mt-16">
-      <Heading as="h1">Pricing that grows with your team size.</Heading>
-      <Lead className="mt-6 max-w-3xl">
-        Companies all over the world have closed millions of deals with Radiant.
-        Sign up today and start selling smarter.
-      </Lead>
-    </Container>
-  )
-}
-
-function PricingCards() {
-  return (
-    <div className="relative py-24">
-      <Gradient className="absolute inset-x-2 top-48 bottom-0 rounded-4xl ring-1 ring-black/5 ring-inset" />
-      <Container className="relative">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {tiers.map((tier, tierIndex) => (
-            <PricingCard key={tierIndex} tier={tier} />
-          ))}
-        </div>
-        <LogoCloud className="mt-24" />
-      </Container>
-    </div>
-  )
-}
-
-function PricingCard({ tier }) {
-  return (
-    <div className="-m-2 grid grid-cols-1 rounded-4xl shadow-[inset_0_0_2px_1px_#ffffff4d] ring-1 ring-black/5 max-lg:mx-auto max-lg:w-full max-lg:max-w-md">
-      <div className="grid grid-cols-1 rounded-4xl p-2 shadow-md shadow-black/5">
-        <div className="rounded-3xl bg-white p-10 pb-9 shadow-2xl ring-1 ring-black/5">
-          <Subheading>{tier.name}</Subheading>
-          <p className="mt-2 text-sm/6 text-gray-950/75">{tier.description}</p>
-          <div className="mt-8 flex items-center gap-4">
-            <div className="text-5xl font-medium text-gray-950">
-              ${tier.priceMonthly}
-            </div>
-            <div className="text-sm/5 text-gray-950/75">
-              <p>USD</p>
-              <p>per month</p>
-            </div>
+    <div className="bg-gray-900">
+      <header className="absolute inset-x-0 top-0 z-50">
+        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
+          <div className="flex lg:flex-1">
+            <a href="/" className="-m-1.5 p-1.5">
+              <span className="sr-only">Pimlico XHS</span>
+              <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
+            </a>
           </div>
-          <div className="mt-8">
-            <Button href={tier.href}>Start a free trial</Button>
+          <div className="flex lg:hidden">
+            <button 
+              type="button" 
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="size-6">
+                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
-          <div className="mt-8">
-            <h3 className="text-sm/6 font-medium text-gray-950">
-              Start selling with:
-            </h3>
-            <ul className="mt-3 space-y-3">
-              {tier.highlights.map((props, featureIndex) => (
-                <FeatureItem key={featureIndex} {...props} />
-              ))}
-            </ul>
+          <div className="hidden lg:flex lg:gap-x-12">
+            <a href="/#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
+            <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
+            <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
+            <a href="/#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
+            <a href="/#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function PricingTable({ selectedTier }) {
-  return (
-    <Container className="py-24">
-      <table className="w-full text-left">
-        <caption className="sr-only">Pricing plan comparison</caption>
-        <colgroup>
-          <col className="w-3/5 sm:w-2/5" />
-          <col
-            data-selected={selectedTier === tiers[0] ? true : undefined}
-            className="w-2/5 data-selected:table-column max-sm:hidden sm:w-1/5"
-          />
-          <col
-            data-selected={selectedTier === tiers[1] ? true : undefined}
-            className="w-2/5 data-selected:table-column max-sm:hidden sm:w-1/5"
-          />
-          <col
-            data-selected={selectedTier === tiers[2] ? true : undefined}
-            className="w-2/5 data-selected:table-column max-sm:hidden sm:w-1/5"
-          />
-        </colgroup>
-        <thead>
-          <tr className="max-sm:hidden">
-            <td className="p-0" />
-            {tiers.map((tier) => (
-              <th
-                key={tier.slug}
-                scope="col"
-                data-selected={selectedTier === tier ? true : undefined}
-                className="p-0 data-selected:table-cell max-sm:hidden"
-              >
-                <Subheading as="div">{tier.name}</Subheading>
-              </th>
-            ))}
-          </tr>
-          <tr className="sm:hidden">
-            <td className="p-0">
-              <div className="relative inline-block">
-                <Menu>
-                  <MenuButton className="flex items-center justify-between gap-2 font-medium">
-                    {selectedTier.name}
-                    <ChevronUpDownIcon className="size-4 fill-gray-900" />
-                  </MenuButton>
-                  <MenuItems
-                    anchor="bottom start"
-                    className="min-w-(--button-width) rounded-lg bg-white p-1 shadow-lg ring-1 ring-gray-200 [--anchor-gap:6px] [--anchor-offset:-4px] [--anchor-padding:10px]"
-                  >
-                    {tiers.map((tier) => (
-                      <MenuItem key={tier.slug}>
-                        <Link
-                          scroll={false}
-                          href={`/pricing?tier=${tier.slug}`}
-                          data-selected={
-                            tier === selectedTier ? true : undefined
-                          }
-                          className="group flex items-center gap-2 rounded-md px-2 py-1 data-focus:bg-gray-200"
-                        >
-                          {tier.name}
-                          <CheckIcon className="hidden size-4 group-data-selected:block" />
-                        </Link>
-                      </MenuItem>
-                    ))}
-                  </MenuItems>
-                </Menu>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                  <ChevronUpDownIcon className="size-4 fill-gray-900" />
-                </div>
-              </div>
-            </td>
-            <td colSpan={3} className="p-0 text-right">
-              <Button variant="outline" href={selectedTier.href}>
-                Get started
-              </Button>
-            </td>
-          </tr>
-          <tr className="max-sm:hidden">
-            <th className="p-0" scope="row">
-              <span className="sr-only">Get started</span>
-            </th>
-            {tiers.map((tier) => (
-              <td
-                key={tier.slug}
-                data-selected={selectedTier === tier ? true : undefined}
-                className="px-0 pt-4 pb-0 data-selected:table-cell max-sm:hidden"
-              >
-                <Button variant="outline" href={tier.href}>
-                  Get started
-                </Button>
-              </td>
-            ))}
-          </tr>
-        </thead>
-        {[...new Set(tiers[0].features.map(({ section }) => section))].map(
-          (section) => (
-            <tbody key={section} className="group">
-              <tr>
-                <th
-                  scope="colgroup"
-                  colSpan={4}
-                  className="px-0 pt-10 pb-0 group-first-of-type:pt-5"
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <a href="/#contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </nav>
+        
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden">
+            <div className="fixed inset-0 z-50"></div>
+            <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+              <div className="flex items-center justify-between">
+                <a href="/" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Pimlico XHS</span>
+                  <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-8 w-auto" />
+                </a>
+                <button
+                  type="button"
+                  className="-m-2.5 rounded-md p-2.5 text-gray-200"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className="-mx-4 rounded-lg bg-gray-50 px-4 py-3 text-sm/6 font-semibold">
-                    {section}
+                  <span className="sr-only">Close menu</span>
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="mt-6 flow-root">
+                <div className="-my-6 divide-y divide-gray-500/10">
+                  <div className="space-y-2 py-6">
+                    <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>How it works</a>
+                    <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>AI</a>
+                    <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Payments</a>
+                    <a href="/#use-cases" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Use cases</a>
+                    <a href="/#team" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Team</a>
                   </div>
-                </th>
-              </tr>
-              {tiers[0].features
-                .filter((feature) => feature.section === section)
-                .map(({ name }) => (
-                  <tr
-                    key={name}
-                    className="border-b border-gray-100 last:border-none"
-                  >
-                    <th
-                      scope="row"
-                      className="px-0 py-4 text-sm/6 font-normal text-gray-600"
-                    >
-                      {name}
-                    </th>
-                    {tiers.map((tier) => {
-                      let value = tier.features.find(
-                        (feature) =>
-                          feature.section === section && feature.name === name,
-                      )?.value
-
-                      return (
-                        <td
-                          key={tier.slug}
-                          data-selected={
-                            selectedTier === tier ? true : undefined
-                          }
-                          className="p-4 data-selected:table-cell max-sm:hidden"
-                        >
-                          {value === true ? (
-                            <>
-                              <CheckIcon className="size-4 fill-green-600" />
-                              <span className="sr-only">
-                                Included in {tier.name}
-                              </span>
-                            </>
-                          ) : value === false || value === undefined ? (
-                            <>
-                              <MinusIcon className="size-4 fill-gray-400" />
-                              <span className="sr-only">
-                                Not included in {tier.name}
-                              </span>
-                            </>
-                          ) : (
-                            <div className="text-sm/6">{value}</div>
-                          )}
-                        </td>
-                      )
-                    })}
-                  </tr>
-                ))}
-            </tbody>
-          ),
-        )}
-      </table>
-    </Container>
-  )
-}
-
-function FeatureItem({ description, disabled = false }) {
-  return (
-    <li
-      data-disabled={disabled ? true : undefined}
-      className="flex items-start gap-4 text-sm/6 text-gray-950/75 data-disabled:text-gray-950/25"
-    >
-      <span className="inline-flex h-6 items-center">
-        <PlusIcon className="size-3.75 shrink-0 fill-gray-950/25" />
-      </span>
-      {disabled && <span className="sr-only">Not included:</span>}
-      {description}
-    </li>
-  )
-}
-
-function PlusIcon(props) {
-  return (
-    <svg viewBox="0 0 15 15" aria-hidden="true" {...props}>
-      <path clipRule="evenodd" d="M8 0H7v7H0v1h7v7h1V8h7V7H8V0z" />
-    </svg>
-  )
-}
-
-function Testimonial() {
-  return (
-    <div className="mx-2 my-24 rounded-4xl bg-gray-900 bg-[url(/dot-texture.svg)] pt-72 pb-24 lg:pt-36">
-      <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-[384px_1fr_1fr]">
-          <div className="-mt-96 lg:-mt-52">
-            <div className="-m-2 rounded-4xl bg-white/15 shadow-[inset_0_0_2px_1px_#ffffff4d] ring-1 ring-black/5 max-lg:mx-auto max-lg:max-w-xs">
-              <div className="rounded-4xl p-2 shadow-md shadow-black/5">
-                <div className="overflow-hidden rounded-3xl shadow-2xl outline outline-1 -outline-offset-1 outline-black/10">
-                  <img
-                    alt=""
-                    src="/testimonials/tina-yards.jpg"
-                    className="aspect-3/4 w-full object-cover"
-                  />
+                  <div className="py-6">
+                    <a href="/#contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Book a demo</a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex max-lg:mt-16 lg:col-span-2 lg:px-16">
-            <figure className="mx-auto flex max-w-xl flex-col gap-16 max-lg:text-center">
-              <blockquote>
-                <p className="relative text-3xl tracking-tight text-white before:absolute before:-translate-x-full before:content-['“'] after:absolute after:content-['”'] lg:text-4xl">
-                  Thanks to Radiant, we&apos;re finding new leads that we never
-                  would have found with legal methods.
+        )}
+      </header>
+
+      <main>
+        {/* Pricing section */}
+        <div className="bg-gray-900 pt-24 sm:pt-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-4xl text-center">
+              <h2 className="text-base/7 font-semibold text-indigo-400">Pricing</h2>
+              <p className="mt-2 text-5xl font-semibold tracking-tight text-balance text-white sm:text-6xl">Pricing that grows with you</p>
+            </div>
+            <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Choose an affordable plan that's packed with the best features for regulatory compliance, creating team efficiency, and driving business outcomes.</p>
+            <div className="mt-16 flex justify-center">
+              <fieldset aria-label="Payment frequency">
+                <div className="grid grid-cols-2 gap-x-1 rounded-full p-1 text-center text-xs/5 font-semibold ring-1 ring-inset ring-white/10">
+                  <label className={`cursor-pointer rounded-full px-2.5 py-1 ${frequency === 'monthly' ? 'bg-indigo-500' : ''}`}>
+                    <input type="radio" name="frequency" value="monthly" checked={frequency === 'monthly'} onChange={(e) => setFrequency(e.target.value)} className="sr-only" />
+                    <span className={frequency === 'monthly' ? 'text-white' : 'text-gray-400'}>Monthly</span>
+                  </label>
+                  <label className={`cursor-pointer rounded-full px-2.5 py-1 ${frequency === 'annually' ? 'bg-indigo-500' : ''}`}>
+                    <input type="radio" name="frequency" value="annually" checked={frequency === 'annually'} onChange={(e) => setFrequency(e.target.value)} className="sr-only" />
+                    <span className={frequency === 'annually' ? 'text-white' : 'text-gray-400'}>Annually</span>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+            <div className="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 md:max-w-2xl md:grid-cols-2 lg:max-w-4xl xl:mx-0 xl:max-w-none xl:grid-cols-4">
+              {/* Starter Tier */}
+              <div className="rounded-3xl bg-gray-800/50 p-8 ring-1 ring-white/15">
+                <h3 className="text-lg/8 font-semibold text-white">Starter</h3>
+                <p className="mt-4 text-sm/6 text-gray-300">Perfect for small teams getting started with regulatory compliance.</p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '499' : '4,990'}</span>
+                  <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
                 </p>
-              </blockquote>
-              <figcaption className="mt-auto">
-                <p className="text-sm/6 font-medium text-white">Tina Yards</p>
-                <p className="text-sm/6 font-medium">
-                  <span className="bg-linear-to-r from-[#fff1be] from-28% via-[#ee87cb] via-70% to-[#b060ff] bg-clip-text text-transparent">
-                    VP of Sales, Protocol
-                  </span>
+                <a href="/#contact" className="mt-6 block w-full rounded-md bg-white/10 px-3 py-2 text-center text-sm/6 font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20">Get started</a>
+                <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Up to 5 users</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>2 regulatory domains</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Basic analytics</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Email support</li>
+                </ul>
+              </div>
+
+              {/* Professional Tier */}
+              <div className="rounded-3xl bg-gray-800/50 p-8 ring-1 ring-white/15">
+                <h3 className="text-lg/8 font-semibold text-white">Professional</h3>
+                <p className="mt-4 text-sm/6 text-gray-300">For growing teams managing multiple regulatory requirements.</p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '999' : '9,990'}</span>
+                  <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
                 </p>
-              </figcaption>
-            </figure>
+                <a href="/#contact" className="mt-6 block w-full rounded-md bg-white/10 px-3 py-2 text-center text-sm/6 font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20">Get started</a>
+                <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Up to 15 users</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>All regulatory domains</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Advanced analytics</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>API access</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Priority support</li>
+                </ul>
+              </div>
+
+              {/* Enterprise Tier - Featured */}
+              <div className="rounded-3xl bg-gray-800/50 p-8 ring-2 ring-indigo-400">
+                <div className="flex items-center justify-between gap-x-4">
+                  <h3 className="text-lg/8 font-semibold text-indigo-400">Enterprise</h3>
+                  <p className="rounded-full bg-indigo-500 px-2.5 py-1 text-xs/5 font-semibold text-white">Most popular</p>
+                </div>
+                <p className="mt-4 text-sm/6 text-gray-300">Comprehensive solution for large organizations with complex needs.</p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '2,499' : '24,990'}</span>
+                  <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
+                </p>
+                <a href="/#contact" className="mt-6 block w-full rounded-md bg-indigo-500 px-3 py-2 text-center text-sm/6 font-semibold text-white hover:bg-indigo-400">Get started</a>
+                <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Unlimited users</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>All regulatory domains</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Custom analytics & reporting</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Full API access & webhooks</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Dedicated support & CSM</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>SLA & uptime guarantee</li>
+                </ul>
+              </div>
+
+              {/* Custom Tier */}
+              <div className="rounded-3xl bg-gray-800/50 p-8 ring-1 ring-white/15">
+                <h3 className="text-lg/8 font-semibold text-white">Custom</h3>
+                <p className="mt-4 text-sm/6 text-gray-300">Tailored solutions for unique regulatory and compliance challenges.</p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-semibold tracking-tight text-white">Contact us</span>
+                </p>
+                <a href="/#contact" className="mt-6 block w-full rounded-md bg-white/10 px-3 py-2 text-center text-sm/6 font-semibold text-white ring-1 ring-inset ring-white/5 hover:bg-white/20">Contact sales</a>
+                <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Everything in Enterprise</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Custom integrations</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>On-premise deployment</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Custom training & onboarding</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>White-label options</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Flexible contract terms</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
-      </Container>
-    </div>
-  )
-}
 
-function FrequentlyAskedQuestions() {
-  return (
-    <Container>
-      <section id="faqs" className="scroll-mt-8">
-        <Subheading className="text-center">
-          Frequently asked questions
-        </Subheading>
-        <Heading as="div" className="mt-2 text-center">
-          Your questions answered.
-        </Heading>
-        <div className="mx-auto mt-16 mb-32 max-w-xl space-y-12">
-          <dl>
-            <dt className="text-sm font-semibold">
-              What measures are in place to ensure the security of our data?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              Data security is a top priority for us, which is ironic given that
-              our business depends on others not taking it very seriously. We
-              understand that any breach could put both us and most of our
-              customers out of business—and behind bars. We employ robust
-              security measures, including data encryption, secure data centers,
-              and regular security audits to ensure this never happens.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">
-              Is there a mobile app available for your platform?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              Yes, we offer a mobile app that provides all the key
-              functionalities of our desktop platform, allowing sales reps to
-              manage deals on the go. Additionally, we have another app
-              pre-installed on most modern smartphones that allows us to track
-              your location, listen to your conversations, and access your
-              camera and microphone at any time. This app is not available for
-              download.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">
-              Can I customize the workflow to match our company’s deal process?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              Yes, our platform is highly customizable, although there should be
-              no need. Before you sign up, we discreetly gather information
-              about your company and its processes from a variety of sources. We
-              then use this information to pre-configure the platform to match
-              your existing workflows. This is why we ask for your social
-              security number and access to your email account during the
-              sign-up process.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">
-              What kind of support do you offer?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              We offer comprehensive support through multiple channels,
-              including 24/7 live chat, email, and phone support. However, since
-              we have full access to your internal network, we will know if
-              you’re having issues before you do.
-            </dd>
-          </dl>
-          <dl>
-            <dt className="text-sm font-semibold">
-              Can I integrate the CRM with other sales intelligence tools?
-            </dt>
-            <dd className="mt-4 text-sm/6 text-gray-600">
-              Yes, our solution integrates seamlessly with a variety of other
-              systems. However, be warned that most of these integrations are
-              short-lived. We have a dedicated team of engineers who
-              reverse-engineer the APIs of other tools, enabling us to build
-              their functionality into our product and eventually put them out
-              of business.
-            </dd>
-          </dl>
+        {/* FAQ section */}
+        <div className="mx-auto mt-24 max-w-7xl px-6 sm:mt-56 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Frequently asked questions</h2>
+            <dl className="mt-16 divide-y divide-white/10">
+              <div className="py-6">
+                <dt className="text-base/7 font-semibold text-white">What's included in all plans?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">All plans include access to our AI-powered regulatory monitoring platform, real-time updates, collaborative workspaces, and basic analytics. Higher-tier plans add more users, domains, and advanced features.</p></dd>
+              </div>
+              <div className="py-6">
+                <dt className="text-base/7 font-semibold text-white">Can I switch plans later?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle, and we'll prorate any differences.</p></dd>
+              </div>
+              <div className="py-6">
+                <dt className="text-base/7 font-semibold text-white">Do you offer a free trial?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">We offer a 14-day free trial for all new customers on any plan. No credit card required to start your trial.</p></dd>
+              </div>
+              <div className="py-6">
+                <dt className="text-base/7 font-semibold text-white">What payment methods do you accept?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">We accept all major credit cards (Visa, Mastercard, American Express), bank transfers, and can accommodate invoicing for Enterprise and Custom plans.</p></dd>
+              </div>
+              <div className="py-6">
+                <dt className="text-base/7 font-semibold text-white">Is there a setup fee?</dt>
+                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">No setup fees for Starter, Professional, and Enterprise plans. Custom plans may include implementation services priced separately based on your specific requirements.</p></dd>
+              </div>
+            </dl>
+          </div>
         </div>
-      </section>
-    </Container>
-  )
-}
+      </main>
 
-export default async function Pricing({ searchParams }) {
-  let params = await searchParams
-  let tier =
-    typeof params.tier === 'string'
-      ? tiers.find(({ slug }) => slug === params.tier)
-      : tiers[0]
-
-  return (
-    <main className="overflow-hidden">
-      <GradientBackground />
-      <Container>
-        <Navbar />
-      </Container>
-      <Header />
-      <PricingCards />
-      <PricingTable selectedTier={tier} />
-      <Testimonial />
-      <FrequentlyAskedQuestions />
       <Footer />
-    </main>
-  )
+    </div>
+  );
 }

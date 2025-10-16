@@ -341,7 +341,7 @@ export default function AIPage() {
                       alt="AI Regulatory Monitoring Dashboard"
                       width={1200}
                       height={800}
-                      className="w-full h-full object-cover object-center rounded-lg"
+                      className="w-full h-full object-cover object-[center_top] rounded-lg scale-95"
                     />
                   </div>
                 </div>
