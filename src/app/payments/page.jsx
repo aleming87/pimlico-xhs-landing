@@ -124,6 +124,7 @@ export default function PaymentsPage() {
             <a href="/#differentiators" className="text-sm/6 font-semibold text-gray-900">How it works</a>
             <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-blue-600">Payments</a>
+            <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="/#contact" className="text-sm/6 font-semibold text-gray-900">Book a demo <span aria-hidden="true">&rarr;</span></a>
@@ -158,6 +159,7 @@ export default function PaymentsPage() {
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">How it works</a>
                     <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">AI</a>
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50">Payments</a>
+                    <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Pricing</a>
                   </div>
                   <div className="py-6">
                     <a href="/#contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Book a demo</a>
@@ -211,9 +213,9 @@ export default function PaymentsPage() {
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Payment subcategories covered</dt>
+              <dt className="text-base/7 text-gray-600">Payments subcategories monitored</dt>
               <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
-                <AnimatedNumber start={0} end={4} />
+                <AnimatedNumber start={0} end={12} />
               </dd>
             </div>
           </dl>

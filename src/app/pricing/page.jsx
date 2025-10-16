@@ -34,6 +34,7 @@ export default function PricingPage() {
             <a href="/#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
+            <a href="/pricing" className="text-sm/6 font-semibold text-indigo-400">Pricing</a>
             <a href="/#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
@@ -69,6 +70,7 @@ export default function PricingPage() {
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>How it works</a>
                     <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>AI</a>
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Payments</a>
+                    <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-indigo-400 hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
                     <a href="/#use-cases" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Use cases</a>
                     <a href="/#team" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Team</a>
                   </div>
