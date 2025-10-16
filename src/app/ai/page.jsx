@@ -47,35 +47,30 @@ export default function AIPage() {
     {
       id: 1,
       name: 'United States',
-      regulations: ['NIST AI Risk Management Framework', 'Executive Order 14110 on Safe AI', 'OMB AI Governance Memorandum']
+      regulations: ['NIST AI Risk Management Framework', 'Executive Order 14110 on Safe AI', 'OMB AI Governance Memorandum', 'California AI Transparency Act (SB 942)', 'Colorado AI Act (SB 24-205)', 'New York AI Bias Audit Law']
     },
     {
       id: 2,
-      name: 'US States',
-      regulations: ['California AI Transparency Act (SB 942)', 'Colorado AI Act (SB 24-205)', 'New York AI Bias Audit Law']
-    },
-    {
-      id: 3,
       name: 'European Union',
       regulations: ['EU AI Act', 'GDPR (AI-related provisions)', 'Digital Services Act']
     },
     {
-      id: 4,
+      id: 3,
       name: 'United Kingdom',
       regulations: ['AI White Paper', 'ICO AI Guidance', 'Online Safety Act (AI provisions)']
     },
     {
-      id: 5,
+      id: 4,
       name: 'Singapore',
       regulations: ['Model AI Governance Framework', 'AI Verify Foundation', 'PDPA AI Guidelines']
     },
     {
-      id: 6,
+      id: 5,
       name: 'China',
       regulations: ['Deep Synthesis Regulations', 'Algorithm Recommendation Regulations', 'Generative AI Measures']
     },
     {
-      id: 7,
+      id: 6,
       name: 'Brazil',
       regulations: ['LGPD AI provisions', 'AI Bill (PL 2338/2023)', 'National AI Strategy']
     },

@@ -18,18 +18,38 @@ export default function PaymentsPage() {
     },
     {
       id: 2,
-      name: 'Crypto & Digital Assets',
-      description: 'Stay updated on cryptocurrency regulations, digital asset frameworks, stablecoin requirements, and emerging rules governing blockchain-based payment systems.'
+      name: 'Realtime Payments',
+      description: 'Track instant payment regulations, faster payment schemes, real-time settlement requirements, and infrastructure mandates for 24/7 payment processing.'
     },
     {
       id: 3,
+      name: 'Cryptocurrencies',
+      description: 'Stay updated on cryptocurrency regulations, stablecoin requirements, and emerging rules governing blockchain-based payment systems.'
+    },
+    {
+      id: 4,
+      name: 'Digital Assets',
+      description: 'Monitor digital asset frameworks, tokenization standards, and regulatory requirements for asset-backed tokens and digital securities.'
+    },
+    {
+      id: 5,
       name: 'AML/CTF & Sanctions',
       description: 'Track anti-money laundering obligations, counter-terrorism financing requirements, sanctions compliance, and transaction monitoring standards for payment providers.'
     },
     {
-      id: 4,
-      name: 'Operational Resilience & ICT Risk',
+      id: 6,
+      name: 'Operational Resilience & ICT',
       description: 'Navigate operational resilience requirements, ICT security standards, incident reporting obligations, and business continuity mandates for payment infrastructure.'
+    },
+    {
+      id: 7,
+      name: 'Enforcements',
+      description: 'Monitor regulatory enforcement actions, penalties, compliance violations, and supervisory measures affecting payment service providers globally.'
+    },
+    {
+      id: 8,
+      name: 'Technical Standards',
+      description: 'Track technical specifications, API standards, security protocols, and interoperability requirements for payment systems and infrastructure.'
     }
   ];
 
@@ -37,45 +57,40 @@ export default function PaymentsPage() {
     {
       id: 1,
       name: 'United States',
-      regulations: ['Bank Secrecy Act (BSA)', 'Dodd-Frank Act', 'State Money Transmitter Licenses']
+      regulations: ['Bank Secrecy Act (BSA)', 'Dodd-Frank Act', 'State Money Transmitter Licenses', 'New York BitLicense', 'California DFPI Requirements', 'Texas Money Services Act']
     },
     {
       id: 2,
-      name: 'US States',
-      regulations: ['New York BitLicense', 'California DFPI Requirements', 'Texas Money Services Act']
-    },
-    {
-      id: 3,
       name: 'European Union',
       regulations: ['Payment Services Directive 2 (PSD2)', 'Markets in Crypto-Assets (MiCA)', 'Digital Operational Resilience Act (DORA)']
     },
     {
-      id: 4,
+      id: 3,
       name: 'United Kingdom',
       regulations: ['Payment Services Regulations 2017', 'Electronic Money Regulations', 'FCA Cryptoasset Rules']
     },
     {
-      id: 5,
+      id: 4,
       name: 'Singapore',
       regulations: ['Payment Services Act', 'MAS Digital Token Framework', 'Cross-Border Payment Regulations']
     },
     {
-      id: 6,
+      id: 5,
       name: 'China',
       regulations: ['PBOC Payment Regulations', 'Anti-Money Laundering Law', 'Digital Yuan Framework']
     },
     {
-      id: 7,
+      id: 6,
       name: 'Brazil',
       regulations: ['PIX Instant Payments Regulation', 'Central Bank Resolution 4.656', 'Open Banking Rules']
     },
     {
-      id: 8,
+      id: 7,
       name: 'United Arab Emirates',
       regulations: ['UAE Payment Systems Law', 'VARA Crypto Regulations', 'DFSA Payment Rules']
     },
     {
-      id: 9,
+      id: 8,
       name: 'India',
       regulations: ['Payment and Settlement Systems Act', 'UPI Framework', 'RBI Master Direction on PPIs']
     }
@@ -167,7 +182,7 @@ export default function PaymentsPage() {
                 Manage <span className="text-blue-600">Payments</span> Regulations with XHS™
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Turn regulatory complexity into competitive advantage
+                Turn regulatory complexity into competitive advantage.
               </p>
             </div>
           </div>
