@@ -4,6 +4,39 @@ import Image from "next/image";
 import { useState } from "react";
 import { Footer } from '@/components/footer';
 
+function FAQ({ question, answer }) {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div className="py-6">
+      <dt>
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex w-full items-start justify-between text-left text-white"
+        >
+          <span className="text-base/7 font-semibold">{question}</span>
+          <span className="ml-6 flex h-7 items-center">
+            <svg 
+              className={`h-6 w-6 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              strokeWidth="1.5" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </span>
+        </button>
+      </dt>
+      {isOpen && (
+        <dd className="mt-2 pr-12">
+          <p className="text-base/7 text-gray-400">{answer}</p>
+        </dd>
+      )}
+    </div>
+  );
+}
+
 export default function PricingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [frequency, setFrequency] = useState('monthly');
@@ -145,6 +178,7 @@ export default function PricingPage() {
                 <a href="/#contact" className="mt-6 block w-full rounded-md bg-indigo-500 px-3 py-2 text-center text-sm/6 font-semibold text-white hover:bg-indigo-400">Get started</a>
                 <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300">
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>1,500 AI credits per month</li>
+                  <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Unlimited users at $15/user/month</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>All regulatory domains</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Full platform access</li>
                   <li className="flex gap-x-3"><svg viewBox="0 0 20 20" fill="currentColor" className="h-6 w-5 flex-none text-indigo-400"><path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" /></svg>Collaborate workspaces</li>
@@ -179,26 +213,30 @@ export default function PricingPage() {
           <div className="mx-auto max-w-4xl">
             <h2 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Frequently asked questions</h2>
             <dl className="mt-16 divide-y divide-white/10">
-              <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">What are AI credits and how do they work?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">AI credits power your regulatory analysis and monitoring. Each credit represents an AI-powered action like analysing a regulation, generating insights, or monitoring updates. Professional gets 500 credits/month, Team gets 1,500 credits/month, and Enterprise gets unlimited.</p></dd>
-              </div>
-              <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">Which regulatory domains are covered?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">XHS™ covers AI regulations (including EU AI Act, NIST framework) and Payments regulations (PSD3, MiCA, PSR) across 90+ jurisdictions. All plans include access to both AI and Payments regulatory domains.</p></dd>
-              </div>
-              <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">What's included in the Beta program?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Beta participants get early access to XHS™ at special pricing, direct input into product development, priority support, and the opportunity to shape the future of regulatory compliance AI workspaces.</p></dd>
-              </div>
-              <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">Can I upgrade or change plans later?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Yes! You can upgrade from Professional to Team or Enterprise at any time. Changes take effect immediately, and you'll be prorated for the remainder of your billing period.</p></dd>
-              </div>
-              <div className="py-6">
-                <dt className="text-base/7 font-semibold text-white">How does the annual discount work?</dt>
-                <dd className="mt-2 pr-12"><p className="text-base/7 text-gray-400">Annual plans save 5% compared to monthly billing. For example, Professional at $250/month = $3,000/year, but with annual billing you pay only $2,850/year, saving $150.</p></dd>
-              </div>
+              <FAQ 
+                question="What are AI credits and how do they work?" 
+                answer="AI credits power your regulatory analysis and monitoring. Each credit represents an AI-powered action like analysing a regulation, generating insights, or monitoring updates. Professional gets 500 credits/month, Team gets 1,500 credits/month, and Enterprise gets unlimited."
+              />
+              <FAQ 
+                question="Which regulatory domains are covered?" 
+                answer="XHS™ covers AI regulations (including EU AI Act, NIST framework) and Payments regulations (PSD3, MiCA, PSR) across 90+ jurisdictions. All plans include access to both AI and Payments regulatory domains."
+              />
+              <FAQ 
+                question="What happens if I run out of AI credits?" 
+                answer="If you exceed your monthly AI credit allocation, overage credits are charged at $0.05 per credit. You can monitor your credit usage in real-time from your dashboard and upgrade your plan at any time to get more credits."
+              />
+              <FAQ 
+                question="What's included in the Beta program?" 
+                answer="Beta participants get early access to XHS™ at special pricing, direct input into product development, priority support, and the opportunity to shape the future of regulatory compliance AI workspaces."
+              />
+              <FAQ 
+                question="Can I upgrade or change plans later?" 
+                answer="Yes! You can upgrade from Professional to Team or Enterprise at any time. Changes take effect immediately, and you'll be prorated for the remainder of your billing period."
+              />
+              <FAQ 
+                question="How does the annual discount work?" 
+                answer="Annual plans save 5% compared to monthly billing. For example, Professional at $250/month = $3,000/year, but with annual billing you pay only $2,850/year, saving $150."
+              />
             </dl>
           </div>
         </div>

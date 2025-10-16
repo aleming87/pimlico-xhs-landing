@@ -350,8 +350,8 @@ export default function PaymentsPage() {
                   <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
                     <img
                       src="/AIProductIII.png"
-                      alt="Payments Regulatory Monitoring Dashboard"
-                      className="w-full h-full object-cover object-[center_top] rounded-lg scale-95"
+                      alt="AI Regulatory Monitoring Dashboard"
+                      className="w-full h-auto min-h-full object-cover object-top rounded-lg"
                     />
                   </div>
                 </div>

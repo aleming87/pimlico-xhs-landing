@@ -30,10 +30,10 @@ export default function Hero() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a href="#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
+            <a href="#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
-            <a href="#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -73,6 +73,13 @@ export default function Hero() {
                       How it works
                     </a>
                     <a 
+                      href="#use-cases" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Use cases
+                    </a>
+                    <a 
                       href="/ai" 
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
                       onClick={() => setMobileMenuOpen(false)}
@@ -85,13 +92,6 @@ export default function Hero() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Payments
-                    </a>
-                    <a 
-                      href="#use-cases" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Use cases
                     </a>
                     <a 
                       href="#team" 
