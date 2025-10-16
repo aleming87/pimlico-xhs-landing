@@ -172,7 +172,7 @@ export default function AIPage() {
                 Manage <span className="text-blue-600">AI</span> Regulations with XHS™
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                End-to-end AI-native regulatory workspaces
+                Stay ahead of regulations. Deploy with confidence.
               </p>
             </div>
           </div>

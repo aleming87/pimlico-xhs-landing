@@ -182,7 +182,7 @@ export default function PaymentsPage() {
                 Manage <span className="text-blue-600">Payments</span> Regulations with XHS™
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                End-to-end AI-native regulatory workspaces
+                Turn regulatory complexity into competitive advantage.
               </p>
             </div>
           </div>
