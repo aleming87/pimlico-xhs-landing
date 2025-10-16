@@ -8,20 +8,22 @@ export function AnimatedImpactScore() {
   const [score, setScore] = useState(0);
   
   useEffect(() => {
+    let interval;
     const timer = setTimeout(() => {
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         setScore(prev => {
           if (prev >= 85) {
-            clearInterval(interval);
             return 85;
           }
           return prev + 1;
         });
       }, 20);
-      return () => clearInterval(interval);
     }, 500);
     
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (interval) clearInterval(interval);
+    };
   }, []);
   
   return (
@@ -60,34 +62,36 @@ export function AnimatedImpactScore() {
 }
 
 // Animated Collaborate Component with Scrolling Names
+const newActivitiesList = [
+  { name: 'Alex', initials: 'AM', color: 'purple', action: 'updated status', detail: 'PSD3 implementation timeline adjusted' },
+  { name: 'Maria', initials: 'MR', color: 'pink', action: 'added comment', detail: 'MiCA requirements need clarification' },
+  { name: 'David', initials: 'DL', color: 'yellow', action: 'shared document', detail: 'Q4 compliance checklist ready for review' },
+];
+
 export function AnimatedCollaborate() {
   const [activities, setActivities] = useState([
     { id: 1, name: 'Jane', initials: 'JD', color: 'blue', action: 'added a note', detail: 'EU AI Act - High risk classification needs review' },
     { id: 2, name: 'Sam', initials: 'SK', color: 'green', action: 'assigned a task', detail: 'Review NIST guidelines compliance' },
   ]);
   
-  const newActivities = [
-    { name: 'Alex', initials: 'AM', color: 'purple', action: 'updated status', detail: 'PSD3 implementation timeline adjusted' },
-    { name: 'Maria', initials: 'MR', color: 'pink', action: 'added comment', detail: 'MiCA requirements need clarification' },
-    { name: 'David', initials: 'DL', color: 'yellow', action: 'shared document', detail: 'Q4 compliance checklist ready for review' },
-  ];
-  
   useEffect(() => {
     let index = 0;
-    const interval = setInterval(() => {
-      if (index < newActivities.length) {
-        setActivities(prev => {
-          const newItem = { ...newActivities[index], id: Date.now() };
-          const updated = [newItem, ...prev];
-          return updated.slice(0, 3); // Keep only 3 items
-        });
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 3000);
+    const timer = setTimeout(() => {
+      const interval = setInterval(() => {
+        if (index < newActivitiesList.length) {
+          setActivities(prev => {
+            const newItem = { ...newActivitiesList[index], id: Date.now() + index };
+            const updated = [newItem, ...prev];
+            return updated.slice(0, 3); // Keep only 3 items
+          });
+          index++;
+        }
+      }, 4000); // Show new activity every 4 seconds
+      
+      return () => clearInterval(interval);
+    }, 2000); // Start after 2 seconds
     
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, []);
   
   const colorClasses = {
@@ -110,10 +114,14 @@ export function AnimatedCollaborate() {
         <span className="text-xs text-gray-400">8 team members</span>
       </div>
       <div className="space-y-2 overflow-hidden">
-        {activities.map((activity) => (
+        {activities.map((activity, index) => (
           <div 
             key={activity.id}
-            className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50 transition-all duration-500"
+            className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50 animate-in fade-in slide-in-from-top-4 duration-500"
+            style={{
+              animationDelay: `${index * 50}ms`,
+              animationFillMode: 'backwards'
+            }}
           >
             <div className="flex items-start gap-2">
               <div className={`h-6 w-6 rounded-full ${colorClasses[activity.color]} flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white`}>
