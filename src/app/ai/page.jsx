@@ -206,7 +206,7 @@ export default function AIPage() {
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">AI subcategories covered</dt>
               <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
-                <AnimatedNumber start={0} end={6} />
+                <AnimatedNumber start={0} end={10} />
               </dd>
             </div>
           </dl>
