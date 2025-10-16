@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Footer } from '@/components/footer';
 import { AnimatedNumber } from '@/components/animated-number';
+import { AnimatedImpactScore, AnimatedCollaborate, AnimatedCodeIntegration } from '@/components/BentoAnimations';
 
 export default function AIPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -360,32 +361,7 @@ export default function AIPage() {
                   </p>
                 </div>
                 <div className="flex flex-1 items-center justify-center px-8 pb-8 sm:px-10 lg:pb-10">
-                  <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-6 border border-gray-600/50">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-400">Impact Score</span>
-                        <span className="text-sm font-semibold text-red-400">High</span>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="h-2 bg-red-500 rounded flex-1"></div>
-                          <span className="text-xs text-gray-400">85%</span>
-                        </div>
-                        <div className="text-xs text-gray-300">
-                          <div className="font-semibold text-white mb-1">Key Obligations:</div>
-                          <div className="space-y-1 pl-3">
-                            <div>• Model documentation required</div>
-                            <div>• Risk assessment mandatory</div>
-                            <div>• Human oversight needed</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="pt-2 border-t border-gray-600/50">
-                        <div className="text-xs text-gray-400">Compliance Deadline</div>
-                        <div className="text-sm font-semibold text-yellow-400 mt-1">Aug 2, 2026</div>
-                      </div>
-                    </div>
-                  </div>
+                  <AnimatedImpactScore />
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 max-lg:rounded-t-[2rem]"></div>
@@ -402,35 +378,7 @@ export default function AIPage() {
                   </p>
                 </div>
                 <div className="flex flex-1 flex-col justify-center px-8 max-lg:py-6 lg:pb-2">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex -space-x-2">
-                        <div className="h-8 w-8 rounded-full bg-blue-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">JD</div>
-                        <div className="h-8 w-8 rounded-full bg-green-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">SK</div>
-                        <div className="h-8 w-8 rounded-full bg-purple-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">AM</div>
-                        <div className="h-8 w-8 rounded-full bg-gray-600 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-gray-300">+5</div>
-                      </div>
-                      <span className="text-xs text-gray-400">8 team members</span>
-                    </div>
-                    <div className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50">
-                      <div className="flex items-start gap-2">
-                        <div className="h-6 w-6 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white">JD</div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-semibold text-white">Jane added a note</div>
-                          <div className="text-xs text-gray-400 mt-0.5">EU AI Act - High risk classification needs review</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50">
-                      <div className="flex items-start gap-2">
-                        <div className="h-6 w-6 rounded-full bg-green-500 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white">SK</div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-semibold text-white">Sam assigned a task</div>
-                          <div className="text-xs text-gray-400 mt-0.5">Review NIST guidelines compliance</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <AnimatedCollaborate />
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
@@ -447,102 +395,7 @@ export default function AIPage() {
                   </p>
                 </div>
                 <div className="relative min-h-[30rem] w-full grow">
-                  <div className="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl ring-1 ring-white/10">
-                    <div className="flex bg-gray-800 ring-1 ring-white/5 border-b border-gray-700">
-                      <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
-                        <div className="border-r border-b border-r-white/20 border-b-transparent bg-gray-900 px-4 py-2 text-white flex items-center gap-2">
-                          <span>integrations.js</span>
-                        </div>
-                        <div className="border-r border-gray-600/10 px-4 py-2">webhooks.js</div>
-                        <div className="border-r border-gray-600/10 px-4 py-2">README.md</div>
-                      </div>
-                    </div>
-                    <div className="px-6 pt-4 pb-6 overflow-auto h-full">
-                      <div className="font-mono text-xs leading-relaxed">
-                        <div className="text-gray-500">// XHS API Integration</div>
-                        <div className="text-purple-400">import</div>
-                        <span className="text-gray-300">{` { XHSClient } `}</span>
-                        <span className="text-purple-400">from</span>
-                        <span className="text-green-400">{` '@xhs/sdk'`}</span>
-                        
-                        <div className="mt-3 text-purple-400">const</div>
-                        <span className="text-blue-300">{` client `}</span>
-                        <span className="text-gray-300">{`= `}</span>
-                        <span className="text-purple-400">new</span>
-                        <span className="text-blue-300">{` XHSClient`}</span>
-                        <span className="text-gray-300">{`({`}</span>
-                        <div className="ml-4 text-gray-300">
-                          <span className="text-blue-300">apiKey:</span>
-                          <span className="text-green-400">{` 'xhs_live_k8s9d...'`}</span>
-                          <span>,</span>
-                        </div>
-                        <div className="ml-4 text-gray-300">
-                          <span className="text-blue-300">environment:</span>
-                          <span className="text-green-400">{` 'production'`}</span>
-                        </div>
-                        <div className="text-gray-300">{`})`}</div>
-                        
-                        <div className="mt-4 text-gray-500">// Fetch regulations by domain</div>
-                        <div className="text-purple-400">const</div>
-                        <span className="text-blue-300">{` data `}</span>
-                        <span className="text-gray-300">{`= `}</span>
-                        <span className="text-purple-400">await</span>
-                        <span className="text-blue-300">{` client`}</span>
-                        <span className="text-gray-300">.regulations.list(</span>
-                        <span className="text-gray-300">{`{`}</span>
-                        <div className="ml-4">
-                          <span className="text-blue-300">domain:</span>
-                          <span className="text-green-400">{` 'ai'`}</span>
-                          <span className="text-gray-300">,</span>
-                        </div>
-                        <div className="ml-4">
-                          <span className="text-blue-300">jurisdictions:</span>
-                          <span className="text-gray-300">{` [`}</span>
-                          <span className="text-green-400">'US'</span>
-                          <span className="text-gray-300">, </span>
-                          <span className="text-green-400">'EU'</span>
-                          <span className="text-gray-300">, </span>
-                          <span className="text-green-400">'UK'</span>
-                          <span className="text-gray-300">{`],`}</span>
-                        </div>
-                        <div className="ml-4">
-                          <span className="text-blue-300">limit:</span>
-                          <span className="text-yellow-400">{` 50`}</span>
-                        </div>
-                        <div className="text-gray-300">{`})`}</div>
-
-                        <div className="mt-4 border-t border-gray-700 pt-4">
-                          <div className="text-gray-500">// Slack Integration</div>
-                          <div className="flex items-center gap-2 mt-2 mb-2">
-                            <Image
-                              src="/logo-timeline/slack.svg"
-                              alt="Slack"
-                              width={16}
-                              height={16}
-                              className="opacity-80"
-                            />
-                            <span className="text-gray-400 text-xs">Push alerts to Slack channels</span>
-                          </div>
-                          <div className="text-purple-400">await</div>
-                          <span className="text-blue-300">{` client`}</span>
-                          <span className="text-gray-300">.webhooks.create(</span>
-                          <span className="text-gray-300">{`{`}</span>
-                          <div className="ml-4">
-                            <span className="text-blue-300">url:</span>
-                            <span className="text-green-400">{` 'https://hooks.slack.com/...'`}</span>
-                            <span className="text-gray-300">,</span>
-                          </div>
-                          <div className="ml-4">
-                            <span className="text-blue-300">events:</span>
-                            <span className="text-gray-300">{` [`}</span>
-                            <span className="text-green-400">'regulation.updated'</span>
-                            <span className="text-gray-300">{`]`}</span>
-                          </div>
-                          <div className="text-gray-300">{`})`}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <AnimatedCodeIntegration />
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
