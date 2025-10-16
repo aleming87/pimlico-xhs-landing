@@ -331,7 +331,7 @@ export default function PaymentsPage() {
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
           <h2 className="text-center text-base/7 font-semibold text-indigo-400">Everything you need</h2>
           <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
-            Monitor, Analyse, Collaborate, and Integrate
+            End-to-end payments regulatory workflows
           </p>
           <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
             {/* Monitor - Large left column */}
@@ -344,25 +344,15 @@ export default function PaymentsPage() {
                     Real-time regulatory updates across all jurisdictions in a unified feed
                   </p>
                 </div>
-                <div className="relative min-h-[30rem] w-full grow max-lg:mx-auto max-lg:max-w-sm">
-                  <div className="absolute inset-x-10 top-10 bottom-0 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
-                    <div className="p-4 space-y-3 bg-gradient-to-b from-gray-900 to-gray-800 h-full overflow-hidden">
-                      {/* XHS Feed Simulation */}
-                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-blue-500">
-                        <p className="text-xs font-semibold text-blue-400">EU MiCA Update</p>
-                        <p className="text-xs text-gray-300 mt-1">New stablecoin requirements...</p>
-                      </div>
-                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-green-500">
-                        <p className="text-xs font-semibold text-green-400">US Federal</p>
-                        <p className="text-xs text-gray-300 mt-1">FinCEN proposes new AML rules...</p>
-                      </div>
-                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-yellow-500">
-                        <p className="text-xs font-semibold text-yellow-400">UK FCA</p>
-                        <p className="text-xs text-gray-300 mt-1">Payment services consultation...</p>
-                      </div>
-                      <div className="bg-gray-700/50 rounded-lg p-3 border-l-4 border-purple-500">
-                        <p className="text-xs font-semibold text-purple-400">Singapore MAS</p>
-                        <p className="text-xs text-gray-300 mt-1">Digital payment token framework...</p>
+                <div className="relative min-h-[30rem] w-full grow">
+                  <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
+                    {/* Placeholder for product screenshot - will be updated */}
+                    <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                      <div className="text-center p-8">
+                        <svg className="h-16 w-16 text-gray-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        </svg>
+                        <p className="text-sm text-gray-500">Product Screenshot</p>
                       </div>
                     </div>
                   </div>
@@ -375,18 +365,37 @@ export default function PaymentsPage() {
             <div className="relative max-lg:row-start-1">
               <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-t-[2rem]"></div>
               <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
-                <div className="px-8 pt-8 sm:px-10 sm:pt-10">
+                <div className="px-8 pt-8 pb-4 sm:px-10 sm:pt-10 sm:pb-6">
                   <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Analyse</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
                     AI-powered insights identify regulatory impacts and obligations
                   </p>
                 </div>
-                <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-                  <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-4">
-                    <div className="space-y-2">
-                      <div className="h-2 bg-blue-500 rounded w-3/4"></div>
-                      <div className="h-2 bg-blue-400 rounded w-1/2"></div>
-                      <div className="h-2 bg-blue-300 rounded w-2/3"></div>
+                <div className="flex flex-1 items-center justify-center px-8 pb-8 sm:px-10 lg:pb-10">
+                  <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-6 border border-gray-600/50">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-400">Impact Score</span>
+                        <span className="text-sm font-semibold text-red-400">High</span>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="h-2 bg-red-500 rounded flex-1"></div>
+                          <span className="text-xs text-gray-400">92%</span>
+                        </div>
+                        <div className="text-xs text-gray-300">
+                          <div className="font-semibold text-white mb-1">Key Obligations:</div>
+                          <div className="space-y-1 pl-3">
+                            <div>• PSP license required</div>
+                            <div>• AML/CTF compliance mandatory</div>
+                            <div>• Transaction monitoring needed</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pt-2 border-t border-gray-600/50">
+                        <div className="text-xs text-gray-400">Compliance Deadline</div>
+                        <div className="text-sm font-semibold text-yellow-400 mt-1">Jan 9, 2027</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -404,11 +413,35 @@ export default function PaymentsPage() {
                     Team workspaces for shared regulatory intelligence
                   </p>
                 </div>
-                <div className="flex flex-1 items-center max-lg:py-6 lg:pb-2">
-                  <div className="flex gap-2 px-8">
-                    <div className="h-8 w-8 rounded-full bg-blue-500"></div>
-                    <div className="h-8 w-8 rounded-full bg-green-500"></div>
-                    <div className="h-8 w-8 rounded-full bg-purple-500"></div>
+                <div className="flex flex-1 flex-col justify-center px-8 max-lg:py-6 lg:pb-2">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex -space-x-2">
+                        <div className="h-8 w-8 rounded-full bg-blue-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">JD</div>
+                        <div className="h-8 w-8 rounded-full bg-green-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">SK</div>
+                        <div className="h-8 w-8 rounded-full bg-purple-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">AM</div>
+                        <div className="h-8 w-8 rounded-full bg-gray-600 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-gray-300">+5</div>
+                      </div>
+                      <span className="text-xs text-gray-400">8 team members</span>
+                    </div>
+                    <div className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50">
+                      <div className="flex items-start gap-2">
+                        <div className="h-6 w-6 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white">JD</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold text-white">Jane added a note</div>
+                          <div className="text-xs text-gray-400 mt-0.5">PSD3 - Strong authentication needs review</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-gray-700/30 rounded-lg p-3 border border-gray-600/50">
+                      <div className="flex items-start gap-2">
+                        <div className="h-6 w-6 rounded-full bg-green-500 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white">SK</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold text-white">Sam assigned a task</div>
+                          <div className="text-xs text-gray-400 mt-0.5">Review MiCA stablecoin requirements</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -422,23 +455,104 @@ export default function PaymentsPage() {
                 <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
                   <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Integrate</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
-                    API access to embed regulatory data into your existing systems
+                    Connect with your existing workflow tools and systems
                   </p>
                 </div>
                 <div className="relative min-h-[30rem] w-full grow">
                   <div className="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl ring-1 ring-white/10">
-                    <div className="flex bg-gray-800 ring-1 ring-white/5">
+                    <div className="flex bg-gray-800 ring-1 ring-white/5 border-b border-gray-700">
                       <div className="-mb-px flex text-sm/6 font-medium text-gray-400">
-                        <div className="border-r border-b border-r-white/20 border-b-white/20 bg-white/5 px-4 py-2 text-white">api.js</div>
-                        <div className="border-r border-gray-600/10 px-4 py-2">index.js</div>
+                        <div className="border-r border-b border-r-white/20 border-b-transparent bg-gray-900 px-4 py-2 text-white flex items-center gap-2">
+                          <span>integrations.js</span>
+                        </div>
+                        <div className="border-r border-gray-600/10 px-4 py-2">webhooks.js</div>
+                        <div className="border-r border-gray-600/10 px-4 py-2">README.md</div>
                       </div>
                     </div>
-                    <div className="px-6 pt-6 pb-14 font-mono text-xs text-white">
-                      <div className="text-purple-400">import</div>
-                      <div className="text-gray-300">{`{ XHSClient }`}</div>
-                      <div className="text-purple-400 mt-2">const</div>
-                      <div className="text-gray-300 mt-1">{`regulations =`}</div>
-                      <div className="text-blue-400 ml-4">{`await xhs.getUpdates()`}</div>
+                    <div className="px-6 pt-4 pb-6 overflow-auto h-full">
+                      <div className="font-mono text-xs leading-relaxed">
+                        <div className="text-gray-500">// XHS API Integration</div>
+                        <div className="text-purple-400">import</div>
+                        <span className="text-gray-300">{` { XHSClient } `}</span>
+                        <span className="text-purple-400">from</span>
+                        <span className="text-green-400">{` '@xhs/sdk'`}</span>
+                        
+                        <div className="mt-3 text-purple-400">const</div>
+                        <span className="text-blue-300">{` client `}</span>
+                        <span className="text-gray-300">{`= `}</span>
+                        <span className="text-purple-400">new</span>
+                        <span className="text-blue-300">{` XHSClient`}</span>
+                        <span className="text-gray-300">{`({`}</span>
+                        <div className="ml-4 text-gray-300">
+                          <span className="text-blue-300">apiKey:</span>
+                          <span className="text-green-400">{` 'xhs_live_k8s9d...'`}</span>
+                          <span>,</span>
+                        </div>
+                        <div className="ml-4 text-gray-300">
+                          <span className="text-blue-300">environment:</span>
+                          <span className="text-green-400">{` 'production'`}</span>
+                        </div>
+                        <div className="text-gray-300">{`})`}</div>
+                        
+                        <div className="mt-4 text-gray-500">// Fetch payments regulations</div>
+                        <div className="text-purple-400">const</div>
+                        <span className="text-blue-300">{` data `}</span>
+                        <span className="text-gray-300">{`= `}</span>
+                        <span className="text-purple-400">await</span>
+                        <span className="text-blue-300">{` client`}</span>
+                        <span className="text-gray-300">.regulations.list(</span>
+                        <span className="text-gray-300">{`{`}</span>
+                        <div className="ml-4">
+                          <span className="text-blue-300">domain:</span>
+                          <span className="text-green-400">{` 'payments'`}</span>
+                          <span className="text-gray-300">,</span>
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-blue-300">jurisdictions:</span>
+                          <span className="text-gray-300">{` [`}</span>
+                          <span className="text-green-400">'US'</span>
+                          <span className="text-gray-300">, </span>
+                          <span className="text-green-400">'EU'</span>
+                          <span className="text-gray-300">, </span>
+                          <span className="text-green-400">'UK'</span>
+                          <span className="text-gray-300">{`],`}</span>
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-blue-300">limit:</span>
+                          <span className="text-yellow-400">{` 50`}</span>
+                        </div>
+                        <div className="text-gray-300">{`})`}</div>
+
+                        <div className="mt-4 border-t border-gray-700 pt-4">
+                          <div className="text-gray-500">// Slack Integration</div>
+                          <div className="flex items-center gap-2 mt-2 mb-2">
+                            <Image
+                              src="/logo-timeline/slack.svg"
+                              alt="Slack"
+                              width={16}
+                              height={16}
+                              className="opacity-80"
+                            />
+                            <span className="text-gray-400 text-xs">Push alerts to Slack channels</span>
+                          </div>
+                          <div className="text-purple-400">await</div>
+                          <span className="text-blue-300">{` client`}</span>
+                          <span className="text-gray-300">.webhooks.create(</span>
+                          <span className="text-gray-300">{`{`}</span>
+                          <div className="ml-4">
+                            <span className="text-blue-300">url:</span>
+                            <span className="text-green-400">{` 'https://hooks.slack.com/...'`}</span>
+                            <span className="text-gray-300">,</span>
+                          </div>
+                          <div className="ml-4">
+                            <span className="text-blue-300">events:</span>
+                            <span className="text-gray-300">{` [`}</span>
+                            <span className="text-green-400">'regulation.updated'</span>
+                            <span className="text-gray-300">{`]`}</span>
+                          </div>
+                          <div className="text-gray-300">{`})`}</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
