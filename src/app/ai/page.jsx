@@ -335,13 +335,13 @@ export default function AIPage() {
                   </p>
                 </div>
                 <div className="relative min-h-[30rem] w-full grow">
-                  <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
+                  <div className="absolute left-0 right-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
                     <Image
                       src="/AIProductII.png"
                       alt="AI Regulatory Monitoring Dashboard"
                       width={1200}
                       height={800}
-                      className="w-full h-full object-cover object-top rounded-lg"
+                      className="w-full h-full object-cover object-left rounded-lg"
                     />
                   </div>
                 </div>
@@ -360,14 +360,14 @@ export default function AIPage() {
                   </p>
                 </div>
                 <div className="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-                  <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-4 border border-gray-600/50">
-                    <div className="space-y-3">
+                  <div className="w-full max-lg:max-w-xs bg-gray-700/30 rounded-lg p-6 border border-gray-600/50">
+                    <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-gray-400">Impact Score</span>
                         <span className="text-sm font-semibold text-red-400">High</span>
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
                           <div className="h-2 bg-red-500 rounded flex-1"></div>
                           <span className="text-xs text-gray-400">85%</span>
                         </div>
