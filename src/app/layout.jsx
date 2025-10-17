@@ -11,14 +11,14 @@ export const metadata = {
   authors: [{ name: 'Pimlico XHS' }],
   creator: 'Pimlico XHS',
   publisher: 'Pimlico XHS',
-  metadataBase: new URL('https://pimlico-xhs-landing.vercel.app'),
+  metadataBase: new URL('https://pimlicosolutions.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
     description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI and Payments regulations across 90+ jurisdictions.',
-    url: 'https://pimlico-xhs-landing.vercel.app',
+    url: 'https://pimlicosolutions.com',
     siteName: 'Pimlico XHS',
     images: [
       {
