@@ -124,13 +124,39 @@ export default function ContactPage() {
               <div className="mt-2.5">
                 <div className="flex rounded-md bg-white/5 outline outline-1 -outline-offset-1 outline-white/10 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-blue-500">
                   <div className="grid shrink-0 grid-cols-1 focus-within:relative">
-                    <select id="country" name="country" autoComplete="country" aria-label="Country" className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-transparent py-2 pr-7 pl-3.5 text-base text-gray-400 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 sm:text-sm/6">
-                      <option>US</option>
-                      <option>CA</option>
-                      <option>EU</option>
-                      <option>UK</option>
-                      <option>SG</option>
-                      <option>AU</option>
+                    <select id="country" name="country" autoComplete="country" aria-label="Country" className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-transparent py-2 pr-7 pl-3.5 text-base text-white placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 sm:text-sm/6">
+                      <option value="+1">🇺🇸 US (+1)</option>
+                      <option value="+1">🇨🇦 CA (+1)</option>
+                      <option value="+44">🇬🇧 UK (+44)</option>
+                      <option value="+61">🇦🇺 AU (+61)</option>
+                      <option value="+49">🇩🇪 DE (+49)</option>
+                      <option value="+33">🇫🇷 FR (+33)</option>
+                      <option value="+39">🇮🇹 IT (+39)</option>
+                      <option value="+34">🇪🇸 ES (+34)</option>
+                      <option value="+31">🇳🇱 NL (+31)</option>
+                      <option value="+32">🇧🇪 BE (+32)</option>
+                      <option value="+41">🇨🇭 CH (+41)</option>
+                      <option value="+43">🇦🇹 AT (+43)</option>
+                      <option value="+45">🇩🇰 DK (+45)</option>
+                      <option value="+46">🇸🇪 SE (+46)</option>
+                      <option value="+47">🇳🇴 NO (+47)</option>
+                      <option value="+358">🇫🇮 FI (+358)</option>
+                      <option value="+353">🇮🇪 IE (+353)</option>
+                      <option value="+351">🇵🇹 PT (+351)</option>
+                      <option value="+48">🇵🇱 PL (+48)</option>
+                      <option value="+65">🇸🇬 SG (+65)</option>
+                      <option value="+852">🇭🇰 HK (+852)</option>
+                      <option value="+81">🇯🇵 JP (+81)</option>
+                      <option value="+82">🇰🇷 KR (+82)</option>
+                      <option value="+86">🇨🇳 CN (+86)</option>
+                      <option value="+91">🇮🇳 IN (+91)</option>
+                      <option value="+971">🇦🇪 AE (+971)</option>
+                      <option value="+966">🇸🇦 SA (+966)</option>
+                      <option value="+55">🇧🇷 BR (+55)</option>
+                      <option value="+52">🇲🇽 MX (+52)</option>
+                      <option value="+54">🇦🇷 AR (+54)</option>
+                      <option value="+27">🇿🇦 ZA (+27)</option>
+                      <option value="+64">🇳🇿 NZ (+64)</option>
                     </select>
                     <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true" className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-400 sm:size-4">
                       <path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" fillRule="evenodd" />
