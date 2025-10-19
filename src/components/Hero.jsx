@@ -73,6 +73,13 @@ export default function Hero() {
                       How it works
                     </a>
                     <a 
+                      href="#use-cases" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Use cases
+                    </a>
+                    <a 
                       href="/ai" 
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
                       onClick={() => setMobileMenuOpen(false)}
@@ -92,13 +99,6 @@ export default function Hero() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Pricing
-                    </a>
-                    <a 
-                      href="#use-cases" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Use cases
                     </a>
                     <a 
                       href="#team" 

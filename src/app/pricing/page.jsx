@@ -102,10 +102,10 @@ export default function PricingPage() {
                   <div className="space-y-2 py-6">
                     <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Home</a>
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>How it works</a>
+                    <a href="/#use-cases" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Use cases</a>
                     <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>AI</a>
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Payments</a>
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-indigo-400 hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-                    <a href="/#use-cases" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Use cases</a>
                     <a href="/#team" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Team</a>
                   </div>
                   <div className="py-6">
