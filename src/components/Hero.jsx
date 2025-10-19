@@ -37,7 +37,7 @@ export default function Hero() {
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
+            <a href="/contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
           </div>
         </nav>
         
@@ -110,7 +110,7 @@ export default function Hero() {
                   </div>
                   <div className="py-6">
                     <a
-                      href="#contact"
+                      href="/contact"
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800"
                       onClick={() => setMobileMenuOpen(false)}
                     >
