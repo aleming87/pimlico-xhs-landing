@@ -45,7 +45,7 @@ export default function Differentiators() {
     <section id="differentiators" className="py-32 scroll-mt-24 bg-gray-50">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-20">
-          <h2 className="text-5xl font-bold tracking-tight text-gray-900 mb-6">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6 sm:text-4xl lg:text-5xl">
             Turn noise into<br/>
             <span className="text-blue-600">collaboration</span> for <span className="text-blue-600">growth</span>.
           </h2>

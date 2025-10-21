@@ -65,10 +65,10 @@ export default function PricingPage() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a href="/#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
+            <a href="/#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-indigo-400">Pricing</a>
-            <a href="/#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">

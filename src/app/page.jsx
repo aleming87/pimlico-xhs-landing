@@ -117,7 +117,7 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
               <div className="w-full mx-auto text-center">
-                <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl md:whitespace-nowrap">Get notified when <span className="text-blue-400">XHS™</span> launches.</h2>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Get notified when <span className="text-blue-400">XHS™</span> launches.</h2>
                 <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Be first to experience XHS™ regulatory AI workspaces.</p>
                 <form className="mt-10 flex flex-col sm:flex-row max-w-md gap-3 sm:gap-x-4 mx-auto" action="mailto:contact@pimlicosolutions.com" method="post" encType="text/plain">
                   <label htmlFor="email-address" className="sr-only">Email address</label>
@@ -147,7 +147,7 @@ export default function Page() {
       <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
           <div className="mx-auto max-w-2xl">
-            <h2 className="text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-5xl" id="team">Our Team</h2>
+            <h2 className="text-3xl font-semibold tracking-tight text-balance text-gray-900 sm:text-4xl lg:text-5xl" id="team">Our Team</h2>
           </div>
           <ul role="list" className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-8">
             <li className="rounded-2xl bg-gray-100 px-8 py-10">
