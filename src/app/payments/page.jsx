@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Footer } from '@/components/footer';
 import { AnimatedNumber } from '@/components/animated-number';
 import { AnimatedImpactScore, AnimatedCollaborate, AnimatedCodeIntegration } from '@/components/BentoAnimations';
@@ -10,6 +10,22 @@ export default function PaymentsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [expandedJurisdiction, setExpandedJurisdiction] = useState(null);
+
+  // Handle hash navigation to expand category
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#category-')) {
+      const categoryId = parseInt(hash.replace('#category-', ''));
+      setExpandedCategory(categoryId);
+      // Small delay to ensure the element is rendered before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(hash.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
+  }, []);
 
   const categories = [
     {
@@ -240,7 +256,7 @@ export default function PaymentsPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {categories.map((category) => (
-                  <div key={category.id} className="bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl border border-gray-600 overflow-hidden transition-all duration-200">
+                  <div key={category.id} id={`category-${category.id}`} className="bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl border border-gray-600 overflow-hidden transition-all duration-200 scroll-mt-24">
                     <button
                       onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
                       className="w-full px-6 py-5 flex items-center justify-between hover:from-gray-600 hover:to-gray-650 transition-all duration-200"

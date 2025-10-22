@@ -1,34 +1,27 @@
 function Card({ title, items, href }) {
-  const content = (
-    <>
+  return (
+    <div className="rounded-2xl border border-slate-200 p-6">
       <h3 className="font-medium text-lg">{title}</h3>
-      <ul className="mt-3 text-sm text-slate-600 space-y-2 list-disc list-inside">
-        {items.map((t) => <li key={t}>{t}</li>)}
+      <ul className="mt-3 text-sm text-slate-600 space-y-2">
+        {items.map((item) => (
+          <li key={item.name}>
+            <a 
+              href={item.href} 
+              className="flex items-start group hover:text-blue-600 transition-colors duration-200"
+            >
+              <span className="mr-2 text-blue-600">•</span>
+              <span className="group-hover:underline">{item.name}</span>
+            </a>
+          </li>
+        ))}
       </ul>
       {href && (
         <div className="mt-4 pt-4 border-t border-slate-200">
-          <span className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+          <a href={href} className="text-sm font-semibold text-blue-600 hover:text-blue-700">
             Learn more →
-          </span>
+          </a>
         </div>
       )}
-    </>
-  );
-
-  if (href) {
-    return (
-      <a 
-        href={href} 
-        className="block rounded-2xl border border-slate-200 p-6 hover:border-blue-300 hover:shadow-lg transition-all duration-200 cursor-pointer group"
-      >
-        {content}
-      </a>
-    );
-  }
-
-  return (
-    <div className="rounded-2xl border border-slate-200 p-6">
-      {content}
     </div>
   );
 }
@@ -43,22 +36,22 @@ export default function UseCases() {
             title="AI"
             href="/ai"
             items={[
-              "AI Legislation & Governance",
-              "Compute & Infrastructure",
-              "Data Protection",
-              "Technical Standards",
-              "National Security & Export Controls",
-              "Consumer Protection & Conduct",
+              { name: "AI Legislation & Governance", href: "/ai#category-1" },
+              { name: "Compute & Infrastructure", href: "/ai#category-2" },
+              { name: "Data Protection", href: "/ai#category-3" },
+              { name: "Technical Standards", href: "/ai#category-4" },
+              { name: "National Security & Export Controls", href: "/ai#category-5" },
+              { name: "Consumer Protection & Conduct", href: "/ai#category-6" },
             ]}
           />
           <Card
             title="Payments"
             href="/payments"
             items={[
-              "Licensing & Authorisations",
-              "Crypto & Digital Assets",
-              "AML/CTF & Sanctions",
-              "Operational Resilience & ICT Risk",
+              { name: "Licensing & Authorisations", href: "/payments#category-1" },
+              { name: "Crypto & Digital Assets", href: "/payments#category-3" },
+              { name: "AML/CTF & Sanctions", href: "/payments#category-5" },
+              { name: "Operational Resilience & ICT Risk", href: "/payments#category-6" },
             ]}
           />
         </div>
