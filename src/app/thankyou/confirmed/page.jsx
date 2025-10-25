@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect } from "react";
 
-export default function ConfirmationPage() {
+export default function ConfirmedPage() {
   useEffect(() => {
     // Mark call as booked in localStorage
     localStorage.setItem('callBooked', 'true');
@@ -25,7 +25,7 @@ export default function ConfirmationPage() {
 
       {/* Confirmation Content */}
       <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-4xl pt-20">
+        <div className="mx-auto max-w-3xl pt-20">
           
           {/* Success Icon */}
           <div className="text-center mb-12">
@@ -39,9 +39,69 @@ export default function ConfirmationPage() {
               Your demo is scheduled!
             </h1>
             
-            <p className="text-lg text-gray-300 mb-8">
-              We're looking forward to showing you how XHS™ can transform your regulatory workflow
+            <p className="text-lg text-gray-300 mb-12">
+              Thank you for completing all the steps
             </p>
+          </div>
+
+          {/* Two-Step Process - Both Completed */}
+          <div className="space-y-6 mb-12">
+            
+            {/* Step 1: Take Survey - Completed */}
+            <div className="bg-green-500/5 rounded-2xl p-8 border border-green-500/50">
+              <div className="flex items-start gap-6">
+                {/* Step Number */}
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 text-left">
+                  <h2 className="text-2xl font-semibold text-white mb-2">
+                    Take Survey
+                  </h2>
+                  <p className="text-gray-300 mb-4">
+                    Help us understand your needs (2 minutes)
+                  </p>
+                  <div className="flex items-center gap-2 text-green-400 font-medium">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Survey completed
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2: Book Call - Completed */}
+            <div className="bg-green-500/5 rounded-2xl p-8 border border-green-500/50">
+              <div className="flex items-start gap-6">
+                {/* Step Number */}
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 text-left">
+                  <h2 className="text-2xl font-semibold text-white mb-2">
+                    Book Your Call
+                  </h2>
+                  <p className="text-gray-300 mb-4">
+                    Schedule a personalized demo with our team
+                  </p>
+                  <div className="flex items-center gap-2 text-green-400 font-medium">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Demo scheduled - check your email for details
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Personal Thank You Messages */}
@@ -112,13 +172,11 @@ export default function ConfirmationPage() {
           </div>
 
           {/* Step 3: Follow on Social Media */}
-          <div className="bg-white/5 rounded-2xl p-8 border border-white/10 mb-8">
+          <div className="bg-white/5 rounded-2xl p-8 border border-white/10 mb-8 animate-fade-in">
             <div className="flex items-start gap-6">
               {/* Step Number */}
-              <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-green-600 text-white">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
+              <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white text-lg font-bold">
+                3
               </div>
 
               {/* Content */}
