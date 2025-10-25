@@ -79,8 +79,7 @@ export default function ContactPage() {
       email: email,
       message: formData.get('message'),
       agreedToPolicy: formData.get('agree-to-policies') === 'on',
-      marketingConsent: formData.get('marketing-consent') === 'on',
-      newsletterConsent: formData.get('newsletter-consent') === 'on'
+      marketingConsent: formData.get('marketing-consent') === 'on'
     };
 
     // Store email for thank you page
@@ -302,14 +301,6 @@ export default function ContactPage() {
               </div>
               <label htmlFor="marketing-consent" className="text-sm/6 text-gray-400">
                 Receive updates about Pimlico XHS™ products and services.
-              </label>
-            </div>
-            <div className="flex gap-x-4 sm:col-span-2">
-              <div className="flex h-6 items-center">
-                <input id="newsletter-consent" type="checkbox" name="newsletter-consent" defaultChecked className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
-              </div>
-              <label htmlFor="newsletter-consent" className="text-sm/6 text-gray-400">
-                Subscribe to regulatory updates and insights newsletter.
               </label>
             </div>
           </div>
