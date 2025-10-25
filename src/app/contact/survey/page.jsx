@@ -203,7 +203,11 @@ export default function SurveyPage() {
         throw new Error('Failed to submit survey');
       }
 
-      router.push('/?survey=complete');
+      // Mark survey as completed in localStorage
+      localStorage.setItem('surveyCompleted', 'true');
+      
+      // Redirect back to thank you page
+      router.push('/contact/thank-you');
     } catch (error) {
       console.error('Survey submission error:', error);
       setIsSubmitting(false);
