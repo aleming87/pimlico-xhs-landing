@@ -110,9 +110,9 @@ export default function ConfirmedPage() {
               Thank you from our team!
             </h2>
             
-            <div className="space-y-8">
+            <div className="flex justify-center items-center gap-16">
               {/* Founders - Horizontal */}
-              <div className="flex justify-center gap-16">
+              <div className="flex gap-16">
                 {/* Andrew */}
                 <div className="text-center">
                   <img src="/Andrew.png" alt="Andrew Leming" className="size-24 rounded-full mx-auto mb-3 outline-1 -outline-offset-1 outline-white/10" />
@@ -148,8 +148,8 @@ export default function ConfirmedPage() {
                 </div>
               </div>
 
-              {/* Logos and Social Media - Horizontal */}
-              <div className="flex justify-center items-center gap-12">
+              {/* Logos Above Social Media - Stacked Vertically */}
+              <div className="flex flex-col items-center gap-6">
                 {/* Logo Combo */}
                 <div className="flex items-center gap-4">
                   <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-6" />
