@@ -111,8 +111,8 @@ export default function ConfirmedPage() {
             </h2>
             
             <div className="space-y-8">
-              {/* Founders - Horizontal */}
-              <div className="flex justify-center gap-12">
+              {/* Founders - All in one horizontal line */}
+              <div className="flex justify-center items-center gap-16">
                 {/* Andrew */}
                 <div className="text-center">
                   <img src="/Andrew.png" alt="Andrew Leming" className="size-24 rounded-full mx-auto mb-3 outline-1 -outline-offset-1 outline-white/10" />
@@ -146,25 +146,16 @@ export default function ConfirmedPage() {
                     </svg>
                   </a>
                 </div>
-              </div>
 
-              {/* Divider */}
-              <div className="border-t border-white/10"></div>
-
-              {/* Follow Us on Social Media */}
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Follow us on social media
-                </h3>
-                
                 {/* Logo Combo */}
-                <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="flex items-center gap-3">
                   <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-5" />
                   <span className="text-gray-500">|</span>
-                  <img src="/XHS_Logo_White.png" alt="XHS" className="h-5" />
+                  <img src="/XHS_Logo_White.png" alt="XHS" className="h-8" />
                 </div>
-                
-                <div className="flex justify-center items-center gap-6">
+
+                {/* Social Media Icons */}
+                <div className="flex items-center gap-6">
                   <a
                     href="https://www.linkedin.com/company/wearepimlico/"
                     target="_blank"
