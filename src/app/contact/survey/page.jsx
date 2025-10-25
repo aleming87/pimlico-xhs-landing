@@ -10,11 +10,12 @@ export default function SurveyPage() {
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [selectedChallenges, setSelectedChallenges] = useState([]);
   const [selectedIntegrations, setSelectedIntegrations] = useState([]);
+  const [selectedFocusAreas, setSelectedFocusAreas] = useState([]);
   const [jurisdictionSearch, setJurisdictionSearch] = useState('');
   const [topicSearch, setTopicSearch] = useState('');
   const [showJurisdictionDropdown, setShowJurisdictionDropdown] = useState(false);
   const [showTopicDropdown, setShowTopicDropdown] = useState(false);
-  const [focusArea, setFocusArea] = useState('');
+  const [usingCompetitors, setUsingCompetitors] = useState('');
   const router = useRouter();
 
   const jurisdictionDropdownRef = useRef(null);
@@ -33,29 +34,29 @@ export default function SurveyPage() {
   // Focus areas - AI, Payments, Gambling
   const focusAreas = ['AI', 'Payments', 'Gambling'];
 
-  // Regulatory topics aligned with site categories
+  // Regulatory topics aligned with site categories - improved clarity
   const regulatoryTopics = {
     AI: [
-      'EU AI Act', 'AI Governance & Ethics', 'Algorithmic Transparency',
-      'High-Risk AI Systems', 'AI Safety & Testing', 'Foundation Models',
-      'General Purpose AI', 'AI Licensing', 'AI Impact Assessments',
-      'Automated Decision Making', 'AI in Healthcare', 'AI in Finance',
-      'Generative AI', 'AI Copyright & IP', 'AI Data Protection'
+      'EU AI Act Compliance', 'AI Governance Frameworks', 'Algorithmic Transparency Requirements',
+      'High-Risk AI Systems Classification', 'AI Safety Testing & Validation', 'Foundation Model Regulations',
+      'General Purpose AI Oversight', 'AI System Licensing & Registration', 'AI Impact Assessments',
+      'Automated Decision-Making Rules', 'AI in Healthcare Regulation', 'AI in Financial Services',
+      'Generative AI Content Rules', 'AI Copyright & Intellectual Property', 'AI Data Protection & Privacy'
     ],
     Payments: [
-      'PSD3 / PSR', 'Open Banking', 'Crypto & Digital Assets',
-      'Stablecoins', 'MiCA', 'AML & Financial Crime',
-      'Consumer Protection', 'Strong Customer Authentication',
-      'Payment Services Licensing', 'E-Money Regulations',
-      'Cross-Border Payments', 'Payment Security', 'BNPL Regulation',
-      'Interchange Fees', 'Payment Innovation'
+      'PSD3 & Payment Services Regulation', 'Open Banking & API Standards', 'Crypto Asset Regulations',
+      'Stablecoin Requirements', 'MiCA Compliance', 'AML & Counter-Terrorist Financing',
+      'Consumer Protection in Payments', 'Strong Customer Authentication (SCA)', 
+      'Payment Institution Licensing', 'E-Money Directive Compliance',
+      'Cross-Border Payment Rules', 'Payment Security Standards', 'Buy Now Pay Later Regulation',
+      'Interchange Fee Regulation', 'Payment Innovation Frameworks'
     ],
     Gambling: [
-      'Online Gambling Licensing', 'Responsible Gambling', 'AML for Gambling',
-      'Advertising Restrictions', 'Player Protection', 'Age Verification',
-      'Gambling Tax & Levies', 'Sports Betting Regulation',
-      'Casino & Gaming', 'Lottery Regulation', 'Safer Gambling',
-      'Problem Gambling Prevention', 'Gambling Technology Standards'
+      'Online Gambling Licensing Requirements', 'Responsible Gambling Obligations', 'AML for Gambling Operators',
+      'Gambling Advertising & Marketing Restrictions', 'Player Protection Measures', 'Age Verification Systems',
+      'Gambling Taxes & Regulatory Levies', 'Sports Betting Regulations',
+      'Casino & iGaming Compliance', 'Lottery & Gaming Licenses', 'Safer Gambling Tools',
+      'Problem Gambling Prevention Programs', 'Gambling Technology Standards'
     ]
   };
 
@@ -73,10 +74,37 @@ export default function SurveyPage() {
     'Regulatory horizon scanning'
   ];
 
-  // Workflow integrations from homepage
-  const workflowIntegrations = [
-    'Google Workspace', 'Microsoft Teams', 'Slack',
-    'Asana', 'Hubspot', 'Zoom', 'Other'
+  // Horizon scanning vendors
+  const competitorVendors = [
+    'Thomson Reuters Regulatory Intelligence',
+    'LexisNexis Regulatory Tracker',
+    'Bloomberg Regulatory & Compliance',
+    'Compliance.ai',
+    'RegTech Associates',
+    'Corlytics',
+    'Ascent RegTech',
+    'Fenergo',
+    'ComplyAdvantage',
+    'Other'
+  ];
+
+  // Productivity, communication, and GRC apps
+  const productivityApps = [
+    'Google Workspace',
+    'Microsoft Teams', 
+    'Slack',
+    'Asana',
+    'Hubspot',
+    'OneTrust (GRC)',
+    'MetricStream (GRC)',
+    'LogicManager (GRC)',
+    'ServiceNow (GRC)',
+    'Archer (RSA)',
+    'iManage',
+    'NetDocuments',
+    'Workday',
+    'Salesforce',
+    'Other'
   ];
 
   // Filter jurisdictions based on search
@@ -85,8 +113,10 @@ export default function SurveyPage() {
     !selectedJurisdictions.includes(j)
   );
 
-  // Get available topics based on focus area
-  const availableTopics = focusArea ? (regulatoryTopics[focusArea] || []) : [];
+  // Get available topics based on selected focus areas (combine all selected)
+  const availableTopics = selectedFocusAreas.length > 0 
+    ? selectedFocusAreas.flatMap(area => regulatoryTopics[area] || [])
+    : [];
   const filteredTopics = availableTopics.filter(t =>
     t.toLowerCase().includes(topicSearch.toLowerCase()) &&
     !selectedTopics.includes(t)
@@ -144,6 +174,17 @@ export default function SurveyPage() {
     }
   };
 
+  const toggleFocusArea = (area) => {
+    if (selectedFocusAreas.includes(area)) {
+      setSelectedFocusAreas(selectedFocusAreas.filter(a => a !== area));
+      // Remove topics from deselected area
+      const topicsToRemove = regulatoryTopics[area] || [];
+      setSelectedTopics(selectedTopics.filter(t => !topicsToRemove.includes(t)));
+    } else {
+      setSelectedFocusAreas([...selectedFocusAreas, area]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -151,15 +192,18 @@ export default function SurveyPage() {
     const formData = new FormData(e.target);
     const data = {
       topJurisdictions: selectedJurisdictions,
-      focusArea: focusArea,
+      focusAreas: selectedFocusAreas,
       topTopics: selectedTopics,
       role: formData.get('role'),
       companySize: formData.get('company-size'),
       challenges: selectedChallenges,
       timeline: formData.get('timeline'),
       usingCompetitors: formData.get('using-competitors'),
-      workspaceApp: formData.get('workspace-app'),
-      integrations: selectedIntegrations
+      competitorVendors: formData.get('competitor-vendors') ? [formData.get('competitor-vendors')] : [],
+      hasSharedWorkspace: formData.get('shared-workspace'),
+      interestedInXHS: formData.get('interested-xhs'),
+      productivityApps: selectedIntegrations,
+      additionalInfo: formData.get('additional-info')
     };
 
     try {
@@ -200,13 +244,10 @@ export default function SurveyPage() {
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
-              Help us understand your needs
+              Tell us about your needs
             </h1>
-            <p className="text-lg text-gray-400 mb-2">
-              This survey helps us tailor our conversation to your specific regulatory compliance requirements.
-            </p>
             <p className="text-sm text-blue-400 font-medium">
-              ⏱️ Takes 5 minutes to complete
+              ⏱️ Takes 2 minutes
             </p>
           </div>
 
@@ -273,22 +314,20 @@ export default function SurveyPage() {
               )}
             </div>
 
-            {/* Focus Area - AI, Payments, Gambling */}
+            {/* Focus Areas - AI, Payments, Gambling - Multi-select */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label className="block text-xl font-semibold text-white mb-4">
-                Primary focus area <span className="text-red-400">*</span>
+              <label className="block text-xl font-semibold text-white mb-2">
+                Primary focus areas <span className="text-red-400">*</span>
               </label>
+              <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
               <div className="grid grid-cols-3 gap-3">
                 {focusAreas.map((area) => (
                   <button
                     key={area}
                     type="button"
-                    onClick={() => {
-                      setFocusArea(area);
-                      setSelectedTopics([]); // Reset topics when changing focus
-                    }}
+                    onClick={() => toggleFocusArea(area)}
                     className={`py-3 px-4 rounded-lg font-medium transition-all ${
-                      focusArea === area
+                      selectedFocusAreas.includes(area)
                         ? 'bg-blue-600 text-white'
                         : 'bg-white/10 text-gray-300 hover:bg-white/20'
                     }`}
@@ -299,11 +338,11 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* Top 5 Regulatory Topics - Conditional on focus area */}
-            {focusArea && (
+            {/* Top 5 Regulatory Topics - Conditional on focus areas */}
+            {selectedFocusAreas.length > 0 && (
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  Top 5 regulatory topics in {focusArea} <span className="text-red-400">*</span>
+                  Top 5 regulatory topics in {selectedFocusAreas.join(', ')} <span className="text-red-400">*</span>
                 </h2>
                 <p className="text-sm text-gray-400 mb-4">Rank your top 5 priorities</p>
                 
@@ -454,13 +493,14 @@ export default function SurveyPage() {
               <label className="block text-xl font-semibold text-white mb-4">
                 Are you purchasing from other horizon scanning or regulatory monitoring vendors? <span className="text-red-400">*</span>
               </label>
-              <div className="flex gap-4">
+              <div className="flex gap-4 mb-4">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     name="using-competitors"
                     value="Yes"
                     required
+                    onChange={(e) => setUsingCompetitors(e.target.value)}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-600"
                   />
                   <span className="text-gray-300">Yes</span>
@@ -470,70 +510,142 @@ export default function SurveyPage() {
                     type="radio"
                     name="using-competitors"
                     value="No"
+                    onChange={(e) => setUsingCompetitors(e.target.value)}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-600"
                   />
                   <span className="text-gray-300">No</span>
                 </label>
               </div>
+              
+              {/* Conditional dropdown for vendor selection */}
+              {usingCompetitors === 'Yes' && (
+                <div className="mt-4">
+                  <label htmlFor="competitor-vendors" className="block text-sm font-medium text-gray-300 mb-2">
+                    Which vendor(s)?
+                  </label>
+                  <select
+                    id="competitor-vendors"
+                    name="competitor-vendors"
+                    className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                  >
+                    <option value="" className="bg-gray-800">Select vendor...</option>
+                    {competitorVendors.map((vendor) => (
+                      <option key={vendor} value={vendor} className="bg-gray-800">{vendor}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
-            {/* Workspace App */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label className="block text-xl font-semibold text-white mb-4">
-                Do you currently use a Workspace app? <span className="text-red-400">*</span>
-              </label>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="workspace-app"
-                    value="Yes"
-                    required
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                  />
-                  <span className="text-gray-300">Yes</span>
+            {/* Shared Workspace Questions */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-6">
+              <div>
+                <label className="block text-xl font-semibold text-white mb-4">
+                  Does your team collaborate in a shared regulatory workspace? <span className="text-red-400">*</span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="workspace-app"
-                    value="No"
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                  />
-                  <span className="text-gray-300">No</span>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="shared-workspace"
+                      value="Yes"
+                      required
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    />
+                    <span className="text-gray-300">Yes</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="shared-workspace"
+                      value="No"
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    />
+                    <span className="text-gray-300">No</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xl font-semibold text-white mb-4">
+                  Are you interested in exploring XHS™ workspace functionalities? <span className="text-red-400">*</span>
                 </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="interested-xhs"
+                      value="Yes"
+                      required
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    />
+                    <span className="text-gray-300">Yes</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="interested-xhs"
+                      value="No"
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    />
+                    <span className="text-gray-300">No</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="interested-xhs"
+                      value="Maybe"
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    />
+                    <span className="text-gray-300">Maybe</span>
+                  </label>
+                </div>
               </div>
             </div>
 
-            {/* Workflow Integrations - Multi-select chips */}
+            {/* Productivity and GRC Apps - Multi-select chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4">
-                What workflow integrations do you use?
+                What productivity and communication apps does your team use?
               </h2>
               <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
               <div className="flex flex-wrap gap-2">
-                {workflowIntegrations.map((integration) => (
+                {productivityApps.map((app) => (
                   <button
-                    key={integration}
+                    key={app}
                     type="button"
-                    onClick={() => toggleIntegration(integration)}
+                    onClick={() => toggleIntegration(app)}
                     className={`px-4 py-2 rounded-full text-sm transition-all ${
-                      selectedIntegrations.includes(integration)
+                      selectedIntegrations.includes(app)
                         ? 'bg-blue-600 text-white'
                         : 'bg-white/10 text-gray-300 hover:bg-white/20'
                     }`}
                   >
-                    {integration}
+                    {app}
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Additional Information - Optional */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <label htmlFor="additional-info" className="block text-xl font-semibold text-white mb-4">
+                Anything else you'd like us to know?
+              </label>
+              <textarea
+                id="additional-info"
+                name="additional-info"
+                rows={3}
+                placeholder="Optional: Share any additional context that might help us..."
+                className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+              ></textarea>
             </div>
 
             {/* Submit Button */}
             <div className="flex gap-4">
               <button
                 type="submit"
-                disabled={isSubmitting || selectedJurisdictions.length === 0 || !focusArea || selectedTopics.length === 0}
+                disabled={isSubmitting || selectedJurisdictions.length === 0 || selectedFocusAreas.length === 0 || selectedTopics.length === 0}
                 className="flex-1 rounded-md bg-blue-600 px-3.5 py-3 text-center text-base font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Survey'}

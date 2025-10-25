@@ -15,9 +15,9 @@ NEW SURVEY SUBMISSION - XHS™ PROSPECT INTELLIGENCE
 Top 5 Jurisdictions (Ranked):
 ${data.topJurisdictions.map((j, i) => `${i + 1}. ${j}`).join('\n')}
 
-Primary Focus Area: ${data.focusArea}
+Primary Focus Areas: ${data.focusAreas.join(', ')}
 
-Top 5 Regulatory Topics in ${data.focusArea} (Ranked):
+Top 5 Regulatory Topics (Ranked):
 ${data.topTopics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
 
 ---------------------------------------------------
@@ -36,10 +36,23 @@ Current Challenges:
 ${data.challenges.length > 0 ? data.challenges.map(c => `• ${c}`).join('\n') : '• None specified'}
 
 Using Competing Vendors: ${data.usingCompetitors}
-Uses Workspace App: ${data.workspaceApp}
+${data.competitorVendors.length > 0 ? `Competitor: ${data.competitorVendors.join(', ')}` : ''}
 
-Workflow Integrations:
-${data.integrations.length > 0 ? data.integrations.map(i => `• ${i}`).join('\n') : '• None specified'}
+---------------------------------------------------
+
+💼 WORKSPACE & COLLABORATION
+
+Has Shared Regulatory Workspace: ${data.hasSharedWorkspace}
+Interested in XHS™ Workspace: ${data.interestedInXHS}
+
+Productivity & GRC Apps:
+${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).join('\n') : '• None specified'}
+
+---------------------------------------------------
+
+📝 ADDITIONAL CONTEXT
+
+${data.additionalInfo || 'None provided'}
 
 ---------------------------------------------------
 
@@ -59,7 +72,7 @@ ${data.integrations.length > 0 ? data.integrations.map(i => `• ${i}`).join('\n
     // await resend.emails.send({
     //   from: 'intel@pimlicosolutions.com',
     //   to: 'contact@pimlicosolutions.com', // Or your intelligence inbox
-    //   subject: `🎯 New XHS™ Prospect Intel - ${data.focusArea} | ${data.topJurisdictions[0] || 'Multi-jurisdiction'}`,
+    //   subject: `🎯 New XHS™ Prospect Intel - ${data.focusAreas.join('+')} | ${data.topJurisdictions[0] || 'Multi-jurisdiction'}`,
     //   text: surveyIntel,
     // });
 
