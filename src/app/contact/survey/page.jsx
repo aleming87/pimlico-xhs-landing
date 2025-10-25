@@ -10,24 +10,51 @@ export default function SurveyPage() {
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [selectedChallenges, setSelectedChallenges] = useState([]);
   const [selectedFocusAreas, setSelectedFocusAreas] = useState([]);
+  const [selectedProductivityApps, setSelectedProductivityApps] = useState([]);
   const [topicSearch, setTopicSearch] = useState('');
+  const [jurisdictionSearch, setJurisdictionSearch] = useState('');
+  const [productivitySearch, setProductivitySearch] = useState('');
   const [showTopicDropdown, setShowTopicDropdown] = useState(false);
+  const [showJurisdictionDropdown, setShowJurisdictionDropdown] = useState(false);
+  const [showProductivityDropdown, setShowProductivityDropdown] = useState(false);
   const [usingCompetitors, setUsingCompetitors] = useState('');
   const router = useRouter();
 
   const topicDropdownRef = useRef(null);
+  const jurisdictionDropdownRef = useRef(null);
+  const productivityDropdownRef = useRef(null);
 
-  // Top 5 jurisdictions as radio chips
-  const topJurisdictions = [
-    'European Union',
-    'United Kingdom', 
-    'United States',
-    'Canada',
-    'Australia'
+  // All available jurisdictions
+  const allJurisdictions = [
+    'European Union', 'United Kingdom', 'United States', 'Canada',
+    'Australia', 'Singapore', 'Hong Kong', 'Japan',
+    'South Korea', 'China', 'India', 'UAE',
+    'Brazil', 'Mexico', 'Switzerland', 'Norway', 'Iceland',
+    'Germany', 'France', 'Italy', 'Spain', 'Netherlands',
+    'Belgium', 'Sweden', 'Denmark', 'Finland', 'Ireland', 'Other'
   ];
 
   // Focus areas - AI, Payments, Gambling
   const focusAreas = ['AI', 'Payments', 'Gambling'];
+
+  // Productivity, communication, and GRC apps
+  const productivityApps = [
+    'Google Workspace',
+    'Microsoft Teams', 
+    'Slack',
+    'Asana',
+    'Hubspot',
+    'OneTrust (GRC)',
+    'MetricStream (GRC)',
+    'LogicManager (GRC)',
+    'ServiceNow (GRC)',
+    'Archer (RSA)',
+    'iManage',
+    'NetDocuments',
+    'Workday',
+    'Salesforce',
+    'Other'
+  ];
 
   // Regulatory topics aligned with site categories - improved clarity
   const regulatoryTopics = {
@@ -68,6 +95,18 @@ export default function SurveyPage() {
   // Simplified workspace options
   const workspaceOptions = ['Yes', 'No', 'Not sure'];
 
+  // Filter jurisdictions based on search
+  const filteredJurisdictions = allJurisdictions.filter(j =>
+    j.toLowerCase().includes(jurisdictionSearch.toLowerCase()) &&
+    !selectedJurisdictions.includes(j)
+  );
+
+  // Filter productivity apps based on search
+  const filteredProductivityApps = productivityApps.filter(app =>
+    app.toLowerCase().includes(productivitySearch.toLowerCase()) &&
+    !selectedProductivityApps.includes(app)
+  );
+
   // Get available topics based on selected focus areas (combine all selected)
   const availableTopics = selectedFocusAreas.length > 0 
     ? selectedFocusAreas.flatMap(area => regulatoryTopics[area] || [])
@@ -83,19 +122,35 @@ export default function SurveyPage() {
       if (topicDropdownRef.current && !topicDropdownRef.current.contains(event.target)) {
         setShowTopicDropdown(false);
       }
+      if (jurisdictionDropdownRef.current && !jurisdictionDropdownRef.current.contains(event.target)) {
+        setShowJurisdictionDropdown(false);
+      }
+      if (productivityDropdownRef.current && !productivityDropdownRef.current.contains(event.target)) {
+        setShowProductivityDropdown(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const toggleJurisdiction = (jurisdiction) => {
-    if (selectedJurisdictions.includes(jurisdiction)) {
-      setSelectedJurisdictions(selectedJurisdictions.filter(j => j !== jurisdiction));
-    } else {
-      if (selectedJurisdictions.length < 5) {
-        setSelectedJurisdictions([...selectedJurisdictions, jurisdiction]);
-      }
+  const handleJurisdictionAdd = (jurisdiction) => {
+    if (selectedJurisdictions.length < 5) {
+      setSelectedJurisdictions([...selectedJurisdictions, jurisdiction]);
+      setJurisdictionSearch('');
     }
+  };
+
+  const handleJurisdictionRemove = (jurisdiction) => {
+    setSelectedJurisdictions(selectedJurisdictions.filter(j => j !== jurisdiction));
+  };
+
+  const handleProductivityAppAdd = (app) => {
+    setSelectedProductivityApps([...selectedProductivityApps, app]);
+    setProductivitySearch('');
+  };
+
+  const handleProductivityAppRemove = (app) => {
+    setSelectedProductivityApps(selectedProductivityApps.filter(a => a !== app));
   };
 
   const handleTopicAdd = (topic) => {
@@ -141,7 +196,8 @@ export default function SurveyPage() {
       timeline: formData.get('timeline'),
       hasSharedWorkspace: formData.get('shared-workspace'),
       usingCompetitors: formData.get('using-competitors'),
-      competitorVendors: formData.get('competitor-vendors') || ''
+      competitorVendors: formData.get('competitor-vendors') || '',
+      productivityApps: selectedProductivityApps
     };
 
     try {
@@ -218,27 +274,64 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* Top 5 Jurisdictions - Radio chips */}
+            {/* Top 5 Jurisdictions - Searchable with inline chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-2">
                 Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
               </h2>
-              <p className="text-sm text-gray-400 mb-4">Select up to 5</p>
+              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
               
-              <div className="flex flex-wrap gap-3">
-                {topJurisdictions.map((jurisdiction) => (
-                  <button
+              <div ref={jurisdictionDropdownRef} className="relative">
+                <input
+                  type="text"
+                  value={jurisdictionSearch}
+                  onChange={(e) => {
+                    setJurisdictionSearch(e.target.value);
+                    setShowJurisdictionDropdown(true);
+                  }}
+                  onFocus={() => setShowJurisdictionDropdown(true)}
+                  placeholder="Search jurisdictions..."
+                  disabled={selectedJurisdictions.length >= 5}
+                  className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 disabled:opacity-50"
+                />
+                
+                {/* Dropdown */}
+                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
+                  <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredJurisdictions.map((jurisdiction) => (
+                      <button
+                        key={jurisdiction}
+                        type="button"
+                        onClick={() => handleJurisdictionAdd(jurisdiction)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        {jurisdiction}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Selected chips with inline checkmarks */}
+              <div className="flex flex-wrap gap-2 mt-3">
+                {selectedJurisdictions.map((jurisdiction, index) => (
+                  <span
                     key={jurisdiction}
-                    type="button"
-                    onClick={() => toggleJurisdiction(jurisdiction)}
-                    className={`py-2 px-4 rounded-full text-sm transition-all ${
-                      selectedJurisdictions.includes(jurisdiction)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                    }`}
+                    className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
                   >
+                    <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-medium">{index + 1}.</span>
                     {jurisdiction}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleJurisdictionRemove(jurisdiction)}
+                      className="hover:text-gray-200"
+                    >
+                      ×
+                    </button>
+                  </span>
                 ))}
               </div>
               {selectedJurisdictions.length === 0 && (
@@ -414,6 +507,66 @@ export default function SurveyPage() {
                     />
                     <span className="text-gray-300">{option}</span>
                   </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Productivity and Communication Apps - Searchable with inline chips */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                What productivity and communication apps does your team use?
+              </h2>
+              <p className="text-sm text-gray-400 mb-4">Type to search and select</p>
+              
+              <div ref={productivityDropdownRef} className="relative">
+                <input
+                  type="text"
+                  value={productivitySearch}
+                  onChange={(e) => {
+                    setProductivitySearch(e.target.value);
+                    setShowProductivityDropdown(true);
+                  }}
+                  onFocus={() => setShowProductivityDropdown(true)}
+                  placeholder="Search apps..."
+                  className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                />
+                
+                {/* Dropdown */}
+                {showProductivityDropdown && filteredProductivityApps.length > 0 && (
+                  <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredProductivityApps.map((app) => (
+                      <button
+                        key={app}
+                        type="button"
+                        onClick={() => handleProductivityAppAdd(app)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        {app}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Selected chips with checkmarks */}
+              <div className="flex flex-wrap gap-2 mt-3">
+                {selectedProductivityApps.map((app) => (
+                  <span
+                    key={app}
+                    className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
+                  >
+                    <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                    {app}
+                    <button
+                      type="button"
+                      onClick={() => handleProductivityAppRemove(app)}
+                      className="hover:text-gray-200"
+                    >
+                      ×
+                    </button>
+                  </span>
                 ))}
               </div>
             </div>
