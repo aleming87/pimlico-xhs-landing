@@ -1,6 +1,6 @@
 import '@/styles/tailwind.css'
 import { Analytics } from '@vercel/analytics/react'
-import WhatsAppWidget from '@/components/WhatsAppWidget'
+import ContactWidget from '@/components/WhatsAppWidget'
 
 export const metadata = {
   title: {
@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="text-gray-950 antialiased">
         {children}
-        <WhatsAppWidget />
+        <ContactWidget />
         <Analytics />
       </body>
     </html>
