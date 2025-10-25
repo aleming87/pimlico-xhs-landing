@@ -9,7 +9,7 @@ export default function ThankYouPage() {
   const [callBooked, setCallBooked] = useState(false);
   const router = useRouter();
   const surveyUrl = "/contact/survey";
-  const calendlyUrl = "https://calendly.com/your-link"; // Replace with your actual Calendly link
+  const calendlyUrl = "https://calendly.com/andrew-pimlicosolutions/xhs-demo";
 
   useEffect(() => {
     // Check if survey was completed
