@@ -111,8 +111,8 @@ export default function ConfirmedPage() {
             </h2>
             
             <div className="space-y-8">
-              {/* Founders - All in one horizontal line */}
-              <div className="flex justify-center items-center gap-16">
+              {/* Founders - Horizontal */}
+              <div className="flex justify-center gap-16">
                 {/* Andrew */}
                 <div className="text-center">
                   <img src="/Andrew.png" alt="Andrew Leming" className="size-24 rounded-full mx-auto mb-3 outline-1 -outline-offset-1 outline-white/10" />
@@ -146,12 +146,15 @@ export default function ConfirmedPage() {
                     </svg>
                   </a>
                 </div>
+              </div>
 
+              {/* Logos and Social Media - Horizontal */}
+              <div className="flex justify-center items-center gap-12">
                 {/* Logo Combo */}
-                <div className="flex items-center gap-3">
-                  <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-5" />
-                  <span className="text-gray-500">|</span>
-                  <img src="/XHS_Logo_White.png" alt="XHS" className="h-8" />
+                <div className="flex items-center gap-4">
+                  <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-6" />
+                  <span className="text-gray-500 text-xl">|</span>
+                  <img src="/XHS_Logo_White.png" alt="XHS" className="h-12" />
                 </div>
 
                 {/* Social Media Icons */}
