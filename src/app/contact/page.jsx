@@ -9,6 +9,12 @@ export default function ContactPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [validFields, setValidFields] = useState({
+    firstName: false,
+    lastName: false,
+    company: false,
+    email: false
+  });
   const router = useRouter();
 
   const freeEmailProviders = [
@@ -30,13 +36,27 @@ export default function ContactPage() {
     return true;
   };
 
+  const handleFieldChange = (field, value) => {
+    let isValid = false;
+    
+    switch(field) {
+      case 'firstName':
+      case 'lastName':
+      case 'company':
+        isValid = value.trim().length > 0;
+        break;
+      case 'email':
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        isValid = emailRegex.test(value) && validateBusinessEmail(value);
+        break;
+    }
+    
+    setValidFields(prev => ({...prev, [field]: isValid}));
+  };
+
   const handleEmailChange = (e) => {
     const email = e.target.value;
-    if (email && email.includes('@')) {
-      validateBusinessEmail(email);
-    } else {
-      setEmailError('');
-    }
+    handleFieldChange('email', email);
   };
 
   const handleSubmit = async (e) => {
@@ -57,8 +77,6 @@ export default function ContactPage() {
       lastName: formData.get('last-name'),
       company: formData.get('company'),
       email: email,
-      country: formData.get('country'),
-      phoneNumber: formData.get('phone-number'),
       message: formData.get('message'),
       agreedToPolicy: formData.get('agree-to-policies') === 'on',
       marketingConsent: formData.get('marketing-consent') === 'on',
@@ -178,25 +196,70 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
             <div>
               <label htmlFor="first-name" className="block text-sm/6 font-semibold text-white">First name</label>
-              <div className="mt-2.5">
-                <input id="first-name" type="text" name="first-name" autoComplete="given-name" required className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" />
+              <div className="mt-2.5 relative">
+                <input 
+                  id="first-name" 
+                  type="text" 
+                  name="first-name" 
+                  autoComplete="given-name" 
+                  required 
+                  onChange={(e) => handleFieldChange('firstName', e.target.value)}
+                  className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" 
+                />
+                {validFields.firstName && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
               </div>
             </div>
             <div>
               <label htmlFor="last-name" className="block text-sm/6 font-semibold text-white">Last name</label>
-              <div className="mt-2.5">
-                <input id="last-name" type="text" name="last-name" autoComplete="family-name" required className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" />
+              <div className="mt-2.5 relative">
+                <input 
+                  id="last-name" 
+                  type="text" 
+                  name="last-name" 
+                  autoComplete="family-name" 
+                  required 
+                  onChange={(e) => handleFieldChange('lastName', e.target.value)}
+                  className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" 
+                />
+                {validFields.lastName && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
               </div>
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="company" className="block text-sm/6 font-semibold text-white">Company</label>
-              <div className="mt-2.5">
-                <input id="company" type="text" name="company" autoComplete="organization" required className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" />
+              <div className="mt-2.5 relative">
+                <input 
+                  id="company" 
+                  type="text" 
+                  name="company" 
+                  autoComplete="organization" 
+                  required 
+                  onChange={(e) => handleFieldChange('company', e.target.value)}
+                  className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" 
+                />
+                {validFields.company && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label htmlFor="email" className="block text-sm/6 font-semibold text-white">Email</label>
-              <div className="mt-2.5">
+              <label htmlFor="email" className="block text-sm/6 font-semibold text-white">Work Email</label>
+              <div className="mt-2.5 relative">
                 <input 
                   id="email" 
                   type="email" 
@@ -206,62 +269,22 @@ export default function ContactPage() {
                   onChange={handleEmailChange}
                   className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" 
                 />
+                {validFields.email && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
                 {emailError && (
                   <p className="mt-2 text-sm text-red-400">{emailError}</p>
                 )}
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label htmlFor="phone-number" className="block text-sm/6 font-semibold text-white">Phone number</label>
-              <div className="mt-2.5">
-                <div className="flex rounded-md bg-white/5 outline outline-1 -outline-offset-1 outline-white/10 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-blue-500">
-                  <div className="grid shrink-0 grid-cols-1 focus-within:relative">
-                    <select id="country" name="country" autoComplete="country" aria-label="Country" className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/10 py-2 pr-7 pl-3.5 text-base text-white focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 sm:text-sm/6">
-                      <option value="+1" className="bg-gray-800 text-white">US +1</option>
-                      <option value="+1" className="bg-gray-800 text-white">CA +1</option>
-                      <option value="+44" className="bg-gray-800 text-white">UK +44</option>
-                      <option value="+61" className="bg-gray-800 text-white">AU +61</option>
-                      <option value="+49" className="bg-gray-800 text-white">DE +49</option>
-                      <option value="+33" className="bg-gray-800 text-white">FR +33</option>
-                      <option value="+39" className="bg-gray-800 text-white">IT +39</option>
-                      <option value="+34" className="bg-gray-800 text-white">ES +34</option>
-                      <option value="+31" className="bg-gray-800 text-white">NL +31</option>
-                      <option value="+32" className="bg-gray-800 text-white">BE +32</option>
-                      <option value="+41" className="bg-gray-800 text-white">CH +41</option>
-                      <option value="+43" className="bg-gray-800 text-white">AT +43</option>
-                      <option value="+45" className="bg-gray-800 text-white">DK +45</option>
-                      <option value="+46" className="bg-gray-800 text-white">SE +46</option>
-                      <option value="+47" className="bg-gray-800 text-white">NO +47</option>
-                      <option value="+358" className="bg-gray-800 text-white">FI +358</option>
-                      <option value="+353" className="bg-gray-800 text-white">IE +353</option>
-                      <option value="+351" className="bg-gray-800 text-white">PT +351</option>
-                      <option value="+48" className="bg-gray-800 text-white">PL +48</option>
-                      <option value="+65" className="bg-gray-800 text-white">SG +65</option>
-                      <option value="+852" className="bg-gray-800 text-white">HK +852</option>
-                      <option value="+81" className="bg-gray-800 text-white">JP +81</option>
-                      <option value="+82" className="bg-gray-800 text-white">KR +82</option>
-                      <option value="+86" className="bg-gray-800 text-white">CN +86</option>
-                      <option value="+91" className="bg-gray-800 text-white">IN +91</option>
-                      <option value="+971" className="bg-gray-800 text-white">AE +971</option>
-                      <option value="+966" className="bg-gray-800 text-white">SA +966</option>
-                      <option value="+55" className="bg-gray-800 text-white">BR +55</option>
-                      <option value="+52" className="bg-gray-800 text-white">MX +52</option>
-                      <option value="+54" className="bg-gray-800 text-white">AR +54</option>
-                      <option value="+27" className="bg-gray-800 text-white">ZA +27</option>
-                      <option value="+64" className="bg-gray-800 text-white">NZ +64</option>
-                    </select>
-                    <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true" className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-white sm:size-4">
-                      <path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" fillRule="evenodd" />
-                    </svg>
-                  </div>
-                  <input id="phone-number" type="text" name="phone-number" placeholder="123-456-7890" className="block min-w-0 grow bg-transparent py-1.5 pr-3 pl-1 text-base text-white placeholder:text-gray-500 focus:outline-none sm:text-sm/6" />
-                </div>
-              </div>
-            </div>
-            <div className="sm:col-span-2">
               <label htmlFor="message" className="block text-sm/6 font-semibold text-white">Message</label>
               <div className="mt-2.5">
-                <textarea id="message" name="message" rows={4} className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"></textarea>
+                <textarea id="message" name="message" rows={2} className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"></textarea>
               </div>
             </div>
             <div className="flex gap-x-4 sm:col-span-2">
