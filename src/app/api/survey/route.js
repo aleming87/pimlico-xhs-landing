@@ -4,53 +4,66 @@ export async function POST(request) {
   try {
     const data = await request.json();
     
-    // Format the survey results
-    const surveyContent = `
-New Survey Submission
+    // Format the survey intelligence report
+    const surveyIntel = `
+====================================================
+NEW SURVEY SUBMISSION - XHS™ PROSPECT INTELLIGENCE
+====================================================
 
-JURISDICTIONS:
-${data.jurisdictions.length > 0 ? data.jurisdictions.join(', ') : 'None selected'}
+📊 PRIORITY INTELLIGENCE
 
-SECTORS:
-${data.sectors.length > 0 ? data.sectors.join(', ') : 'None selected'}
+Top 5 Jurisdictions (Ranked):
+${data.topJurisdictions.map((j, i) => `${i + 1}. ${j}`).join('\n')}
 
-REGULATORY TOPICS:
-${data.topics.length > 0 ? data.topics.join(', ') : 'None selected'}
+Primary Focus Area: ${data.focusArea}
 
-ROLE:
-${data.role}
+Top 5 Regulatory Topics in ${data.focusArea} (Ranked):
+${data.topTopics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
 
-COMPANY DETAILS:
-Name: ${data.companyName || 'Not provided'}
-Size: ${data.companySize}
+---------------------------------------------------
 
-COMPLIANCE CHALLENGES:
-${data.challenges || 'Not provided'}
+👤 PROSPECT PROFILE
 
-IMPLEMENTATION TIMELINE:
-${data.timeline}
+Role: ${data.role}
+Company Size: ${data.companySize}
+Implementation Timeline: ${data.timeline}
 
-ADDITIONAL INFORMATION:
-${data.additionalInfo || 'None provided'}
+---------------------------------------------------
 
-Submitted: ${new Date().toISOString()}
+🎯 COMPLIANCE INTELLIGENCE
+
+Current Challenges:
+${data.challenges.length > 0 ? data.challenges.map(c => `• ${c}`).join('\n') : '• None specified'}
+
+Using Competing Vendors: ${data.usingCompetitors}
+Uses Workspace App: ${data.workspaceApp}
+
+Workflow Integrations:
+${data.integrations.length > 0 ? data.integrations.map(i => `• ${i}`).join('\n') : '• None specified'}
+
+---------------------------------------------------
+
+🕐 SUBMITTED: ${new Date().toISOString()}
+
+====================================================
     `.trim();
 
-    // Log to console (replace with actual email service when ready)
-    console.log('Survey submission received:', surveyContent);
+    // Log to console (for development)
+    console.log('Survey intelligence received:');
+    console.log(surveyIntel);
 
-    // TODO: Send email notification using Resend
+    // TODO: Send to your CRM/intelligence system
     // const { Resend } = require('resend');
     // const resend = new Resend(process.env.RESEND_API_KEY);
     // 
     // await resend.emails.send({
-    //   from: 'noreply@pimlicosolutions.com',
-    //   to: 'contact@pimlicosolutions.com',
-    //   subject: 'New Survey Response - XHS™',
-    //   text: surveyContent,
+    //   from: 'intel@pimlicosolutions.com',
+    //   to: 'contact@pimlicosolutions.com', // Or your intelligence inbox
+    //   subject: `🎯 New XHS™ Prospect Intel - ${data.focusArea} | ${data.topJurisdictions[0] || 'Multi-jurisdiction'}`,
+    //   text: surveyIntel,
     // });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: 'Survey intelligence captured' });
   } catch (error) {
     console.error('Survey submission error:', error);
     return NextResponse.json(
