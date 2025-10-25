@@ -12,7 +12,7 @@ export default function ThankYouPage() {
   
   // Calendly URL with redirect to confirmation page
   const confirmationUrl = typeof window !== 'undefined' 
-    ? `${window.location.origin}/thankyou/confirmed` 
+    ? `${window.location.origin}/contact/thank-you/confirmed` 
     : '';
   const calendlyUrl = `https://calendly.com/andrew-pimlicosolutions/xhs-demo?redirect_url=${encodeURIComponent(confirmationUrl)}`;
 
