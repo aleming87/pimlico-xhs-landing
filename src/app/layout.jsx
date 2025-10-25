@@ -15,6 +15,11 @@ export const metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: '/Pimlico_SI_Brandmark.png',
+    shortcut: '/Pimlico_SI_Brandmark.png',
+    apple: '/Pimlico_SI_Brandmark.png',
+  },
   openGraph: {
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
     description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI and Payments regulations across 90+ jurisdictions.',
