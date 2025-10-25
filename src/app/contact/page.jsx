@@ -195,9 +195,7 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label htmlFor="email" className="block text-sm/6 font-semibold text-white">
-                Business Email <span className="text-red-400">*</span>
-              </label>
+              <label htmlFor="email" className="block text-sm/6 font-semibold text-white">Email</label>
               <div className="mt-2.5">
                 <input 
                   id="email" 
@@ -211,7 +209,6 @@ export default function ContactPage() {
                 {emailError && (
                   <p className="mt-2 text-sm text-red-400">{emailError}</p>
                 )}
-                <p className="mt-1 text-xs text-gray-500">Please use your work email (not Gmail, Yahoo, etc.)</p>
               </div>
             </div>
             <div className="sm:col-span-2">
@@ -278,18 +275,18 @@ export default function ContactPage() {
             </div>
             <div className="flex gap-x-4 sm:col-span-2">
               <div className="flex h-6 items-center">
-                <input id="marketing-consent" type="checkbox" name="marketing-consent" className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
+                <input id="marketing-consent" type="checkbox" name="marketing-consent" defaultChecked className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
               </div>
               <label htmlFor="marketing-consent" className="text-sm/6 text-gray-400">
-                I would like to receive marketing communications about Pimlico XHS products and services.
+                Receive updates about Pimlico XHS™ products and services.
               </label>
             </div>
             <div className="flex gap-x-4 sm:col-span-2">
               <div className="flex h-6 items-center">
-                <input id="newsletter-consent" type="checkbox" name="newsletter-consent" className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
+                <input id="newsletter-consent" type="checkbox" name="newsletter-consent" defaultChecked className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
               </div>
               <label htmlFor="newsletter-consent" className="text-sm/6 text-gray-400">
-                Subscribe to our newsletter for regulatory updates and compliance insights.
+                Subscribe to regulatory updates and insights newsletter.
               </label>
             </div>
           </div>

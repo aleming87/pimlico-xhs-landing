@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 
 export default function ThankYouPage() {
-  const surveyUrl = "https://docs.google.com/forms/d/1hSpj9XbDtglMYy0gwvxbc4p26FNtk95cT3Tc30PpDEo/viewform";
+  const surveyUrl = "/contact/survey";
 
   useEffect(() => {
     // Send thank you email via a serverless function or API
@@ -69,8 +69,6 @@ export default function ThankYouPage() {
             </p>
             <a
               href={surveyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all"
             >
               Complete Survey
