@@ -297,7 +297,7 @@ export default function ContactPage() {
             </div>
             <div className="flex gap-x-4 sm:col-span-2">
               <div className="flex h-6 items-center">
-                <input id="marketing-consent" type="checkbox" name="marketing-consent" defaultChecked className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
+                <input id="marketing-consent" type="checkbox" name="marketing-consent" className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
               </div>
               <label htmlFor="marketing-consent" className="text-sm/6 text-gray-400">
                 Receive updates about Pimlico XHS™ products and services.
