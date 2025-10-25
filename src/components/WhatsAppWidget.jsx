@@ -5,8 +5,8 @@ import { useState } from 'react';
 export default function WhatsAppWidget() {
   const [isHovered, setIsHovered] = useState(false);
   
-  // Replace with your actual WhatsApp Business number (in international format without + or spaces)
-  const whatsappNumber = "1234567890"; // Update this with your WhatsApp Business number
+  // WhatsApp Business number in international format (without + or spaces)
+  const whatsappNumber = "447961642867";
   const message = encodeURIComponent("Hi! I'm interested in learning more about Pimlico XHS™");
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 
