@@ -9,26 +9,21 @@ export default function SurveyPage() {
   const [selectedJurisdictions, setSelectedJurisdictions] = useState([]);
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [selectedChallenges, setSelectedChallenges] = useState([]);
-  const [selectedIntegrations, setSelectedIntegrations] = useState([]);
   const [selectedFocusAreas, setSelectedFocusAreas] = useState([]);
-  const [jurisdictionSearch, setJurisdictionSearch] = useState('');
   const [topicSearch, setTopicSearch] = useState('');
-  const [showJurisdictionDropdown, setShowJurisdictionDropdown] = useState(false);
   const [showTopicDropdown, setShowTopicDropdown] = useState(false);
   const [usingCompetitors, setUsingCompetitors] = useState('');
   const router = useRouter();
 
-  const jurisdictionDropdownRef = useRef(null);
   const topicDropdownRef = useRef(null);
 
-  // All available jurisdictions (90+)
-  const allJurisdictions = [
-    'European Union', 'United Kingdom', 'United States', 'Canada',
-    'Australia', 'Singapore', 'Hong Kong', 'Japan',
-    'South Korea', 'China', 'India', 'UAE',
-    'Brazil', 'Mexico', 'Switzerland', 'Norway', 'Iceland',
-    'Germany', 'France', 'Italy', 'Spain', 'Netherlands',
-    'Belgium', 'Sweden', 'Denmark', 'Finland', 'Ireland', 'Other'
+  // Top 5 jurisdictions as radio chips
+  const topJurisdictions = [
+    'European Union',
+    'United Kingdom', 
+    'United States',
+    'Canada',
+    'Australia'
   ];
 
   // Focus areas - AI, Payments, Gambling
@@ -60,44 +55,18 @@ export default function SurveyPage() {
     ]
   };
 
-  // Compliance challenges
+  // Compliance challenges - reduced list
   const complianceChallenges = [
     'Keeping up with regulatory changes',
     'Multi-jurisdiction compliance',
     'Resource constraints',
     'Lack of regulatory visibility',
     'Manual monitoring processes',
-    'Siloed information across teams',
-    'Interpreting complex regulations',
-    'Compliance reporting',
-    'Risk assessment',
-    'Regulatory horizon scanning'
+    'Siloed information across teams'
   ];
 
-  // Productivity, communication, and GRC apps
-  const productivityApps = [
-    'Google Workspace',
-    'Microsoft Teams', 
-    'Slack',
-    'Asana',
-    'Hubspot',
-    'OneTrust (GRC)',
-    'MetricStream (GRC)',
-    'LogicManager (GRC)',
-    'ServiceNow (GRC)',
-    'Archer (RSA)',
-    'iManage',
-    'NetDocuments',
-    'Workday',
-    'Salesforce',
-    'Other'
-  ];
-
-  // Filter jurisdictions based on search
-  const filteredJurisdictions = allJurisdictions.filter(j =>
-    j.toLowerCase().includes(jurisdictionSearch.toLowerCase()) &&
-    !selectedJurisdictions.includes(j)
-  );
+  // Simplified workspace options
+  const workspaceOptions = ['Yes', 'No', 'Not sure'];
 
   // Get available topics based on selected focus areas (combine all selected)
   const availableTopics = selectedFocusAreas.length > 0 
@@ -108,12 +77,9 @@ export default function SurveyPage() {
     !selectedTopics.includes(t)
   );
 
-  // Close dropdowns when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (jurisdictionDropdownRef.current && !jurisdictionDropdownRef.current.contains(event.target)) {
-        setShowJurisdictionDropdown(false);
-      }
       if (topicDropdownRef.current && !topicDropdownRef.current.contains(event.target)) {
         setShowTopicDropdown(false);
       }
@@ -122,15 +88,14 @@ export default function SurveyPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleJurisdictionAdd = (jurisdiction) => {
-    if (selectedJurisdictions.length < 5) {
-      setSelectedJurisdictions([...selectedJurisdictions, jurisdiction]);
-      setJurisdictionSearch('');
+  const toggleJurisdiction = (jurisdiction) => {
+    if (selectedJurisdictions.includes(jurisdiction)) {
+      setSelectedJurisdictions(selectedJurisdictions.filter(j => j !== jurisdiction));
+    } else {
+      if (selectedJurisdictions.length < 5) {
+        setSelectedJurisdictions([...selectedJurisdictions, jurisdiction]);
+      }
     }
-  };
-
-  const handleJurisdictionRemove = (jurisdiction) => {
-    setSelectedJurisdictions(selectedJurisdictions.filter(j => j !== jurisdiction));
   };
 
   const handleTopicAdd = (topic) => {
@@ -152,14 +117,6 @@ export default function SurveyPage() {
     }
   };
 
-  const toggleIntegration = (integration) => {
-    if (selectedIntegrations.includes(integration)) {
-      setSelectedIntegrations(selectedIntegrations.filter(i => i !== integration));
-    } else {
-      setSelectedIntegrations([...selectedIntegrations, integration]);
-    }
-  };
-
   const toggleFocusArea = (area) => {
     if (selectedFocusAreas.includes(area)) {
       setSelectedFocusAreas(selectedFocusAreas.filter(a => a !== area));
@@ -177,19 +134,14 @@ export default function SurveyPage() {
 
     const formData = new FormData(e.target);
     const data = {
-      topJurisdictions: selectedJurisdictions,
       focusAreas: selectedFocusAreas,
+      topJurisdictions: selectedJurisdictions,
       topTopics: selectedTopics,
-      role: formData.get('role'),
-      companySize: formData.get('company-size'),
       challenges: selectedChallenges,
       timeline: formData.get('timeline'),
-      usingCompetitors: formData.get('using-competitors'),
-      competitorVendors: formData.get('competitor-vendors') ? [formData.get('competitor-vendors')] : [],
       hasSharedWorkspace: formData.get('shared-workspace'),
-      interestedInXHS: formData.get('interested-xhs'),
-      productivityApps: selectedIntegrations,
-      additionalInfo: formData.get('additional-info')
+      usingCompetitors: formData.get('using-competitors'),
+      competitorVendors: formData.get('competitor-vendors') || ''
     };
 
     try {
@@ -237,74 +189,12 @@ export default function SurveyPage() {
               Tell us about your needs
             </h1>
             <p className="text-sm text-blue-400 font-medium">
-              ⏱️ Takes 2 minutes
+              ⏱️ Takes 1 minute
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Top 5 Jurisdictions - Searchable dropdown with chips */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
-              </h2>
-              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
-              
-              <div ref={jurisdictionDropdownRef} className="relative">
-                <input
-                  type="text"
-                  value={jurisdictionSearch}
-                  onChange={(e) => {
-                    setJurisdictionSearch(e.target.value);
-                    setShowJurisdictionDropdown(true);
-                  }}
-                  onFocus={() => setShowJurisdictionDropdown(true)}
-                  placeholder="Search jurisdictions..."
-                  disabled={selectedJurisdictions.length >= 5}
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 disabled:opacity-50"
-                />
-                
-                {/* Dropdown */}
-                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
-                  <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
-                    {filteredJurisdictions.map((jurisdiction) => (
-                      <button
-                        key={jurisdiction}
-                        type="button"
-                        onClick={() => handleJurisdictionAdd(jurisdiction)}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        {jurisdiction}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Selected chips */}
-              <div className="flex flex-wrap gap-2 mt-3">
-                {selectedJurisdictions.map((jurisdiction, index) => (
-                  <span
-                    key={jurisdiction}
-                    className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
-                  >
-                    <span className="font-medium">{index + 1}.</span>
-                    {jurisdiction}
-                    <button
-                      type="button"
-                      onClick={() => handleJurisdictionRemove(jurisdiction)}
-                      className="hover:text-gray-200"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-              {selectedJurisdictions.length === 0 && (
-                <p className="text-xs text-gray-500 mt-2">Please select at least one jurisdiction</p>
-              )}
-            </div>
-
-            {/* Focus Areas - AI, Payments, Gambling - Multi-select */}
+            {/* Primary Focus Areas - AI, Payments, Gambling */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <label className="block text-xl font-semibold text-white mb-2">
                 Primary focus areas <span className="text-red-400">*</span>
@@ -328,11 +218,39 @@ export default function SurveyPage() {
               </div>
             </div>
 
+            {/* Top 5 Jurisdictions - Radio chips */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
+              </h2>
+              <p className="text-sm text-gray-400 mb-4">Select up to 5</p>
+              
+              <div className="flex flex-wrap gap-3">
+                {topJurisdictions.map((jurisdiction) => (
+                  <button
+                    key={jurisdiction}
+                    type="button"
+                    onClick={() => toggleJurisdiction(jurisdiction)}
+                    className={`py-2 px-4 rounded-full text-sm transition-all ${
+                      selectedJurisdictions.includes(jurisdiction)
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                    }`}
+                  >
+                    {jurisdiction}
+                  </button>
+                ))}
+              </div>
+              {selectedJurisdictions.length === 0 && (
+                <p className="text-xs text-gray-500 mt-2">Please select at least one jurisdiction</p>
+              )}
+            </div>
+
             {/* Top 5 Regulatory Topics - Conditional on focus areas */}
             {selectedFocusAreas.length > 0 && (
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  Top 5 regulatory topics in {selectedFocusAreas.join(', ')} <span className="text-red-400">*</span>
+                  Top 5 regulatory topics in {selectedFocusAreas.join(', ')}
                 </h2>
                 <p className="text-sm text-gray-400 mb-4">Rank your top 5 priorities</p>
                 
@@ -389,51 +307,6 @@ export default function SurveyPage() {
               </div>
             )}
 
-            {/* Role */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label htmlFor="role" className="block text-xl font-semibold text-white mb-4">
-                Your role <span className="text-red-400">*</span>
-              </label>
-              <select
-                id="role"
-                name="role"
-                required
-                className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-              >
-                <option value="" className="bg-gray-800">Select your role...</option>
-                <option value="Chief Compliance Officer" className="bg-gray-800">Chief Compliance Officer</option>
-                <option value="Compliance Manager/Director" className="bg-gray-800">Compliance Manager/Director</option>
-                <option value="Legal Counsel/General Counsel" className="bg-gray-800">Legal Counsel/General Counsel</option>
-                <option value="Risk Manager" className="bg-gray-800">Risk Manager</option>
-                <option value="Regulatory Affairs" className="bg-gray-800">Regulatory Affairs</option>
-                <option value="Policy Manager" className="bg-gray-800">Policy Manager</option>
-                <option value="C-Suite Executive" className="bg-gray-800">C-Suite Executive</option>
-                <option value="Other" className="bg-gray-800">Other</option>
-              </select>
-            </div>
-
-            {/* Company Size */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label htmlFor="company-size" className="block text-xl font-semibold text-white mb-4">
-                Company size <span className="text-red-400">*</span>
-              </label>
-              <select
-                id="company-size"
-                name="company-size"
-                required
-                className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-              >
-                <option value="" className="bg-gray-800">Select company size...</option>
-                <option value="1-10" className="bg-gray-800">1-10 employees</option>
-                <option value="11-50" className="bg-gray-800">11-50 employees</option>
-                <option value="51-200" className="bg-gray-800">51-200 employees</option>
-                <option value="201-500" className="bg-gray-800">201-500 employees</option>
-                <option value="501-1000" className="bg-gray-800">501-1,000 employees</option>
-                <option value="1001-5000" className="bg-gray-800">1,001-5,000 employees</option>
-                <option value="5001+" className="bg-gray-800">5,001+ employees</option>
-              </select>
-            </div>
-
             {/* Compliance Challenges - Multi-select chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4">
@@ -458,10 +331,10 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* Timeline */}
+            {/* When do you need our services */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <label htmlFor="timeline" className="block text-xl font-semibold text-white mb-4">
-                Implementation timeline <span className="text-red-400">*</span>
+                When do you need our services? <span className="text-red-400">*</span>
               </label>
               <select
                 id="timeline"
@@ -469,19 +342,19 @@ export default function SurveyPage() {
                 required
                 className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
               >
-                <option value="" className="bg-gray-800">Select timeline...</option>
-                <option value="Immediate (within 1 month)" className="bg-gray-800">Immediate (within 1 month)</option>
-                <option value="Short-term (1-3 months)" className="bg-gray-800">Short-term (1-3 months)</option>
-                <option value="Medium-term (3-6 months)" className="bg-gray-800">Medium-term (3-6 months)</option>
-                <option value="Long-term (6-12 months)" className="bg-gray-800">Long-term (6-12 months)</option>
-                <option value="Exploring options (12+ months)" className="bg-gray-800">Exploring options (12+ months)</option>
+                <option value="" className="bg-gray-800">Select timeframe...</option>
+                <option value="Now" className="bg-gray-800">Now</option>
+                <option value="Next 1-3 months" className="bg-gray-800">Next 1-3 months</option>
+                <option value="Next 3-6 months" className="bg-gray-800">Next 3-6 months</option>
+                <option value="Next 6-12 months" className="bg-gray-800">Next 6-12 months</option>
+                <option value="Just exploring" className="bg-gray-800">Just exploring</option>
               </select>
             </div>
 
-            {/* Using Competitors */}
+            {/* Using Competitors - No suggestions */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <label className="block text-xl font-semibold text-white mb-4">
-                Are you purchasing from other horizon scanning or regulatory monitoring vendors? <span className="text-red-400">*</span>
+                Are you using other regulatory monitoring vendors? <span className="text-red-400">*</span>
               </label>
               <div className="flex gap-4 mb-4">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -517,132 +390,43 @@ export default function SurveyPage() {
                     type="text"
                     id="competitor-vendors"
                     name="competitor-vendors"
-                    placeholder="e.g., Thomson Reuters, LexisNexis..."
+                    placeholder="Enter vendor name(s)"
                     className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white placeholder-gray-500 outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                   />
                 </div>
               )}
             </div>
 
-            {/* Shared Workspace Questions */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10 space-y-6">
-              <div>
-                <label className="block text-xl font-semibold text-white mb-4">
-                  Does your team collaborate in a shared regulatory workspace? <span className="text-red-400">*</span>
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="shared-workspace"
-                      value="Yes"
-                      required
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                    />
-                    <span className="text-gray-300">Yes</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="shared-workspace"
-                      value="No"
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                    />
-                    <span className="text-gray-300">No</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xl font-semibold text-white mb-4">
-                  Are you interested in exploring XHS™ workspace functionalities? <span className="text-red-400">*</span>
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="interested-xhs"
-                      value="Yes"
-                      required
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                    />
-                    <span className="text-gray-300">Yes</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="interested-xhs"
-                      value="No"
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                    />
-                    <span className="text-gray-300">No</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="interested-xhs"
-                      value="Maybe"
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                    />
-                    <span className="text-gray-300">Maybe</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Productivity and GRC Apps - Multi-select chips */}
+            {/* Shared Workspace - Simplified */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-4">
-                What productivity and communication apps does your team use?
-              </h2>
-              <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
-              <div className="flex flex-wrap gap-2">
-                {productivityApps.map((app) => (
-                  <button
-                    key={app}
-                    type="button"
-                    onClick={() => toggleIntegration(app)}
-                    className={`px-4 py-2 rounded-full text-sm transition-all ${
-                      selectedIntegrations.includes(app)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                    }`}
-                  >
-                    {app}
-                  </button>
+              <label className="block text-xl font-semibold text-white mb-4">
+                Does your team collaborate in a shared regulatory workspace? <span className="text-red-400">*</span>
+              </label>
+              <div className="flex gap-4">
+                {workspaceOptions.map((option) => (
+                  <label key={option} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="shared-workspace"
+                      value={option}
+                      required
+                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    />
+                    <span className="text-gray-300">{option}</span>
+                  </label>
                 ))}
               </div>
-            </div>
-
-            {/* Additional Information - Optional */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label htmlFor="additional-info" className="block text-xl font-semibold text-white mb-4">
-                Anything else you'd like us to know?
-              </label>
-              <textarea
-                id="additional-info"
-                name="additional-info"
-                rows={3}
-                placeholder="Optional: Share any additional context that might help us..."
-                className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-              ></textarea>
             </div>
 
             {/* Submit Button */}
             <div className="flex gap-4">
               <button
                 type="submit"
-                disabled={isSubmitting || selectedJurisdictions.length === 0 || selectedFocusAreas.length === 0 || selectedTopics.length === 0}
+                disabled={isSubmitting || selectedJurisdictions.length === 0 || selectedFocusAreas.length === 0}
                 className="flex-1 rounded-md bg-blue-600 px-3.5 py-3 text-center text-base font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Survey'}
               </button>
-              <a
-                href="/"
-                className="px-6 py-3 text-sm font-semibold text-gray-400 hover:text-white"
-              >
-                Skip for now
-              </a>
             </div>
           </form>
         </div>
