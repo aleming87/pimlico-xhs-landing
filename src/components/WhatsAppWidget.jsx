@@ -8,7 +8,7 @@ export default function ContactWidget() {
   const whatsappNumber = "447961642867";
   const whatsappMessage = encodeURIComponent("Hi! I'm interested in learning more about Pimlico XHS™");
   const emailAddress = "contact@pimlicosolutions.com";
-  const linkedinUrl = "https://www.linkedin.com/company/pimlico-xhs";
+  const linkedinUrl = "https://www.linkedin.com/company/wearepimlico";
 
   const contactOptions = [
     {
@@ -51,25 +51,22 @@ export default function ContactWidget() {
 
   return (
     <>
-      {/* Vertical Tab */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50">
+      {/* Chat Bubble Button */}
+      <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="bg-gradient-to-b from-blue-600 to-blue-700 text-white px-3 py-6 rounded-l-lg shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 flex items-center gap-2 group"
+          className="group relative w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 flex items-center justify-center text-white"
           aria-label="Open contact options"
         >
-          <span className="writing-mode-vertical text-sm font-semibold tracking-wider">
-            CONTACT US
-          </span>
-          <svg 
-            className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-            fill="none" 
-            viewBox="0 0 24 24" 
-            strokeWidth={2} 
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
+          {isOpen ? (
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+            </svg>
+          )}
         </button>
       </div>
 
@@ -83,23 +80,12 @@ export default function ContactWidget() {
           />
           
           {/* Contact Options Panel */}
-          <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 mr-20 animate-slide-in">
-            <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 max-w-[calc(100vw-6rem)] border border-gray-200">
+          <div className="fixed bottom-24 right-6 z-50 animate-slide-up">
+            <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 max-w-[calc(100vw-3rem)] border border-gray-200">
               {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Get in touch</h3>
-                  <p className="text-sm text-gray-600 mt-1">Choose how you'd like to connect</p>
-                </div>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                  aria-label="Close"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-900">Get in touch</h3>
+                <p className="text-sm text-gray-600 mt-1">Choose how you'd like to connect</p>
               </div>
 
               {/* Contact Options */}
@@ -139,31 +125,19 @@ export default function ContactWidget() {
       )}
 
       <style jsx>{`
-        .writing-mode-vertical {
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
-        }
-        
-        @keyframes slide-in {
+        @keyframes slide-up {
           from {
             opacity: 0;
-            transform: translateX(100%) translateY(-50%);
+            transform: translateY(20px);
           }
           to {
             opacity: 1;
-            transform: translateX(0) translateY(-50%);
+            transform: translateY(0);
           }
         }
         
-        .animate-slide-in {
-          animation: slide-in 0.3s ease-out;
-        }
-
-        @media (max-width: 640px) {
-          .writing-mode-vertical {
-            writing-mode: horizontal-tb;
-            text-orientation: unset;
-          }
+        .animate-slide-up {
+          animation: slide-up 0.3s ease-out;
         }
       `}</style>
     </>

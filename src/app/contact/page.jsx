@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Footer } from '@/components/footer';
+import ContactWidget from '@/components/WhatsAppWidget';
 
 export default function ContactPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -188,6 +189,7 @@ export default function ContactPage() {
         </form>
       </div>
 
+      <ContactWidget />
       <Footer />
     </div>
   );
