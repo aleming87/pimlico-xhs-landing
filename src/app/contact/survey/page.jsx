@@ -24,14 +24,32 @@ export default function SurveyPage() {
   const jurisdictionDropdownRef = useRef(null);
   const productivityDropdownRef = useRef(null);
 
-  // All available jurisdictions
+  // All available jurisdictions - comprehensive alphabetical list
   const allJurisdictions = [
-    'European Union', 'United Kingdom', 'United States', 'Canada',
-    'Australia', 'Singapore', 'Hong Kong', 'Japan',
-    'South Korea', 'China', 'India', 'UAE',
-    'Brazil', 'Mexico', 'Switzerland', 'Norway', 'Iceland',
-    'Germany', 'France', 'Italy', 'Spain', 'Netherlands',
-    'Belgium', 'Sweden', 'Denmark', 'Finland', 'Ireland', 'Other'
+    'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan',
+    'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi',
+    'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic',
+    'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic',
+    'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'European Union',
+    'Fiji', 'Finland', 'France',
+    'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana',
+    'Haiti', 'Honduras', 'Hong Kong', 'Hungary',
+    'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy',
+    'Jamaica', 'Japan', 'Jordan',
+    'Kazakhstan', 'Kenya', 'Kiribati', 'Kosovo', 'Kuwait', 'Kyrgyzstan',
+    'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+    'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar',
+    'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'North Korea', 'North Macedonia', 'Norway',
+    'Oman',
+    'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal',
+    'Qatar',
+    'Romania', 'Russia', 'Rwanda',
+    'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Sweden', 'Switzerland', 'Syria',
+    'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu',
+    'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan',
+    'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam',
+    'Yemen',
+    'Zambia', 'Zimbabwe'
   ];
 
   // Focus areas - AI, Payments, Gambling
@@ -282,18 +300,44 @@ export default function SurveyPage() {
               <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
               
               <div ref={jurisdictionDropdownRef} className="relative">
-                <input
-                  type="text"
-                  value={jurisdictionSearch}
-                  onChange={(e) => {
-                    setJurisdictionSearch(e.target.value);
-                    setShowJurisdictionDropdown(true);
-                  }}
-                  onFocus={() => setShowJurisdictionDropdown(true)}
-                  placeholder="Search jurisdictions..."
-                  disabled={selectedJurisdictions.length >= 5}
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 disabled:opacity-50"
-                />
+                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {/* Selected chips inside input */}
+                    {selectedJurisdictions.map((jurisdiction, index) => (
+                      <span
+                        key={jurisdiction}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-green-600 px-2.5 py-0.5 text-sm text-white"
+                      >
+                        <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                        </svg>
+                        <span className="font-medium">{index + 1}.</span>
+                        {jurisdiction}
+                        <button
+                          type="button"
+                          onClick={() => handleJurisdictionRemove(jurisdiction)}
+                          className="hover:text-gray-200 ml-0.5"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                    {/* Input field */}
+                    {selectedJurisdictions.length < 5 && (
+                      <input
+                        type="text"
+                        value={jurisdictionSearch}
+                        onChange={(e) => {
+                          setJurisdictionSearch(e.target.value);
+                          setShowJurisdictionDropdown(true);
+                        }}
+                        onFocus={() => setShowJurisdictionDropdown(true)}
+                        placeholder={selectedJurisdictions.length === 0 ? "Search jurisdictions..." : ""}
+                        className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                      />
+                    )}
+                  </div>
+                </div>
                 
                 {/* Dropdown */}
                 {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
@@ -312,28 +356,6 @@ export default function SurveyPage() {
                 )}
               </div>
 
-              {/* Selected chips with inline checkmarks */}
-              <div className="flex flex-wrap gap-2 mt-3">
-                {selectedJurisdictions.map((jurisdiction, index) => (
-                  <span
-                    key={jurisdiction}
-                    className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
-                  >
-                    <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                    </svg>
-                    <span className="font-medium">{index + 1}.</span>
-                    {jurisdiction}
-                    <button
-                      type="button"
-                      onClick={() => handleJurisdictionRemove(jurisdiction)}
-                      className="hover:text-gray-200"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
               {selectedJurisdictions.length === 0 && (
                 <p className="text-xs text-gray-500 mt-2">Please select at least one jurisdiction</p>
               )}
@@ -519,17 +541,41 @@ export default function SurveyPage() {
               <p className="text-sm text-gray-400 mb-4">Type to search and select</p>
               
               <div ref={productivityDropdownRef} className="relative">
-                <input
-                  type="text"
-                  value={productivitySearch}
-                  onChange={(e) => {
-                    setProductivitySearch(e.target.value);
-                    setShowProductivityDropdown(true);
-                  }}
-                  onFocus={() => setShowProductivityDropdown(true)}
-                  placeholder="Search apps..."
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                />
+                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {/* Selected chips inside input */}
+                    {selectedProductivityApps.map((app) => (
+                      <span
+                        key={app}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-green-600 px-2.5 py-0.5 text-sm text-white"
+                      >
+                        <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                        </svg>
+                        {app}
+                        <button
+                          type="button"
+                          onClick={() => handleProductivityAppRemove(app)}
+                          className="hover:text-gray-200 ml-0.5"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                    {/* Input field */}
+                    <input
+                      type="text"
+                      value={productivitySearch}
+                      onChange={(e) => {
+                        setProductivitySearch(e.target.value);
+                        setShowProductivityDropdown(true);
+                      }}
+                      onFocus={() => setShowProductivityDropdown(true)}
+                      placeholder={selectedProductivityApps.length === 0 ? "Search apps..." : ""}
+                      className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
                 
                 {/* Dropdown */}
                 {showProductivityDropdown && filteredProductivityApps.length > 0 && (
@@ -546,28 +592,6 @@ export default function SurveyPage() {
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* Selected chips with checkmarks */}
-              <div className="flex flex-wrap gap-2 mt-3">
-                {selectedProductivityApps.map((app) => (
-                  <span
-                    key={app}
-                    className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
-                  >
-                    <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                    </svg>
-                    {app}
-                    <button
-                      type="button"
-                      onClick={() => handleProductivityAppRemove(app)}
-                      className="hover:text-gray-200"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
               </div>
             </div>
 
