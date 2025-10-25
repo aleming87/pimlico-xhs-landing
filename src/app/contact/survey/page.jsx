@@ -77,26 +77,32 @@ export default function SurveyPage() {
   // Regulatory topics aligned with site categories - improved clarity
   const regulatoryTopics = {
     AI: [
-      'EU AI Act Compliance', 'AI Governance Frameworks', 'Algorithmic Transparency Requirements',
-      'High-Risk AI Systems Classification', 'AI Safety Testing & Validation', 'Foundation Model Regulations',
-      'General Purpose AI Oversight', 'AI System Licensing & Registration', 'AI Impact Assessments',
-      'Automated Decision-Making Rules', 'AI in Healthcare Regulation', 'AI in Financial Services',
-      'Generative AI Content Rules', 'AI Copyright & Intellectual Property', 'AI Data Protection & Privacy'
+      'AI Copyright & Intellectual Property', 'AI Data Protection & Privacy', 'AI Governance Frameworks', 
+      'AI Impact Assessments', 'AI in Financial Services', 'AI in Healthcare Regulation', 
+      'AI Safety Testing & Validation', 'AI System Licensing & Registration', 
+      'Algorithmic Transparency Requirements', 'Automated Decision-Making Rules', 
+      'EU AI Act Compliance', 'Foundation Model Regulations', 
+      'General Purpose AI Oversight', 'Generative AI Content Rules', 
+      'High-Risk AI Systems Classification'
     ],
     Payments: [
-      'PSD3 & Payment Services Regulation', 'Open Banking & API Standards', 'Crypto Asset Regulations',
-      'Stablecoin Requirements', 'MiCA Compliance', 'AML & Counter-Terrorist Financing',
-      'Consumer Protection in Payments', 'Strong Customer Authentication (SCA)', 
-      'Payment Institution Licensing', 'E-Money Directive Compliance',
-      'Cross-Border Payment Rules', 'Payment Security Standards', 'Buy Now Pay Later Regulation',
-      'Interchange Fee Regulation', 'Payment Innovation Frameworks'
+      'AML & Counter-Terrorist Financing', 'Buy Now Pay Later Regulation', 
+      'Consumer Protection in Payments', 'Cross-Border Payment Rules', 
+      'Crypto Asset Regulations', 'E-Money Directive Compliance', 
+      'Interchange Fee Regulation', 'MiCA Compliance', 
+      'Open Banking & API Standards', 'Payment Innovation Frameworks', 
+      'Payment Institution Licensing', 'Payment Security Standards', 
+      'PSD3 & Payment Services Regulation', 'Stablecoin Requirements', 
+      'Strong Customer Authentication (SCA)'
     ],
     Gambling: [
-      'Online Gambling Licensing Requirements', 'Responsible Gambling Obligations', 'AML for Gambling Operators',
-      'Gambling Advertising & Marketing Restrictions', 'Player Protection Measures', 'Age Verification Systems',
-      'Gambling Taxes & Regulatory Levies', 'Sports Betting Regulations',
-      'Casino & iGaming Compliance', 'Lottery & Gaming Licenses', 'Safer Gambling Tools',
-      'Problem Gambling Prevention Programs', 'Gambling Technology Standards'
+      'Age Verification Systems', 'AML for Gambling Operators', 
+      'Casino & iGaming Compliance', 'Gambling Advertising & Marketing Restrictions', 
+      'Gambling Taxes & Regulatory Levies', 'Gambling Technology Standards', 
+      'Lottery & Gaming Licenses', 'Online Gambling Licensing Requirements', 
+      'Player Protection Measures', 'Problem Gambling Prevention Programs', 
+      'Responsible Gambling Obligations', 'Safer Gambling Tools', 
+      'Sports Betting Regulations'
     ]
   };
 
@@ -292,75 +298,6 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* Top 5 Jurisdictions - Searchable with inline chips */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
-              </h2>
-              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
-              
-              <div ref={jurisdictionDropdownRef} className="relative">
-                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
-                  <div className="flex flex-wrap gap-2 items-center">
-                    {/* Selected chips inside input */}
-                    {selectedJurisdictions.map((jurisdiction, index) => (
-                      <span
-                        key={jurisdiction}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-green-600 px-2.5 py-0.5 text-sm text-white"
-                      >
-                        <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                        </svg>
-                        <span className="font-medium">{index + 1}.</span>
-                        {jurisdiction}
-                        <button
-                          type="button"
-                          onClick={() => handleJurisdictionRemove(jurisdiction)}
-                          className="hover:text-gray-200 ml-0.5"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                    {/* Input field */}
-                    {selectedJurisdictions.length < 5 && (
-                      <input
-                        type="text"
-                        value={jurisdictionSearch}
-                        onChange={(e) => {
-                          setJurisdictionSearch(e.target.value);
-                          setShowJurisdictionDropdown(true);
-                        }}
-                        onFocus={() => setShowJurisdictionDropdown(true)}
-                        placeholder={selectedJurisdictions.length === 0 ? "Search jurisdictions..." : ""}
-                        className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
-                      />
-                    )}
-                  </div>
-                </div>
-                
-                {/* Dropdown */}
-                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
-                  <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
-                    {filteredJurisdictions.map((jurisdiction) => (
-                      <button
-                        key={jurisdiction}
-                        type="button"
-                        onClick={() => handleJurisdictionAdd(jurisdiction)}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                      >
-                        {jurisdiction}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {selectedJurisdictions.length === 0 && (
-                <p className="text-xs text-gray-500 mt-2">Please select at least one jurisdiction</p>
-              )}
-            </div>
-
             {/* Top 5 Regulatory Topics - Conditional on focus areas */}
             {selectedFocusAreas.length > 0 && (
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
@@ -422,6 +359,75 @@ export default function SurveyPage() {
               </div>
             )}
 
+            {/* Top 5 Jurisdictions - Searchable with inline chips */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
+              </h2>
+              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
+              
+              <div ref={jurisdictionDropdownRef} className="relative">
+                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {/* Selected chips inside input */}
+                    {selectedJurisdictions.map((jurisdiction, index) => (
+                      <span
+                        key={jurisdiction}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                      >
+                        <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                        </svg>
+                        <span className="font-medium">{index + 1}.</span>
+                        {jurisdiction}
+                        <button
+                          type="button"
+                          onClick={() => handleJurisdictionRemove(jurisdiction)}
+                          className="hover:text-gray-200 ml-0.5"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                    {/* Input field */}
+                    {selectedJurisdictions.length < 5 && (
+                      <input
+                        type="text"
+                        value={jurisdictionSearch}
+                        onChange={(e) => {
+                          setJurisdictionSearch(e.target.value);
+                          setShowJurisdictionDropdown(true);
+                        }}
+                        onFocus={() => setShowJurisdictionDropdown(true)}
+                        placeholder={selectedJurisdictions.length === 0 ? "Search jurisdictions..." : ""}
+                        className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                      />
+                    )}
+                  </div>
+                </div>
+                
+                {/* Dropdown */}
+                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
+                  <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredJurisdictions.map((jurisdiction) => (
+                      <button
+                        key={jurisdiction}
+                        type="button"
+                        onClick={() => handleJurisdictionAdd(jurisdiction)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                      >
+                        {jurisdiction}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {selectedJurisdictions.length === 0 && (
+                <p className="text-xs text-gray-500 mt-2">Please select at least one jurisdiction</p>
+              )}
+            </div>
+
             {/* Compliance Challenges - Multi-select chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4">
@@ -446,10 +452,10 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* When do you need our services */}
+            {/* What brings you here today - More neutral question */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <label htmlFor="timeline" className="block text-xl font-semibold text-white mb-4">
-                When do you need our services? <span className="text-red-400">*</span>
+                What brings you here today? <span className="text-red-400">*</span>
               </label>
               <select
                 id="timeline"
@@ -457,12 +463,12 @@ export default function SurveyPage() {
                 required
                 className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
               >
-                <option value="" className="bg-gray-800">Select timeframe...</option>
-                <option value="Now" className="bg-gray-800">Now</option>
-                <option value="Next 1-3 months" className="bg-gray-800">Next 1-3 months</option>
-                <option value="Next 3-6 months" className="bg-gray-800">Next 3-6 months</option>
-                <option value="Next 6-12 months" className="bg-gray-800">Next 6-12 months</option>
-                <option value="Just exploring" className="bg-gray-800">Just exploring</option>
+                <option value="" className="bg-gray-800">Select one...</option>
+                <option value="Immediate compliance need" className="bg-gray-800">Immediate compliance need</option>
+                <option value="Planning for upcoming requirements" className="bg-gray-800">Planning for upcoming requirements</option>
+                <option value="Evaluating monitoring solutions" className="bg-gray-800">Evaluating monitoring solutions</option>
+                <option value="Looking to improve current processes" className="bg-gray-800">Looking to improve current processes</option>
+                <option value="Just exploring options" className="bg-gray-800">Just exploring options</option>
               </select>
             </div>
 
@@ -547,7 +553,7 @@ export default function SurveyPage() {
                     {selectedProductivityApps.map((app) => (
                       <span
                         key={app}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-green-600 px-2.5 py-0.5 text-sm text-white"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
                       >
                         <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
