@@ -74,20 +74,6 @@ export default function SurveyPage() {
     'Regulatory horizon scanning'
   ];
 
-  // Horizon scanning vendors
-  const competitorVendors = [
-    'Thomson Reuters Regulatory Intelligence',
-    'LexisNexis Regulatory Tracker',
-    'Bloomberg Regulatory & Compliance',
-    'Compliance.ai',
-    'RegTech Associates',
-    'Corlytics',
-    'Ascent RegTech',
-    'Fenergo',
-    'ComplyAdvantage',
-    'Other'
-  ];
-
   // Productivity, communication, and GRC apps
   const productivityApps = [
     'Google Workspace',
@@ -517,22 +503,19 @@ export default function SurveyPage() {
                 </label>
               </div>
               
-              {/* Conditional dropdown for vendor selection */}
+              {/* Conditional text box for vendor names */}
               {usingCompetitors === 'Yes' && (
                 <div className="mt-4">
                   <label htmlFor="competitor-vendors" className="block text-sm font-medium text-gray-300 mb-2">
                     Which vendor(s)?
                   </label>
-                  <select
+                  <input
+                    type="text"
                     id="competitor-vendors"
                     name="competitor-vendors"
-                    className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                  >
-                    <option value="" className="bg-gray-800">Select vendor...</option>
-                    {competitorVendors.map((vendor) => (
-                      <option key={vendor} value={vendor} className="bg-gray-800">{vendor}</option>
-                    ))}
-                  </select>
+                    placeholder="e.g., Thomson Reuters, LexisNexis..."
+                    className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white placeholder-gray-500 outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                  />
                 </div>
               )}
             </div>
