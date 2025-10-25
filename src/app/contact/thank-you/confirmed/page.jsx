@@ -151,7 +151,7 @@ export default function ConfirmedPage() {
               {/* Logos Above Social Media - Stacked Vertically */}
               <div className="flex flex-col items-center gap-6">
                 {/* Logo Combo */}
-                <div className="flex items-center gap-6">
+                <div className="flex items-center -space-x-1">
                   <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-6" />
                   <span className="text-gray-500 text-xl">|</span>
                   <img src="/XHS_Logo_White.png" alt="XHS" className="h-14" />
