@@ -158,7 +158,7 @@ export default function SurveyPage() {
   }, []);
 
   const handleJurisdictionAdd = (jurisdiction) => {
-    if (selectedJurisdictions.length < 5) {
+    if (selectedJurisdictions.length < 3) {
       setSelectedJurisdictions([...selectedJurisdictions, jurisdiction]);
       setJurisdictionSearch('');
     }
@@ -178,7 +178,7 @@ export default function SurveyPage() {
   };
 
   const handleTopicAdd = (topic) => {
-    if (selectedTopics.length < 5) {
+    if (selectedTopics.length < 3) {
       setSelectedTopics([...selectedTopics, topic]);
       setTopicSearch('');
     }
@@ -269,7 +269,7 @@ export default function SurveyPage() {
               Tell us about your needs
             </h1>
             <p className="text-sm text-blue-400 font-medium">
-              ⏱️ Takes 1 minute
+              ⏱️ Takes 2 minutes
             </p>
           </div>
 
@@ -298,13 +298,13 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* Top 5 Regulatory Topics - Conditional on focus areas */}
+            {/* Top 3 Regulatory Topics - Conditional on focus areas */}
             {selectedFocusAreas.length > 0 && (
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  Top 5 regulatory topics in {selectedFocusAreas.join(', ')}
+                  Top 3 regulatory topics in {selectedFocusAreas.join(', ')}
                 </h2>
-                <p className="text-sm text-gray-400 mb-4">Rank your top 5 priorities</p>
+                <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities</p>
                 
                 <div ref={topicDropdownRef} className="relative">
                   <input
@@ -316,12 +316,13 @@ export default function SurveyPage() {
                     }}
                     onFocus={() => setShowTopicDropdown(true)}
                     placeholder="Search topics..."
-                    disabled={selectedTopics.length >= 5}
+                    disabled={selectedTopics.length >= 3}
                     className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 disabled:opacity-50"
+                    autoComplete="on"
                   />
                   
                   {/* Dropdown */}
-                  {showTopicDropdown && filteredTopics.length > 0 && selectedTopics.length < 5 && (
+                  {showTopicDropdown && filteredTopics.length > 0 && selectedTopics.length < 3 && (
                     <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
                       {filteredTopics.map((topic) => (
                         <button
@@ -359,12 +360,12 @@ export default function SurveyPage() {
               </div>
             )}
 
-            {/* Top 5 Jurisdictions - Searchable with inline chips */}
+            {/* Top 3 Jurisdictions - Searchable with inline chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-2">
-                Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
+                Top 3 jurisdictions you're monitoring <span className="text-red-400">*</span>
               </h2>
-              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
+              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 3 jurisdictions</p>
               
               <div ref={jurisdictionDropdownRef} className="relative">
                 <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
@@ -390,7 +391,7 @@ export default function SurveyPage() {
                       </span>
                     ))}
                     {/* Input field */}
-                    {selectedJurisdictions.length < 5 && (
+                    {selectedJurisdictions.length < 3 && (
                       <input
                         type="text"
                         value={jurisdictionSearch}
@@ -401,13 +402,14 @@ export default function SurveyPage() {
                         onFocus={() => setShowJurisdictionDropdown(true)}
                         placeholder={selectedJurisdictions.length === 0 ? "Search jurisdictions..." : ""}
                         className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                        autoComplete="on"
                       />
                     )}
                   </div>
                 </div>
                 
                 {/* Dropdown */}
-                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
+                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 3 && (
                   <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
                     {filteredJurisdictions.map((jurisdiction) => (
                       <button
@@ -462,6 +464,7 @@ export default function SurveyPage() {
                 name="timeline"
                 required
                 className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                autoComplete="on"
               >
                 <option value="" className="bg-gray-800">Select one...</option>
                 <option value="Immediate compliance need" className="bg-gray-800">Immediate compliance need</option>
@@ -513,6 +516,7 @@ export default function SurveyPage() {
                     name="competitor-vendors"
                     placeholder="Enter vendor name(s)"
                     className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white placeholder-gray-500 outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                    autoComplete="on"
                   />
                 </div>
               )}
@@ -542,7 +546,7 @@ export default function SurveyPage() {
             {/* Productivity and Communication Apps - Searchable with inline chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-2">
-                What productivity and communication apps does your team use?
+                What productivity and communication apps do you or your team use?
               </h2>
               <p className="text-sm text-gray-400 mb-4">Type to search and select</p>
               
@@ -579,6 +583,7 @@ export default function SurveyPage() {
                       onFocus={() => setShowProductivityDropdown(true)}
                       placeholder={selectedProductivityApps.length === 0 ? "Search apps..." : ""}
                       className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                      autoComplete="on"
                     />
                   </div>
                 </div>
