@@ -8,22 +8,61 @@ import { Footer } from '@/components/footer';
 export default function ContactPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const router = useRouter();
+
+  const freeEmailProviders = [
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
+    'icloud.com', 'mail.com', 'protonmail.com', 'zoho.com', 'yandex.com',
+    'gmx.com', 'live.com', 'msn.com', 'inbox.com', 'tutanota.com'
+  ];
+
+  const validateBusinessEmail = (email) => {
+    const domain = email.split('@')[1]?.toLowerCase();
+    if (!domain) return false;
+    
+    if (freeEmailProviders.includes(domain)) {
+      setEmailError('Please use your business email address');
+      return false;
+    }
+    
+    setEmailError('');
+    return true;
+  };
+
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    if (email && email.includes('@')) {
+      validateBusinessEmail(email);
+    } else {
+      setEmailError('');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const formData = new FormData(e.target);
+    const email = formData.get('email');
+    
+    // Validate business email
+    if (!validateBusinessEmail(email)) {
+      setIsSubmitting(false);
+      return;
+    }
+
     const data = {
       firstName: formData.get('first-name'),
       lastName: formData.get('last-name'),
       company: formData.get('company'),
-      email: formData.get('email'),
+      email: email,
       country: formData.get('country'),
       phoneNumber: formData.get('phone-number'),
       message: formData.get('message'),
-      agreedToPolicy: formData.get('agree-to-policies') === 'on'
+      agreedToPolicy: formData.get('agree-to-policies') === 'on',
+      marketingConsent: formData.get('marketing-consent') === 'on',
+      newsletterConsent: formData.get('newsletter-consent') === 'on'
     };
 
     // Store email for thank you page
@@ -156,9 +195,23 @@ export default function ContactPage() {
               </div>
             </div>
             <div className="sm:col-span-2">
-              <label htmlFor="email" className="block text-sm/6 font-semibold text-white">Email</label>
+              <label htmlFor="email" className="block text-sm/6 font-semibold text-white">
+                Business Email <span className="text-red-400">*</span>
+              </label>
               <div className="mt-2.5">
-                <input id="email" type="email" name="email" autoComplete="email" required className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" />
+                <input 
+                  id="email" 
+                  type="email" 
+                  name="email" 
+                  autoComplete="email" 
+                  required 
+                  onChange={handleEmailChange}
+                  className="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500" 
+                />
+                {emailError && (
+                  <p className="mt-2 text-sm text-red-400">{emailError}</p>
+                )}
+                <p className="mt-1 text-xs text-gray-500">Please use your work email (not Gmail, Yahoo, etc.)</p>
               </div>
             </div>
             <div className="sm:col-span-2">
@@ -221,6 +274,22 @@ export default function ContactPage() {
               <label htmlFor="agree-to-policies" className="text-sm/6 text-gray-400">
                 By selecting this, you agree to our{' '}
                 <a href="/privacy" className="font-semibold whitespace-nowrap text-blue-400 hover:text-blue-300">privacy policy</a>.
+              </label>
+            </div>
+            <div className="flex gap-x-4 sm:col-span-2">
+              <div className="flex h-6 items-center">
+                <input id="marketing-consent" type="checkbox" name="marketing-consent" className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
+              </div>
+              <label htmlFor="marketing-consent" className="text-sm/6 text-gray-400">
+                I would like to receive marketing communications about Pimlico XHS products and services.
+              </label>
+            </div>
+            <div className="flex gap-x-4 sm:col-span-2">
+              <div className="flex h-6 items-center">
+                <input id="newsletter-consent" type="checkbox" name="newsletter-consent" className="size-4 rounded border-white/10 bg-white/5 text-blue-600 focus:ring-blue-600 focus:ring-offset-gray-900" />
+              </div>
+              <label htmlFor="newsletter-consent" className="text-sm/6 text-gray-400">
+                Subscribe to our newsletter for regulatory updates and compliance insights.
               </label>
             </div>
           </div>

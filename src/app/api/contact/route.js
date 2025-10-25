@@ -14,7 +14,11 @@ Email: ${data.email}
 Phone: ${data.country} ${data.phoneNumber}
 Message: ${data.message}
 
-Privacy Policy Agreed: ${data.agreedToPolicy ? 'Yes' : 'No'}
+Consents:
+- Privacy Policy Agreed: ${data.agreedToPolicy ? 'Yes' : 'No'}
+- Marketing Communications: ${data.marketingConsent ? 'Yes' : 'No'}
+- Newsletter Subscription: ${data.newsletterConsent ? 'Yes' : 'No'}
+
 Submitted: ${new Date().toISOString()}
     `.trim();
 
@@ -47,7 +51,7 @@ Submitted: ${new Date().toISOString()}
     //     <p>Hi ${data.firstName},</p>
     //     <p>We've received your inquiry and will be in touch soon.</p>
     //     <p>To help us prepare for our conversation, please complete our brief survey:</p>
-    //     <a href="https://forms.gle/YOUR_GOOGLE_FORM_ID">Complete Survey</a>
+    //     <a href="https://docs.google.com/forms/d/1hSpj9XbDtglMYy0gwvxbc4p26FNtk95cT3Tc30PpDEo/viewform">Complete Survey</a>
     //     <p>Best regards,<br>The Pimlico XHS Team</p>
     //   `,
     // });

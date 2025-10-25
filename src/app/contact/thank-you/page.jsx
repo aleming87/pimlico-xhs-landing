@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 
 export default function ThankYouPage() {
-  const surveyUrl = "https://forms.gle/YOUR_GOOGLE_FORM_ID"; // Replace with your actual Google Form URL
+  const surveyUrl = "https://docs.google.com/forms/d/1hSpj9XbDtglMYy0gwvxbc4p26FNtk95cT3Tc30PpDEo/viewform";
 
   useEffect(() => {
     // Send thank you email via a serverless function or API
