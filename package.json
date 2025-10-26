@@ -24,6 +24,7 @@
     "react": "^19",
     "react-dom": "^19",
     "react-use-measure": "^2.1.7",
+    "resend": "^4.0.1",
     "sanity": "^4.2.0"
   },
   "devDependencies": {
