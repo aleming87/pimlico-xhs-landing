@@ -100,7 +100,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
 
-      const recipientEmail = process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com';
+      const recipientEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
       console.log('📧 Sending COMBINED lead report to:', recipientEmail);
       console.log('📧 Subject:', `🎯 NEW LEAD - ${contactData.firstName || 'Unknown'} ${contactData.lastName || ''} from ${contactData.company || 'Unknown Company'} | ${data.focusAreas.join('+')}`);
 
