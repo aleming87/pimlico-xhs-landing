@@ -15,7 +15,7 @@ export default function ThankYouPage() {
   const confirmationUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}/contact/thank-you/confirmed` 
     : '';
-  const calendlyUrl = `https://calendly.com/andrew-pimlicosolutions/xhs-demo?redirect_url=${encodeURIComponent(confirmationUrl)}`;
+  const calendlyUrl = `https://calendly.com/andrew-pimlicosolutions/xhs-demo-1?redirect_url=${encodeURIComponent(confirmationUrl)}`;
 
   useEffect(() => {
     // Check if survey was completed
@@ -168,7 +168,7 @@ export default function ThankYouPage() {
                       {/* Calendly inline widget */}
                       <div 
                         className="calendly-inline-widget" 
-                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo?background_color=111827&text_color=ffffff&primary_color=2563eb" 
+                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo-1?background_color=111827&text_color=ffffff&primary_color=2563eb" 
                         style={{ minWidth: '320px', height: '700px' }}
                       ></div>
                     </div>
