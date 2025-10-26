@@ -66,6 +66,13 @@ export default function ContactPage() {
     const formData = new FormData(e.target);
     const email = formData.get('email');
     
+    // Block vixio.com email addresses
+    if (email && email.toLowerCase().endsWith('@vixio.com')) {
+      setIsSubmitting(false);
+      alert('We are unable to process your request at this time. Please contact us through alternative channels.');
+      return;
+    }
+    
     // Validate business email
     if (!validateBusinessEmail(email)) {
       setIsSubmitting(false);
