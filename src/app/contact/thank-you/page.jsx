@@ -168,12 +168,12 @@ export default function ThankYouPage() {
                       Complete the survey to unlock this step
                     </div>
                   ) : !callBooked ? (
-                    <div className="mt-4">
-                      {/* Calendly inline widget */}
+                    <div className="mt-4 -mx-4 sm:mx-0">
+                      {/* Calendly inline widget - responsive height for mobile */}
                       <div 
                         className="calendly-inline-widget" 
                         data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo-1?background_color=111827&text_color=ffffff&primary_color=2563eb" 
-                        style={{ minWidth: '320px', height: '700px' }}
+                        style={{ minWidth: '100%', height: '600px' }}
                       ></div>
                     </div>
                   ) : (

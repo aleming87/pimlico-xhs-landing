@@ -399,20 +399,20 @@ export default function SurveyPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* Primary Focus Areas - AI, Payments, Gambling */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label className="block text-xl font-semibold text-white mb-2">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <label className="block text-lg sm:text-xl font-semibold text-white mb-2">
                 Primary focus areas <span className="text-red-400">*</span>
               </label>
               <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {focusAreas.map((area) => (
                   <button
                     key={area}
                     type="button"
                     onClick={() => toggleFocusArea(area)}
-                    className={`py-3 px-4 rounded-lg font-medium transition-all ${
+                    className={`py-3 px-4 rounded-lg font-medium transition-all min-h-[44px] ${
                       selectedFocusAreas.includes(area)
                         ? 'bg-blue-600 text-white'
                         : 'bg-white/10 text-gray-300 hover:bg-white/20'
@@ -426,20 +426,20 @@ export default function SurveyPage() {
 
             {/* AI Regulatory Topics - Only show if AI is selected */}
             {selectedFocusAreas.includes('AI') && (
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-2">
+              <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+                <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
                   Top 3 regulatory topics in AI <span className="text-red-400">*</span>
                 </h2>
                 <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for AI</p>
                 
                 <div ref={topicDropdownRefAI} className="relative">
-                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[48px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                     <div className="flex flex-wrap gap-2 items-center">
                       {/* Selected chips inside input */}
                       {selectedTopicsAI.map((topic, index) => (
                         <span
                           key={topic}
-                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm text-white min-h-[36px]"
                         >
                           <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -449,7 +449,7 @@ export default function SurveyPage() {
                           <button
                             type="button"
                             onClick={() => handleTopicRemoveAI(topic)}
-                            className="hover:text-gray-200 ml-0.5"
+                            className="hover:text-gray-200 ml-0.5 min-w-[24px] min-h-[24px] flex items-center justify-center"
                           >
                             ×
                           </button>
@@ -494,20 +494,20 @@ export default function SurveyPage() {
 
             {/* Payments Regulatory Topics - Only show if Payments is selected */}
             {selectedFocusAreas.includes('Payments') && (
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-2">
+              <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+                <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
                   Top 3 regulatory topics in Payments <span className="text-red-400">*</span>
                 </h2>
                 <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for Payments</p>
                 
                 <div ref={topicDropdownRefPayments} className="relative">
-                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[48px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                     <div className="flex flex-wrap gap-2 items-center">
                       {/* Selected chips inside input */}
                       {selectedTopicsPayments.map((topic, index) => (
                         <span
                           key={topic}
-                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm text-white min-h-[36px]"
                         >
                           <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -517,7 +517,7 @@ export default function SurveyPage() {
                           <button
                             type="button"
                             onClick={() => handleTopicRemovePayments(topic)}
-                            className="hover:text-gray-200 ml-0.5"
+                            className="hover:text-gray-200 ml-0.5 min-w-[24px] min-h-[24px] flex items-center justify-center"
                           >
                             ×
                           </button>
@@ -562,20 +562,20 @@ export default function SurveyPage() {
 
             {/* Gambling Regulatory Topics - Only show if Gambling is selected */}
             {selectedFocusAreas.includes('Gambling') && (
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-2">
+              <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+                <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
                   Top 3 regulatory topics in Gambling <span className="text-red-400">*</span>
                 </h2>
                 <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for Gambling</p>
                 
                 <div ref={topicDropdownRefGambling} className="relative">
-                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[48px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                     <div className="flex flex-wrap gap-2 items-center">
                       {/* Selected chips inside input */}
                       {selectedTopicsGambling.map((topic, index) => (
                         <span
                           key={topic}
-                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm text-white min-h-[36px]"
                         >
                           <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -585,7 +585,7 @@ export default function SurveyPage() {
                           <button
                             type="button"
                             onClick={() => handleTopicRemoveGambling(topic)}
-                            className="hover:text-gray-200 ml-0.5"
+                            className="hover:text-gray-200 ml-0.5 min-w-[24px] min-h-[24px] flex items-center justify-center"
                           >
                             ×
                           </button>
@@ -629,20 +629,20 @@ export default function SurveyPage() {
             )}
 
             {/* Top 5 Jurisdictions - Searchable with inline chips */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-2">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
                 Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
               </h2>
               <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
               
               <div ref={jurisdictionDropdownRef} className="relative">
-                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[48px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                   <div className="flex flex-wrap gap-2 items-center">
                     {/* Selected chips inside input */}
                     {selectedJurisdictions.map((jurisdiction, index) => (
                       <span
                         key={jurisdiction}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm text-white min-h-[36px]"
                       >
                         <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -652,7 +652,7 @@ export default function SurveyPage() {
                         <button
                           type="button"
                           onClick={() => handleJurisdictionRemove(jurisdiction)}
-                          className="hover:text-gray-200 ml-0.5"
+                          className="hover:text-gray-200 ml-0.5 min-w-[24px] min-h-[24px] flex items-center justify-center"
                         >
                           ×
                         </button>
@@ -699,8 +699,8 @@ export default function SurveyPage() {
             </div>
 
             {/* Compliance Challenges - Multi-select chips */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-4">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <h2 className="text-lg sm:text-xl font-semibold text-white mb-4">
                 Current compliance challenges
               </h2>
               <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
@@ -710,7 +710,7 @@ export default function SurveyPage() {
                     key={challenge}
                     type="button"
                     onClick={() => toggleChallenge(challenge)}
-                    className={`px-4 py-2 rounded-full text-sm transition-all ${
+                    className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
                       selectedChallenges.includes(challenge)
                         ? 'bg-blue-600 text-white'
                         : 'bg-white/10 text-gray-300 hover:bg-white/20'
@@ -723,8 +723,8 @@ export default function SurveyPage() {
             </div>
 
             {/* What brings you here today - More neutral question */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label htmlFor="timeline" className="block text-xl font-semibold text-white mb-4">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <label htmlFor="timeline" className="block text-lg sm:text-xl font-semibold text-white mb-4">
                 What brings you here today? <span className="text-red-400">*</span>
               </label>
               <select
@@ -744,8 +744,8 @@ export default function SurveyPage() {
             </div>
 
             {/* Using Competitors - Chip-based search with focus area specific vendors */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label className="block text-xl font-semibold text-white mb-4">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <label className="block text-lg sm:text-xl font-semibold text-white mb-4">
                 Are you using other regulatory monitoring vendors? <span className="text-red-400">*</span>
               </label>
               <div className="flex gap-4 mb-4">
@@ -783,13 +783,13 @@ export default function SurveyPage() {
                   </label>
                   
                   <div ref={competitorDropdownRef} className="relative">
-                    <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                    <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[48px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                       <div className="flex flex-wrap gap-2 items-center">
                         {/* Selected chips inside input */}
                         {selectedCompetitors.map((vendor) => (
                           <span
                             key={vendor}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                            className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm text-white min-h-[36px]"
                           >
                             <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -798,7 +798,7 @@ export default function SurveyPage() {
                               <button
                                 type="button"
                                 onClick={() => handleCompetitorRemove(vendor)}
-                                className="hover:text-gray-200 ml-0.5"
+                                className="hover:text-gray-200 ml-0.5 min-w-[24px] min-h-[24px] flex items-center justify-center"
                               >
                                 ×
                               </button>
@@ -841,8 +841,8 @@ export default function SurveyPage() {
             </div>
 
             {/* Shared Workspace - Simplified */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <label className="block text-xl font-semibold text-white mb-4">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <label className="block text-lg sm:text-xl font-semibold text-white mb-4">
                 Does your team collaborate in a shared regulatory workspace? <span className="text-red-400">*</span>
               </label>
               <div className="flex gap-4">
@@ -862,20 +862,20 @@ export default function SurveyPage() {
             </div>
 
             {/* Productivity and Communication Apps - Searchable with inline chips */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-2">
+            <div className="bg-white/5 rounded-2xl p-4 sm:p-6 border border-white/10">
+              <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">
                 What productivity and communication apps do you or your team use?
               </h2>
               <p className="text-sm text-gray-400 mb-4">Type to search and select</p>
               
               <div ref={productivityDropdownRef} className="relative">
-                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[48px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                   <div className="flex flex-wrap gap-2 items-center">
                     {/* Selected chips inside input */}
                     {selectedProductivityApps.map((app) => (
                       <span
                         key={app}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1.5 text-sm text-white min-h-[36px]"
                       >
                         <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -884,7 +884,7 @@ export default function SurveyPage() {
                         <button
                           type="button"
                           onClick={() => handleProductivityAppRemove(app)}
-                          className="hover:text-gray-200 ml-0.5"
+                          className="hover:text-gray-200 ml-0.5 min-w-[24px] min-h-[24px] flex items-center justify-center"
                         >
                           ×
                         </button>
