@@ -32,6 +32,10 @@ export default function ThankYouPage() {
         if (e.data.event === 'calendly.event_scheduled') {
           localStorage.setItem('callBooked', 'true');
           setCallBooked(true);
+          // Redirect to confirmation page after booking
+          setTimeout(() => {
+            router.push('/contact/thank-you/confirmed');
+          }, 1000);
         }
       }
     };

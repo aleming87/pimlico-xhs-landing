@@ -25,17 +25,21 @@ Submitted: ${new Date().toISOString()}
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
 
+      console.log('Sending contact form email to:', process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com');
+
       // Send notification to your team
       // Using onboarding@resend.dev until domain is verified
-      await resend.emails.send({
+      const teamEmail = await resend.emails.send({
         from: 'Pimlico XHS <onboarding@resend.dev>',
         to: process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com',
         subject: `New Contact: ${data.firstName} ${data.lastName} from ${data.company}`,
         text: emailContent,
       });
+      
+      console.log('Team email sent:', teamEmail);
 
       // Send confirmation to the user
-      await resend.emails.send({
+      const userEmail = await resend.emails.send({
         from: 'Pimlico XHS <onboarding@resend.dev>',
         to: data.email,
         subject: 'Thank you for contacting Pimlico XHS™',
@@ -46,6 +50,8 @@ Submitted: ${new Date().toISOString()}
           <p>Best regards,<br>The Pimlico XHS Team</p>
         `,
       });
+      
+      console.log('User confirmation email sent:', userEmail);
     } else {
       // Fallback: just log to console if Resend not configured
       console.log('📧 Contact Form Submission (Resend not configured):');

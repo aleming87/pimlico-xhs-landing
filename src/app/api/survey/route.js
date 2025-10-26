@@ -67,14 +67,18 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
 
+      console.log('Sending survey email to:', process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com');
+
       // Send to your intelligence inbox
       // Using onboarding@resend.dev until domain is verified
-      await resend.emails.send({
+      const surveyEmail = await resend.emails.send({
         from: 'Pimlico XHS Intelligence <onboarding@resend.dev>',
         to: process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com',
         subject: `🎯 New Prospect Intel - ${data.focusAreas.join('+')} | ${data.topJurisdictions[0] || 'Multi-jurisdiction'}`,
         text: surveyIntel,
       });
+      
+      console.log('Survey email sent:', surveyEmail);
     } else {
       // Fallback: just log to console if Resend not configured
       console.log('📊 Survey Submission (Resend not configured):');
