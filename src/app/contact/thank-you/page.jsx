@@ -98,10 +98,10 @@ export default function ThankYouPage() {
                 {/* Content */}
                 <div className="flex-1 text-left">
                   <h2 className="text-2xl font-semibold text-white mb-2">
-                    Tell us a bit more
+                    Take Survey
                   </h2>
                   <p className="text-gray-300 mb-4">
-                    Complete a short 2 minute survey
+                    Help us understand your needs (2 minutes)
                   </p>
                   {!surveyCompleted ? (
                     <a
@@ -157,7 +157,7 @@ export default function ThankYouPage() {
                     Book Your Call
                   </h2>
                   <p className="text-gray-300 mb-4">
-                    Schedule a personalized demo with our team
+                    Schedule a quick chat with our team
                   </p>
                   {!surveyCompleted ? (
                     <div className="text-sm text-gray-500 italic">
@@ -168,7 +168,7 @@ export default function ThankYouPage() {
                       {/* Calendly inline widget */}
                       <div 
                         className="calendly-inline-widget" 
-                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo?background_color=000000&text_color=ffffff" 
+                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo?background_color=111827&text_color=ffffff&primary_color=2563eb" 
                         style={{ minWidth: '320px', height: '700px' }}
                       ></div>
                     </div>
