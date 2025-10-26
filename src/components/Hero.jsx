@@ -37,7 +37,9 @@ export default function Hero() {
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="text-sm/6 font-semibold text-white">Book a demo <span aria-hidden="true">&rarr;</span></a>
+            <a href="/contact" className="inline-flex items-center rounded-xl px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-500/50 transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/60 hover:scale-105">
+              Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
+            </a>
           </div>
         </nav>
         
