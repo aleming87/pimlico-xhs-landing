@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request) {
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const data = await request.json();
     
     // Format the survey intelligence report
@@ -15,13 +14,23 @@ NEW SURVEY SUBMISSION - XHS™ PROSPECT INTELLIGENCE
 
 📊 PRIORITY INTELLIGENCE
 
-Top 3 Jurisdictions (Ranked):
+Top 5 Jurisdictions (Ranked):
 ${data.topJurisdictions.map((j, i) => `${i + 1}. ${j}`).join('\n')}
 
 Primary Focus Areas: ${data.focusAreas.join(', ')}
 
-Top 3 Regulatory Topics (Ranked):
-${data.topTopics.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+${data.topTopicsAI && data.topTopicsAI.length > 0 ? `
+Top 3 AI Regulatory Topics (Ranked):
+${data.topTopicsAI.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+` : ''}
+${data.topTopicsPayments && data.topTopicsPayments.length > 0 ? `
+Top 3 Payments Regulatory Topics (Ranked):
+${data.topTopicsPayments.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+` : ''}
+${data.topTopicsGambling && data.topTopicsGambling.length > 0 ? `
+Top 3 Gambling Regulatory Topics (Ranked):
+${data.topTopicsGambling.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+` : ''}
 
 ---------------------------------------------------
 

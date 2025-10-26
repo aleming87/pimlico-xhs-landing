@@ -7,22 +7,38 @@ import { useRouter } from "next/navigation";
 export default function SurveyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedJurisdictions, setSelectedJurisdictions] = useState([]);
-  const [selectedTopics, setSelectedTopics] = useState([]);
+  // Separate topic selections for each focus area
+  const [selectedTopicsAI, setSelectedTopicsAI] = useState([]);
+  const [selectedTopicsPayments, setSelectedTopicsPayments] = useState([]);
+  const [selectedTopicsGambling, setSelectedTopicsGambling] = useState([]);
   const [selectedChallenges, setSelectedChallenges] = useState([]);
   const [selectedFocusAreas, setSelectedFocusAreas] = useState([]);
   const [selectedProductivityApps, setSelectedProductivityApps] = useState([]);
-  const [topicSearch, setTopicSearch] = useState('');
+  const [selectedCompetitors, setSelectedCompetitors] = useState([]);
+  // Separate search states for each focus area
+  const [topicSearchAI, setTopicSearchAI] = useState('');
+  const [topicSearchPayments, setTopicSearchPayments] = useState('');
+  const [topicSearchGambling, setTopicSearchGambling] = useState('');
   const [jurisdictionSearch, setJurisdictionSearch] = useState('');
   const [productivitySearch, setProductivitySearch] = useState('');
-  const [showTopicDropdown, setShowTopicDropdown] = useState(false);
+  const [competitorSearch, setCompetitorSearch] = useState('');
+  // Separate dropdown states for each focus area
+  const [showTopicDropdownAI, setShowTopicDropdownAI] = useState(false);
+  const [showTopicDropdownPayments, setShowTopicDropdownPayments] = useState(false);
+  const [showTopicDropdownGambling, setShowTopicDropdownGambling] = useState(false);
   const [showJurisdictionDropdown, setShowJurisdictionDropdown] = useState(false);
   const [showProductivityDropdown, setShowProductivityDropdown] = useState(false);
+  const [showCompetitorDropdown, setShowCompetitorDropdown] = useState(false);
   const [usingCompetitors, setUsingCompetitors] = useState('');
   const router = useRouter();
 
-  const topicDropdownRef = useRef(null);
+  // Separate refs for each focus area
+  const topicDropdownRefAI = useRef(null);
+  const topicDropdownRefPayments = useRef(null);
+  const topicDropdownRefGambling = useRef(null);
   const jurisdictionDropdownRef = useRef(null);
   const productivityDropdownRef = useRef(null);
+  const competitorDropdownRef = useRef(null);
 
   // All available jurisdictions - comprehensive alphabetical list
   const allJurisdictions = [
@@ -71,6 +87,41 @@ export default function SurveyPage() {
     'NetDocuments',
     'Workday',
     'Salesforce',
+    'Other'
+  ];
+
+  // Competitor vendors - specific to each focus area
+  const competitorVendors = {
+    AI: [
+      'LexisNexis',
+      'Thomson Reuters',
+      'Vixio',
+      'Qube',
+      'Other'
+    ],
+    Payments: [
+      'LexisNexis',
+      'Thomson Reuters',
+      'Vixio',
+      'Regology',
+      'Other'
+    ],
+    Gambling: [
+      'LexisNexis',
+      'Thomson Reuters',
+      'Vixio',
+      'Regology',
+      'Other'
+    ]
+  };
+
+  // Single vendor list for all focus areas
+  const allCompetitorVendors = [
+    'LexisNexis',
+    'Thomson Reuters',
+    'Vixio',
+    'Qube',
+    'Regology',
     'Other'
   ];
 
@@ -131,20 +182,39 @@ export default function SurveyPage() {
     !selectedProductivityApps.includes(app)
   );
 
-  // Get available topics based on selected focus areas (combine all selected)
-  const availableTopics = selectedFocusAreas.length > 0 
-    ? selectedFocusAreas.flatMap(area => regulatoryTopics[area] || [])
-    : [];
-  const filteredTopics = availableTopics.filter(t =>
-    t.toLowerCase().includes(topicSearch.toLowerCase()) &&
-    !selectedTopics.includes(t)
+  // Filter competitors - using single vendor list
+  const filteredCompetitors = allCompetitorVendors.filter(vendor =>
+    vendor.toLowerCase().includes(competitorSearch.toLowerCase()) &&
+    !selectedCompetitors.includes(vendor)
+  );
+
+  // Filter topics for each focus area separately
+  const filteredTopicsAI = regulatoryTopics.AI.filter(t =>
+    t.toLowerCase().includes(topicSearchAI.toLowerCase()) &&
+    !selectedTopicsAI.includes(t)
+  );
+
+  const filteredTopicsPayments = regulatoryTopics.Payments.filter(t =>
+    t.toLowerCase().includes(topicSearchPayments.toLowerCase()) &&
+    !selectedTopicsPayments.includes(t)
+  );
+
+  const filteredTopicsGambling = regulatoryTopics.Gambling.filter(t =>
+    t.toLowerCase().includes(topicSearchGambling.toLowerCase()) &&
+    !selectedTopicsGambling.includes(t)
   );
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (topicDropdownRef.current && !topicDropdownRef.current.contains(event.target)) {
-        setShowTopicDropdown(false);
+      if (topicDropdownRefAI.current && !topicDropdownRefAI.current.contains(event.target)) {
+        setShowTopicDropdownAI(false);
+      }
+      if (topicDropdownRefPayments.current && !topicDropdownRefPayments.current.contains(event.target)) {
+        setShowTopicDropdownPayments(false);
+      }
+      if (topicDropdownRefGambling.current && !topicDropdownRefGambling.current.contains(event.target)) {
+        setShowTopicDropdownGambling(false);
       }
       if (jurisdictionDropdownRef.current && !jurisdictionDropdownRef.current.contains(event.target)) {
         setShowJurisdictionDropdown(false);
@@ -152,13 +222,16 @@ export default function SurveyPage() {
       if (productivityDropdownRef.current && !productivityDropdownRef.current.contains(event.target)) {
         setShowProductivityDropdown(false);
       }
+      if (competitorDropdownRef.current && !competitorDropdownRef.current.contains(event.target)) {
+        setShowCompetitorDropdown(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleJurisdictionAdd = (jurisdiction) => {
-    if (selectedJurisdictions.length < 3) {
+    if (selectedJurisdictions.length < 5) {
       setSelectedJurisdictions([...selectedJurisdictions, jurisdiction]);
       setJurisdictionSearch('');
     }
@@ -177,15 +250,49 @@ export default function SurveyPage() {
     setSelectedProductivityApps(selectedProductivityApps.filter(a => a !== app));
   };
 
-  const handleTopicAdd = (topic) => {
-    if (selectedTopics.length < 3) {
-      setSelectedTopics([...selectedTopics, topic]);
-      setTopicSearch('');
+  const handleCompetitorAdd = (vendor) => {
+    setSelectedCompetitors([...selectedCompetitors, vendor]);
+    setCompetitorSearch('');
+  };
+
+  const handleCompetitorRemove = (vendor) => {
+    setSelectedCompetitors(selectedCompetitors.filter(v => v !== vendor));
+  };
+
+  // Handlers for AI topics
+  const handleTopicAddAI = (topic) => {
+    if (selectedTopicsAI.length < 3) {
+      setSelectedTopicsAI([...selectedTopicsAI, topic]);
+      setTopicSearchAI('');
     }
   };
 
-  const handleTopicRemove = (topic) => {
-    setSelectedTopics(selectedTopics.filter(t => t !== topic));
+  const handleTopicRemoveAI = (topic) => {
+    setSelectedTopicsAI(selectedTopicsAI.filter(t => t !== topic));
+  };
+
+  // Handlers for Payments topics
+  const handleTopicAddPayments = (topic) => {
+    if (selectedTopicsPayments.length < 3) {
+      setSelectedTopicsPayments([...selectedTopicsPayments, topic]);
+      setTopicSearchPayments('');
+    }
+  };
+
+  const handleTopicRemovePayments = (topic) => {
+    setSelectedTopicsPayments(selectedTopicsPayments.filter(t => t !== topic));
+  };
+
+  // Handlers for Gambling topics
+  const handleTopicAddGambling = (topic) => {
+    if (selectedTopicsGambling.length < 3) {
+      setSelectedTopicsGambling([...selectedTopicsGambling, topic]);
+      setTopicSearchGambling('');
+    }
+  };
+
+  const handleTopicRemoveGambling = (topic) => {
+    setSelectedTopicsGambling(selectedTopicsGambling.filter(t => t !== topic));
   };
 
   const toggleChallenge = (challenge) => {
@@ -199,9 +306,10 @@ export default function SurveyPage() {
   const toggleFocusArea = (area) => {
     if (selectedFocusAreas.includes(area)) {
       setSelectedFocusAreas(selectedFocusAreas.filter(a => a !== area));
-      // Remove topics from deselected area
-      const topicsToRemove = regulatoryTopics[area] || [];
-      setSelectedTopics(selectedTopics.filter(t => !topicsToRemove.includes(t)));
+      // Clear topics for the deselected area
+      if (area === 'AI') setSelectedTopicsAI([]);
+      if (area === 'Payments') setSelectedTopicsPayments([]);
+      if (area === 'Gambling') setSelectedTopicsGambling([]);
     } else {
       setSelectedFocusAreas([...selectedFocusAreas, area]);
     }
@@ -212,15 +320,26 @@ export default function SurveyPage() {
     setIsSubmitting(true);
 
     const formData = new FormData(e.target);
+    
+    // Combine all selected topics from all focus areas
+    const allSelectedTopics = [
+      ...selectedTopicsAI,
+      ...selectedTopicsPayments,
+      ...selectedTopicsGambling
+    ];
+    
     const data = {
       focusAreas: selectedFocusAreas,
       topJurisdictions: selectedJurisdictions,
-      topTopics: selectedTopics,
+      topTopics: allSelectedTopics,
+      topTopicsAI: selectedTopicsAI,
+      topTopicsPayments: selectedTopicsPayments,
+      topTopicsGambling: selectedTopicsGambling,
       challenges: selectedChallenges,
       timeline: formData.get('timeline'),
       hasSharedWorkspace: formData.get('shared-workspace'),
       usingCompetitors: formData.get('using-competitors'),
-      competitorVendors: formData.get('competitor-vendors') || '',
+      competitorVendors: selectedCompetitors.join(', '),
       productivityApps: selectedProductivityApps
     };
 
@@ -298,19 +417,19 @@ export default function SurveyPage() {
               </div>
             </div>
 
-            {/* Top 3 Regulatory Topics - Conditional on focus areas */}
-            {selectedFocusAreas.length > 0 && (
+            {/* AI Regulatory Topics - Only show if AI is selected */}
+            {selectedFocusAreas.includes('AI') && (
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
                 <h2 className="text-xl font-semibold text-white mb-2">
-                  Top 3 regulatory topics in {selectedFocusAreas.join(', ')}
+                  Top 3 regulatory topics in AI <span className="text-red-400">*</span>
                 </h2>
-                <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities</p>
+                <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for AI</p>
                 
-                <div ref={topicDropdownRef} className="relative">
+                <div ref={topicDropdownRefAI} className="relative">
                   <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
                     <div className="flex flex-wrap gap-2 items-center">
                       {/* Selected chips inside input */}
-                      {selectedTopics.map((topic, index) => (
+                      {selectedTopicsAI.map((topic, index) => (
                         <span
                           key={topic}
                           className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
@@ -322,7 +441,7 @@ export default function SurveyPage() {
                           {topic}
                           <button
                             type="button"
-                            onClick={() => handleTopicRemove(topic)}
+                            onClick={() => handleTopicRemoveAI(topic)}
                             className="hover:text-gray-200 ml-0.5"
                           >
                             ×
@@ -330,16 +449,16 @@ export default function SurveyPage() {
                         </span>
                       ))}
                       {/* Input field */}
-                      {selectedTopics.length < 3 && (
+                      {selectedTopicsAI.length < 3 && (
                         <input
                           type="text"
-                          value={topicSearch}
+                          value={topicSearchAI}
                           onChange={(e) => {
-                            setTopicSearch(e.target.value);
-                            setShowTopicDropdown(true);
+                            setTopicSearchAI(e.target.value);
+                            setShowTopicDropdownAI(true);
                           }}
-                          onFocus={() => setShowTopicDropdown(true)}
-                          placeholder={selectedTopics.length === 0 ? "Search topics..." : ""}
+                          onFocus={() => setShowTopicDropdownAI(true)}
+                          placeholder={selectedTopicsAI.length === 0 ? "Search AI topics..." : ""}
                           className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
                           autoComplete="on"
                         />
@@ -348,13 +467,13 @@ export default function SurveyPage() {
                   </div>
                   
                   {/* Dropdown */}
-                  {showTopicDropdown && filteredTopics.length > 0 && selectedTopics.length < 3 && (
+                  {showTopicDropdownAI && filteredTopicsAI.length > 0 && selectedTopicsAI.length < 3 && (
                     <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
-                      {filteredTopics.map((topic) => (
+                      {filteredTopicsAI.map((topic) => (
                         <button
                           key={topic}
                           type="button"
-                          onClick={() => handleTopicAdd(topic)}
+                          onClick={() => handleTopicAddAI(topic)}
                           className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
                         >
                           {topic}
@@ -366,12 +485,148 @@ export default function SurveyPage() {
               </div>
             )}
 
-            {/* Top 3 Jurisdictions - Searchable with inline chips */}
+            {/* Payments Regulatory Topics - Only show if Payments is selected */}
+            {selectedFocusAreas.includes('Payments') && (
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 className="text-xl font-semibold text-white mb-2">
+                  Top 3 regulatory topics in Payments <span className="text-red-400">*</span>
+                </h2>
+                <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for Payments</p>
+                
+                <div ref={topicDropdownRefPayments} className="relative">
+                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                    <div className="flex flex-wrap gap-2 items-center">
+                      {/* Selected chips inside input */}
+                      {selectedTopicsPayments.map((topic, index) => (
+                        <span
+                          key={topic}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                        >
+                          <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                          </svg>
+                          <span className="font-medium">{index + 1}.</span>
+                          {topic}
+                          <button
+                            type="button"
+                            onClick={() => handleTopicRemovePayments(topic)}
+                            className="hover:text-gray-200 ml-0.5"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                      {/* Input field */}
+                      {selectedTopicsPayments.length < 3 && (
+                        <input
+                          type="text"
+                          value={topicSearchPayments}
+                          onChange={(e) => {
+                            setTopicSearchPayments(e.target.value);
+                            setShowTopicDropdownPayments(true);
+                          }}
+                          onFocus={() => setShowTopicDropdownPayments(true)}
+                          placeholder={selectedTopicsPayments.length === 0 ? "Search Payments topics..." : ""}
+                          className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                          autoComplete="on"
+                        />
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Dropdown */}
+                  {showTopicDropdownPayments && filteredTopicsPayments.length > 0 && selectedTopicsPayments.length < 3 && (
+                    <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                      {filteredTopicsPayments.map((topic) => (
+                        <button
+                          key={topic}
+                          type="button"
+                          onClick={() => handleTopicAddPayments(topic)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                          {topic}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Gambling Regulatory Topics - Only show if Gambling is selected */}
+            {selectedFocusAreas.includes('Gambling') && (
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                <h2 className="text-xl font-semibold text-white mb-2">
+                  Top 3 regulatory topics in Gambling <span className="text-red-400">*</span>
+                </h2>
+                <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for Gambling</p>
+                
+                <div ref={topicDropdownRefGambling} className="relative">
+                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                    <div className="flex flex-wrap gap-2 items-center">
+                      {/* Selected chips inside input */}
+                      {selectedTopicsGambling.map((topic, index) => (
+                        <span
+                          key={topic}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                        >
+                          <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                          </svg>
+                          <span className="font-medium">{index + 1}.</span>
+                          {topic}
+                          <button
+                            type="button"
+                            onClick={() => handleTopicRemoveGambling(topic)}
+                            className="hover:text-gray-200 ml-0.5"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                      {/* Input field */}
+                      {selectedTopicsGambling.length < 3 && (
+                        <input
+                          type="text"
+                          value={topicSearchGambling}
+                          onChange={(e) => {
+                            setTopicSearchGambling(e.target.value);
+                            setShowTopicDropdownGambling(true);
+                          }}
+                          onFocus={() => setShowTopicDropdownGambling(true)}
+                          placeholder={selectedTopicsGambling.length === 0 ? "Search Gambling topics..." : ""}
+                          className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                          autoComplete="on"
+                        />
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Dropdown */}
+                  {showTopicDropdownGambling && filteredTopicsGambling.length > 0 && selectedTopicsGambling.length < 3 && (
+                    <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                      {filteredTopicsGambling.map((topic) => (
+                        <button
+                          key={topic}
+                          type="button"
+                          onClick={() => handleTopicAddGambling(topic)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                          {topic}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Top 5 Jurisdictions - Searchable with inline chips */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-2">
-                Top 3 jurisdictions you're monitoring <span className="text-red-400">*</span>
+                Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
               </h2>
-              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 3 jurisdictions</p>
+              <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
               
               <div ref={jurisdictionDropdownRef} className="relative">
                 <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
@@ -397,7 +652,7 @@ export default function SurveyPage() {
                       </span>
                     ))}
                     {/* Input field */}
-                    {selectedJurisdictions.length < 3 && (
+                    {selectedJurisdictions.length < 5 && (
                       <input
                         type="text"
                         value={jurisdictionSearch}
@@ -415,7 +670,7 @@ export default function SurveyPage() {
                 </div>
                 
                 {/* Dropdown */}
-                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 3 && (
+                {showJurisdictionDropdown && filteredJurisdictions.length > 0 && selectedJurisdictions.length < 5 && (
                   <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
                     {filteredJurisdictions.map((jurisdiction) => (
                       <button
@@ -481,7 +736,7 @@ export default function SurveyPage() {
               </select>
             </div>
 
-            {/* Using Competitors - No suggestions */}
+            {/* Using Competitors - Chip-based search with focus area specific vendors */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <label className="block text-xl font-semibold text-white mb-4">
                 Are you using other regulatory monitoring vendors? <span className="text-red-400">*</span>
@@ -503,28 +758,77 @@ export default function SurveyPage() {
                     type="radio"
                     name="using-competitors"
                     value="No"
-                    onChange={(e) => setUsingCompetitors(e.target.value)}
+                    onChange={(e) => {
+                      setUsingCompetitors(e.target.value);
+                      setSelectedCompetitors([]);
+                    }}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-600"
                   />
                   <span className="text-gray-300">No</span>
                 </label>
               </div>
               
-              {/* Conditional text box for vendor names */}
+              {/* Conditional chip-based search for vendor names */}
               {usingCompetitors === 'Yes' && (
                 <div className="mt-4">
-                  <label htmlFor="competitor-vendors" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Which vendor(s)?
                   </label>
-                  <input
-                    type="text"
-                    id="competitor-vendors"
-                    name="competitor-vendors"
-                    placeholder="Enter vendor name(s)"
-                    required={usingCompetitors === 'Yes'}
-                    className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white placeholder:text-gray-400 outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                    autoComplete="on"
-                  />
+                  
+                  <div ref={competitorDropdownRef} className="relative">
+                    <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                      <div className="flex flex-wrap gap-2 items-center">
+                        {/* Selected chips inside input */}
+                        {selectedCompetitors.map((vendor) => (
+                          <span
+                            key={vendor}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                          >
+                            <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                              </svg>
+                              {vendor}
+                              <button
+                                type="button"
+                                onClick={() => handleCompetitorRemove(vendor)}
+                                className="hover:text-gray-200 ml-0.5"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                          {/* Input field */}
+                          <input
+                            type="text"
+                            value={competitorSearch}
+                            onChange={(e) => {
+                              setCompetitorSearch(e.target.value);
+                              setShowCompetitorDropdown(true);
+                            }}
+                            onFocus={() => setShowCompetitorDropdown(true)}
+                            placeholder={selectedCompetitors.length === 0 ? "Search vendors..." : ""}
+                            className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                            autoComplete="on"
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* Dropdown */}
+                      {showCompetitorDropdown && filteredCompetitors.length > 0 && (
+                        <div className="absolute z-10 mt-2 w-full bg-gray-800 rounded-md shadow-lg max-h-60 overflow-auto">
+                          {filteredCompetitors.map((vendor) => (
+                            <button
+                              key={vendor}
+                              type="button"
+                              onClick={() => handleCompetitorAdd(vendor)}
+                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                            >
+                              {vendor}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                 </div>
               )}
             </div>
