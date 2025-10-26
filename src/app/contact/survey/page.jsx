@@ -328,7 +328,14 @@ export default function SurveyPage() {
       ...selectedTopicsGambling
     ];
     
+    // Get contact data from localStorage
+    const contactDataStr = localStorage.getItem('contactFormData');
+    const contactData = contactDataStr ? JSON.parse(contactDataStr) : null;
+    
     const data = {
+      // Include contact form data for combined email
+      contactData: contactData,
+      // Survey data
       focusAreas: selectedFocusAreas,
       topJurisdictions: selectedJurisdictions,
       topTopics: allSelectedTopics,

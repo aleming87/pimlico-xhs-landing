@@ -82,6 +82,8 @@ export default function ContactPage() {
       marketingConsent: formData.get('marketing-consent') === 'on'
     };
 
+    // Store contact data in localStorage for combined email with survey
+    localStorage.setItem('contactFormData', JSON.stringify(data));
     // Store email for thank you page
     sessionStorage.setItem('contactEmail', data.email);
 

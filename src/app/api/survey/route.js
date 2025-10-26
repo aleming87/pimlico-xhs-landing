@@ -4,18 +4,35 @@ export async function POST(request) {
   try {
     const data = await request.json();
     
-    // Format the survey intelligence report
-    const surveyIntel = `
+    // Extract contact data if it exists
+    const contactData = data.contactData || {};
+    
+    // Format the COMBINED intelligence report
+    const combinedReport = `
 ====================================================
-NEW SURVEY SUBMISSION - XHS™ PROSPECT INTELLIGENCE
+NEW LEAD SUBMISSION - COMPLETE PROSPECT PROFILE
 ====================================================
 
-📊 PRIORITY INTELLIGENCE
+👤 CONTACT INFORMATION
+
+Name: ${contactData.firstName || 'N/A'} ${contactData.lastName || 'N/A'}
+Company: ${contactData.company || 'N/A'}
+Email: ${contactData.email || 'N/A'}
+Message: ${contactData.message || 'N/A'}
+
+Consents:
+- Privacy Policy Agreed: ${contactData.agreedToPolicy ? 'Yes' : 'No'}
+- Marketing Communications: ${contactData.marketingConsent ? 'Yes' : 'No'}
+
+====================================================
+
+📊 PROSPECT INTELLIGENCE - SURVEY RESPONSES
 
 Top 5 Jurisdictions (Ranked):
 ${data.topJurisdictions.map((j, i) => `${i + 1}. ${j}`).join('\n')}
 
 Primary Focus Areas: ${data.focusAreas.join(', ')}
+
 
 ${data.topTopicsAI && data.topTopicsAI.length > 0 ? `
 Top 3 AI Regulatory Topics (Ranked):
@@ -67,25 +84,40 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
 
-      console.log('Sending survey email to:', process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com');
+      console.log('Sending COMBINED lead report to:', process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com');
 
-      // Send to your intelligence inbox
-      // Using onboarding@resend.dev until domain is verified
-      const surveyEmail = await resend.emails.send({
-        from: 'Pimlico XHS Intelligence <onboarding@resend.dev>',
+      // Send combined report to your team
+      const leadEmail = await resend.emails.send({
+        from: 'Pimlico XHS Lead Intelligence <onboarding@resend.dev>',
         to: process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com',
-        subject: `🎯 New Prospect Intel - ${data.focusAreas.join('+')} | ${data.topJurisdictions[0] || 'Multi-jurisdiction'}`,
-        text: surveyIntel,
+        subject: `🎯 NEW LEAD - ${contactData.firstName || 'Unknown'} ${contactData.lastName || ''} from ${contactData.company || 'Unknown Company'} | ${data.focusAreas.join('+')}`,
+        text: combinedReport,
       });
       
-      console.log('Survey email sent:', surveyEmail);
+      console.log('Combined lead email sent:', leadEmail);
+
+      // Send confirmation to the user if we have their email
+      if (contactData.email) {
+        const userEmail = await resend.emails.send({
+          from: 'Pimlico XHS <onboarding@resend.dev>',
+          to: contactData.email,
+          subject: 'Thank you for contacting Pimlico XHS™',
+          html: `
+            <h1>Thank you for your interest in Pimlico XHS™</h1>
+            <p>Hi ${contactData.firstName},</p>
+            <p>We've received your inquiry and survey responses. Our team will review your information and be in touch soon.</p>
+            <p>Best regards,<br>The Pimlico XHS Team</p>
+          `,
+        });
+        console.log('User confirmation email sent:', userEmail);
+      }
     } else {
       // Fallback: just log to console if Resend not configured
-      console.log('📊 Survey Submission (Resend not configured):');
-      console.log(surveyIntel);
+      console.log('📊 COMBINED Lead Submission (Resend not configured):');
+      console.log(combinedReport);
     }
 
-    return NextResponse.json({ success: true, message: 'Survey intelligence captured' });
+    return NextResponse.json({ success: true, message: 'Lead intelligence captured' });
   } catch (error) {
     console.error('Survey submission error:', error);
     return NextResponse.json(
