@@ -130,7 +130,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
           const userEmail = await resend.emails.send({
             from: 'Pimlico XHS <onboarding@resend.dev>',
             to: contactData.email,
-            subject: 'Welcome to Pimlico XHS™ - Your Regulatory Intelligence Partner',
+            subject: 'Welcome to Pimlico XHS™ - Your Regulatory AI Workspace Partner',
             html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -148,9 +148,13 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
           <!-- Header with Logo -->
           <tr>
             <td style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 40px 40px 30px; text-align: center;">
-              <img src="https://www.pimlicosolutions.com/logo-white.svg" alt="Pimlico XHS" style="height: 40px; margin-bottom: 20px;" onerror="this.style.display='none'">
+              <div style="margin-bottom: 20px;">
+                <svg width="140" height="40" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                  <text x="10" y="40" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">PIMLICO XHS</text>
+                </svg>
+              </div>
               <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Welcome to Pimlico XHS™</h1>
-              <p style="margin: 10px 0 0; color: #bfdbfe; font-size: 16px;">Your Regulatory Intelligence Partner</p>
+              <p style="margin: 10px 0 0; color: #bfdbfe; font-size: 16px;">Your Regulatory AI Workspace Partner</p>
             </td>
           </tr>
           
@@ -162,11 +166,11 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
               </p>
               
               <p style="margin: 0 0 20px; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
-                Thank you for your interest in <strong>Pimlico XHS™</strong> - the intelligent regulatory monitoring solution designed for ${data.focusAreas.join(', ')} compliance.
+                Thank you for your interest in <strong>Pimlico XHS™</strong> - the regulatory AI workspace designed for ${data.focusAreas.join(', ')} compliance teams.
               </p>
               
               <p style="margin: 0 0 20px; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
-                We've received your inquiry and our team is reviewing your requirements. Here's what happens next:
+                We've received your submission and our team is reviewing your requirements. Here's what happens next:
               </p>
               
               <!-- What's Next Section -->
@@ -175,29 +179,41 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
                   <td>
                     <h2 style="margin: 0 0 20px; color: #3b82f6; font-size: 20px; font-weight: 600;">What Happens Next?</h2>
                     
-                    <table width="100%" cellpadding="0" cellspacing="0">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: separate; border-spacing: 0;">
                       <tr>
-                        <td style="padding: 12px 0; vertical-align: top; width: 40px;">
-                          <div style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: bold; font-size: 16px;">1</div>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">1</td>
+                            </tr>
+                          </table>
                         </td>
-                        <td style="padding: 12px 0 12px 16px; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
-                          Our team will review your jurisdictions and compliance needs
+                        <td style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
+                          Our team will review your submission
                         </td>
                       </tr>
                       <tr>
-                        <td style="padding: 12px 0; vertical-align: top;">
-                          <div style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: bold; font-size: 16px;">2</div>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">2</td>
+                            </tr>
+                          </table>
                         </td>
-                        <td style="padding: 12px 0 12px 16px; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
+                        <td style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
                           We'll prepare a personalized demo tailored to your focus areas
                         </td>
                       </tr>
                       <tr>
-                        <td style="padding: 12px 0; vertical-align: top;">
-                          <div style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: bold; font-size: 16px;">3</div>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">3</td>
+                            </tr>
+                          </table>
                         </td>
-                        <td style="padding: 12px 0 12px 16px; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
-                          A member of our team will reach out within 24 hours
+                        <td style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
+                          A member of our team will reach out within 24-48 hours
                         </td>
                       </tr>
                     </table>
@@ -205,18 +221,38 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
                 </tr>
               </table>
               
-              <!-- Your Focus Areas -->
-              ${data.focusAreas.length > 0 ? `
-              <div style="margin: 30px 0; padding: 20px; background-color: #0f172a; border-left: 4px solid #3b82f6; border-radius: 8px;">
-                <p style="margin: 0 0 12px; color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Your Focus Areas</p>
-                <p style="margin: 0; color: #f1f5f9; font-size: 16px; font-weight: 600;">${data.focusAreas.join(' • ')}</p>
+              <!-- Your Submission Summary -->
+              <div style="margin: 30px 0; padding: 24px; background-color: #0f172a; border-left: 4px solid #3b82f6; border-radius: 8px;">
+                <p style="margin: 0 0 16px; color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Your Submission Summary</p>
+                
+                ${data.focusAreas.length > 0 ? `
+                <div style="margin-bottom: 16px;">
+                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Focus Area(s):</p>
+                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.focusAreas.join(' • ')}</p>
+                </div>
+                ` : ''}
+                
                 ${data.topJurisdictions && data.topJurisdictions.length > 0 ? `
-                <p style="margin: 12px 0 0; color: #94a3b8; font-size: 14px;">
-                  Monitoring: ${data.topJurisdictions.slice(0, 3).join(', ')}${data.topJurisdictions.length > 3 ? ` +${data.topJurisdictions.length - 3} more` : ''}
-                </p>
+                <div style="margin-bottom: 16px;">
+                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Jurisdictions:</p>
+                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.topJurisdictions.join(', ')}</p>
+                </div>
+                ` : ''}
+                
+                ${data.challenges && data.challenges.length > 0 ? `
+                <div style="margin-bottom: 16px;">
+                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Challenges:</p>
+                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.challenges.join(', ')}</p>
+                </div>
+                ` : ''}
+                
+                ${data.timeline ? `
+                <div>
+                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Objective:</p>
+                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.timeline}</p>
+                </div>
                 ` : ''}
               </div>
-              ` : ''}
               
               <!-- CTA Button -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
@@ -246,17 +282,21 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center" style="padding-bottom: 20px;">
-                    <a href="https://www.pimlicosolutions.com" style="color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 14px; margin: 0 12px;">Website</a>
-                    <span style="color: #475569;">•</span>
-                    <a href="https://www.linkedin.com/company/pimlico-solutions" style="color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 14px; margin: 0 12px;">LinkedIn</a>
-                    <span style="color: #475569;">•</span>
-                    <a href="mailto:andrew@pimlicosolutions.com" style="color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 14px; margin: 0 12px;">Contact</a>
+                    <!-- Social Media Icons -->
+                    <a href="https://www.linkedin.com/company/pimlico-solutions-ltd" style="display: inline-block; margin: 0 8px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width: 32px; height: 32px; vertical-align: middle;">
+                    </a>
+                    <a href="https://x.com/pimlicosol" style="display: inline-block; margin: 0 8px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/5969/5969020.png" alt="X" style="width: 32px; height: 32px; vertical-align: middle;">
+                    </a>
+                    <a href="https://wa.me/message/YOUR_WHATSAPP_NUMBER" style="display: inline-block; margin: 0 8px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="width: 32px; height: 32px; vertical-align: middle;">
+                    </a>
                   </td>
                 </tr>
                 <tr>
                   <td align="center" style="padding-top: 12px; color: #64748b; font-size: 13px; line-height: 1.6;">
-                    © ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.<br>
-                    Intelligent regulatory monitoring for AI, Payments & Gambling compliance.
+                    © 2025 Pimlico Solutions Ltd. All rights reserved.
                   </td>
                 </tr>
               </table>
