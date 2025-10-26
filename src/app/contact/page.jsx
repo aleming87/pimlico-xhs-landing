@@ -145,7 +145,7 @@ export default function ContactPage() {
             <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="inline-flex items-center rounded-xl px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
+            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
               Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>

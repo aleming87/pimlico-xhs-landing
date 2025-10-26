@@ -138,20 +138,30 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to Pimlico XHS™</title>
+  <style>
+    @media only screen and (max-width: 600px) {
+      .container { width: 100% !important; }
+      .header { padding: 30px 20px 20px !important; }
+      .content { padding: 30px 20px !important; }
+      .footer { padding: 20px !important; }
+      h1 { font-size: 24px !important; }
+      h2 { font-size: 18px !important; }
+      .step-number { width: 28px !important; height: 28px !important; font-size: 14px !important; }
+      .step-text { font-size: 14px !important; }
+    }
+  </style>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0f172a; color: #e2e8f0;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0f172a;">
     <tr>
-      <td align="center" style="padding: 40px 20px;">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
+      <td align="center" style="padding: 20px;">
+        <table class="container" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
           
           <!-- Header with Logo -->
           <tr>
-            <td style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 40px 40px 30px; text-align: center;">
+            <td class="header" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 40px 40px 30px; text-align: center;">
               <div style="margin-bottom: 20px;">
-                <svg width="140" height="40" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-                  <text x="10" y="40" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#ffffff">PIMLICO XHS</text>
-                </svg>
+                <img src="https://pimlicosolutions.com/XHS_Logo_White.png" alt="Pimlico XHS" style="max-width: 180px; height: auto;" />
               </div>
               <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Welcome to Pimlico XHS™</h1>
               <p style="margin: 10px 0 0; color: #bfdbfe; font-size: 16px;">Your Regulatory AI Workspace Partner</p>
@@ -160,7 +170,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
           
           <!-- Main Content -->
           <tr>
-            <td style="padding: 40px;">
+            <td class="content" style="padding: 40px;">
               <p style="margin: 0 0 20px; font-size: 18px; color: #f1f5f9; line-height: 1.6;">
                 Hi <strong>${contactData.firstName}</strong>,
               </p>
@@ -182,37 +192,37 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
                     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: separate; border-spacing: 0;">
                       <tr>
                         <td style="padding: 12px 0; vertical-align: top; width: 50px;">
-                          <table cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
                             <tr>
                               <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">1</td>
                             </tr>
                           </table>
                         </td>
-                        <td style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
+                        <td class="step-text" style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
                           Our team will review your submission
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0; vertical-align: top; width: 50px;">
-                          <table cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
                             <tr>
                               <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">2</td>
                             </tr>
                           </table>
                         </td>
-                        <td style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
+                        <td class="step-text" style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
                           We'll prepare a personalized demo tailored to your focus areas
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0; vertical-align: top; width: 50px;">
-                          <table cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
                             <tr>
                               <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">3</td>
                             </tr>
                           </table>
                         </td>
-                        <td style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
+                        <td class="step-text" style="padding: 12px 0 12px 0; color: #e2e8f0; font-size: 15px; line-height: 1.6;">
                           A member of our team will reach out within 24-48 hours
                         </td>
                       </tr>
@@ -221,38 +231,80 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
                 </tr>
               </table>
               
-              <!-- Your Submission Summary -->
-              <div style="margin: 30px 0; padding: 24px; background-color: #0f172a; border-left: 4px solid #3b82f6; border-radius: 8px;">
-                <p style="margin: 0 0 16px; color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Your Submission Summary</p>
-                
-                ${data.focusAreas.length > 0 ? `
-                <div style="margin-bottom: 16px;">
-                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Focus Area(s):</p>
-                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.focusAreas.join(' • ')}</p>
-                </div>
-                ` : ''}
-                
-                ${data.topJurisdictions && data.topJurisdictions.length > 0 ? `
-                <div style="margin-bottom: 16px;">
-                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Jurisdictions:</p>
-                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.topJurisdictions.join(', ')}</p>
-                </div>
-                ` : ''}
-                
-                ${data.challenges && data.challenges.length > 0 ? `
-                <div style="margin-bottom: 16px;">
-                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Challenges:</p>
-                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.challenges.join(', ')}</p>
-                </div>
-                ` : ''}
-                
-                ${data.timeline ? `
-                <div>
-                  <p style="margin: 0 0 6px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Objective:</p>
-                  <p style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.timeline}</p>
-                </div>
-                ` : ''}
-              </div>
+              <!-- Your Submission (formatted like What Happens Next) -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0; background-color: #0f172a; border-radius: 12px; padding: 24px;">
+                <tr>
+                  <td>
+                    <h2 style="margin: 0 0 20px; color: #3b82f6; font-size: 20px; font-weight: 600;">Your Submission</h2>
+                    
+                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: separate; border-spacing: 0;">
+                      ${data.focusAreas.length > 0 ? `
+                      <tr>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">•</td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td style="padding: 12px 0 12px 0;">
+                          <p style="margin: 0 0 4px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Focus Area(s)</p>
+                          <p class="step-text" style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.focusAreas.join(' • ')}</p>
+                        </td>
+                      </tr>
+                      ` : ''}
+                      
+                      ${data.topJurisdictions && data.topJurisdictions.length > 0 ? `
+                      <tr>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">•</td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td style="padding: 12px 0 12px 0;">
+                          <p style="margin: 0 0 4px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Jurisdictions</p>
+                          <p class="step-text" style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.topJurisdictions.join(', ')}</p>
+                        </td>
+                      </tr>
+                      ` : ''}
+                      
+                      ${data.challenges && data.challenges.length > 0 ? `
+                      <tr>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">•</td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td style="padding: 12px 0 12px 0;">
+                          <p style="margin: 0 0 4px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Challenges</p>
+                          <p class="step-text" style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.challenges.join(', ')}</p>
+                        </td>
+                      </tr>
+                      ` : ''}
+                      
+                      ${data.timeline ? `
+                      <tr>
+                        <td style="padding: 12px 0; vertical-align: top; width: 50px;">
+                          <table class="step-number" cellpadding="0" cellspacing="0" style="width: 32px; height: 32px; background-color: #2563eb; border-radius: 50%;">
+                            <tr>
+                              <td align="center" valign="middle" style="color: #ffffff; font-weight: bold; font-size: 16px;">•</td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td style="padding: 12px 0 12px 0;">
+                          <p style="margin: 0 0 4px; color: #cbd5e1; font-size: 13px; font-weight: 600;">Objective</p>
+                          <p class="step-text" style="margin: 0; color: #f1f5f9; font-size: 15px;">${data.timeline}</p>
+                        </td>
+                      </tr>
+                      ` : ''}
+                    </table>
+                  </td>
+                </tr>
+              </table>
               
               <p style="margin: 30px 0 0; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
                 In the meantime, feel free to explore our website to learn more about how Pimlico XHS™ can transform your regulatory monitoring.
@@ -260,26 +312,29 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
               
               <p style="margin: 20px 0 0; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
                 Best regards,<br>
-                <strong style="color: #f1f5f9;">The Pimlico XHS Team</strong>
+                <strong style="color: #f1f5f9;">The Pimlico XHS™ Team</strong>
               </p>
             </td>
           </tr>
           
           <!-- Footer -->
           <tr>
-            <td style="background-color: #0f172a; padding: 30px 40px; border-top: 1px solid #334155;">
+            <td class="footer" style="background-color: #0f172a; padding: 30px 40px; border-top: 1px solid #334155;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center" style="padding-bottom: 20px;">
                     <!-- Social Media Icons -->
-                    <a href="https://www.linkedin.com/company/pimlico-solutions-ltd" style="display: inline-block; margin: 0 8px;">
-                      <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width: 32px; height: 32px; vertical-align: middle;">
+                    <a href="https://www.pimlicosolutions.com" style="display: inline-block; margin: 0 10px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/2659/2659360.png" alt="Website" style="width: 24px; height: 24px; vertical-align: middle;">
                     </a>
-                    <a href="https://x.com/pimlicosol" style="display: inline-block; margin: 0 8px;">
-                      <img src="https://cdn-icons-png.flaticon.com/512/5969/5969020.png" alt="X" style="width: 32px; height: 32px; vertical-align: middle;">
+                    <a href="https://www.linkedin.com/company/wearepimlico" style="display: inline-block; margin: 0 10px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="width: 24px; height: 24px; vertical-align: middle;">
                     </a>
-                    <a href="https://wa.me/message/YOUR_WHATSAPP_NUMBER" style="display: inline-block; margin: 0 8px;">
-                      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="width: 32px; height: 32px; vertical-align: middle;">
+                    <a href="https://x.com/pimlicoxhs" style="display: inline-block; margin: 0 10px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/5969/5969020.png" alt="X" style="width: 24px; height: 24px; vertical-align: middle;">
+                    </a>
+                    <a href="https://wa.me/447961642867" style="display: inline-block; margin: 0 10px;">
+                      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" style="width: 24px; height: 24px; vertical-align: middle;">
                     </a>
                   </td>
                 </tr>
