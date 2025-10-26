@@ -307,19 +307,45 @@ export default function SurveyPage() {
                 <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities</p>
                 
                 <div ref={topicDropdownRef} className="relative">
-                  <input
-                    type="text"
-                    value={topicSearch}
-                    onChange={(e) => {
-                      setTopicSearch(e.target.value);
-                      setShowTopicDropdown(true);
-                    }}
-                    onFocus={() => setShowTopicDropdown(true)}
-                    placeholder="Search topics..."
-                    disabled={selectedTopics.length >= 3}
-                    className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 disabled:opacity-50"
-                    autoComplete="on"
-                  />
+                  <div className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 min-h-[42px] outline outline-1 -outline-offset-1 outline-white/10 focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-500">
+                    <div className="flex flex-wrap gap-2 items-center">
+                      {/* Selected chips inside input */}
+                      {selectedTopics.map((topic, index) => (
+                        <span
+                          key={topic}
+                          className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-2.5 py-0.5 text-sm text-white"
+                        >
+                          <svg className="h-3.5 w-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                          </svg>
+                          <span className="font-medium">{index + 1}.</span>
+                          {topic}
+                          <button
+                            type="button"
+                            onClick={() => handleTopicRemove(topic)}
+                            className="hover:text-gray-200 ml-0.5"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                      {/* Input field */}
+                      {selectedTopics.length < 3 && (
+                        <input
+                          type="text"
+                          value={topicSearch}
+                          onChange={(e) => {
+                            setTopicSearch(e.target.value);
+                            setShowTopicDropdown(true);
+                          }}
+                          onFocus={() => setShowTopicDropdown(true)}
+                          placeholder={selectedTopics.length === 0 ? "Search topics..." : ""}
+                          className="flex-1 min-w-[120px] bg-transparent border-none text-base text-white placeholder:text-gray-500 focus:outline-none"
+                          autoComplete="on"
+                        />
+                      )}
+                    </div>
+                  </div>
                   
                   {/* Dropdown */}
                   {showTopicDropdown && filteredTopics.length > 0 && selectedTopics.length < 3 && (
@@ -336,26 +362,6 @@ export default function SurveyPage() {
                       ))}
                     </div>
                   )}
-                </div>
-
-                {/* Selected chips with ranking */}
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {selectedTopics.map((topic, index) => (
-                    <span
-                      key={topic}
-                      className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
-                    >
-                      <span className="font-medium">{index + 1}.</span>
-                      {topic}
-                      <button
-                        type="button"
-                        onClick={() => handleTopicRemove(topic)}
-                        className="hover:text-gray-200"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
                 </div>
               </div>
             )}
