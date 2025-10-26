@@ -15,7 +15,7 @@ export default function Header() {
             <a href="#use-cases" className="hover:text-brand-700">Use cases</a>
             <a href="#icp" className="hover:text-brand-700">ICP</a>
             <a href="/pricing" className="hover:text-brand-700">Pricing</a>
-            <a href="#contact" className="inline-flex items-center rounded-xl border border-slate-300 px-3 py-1.5 hover:border-brand-600 hover:text-brand-700">
+            <a href="/contact" className="inline-flex items-center rounded-xl px-4 py-2 font-semibold bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-500/50 transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/60 hover:scale-105">
               Book a demo
             </a>
           </nav>

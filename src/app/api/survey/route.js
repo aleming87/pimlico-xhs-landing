@@ -254,21 +254,8 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
                 ` : ''}
               </div>
               
-              <!-- CTA Button - Enhanced -->
-              <table width="100%" cellpadding="0" cellspacing="0" style="margin: 40px 0;">
-                <tr>
-                  <td align="center" style="padding: 30px 20px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%); border-radius: 16px; border: 2px solid #2563eb;">
-                    <p style="margin: 0 0 20px; color: #f1f5f9; font-size: 18px; font-weight: 600;">Ready to see Pimlico XHS™ in action?</p>
-                    <a href="https://www.pimlicosolutions.com/contact" style="display: inline-block; padding: 18px 48px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: #ffffff; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 18px; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.6); text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #3b82f6;">
-                      📅 BOOK A DEMO
-                    </a>
-                    <p style="margin: 16px 0 0; color: #94a3b8; font-size: 14px;">Schedule your personalized walkthrough today</p>
-                  </td>
-                </tr>
-              </table>
-              
               <p style="margin: 30px 0 0; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
-                Or feel free to explore our <a href="https://www.pimlicosolutions.com" style="color: #3b82f6; text-decoration: none; font-weight: 600;">website</a> to learn more about how Pimlico XHS™ can transform your regulatory monitoring.
+                In the meantime, feel free to explore our website to learn more about how Pimlico XHS™ can transform your regulatory monitoring.
               </p>
               
               <p style="margin: 20px 0 0; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
