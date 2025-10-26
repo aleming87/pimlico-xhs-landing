@@ -73,7 +73,7 @@ export default function ThankYouPage() {
           </h1>
           
           <p className="text-lg text-gray-300 mb-12">
-            Complete these steps to book your personalized demo
+            Follow these steps to complete your booking
           </p>
 
           {/* Two-Step Process */}
@@ -102,7 +102,7 @@ export default function ThankYouPage() {
                 {/* Content */}
                 <div className="flex-1 text-left">
                   <h2 className="text-2xl font-semibold text-white mb-2">
-                    Tell Us More
+                    Customize Your Demo
                   </h2>
                   <p className="text-gray-300 mb-4">
                     Help us understand your needs (2 minutes)

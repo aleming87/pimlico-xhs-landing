@@ -198,7 +198,7 @@ export default function ContactPage() {
         </div>
         
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">Contact sales</h2>
+          <h2 className="text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">Book your XHS™ demo</h2>
           <p className="mt-2 text-lg/8 text-gray-400">Get in touch with our team to learn how XHS™ can transform your regulatory compliance workflows.</p>
         </div>
         
