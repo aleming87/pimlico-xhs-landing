@@ -26,8 +26,9 @@ Submitted: ${new Date().toISOString()}
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       // Send notification to your team
+      // Using onboarding@resend.dev until domain is verified
       await resend.emails.send({
-        from: 'Pimlico XHS <noreply@pimlicosolutions.com>',
+        from: 'Pimlico XHS <onboarding@resend.dev>',
         to: process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com',
         subject: `New Contact: ${data.firstName} ${data.lastName} from ${data.company}`,
         text: emailContent,
@@ -35,7 +36,7 @@ Submitted: ${new Date().toISOString()}
 
       // Send confirmation to the user
       await resend.emails.send({
-        from: 'Pimlico XHS <noreply@pimlicosolutions.com>',
+        from: 'Pimlico XHS <onboarding@resend.dev>',
         to: data.email,
         subject: 'Thank you for contacting Pimlico XHS™',
         html: `

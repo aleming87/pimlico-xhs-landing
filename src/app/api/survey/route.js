@@ -68,8 +68,9 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       // Send to your intelligence inbox
+      // Using onboarding@resend.dev until domain is verified
       await resend.emails.send({
-        from: 'Pimlico XHS Intelligence <intel@pimlicosolutions.com>',
+        from: 'Pimlico XHS Intelligence <onboarding@resend.dev>',
         to: process.env.CONTACT_EMAIL || 'contact@pimlicosolutions.com',
         subject: `🎯 New Prospect Intel - ${data.focusAreas.join('+')} | ${data.topJurisdictions[0] || 'Multi-jurisdiction'}`,
         text: surveyIntel,
