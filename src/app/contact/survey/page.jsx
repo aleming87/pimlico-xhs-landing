@@ -266,10 +266,10 @@ export default function SurveyPage() {
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
-              Tell us about your needs
+              Two Minute Survey
             </h1>
-            <p className="text-sm text-blue-400 font-medium">
-              ⏱️ Takes 2 minutes
+            <p className="text-lg text-gray-300">
+              Tell us about your needs
             </p>
           </div>
 

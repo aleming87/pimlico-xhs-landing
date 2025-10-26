@@ -168,16 +168,23 @@ export default function ThankYouPage() {
                       {/* Calendly inline widget */}
                       <div 
                         className="calendly-inline-widget" 
-                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo" 
+                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo?background_color=000000&text_color=ffffff" 
                         style={{ minWidth: '320px', height: '700px' }}
                       ></div>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 text-green-400 font-medium">
-                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      Call scheduled - check your email for confirmation
+                    <div className="mt-4 p-6 bg-green-500/10 border border-green-500/50 rounded-lg">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                        <div className="flex-shrink-0">
+                          <svg className="h-12 w-12 text-green-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-xl font-semibold text-green-400 mb-1">Call Scheduled!</h3>
+                          <p className="text-gray-300">Check your email for confirmation details and calendar invite.</p>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
