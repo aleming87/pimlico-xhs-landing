@@ -521,6 +521,7 @@ export default function SurveyPage() {
                     id="competitor-vendors"
                     name="competitor-vendors"
                     placeholder="Enter vendor name(s)"
+                    required={usingCompetitors === 'Yes'}
                     className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white placeholder:text-gray-400 outline outline-1 -outline-offset-1 outline-white/10 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                     autoComplete="on"
                   />
