@@ -147,11 +147,11 @@ export default function ConfirmedPage() {
 
               {/* Ashley */}
               <div className="text-center">
-                <img src="/Ashley.png" alt="Ashley" className="size-24 rounded-full mx-auto mb-3 outline-1 -outline-offset-1 outline-white/10" />
-                <h3 className="text-base font-semibold text-white">Ashley</h3>
-                <p className="text-sm text-gray-400 mb-2">Operations Lead</p>
+                <img src="/Ashley.png" alt="Ashley Burghardt" className="size-24 rounded-full mx-auto mb-3 outline-1 -outline-offset-1 outline-white/10" />
+                <h3 className="text-base font-semibold text-white">Ashley Burghardt</h3>
+                <p className="text-sm text-gray-400 mb-2">COPO</p>
                 <a 
-                  href="https://www.linkedin.com/company/wearepimlico/" 
+                  href="https://www.linkedin.com/in/ashley-burghardt-b7051a21/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm text-gray-400 hover:text-blue-400 transition-colors"
@@ -165,10 +165,10 @@ export default function ConfirmedPage() {
 
             {/* Connect CTA */}
             <div className="text-center mb-6">
-              <h3 className="text-lg font-semibold text-white mb-6">Connect</h3>
+              <h3 className="text-lg font-semibold text-white mb-6">Connect with Us!</h3>
               
               {/* Logo Combo */}
-              <div className="flex justify-center items-center -space-x-1 mb-6">
+              <div className="flex justify-center items-center gap-2 mb-6">
                 <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-6" />
                 <span className="text-gray-500 text-xl">|</span>
                 <img src="/XHS_Logo_White.png" alt="XHS" className="h-14" />
