@@ -171,7 +171,7 @@ export default function ConfirmedPage() {
               <div className="flex justify-center items-center gap-2 mb-6">
                 <img src="/Pimlico_Logo_Inverted.png" alt="Pimlico" className="h-6" />
                 <span className="text-gray-500 text-xl">|</span>
-                <img src="/XHS_Logo_White.png" alt="XHS" className="h-14" />
+                <img src="/XHS_Logo_White.png" alt="XHS" className="h-14 translate-y-[1px] -translate-x-[1px]" />
               </div>
 
               {/* Social Media Icons */}
