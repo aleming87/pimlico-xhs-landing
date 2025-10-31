@@ -10,25 +10,25 @@ const PRICING = {
     symbol: '$',
     code: 'USD',
     professional: { monthly: 250, annually: 2850 },
-    team: { monthly: 750, annually: 8550 }
+    team: { monthly: 750, annually: 8550, perUser: 32 }
   },
   GBP: {
     symbol: '£',
     code: 'GBP',
     professional: { monthly: 225, annually: 2565 }, // 225 * 11.4 (5% discount)
-    team: { monthly: 675, annually: 7695 }
+    team: { monthly: 675, annually: 7695, perUser: 29 } // ~£29/user
   },
   EUR: {
     symbol: '€',
     code: 'EUR',
     professional: { monthly: 235, annually: 2679 }, // 235 * 11.4
-    team: { monthly: 705, annually: 8037 }
+    team: { monthly: 705, annually: 8037, perUser: 30 } // ~€30/user
   },
   CHF: {
     symbol: 'CHF ',
     code: 'CHF',
     professional: { monthly: 240, annually: 2736 }, // 240 * 11.4
-    team: { monthly: 720, annually: 8208 }
+    team: { monthly: 720, annually: 8208, perUser: 31 } // ~CHF 31/user
   }
 };
 
