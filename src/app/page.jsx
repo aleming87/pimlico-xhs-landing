@@ -9,8 +9,51 @@ export const metadata = {
 }
 
 export default function Page() {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Pimlico XHS",
+    "url": "https://pimlicosolutions.com",
+    "logo": "https://pimlicosolutions.com/XHS Logo BLUE on WHITE.png",
+    "description": "AI-native regulatory intelligence platform for compliance teams",
+    "sameAs": [
+      "https://www.linkedin.com/company/pimlico-solutions",
+      "https://twitter.com/pimlicoxhs"
+    ]
+  };
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Pimlico XHS",
+    "applicationCategory": "BusinessApplication",
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": "250",
+      "highPrice": "750",
+      "priceCurrency": "USD",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "250",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    },
+    "description": "AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI and Payments regulations across 90+ jurisdictions.",
+    "operatingSystem": "Web",
+    "featureList": "Regulatory monitoring, AI compliance, Payments compliance, Real-time updates, Team collaboration"
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <main className="bg-white text-slate-900">
         <Hero />
         <Differentiators />

@@ -1,6 +1,10 @@
 export const metadata = {
-  title: 'Privacy Policy',
-  description: 'Privacy Policy for Pimlico Solutions Ltd',
+  title: 'Privacy Policy - Pimlico XHS',
+  description: 'Privacy Policy for Pimlico Solutions Ltd. Learn how we collect, use, and protect your personal data.',
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function Privacy() {

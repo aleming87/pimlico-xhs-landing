@@ -1,5 +1,6 @@
 import '@/styles/tailwind.css'
 import { Analytics } from '@vercel/analytics/react'
+import { CurrencyProvider } from '@/contexts/CurrencyContext'
 
 export const metadata = {
   title: {
@@ -7,8 +8,8 @@ export const metadata = {
     default: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
   },
   description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI and Payments regulations across 90+ jurisdictions in real-time.',
-  keywords: ['regulatory compliance', 'AI compliance', 'payments regulation', 'EU AI Act', 'PSD3', 'MiCA', 'regulatory monitoring', 'compliance software', 'regulatory intelligence'],
-  authors: [{ name: 'Pimlico XHS' }],
+  keywords: ['regulatory compliance', 'AI compliance', 'payments regulation', 'EU AI Act', 'PSD3', 'MiCA', 'PSR', 'regulatory monitoring', 'compliance software', 'regulatory intelligence', 'regtech', 'compliance automation', 'regulatory technology', 'AI Act compliance', 'payments compliance'],
+  authors: [{ name: 'Pimlico XHS', url: 'https://pimlicosolutions.com' }],
   creator: 'Pimlico XHS',
   publisher: 'Pimlico XHS',
   metadataBase: new URL('https://pimlicosolutions.com'),
@@ -41,6 +42,7 @@ export const metadata = {
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
     description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on regulations across 90+ jurisdictions.',
     images: ['/XHS Logo BLUE on WHITE.png'],
+    creator: '@pimlicoxhs',
   },
   robots: {
     index: true,
@@ -83,7 +85,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="text-gray-950 antialiased">
-        {children}
+        <CurrencyProvider>
+          {children}
+        </CurrencyProvider>
         <Analytics />
       </body>
     </html>

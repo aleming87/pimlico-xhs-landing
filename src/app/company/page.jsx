@@ -7,9 +7,13 @@ import { Navbar } from '@/components/navbar'
 import { Heading, Lead, Subheading } from '@/components/text'
 
 export const metadata = {
-  title: 'Company',
-  description:
-    'We’re on a mission to transform revenue organizations by harnessing vast amounts of illegally acquired customer data.',
+  title: 'Company - Pimlico XHS',
+  description: 'Learn about Pimlico XHS and our mission to transform regulatory compliance with AI-powered intelligence. Meet the team building the future of compliance technology.',
+  openGraph: {
+    title: 'Company - Pimlico XHS',
+    description: 'Learn about Pimlico XHS and our mission to transform regulatory compliance with AI-powered intelligence.',
+    url: 'https://pimlicosolutions.com/company',
+  },
 }
 
 function Header() {

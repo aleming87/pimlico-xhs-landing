@@ -1,6 +1,10 @@
 export const metadata = {
-  title: 'Terms and Conditions',
-  description: 'Terms and Conditions for Pimlico Solutions Ltd',
+  title: 'Terms and Conditions - Pimlico XHS',
+  description: 'Terms and Conditions for Pimlico Solutions Ltd. Read our terms of service for using the XHS platform.',
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function Terms() {

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Footer } from '@/components/footer';
+import { useCurrency } from '@/contexts/CurrencyContext';
+import { CurrencySelector } from '@/components/currency-selector';
 
 function FAQ({ question, answer }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +42,7 @@ function FAQ({ question, answer }) {
 export default function PricingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [frequency, setFrequency] = useState('monthly');
+  const { currencyData, isLoading } = useCurrency();
 
   return (
     <div className="bg-gray-900">
@@ -125,7 +128,10 @@ export default function PricingPage() {
         <div className="bg-gray-900 pt-24 sm:pt-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-4xl text-center">
-              <h2 className="text-base/7 font-semibold text-indigo-400">Beta Pricing</h2>
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <h2 className="text-base/7 font-semibold text-indigo-400">Beta Pricing</h2>
+                <CurrencySelector />
+              </div>
               <p className="mt-2 text-5xl font-semibold tracking-tight text-balance text-white sm:text-6xl">Early Access Pricing</p>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Join our beta program and get special pricing on AI-powered regulatory compliance workspaces. Annual plans save 5%.</p>
@@ -152,7 +158,9 @@ export default function PricingPage() {
                 </div>
                 <p className="mt-4 text-sm/6 text-gray-300">Ideal for individuals starting with regulatory compliance.</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '250' : '2,850'}</span>
+                  <span className="text-4xl font-semibold tracking-tight text-white">
+                    {isLoading ? '...' : `${currencyData.symbol}${frequency === 'monthly' ? currencyData.professional.monthly : currencyData.professional.annually}`}
+                  </span>
                   <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
                 </p>
                 {frequency === 'annually' && (
@@ -173,7 +181,9 @@ export default function PricingPage() {
                 <h3 className="text-lg/8 font-semibold text-white">Team</h3>
                 <p className="mt-4 text-sm/6 text-gray-300">Perfect for teams collaborating on regulatory compliance projects.</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
-                  <span className="text-4xl font-semibold tracking-tight text-white">${frequency === 'monthly' ? '750' : '8,550'}</span>
+                  <span className="text-4xl font-semibold tracking-tight text-white">
+                    {isLoading ? '...' : `${currencyData.symbol}${frequency === 'monthly' ? currencyData.team.monthly : currencyData.team.annually}`}
+                  </span>
                   <span className="text-sm/6 font-semibold text-gray-400">/{frequency === 'monthly' ? 'month' : 'year'}</span>
                 </p>
                 {frequency === 'annually' && (
