@@ -108,13 +108,47 @@ export default function Page() {
             <div className="flex items-start justify-end lg:order-first">
               <div className="w-full">
                 <div className="w-full rounded-2xl shadow-2xl ring-1 ring-white/10 bg-gray-800 p-4">
-                  <div id="hs-users-datamap" className="h-96"></div>
+                  <div id="hs-users-datamap" className="h-[500px]"></div>
+
+                  {/* Region Buttons */}
+                  <div className="mt-6 mb-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>North America</span>
+                      </button>
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>LATAM</span>
+                      </button>
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>Europe</span>
+                      </button>
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>Africa</span>
+                      </button>
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>Middle East</span>
+                      </button>
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>APAC</span>
+                      </button>
+                      <button className="px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-all duration-200 flex items-center justify-center space-x-2 border border-gray-600 hover:border-blue-400">
+                        <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>Oceania</span>
+                      </button>
+                    </div>
+                  </div>
 
                   {/* Status indicators */}
                   <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center space-x-2 text-gray-300">
                       <div className="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></div>
-                      <span>Active Monitoring: 6 Regions</span>
+                      <span>Active Monitoring: 7 Regions</span>
                     </div>
                     <div className="flex items-center space-x-2 text-gray-300">
                       <div className="w-3 h-3 rounded bg-gray-600"></div>

@@ -67,6 +67,7 @@ export default function PricingPage() {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
+            <a href="/" className="text-sm/6 font-semibold text-white">Home</a>
             <a href="/#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
             <a href="/#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
