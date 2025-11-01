@@ -70,7 +70,7 @@ export default function DeploySection() {
             <div className="mt-8 text-center">
               <a 
                 href="/ai" 
-                className="inline-flex items-center text-blue-400 hover:text-purple-300 font-semibold transition-colors duration-200"
+                className="inline-flex items-center text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200"
               >
                 Learn more
                 <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
