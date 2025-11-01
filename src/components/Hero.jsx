@@ -33,6 +33,7 @@ export default function Hero() {
             <a href="#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
+            <a href="/gambling" className="text-sm/6 font-semibold text-white">Gambling</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
@@ -96,6 +97,13 @@ export default function Hero() {
                       Payments
                     </a>
                     <a 
+                      href="/gambling" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Gambling
+                    </a>
+                    <a 
                       href="/pricing" 
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
                       onClick={() => setMobileMenuOpen(false)}
@@ -141,7 +149,7 @@ export default function Hero() {
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               The platform for<br />Regulatory AI&nbsp;workspaces
             </h1>
-            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI & Payments</span> compliance workflows with intelligent automation.</p>
+            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI, Payments & Gambling</span> compliance workflows with intelligent automation.</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
               <a href="#contact" className="w-full sm:w-auto rounded-md bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-xs hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center">Request early access</a>
             </div>

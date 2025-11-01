@@ -131,6 +131,7 @@ export default function AIPage() {
             <a href="/#differentiators" className="text-sm/6 font-semibold text-gray-900">How it works</a>
             <a href="/ai" className="text-sm/6 font-semibold text-blue-600">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
+            <a href="/gambling" className="text-sm/6 font-semibold text-gray-900">Gambling</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -168,6 +169,7 @@ export default function AIPage() {
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">How it works</a>
                     <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50">AI</a>
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Payments</a>
+                    <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gambling</a>
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Pricing</a>
                   </div>
                   <div className="py-6">
