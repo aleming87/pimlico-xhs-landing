@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Footer } from '@/components/footer';
 import { AnimatedNumber } from '@/components/animated-number';
+import { AnimatedImpactScore, AnimatedCollaborate, AnimatedCodeIntegration } from '@/components/BentoAnimations';
 
 export default function GamblingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -350,6 +351,91 @@ export default function GamblingPage() {
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bento Grid - Product Breakdown */}
+      <div className="bg-gray-900 py-24 sm:py-32">
+        <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+          <h2 className="text-center text-base/7 font-semibold text-emerald-400">Everything you need</h2>
+          <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
+            End-to-end gambling compliance workflows
+          </p>
+          <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
+            {/* Monitor - Large left column */}
+            <div className="relative lg:row-span-2">
+              <div className="absolute inset-px rounded-lg bg-gray-800 lg:rounded-l-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Monitor</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    Real-time gambling regulatory updates across all jurisdictions in a unified feed
+                  </p>
+                </div>
+                <div className="relative min-h-[30rem] w-full grow">
+                  <div className="absolute inset-x-8 top-10 bottom-8 overflow-hidden rounded-lg bg-gray-900 shadow-2xl ring-1 ring-white/10">
+                    <img
+                      src="/AI4.png"
+                      alt="Gambling Regulatory Monitoring Dashboard"
+                      className="w-full h-auto min-h-full object-cover object-left-top rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 lg:rounded-l-[2rem]"></div>
+            </div>
+
+            {/* Analyse - Top right */}
+            <div className="relative max-lg:row-start-1">
+              <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-t-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 pb-4 sm:px-10 sm:pt-10 sm:pb-6">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Analyse</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    AI-powered insights identify regulatory impacts and compliance obligations
+                  </p>
+                </div>
+                <div className="flex flex-1 items-center justify-center px-8 pb-8 sm:px-10 lg:pb-10">
+                  <AnimatedImpactScore />
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 max-lg:rounded-t-[2rem]"></div>
+            </div>
+
+            {/* Collaborate - Middle right */}
+            <div className="relative max-lg:row-start-3 lg:col-start-2 lg:row-start-2">
+              <div className="absolute inset-px rounded-lg bg-gray-800"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
+                <div className="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Collaborate</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    Team workspaces for shared gambling compliance intelligence
+                  </p>
+                </div>
+                <div className="flex flex-1 flex-col justify-center px-8 max-lg:py-6 lg:pb-2">
+                  <AnimatedCollaborate />
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5"></div>
+            </div>
+
+            {/* Integrate - Large right column */}
+            <div className="relative lg:row-span-2">
+              <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
+                <div className="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Integrate</p>
+                  <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
+                    Connect with your existing compliance workflow tools and systems
+                  </p>
+                </div>
+                <div className="relative min-h-[30rem] w-full grow">
+                  <AnimatedCodeIntegration />
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"></div>
+            </div>
           </div>
         </div>
       </div>
