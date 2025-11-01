@@ -38,7 +38,8 @@ export default function DatamapScripts() {
         projection: 'mercator',
         responsive: true,
         fills: {
-          defaultFill: '#374151'
+          defaultFill: '#374151',
+          highlighted: '#3b82f6'
         },
         data: dataSet,
         geographyConfig: {
@@ -58,6 +59,24 @@ export default function DatamapScripts() {
           }
         }
       })
+      
+      // Create a global function to highlight regions
+      window.highlightRegions = function(countryCodes, color) {
+        const updates = {}
+        countryCodes.forEach(code => {
+          updates[code] = { fillKey: 'highlighted', fillColor: color }
+        })
+        dataMap.updateChoropleth(updates)
+        
+        // Reset after 3 seconds
+        setTimeout(() => {
+          const reset = {}
+          countryCodes.forEach(code => {
+            reset[code] = { fillKey: 'defaultFill' }
+          })
+          dataMap.updateChoropleth(reset)
+        }, 3000)
+      }
       
       window.addEventListener('resize', function () {
         if (dataMap && dataMap.resize) {

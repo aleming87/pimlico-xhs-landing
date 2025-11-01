@@ -25,7 +25,7 @@ export default function DeploySection() {
             </div>
             
             <div className="space-y-4">
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">AI Legislation & Governance</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,7 +33,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Compute & Infrastructure</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,7 +41,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Data Protection</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -49,7 +49,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Technical Standards</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,7 +57,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">National Security & Export Controls</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -92,7 +92,7 @@ export default function DeploySection() {
             </div>
             
             <div className="space-y-4">
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Licensing & Authorisations</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -100,7 +100,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Crypto & Digital Assets</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -108,7 +108,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">AML/CTF & Sanctions</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -116,7 +116,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Operational Resilience & ICT Risk</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -124,7 +124,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Consumer Protection & Conduct</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,7 +159,7 @@ export default function DeploySection() {
             </div>
             
             <div className="space-y-4">
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Licensing & Compliance</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -167,7 +167,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Player Protection</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -175,7 +175,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">AML/CFT & Financial Crime</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -183,7 +183,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Advertising & Marketing</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -191,7 +191,7 @@ export default function DeploySection() {
                   </svg>
                 </div>
               </div>
-              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-8 py-6 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
+              <div className="group bg-gradient-to-r from-gray-700 to-gray-750 rounded-2xl px-10 py-7 hover:from-gray-600 hover:to-gray-650 transition-all duration-200 border border-gray-600 hover:border-blue-400/50 cursor-pointer">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-semibold text-base group-hover:text-blue-300">Enforcement & Blocklists</span>
                   <svg className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -218,6 +218,7 @@ export default function DeploySection() {
     </div>
   );
 }
+
 
 
 

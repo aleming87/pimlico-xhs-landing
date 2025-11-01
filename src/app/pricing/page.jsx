@@ -69,7 +69,6 @@ export default function PricingPage() {
           <div className="hidden lg:flex lg:gap-x-12">
             <a href="/" className="text-sm/6 font-semibold text-white">Home</a>
             <a href="/#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
-            <a href="/#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
             <a href="/gambling" className="text-sm/6 font-semibold text-white">Gambling</a>
@@ -109,7 +108,6 @@ export default function PricingPage() {
                   <div className="space-y-2 py-6">
                     <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Home</a>
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>How it works</a>
-                    <a href="/#use-cases" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Use cases</a>
                     <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>AI</a>
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Payments</a>
                     <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800" onClick={() => setMobileMenuOpen(false)}>Gambling</a>
