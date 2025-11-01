@@ -426,6 +426,92 @@ export default function AIPage() {
         </div>
       </div>
 
+      {/* Use Cases Section */}
+      <div className="bg-gray-50 py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Built for AI <span className="text-blue-600">compliance teams</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 mb-4">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">AI Risk Assessment</h3>
+              <p className="text-gray-600">
+                Classify AI systems by risk level and track compliance obligations under the EU AI Act and other frameworks.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 mb-4">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Model Documentation</h3>
+              <p className="text-gray-600">
+                Maintain comprehensive AI model cards, technical documentation, and transparency requirements for regulators.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 mb-4">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Algorithmic Transparency</h3>
+              <p className="text-gray-600">
+                Document AI decision-making processes, explainability requirements, and transparency obligations.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 mb-4">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Data Governance</h3>
+              <p className="text-gray-600">
+                Track training data sources, privacy compliance requirements, and usage restrictions across jurisdictions.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 mb-4">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 16a9.065 9.065 0 0 1-6.23-.693L5 15.3m14.8 0 .504 1.512a1.93 1.93 0 0 1-1.293 2.42l-.6.15a9.06 9.06 0 0 1-4.411 0l-.6-.15a1.93 1.93 0 0 1-1.293-2.42l.504-1.512m14.8 0-2.55 6.4m-12.25-6.4-2.55 6.4" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Safety & Testing</h3>
+              <p className="text-gray-600">
+                Monitor AI safety requirements, testing protocols, validation standards, and conformity assessment obligations.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500 mb-4">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Bias Monitoring</h3>
+              <p className="text-gray-600">
+                Track fairness requirements, bias mitigation obligations, and non-discrimination standards for AI systems.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="bg-gray-900 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
