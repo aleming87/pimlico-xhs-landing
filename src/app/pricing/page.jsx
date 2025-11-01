@@ -238,7 +238,7 @@ export default function PricingPage() {
               />
               <FAQ 
                 question="Which regulatory domains and jurisdictions are covered?" 
-                answer="XHS™ provides comprehensive coverage of AI regulations (including EU AI Act, UK AI regulations, and NIST AI frameworks) and Payments regulations (PSD3, MiCA, PSR) across more than 90 jurisdictions worldwide. All plans include full access to both regulatory domains and all jurisdictions."
+                answer="XHS™ provides comprehensive coverage of AI regulations (including EU AI Act, UK AI regulations, and NIST AI frameworks), Payments regulations (PSD3, MiCA, PSR), and Gambling regulations (licensing, player protection, AML/CFT, advertising standards) across more than 90 jurisdictions worldwide. Professional plans provide access to selected domains and jurisdictions, while Team and Enterprise plans include full access to all regulatory domains and markets."
               />
               <FAQ 
                 question="What happens if I exceed my AI credit allocation?" 

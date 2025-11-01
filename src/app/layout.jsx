@@ -7,8 +7,8 @@ export const metadata = {
     template: '%s - Pimlico XHS',
     default: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
   },
-  description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI and Payments regulations across 90+ jurisdictions in real-time.',
-  keywords: ['regulatory compliance', 'AI compliance', 'payments regulation', 'EU AI Act', 'PSD3', 'MiCA', 'PSR', 'regulatory monitoring', 'compliance software', 'regulatory intelligence', 'regtech', 'compliance automation', 'regulatory technology', 'AI Act compliance', 'payments compliance'],
+  description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI, Payments, and Gambling regulations across 90+ jurisdictions in real-time.',
+  keywords: ['regulatory compliance', 'AI compliance', 'payments regulation', 'gambling compliance', 'EU AI Act', 'PSD3', 'MiCA', 'PSR', 'UKGC', 'gambling regulation', 'regulatory monitoring', 'compliance software', 'regulatory intelligence', 'regtech', 'compliance automation', 'regulatory technology', 'AI Act compliance', 'payments compliance', 'gaming compliance'],
   authors: [{ name: 'Pimlico XHS', url: 'https://pimlicosolutions.com' }],
   creator: 'Pimlico XHS',
   publisher: 'Pimlico XHS',
@@ -23,7 +23,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
-    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI and Payments regulations across 90+ jurisdictions.',
+    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI, Payments, and Gambling regulations across 90+ jurisdictions.',
     url: 'https://pimlicosolutions.com',
     siteName: 'Pimlico XHS',
     images: [
