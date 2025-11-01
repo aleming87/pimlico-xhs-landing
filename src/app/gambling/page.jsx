@@ -158,12 +158,12 @@ export default function GamblingPage() {
             <a href="/#use-cases" className="text-sm/6 font-semibold text-gray-900">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
-            <a href="/gambling" className="text-sm/6 font-semibold text-blue-600">Gambling</a>
+            <a href="/gambling" className="text-sm/6 font-semibold text-emerald-600">Gambling</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
             <a href="/#team" className="text-sm/6 font-semibold text-gray-900">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
+            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 hover:scale-105">
               Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
