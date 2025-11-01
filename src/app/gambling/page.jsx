@@ -155,8 +155,8 @@ export default function GamblingPage() {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
+            <a href="/" className="text-sm/6 font-semibold text-gray-900">Home</a>
             <a href="/#differentiators" className="text-sm/6 font-semibold text-gray-900">How it works</a>
-            <a href="/#use-cases" className="text-sm/6 font-semibold text-gray-900">Use cases</a>
             <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
             <a href="/gambling" className="text-sm/6 font-semibold text-emerald-600">Gambling</a>
@@ -194,8 +194,8 @@ export default function GamblingPage() {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
+                    <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Home</a>
                     <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>How it works</a>
-                    <a href="/#use-cases" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Use cases</a>
                     <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>AI</a>
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Payments</a>
                     <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Gambling</a>
