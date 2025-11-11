@@ -59,14 +59,14 @@ export default function Page() {
         <Hero />
         
         {/* Trusted by section */}
-        <div className="bg-white py-16 sm:py-20">
+        <div className="bg-white py-10 sm:py-12">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <h2 className="text-center text-sm font-semibold leading-8 text-gray-900">Trusted by</h2>
-            <div className="mx-auto mt-8 flex justify-center">
+            <div className="mx-auto mt-6 flex justify-center">
               <img
                 src="/Microsoft_logo_(2012).svg"
                 alt="Microsoft"
-                className="h-8 w-auto grayscale opacity-60 transition-opacity hover:opacity-100"
+                className="h-8 w-auto"
               />
             </div>
           </div>
