@@ -57,6 +57,23 @@ export default function Page() {
       />
       <main className="bg-white text-slate-900">
         <Hero />
+        
+        {/* Trusted by section */}
+        <div className="bg-gray-900 py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <h2 className="text-center text-lg/8 font-semibold text-white">Trusted by</h2>
+            <div className="mx-auto mt-10 flex justify-center items-center">
+              <img 
+                width="158" 
+                height="48" 
+                src="/Microsoft_logo_(2012).svg" 
+                alt="Microsoft" 
+                className="max-h-12 w-full object-contain" 
+              />
+            </div>
+          </div>
+        </div>
+
         <Differentiators />
         <DeploySection />
         
