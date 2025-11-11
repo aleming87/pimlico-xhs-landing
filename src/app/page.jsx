@@ -66,7 +66,7 @@ export default function Page() {
               <img
                 src="/Microsoft_logo_(2012).svg"
                 alt="Microsoft"
-                className="h-8 w-auto"
+                className="h-6 w-auto sm:h-8"
               />
             </div>
           </div>
