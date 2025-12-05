@@ -64,6 +64,7 @@ export default function TermsAndConditions() {
               <li><strong>"Materials"</strong> means all reports, dashboards, alerts, newsletters, data outputs, analyses, research, templates, written commentary and other content provided through the XHS™ Copilot or otherwise by Pimlico (excluding Customer Data).</li>
               <li><strong>"Online Order"</strong> means a subscription or purchase for the XHS™ Copilot placed through an online sign-up, in-app purchase flow or similar mechanism made available by Pimlico.</li>
               <li><strong>"Service Period"</strong> or <strong>"Subscription Term"</strong> means the initial term and any renewal term(s) for the XHS™ Copilot, as specified in the applicable Order Form or Online Order.</li>
+              <li><strong>"Service Level Agreement"</strong> or <strong>"SLA"</strong> means the service levels and support commitments set out in Schedule 1 (Service Level Agreement), as updated from time to time in accordance with these Terms.</li>
               <li><strong>"Services"</strong> means the XHS™ Copilot, any related APIs, professional services (including onboarding, configuration or bespoke research) and support services supplied by Pimlico under these Terms.</li>
               <li><strong>"AI Credit Usage Fees"</strong> means the usage-based fees payable by Customer for consumption of AI Credits beyond any AI Credit Allowance, as specified in the applicable Order Form or Online Order.</li>
               <li><strong>"Website"</strong> means any website operated by or on behalf of Pimlico through which the XHS™ Service or related information is made available.</li>
@@ -679,6 +680,11 @@ export default function TermsAndConditions() {
               <li>it is solely responsible for how it interprets and applies the Materials and outputs of the XHS™ Service; and</li>
               <li>it must not rely on the XHS™ Service as the sole basis for regulatory, legal or strategic decision-making.</li>
             </ul>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">15.5 Service levels</h3>
+            <p>
+              Customer's sole and exclusive remedy (and Pimlico's entire liability) in respect of any failure to meet the service levels or availability targets described in Schedule 1 (Service Level Agreement) is the award of any applicable service credits in accordance with that Schedule, in each case subject to the exclusions and procedures set out therein and to the overall limitations in this clause 15.
+            </p>
           </section>
 
           <hr className="my-12 border-gray-200" />
@@ -775,6 +781,216 @@ export default function TermsAndConditions() {
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.9 Governing law and jurisdiction</h3>
             <p>
               The Contract and any dispute or claim arising out of or in connection with it (including non-contractual disputes or claims) shall be governed by and construed in accordance with the laws of England and Wales, and the parties submit to the exclusive jurisdiction of the courts of England and Wales.
+            </p>
+          </section>
+
+          <hr className="my-12 border-gray-200" />
+
+          {/* Schedule 1 */}
+          <section>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">Schedule 1 – Service Level Agreement</h2>
+            <p className="mb-6">
+              This Schedule 1 (the <strong>"Service Level Agreement"</strong> or <strong>"SLA"</strong>) forms part of the Contract between Pimlico and Customer and sets out the service levels and support commitments that apply to the production XHS™ Service, subject to Customer's payment of all applicable fees in accordance with the Contract.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Scope and relationship with the Terms</h3>
+            
+            <p className="mb-3">
+              <strong>1.1</strong> This SLA applies only to the production instance of the XHS™ Service used by Customer under a paid Subscription Term. It does not apply to:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>any free trial, proof-of-concept, beta, pilot or early-access environment; or</li>
+              <li>any professional services, bespoke research or deliverables outside the XHS™ Service.</li>
+            </ul>
+
+            <p className="mb-3">
+              <strong>1.2</strong> If there is any conflict between this SLA and the main body of the Terms, the Terms shall prevail, except that this SLA governs:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>how service availability is measured; and</li>
+              <li>the calculation and application of any service credits.</li>
+            </ul>
+
+            <p className="mb-3">
+              <strong>1.3</strong> Service credits, where applicable, are not refundable in cash and may only be applied as a discount against future fees for the XHS™ Service. Service credits do not increase or alter the limitations of liability in clause 15 of the Terms.
+            </p>
+
+            <p className="mb-6">
+              <strong>1.4</strong> Customer's sole and exclusive remedy (and Pimlico's entire liability) in respect of any failure to meet the availability or service levels set out in this SLA is the award of service credits, in accordance with this Schedule and subject to the Contract.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Definitions (SLA)</h3>
+            <p className="mb-4">For the purposes of this Schedule:</p>
+            <ul className="space-y-3 ml-6 mb-6">
+              <li><strong>"Business Day"</strong> means Monday to Friday, excluding public holidays in England.</li>
+              <li><strong>"Business Hours"</strong> means 09:00–18:00 (UK time) on a Business Day.</li>
+              <li><strong>"Monthly Service Fee"</strong> means the subscription or base fee charged for the XHS™ Service for the relevant calendar month for the affected environment, excluding any usage-based AI Credit charges and any professional services or one-off fees.</li>
+              <li><strong>"Service Month"</strong> means a calendar month.</li>
+              <li>
+                <strong>"Service Availability"</strong> means the percentage of time in a Service Month during which the production XHS™ Service is available for Customer to send requests and receive responses at the service boundary, excluding Planned Maintenance and Excluded Events (as defined below).
+                <p className="mt-3 ml-6">Service Availability for a Service Month is calculated as:</p>
+                <p className="mt-2 ml-6 font-mono text-sm bg-gray-50 p-3 rounded">
+                  Service Availability (%) = [(Total minutes in the Service Month - Downtime) / Total minutes in the Service Month] × 100
+                </p>
+              </li>
+              <li><strong>"Downtime"</strong> means the total number of minutes during a Service Month when the production XHS™ Service is unavailable for Customer to send requests and receive responses at the service boundary, excluding Planned Maintenance and Excluded Events.</li>
+              <li><strong>"Planned Maintenance"</strong> means maintenance performed by Pimlico on the XHS™ Service during a notified maintenance window, as described in clause 3.2, and which is excluded from Downtime.</li>
+              <li><strong>"Excluded Events"</strong> has the meaning given in clause 3.3.</li>
+            </ul>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">3. Availability commitment</h3>
+            
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.1 Availability target</h4>
+            <p className="mb-3">
+              Pimlico will use commercially reasonable efforts to ensure that Service Availability for the production XHS™ Service is at least <strong>99.5%</strong> in each Service Month (the <strong>"Availability Commitment"</strong>).
+            </p>
+            <p className="mb-6">
+              Service Availability is measured using Pimlico's monitoring systems and, where applicable, third-party monitoring tools designated by Pimlico. Customer agrees that these measurements will be the authoritative source for determining Service Availability and any associated service credits.
+            </p>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.2 Planned Maintenance</h4>
+            <p className="mb-3">Pimlico may perform Planned Maintenance from time to time. Where reasonably practicable, Pimlico will:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>schedule Planned Maintenance outside Business Hours; and</li>
+              <li>provide at least 48 hours' prior notice to Customer by email or via the XHS™ Service interface.</li>
+            </ul>
+            <p className="mb-6">
+              Periods of Planned Maintenance are excluded from Downtime and do not reduce Service Availability for the purposes of this SLA.
+            </p>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.3 Excluded Events</h4>
+            <p className="mb-3">The following are <strong>"Excluded Events"</strong> and are not counted as Downtime and do not reduce Service Availability:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li>any failure or degradation of the XHS™ Service caused by Customer's or any third party's networks, infrastructure, hardware, software, VPNs, security controls, browser configuration or internet connectivity;</li>
+              <li>any misuse of the XHS™ Service, use in breach of the Terms or use contrary to the Documentation by Customer or its Authorised Users;</li>
+              <li>any beta, pilot, early-access or trial features or environments, including any XHS™ Copilot features designated as beta;</li>
+              <li>any suspension of the Services in accordance with the Terms (including for non-payment, misuse or security reasons);</li>
+              <li>any Force Majeure events (as described in clause 17 of the Terms);</li>
+              <li>any emergency maintenance required to address urgent security, stability or performance issues, provided Pimlico uses reasonable efforts to minimise the duration and impact;</li>
+              <li>issues caused by third-party services or providers (including cloud infrastructure providers, hosting providers or telecommunications providers) that are outside Pimlico's reasonable control; and</li>
+              <li>issues arising from Customer's configuration, integrations or changes to its own systems that affect access to or performance of the XHS™ Service.</li>
+            </ul>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">4. Service credits</h3>
+            
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.1 Eligibility and calculation</h4>
+            <p className="mb-3">
+              If, in a given Service Month, Service Availability for the production XHS™ Service falls below the Availability Commitment, Customer may be eligible for a service credit calculated as a percentage of the Monthly Service Fee for that Service Month, as set out below:
+            </p>
+            <div className="overflow-x-auto mb-4">
+              <table className="min-w-full border border-gray-300 mb-4">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Service Availability in a Service Month</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">Service credit (% of Monthly Service Fee)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-gray-300 px-4 py-2">≥ 99.5%</td>
+                    <td className="border border-gray-300 px-4 py-2">0%</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-4 py-2">≥ 99.0% and &lt; 99.5%</td>
+                    <td className="border border-gray-300 px-4 py-2">5%</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-4 py-2">≥ 98.0% and &lt; 99.0%</td>
+                    <td className="border border-gray-300 px-4 py-2">10%</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-4 py-2">&lt; 98.0%</td>
+                    <td className="border border-gray-300 px-4 py-2">20%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="mb-6">
+              The maximum total service credit for any Service Month is <strong>25% of the Monthly Service Fee</strong> for that Service Month.
+            </p>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.2 Application of service credits</h4>
+            <p className="mb-3">Service credits:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>will be applied as a credit against future invoices or card charges for the XHS™ Service;</li>
+              <li>may not be exchanged for cash or any other payment;</li>
+              <li>may not be transferred or applied to any other account or service; and</li>
+              <li>will expire if not used against future invoices within twelve (12) months of the date on which the credit is granted.</li>
+            </ul>
+            <p className="mb-6">
+              If the Contract ends before service credits have been fully used, any remaining credits shall be forfeited.
+            </p>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.3 Requesting service credits</h4>
+            <p className="mb-3">To be eligible for a service credit, Customer must submit a written request to Pimlico:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>by email to <strong>contact@pimlicosolutions.com</strong>; and</li>
+              <li>within 30 days after the end of the Service Month in which the relevant Downtime occurred.</li>
+            </ul>
+            <p className="mb-3">The request must include:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>Customer's name and primary contact details;</li>
+              <li>the dates and approximate times of each incident of suspected unavailability; and</li>
+              <li>reasonable supporting details (for example, screenshots or error messages) where available.</li>
+            </ul>
+            <p className="mb-3">
+              Pimlico will review the request using its monitoring records. If Pimlico determines that Customer is entitled to a service credit, Pimlico will apply the appropriate credit to Customer's next invoice or card charge for the XHS™ Service.
+            </p>
+            <p className="mb-6">
+              If Customer does not submit a request within the timeframe set out above, Customer waives any right to claim a service credit for the relevant Service Month.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">5. Support</h3>
+            
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.1 Support scope and hours</h4>
+            <p className="mb-3">Pimlico will provide support for the production XHS™ Service to Customer's designated contacts:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>during Business Hours; and</li>
+              <li>via email at <strong>contact@pimlicosolutions.com</strong> or via any in-product support channel identified in the Documentation.</li>
+            </ul>
+            <p className="mb-6">
+              Support is provided only to Customer's nominated contacts, not to Customer's end users or clients.
+            </p>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.2 Issue categories</h4>
+            <p className="mb-3">Pimlico will categorise support issues it receives, acting reasonably, as follows:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li><strong>Priority 1 – Critical:</strong> the production XHS™ Service is unavailable for all Authorised Users, or a critical function is materially inoperable with no reasonable workaround.</li>
+              <li><strong>Priority 2 – Major:</strong> significant degradation or impairment of the XHS™ Service affecting multiple users or key functionality, but the XHS™ Service remains usable and/or a reasonable workaround is available.</li>
+              <li><strong>Priority 3 – Standard:</strong> all other issues, including minor defects, cosmetic issues, how-to questions and feature requests.</li>
+            </ul>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.3 Target response times</h4>
+            <p className="mb-3">
+              During Business Hours, Pimlico will use commercially reasonable efforts to provide an initial response (acknowledgement and assignment, not necessarily a fix) within the following target times:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>Priority 1 – Critical: within 4 Business Hours;</li>
+              <li>Priority 2 – Major: within 1 Business Day;</li>
+              <li>Priority 3 – Standard: within 2 Business Days.</li>
+            </ul>
+            <p className="mb-6">
+              Pimlico will keep Customer reasonably informed of progress in resolving issues, but makes no guarantee as to resolution times.
+            </p>
+
+            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.4 Support exclusions</h4>
+            <p className="mb-3">Support under this SLA does not include:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>on-site services, implementation, configuration, custom development or training (unless separately agreed and charged);</li>
+              <li>support for Customer's own systems, infrastructure, networks, hardware, software or third-party services;</li>
+              <li>issues caused by modifications to the XHS™ Service not made or authorised by Pimlico; or</li>
+              <li>issues arising from use of the XHS™ Service in breach of the Terms or outside the scope of the Documentation.</li>
+            </ul>
+            <p className="mb-6">
+              Pimlico may, at its discretion, agree to provide additional support or professional services outside this SLA, which may be subject to additional fees.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">6. Miscellaneous (SLA)</h3>
+            <p className="mb-4">
+              <strong>6.1</strong> Pimlico may update this SLA from time to time to reflect changes in the XHS™ Service, provided that any such changes will not materially reduce the overall level of service available to Customer during the then-current Subscription Term. Any updated SLA will apply from the start of the next renewal Subscription Term unless a change is required earlier by law or regulation.
+            </p>
+            <p className="mb-6">
+              <strong>6.2</strong> This SLA is subject to, and shall be interpreted in accordance with, the Terms. Capitalised terms used but not defined in this Schedule have the meaning given to them in the Terms.
             </p>
           </section>
 
