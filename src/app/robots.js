@@ -3,7 +3,7 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/login'],
+      disallow: ['/api/', '/login', '/terms-and-conditions'],
     },
     sitemap: 'https://pimlicosolutions.com/sitemap.xml',
   };
