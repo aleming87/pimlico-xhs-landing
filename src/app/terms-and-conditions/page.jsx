@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Terms and Conditions - Pimlico XHS',
-  description: 'Terms and Conditions for Pimlico Solutions Ltd. Read our terms of service for using the XHS platform.',
+  title: 'Terms and Conditions - Pimlico Solutions',
+  description: 'Terms and Conditions for Pimlico Solutions Ltd. Read our terms of service for using the XHS Copilot platform.',
   robots: {
     index: false,
     follow: false,
@@ -19,24 +19,24 @@ export default function TermsAndConditions() {
         </div>
         
         <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          Pimlico XHS™ SaaS Terms and Conditions
+          Terms and Conditions
         </h1>
         
         <p className="mt-6 text-lg font-semibold text-gray-900">
-          Effective date: [●]
+          Effective date: December 1, 2025
         </p>
 
         <div className="mt-10 space-y-8 text-gray-700">
           <p>
-            These terms and conditions (the <strong>"Terms"</strong>) govern access to and use of the Pimlico XHS™ software-as-a-service platform, any related websites, APIs and interfaces, and any content, reports and deliverables made available through them (together, the <strong>"XHS™ Service"</strong>).
+            These terms and conditions (the <strong>"Terms"</strong>) govern access to and use of the Pimlico XHS™ software-as-a-service platform, any related websites, APIs and interfaces, and any content, reports and deliverables made available through them (together, the <strong>"XHS™ Copilot"</strong>).
           </p>
 
           <p>
-            The XHS™ Service is provided by <strong>Pimlico Solutions Limited</strong>, a company registered in England and Wales under company number <strong>16505294</strong>, with its registered office at <strong>71–75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ</strong> (<strong>"Pimlico"</strong>, <strong>"we"</strong>, <strong>"us"</strong>, <strong>"our"</strong>).
+            The XHS™ Copilot is provided by <strong>Pimlico Solutions Ltd.</strong>, a company registered in England and Wales under company number <strong>16505294</strong>, with its registered office at <strong>71–75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ</strong> (<strong>"Pimlico"</strong>, <strong>"we"</strong>, <strong>"us"</strong>, <strong>"our"</strong>).
           </p>
 
           <p>
-            These Terms are intended for business users only. By (i) signing an order form, statement of work or similar document that references these Terms (an <strong>"Order Form"</strong>), (ii) clicking "accept", "sign up" or a similar button, or (iii) accessing or using the XHS™ Service, you confirm that you are acting in the course of your trade, business or profession and agree to be bound by these Terms. If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have authority to bind that entity; in that case, <strong>"Customer"</strong>, <strong>"you"</strong> and <strong>"your"</strong> refer to that entity.
+            These Terms are intended for business users only. By (i) signing an order form, statement of work or similar document that references these Terms (an <strong>"Order Form"</strong>), (ii) clicking "accept", "sign up" or a similar button, or (iii) accessing or using the XHS™ Copilot, you confirm that you are acting in the course of your trade, business or profession and agree to be bound by these Terms. If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have authority to bind that entity; in that case, <strong>"Customer"</strong>, <strong>"you"</strong> and <strong>"your"</strong> refer to that entity.
           </p>
 
           <p>
@@ -730,7 +730,7 @@ export default function TermsAndConditions() {
           <hr className="my-12 border-gray-200" />
 
           <div className="mt-16 text-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} Pimlico Solutions Limited. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
             <p className="mt-2">Company Number: 16505294</p>
             <p className="mt-1">71–75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ</p>
           </div>
