@@ -183,7 +183,7 @@ export function Footer() {
                   <a href="/privacy" className="text-sm/6 text-gray-600 hover:text-gray-900">Privacy</a>
                 </li>
                 <li>
-                  <a href="/terms" className="text-sm/6 text-gray-600 hover:text-gray-900">Terms</a>
+                  <a href="/terms-and-conditions" className="text-sm/6 text-gray-600 hover:text-gray-900">Terms and Conditions</a>
                 </li>
               </ul>
             </div>
