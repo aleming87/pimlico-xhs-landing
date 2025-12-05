@@ -120,29 +120,56 @@ export default function TermsAndConditions() {
 
           {/* Section 3 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">3. Eligibility and customer information</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">3. Eligibility, authority and customer responsibilities</h2>
             
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.1 Business use only</h3>
             <p>
-              Customer warrants that it is entering into these Terms in the course of its trade, business or profession and not as a consumer.
+              Customer warrants that it is entering into these Terms in the course of its trade, business or profession and not as a consumer, and that it is acquiring the XHS™ Service solely for business and not for private or domestic use.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.2 Customer information</h3>
-            <p>
-              Customer warrants that all information it provides to Pimlico (including in any Order Form, Online Order or vendor set-up process) is true, accurate and complete, and will promptly update such information if it changes.
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.2 Authority and internal approvals</h3>
+            <p>Customer represents and warrants that:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>the individual accepting these Terms or signing the relevant Order Form has full authority to bind Customer to the Contract;</li>
+              <li>Customer has obtained all necessary corporate approvals and internal consents required to enter into and perform the Contract; and</li>
+              <li>entering into and performing the Contract will not cause Customer to breach any other agreement or obligation to which it is subject.</li>
+            </ul>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.3 Customer information and contacts</h3>
+            <p className="mb-3">
+              Customer warrants that all information it provides to Pimlico (including in any Order Form, Online Order, vendor set-up process or subsequent update) is true, accurate and complete, and will promptly update such information if it changes. This includes, without limitation:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>legal name and registered details of Customer;</li>
+              <li>billing and tax information (including any applicable VAT registration numbers); and</li>
+              <li>nominated administrative, technical and billing contacts for the XHS™ Service.</li>
+            </ul>
+            <p className="mt-4">
+              Customer is responsible for ensuring that its nominated contacts have the necessary authority to give instructions to Pimlico in relation to the Services.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.3 Compliance</h3>
-            <p>
-              Customer is responsible for complying with all applicable laws, rules and regulations in connection with its use of the XHS™ Service and Materials.
-            </p>
-
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.4 Responsibility for use</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.4 Compliance with laws and internal policies</h3>
             <p>Customer is responsible for:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
-              <li>all activities occurring under its accounts, whether by Authorised Users or otherwise; and</li>
-              <li>ensuring that its Authorised Users comply with these Terms and the Documentation.</li>
+              <li>complying with all applicable laws, rules and regulations in connection with its access to and use of the XHS™ Service and Materials, including any sector-specific rules that apply to its business (for example, financial services, gambling, payments, data protection or competition laws); and</li>
+              <li>determining how the XHS™ Service fits within its own internal policies, controls and governance frameworks (including, where relevant, model risk, operational resilience and outsourcing policies), and for configuring its use of the XHS™ Service accordingly.</li>
             </ul>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.5 Responsibility for accounts and Authorised Users</h3>
+            <p>Customer is responsible for:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>all activities occurring under its accounts, whether by Authorised Users or otherwise, and whether such use is authorised by Customer or not;</li>
+              <li>establishing and maintaining appropriate user access controls (including the allocation and revocation of roles and permissions for Authorised Users); and</li>
+              <li>ensuring that all Authorised Users are made aware of, and comply with, these Terms and the Documentation.</li>
+            </ul>
+            <p className="mt-4">
+              Customer shall promptly notify Pimlico if it becomes aware of any unauthorised access to the XHS™ Service, misuse of credentials or other security incident relating to its accounts.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.6 Third-party users</h3>
+            <p>
+              If Customer permits contractors, advisers or other third parties to act as Authorised Users, Customer remains responsible for their acts and omissions as if they were Customer's own employees and shall ensure that any such third parties use the XHS™ Service only for Customer's internal business purposes and in accordance with these Terms.
+            </p>
           </section>
 
           <hr className="my-12 border-gray-200" />
