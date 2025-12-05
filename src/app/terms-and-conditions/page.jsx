@@ -51,16 +51,22 @@ export default function TermsAndConditions() {
             <p className="mb-4">In these Terms:</p>
             <ul className="space-y-3 ml-6">
               <li><strong>"Affiliate"</strong> means any entity that directly or indirectly controls, is controlled by, or is under common control with a party, where "control" means ownership of more than 50% of the voting interests.</li>
-              <li><strong>"Authorised User"</strong> means an individual who is authorised by Customer to use the XHS™ Service under Customer's account, and to whom unique login credentials are supplied by Pimlico.</li>
+              <li><strong>"AI Credits"</strong> means the metered units used by Pimlico to measure usage of AI-powered functionality within the XHS™ Copilot (including, for example, automated monitoring, summarisation, classification, tagging, enrichment and delivery workflows, and associated API or integration calls).</li>
+              <li><strong>"AI Credit Allowance"</strong> means the number of AI Credits included in the Fees for a given period, as specified in the applicable Order Form or Online Order.</li>
+              <li><strong>"Authorised User"</strong> means an individual who is authorised by Customer to use the XHS™ Copilot under Customer's account, and to whom unique login credentials are supplied by Pimlico.</li>
+              <li><strong>"Beta Customer"</strong> means a Customer that is expressly identified as participating in a beta, pilot or early-access programme for the XHS™ Copilot in an Order Form or similar document.</li>
+              <li><strong>"Beta Period"</strong> means, for a Beta Customer, the period of up to six (6) months from the Service start date (or such other period expressly stated in the Order Form) during which AI Credit Usage Fees and AI Credit overage charges are waived in accordance with clause 8.4.</li>
               <li><strong>"Contract"</strong> means the legally binding agreement between Pimlico and Customer formed in accordance with clause 4.</li>
-              <li><strong>"Customer Data"</strong> means any data, content, documents, configuration, prompts, queries or other information submitted to, stored within or generated within the XHS™ Service by or on behalf of Customer or its Authorised Users (including personal data relating to Customer's employees, clients or other contacts).</li>
-              <li><strong>"Documentation"</strong> means any user guides, technical documentation, onboarding materials and usage policies for the XHS™ Service made available by Pimlico, as updated from time to time.</li>
+              <li><strong>"Customer Data"</strong> means any data, content, documents, configuration, prompts, queries or other information submitted to, stored within or generated within the XHS™ Copilot by or on behalf of Customer or its Authorised Users (including personal data relating to Customer's employees, clients or other contacts).</li>
+              <li><strong>"Documentation"</strong> means any user guides, technical documentation, onboarding materials and usage policies for the XHS™ Copilot made available by Pimlico, as updated from time to time.</li>
+              <li><strong>"General Release"</strong> means the date on which Pimlico designates a version of the XHS™ Copilot (or relevant module) as generally available for production use outside the applicable beta, pilot or early-access programme.</li>
               <li><strong>"Intellectual Property Rights"</strong> or <strong>"IPR"</strong> means patents, rights to inventions, copyright and related rights, trade marks, trade names, domain names, rights in get-up, goodwill, rights in designs, database rights, confidential information, and all similar or equivalent rights existing anywhere in the world, whether registered or unregistered.</li>
-              <li><strong>"Materials"</strong> means all reports, dashboards, alerts, newsletters, data outputs, analyses, research, templates, written commentary and other content provided through the XHS™ Service or otherwise by Pimlico (excluding Customer Data).</li>
-              <li><strong>"Online Order"</strong> means a subscription or purchase for the XHS™ Service placed through an online sign-up, in-app purchase flow or similar mechanism made available by Pimlico.</li>
-              <li><strong>"Service Period"</strong> or <strong>"Subscription Term"</strong> means the initial term and any renewal term(s) for the XHS™ Service, as specified in the applicable Order Form or Online Order.</li>
-              <li><strong>"Services"</strong> means the XHS™ Service, any related APIs, professional services (including onboarding, configuration or bespoke research) and support services supplied by Pimlico under these Terms.</li>
-              <li><strong>"Website"</strong> means any website operated by or on behalf of Pimlico through which the XHS™ Service or related information is made available.</li>
+              <li><strong>"Materials"</strong> means all reports, dashboards, alerts, newsletters, data outputs, analyses, research, templates, written commentary and other content provided through the XHS™ Copilot or otherwise by Pimlico (excluding Customer Data).</li>
+              <li><strong>"Online Order"</strong> means a subscription or purchase for the XHS™ Copilot placed through an online sign-up, in-app purchase flow or similar mechanism made available by Pimlico.</li>
+              <li><strong>"Service Period"</strong> or <strong>"Subscription Term"</strong> means the initial term and any renewal term(s) for the XHS™ Copilot, as specified in the applicable Order Form or Online Order.</li>
+              <li><strong>"Services"</strong> means the XHS™ Copilot, any related APIs, professional services (including onboarding, configuration or bespoke research) and support services supplied by Pimlico under these Terms.</li>
+              <li><strong>"AI Credit Usage Fees"</strong> means the usage-based fees payable by Customer for consumption of AI Credits beyond any AI Credit Allowance, as specified in the applicable Order Form or Online Order.</li>
+              <li><strong>"Website"</strong> means any website operated by or on behalf of Pimlico through which the XHS™ Copilot or related information is made available.</li>
             </ul>
           </section>
 
@@ -70,27 +76,38 @@ export default function TermsAndConditions() {
           <section>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">2. Scope of services</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.1 Nature of the XHS™ Service</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.1 Nature of the XHS™ Copilot</h3>
             <p>
               XHS™ is a subscription-based platform providing regulatory and market intelligence, workflow tools and analytical functionality. The precise modules, features, usage limits and Authorised User numbers purchased by Customer are set out in the applicable Order Form or Online Order and any accompanying service description.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.2 Access methods</h3>
             <p>
-              Customer may access the XHS™ Service via web interfaces, APIs, agents, integrations or other methods described in the Documentation.
+              Customer may access the XHS™ Copilot via web interfaces, APIs, agents, integrations or other methods described in the Documentation.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.3 No legal or professional advice</h3>
             <p>
-              The Materials and outputs of the XHS™ Service are for general information only. They do not constitute legal, financial, regulatory or other professional advice, and should not be relied on as a definitive or complete statement of law, regulation or risk. Customer remains solely responsible for obtaining appropriate professional advice and making its own decisions.
+              The Materials and outputs of the XHS™ Copilot are for general information only. They do not constitute legal, financial, regulatory or other professional advice, and should not be relied on as a definitive or complete statement of law, regulation or risk. Customer remains solely responsible for obtaining appropriate professional advice and making its own decisions.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.4 Support and service levels</h3>
             <p>Unless expressly stated otherwise in an Order Form:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
-              <li>Pimlico will provide reasonable remote support during normal business hours for issues relating to the XHS™ Service; and</li>
+              <li>Pimlico will provide reasonable remote support during normal business hours for issues relating to the XHS™ Copilot; and</li>
               <li>any uptime, response-time or service credit commitments will be as expressly set out in the Order Form or a separate service level agreement (if any). Any service credits specified in such documents shall be Customer's sole and exclusive remedy for service availability or performance issues.</li>
             </ul>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.5 Beta programme and General Release</h3>
+            <p>Where Customer is a Beta Customer:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>during the Beta Period, Pimlico will make the relevant XHS™ Copilot functionality available on a beta, pilot or early-access basis and may change, suspend or withdraw such functionality at any time;</li>
+              <li>during the Beta Period, there will be no contractual limit on the number of Authorised Users or monitored jurisdictions that may access or use the XHS™ Copilot for Customer's internal business purposes, provided Customer's use remains reasonable and in accordance with these Terms; and</li>
+              <li>Customer's use of AI-powered functionality during the Beta Period will be measured in AI Credits but AI Credit Usage Fees and associated overage charges for such usage will be waived in accordance with clause 8.4.</li>
+            </ul>
+            <p className="mt-3">
+              Pimlico will notify the Beta Customer when the relevant functionality moves to General Release. From the effective date of General Release, the charging of AI Credit Usage Fees will commence or continue in accordance with clause 8 and the applicable Order Form.
+            </p>
           </section>
 
           <hr className="my-12 border-gray-200" />
@@ -289,10 +306,10 @@ export default function TermsAndConditions() {
             <p>Fees for the Services are set out in the Order Form, Online Order or applicable plan description and, unless stated otherwise, are:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>exclusive of VAT and any other applicable taxes, which shall be added at the appropriate rate; and</li>
-              <li>based on the modules, usage tiers, Authorised User numbers and/or other metrics specified in the Order Form or plan.</li>
+              <li>based on (i) subscription or base fees for access to the XHS™ Copilot and its modules, and (ii) usage-based AI Credit charges, together with any other metrics specified in the Order Form or plan.</li>
             </ul>
             <p className="mt-3">
-              Where Customer exceeds agreed usage limits, Pimlico may charge additional fees at the overage rates set out in the Order Form or otherwise notified to Customer.
+              Where Customer exceeds any agreed usage parameters or AI Credit Allowance, Pimlico may charge additional fees at the overage rates set out in the Order Form or otherwise notified to Customer.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.2 Subscription commitment and auto-renewal</h3>
@@ -306,20 +323,37 @@ export default function TermsAndConditions() {
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.3 Payment method and timing (card, monthly)</h3>
             <p>Unless the Order Form expressly states different billing terms:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
-              <li>fees for each Subscription Term are payable in twelve (12) equal monthly instalments in advance, or such other number of instalments as corresponds to the length of the Subscription Term stated in the Order Form;</li>
+              <li>fees for each Subscription Term are payable in equal monthly instalments in advance, calculated by dividing the total subscription or base fees for the Subscription Term by the number of months in that term;</li>
               <li>the first monthly instalment is due and will be charged on the date the Customer signs the relevant Order Form or completes the Online Order (as applicable);</li>
               <li>subsequent monthly instalments will be charged automatically on or around the same calendar day each month during the Subscription Term (or, where the month has no such day, on the last day of that month); and</li>
               <li>by providing card details, the Customer represents that it is authorised to use the relevant card and authorises Pimlico and its third-party payment processors to charge all amounts due under the Contract on a recurring basis using that card (or any replacement card the Customer later provides).</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.4 Changes during the Subscription Term</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.4 AI Credit charging model</h3>
+            <p>AI Credits are used to measure Customer's usage of AI-powered functionality within the XHS™ Copilot. Unless the Order Form states otherwise:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>an AI Credit Allowance for a given period (for example, per month) will be set out in the Order Form or applicable plan description;</li>
+              <li>where Customer's AI Credit consumption in that period exceeds the AI Credit Allowance, AI Credit Usage Fees will apply to the excess usage at the rates specified in the Order Form or applicable plan description;</li>
+              <li>Pimlico will make reasonable usage and consumption information available to Customer via the XHS™ Copilot or other reporting mechanism so that Customer can monitor its AI Credit consumption; and</li>
+              <li>AI Credit Allowances, rate cards and overage pricing may be updated by Pimlico for any renewal Subscription Term in accordance with clause 8.9.</li>
+            </ul>
+            <p className="mt-3">For Beta Customers, during the Beta Period:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>AI Credit consumption will continue to be measured and reported, but AI Credit Usage Fees and overage charges for AI Credit consumption will be waived; and</li>
+              <li>all other fees set out in the Order Form, including any subscription or base fees, remain payable.</li>
+            </ul>
+            <p className="mt-3">
+              From the earlier of (a) the end of the Beta Period or (b) the applicable General Release date notified by Pimlico, AI Credit Usage Fees and overage charges will become payable in accordance with the Order Form and this clause 8.4.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.5 Changes during the Subscription Term</h3>
             <p>If the Customer upgrades its plan, adds modules or increases the number of Authorised Users or other billable units during a Subscription Term, Pimlico may:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>increase the monthly instalments for the remainder of that Subscription Term to reflect the new scope; and</li>
               <li>where applicable, charge a pro-rated amount for the period from the date of the change to the next billing date.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.5 Card failures and alternative payment</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.6 Card failures and alternative payment</h3>
             <p>The Customer must ensure that its payment card details remain valid and that sufficient funds are available. If a card payment fails:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>Pimlico may notify the Customer and request updated payment details;</li>
@@ -327,27 +361,27 @@ export default function TermsAndConditions() {
               <li>Pimlico may, if payment has not been successfully taken within 7 days of the due date, suspend access to the Services until payment is received in cleared funds.</li>
             </ul>
             <p className="mt-3">
-              Pimlico may, at its discretion, agree to accept payment by invoice and bank transfer for some or all fees, in which case the due date for such invoice(s) shall be as stated on the invoice and interest may accrue under clause 8.6.
+              Pimlico may, at its discretion, agree to accept payment by invoice and bank transfer for some or all fees, in which case the due date for such invoice(s) shall be as stated on the invoice and interest may accrue under clause 8.7.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.6 Late payment and interest</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.7 Late payment and interest</h3>
             <p>Without prejudice to Pimlico's other rights:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>Pimlico may charge interest on any overdue amount that is not collected by card on the due date at the rate of 5% per annum above the Bank of England base rate, accruing daily from the due date until payment is received in full; and</li>
-              <li>Pimlico may suspend access to the Services under clause 8.5 and/or clause 9.5 where undisputed amounts remain unpaid.</li>
+              <li>Pimlico may suspend access to the Services under clause 8.6 and/or clause 9.5 where undisputed amounts remain unpaid.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.7 Taxes</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.8 Taxes</h3>
             <p>
               The Customer is responsible for all applicable taxes arising out of the Contract, other than Pimlico's own corporation tax. If any withholding or deduction is required by law, the Customer shall increase the amount it pays such that Pimlico receives the full amount it would have received had no withholding or deduction been required.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.8 Price changes and renewals</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.9 Price changes and renewals</h3>
             <p>
-              Pimlico may adjust pricing for any renewal Subscription Term by notifying the Customer in writing at least 60 days prior to the end of the then-current Subscription Term. If the Customer does not wish to renew at the updated price, it may choose not to renew in accordance with clause 9.1.
+              Pimlico may adjust pricing, including subscription or base fees, AI Credit Allowances and AI Credit Usage Fees, for any renewal Subscription Term by notifying the Customer in writing at least 60 days prior to the end of the then-current Subscription Term. If the Customer does not wish to renew at the updated price, it may choose not to renew in accordance with clause 9.1.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.9 Non-payment and refunds</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.10 Non-payment and refunds</h3>
             <p>
               Pimlico reserves the right to deny or suspend access to any Services for which fees and applicable taxes have not been received in cleared funds. Except as expressly stated in these Terms or the Order Form, all fees are non-cancellable and non-refundable, irrespective of actual usage.
             </p>
@@ -544,7 +578,7 @@ export default function TermsAndConditions() {
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.3 Beta or trial features</h3>
             <p>
-              From time to time, Pimlico may make preview, beta or trial features or modules of the XHS™ Service available. Such features are provided "as is" without warranty, may be withdrawn or modified at any time and are not subject to any service level or support commitments.
+              From time to time, Pimlico may make preview, beta or trial features or modules of the XHS™ Copilot (including AI-powered functionality measured in AI Credits) available. Such features are provided "as is" without warranty, may be changed, suspended or withdrawn at any time and are not subject to any service level or support commitments. For Beta Customers, the Beta Period and any waiver of AI Credit Usage Fees are as described in clauses 1 and 8.4. All other Terms continue to apply in full during any beta, pilot or early-access use.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.4 Exclusions</h3>
