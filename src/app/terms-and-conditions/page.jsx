@@ -88,18 +88,13 @@ export default function TermsAndConditions() {
               Customer may access the XHS™ Copilot via web interfaces, APIs, agents, integrations or other methods described in the Documentation.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.3 AI-native nature; XHS™ Copilot and no legal or professional advice</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.3 AI features in the XHS™ Service</h3>
             <p>
-              Customer acknowledges that the XHS™ Service is an AI-native product that uses machine learning models and related techniques to generate, transform and prioritise content. Outputs are generated probabilistically and may be incomplete, incorrect, inconsistent, misleading or out of date.
+              Customer acknowledges that the XHS™ Service (including any XHS™ Copilot features) uses artificial intelligence and related techniques to assist with searching, analysing and presenting information. While Pimlico aims to provide high-quality outputs, the XHS™ Service is intended as a decision-support tool and does not replace Customer's own judgement or the need for independent professional advice.
             </p>
             <p className="mt-3">
-              The Materials and outputs of the XHS™ Service are provided for general information only. They do not constitute legal, financial, regulatory, tax or other professional advice, and should not be relied on as a definitive or complete statement of law, regulation or risk. Customer remains solely responsible for:
+              The Materials and outputs of the XHS™ Service are provided for general information only and do not constitute legal, financial, regulatory, tax or other professional advice. Customer remains responsible for assessing whether any output is appropriate for its purposes, and for verifying information that is important to its business before relying on it or acting on it.
             </p>
-            <ul className="list-disc ml-6 mt-3 space-y-2">
-              <li>verifying the accuracy, completeness and appropriateness of any outputs before relying on them;</li>
-              <li>obtaining independent professional advice where required; and</li>
-              <li>making its own decisions based on its own judgement and that advice.</li>
-            </ul>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.4 Support and service levels</h3>
             <p>Unless expressly stated otherwise in an Order Form:</p>
