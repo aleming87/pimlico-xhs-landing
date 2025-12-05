@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Terms and Conditions - Pimlico Solutions',
-  description: 'Terms and Conditions for Pimlico Solutions Ltd. Read our terms of service for using the XHS Copilot platform.',
+  description: 'Terms and Conditions for Pimlico Solutions Ltd. Read our terms of service for using the XHS Service platform.',
   robots: {
     index: false,
     follow: false,
@@ -28,15 +28,15 @@ export default function TermsAndConditions() {
 
         <div className="mt-10 space-y-8 text-gray-700">
           <p>
-            These terms and conditions (the <strong>"Terms"</strong>) govern access to and use of the Pimlico XHS™ software-as-a-service platform, any related websites, APIs and interfaces, and any content, reports and deliverables made available through them (together, the <strong>"XHS™ Copilot"</strong>).
+            These terms and conditions (the <strong>"Terms"</strong>) govern access to and use of the Pimlico XHS™ software-as-a-service platform, any related websites, APIs and interfaces, and any content, reports and deliverables made available through them (together, the <strong>"XHS™ Service"</strong>).
           </p>
 
           <p>
-            The XHS™ Copilot is provided by <strong>Pimlico Solutions Ltd.</strong>, a company registered in England and Wales under company number <strong>16505294</strong>, with its registered office at <strong>71–75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ</strong> (<strong>"Pimlico"</strong>, <strong>"we"</strong>, <strong>"us"</strong>, <strong>"our"</strong>).
+            The XHS™ Service is provided by <strong>Pimlico Solutions Ltd.</strong>, a company registered in England and Wales under company number <strong>16505294</strong>, with its registered office at <strong>71–75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ</strong> (<strong>"Pimlico"</strong>, <strong>"we"</strong>, <strong>"us"</strong>, <strong>"our"</strong>).
           </p>
 
           <p>
-            These Terms are intended for business users only. By (i) signing an order form, statement of work or similar document that references these Terms (an <strong>"Order Form"</strong>), (ii) clicking "accept", "sign up" or a similar button, or (iii) accessing or using the XHS™ Copilot, you confirm that you are acting in the course of your trade, business or profession and agree to be bound by these Terms. If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have authority to bind that entity; in that case, <strong>"Customer"</strong>, <strong>"you"</strong> and <strong>"your"</strong> refer to that entity.
+            These Terms are intended for business users only. By (i) signing an order form, statement of work or similar document that references these Terms (an <strong>"Order Form"</strong>), (ii) clicking "accept", "sign up" or a similar button, or (iii) accessing or using the XHS™ Service, you confirm that you are acting in the course of your trade, business or profession and agree to be bound by these Terms. If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have authority to bind that entity; in that case, <strong>"Customer"</strong>, <strong>"you"</strong> and <strong>"your"</strong> refer to that entity.
           </p>
 
           <p>
@@ -66,7 +66,9 @@ export default function TermsAndConditions() {
               <li><strong>"Service Period"</strong> or <strong>"Subscription Term"</strong> means the initial term and any renewal term(s) for the XHS™ Copilot, as specified in the applicable Order Form or Online Order.</li>
               <li><strong>"Services"</strong> means the XHS™ Copilot, any related APIs, professional services (including onboarding, configuration or bespoke research) and support services supplied by Pimlico under these Terms.</li>
               <li><strong>"AI Credit Usage Fees"</strong> means the usage-based fees payable by Customer for consumption of AI Credits beyond any AI Credit Allowance, as specified in the applicable Order Form or Online Order.</li>
-              <li><strong>"Website"</strong> means any website operated by or on behalf of Pimlico through which the XHS™ Copilot or related information is made available.</li>
+              <li><strong>"Website"</strong> means any website operated by or on behalf of Pimlico through which the XHS™ Service or related information is made available.</li>
+              <li><strong>"XHS™ Service"</strong> means the Pimlico XHS™ software-as-a-service platform, including all modules, features, APIs, interfaces and related services supplied by Pimlico under these Terms.</li>
+              <li><strong>"XHS™ Copilot"</strong> means any conversational, assistant, agentic or similar AI-powered functionality made available by Pimlico as part of the XHS™ Service (including any plans or tiers branded as "XHS™ Copilot"). For the purposes of these Terms, XHS™ Copilot forms part of the XHS™ Service and is not a separate service.</li>
             </ul>
           </section>
 
@@ -86,10 +88,18 @@ export default function TermsAndConditions() {
               Customer may access the XHS™ Copilot via web interfaces, APIs, agents, integrations or other methods described in the Documentation.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.3 No legal or professional advice</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.3 AI-native nature; XHS™ Copilot and no legal or professional advice</h3>
             <p>
-              The Materials and outputs of the XHS™ Copilot are for general information only. They do not constitute legal, financial, regulatory or other professional advice, and should not be relied on as a definitive or complete statement of law, regulation or risk. Customer remains solely responsible for obtaining appropriate professional advice and making its own decisions.
+              Customer acknowledges that the XHS™ Service is an AI-native product that uses machine learning models and related techniques to generate, transform and prioritise content. Outputs are generated probabilistically and may be incomplete, incorrect, inconsistent, misleading or out of date.
             </p>
+            <p className="mt-3">
+              The Materials and outputs of the XHS™ Service are provided for general information only. They do not constitute legal, financial, regulatory, tax or other professional advice, and should not be relied on as a definitive or complete statement of law, regulation or risk. Customer remains solely responsible for:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>verifying the accuracy, completeness and appropriateness of any outputs before relying on them;</li>
+              <li>obtaining independent professional advice where required; and</li>
+              <li>making its own decisions based on its own judgement and that advice.</li>
+            </ul>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.4 Support and service levels</h3>
             <p>Unless expressly stated otherwise in an Order Form:</p>
@@ -398,7 +408,7 @@ export default function TermsAndConditions() {
               The Subscription Term is as stated in the Order Form or Online Order. If no period is stated, the Subscription Term is twelve (12) months from the date the Customer signs the relevant Order Form or completes the Online Order (as applicable).
             </p>
             <p className="mt-3">
-              At the end of each Subscription Term, the subscription will automatically renew for a further Subscription Term of the same length, unless either party gives the other at least 60 days' written notice of non-renewal before the end of the then-current Subscription Term.
+              At the end of each Subscription Term, the subscription will automatically renew for a further Subscription Term of the same length, unless either party gives the other at least 30 days' written notice of non-renewal before the end of the then-current Subscription Term.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.2 Termination for convenience (where allowed)</h3>
@@ -597,6 +607,18 @@ export default function TermsAndConditions() {
               <li>its use of the Services and the Customer Data will not infringe any third-party rights or violate any applicable law; and</li>
               <li>it will use reasonable professional standards in relying on and applying outputs from the XHS™ Service, and will not treat any Materials as a substitute for independent professional advice.</li>
             </ul>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.6 AI-specific disclaimers</h3>
+            <p>Customer acknowledges and agrees that:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2">
+              <li>the XHS™ Service uses artificial intelligence and machine learning models, which by their nature may generate outputs that are incorrect, incomplete, biased, offensive or otherwise unsuitable;</li>
+              <li>Pimlico does not guarantee that any particular output will be accurate, complete, lawful, free from third-party rights, or suitable for any specific use case;</li>
+              <li>the same or similar outputs may be generated for other customers or users; and</li>
+              <li>Customer is solely responsible for reviewing, testing and validating outputs and for implementing appropriate human review, quality control and approval processes before using any outputs in its business, providing them to third parties or relying on them for any decisions.</li>
+            </ul>
+            <p className="mt-4">
+              Without limiting clauses 13.4 and 15, Pimlico shall have no liability for any loss or damage arising from Customer's or any third party's use of, reliance on, or actions taken in response to, any output generated or delivered by the XHS™ Service, except to the extent that such liability cannot lawfully be excluded and in all cases subject to the limitations set out in clause 15.
+            </p>
           </section>
 
           <hr className="my-12 border-gray-200" />
@@ -773,3 +795,4 @@ export default function TermsAndConditions() {
     </div>
   )
 }
+
