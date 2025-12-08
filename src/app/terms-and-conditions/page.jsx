@@ -25,6 +25,9 @@ export default function TermsAndConditions() {
         <p className="mt-6 text-lg font-semibold text-gray-900">
           Effective date: December 1, 2025
         </p>
+        <p className="mt-2 text-base text-gray-600">
+          Last updated: December 8, 2025
+        </p>
 
         <div className="mt-10 space-y-8 text-gray-700">
           <p>
@@ -1071,25 +1074,309 @@ export default function TermsAndConditions() {
           <section>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">Schedule 2 – Data Processing Addendum</h2>
             
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <p className="text-sm text-gray-700 mb-4">
-                <strong>Note:</strong> This Schedule is referenced in clause 12.2. A full Data Processing Addendum (DPA) should be inserted here, covering at least:
-              </p>
-              <ul className="list-disc ml-6 space-y-1 text-sm text-gray-700">
-                <li>roles of the parties,</li>
-                <li>subject-matter and duration of processing,</li>
-                <li>categories of data and data subjects,</li>
-                <li>sub-processors,</li>
-                <li>international transfers,</li>
-                <li>security measures,</li>
-                <li>breach notification,</li>
-                <li>assistance with data subject rights, and</li>
-                <li>deletion/return of data on termination.</li>
-              </ul>
-              <p className="text-sm text-gray-700 mt-4 italic">
-                [To be completed as a separate document or integrated here in full.]
-              </p>
-            </div>
+            <p className="mb-6">
+              This Data Processing Addendum (the <strong>"DPA"</strong>) forms part of, and is incorporated into, the Contract between Pimlico and Customer. Capitalised terms used but not defined in this DPA have the meaning given to them in the Terms.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Scope and roles</h3>
+            
+            <p className="mb-3">
+              <strong>1.1</strong> This DPA applies to the extent Pimlico processes Personal Data on behalf of Customer in the course of providing the XHS™ Service and related Services under the Contract.
+            </p>
+            
+            <p className="mb-3">
+              <strong>1.2</strong> For the purposes of applicable Data Protection Laws:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>Customer is the controller (or, where Customer itself acts as a processor, "controller" in this DPA shall be interpreted as a reference to the relevant controller on whose behalf Customer acts); and</li>
+              <li>Pimlico is the processor in respect of such Personal Data.</li>
+            </ul>
+
+            <p className="mb-6">
+              <strong>1.3</strong> The subject-matter, duration, nature and purpose of the processing, the types of Personal Data and categories of data subjects are described in Annex 1 (Processing Details).
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Definitions (DPA)</h3>
+            
+            <p className="mb-4">In this DPA:</p>
+            <ul className="space-y-3 ml-6 mb-6">
+              <li><strong>"Data Protection Laws"</strong> means all applicable laws and regulations relating to the processing of Personal Data and privacy, including (where applicable) the UK GDPR, the Data Protection Act 2018, the EU General Data Protection Regulation (EU) 2016/679 and any national laws implementing or supplementing any of the foregoing.</li>
+              <li><strong>"Personal Data"</strong> means any information relating to an identified or identifiable natural person that is processed by Pimlico on behalf of Customer in connection with the provision of the Services.</li>
+              <li><strong>"Personal Data Breach"</strong> means a personal data breach as defined in the UK GDPR or other applicable Data Protection Laws.</li>
+              <li><strong>"Sub-processor"</strong> means another processor engaged by Pimlico to process Personal Data on behalf of Customer.</li>
+              <li><strong>"UK GDPR"</strong> means the General Data Protection Regulation as it forms part of the law of England and Wales, Scotland and Northern Ireland by virtue of section 3 of the European Union (Withdrawal) Act 2018.</li>
+            </ul>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">3. Customer instructions</h3>
+            
+            <p className="mb-3">
+              <strong>3.1</strong> Pimlico shall process Personal Data only:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>on the documented instructions of Customer (including as set out in the Contract and this DPA); and</li>
+              <li>as required to comply with applicable laws, in which case Pimlico shall (to the extent legally permitted) inform Customer of that legal requirement before processing.</li>
+            </ul>
+
+            <p className="mb-3">
+              <strong>3.2</strong> Customer instructs Pimlico to process Personal Data:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>to provide, operate and support the XHS™ Service and related Services as described in the Contract;</li>
+              <li>to perform its obligations and exercise its rights under the Contract; and</li>
+              <li>as further documented in Annex 1 and any additional written instructions that Customer may reasonably give from time to time (provided such instructions are consistent with the Contract and this DPA).</li>
+            </ul>
+
+            <p className="mb-6">
+              <strong>3.3</strong> If Pimlico considers that an instruction from Customer infringes Data Protection Laws, Pimlico shall inform Customer without undue delay. Pimlico shall be entitled to suspend the relevant processing until Customer has modified or confirmed the instruction in a manner that does not infringe Data Protection Laws.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">4. Customer responsibilities</h3>
+            
+            <p className="mb-3">
+              <strong>4.1</strong> Customer is responsible for:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>ensuring that it has a lawful basis under Data Protection Laws for the processing of Personal Data and for the instructions it gives to Pimlico;</li>
+              <li>providing all required notices to data subjects and obtaining all necessary consents (where required) in connection with the collection and use of Personal Data;</li>
+              <li>the accuracy, quality and lawfulness of Personal Data and the means by which Personal Data is acquired; and</li>
+              <li>ensuring that the processing described in the Contract and this DPA is covered by an appropriate record of processing activities (where required by Data Protection Laws).</li>
+            </ul>
+
+            <p className="mb-6">
+              <strong>4.2</strong> Customer shall not instruct Pimlico to process any special categories of data or criminal offence data (as defined in Data Protection Laws) unless expressly agreed in writing.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">5. Confidentiality</h3>
+            
+            <p className="mb-6">
+              <strong>5.1</strong> Pimlico shall ensure that any person authorised to process Personal Data on its behalf is subject to a duty of confidentiality (whether contractual or statutory) in respect of that processing.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">6. Security</h3>
+            
+            <p className="mb-3">
+              <strong>6.1</strong> Pimlico shall implement and maintain appropriate technical and organisational measures to protect Personal Data against accidental or unlawful destruction, loss, alteration, unauthorised disclosure of, or access to, Personal Data, having regard to:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>the nature, scope, context and purposes of the processing;</li>
+              <li>the type of Personal Data processed; and</li>
+              <li>the risks to the rights and freedoms of natural persons.</li>
+            </ul>
+
+            <p className="mb-6">
+              <strong>6.2</strong> Pimlico's current technical and organisational measures are described at a high level in the Security Overview or similar documentation made available by Pimlico on request or via the XHS™ website, as updated from time to time. Updates to such documentation will not materially reduce the overall level of protection for Personal Data during the then-current Subscription Term.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">7. Sub-processors</h3>
+            
+            <p className="mb-3">
+              <strong>7.1</strong> Customer authorises Pimlico to appoint Sub-processors to process Personal Data on its behalf, provided that Pimlico:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>imposes on each Sub-processor data protection obligations that are no less protective than those set out in this DPA; and</li>
+              <li>remains liable to Customer for the performance of each Sub-processor's obligations in relation to the processing of Personal Data.</li>
+            </ul>
+
+            <p className="mb-4">
+              <strong>7.2</strong> Pimlico shall maintain a list of current Sub-processors for the XHS™ Service and make this available to Customer on request or via the XHS™ website. Pimlico may update this list from time to time.
+            </p>
+
+            <p className="mb-6">
+              <strong>7.3</strong> Where required by applicable Data Protection Laws, Pimlico shall provide Customer with advance notice of any intended changes concerning the addition or replacement of Sub-processors that process Personal Data. Customer may object to such changes on reasonable data protection grounds by notifying Pimlico in writing within ten (10) Business Days of receiving the notice. If Customer reasonably objects and the parties are unable to agree on an alternative solution within a reasonable period, either party may terminate the affected Services on written notice, without penalty, and Pimlico shall refund any pre-paid fees for the unused portion of the Subscription Term for those Services.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">8. International transfers</h3>
+            
+            <p className="mb-4">
+              <strong>8.1</strong> Pimlico may transfer Personal Data to, and process Personal Data in, countries outside the United Kingdom and/or European Economic Area, provided that such transfers comply with Data Protection Laws.
+            </p>
+
+            <p className="mb-3">
+              <strong>8.2</strong> Where Personal Data is transferred outside the United Kingdom and/or European Economic Area to a country that is not the subject of an adequacy decision under the applicable Data Protection Laws, Pimlico shall ensure that appropriate safeguards are in place, which may include:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>the use of standard contractual clauses approved or adopted by the relevant supervisory authority or other competent authority;</li>
+              <li>the UK International Data Transfer Agreement (IDTA) or UK addendum to EU standard contractual clauses; or</li>
+              <li>any other data transfer mechanism or safeguard recognised under Data Protection Laws.</li>
+            </ul>
+
+            <p className="mb-6">
+              <strong>8.3</strong> On request, Pimlico shall provide Customer with reasonable information about the data transfer mechanism relied on for such transfers to the extent not already described in the Security Overview, Privacy Policy or other documentation.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">9. Assistance with data subject rights</h3>
+            
+            <p className="mb-3">
+              <strong>9.1</strong> Taking into account the nature of the processing and the information available to Pimlico, Pimlico shall provide reasonable assistance to Customer, at Customer's cost, to enable Customer to respond to:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>requests from data subjects to exercise their rights under Data Protection Laws (including rights of access, rectification, erasure, restriction, portability and objection); and</li>
+              <li>any other queries, complaints or notices from data subjects or regulators relating to Personal Data processed under the Contract.</li>
+            </ul>
+
+            <p className="mb-3">
+              <strong>9.2</strong> If Pimlico receives a request or communication from a data subject directly that relates to Customer's Personal Data and identifies Customer as the controller, Pimlico shall (where reasonably practicable) notify Customer without undue delay and shall not respond directly to the data subject except:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li>on Customer's documented instructions; or</li>
+              <li>to confirm that the request has been passed to Customer; or</li>
+              <li>as required by applicable law.</li>
+            </ul>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">10. Assistance with compliance and DPIAs</h3>
+            
+            <p className="mb-3">
+              <strong>10.1</strong> Taking into account the nature of the processing and the information available to Pimlico, Pimlico shall provide reasonable assistance to Customer, at Customer's cost, in relation to:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li>Customer's obligations to implement appropriate technical and organisational security measures;</li>
+              <li>data protection impact assessments (DPIAs) required under Data Protection Laws; and</li>
+              <li>consultations with supervisory authorities relating to processing of Personal Data under the Contract.</li>
+            </ul>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">11. Personal Data Breach notification</h3>
+            
+            <p className="mb-4">
+              <strong>11.1</strong> Pimlico shall notify Customer without undue delay after becoming aware of a Personal Data Breach affecting Personal Data processed on behalf of Customer.
+            </p>
+
+            <p className="mb-3">
+              <strong>11.2</strong> Such notification shall, where possible, include:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>a description of the nature of the Personal Data Breach;</li>
+              <li>the categories and approximate number of data subjects and Personal Data records concerned;</li>
+              <li>the likely consequences of the Personal Data Breach; and</li>
+              <li>the measures taken or proposed to be taken by Pimlico to address the Personal Data Breach, including measures to mitigate its possible adverse effects.</li>
+            </ul>
+
+            <p className="mb-6">
+              <strong>11.3</strong> Pimlico may provide this information in phases as it becomes available. Customer is responsible for determining whether any notifications to supervisory authorities or data subjects are required under Data Protection Laws and for making any such notifications.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">12. Audits and information</h3>
+            
+            <p className="mb-3">
+              <strong>12.1</strong> Pimlico shall make available to Customer, on request, such information as is reasonably necessary to demonstrate Pimlico's compliance with its obligations as a processor under Article 28 of the UK GDPR (and any equivalent provisions of other applicable Data Protection Laws), which may include:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>responses to reasonable written security or compliance questionnaires; and/or</li>
+              <li>certificates or audit reports issued by independent third-party auditors (if available).</li>
+            </ul>
+
+            <p className="mb-3">
+              <strong>12.2</strong> To the extent that the information made available under clause 12.1 is insufficient to demonstrate such compliance, Customer may, no more than once in any twelve (12) month period and on at least thirty (30) days' written notice, carry out (or appoint an independent third party to carry out) a reasonable audit of Pimlico's data processing activities under this DPA, provided that:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li>any such audit shall be conducted during Business Hours, in a manner that minimises disruption to Pimlico's business, and subject to Pimlico's security, confidentiality and site access policies;</li>
+              <li>Customer (and any third-party auditor) shall keep all information obtained in connection with the audit confidential and use it solely for the purposes of assessing compliance with this DPA; and</li>
+              <li>Customer shall bear all costs of any such audit, unless the audit reveals a material breach of this DPA by Pimlico, in which case Pimlico shall bear its own costs of remediation.</li>
+            </ul>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">13. Return and deletion of Personal Data</h3>
+            
+            <p className="mb-3">
+              <strong>13.1</strong> On expiry or termination of the Contract for any reason, Pimlico shall, at Customer's choice and subject to clause 9.6 of the Terms:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>return Personal Data to Customer in a commonly used, machine-readable format; and/or</li>
+              <li>delete or anonymise Personal Data in its production systems,</li>
+            </ul>
+            <p className="mb-4">
+              in each case to the extent reasonably practicable and within a reasonable period following termination, unless applicable law requires Pimlico to retain certain Personal Data for a longer period.
+            </p>
+
+            <p className="mb-6">
+              <strong>13.2</strong> Pimlico may retain copies of Personal Data in backup systems for a limited period after deletion from its primary systems. Such data will remain subject to the obligations in this DPA until deleted.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">14. Duration</h3>
+            
+            <p className="mb-4">
+              <strong>14.1</strong> This DPA shall remain in force for as long as Pimlico processes Personal Data on behalf of Customer under the Contract.
+            </p>
+
+            <p className="mb-6">
+              <strong>14.2</strong> Termination or expiry of the Contract shall automatically terminate this DPA, without prejudice to any rights or obligations that by their nature should survive (including, without limitation, clauses relating to confidentiality, liability, audit, and return and deletion of Personal Data).
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">15. Miscellaneous</h3>
+            
+            <p className="mb-4">
+              <strong>15.1</strong> This DPA is without prejudice to any additional obligations of the parties under Data Protection Laws.
+            </p>
+
+            <p className="mb-4">
+              <strong>15.2</strong> In the event of any conflict between this DPA and the rest of the Contract in relation to the processing of Personal Data, this DPA shall prevail.
+            </p>
+
+            <p className="mb-8">
+              <strong>15.3</strong> This DPA is governed by, and shall be construed in accordance with, the same law and jurisdiction provisions as the Contract.
+            </p>
+
+            <hr className="my-8 border-gray-300" />
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Annex 1 – Processing details</h3>
+            
+            <p className="mb-3"><strong>Subject-matter of the processing</strong></p>
+            <p className="mb-6 ml-6">
+              Provision of the XHS™ Service and related Services (including XHS™ Copilot and other AI-enabled features), including hosting, storage, analysis, enrichment and delivery of regulatory and market intelligence content, dashboards and reports.
+            </p>
+
+            <p className="mb-3"><strong>Duration of the processing</strong></p>
+            <p className="mb-6 ml-6">
+              For the Subscription Term and any renewal Subscription Terms, and for such additional period as is necessary for backup, archiving and deletion in accordance with the Contract and this DPA.
+            </p>
+
+            <p className="mb-3"><strong>Nature and purpose of the processing</strong></p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li>Hosting and storage of Customer Data within the XHS™ Service;</li>
+              <li>enabling Customer and Authorised Users to access, search and analyse content;</li>
+              <li>generating, structuring, tagging and summarising content and alerts;</li>
+              <li>providing dashboards, reports and other outputs;</li>
+              <li>monitoring usage, performance and security of the XHS™ Service; and</li>
+              <li>providing support and maintenance services.</li>
+            </ul>
+
+            <p className="mb-3"><strong>Types of Personal Data</strong></p>
+            <p className="mb-3 ml-6">Depending on how Customer uses the XHS™ Service, this may include:</p>
+            <ul className="list-disc ml-12 mt-3 space-y-2 mb-4">
+              <li>business contact details of Customer's personnel and other users (such as name, job title, role, business email address, business telephone number);</li>
+              <li>account and profile information for Authorised Users;</li>
+              <li>user-generated content, comments or notes entered into the XHS™ Service;</li>
+              <li>log and usage data (such as IP addresses, device identifiers, timestamps and activity logs); and</li>
+              <li>any other Personal Data that Customer chooses to include in Customer Data.</li>
+            </ul>
+            <p className="mb-6 ml-6">
+              Customer shall not intentionally include special categories of data or criminal offence data in Customer Data unless expressly agreed in writing.
+            </p>
+
+            <p className="mb-3"><strong>Categories of data subjects</strong></p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-8">
+              <li>employees, contractors and other personnel of Customer who are Authorised Users of the XHS™ Service;</li>
+              <li>employees, contractors and other personnel of Customer's clients or counterparties, to the extent their details are included in Customer Data; and</li>
+              <li>any other individuals whose Personal Data is included in Customer Data by or on behalf of Customer.</li>
+            </ul>
+
+            <hr className="my-8 border-gray-300" />
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Annex 2 – Technical and organisational measures (summary)</h3>
+            
+            <p className="mb-4">
+              Pimlico will implement and maintain technical and organisational measures appropriate to the risk, which may include:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
+              <li>access control measures to ensure only authorised personnel have access to Personal Data on a need-to-know basis;</li>
+              <li>authentication and authorisation controls for the XHS™ Service (for example, unique user accounts, role-based access and password policies);</li>
+              <li>encryption of data in transit over public networks and encryption of data at rest in core infrastructure components;</li>
+              <li>network and infrastructure security measures, including firewalls, segmentation and monitoring;</li>
+              <li>logging and monitoring of key systems, together with incident detection and response procedures;</li>
+              <li>backup and disaster recovery processes designed to support continuity of the XHS™ Service; and</li>
+              <li>policies and training for personnel on information security and data protection.</li>
+            </ul>
+            <p className="mb-6">
+              Further details of Pimlico's technical and organisational measures are described in the Security Overview or similar documentation made available by Pimlico on request or via the XHS™ website, as updated from time to time. Updates to such documentation will not materially reduce the overall level of protection for Personal Data during the then-current Subscription Term.
+            </p>
           </section>
 
           <hr className="my-12 border-gray-200" />
