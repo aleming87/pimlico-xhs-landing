@@ -58,6 +58,7 @@ export default function TermsAndConditions() {
               <li><strong>"Beta Period"</strong> means, for a Beta Customer, the period of up to six (6) months from the Service start date (or such other period expressly stated in the Order Form) during which AI Credit Usage Fees and AI Credit overage charges are waived in accordance with clause 8.4.</li>
               <li><strong>"Contract"</strong> means the legally binding agreement between Pimlico and Customer formed in accordance with clause 4.</li>
               <li><strong>"Customer Data"</strong> means any data, content, documents, configuration, prompts, queries or other information submitted to, stored within or generated within the XHS™ Copilot by or on behalf of Customer or its Authorised Users (including personal data relating to Customer's employees, clients or other contacts).</li>
+              <li><strong>"Data Processing Addendum"</strong> or <strong>"DPA"</strong> means the data processing terms agreed between Pimlico and Customer from time to time, as set out in Schedule 2 (Data Processing Addendum).</li>
               <li><strong>"Documentation"</strong> means any user guides, technical documentation, onboarding materials and usage policies for the XHS™ Copilot made available by Pimlico, as updated from time to time.</li>
               <li><strong>"General Release"</strong> means the date on which Pimlico designates a version of the XHS™ Copilot (or relevant module) as generally available for production use outside the applicable beta, pilot or early-access programme.</li>
               <li><strong>"Intellectual Property Rights"</strong> or <strong>"IPR"</strong> means patents, rights to inventions, copyright and related rights, trade marks, trade names, domain names, rights in get-up, goodwill, rights in designs, database rights, confidential information, and all similar or equivalent rights existing anywhere in the world, whether registered or unregistered.</li>
@@ -65,6 +66,7 @@ export default function TermsAndConditions() {
               <li><strong>"Online Order"</strong> means a subscription or purchase for the XHS™ Copilot placed through an online sign-up, in-app purchase flow or similar mechanism made available by Pimlico.</li>
               <li><strong>"Service Period"</strong> or <strong>"Subscription Term"</strong> means the initial term and any renewal term(s) for the XHS™ Copilot, as specified in the applicable Order Form or Online Order.</li>
               <li><strong>"Service Level Agreement"</strong> or <strong>"SLA"</strong> means the service levels and support commitments set out in Schedule 1 (Service Level Agreement), as updated from time to time in accordance with these Terms.</li>
+              <li><strong>"Security Overview"</strong> means any high-level description of Pimlico's technical and organisational security measures published on the XHS™ website or made available to Customer on request, as updated from time to time.</li>
               <li><strong>"Services"</strong> means the XHS™ Copilot, any related APIs, professional services (including onboarding, configuration or bespoke research) and support services supplied by Pimlico under these Terms.</li>
               <li><strong>"AI Credit Usage Fees"</strong> means the usage-based fees payable by Customer for consumption of AI Credits beyond any AI Credit Allowance, as specified in the applicable Order Form or Online Order.</li>
               <li><strong>"Website"</strong> means any website operated by or on behalf of Pimlico through which the XHS™ Service or related information is made available.</li>
@@ -464,8 +466,8 @@ export default function TermsAndConditions() {
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>all rights to access and use the Services and Materials (other than Materials already lawfully downloaded and retained for internal records) shall cease;</li>
               <li>Customer shall immediately stop all use of the Services and Materials and pay all outstanding fees and charges;</li>
-              <li>Pimlico will, on request made within 30 days of termination, provide Customer with a copy of Customer Data in a commonly used, machine-readable format, to the extent reasonably practicable. After this period, Pimlico may delete or anonymise Customer Data in accordance with its retention policies, except where retention is required by law; and</li>
-              <li>clauses which by their nature should continue (including clauses 7.2–7.4, 8, 9.6, 10–18) shall survive termination or expiry.</li>
+              <li>Pimlico will, on request made within 30 days of termination, provide Customer with a copy of Customer Data in a commonly used, machine-readable format, to the extent reasonably practicable. After this period, Pimlico will delete or anonymise Customer Data in its production systems, except to the extent Pimlico is required to retain certain data by law or for the establishment, exercise or defence of legal claims; and</li>
+              <li>clauses which by their nature should continue (including clauses 7.2–7.4, 8, 9.6, 10–18 and the Schedules) shall survive termination or expiry.</li>
             </ul>
           </section>
 
@@ -573,21 +575,63 @@ export default function TermsAndConditions() {
 
           {/* Section 12 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">12. Data protection and privacy</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">12. Data protection, privacy and security</h2>
             
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.1 Roles</h3>
             <p>
-              The parties acknowledge that, in providing the XHS™ Service, Pimlico may process personal data on behalf of Customer. Where Pimlico acts as a processor and Customer as controller (as defined in the UK General Data Protection Regulation and the Data Protection Act 2018), the parties shall comply with their respective obligations, and Pimlico shall process personal data only on Customer's documented instructions.
+              The parties acknowledge that, in providing the XHS™ Service, Pimlico may process personal data on behalf of Customer. Where Pimlico acts as a processor and Customer as controller (as defined in the UK General Data Protection Regulation and the Data Protection Act 2018), the parties shall comply with their respective obligations under applicable data protection laws, and Pimlico shall process personal data only on Customer's documented instructions (unless required otherwise by applicable law).
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.2 Data processing terms</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.2 Data Processing Addendum</h3>
             <p>
-              Where required by applicable data protection laws, the parties shall enter into a separate data processing agreement or addendum, which shall form part of the Contract. In the event of any conflict between these Terms and such data processing agreement in relation to the processing of personal data, the data processing agreement shall prevail.
+              Where Pimlico processes personal data as a processor on behalf of Customer, the parties agree that the Data Processing Addendum in Schedule 2 (Data Processing Addendum) applies and forms part of the Contract. In the event of any conflict between these Terms and the Data Processing Addendum in relation to the processing of personal data, the Data Processing Addendum shall prevail.
             </p>
 
             <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.3 Privacy Policy</h3>
             <p>
-              Any personal data provided to Pimlico will be handled in accordance with Pimlico's Privacy Policy as updated from time to time and accessible via the XHS™ website.
+              Any personal data provided to Pimlico (including contact details for Authorised Users and Customer representatives) will be handled in accordance with Pimlico's Privacy Policy as updated from time to time and accessible via the XHS™ website. The Privacy Policy describes, among other things, how Pimlico collects and uses personal data as an independent controller for its own business purposes (for example, billing, account management and product improvement).
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.4 Information security</h3>
+            <p className="mb-4">
+              Pimlico will implement and maintain appropriate technical and organisational measures to protect Customer Data against unauthorised or unlawful processing and against accidental loss, destruction or damage, having regard to the nature of the Services, the information to be protected and the state of technological development.
+            </p>
+            <p className="mb-3">Without prejudice to Customer's obligations under these Terms:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>Pimlico's current technical and organisational measures are further described in the Security Overview or similar documentation made available by Pimlico on request or via the XHS™ website, as updated from time to time; and</li>
+              <li>updates to such documentation will not materially reduce the overall level of protection for Customer Data during the then-current Subscription Term.</li>
+            </ul>
+            <p>
+              Customer remains responsible for securing its own networks, devices and systems used to access the XHS™ Service, and for configuring the XHS™ Service and managing Authorised Users and permissions in accordance with its own security, governance and access-control policies.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.5 Use of Customer Data for AI, logging and analytics</h3>
+            <p className="mb-3">Pimlico may use Customer Data:</p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>to provide, operate, support and improve the XHS™ Service for Customer (including troubleshooting, monitoring, capacity planning and performance optimisation); and</li>
+              <li>in aggregated and/or anonymised form, in accordance with clause 7.4, to improve and develop Pimlico's products and services.</li>
+            </ul>
+            <p className="mb-4">
+              Pimlico will not use Customer Data to train or fine-tune any foundation model or generally-available AI model intended for use by other customers, unless:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>Customer has expressly agreed to such use in writing or via an in-product setting; or</li>
+              <li>the data has been anonymised and/or aggregated such that Customer and data subjects are not identifiable.</li>
+            </ul>
+            <p>
+              The XHS™ Service may record logs, prompts and interaction data for security, audit, troubleshooting and product improvement purposes. Pimlico will retain such data for no longer than is necessary for those purposes, subject to any longer retention required by law.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.6 Security incidents and personal data breaches</h3>
+            <p className="mb-3">
+              If Pimlico becomes aware of a personal data breach affecting Customer Data (as defined in applicable data protection laws), Pimlico shall:
+            </p>
+            <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
+              <li>notify Customer without undue delay after becoming aware of the breach; and</li>
+              <li>provide information and co-operation reasonably requested by Customer to meet its own obligations under applicable data protection laws (for example, notifications to regulators or affected individuals),</li>
+            </ul>
+            <p>
+              in each case to the extent such information is reasonably available to Pimlico and provided that Customer is responsible for assessing whether any regulatory or other notifications are required. Nothing in this clause limits the Parties' respective obligations under the Data Processing Addendum.
             </p>
           </section>
 
@@ -1019,6 +1063,33 @@ export default function TermsAndConditions() {
             <p className="mb-6">
               <strong>6.2</strong> This SLA is subject to, and shall be interpreted in accordance with, the Terms. Capitalised terms used but not defined in this Schedule have the meaning given to them in the Terms.
             </p>
+          </section>
+
+          <hr className="my-12 border-gray-200" />
+
+          {/* Schedule 2 */}
+          <section>
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">Schedule 2 – Data Processing Addendum</h2>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+              <p className="text-sm text-gray-700 mb-4">
+                <strong>Note:</strong> This Schedule is referenced in clause 12.2. A full Data Processing Addendum (DPA) should be inserted here, covering at least:
+              </p>
+              <ul className="list-disc ml-6 space-y-1 text-sm text-gray-700">
+                <li>roles of the parties,</li>
+                <li>subject-matter and duration of processing,</li>
+                <li>categories of data and data subjects,</li>
+                <li>sub-processors,</li>
+                <li>international transfers,</li>
+                <li>security measures,</li>
+                <li>breach notification,</li>
+                <li>assistance with data subject rights, and</li>
+                <li>deletion/return of data on termination.</li>
+              </ul>
+              <p className="text-sm text-gray-700 mt-4 italic">
+                [To be completed as a separate document or integrated here in full.]
+              </p>
+            </div>
           </section>
 
           <hr className="my-12 border-gray-200" />
