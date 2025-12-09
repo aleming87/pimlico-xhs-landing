@@ -1,6 +1,7 @@
 import '@/styles/tailwind.css'
 import { Analytics } from '@vercel/analytics/react'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
+import { CookieConsent } from '@/components/CookieConsent'
 
 export const metadata = {
   title: {
@@ -70,6 +71,7 @@ export default function RootLayout({ children }) {
         <CurrencyProvider>
           {children}
         </CurrencyProvider>
+        <CookieConsent />
         <Analytics />
       </body>
     </html>
