@@ -71,7 +71,7 @@ export default function Page() {
               <img
                 src="/BVNK.svg"
                 alt="BVNK"
-                className="h-6 w-auto sm:h-8"
+                className="h-4 w-auto sm:h-6"
               />
             </div>
           </div>
