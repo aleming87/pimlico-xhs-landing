@@ -62,10 +62,15 @@ export default function Page() {
         <div className="bg-white py-10 sm:py-12">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <h2 className="text-center text-sm font-semibold leading-8 text-gray-900">Trusted by</h2>
-            <div className="mx-auto mt-6 flex justify-center">
+            <div className="mx-auto mt-6 flex justify-center gap-8 items-center">
               <img
                 src="/Microsoft_logo_(2012).svg"
                 alt="Microsoft"
+                className="h-6 w-auto sm:h-8"
+              />
+              <img
+                src="/BVNK.svg"
+                alt="BVNK"
                 className="h-6 w-auto sm:h-8"
               />
             </div>
