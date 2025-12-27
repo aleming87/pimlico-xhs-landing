@@ -169,24 +169,14 @@ export default function Page() {
               <div className="w-full mx-auto text-center">
                 <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Try <span className="text-blue-400">XHS™</span> Copilot Beta</h2>
                 <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Be first to experience XHS™ regulatory AI workspaces.</p>
-                <form className="mt-10 flex flex-col sm:flex-row max-w-md gap-3 sm:gap-x-4 mx-auto" action="mailto:contact@pimlicosolutions.com" method="post" encType="text/plain">
-                  <label htmlFor="email-address" className="sr-only">Email address</label>
-                  <input
-                    id="email-address"
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Enter your email"
-                    autoComplete="email"
-                    className="w-full sm:min-w-0 sm:flex-auto rounded-md bg-white/10 px-3.5 py-3 text-base text-white outline-1 -outline-offset-1 outline-white/20 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 border-0"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto sm:flex-none rounded-md bg-blue-500 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+                <div className="mt-10 flex items-center justify-center">
+                  <a
+                    href="/contact"
+                    className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   >
-                    Notify me
-                  </button>
-                </form>
+                    Try now
+                  </a>
+                </div>
               </div>
             </div>
           </div>
