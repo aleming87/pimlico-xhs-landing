@@ -59,20 +59,24 @@ export default function Page() {
         <Hero />
         
         {/* Trusted by section */}
-        <div className="bg-white py-10 sm:py-12">
+        <div className="bg-gray-50 py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <h2 className="text-center text-sm font-semibold leading-8 text-gray-900">Trusted by</h2>
-            <div className="mx-auto mt-6 flex justify-center gap-8 items-center">
-              <img
-                src="/Microsoft_logo_(2012).svg"
-                alt="Microsoft"
-                className="h-6 w-auto sm:h-8"
-              />
-              <img
-                src="/BVNK.svg"
-                alt="BVNK"
-                className="h-4 w-auto sm:h-6"
-              />
+            <h2 className="text-center text-sm font-semibold leading-8 text-gray-600 uppercase tracking-wide">Trusted by</h2>
+            <div className="mx-auto mt-8 flex justify-center gap-6 items-center flex-wrap">
+              <div className="flex items-center justify-center bg-white rounded-lg shadow-sm border border-gray-200 px-8 py-4 hover:shadow-md transition-shadow">
+                <img
+                  src="/Microsoft_logo_(2012).svg"
+                  alt="Microsoft"
+                  className="h-6 w-auto sm:h-8"
+                />
+              </div>
+              <div className="flex items-center justify-center bg-white rounded-lg shadow-sm border border-gray-200 px-8 py-4 hover:shadow-md transition-shadow">
+                <img
+                  src="/BVNK.svg"
+                  alt="BVNK"
+                  className="h-4 w-auto sm:h-6"
+                />
+              </div>
             </div>
           </div>
         </div>
