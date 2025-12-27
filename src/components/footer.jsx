@@ -22,8 +22,8 @@ function CallToAction() {
         potential.
       </p>
       <div className="mt-6">
-        <Button className="w-full sm:w-auto" href="#contact">
-          Request early access
+        <Button className="w-full sm:w-auto" href="/contact">
+          Try now
         </Button>
       </div>
     </div>
