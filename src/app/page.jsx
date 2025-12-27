@@ -63,20 +63,16 @@ export default function Page() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:max-w-none">
               <h2 className="text-center text-lg/8 font-semibold text-gray-900">Trusted by</h2>
-              <div className="mx-auto mt-10 grid grid-cols-2 items-center gap-x-12 gap-y-10 sm:gap-x-16 lg:mx-0 lg:grid-cols-2 justify-items-center">
+              <div className="mx-auto mt-10 flex items-center justify-center gap-x-8 sm:gap-x-12">
                 <img
-                  width="158"
-                  height="48"
                   src="/Microsoft_logo_(2012).svg"
                   alt="Microsoft"
-                  className="col-span-1 max-h-12 w-full object-contain"
+                  className="max-h-8 w-auto object-contain"
                 />
                 <img
-                  width="158"
-                  height="48"
                   src="/BVNK.svg"
                   alt="BVNK"
-                  className="col-span-1 max-h-10 w-full object-contain"
+                  className="max-h-6 w-auto object-contain"
                 />
               </div>
             </div>
