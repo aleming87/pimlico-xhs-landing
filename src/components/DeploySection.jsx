@@ -80,7 +80,7 @@ export default function DeploySection() {
         <div className="mx-auto max-w-2xl lg:text-center mb-16">
           <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl lg:text-balance">
             Track the evolution of<br />
-            <span className="text-blue-400">AI</span>{", "}<span className="text-blue-400">Payments</span>{" & "}<span className="text-blue-400">Gambling</span> regulation.
+            <span className="text-blue-400">AI</span>{", "}<span className="text-blue-400">Payments</span>{", "}<span className="text-blue-400">Crypto</span>{" & "}<span className="text-blue-400">Gambling</span> regulation.
           </p>
           <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
             Stay ahead of regulatory changes with real-time monitoring.

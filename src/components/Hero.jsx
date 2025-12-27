@@ -149,7 +149,7 @@ export default function Hero() {
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               The platform for<br />Regulatory AI&nbsp;workspaces
             </h1>
-            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI</span>{", "}<span className="text-blue-300">Payments</span>{" & "}<span className="text-blue-300">Gambling</span> compliance workflows with intelligent automation.</p>
+            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI</span>{", "}<span className="text-blue-300">Payments</span>{", "}<span className="text-blue-300">Crypto</span>{" & "}<span className="text-blue-300">Gambling</span> compliance workflows with intelligent automation.</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
               <a href="/contact" className="w-full sm:w-auto rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center transition-all hover:shadow-xl">Try now</a>
             </div>

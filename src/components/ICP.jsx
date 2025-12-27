@@ -7,7 +7,7 @@ export default function ICP() {
           <div className="rounded-2xl border border-slate-200 p-6">
             <h3 className="font-medium">Who we serve</h3>
             <ul className="mt-3 text-sm text-slate-600 space-y-2 list-disc list-inside">
-              <li>Regulated enterprises and vendors in AI, Payments & Gambling</li>
+              <li>Regulated enterprises and vendors in AI, Payments, Crypto & Gambling</li>
               <li>Leaders in Compliance, Regulatory Affairs, Policy, Strategy</li>
               <li>Teams managing risk, governance, and horizon-scanning</li>
             </ul>
