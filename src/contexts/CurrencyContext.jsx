@@ -9,26 +9,26 @@ const PRICING = {
   USD: {
     symbol: '$',
     code: 'USD',
-    professional: { monthly: 250, annually: 2850 },
-    team: { monthly: 750, annually: 8550, perUser: 32 }
+    professional: { monthly: 250, annually: 2760 },
+    team: { monthly: 750, annually: 8280, perUser: 32 }
   },
   GBP: {
     symbol: '£',
     code: 'GBP',
-    professional: { monthly: 225, annually: 2565 }, // 225 * 11.4 (5% discount)
-    team: { monthly: 675, annually: 7695, perUser: 29 } // ~£29/user
+    professional: { monthly: 275, annually: 3036 }, // 275 * 11.04 (8% discount)
+    team: { monthly: 825, annually: 9108, perUser: 35 } // ~£35/user
   },
   EUR: {
     symbol: '€',
     code: 'EUR',
-    professional: { monthly: 235, annually: 2679 }, // 235 * 11.4
-    team: { monthly: 705, annually: 8037, perUser: 30 } // ~€30/user
+    professional: { monthly: 235, annually: 2594 }, // 235 * 11.04
+    team: { monthly: 705, annually: 7783, perUser: 30 } // ~€30/user
   },
   CHF: {
     symbol: 'CHF ',
     code: 'CHF',
-    professional: { monthly: 240, annually: 2736 }, // 240 * 11.4
-    team: { monthly: 720, annually: 8208, perUser: 31 } // ~CHF 31/user
+    professional: { monthly: 240, annually: 2650 }, // 240 * 11.04
+    team: { monthly: 720, annually: 7949, perUser: 31 } // ~CHF 31/user
   }
 };
 
