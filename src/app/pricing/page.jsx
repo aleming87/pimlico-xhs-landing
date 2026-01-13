@@ -180,7 +180,7 @@ export default function PricingPage() {
                   <h3 className="text-lg/8 font-semibold text-white">Team</h3>
                   <p className="rounded-full bg-blue-600 px-2.5 py-1 text-xs/5 font-semibold text-white">Most popular</p>
                 </div>
-                <p className="mt-4 text-sm/6 text-gray-300">For teams collaborating across regulatory compliance workflows.</p>
+                <p className="mt-4 text-sm/6 text-gray-300">For teams collaborating on regulatory compliance workflows across jurisdictions.</p>
                 <p className="mt-6 text-xs text-gray-400">Starting at</p>
                 <p className="mt-2 flex items-baseline gap-x-1">
                   <span className="text-4xl font-semibold tracking-tight text-white">
