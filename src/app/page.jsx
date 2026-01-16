@@ -3,7 +3,6 @@ import Differentiators from "@/components/Differentiators";
 import DeploySection from "@/components/DeploySection";
 import DatamapScripts from "@/components/DatamapScripts";
 import MapSection from "@/components/MapSection";
-import PromoModal from "@/components/PromoModal";
 import { CookieConsent } from "@/components/CookieConsent";
 
 export const metadata = {
@@ -297,7 +296,6 @@ export default function Page() {
           </div>
         </footer>
       </main>
-      <PromoModal />
       <CookieConsent />
       <DatamapScripts />
     </>
