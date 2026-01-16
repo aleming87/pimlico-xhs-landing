@@ -6,31 +6,24 @@ export default function MapSection() {
   const [activeSelection, setActiveSelection] = useState(null)
 
   const handleAIClick = () => {
-    // AI covers: North America, UK, Europe, Japan, China, Singapore, Australia, India, Brazil, Chile, Argentina, South Africa, South Korea, New Zealand
+    // AI covers major regulatory jurisdictions globally
     if (window.highlightCountries) {
       const aiCountries = [
         'USA', 'CAN', 'MEX',  // North America
-        'GBR',  // UK
-        'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'CZE', 'GRC', 'ROU', 'HUN', 'BGR', 'HRV', 'SVK', 'SVN', 'LTU', 'LVA', 'EST', 'MLT', 'CYP', 'LUX', 'ISL',  // Europe
-        'JPN',  // Japan
-        'CHN',  // China
-        'SGP',  // Singapore
-        'KOR',  // South Korea
-        'AUS',  // Australia
-        'NZL',  // New Zealand
-        'IND',  // India
-        'BRA',  // Brazil
-        'CHL',  // Chile
-        'ARG',  // Argentina
-        'ZAF'   // South Africa
+        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'CZE', 'GRC', 'ROU', 'HUN', 'BGR', 'HRV', 'SVK', 'SVN', 'LTU', 'LVA', 'EST', 'MLT', 'CYP', 'LUX', 'ISL', 'UKR', 'SRB', 'BIH', 'MKD', 'ALB', 'MNE', 'MDA', 'BLR', 'GEO', 'ARM', 'AZE',  // Europe
+        'JPN', 'CHN', 'SGP', 'KOR', 'AUS', 'NZL', 'IND', 'THA', 'VNM', 'IDN', 'MYS', 'PHL', 'HKG', 'TWN', 'KHM', 'LAO', 'MMR', 'BGD', 'PAK', 'LKA', 'NPL', 'BTN', 'MNG',  // APAC
+        'BRA', 'ARG', 'CHL', 'COL', 'PER', 'URY', 'PRY', 'ECU', 'BOL', 'VEN', 'PAN', 'CRI', 'GTM', 'HND', 'SLV', 'NIC', 'CUB', 'DOM', 'HTI', 'JAM', 'TTO', 'BRB', 'BHS', 'GUY', 'SUR',  // LATAM
+        'ZAF', 'KEN', 'NGA', 'GHA', 'UGA', 'TZA', 'ZWE', 'ZMB', 'BWA', 'NAM', 'MOZ', 'AGO', 'ETH', 'SEN', 'CIV', 'CMR', 'RWA', 'MUS', 'SYC', 'MDG', 'MWI', 'BEN', 'TGO', 'BFA', 'MLI', 'NER', 'TCD', 'GAB', 'GNQ', 'COG', 'CAF', 'SSD', 'SOM', 'DJI', 'ERI',  // Africa
+        'ARE', 'SAU', 'QAT', 'BHR', 'OMN', 'KWT', 'ISR', 'JOR', 'LBN', 'TUR', 'EGY', 'IRQ', 'IRN', 'AFG', 'YEM', 'SYR', 'PSE',  // Middle East
+        'RUS', 'KAZ', 'UZB', 'TKM', 'TJK', 'KGZ'  // Eurasia
       ]
-      window.highlightCountries(aiCountries, 'AI', true)  // true = stay highlighted
+      window.highlightCountries(aiCountries, 'AI', true)
       setActiveSelection('AI')
     }
   }
 
   const handlePaymentsClick = () => {
-    // Payments covers: ALL regions
+    // Payments covers comprehensive global coverage
     if (window.highlightRegions) {
       window.highlightRegions(['NORTH_AMERICA', 'EUROPE', 'MIDDLE_EAST', 'APAC', 'LATAM', 'AFRICA'], 'PAYMENTS', true)
       setActiveSelection('PAYMENTS')
@@ -41,20 +34,12 @@ export default function MapSection() {
     // Gambling covers major regulated gambling jurisdictions worldwide
     if (window.highlightCountries) {
       const gamblingCountries = [
-        // North America
-        'USA', 'CAN', 'MEX',
-        // Europe (comprehensive - all major gambling markets)
-        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'MLT', 'CYP', 'GRC', 'CZE', 'SVK', 'HRV', 'BGR', 'ROU', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL', 'SRB', 'MKD', 'ALB', 'BIH', 'MNE',
-        // LATAM (major markets)
-        'BRA', 'ARG', 'CHL', 'COL', 'PER', 'URY', 'PRY', 'ECU', 'BOL', 'PAN', 'CRI', 'GTM', 'DOM', 'JAM', 'TTO', 'BHS', 'BRB', 'CUW',
-        // APAC (regulated markets)
-        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'MAC', 'PHL', 'MYS', 'KHM', 'NPL',
-        // Africa (regulated markets)
-        'ZAF', 'KEN', 'NGA', 'GHA', 'UGA', 'TZA', 'ZWE', 'ZMB', 'BWA', 'NAM', 'RWA', 'MUS', 'SYC',
-        // Middle East (limited - only where legal)
-        'TUR', 'GEO', 'ARM',  // Turkey, Georgia, Armenia (some forms allowed)
-        // Eastern Europe/Eurasia
-        'RUS', 'UKR', 'BLR', 'KAZ', 'MDA'
+        'USA', 'CAN', 'MEX',  // North America
+        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'MLT', 'CYP', 'GRC', 'CZE', 'SVK', 'HRV', 'BGR', 'ROU', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL', 'SRB', 'MKD', 'ALB', 'BIH', 'MNE', 'GEO', 'ARM',  // Europe
+        'BRA', 'ARG', 'CHL', 'COL', 'PER', 'URY', 'PRY', 'ECU', 'BOL', 'PAN', 'CRI', 'GTM', 'DOM', 'JAM', 'TTO', 'BHS', 'BRB',  // LATAM
+        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'MAC', 'PHL', 'MYS', 'KHM', 'NPL', 'IND', 'LKA',  // APAC
+        'ZAF', 'KEN', 'NGA', 'GHA', 'UGA', 'TZA', 'ZWE', 'ZMB', 'BWA', 'NAM', 'RWA', 'MUS', 'SYC',  // Africa
+        'TUR', 'RUS', 'UKR', 'BLR', 'KAZ', 'MDA'  // Eastern Europe/Eurasia
       ]
       window.highlightCountries(gamblingCountries, 'GAMBLING', true)
       setActiveSelection('GAMBLING')
@@ -65,13 +50,13 @@ export default function MapSection() {
   const getStats = () => {
     switch(activeSelection) {
       case 'AI':
-        return { regions: 5, jurisdictions: 45 }  // North America, Europe, Asia-Pacific, LATAM (select), Africa (select)
+        return { regions: 6, jurisdictions: 120 }
       case 'PAYMENTS':
-        return { regions: 6, jurisdictions: 150 }  // All regions
+        return { regions: 6, jurisdictions: 180 }
       case 'GAMBLING':
-        return { regions: 6, jurisdictions: 80 }  // Global gambling jurisdictions (excluding prohibited countries)
+        return { regions: 6, jurisdictions: 90 }
       default:
-        return { regions: 6, jurisdictions: 150 }  // All regions when nothing selected
+        return { regions: 6, jurisdictions: 180 }  // Show full coverage by default
     }
   }
 

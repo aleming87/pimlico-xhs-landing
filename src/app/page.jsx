@@ -87,43 +87,43 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="lg:ml-auto lg:pt-4 lg:pl-4">
               <div className="lg:max-w-lg">
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">Build <span className="text-blue-400">AI-agentic</span> workspaces with XHS™</p>
+                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">Build <span className="text-blue-400">AI-powered</span> regulatory workspaces</p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-400 lg:max-w-none">
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
                       <svg className="absolute top-1 left-1 size-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
-                      Personalisation.
+                      Intelligent Insights.
                     </dt>
-                    <dd className="inline"> Targeted insights on opportunities and risks for your business context</dd>
+                    <dd className="inline"> AI-powered analysis delivers personalized regulatory intelligence for your business context</dd>
                   </div>
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
                       <svg className="absolute top-1 left-1 size-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
                       </svg>
-                      User Experience.
+                      Adaptive Experience.
                     </dt>
-                    <dd className="inline"> Intuitive user journeys, customisable workflows, and adaptive interfaces</dd>
+                    <dd className="inline"> Workspaces that learn and adapt to your team's unique compliance workflows</dd>
                   </div>
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
                       <svg className="absolute top-1 left-1 size-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                       </svg>
-                      Integrations.
+                      Seamless Integration.
                     </dt>
-                    <dd className="inline"> Use enterprise-grade APIs for seamless scaling across teams and organizations</dd>
+                    <dd className="inline"> Enterprise-grade APIs that scale effortlessly across your organization</dd>
                   </div>
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
                       <svg className="absolute top-1 left-1 size-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      Cost Efficiency.
+                      Smart Automation.
                     </dt>
-                    <dd className="inline"> Affordable, AI-native solution delivering measurable time savings and reduced compliance costs</dd>
+                    <dd className="inline"> AI-driven automation reduces manual work and accelerates compliance processes</dd>
                   </div>
                 </dl>
               </div>
@@ -142,21 +142,21 @@ export default function Page() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Regulatory updates parsed annually</dt>
+              <dt className="text-base/7 text-gray-600">Regulatory updates parsed</dt>
               <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
-                <span id="counter-750k">0</span>k+
+                <span id="counter-1200k">0</span>M+
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Global jurisdictions monitored</dt>
+              <dt className="text-base/7 text-gray-600">Global jurisdictions covered</dt>
+              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
+                <span id="counter-180">0</span>+
+              </dd>
+            </div>
+            <div className="mx-auto flex max-w-xs flex-col gap-y-4">
+              <dt className="text-base/7 text-gray-600">Topics covered</dt>
               <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
                 <span id="counter-90">0</span>+
-              </dd>
-            </div>
-            <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-600">Regulatory topics covered</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
-                <span id="counter-50">0</span>+
               </dd>
             </div>
           </dl>
@@ -169,14 +169,14 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
               <div className="w-full mx-auto text-center">
-                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Try <span className="text-blue-400">XHS™</span> Copilot Beta</h2>
-                <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Be first to experience XHS™ regulatory AI workspaces.</p>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Experience the future of <span className="text-blue-400">regulatory compliance</span></h2>
+                <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Transform how your team manages compliance with AI-powered workspaces built for regulated industries.</p>
                 <div className="mt-10 flex items-center justify-center">
                   <a
                     href="/contact"
-                    className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:shadow-xl"
                   >
-                    Try now
+                    Explore
                   </a>
                 </div>
               </div>
