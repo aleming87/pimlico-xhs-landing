@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 export default function PromoModal() {
   const [isOpen, setIsOpen] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false)
 
   useEffect(() => {
     // Check if modal has been shown before
@@ -17,19 +18,70 @@ export default function PromoModal() {
       }, 3000)
       
       return () => clearTimeout(timer)
+    } else {
+      // Show sidebar if user has seen modal
+      setShowSidebar(true)
     }
   }, [])
 
   const handleClose = () => {
     setIsOpen(false)
     localStorage.setItem('hasSeenPromo', 'true')
+    // Show sidebar after closing modal
+    setTimeout(() => {
+      setShowSidebar(true)
+    }, 300)
+  }
+
+  const handleSidebarClick = () => {
+    setIsOpen(true)
+    setShowSidebar(false)
+  }
+
+  const handleSidebarClose = () => {
+    setShowSidebar(false)
+  }
+
+  // Sidebar component
+  if (showSidebar && !isOpen) {
+    return (
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 animate-in slide-in-from-right duration-500">
+        <button
+          onClick={handleSidebarClick}
+          className="group relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-l-2xl shadow-2xl ring-2 ring-blue-500/50 hover:ring-blue-500 transition-all hover:scale-105 p-4 pr-6"
+        >
+          {/* Close sidebar button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              handleSidebarClose()
+            }}
+            className="absolute -left-2 top-2 w-6 h-6 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-all flex items-center justify-center text-xs"
+          >
+            ×
+          </button>
+          
+          <div className="flex flex-col items-center gap-2 text-center w-16">
+            <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+              50%
+            </div>
+            <div className="text-xs text-gray-300 leading-tight">
+              Save on compliance costs
+            </div>
+            <div className="text-[10px] text-gray-500 mt-1">
+              Ends Mar 31
+            </div>
+          </div>
+        </button>
+      </div>
+    )
   }
 
   if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl shadow-2xl max-w-lg w-full ring-2 ring-blue-500/50 hover:ring-blue-500 transition-all animate-in zoom-in-95 duration-300">
+      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl shadow-2xl max-w-lg w-full ring-2 ring-blue-500/50 hover:ring-blue-500 transition-all animate-in zoom-in-95 duration-300 overflow-hidden">
         {/* Close button */}
         <button
           onClick={handleClose}
@@ -41,6 +93,16 @@ export default function PromoModal() {
           </svg>
         </button>
 
+        {/* Image section */}
+        <div className="relative h-48 bg-gradient-to-br from-blue-900/20 to-purple-900/20 flex items-center justify-center overflow-hidden">
+          <Image 
+            src="/promo-modal.png" 
+            alt="XHS Promo" 
+            fill
+            className="object-cover opacity-90"
+          />
+        </div>
+
         {/* Content */}
         <div className="p-8 md:p-10">
           {/* Logos */}
@@ -50,39 +112,49 @@ export default function PromoModal() {
               alt="Pimlico" 
               width={120} 
               height={32} 
-              className="h-7 w-auto"
+              className="h-8 w-auto"
             />
             <div className="h-8 w-px bg-blue-500/30"></div>
             <Image 
               src="/XHS_Logo_White.png" 
               alt="XHS" 
-              width={80} 
-              height={40} 
+              width={100} 
+              height={50} 
               className="h-8 w-auto"
             />
           </div>
 
-          {/* Badge */}
+          {/* Expiry Date Badge */}
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 rounded-full bg-blue-600/20 px-4 py-2 ring-1 ring-blue-500/30">
-              <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-sm font-semibold text-blue-300">Limited Time Offer</span>
+              <span className="text-sm font-semibold text-blue-300">Offer ends March 31st, 2026</span>
             </div>
           </div>
 
           {/* Main message */}
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
               Save up to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">50%</span>
             </h2>
-            <p className="text-xl text-gray-300 mb-2">
+            <p className="text-xl text-gray-300 mt-2">
               on your regulatory intelligence costs
             </p>
-            <p className="text-sm text-gray-400">
-              when you switch to XHS<sup className="text-xs">™</sup> today
-            </p>
+          </div>
+
+          {/* Sectors */}
+          <div className="flex justify-center gap-3 mb-8">
+            <div className="px-4 py-2 rounded-full bg-purple-600/20 ring-1 ring-purple-500/30">
+              <span className="text-sm font-medium text-purple-300">AI</span>
+            </div>
+            <div className="px-4 py-2 rounded-full bg-blue-600/20 ring-1 ring-blue-500/30">
+              <span className="text-sm font-medium text-blue-300">Payments</span>
+            </div>
+            <div className="px-4 py-2 rounded-full bg-emerald-600/20 ring-1 ring-emerald-500/30">
+              <span className="text-sm font-medium text-emerald-300">Gambling</span>
+            </div>
           </div>
 
           {/* Benefits */}
