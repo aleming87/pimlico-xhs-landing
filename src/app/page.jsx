@@ -88,7 +88,7 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="lg:ml-auto lg:pt-4 lg:pl-4">
               <div className="lg:max-w-lg">
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">XHS<sup className="text-2xl">™</sup> delivers <span className="text-blue-400">compliance success</span></p>
+                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">XHS<sup className="text-3xl">™</sup> delivers <span className="text-blue-400">compliance success</span></p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-400 lg:max-w-none">
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
