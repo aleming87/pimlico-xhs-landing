@@ -169,14 +169,14 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
               <div className="w-full mx-auto text-center">
-                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Experience the future of <span className="text-blue-400">regulatory compliance</span></h2>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Sign up for a <span className="text-blue-400">7 day trial</span> today</h2>
                 <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Transform how your team manages compliance with AI-powered workspaces built for regulated industries.</p>
                 <div className="mt-10 flex items-center justify-center">
                   <a
                     href="/contact"
                     className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:shadow-xl"
                   >
-                    Explore
+                    Get started
                   </a>
                 </div>
               </div>

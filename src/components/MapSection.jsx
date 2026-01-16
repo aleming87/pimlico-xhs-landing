@@ -31,15 +31,16 @@ export default function MapSection() {
   }
 
   const handleGamblingClick = () => {
-    // Gambling covers major regulated gambling jurisdictions worldwide
+    // Gambling covers comprehensive global jurisdictions
     if (window.highlightCountries) {
       const gamblingCountries = [
         'USA', 'CAN', 'MEX',  // North America
-        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'MLT', 'CYP', 'GRC', 'CZE', 'SVK', 'HRV', 'BGR', 'ROU', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL', 'SRB', 'MKD', 'ALB', 'BIH', 'MNE', 'GEO', 'ARM',  // Europe
-        'BRA', 'ARG', 'CHL', 'COL', 'PER', 'URY', 'PRY', 'ECU', 'BOL', 'PAN', 'CRI', 'GTM', 'DOM', 'JAM', 'TTO', 'BHS', 'BRB',  // LATAM
-        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'MAC', 'PHL', 'MYS', 'KHM', 'NPL', 'IND', 'LKA',  // APAC
-        'ZAF', 'KEN', 'NGA', 'GHA', 'UGA', 'TZA', 'ZWE', 'ZMB', 'BWA', 'NAM', 'RWA', 'MUS', 'SYC',  // Africa
-        'TUR', 'RUS', 'UKR', 'BLR', 'KAZ', 'MDA'  // Eastern Europe/Eurasia
+        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'MLT', 'CYP', 'GRC', 'CZE', 'SVK', 'HRV', 'BGR', 'ROU', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL', 'SRB', 'MKD', 'ALB', 'BIH', 'MNE', 'GEO', 'ARM', 'AZE', 'UKR', 'MDA', 'BLR',  // Europe
+        'BRA', 'ARG', 'CHL', 'COL', 'PER', 'URY', 'PRY', 'ECU', 'BOL', 'VEN', 'PAN', 'CRI', 'GTM', 'HND', 'SLV', 'NIC', 'DOM', 'JAM', 'TTO', 'BHS', 'BRB', 'CUB', 'GUY', 'SUR',  // LATAM
+        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'MAC', 'PHL', 'MYS', 'KHM', 'NPL', 'IND', 'LKA', 'THA', 'VNM', 'IDN', 'TWN', 'LAO', 'MMR', 'BGD', 'PAK', 'BTN', 'MNG',  // APAC
+        'ZAF', 'KEN', 'NGA', 'GHA', 'UGA', 'TZA', 'ZWE', 'ZMB', 'BWA', 'NAM', 'RWA', 'MUS', 'SYC', 'MOZ', 'AGO', 'ETH', 'SEN', 'CIV', 'CMR', 'MDG', 'MWI', 'BEN', 'TGO', 'BFA', 'MLI', 'NER', 'TCD', 'GAB', 'GNQ', 'COG', 'CAF', 'SSD', 'SOM', 'DJI', 'ERI',  // Africa
+        'TUR', 'RUS', 'KAZ', 'UZB', 'TKM', 'TJK', 'KGZ',  // Eastern Europe/Eurasia
+        'ARE', 'SAU', 'QAT', 'BHR', 'OMN', 'KWT', 'ISR', 'JOR', 'LBN', 'EGY', 'IRQ', 'IRN', 'AFG', 'YEM', 'SYR', 'PSE'  // Middle East
       ]
       window.highlightCountries(gamblingCountries, 'GAMBLING', true)
       setActiveSelection('GAMBLING')
@@ -54,7 +55,7 @@ export default function MapSection() {
       case 'PAYMENTS':
         return { regions: 6, jurisdictions: 180 }
       case 'GAMBLING':
-        return { regions: 6, jurisdictions: 90 }
+        return { regions: 6, jurisdictions: 180 }
       default:
         return { regions: 6, jurisdictions: 180 }  // Show full coverage by default
     }
@@ -69,15 +70,6 @@ export default function MapSection() {
       {/* Solution Area Buttons */}
       <div className="mt-4 mb-4">
         <div className="grid grid-cols-3 gap-3">
-          <button 
-            onClick={handleAIClick}
-            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold transition-all duration-200 border border-gray-600 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20"
-          >
-            <div className="flex items-center justify-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-purple-400 group-hover:bg-white"></span>
-              <span>AI</span>
-            </div>
-          </button>
           <button 
             onClick={handlePaymentsClick}
             className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-semibold transition-all duration-200 border border-gray-600 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20"
@@ -94,6 +86,15 @@ export default function MapSection() {
             <div className="flex items-center justify-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:bg-white"></span>
               <span>Gambling</span>
+            </div>
+          </button>
+          <button 
+            onClick={handleAIClick}
+            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold transition-all duration-200 border border-gray-600 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20"
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-purple-400 group-hover:bg-white"></span>
+              <span>AI</span>
             </div>
           </button>
         </div>
