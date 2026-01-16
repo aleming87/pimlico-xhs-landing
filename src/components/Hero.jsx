@@ -144,10 +144,10 @@ export default function Hero() {
         <div className="mx-auto max-w-4xl py-16 sm:py-24 lg:py-32">
           <div className="text-center">
             <div className="mb-4 flex justify-center">
-              <Image src="/XHS_Logo_White.png" alt="XHS" width={350} height={175} className="h-32 w-auto sm:h-36 lg:h-40" />
+              <Image src="/XHS_Logo_White.png" alt="XHS" width={350} height={175} className="h-40 w-auto sm:h-44 lg:h-48" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-              The platform for<br />Regulatory AI&nbsp;workspaces
+              The platform for<br />AI-powered regulatory&nbsp;workspaces
             </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI</span>{", "}<span className="text-blue-300">Payments</span>{", "}<span className="text-blue-300">Crypto</span>{" & "}<span className="text-blue-300">Gambling</span> compliance workflows.</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
