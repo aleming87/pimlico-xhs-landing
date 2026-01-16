@@ -61,12 +61,12 @@ export default function PromoModal() {
             ×
           </button>
           
-          <div className="flex flex-col items-center gap-2 text-center w-16">
+          <div className="flex flex-col items-center gap-2 text-center w-24">
             <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-              50%
+              Save 50%
             </div>
-            <div className="text-xs text-gray-300 leading-tight">
-              Save on compliance costs
+            <div className="text-[11px] text-gray-300 leading-tight">
+              on regulatory intelligence costs
             </div>
             <div className="text-[10px] text-gray-500 mt-1">
               Ends Mar 31
@@ -93,16 +93,6 @@ export default function PromoModal() {
           </svg>
         </button>
 
-        {/* Image section */}
-        <div className="relative h-48 bg-gradient-to-br from-blue-900/20 to-purple-900/20 flex items-center justify-center overflow-hidden">
-          <Image 
-            src="/promo-modal.png" 
-            alt="XHS Promo" 
-            fill
-            className="object-cover opacity-90"
-          />
-        </div>
-
         {/* Content */}
         <div className="p-8 md:p-10">
           {/* Logos */}
@@ -112,15 +102,15 @@ export default function PromoModal() {
               alt="Pimlico" 
               width={120} 
               height={32} 
-              className="h-8 w-auto"
+              className="h-9 w-auto"
             />
             <div className="h-8 w-px bg-blue-500/30"></div>
             <Image 
               src="/XHS_Logo_White.png" 
               alt="XHS" 
-              width={100} 
-              height={50} 
-              className="h-8 w-auto"
+              width={120} 
+              height={60} 
+              className="h-9 w-auto"
             />
           </div>
 
@@ -139,18 +129,21 @@ export default function PromoModal() {
             <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
               Save up to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">50%</span>
             </h2>
-            <p className="text-xl text-gray-300 mt-2">
-              on your regulatory intelligence costs
+            <p className="text-xl text-gray-300 mt-1">
+              on regulatory intelligence costs
             </p>
           </div>
 
           {/* Sectors */}
-          <div className="flex justify-center gap-3 mb-8">
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
             <div className="px-4 py-2 rounded-full bg-purple-600/20 ring-1 ring-purple-500/30">
               <span className="text-sm font-medium text-purple-300">AI</span>
             </div>
             <div className="px-4 py-2 rounded-full bg-blue-600/20 ring-1 ring-blue-500/30">
               <span className="text-sm font-medium text-blue-300">Payments</span>
+            </div>
+            <div className="px-4 py-2 rounded-full bg-indigo-600/20 ring-1 ring-indigo-500/30">
+              <span className="text-sm font-medium text-indigo-300">Crypto</span>
             </div>
             <div className="px-4 py-2 rounded-full bg-emerald-600/20 ring-1 ring-emerald-500/30">
               <span className="text-sm font-medium text-emerald-300">Gambling</span>
@@ -164,19 +157,31 @@ export default function PromoModal() {
                 <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
                 </svg>
-                <span className="text-sm">AI-powered compliance workspaces</span>
-              </li>
-              <li className="flex items-center gap-3 text-gray-300">
-                <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
-                </svg>
                 <span className="text-sm">180+ jurisdictions covered</span>
               </li>
               <li className="flex items-center gap-3 text-gray-300">
                 <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
                 </svg>
-                <span className="text-sm">7-day free trial included</span>
+                <span className="text-sm">Country reports</span>
+              </li>
+              <li className="flex items-center gap-3 text-gray-300">
+                <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
+                </svg>
+                <span className="text-sm">Slack, Google, and Microsoft integrations</span>
+              </li>
+              <li className="flex items-center gap-3 text-gray-300">
+                <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
+                </svg>
+                <span className="text-sm">Unlimited users</span>
+              </li>
+              <li className="flex items-center gap-3 text-gray-300">
+                <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
+                </svg>
+                <span className="text-sm">7-day free trial</span>
               </li>
             </ul>
           </div>
