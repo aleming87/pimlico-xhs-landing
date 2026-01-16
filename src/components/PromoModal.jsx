@@ -96,7 +96,7 @@ export default function PromoModal() {
         {/* Content */}
         <div className="p-8 md:p-10">
           {/* Logos */}
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-2">
             <Image 
               src="/Pimlico_Logo_Inverted.png" 
               alt="Pimlico" 
@@ -108,20 +108,16 @@ export default function PromoModal() {
             <Image 
               src="/XHS_Logo_White.png" 
               alt="XHS" 
-              width={120} 
-              height={60} 
-              className="h-9 w-auto"
+              width={180} 
+              height={90} 
+              className="h-12 w-auto"
             />
           </div>
 
-          {/* Expiry Date Badge */}
           <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-blue-600/20 px-4 py-2 ring-1 ring-blue-500/30">
-              <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-sm font-semibold text-blue-300">Offer ends March 31st, 2026</span>
-            </div>
+            <span className="text-xs font-medium text-blue-300/80">
+              Offer ends March 31st, 2026
+            </span>
           </div>
 
           {/* Main message */}
@@ -135,18 +131,18 @@ export default function PromoModal() {
           </div>
 
           {/* Sectors */}
-          <div className="flex flex-wrap justify-center gap-3 mb-8">
-            <div className="px-4 py-2 rounded-full bg-purple-600/20 ring-1 ring-purple-500/30">
-              <span className="text-sm font-medium text-purple-300">AI</span>
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            <div className="px-4 py-2 rounded-full bg-blue-600/20 ring-1 ring-blue-500/30">
+              <span className="text-sm font-medium text-blue-300">AI</span>
             </div>
             <div className="px-4 py-2 rounded-full bg-blue-600/20 ring-1 ring-blue-500/30">
               <span className="text-sm font-medium text-blue-300">Payments</span>
             </div>
-            <div className="px-4 py-2 rounded-full bg-indigo-600/20 ring-1 ring-indigo-500/30">
-              <span className="text-sm font-medium text-indigo-300">Crypto</span>
+            <div className="px-4 py-2 rounded-full bg-blue-600/20 ring-1 ring-blue-500/30">
+              <span className="text-sm font-medium text-blue-300">Crypto</span>
             </div>
-            <div className="px-4 py-2 rounded-full bg-emerald-600/20 ring-1 ring-emerald-500/30">
-              <span className="text-sm font-medium text-emerald-300">Gambling</span>
+            <div className="px-4 py-2 rounded-full bg-blue-600/20 ring-1 ring-blue-500/30">
+              <span className="text-sm font-medium text-blue-300">Gambling</span>
             </div>
           </div>
 
@@ -163,7 +159,7 @@ export default function PromoModal() {
                 <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
                 </svg>
-                <span className="text-sm">Country reports</span>
+                <span className="text-sm">Country reports and requirements</span>
               </li>
               <li className="flex items-center gap-3 text-gray-300">
                 <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
@@ -175,13 +171,13 @@ export default function PromoModal() {
                 <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
                 </svg>
-                <span className="text-sm">Unlimited users</span>
+                <span className="text-sm">Collaborative workspaces</span>
               </li>
               <li className="flex items-center gap-3 text-gray-300">
                 <svg className="w-5 h-5 flex-none text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clipRule="evenodd" fillRule="evenodd" />
                 </svg>
-                <span className="text-sm">7-day free trial</span>
+                <span className="text-sm">Unlimited users</span>
               </li>
             </ul>
           </div>
