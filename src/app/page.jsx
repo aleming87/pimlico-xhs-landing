@@ -3,6 +3,8 @@ import Differentiators from "@/components/Differentiators";
 import DeploySection from "@/components/DeploySection";
 import DatamapScripts from "@/components/DatamapScripts";
 import MapSection from "@/components/MapSection";
+import PromoModal from "@/components/PromoModal";
+import { CookieConsent } from "@/components/CookieConsent";
 
 export const metadata = {
   title: "Pimlico XHS™ - Regulatory AI workspaces",
@@ -87,7 +89,7 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="lg:ml-auto lg:pt-4 lg:pl-4">
               <div className="lg:max-w-lg">
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">Build <span className="text-blue-400">AI-powered</span> regulatory workspaces</p>
+                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">XHS<sup className="text-2xl">™</sup> delivers <span className="text-blue-400">compliance success</span></p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-400 lg:max-w-none">
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
@@ -110,20 +112,20 @@ export default function Page() {
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
                       <svg className="absolute top-1 left-1 size-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
-                      Seamless Integration.
+                      Enterprise Security.
                     </dt>
-                    <dd className="inline"> Enterprise-grade APIs that scale effortlessly across your organization</dd>
+                    <dd className="inline"> Bank-grade encryption and compliance with SOC 2, ISO 27001, and GDPR standards</dd>
                   </div>
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
                       <svg className="absolute top-1 left-1 size-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                       </svg>
-                      Smart Automation.
+                      API Integration.
                     </dt>
-                    <dd className="inline"> AI-driven automation reduces manual work and accelerates compliance processes</dd>
+                    <dd className="inline"> Enterprise-grade APIs that scale effortlessly across your organization</dd>
                   </div>
                 </dl>
               </div>
@@ -144,7 +146,7 @@ export default function Page() {
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Regulatory updates parsed</dt>
               <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
-                <span id="counter-1200k">0</span>M+
+                <span id="counter-875k">0</span>k+
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
@@ -295,6 +297,8 @@ export default function Page() {
           </div>
         </footer>
       </main>
+      <PromoModal />
+      <CookieConsent />
       <DatamapScripts />
     </>
   );

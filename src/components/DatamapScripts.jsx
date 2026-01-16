@@ -157,7 +157,7 @@ export default function DatamapScripts() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setTimeout(() => animateCounter('counter-1200k', 1.2, 2000), 200)
+            setTimeout(() => animateCounter('counter-875k', 875, 2000), 200)
             setTimeout(() => animateCounter('counter-180', 180, 2000), 400)
             setTimeout(() => animateCounter('counter-90', 90, 2000), 600)
             observer.disconnect()
@@ -165,7 +165,7 @@ export default function DatamapScripts() {
         })
       }, { threshold: 0.5 })
       
-      const statsSection = document.querySelector('#counter-1200k')?.closest('.bg-white')
+      const statsSection = document.querySelector('#counter-875k')?.closest('.bg-white')
       if (statsSection) {
         observer.observe(statsSection)
       }
