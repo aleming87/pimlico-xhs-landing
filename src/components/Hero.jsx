@@ -146,16 +146,9 @@ export default function Hero() {
             <div className="mb-4 flex justify-center">
               <Image src="/XHS_Logo_White.png" alt="XHS" width={350} height={175} className="h-40 w-auto sm:h-44 lg:h-48" />
             </div>
-            <div className="relative inline-block">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -inset-x-6 -inset-y-4 -z-10 rounded-full bg-gradient-to-r from-blue-500/30 via-blue-400/20 to-indigo-500/30 blur-2xl"
-                style={{ animation: 'titleGlow 10s ease-in-out infinite' }}
-              />
-              <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                AI-powered regulatory workspaces
-              </h1>
-            </div>
+            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+              AI-powered regulatory workspaces
+            </h1>
             <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI</span>{", "}<span className="text-blue-300">Payments</span>{", "}<span className="text-blue-300">Crypto</span>{" & "}<span className="text-blue-300">Gambling</span> compliance workflows.</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
               <a href="/contact" className="w-full sm:w-auto rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center transition-all hover:shadow-xl">Explore</a>
@@ -169,18 +162,6 @@ export default function Hero() {
           ></div>
         </div>
       </div>
-      <style jsx>{`
-        @keyframes titleGlow {
-          0%, 100% {
-            transform: translateY(0px) scale(1);
-            opacity: 0.7;
-          }
-          50% {
-            transform: translateY(6px) scale(1.03);
-            opacity: 0.9;
-          }
-        }
-      `}</style>
     </div>
   );
 }
