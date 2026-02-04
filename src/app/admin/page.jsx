@@ -538,10 +538,47 @@ export default function AdminPage() {
     }
   };
 
-  const handleImageUpload = (e) => {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Compress image to reduce localStorage usage
+    if (!file) return;
+
+    // Check file size (max 4.5MB for Vercel Blob free tier)
+    if (file.size > 4.5 * 1024 * 1024) {
+      alert('Image is too large. Please use an image under 4.5MB.');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Upload to Vercel Blob for public URL
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.url) {
+        // Use the public Vercel Blob URL
+        setArticleImage(result.url);
+        setOgImageUrl(result.url); // Also set as OG image for social sharing
+        alert('Image uploaded successfully! This URL will work for both the article and social sharing.');
+      } else {
+        throw new Error(result.error || 'Upload failed');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      
+      // Fallback to base64 if Vercel Blob fails (e.g., in development or if not configured)
+      alert('Cloud upload failed. Using local storage instead (social sharing may not work).\\n\\nTo enable cloud uploads, add BLOB_READ_WRITE_TOKEN to your Vercel environment variables.');
+      
+      // Compress and use base64 as fallback
       const maxWidth = 1200;
       const maxHeight = 630;
       const quality = 0.7;
@@ -551,7 +588,6 @@ export default function AdminPage() {
       const ctx = canvas.getContext('2d');
       
       img.onload = () => {
-        // Calculate new dimensions maintaining aspect ratio
         let width = img.width;
         let height = img.height;
         
@@ -566,23 +602,14 @@ export default function AdminPage() {
         
         canvas.width = width;
         canvas.height = height;
-        
-        // Draw and compress
         ctx.drawImage(img, 0, 0, width, height);
         const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-        
-        // Check size (base64 is ~33% larger than binary)
-        const sizeInBytes = compressedDataUrl.length * 0.75;
-        const sizeInKB = sizeInBytes / 1024;
-        
-        if (sizeInKB > 500) {
-          alert(`Warning: Image is ${Math.round(sizeInKB)}KB. Consider using a smaller image to avoid storage issues.`);
-        }
-        
         setArticleImage(compressedDataUrl);
       };
       
       img.src = URL.createObjectURL(file);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -1212,15 +1239,28 @@ export default function AdminPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Cover Image</label>
                 <div className="flex items-start gap-4">
-                  <label className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 cursor-pointer transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Upload Image
+                  <label className={`inline-flex items-center gap-2 px-4 py-2 ${isUploading ? 'bg-gray-600 cursor-wait' : 'bg-gray-700 hover:bg-gray-600 cursor-pointer'} text-white rounded-lg transition-colors`}>
+                    {isUploading ? (
+                      <>
+                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Upload Image
+                      </>
+                    )}
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageUpload}
+                      disabled={isUploading}
                       className="hidden"
                     />
                   </label>
@@ -1228,15 +1268,21 @@ export default function AdminPage() {
                     <div className="relative">
                       <img src={articleImage} alt="Preview" className="h-20 w-32 object-cover rounded-lg" />
                       <button
-                        onClick={() => setArticleImage('')}
+                        onClick={() => {
+                          setArticleImage('');
+                          setOgImageUrl('');
+                        }}
                         className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-400"
                       >
                         ×
                       </button>
+                      {articleImage.includes('vercel') && (
+                        <span className="absolute -bottom-2 -right-2 px-1.5 py-0.5 bg-green-500 text-white rounded text-xs">✓ Cloud</span>
+                      )}
                     </div>
                   )}
                 </div>
-                <p className="text-gray-500 text-xs mt-2">Recommended: 1200×630px for optimal social sharing</p>
+                <p className="text-gray-500 text-xs mt-2">Images are uploaded to cloud storage for social sharing. Recommended: 1200×630px</p>
               </div>
 
               {/* Markdown Upload */}
