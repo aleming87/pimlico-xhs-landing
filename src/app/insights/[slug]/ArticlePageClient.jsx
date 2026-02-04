@@ -253,19 +253,6 @@ export default function ArticlePageClient() {
                   </svg>
                 </a>
                 
-                {/* Facebook */}
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Share on Facebook"
-                >
-                  <svg className="w-4 h-4" fill="#1877F2" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
-                
                 {/* WhatsApp */}
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(`${shareTitle}\n\n${article.excerpt || ''}\n\n${shareUrl}`)}`}
@@ -279,6 +266,19 @@ export default function ArticlePageClient() {
                   </svg>
                 </a>
                 
+                {/* Telegram */}
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Share on Telegram"
+                >
+                  <svg className="w-4 h-4" fill="#26A5E4" viewBox="0 0 24 24">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                  </svg>
+                </a>
+                
                 {/* Gmail */}
                 <a
                   href={`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
@@ -289,17 +289,6 @@ export default function ArticlePageClient() {
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#EA4335">
                     <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
-                  </svg>
-                </a>
-                
-                {/* Outlook */}
-                <a
-                  href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Share via Email"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#0078D4">
-                    <path d="M24 7.387v10.478c0 .23-.08.424-.238.576-.16.154-.352.231-.574.231h-8.188v-6.29l1.1.914c.079.066.178.099.298.099.12 0 .218-.033.293-.099l5.2-4.326a.487.487 0 0 0 .165-.18.456.456 0 0 0-.023-.476.533.533 0 0 0-.193-.166.554.554 0 0 0-.26-.066H15V6.27h8.188c.222 0 .413.072.574.216.159.144.238.335.238.576v.325zM14.413 6.844l-2.408 2.06-2.408-2.06a.765.765 0 0 0-.503-.186.765.765 0 0 0-.503.186L6.997 8.49V5.438c0-.106.038-.197.115-.273a.375.375 0 0 1 .273-.114h6.24c.105 0 .196.038.272.114a.371.371 0 0 1 .116.273V6.66c-.065.064-.17.12-.316.168a.751.751 0 0 1-.284.016zM15 18.672v-5.936l-1.387-1.156-1.608 1.38-.005.003-2.995 2.562L6 13.057v5.615h9zm-8.188-5.04l-1.387-1.187-.425.363V6.27H1v11.402h5.812V13.63zM0 17.672V6.583l6 4.993-6 6.096zm6.997.672l5.008-4.281 5.008 4.281H6.997z"/>
                   </svg>
                 </a>
               </div>
