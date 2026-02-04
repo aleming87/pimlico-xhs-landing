@@ -268,7 +268,21 @@ export default function AdminPage() {
       setTimeout(() => setShowSuccess(false), 5000);
       
     } catch (error) {
-      alert('Error saving article: ' + error.message);
+      if (error.name === 'QuotaExceededError' || error.message.includes('quota')) {
+        const clearStorage = confirm(
+          'Storage quota exceeded! This usually happens when images are too large.\n\n' +
+          'Options:\n' +
+          '1. Click OK to remove the image and try saving without it\n' +
+          '2. Click Cancel to abort and try with a smaller image\n\n' +
+          'Tip: Use smaller images (under 500KB) or use image URLs instead of uploads.'
+        );
+        if (clearStorage) {
+          setArticleImage('');
+          alert('Image removed. Please click Update Article again to save without the image.');
+        }
+      } else {
+        alert('Error saving article: ' + error.message);
+      }
       console.error('Publish error:', error);
     }
   };
@@ -366,11 +380,48 @@ export default function AdminPage() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setArticleImage(event.target.result);
+      // Compress image to reduce localStorage usage
+      const maxWidth = 1200;
+      const maxHeight = 630;
+      const quality = 0.7;
+      
+      const img = document.createElement('img');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      img.onload = () => {
+        // Calculate new dimensions maintaining aspect ratio
+        let width = img.width;
+        let height = img.height;
+        
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        
+        // Check size (base64 is ~33% larger than binary)
+        const sizeInBytes = compressedDataUrl.length * 0.75;
+        const sizeInKB = sizeInBytes / 1024;
+        
+        if (sizeInKB > 500) {
+          alert(`Warning: Image is ${Math.round(sizeInKB)}KB. Consider using a smaller image to avoid storage issues.`);
+        }
+        
+        setArticleImage(compressedDataUrl);
       };
-      reader.readAsDataURL(file);
+      
+      img.src = URL.createObjectURL(file);
     }
   };
 
