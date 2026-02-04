@@ -1,6 +1,13 @@
 import { sampleArticles } from '@/data/sample-articles';
 import ArticlePageClient from './ArticlePageClient';
 
+// Category-specific default OG images
+const categoryImages = {
+  'Gambling': '/articles/og-gambling.png',
+  'AI Regulation': '/articles/og-ai-regulation.png', 
+  'Payments': '/articles/og-payments.png',
+};
+
 // Generate metadata for social sharing
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -31,21 +38,24 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  // Use Dashboard.png as the default OG image (must be absolute URL)
+  // OG Image priority:
+  // 1. Article-specific image in /articles/[slug].png
+  // 2. Custom ogImage field on the article
+  // 3. Category-specific default image
+  // 4. General default (Dashboard.png)
   let ogImage = `${baseUrl}/Dashboard.png`;
   
-  // Check if article has a valid image path that exists in public folder
-  if (article.image) {
-    if (article.image.startsWith('data:')) {
-      // Base64 images can't be used for OG - use default
-      ogImage = `${baseUrl}/Dashboard.png`;
-    } else if (article.image.startsWith('http')) {
-      // External URL - use as is
-      ogImage = article.image;
-    } else {
-      // For local paths, always use Dashboard.png for OG (more reliable)
-      // Article images like /screenshots/dashboard.png may not exist
-      ogImage = `${baseUrl}/Dashboard.png`;
+  // Check for article-specific OG image (must be added to public/articles/)
+  if (article.ogImage) {
+    // Custom OG image path specified on article
+    ogImage = article.ogImage.startsWith('http') 
+      ? article.ogImage 
+      : `${baseUrl}${article.ogImage.startsWith('/') ? '' : '/'}${article.ogImage}`;
+  } else {
+    // Use category-specific default
+    const categoryImage = categoryImages[article.category];
+    if (categoryImage) {
+      ogImage = `${baseUrl}${categoryImage}`;
     }
   }
 

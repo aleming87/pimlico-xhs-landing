@@ -10,6 +10,7 @@ export const sampleArticles = [
     date: '2026-02-03',
     readTime: '7 min read',
     image: '/Dashboard.png',
+    ogImage: '/articles/og-gambling.png', // OG image for social sharing
     featured: true,
     tags: ['gambling-reform', 'licensing', 'marketing-restrictions', 'veikkaus', 'finland', 'nordic'],
     content: `
