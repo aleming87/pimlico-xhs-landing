@@ -251,6 +251,13 @@ export default function ArticlePage() {
 
           {/* Article Header */}
           <header className="mb-10">
+            {/* Cover Image - Above Title */}
+            {article.image && (
+              <div className="mb-6 rounded-xl overflow-hidden">
+                <img src={article.image} alt={article.title} className="w-full h-auto object-cover" />
+              </div>
+            )}
+            
             <div className="flex items-center gap-3 text-sm text-gray-500 mb-4">
               <span className="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-medium">{article.category}</span>
               <span>{article.date}</span>
@@ -262,15 +269,10 @@ export default function ArticlePage() {
             </h1>
             <p className="text-xl text-gray-600">{article.excerpt}</p>
             
-            {/* Cover Image */}
-            {article.image && (
-              <div className="mt-6 rounded-xl overflow-hidden">
-                <img src={article.image} alt={article.title} className="w-full h-auto object-cover" />
-              </div>
-            )}
-            
             <div className="mt-6 flex items-center gap-3">
-              <Image src="/Pimlico_Logo.png" alt="Pimlico" width={40} height={40} className="h-10 w-10 object-contain" />
+              <div className="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white p-1">
+                <Image src="/Pimlico_Logo.png" alt="Pimlico" width={32} height={32} className="h-7 w-7 object-contain" />
+              </div>
               <div>
                 <p className="text-gray-900 font-medium">XHS™ Team</p>
               </div>

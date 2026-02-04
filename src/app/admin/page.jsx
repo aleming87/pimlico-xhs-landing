@@ -28,6 +28,7 @@ export default function AdminPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [scheduleEnabled, setScheduleEnabled] = useState(false);
   const [scheduledDate, setScheduledDate] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
 
   // Check if already authenticated via sessionStorage
   useEffect(() => {
@@ -488,7 +489,21 @@ export default function AdminPage() {
 
               {/* Markdown Upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Content (Markdown)</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-300">Content (Markdown)</label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPreview(true)}
+                    disabled={!markdownContent}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    Preview
+                  </button>
+                </div>
                 <div className="mb-3">
                   <label className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 cursor-pointer transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,6 +555,58 @@ export default function AdminPage() {
                   className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
                   Clear
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Markdown Preview Modal */}
+        {showPreview && (
+          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">Markdown Preview</h3>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex-1 overflow-auto p-6">
+                {articleMeta.title && (
+                  <h1 className="text-3xl font-bold text-gray-900 mb-4">{articleMeta.title}</h1>
+                )}
+                {articleMeta.excerpt && (
+                  <p className="text-xl text-gray-600 mb-6">{articleMeta.excerpt}</p>
+                )}
+                <div className="prose prose-lg max-w-none">
+                  {markdownContent.split('\n').map((line, i) => {
+                    if (line.startsWith('## ')) {
+                      return <h2 key={i} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{line.replace('## ', '')}</h2>;
+                    } else if (line.startsWith('### ')) {
+                      return <h3 key={i} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{line.replace('### ', '')}</h3>;
+                    } else if (line.startsWith('- ')) {
+                      return <li key={i} className="text-gray-600 ml-4 list-disc">{line.replace('- ', '')}</li>;
+                    } else if (line.startsWith('**') && line.endsWith('**')) {
+                      return <p key={i} className="text-gray-900 font-semibold mb-2">{line.replace(/\*\*/g, '')}</p>;
+                    } else if (line.trim() === '') {
+                      return <br key={i} />;
+                    } else {
+                      return <p key={i} className="text-gray-600 mb-4">{line}</p>;
+                    }
+                  })}
+                </div>
+              </div>
+              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  Close Preview
                 </button>
               </div>
             </div>
