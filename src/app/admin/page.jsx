@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
 import { sampleArticles as baseSampleArticles } from '@/data/sample-articles';
 
 // Simple password protection - change this password
@@ -747,21 +748,36 @@ export default function AdminPage() {
                   <p className="text-xl text-gray-600 mb-6">{articleMeta.excerpt}</p>
                 )}
                 <div className="prose prose-lg max-w-none">
-                  {markdownContent.split('\n').map((line, i) => {
-                    if (line.startsWith('## ')) {
-                      return <h2 key={i} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{line.replace('## ', '')}</h2>;
-                    } else if (line.startsWith('### ')) {
-                      return <h3 key={i} className="text-xl font-semibold text-gray-900 mt-6 mb-3">{line.replace('### ', '')}</h3>;
-                    } else if (line.startsWith('- ')) {
-                      return <li key={i} className="text-gray-600 ml-4 list-disc">{line.replace('- ', '')}</li>;
-                    } else if (line.startsWith('**') && line.endsWith('**')) {
-                      return <p key={i} className="text-gray-900 font-semibold mb-2">{line.replace(/\*\*/g, '')}</p>;
-                    } else if (line.trim() === '') {
-                      return <br key={i} />;
-                    } else {
-                      return <p key={i} className="text-gray-600 mb-4">{line}</p>;
-                    }
-                  })}
+                  <ReactMarkdown
+                    components={{
+                      h1: ({children}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h1>,
+                      h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>,
+                      h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">{children}</h3>,
+                      h4: ({children}) => <h4 className="text-lg font-semibold text-gray-900 mt-4 mb-2">{children}</h4>,
+                      p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed">{children}</p>,
+                      ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ul>,
+                      ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ol>,
+                      li: ({children}) => <li className="text-gray-600">{children}</li>,
+                      strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
+                      em: ({children}) => <em className="italic">{children}</em>,
+                      a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 underline">{children}</a>,
+                      blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500 my-4">{children}</blockquote>,
+                      code: ({inline, children}) => inline 
+                        ? <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>
+                        : <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code className="text-sm text-gray-800">{children}</code></pre>,
+                      pre: ({children}) => <div className="my-4">{children}</div>,
+                      hr: () => <hr className="border-gray-200 my-8" />,
+                      table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
+                      thead: ({children}) => <thead className="bg-gray-50">{children}</thead>,
+                      tbody: ({children}) => <tbody>{children}</tbody>,
+                      tr: ({children}) => <tr className="border-b border-gray-200">{children}</tr>,
+                      th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left font-semibold">{children}</th>,
+                      td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
+                      img: ({src, alt}) => <img src={src} alt={alt} className="max-w-full h-auto rounded-lg my-4" />,
+                    }}
+                  >
+                    {markdownContent}
+                  </ReactMarkdown>
                 </div>
               </div>
               <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
