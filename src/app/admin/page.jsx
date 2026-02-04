@@ -667,12 +667,60 @@ export default function AdminPage() {
           <div>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-white">Published Articles</h2>
-              <button
-                onClick={() => setActiveTab('publish')}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
-              >
-                + New Article
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    // Export all custom articles for adding to sample-articles.js
+                    const customArticles = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
+                    if (customArticles.length === 0) {
+                      alert('No custom articles to export. All your articles are already in the sample articles file.');
+                      return;
+                    }
+                    
+                    // Format for sample-articles.js
+                    const exportData = customArticles.map((a, idx) => ({
+                      id: 100 + idx, // Start from 100 for custom articles
+                      slug: a.slug,
+                      title: a.title,
+                      excerpt: a.excerpt,
+                      category: a.category,
+                      author: a.author || 'Pimlico XHS™ Team',
+                      date: a.date,
+                      readTime: a.readTime,
+                      image: '/Dashboard.png', // Use default since base64 won't work for OG
+                      ogImage: a.ogImage || `/articles/og-${a.category.toLowerCase().replace(/\s+/g, '-')}.png`,
+                      featured: a.featured || false,
+                      tags: a.tags || [],
+                      isSample: true,
+                      content: a.content
+                    }));
+                    
+                    const jsonOutput = JSON.stringify(exportData, null, 2);
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(jsonOutput).then(() => {
+                      alert('Articles exported to clipboard!\\n\\nPaste this into sample-articles.js to enable LinkedIn sharing.\\n\\nNote: Add these objects to the sampleArticles array in src/data/sample-articles.js');
+                    }).catch(() => {
+                      // Fallback - show in console
+                      console.log('Export for sample-articles.js:', jsonOutput);
+                      alert('Could not copy to clipboard. Check the browser console (F12) for the export data.');
+                    });
+                  }}
+                  className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
+                  title="Export articles for social sharing support"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  Export for LinkedIn
+                </button>
+                <button
+                  onClick={() => setActiveTab('publish')}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
+                >
+                  + New Article
+                </button>
+              </div>
             </div>
 
             {/* Search and Filters */}
