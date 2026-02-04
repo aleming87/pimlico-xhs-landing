@@ -354,7 +354,6 @@ export default function AdminPage() {
       const customArticles = updatedArticles.filter(a => !a.isSample);
       localStorage.setItem('xhs-articles', JSON.stringify(customArticles));
     }
-    }
   };
 
   const handleFileUpload = (e) => {
