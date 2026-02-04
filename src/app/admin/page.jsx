@@ -26,6 +26,8 @@ export default function AdminPage() {
   });
   const [articleImage, setArticleImage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [scheduleEnabled, setScheduleEnabled] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState('');
 
   // Check if already authenticated via sessionStorage
   useEffect(() => {
@@ -124,11 +126,18 @@ export default function AdminPage() {
       return;
     }
 
+    if (scheduleEnabled && !scheduledDate) {
+      alert('Please select a scheduled publish date');
+      return;
+    }
+
     const newArticle = {
       id: Date.now(),
       ...articleMeta,
       image: articleImage,
-      date: new Date().toISOString().split('T')[0],
+      date: scheduleEnabled ? scheduledDate.split('T')[0] : new Date().toISOString().split('T')[0],
+      scheduledAt: scheduleEnabled ? scheduledDate : null,
+      status: scheduleEnabled ? 'scheduled' : 'published',
       content: markdownContent,
     };
 
@@ -139,6 +148,8 @@ export default function AdminPage() {
     // Reset form
     setMarkdownContent('');
     setArticleImage('');
+    setScheduleEnabled(false);
+    setScheduledDate('');
     setArticleMeta({
       title: '',
       slug: '',
@@ -286,7 +297,12 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {articles.map((article) => (
+                    {articles.map((article) => {
+                      const isScheduled = article.status === 'scheduled' && article.scheduledAt;
+                      const scheduledTime = isScheduled ? new Date(article.scheduledAt) : null;
+                      const isPastScheduled = scheduledTime && scheduledTime <= new Date();
+                      
+                      return (
                       <tr key={article.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                         <td className="p-4">
                           <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400">
@@ -294,9 +310,20 @@ export default function AdminPage() {
                           </Link>
                         </td>
                         <td className="p-4 text-gray-400">{article.category}</td>
-                        <td className="p-4 text-gray-400">{article.date}</td>
+                        <td className="p-4 text-gray-400">
+                          {article.date}
+                          {isScheduled && !isPastScheduled && (
+                            <div className="text-xs text-yellow-400 mt-1">
+                              ⏱ {scheduledTime.toLocaleString()}
+                            </div>
+                          )}
+                        </td>
                         <td className="p-4">
-                          <span className="px-2 py-1 bg-green-900/50 text-green-400 text-xs rounded">Published</span>
+                          {isScheduled && !isPastScheduled ? (
+                            <span className="px-2 py-1 bg-yellow-900/50 text-yellow-400 text-xs rounded">Scheduled</span>
+                          ) : (
+                            <span className="px-2 py-1 bg-green-900/50 text-green-400 text-xs rounded">Published</span>
+                          )}
                         </td>
                         <td className="p-4 text-right">
                           <button
@@ -307,7 +334,8 @@ export default function AdminPage() {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -398,6 +426,35 @@ export default function AdminPage() {
                 <label htmlFor="featured" className="text-gray-300">Featured article</label>
               </div>
 
+              {/* Schedule Publishing */}
+              <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <input
+                    type="checkbox"
+                    id="schedule"
+                    checked={scheduleEnabled}
+                    onChange={(e) => setScheduleEnabled(e.target.checked)}
+                    className="w-4 h-4 rounded bg-gray-800 border-gray-700 text-indigo-500 focus:ring-indigo-500"
+                  />
+                  <label htmlFor="schedule" className="text-gray-300 font-medium">Schedule for later</label>
+                </div>
+                {scheduleEnabled && (
+                  <div className="ml-7">
+                    <label className="block text-sm text-gray-400 mb-2">Publish date & time</label>
+                    <input
+                      type="datetime-local"
+                      value={scheduledDate}
+                      onChange={(e) => setScheduledDate(e.target.value)}
+                      min={new Date().toISOString().slice(0, 16)}
+                      className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                    />
+                    <p className="text-gray-500 text-xs mt-2">
+                      Article will be visible on the insights page after this date/time
+                    </p>
+                  </div>
+                )}
+              </div>
+
               {/* Cover Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Cover Image</label>
@@ -461,12 +518,14 @@ export default function AdminPage() {
                   onClick={handlePublish}
                   className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors font-semibold"
                 >
-                  Publish Article
+                  {scheduleEnabled ? '📅 Schedule Article' : 'Publish Article'}
                 </button>
                 <button
                   onClick={() => {
                     setMarkdownContent('');
                     setArticleImage('');
+                    setScheduleEnabled(false);
+                    setScheduledDate('');
                     setArticleMeta({
                       title: '',
                       slug: '',

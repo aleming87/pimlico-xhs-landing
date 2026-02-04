@@ -93,7 +93,15 @@ export default function InsightsPage() {
     const savedArticles = localStorage.getItem('xhs-articles');
     if (savedArticles) {
       const parsed = JSON.parse(savedArticles);
-      setArticles([...parsed, ...sampleArticles]);
+      // Filter out scheduled articles that haven't reached their publish time
+      const now = new Date();
+      const visibleArticles = parsed.filter(article => {
+        if (article.status === 'scheduled' && article.scheduledAt) {
+          return new Date(article.scheduledAt) <= now;
+        }
+        return true;
+      });
+      setArticles([...visibleArticles, ...sampleArticles]);
     }
   }, []);
 
@@ -286,7 +294,6 @@ export default function InsightsPage() {
                       <span className="text-gray-300 text-4xl font-bold">XHS<sup className="text-xl">™</sup></span>
                     </div>
                   )}
-                </div>
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">

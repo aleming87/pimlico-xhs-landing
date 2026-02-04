@@ -172,7 +172,16 @@ export default function ArticlePage() {
     let allArticles = [...sampleArticles];
     
     if (savedArticles) {
-      allArticles = [...JSON.parse(savedArticles), ...sampleArticles];
+      const parsed = JSON.parse(savedArticles);
+      // Filter out scheduled articles that haven't reached their publish time
+      const now = new Date();
+      const visibleArticles = parsed.filter(article => {
+        if (article.status === 'scheduled' && article.scheduledAt) {
+          return new Date(article.scheduledAt) <= now;
+        }
+        return true;
+      });
+      allArticles = [...visibleArticles, ...sampleArticles];
     }
 
     const found = allArticles.find(a => a.slug === params.slug);
@@ -261,12 +270,9 @@ export default function ArticlePage() {
             )}
             
             <div className="mt-6 flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-xs">XHS™</span>
-              </div>
+              <Image src="/Pimlico_Logo.png" alt="Pimlico" width={40} height={40} className="h-10 w-10 object-contain" />
               <div>
-                <p className="text-gray-900 font-medium">{article.author}</p>
-                <p className="text-gray-500 text-sm">Pimlico XHS™</p>
+                <p className="text-gray-900 font-medium">XHS™ Team</p>
               </div>
             </div>
           </header>
