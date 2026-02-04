@@ -8,6 +8,51 @@ import { useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { sampleArticles } from '@/data/sample-articles';
 
+// Helper function to extract country/region mentioned in article
+function extractCountryFromArticle(article) {
+  if (!article) return null;
+  
+  // Common countries and regions to look for in regulatory content
+  const countries = [
+    'Finland', 'Sweden', 'Denmark', 'Norway', 'Iceland',
+    'UK', 'United Kingdom', 'Great Britain', 'Britain',
+    'Germany', 'France', 'Italy', 'Spain', 'Portugal', 'Netherlands', 'Belgium',
+    'Malta', 'Gibraltar', 'Isle of Man', 'Jersey', 'Guernsey',
+    'Ireland', 'Poland', 'Czech Republic', 'Austria', 'Switzerland',
+    'Luxembourg', 'Monaco', 'Liechtenstein', 'Cyprus', 'Greece',
+    'Estonia', 'Latvia', 'Lithuania', 'Romania', 'Bulgaria', 'Hungary',
+    'Croatia', 'Slovenia', 'Slovakia',
+    'USA', 'United States', 'Canada', 'Australia', 'New Zealand',
+    'Singapore', 'Hong Kong', 'Japan', 'South Korea',
+    'UAE', 'Dubai', 'Saudi Arabia',
+    'Brazil', 'Mexico', 'Argentina',
+    'European Union', 'EU', 'Europe', 'European'
+  ];
+  
+  // Check title first, then content
+  const textToSearch = `${article.title} ${article.content || ''}`;
+  
+  for (const country of countries) {
+    if (textToSearch.toLowerCase().includes(country.toLowerCase())) {
+      // Return normalized country name
+      if (country === 'UK') return 'the UK';
+      if (country === 'United Kingdom' || country === 'Great Britain' || country === 'Britain') return 'the UK';
+      if (country === 'USA' || country === 'United States') return 'the United States';
+      if (country === 'European Union' || country === 'EU') return 'the European Union';
+      if (country === 'Europe' || country === 'European') return 'Europe';
+      if (country === 'UAE') return 'the UAE';
+      return country;
+    }
+  }
+  
+  // Fall back to category-based region
+  if (article.category) {
+    return 'this regulatory jurisdiction';
+  }
+  
+  return 'this market';
+}
+
 export default function ArticlePageClient() {
   const params = useParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -184,14 +229,27 @@ export default function ArticlePageClient() {
                   </svg>
                 </a>
                 
-                {/* Email */}
+                {/* Gmail */}
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 text-gray-400 hover:text-[#EA4335] hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Share via Gmail"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                  </svg>
+                </a>
+                
+                {/* Outlook */}
                 <a
                   href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Share via Email"
+                  className="p-2 text-gray-400 hover:text-[#0078D4] hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Share via Outlook"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 7.387v10.478c0 .23-.08.424-.238.576-.16.154-.352.231-.574.231h-8.188v-6.29l1.1.914c.079.066.178.099.298.099.12 0 .218-.033.293-.099l5.2-4.326a.487.487 0 0 0 .165-.18.456.456 0 0 0-.023-.476.533.533 0 0 0-.193-.166.554.554 0 0 0-.26-.066H15V6.27h8.188c.222 0 .413.072.574.216.159.144.238.335.238.576v.325zM14.413 6.844l-2.408 2.06-2.408-2.06a.765.765 0 0 0-.503-.186.765.765 0 0 0-.503.186L6.997 8.49V5.438c0-.106.038-.197.115-.273a.375.375 0 0 1 .273-.114h6.24c.105 0 .196.038.272.114a.371.371 0 0 1 .116.273V6.66c-.065.064-.17.12-.316.168a.751.751 0 0 1-.284.016zM15 18.672v-5.936l-1.387-1.156-1.608 1.38-.005.003-2.995 2.562L6 13.057v5.615h9zm-8.188-5.04l-1.387-1.187-.425.363V6.27H1v11.402h5.812V13.63zM0 17.672V6.583l6 4.993-6 6.096zm6.997.672l5.008-4.281 5.008 4.281H6.997z"/>
                   </svg>
                 </a>
                 
@@ -253,8 +311,40 @@ export default function ArticlePageClient() {
             </ReactMarkdown>
           </div>
 
-          {/* Back to Insights CTA */}
+          {/* Trial CTA Section */}
           <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-sm border border-blue-100">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Is your team tracking the latest regulatory developments in {extractCountryFromArticle(article)}?
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Get real-time alerts, comprehensive analysis, and expert insights with a <strong className="text-blue-600">7-day free trial</strong> of Pimlico XHS™.
+                  </p>
+                  <Link
+                    href="/contact?trial=true"
+                    className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  >
+                    Start Your Free Trial
+                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Back to Insights */}
+          <div className="mt-8">
             <Link 
               href="/insights" 
               className="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"

@@ -1,6 +1,110 @@
 // Sample articles data - shared between pages for SSR metadata and client rendering
 export const sampleArticles = [
   {
+    id: 7,
+    slug: 'finland-s-gambling-act-introduces-licensing-for-betting-and-online-casino-games',
+    title: 'Finland\'s Gambling Act Introduces Licensing for Betting and Online Casino Games',
+    excerpt: 'Finland\'s new Gambling Act opens the market to licensed operators, ending Veikkaus monopoly. Key compliance requirements and timeline for the 2026 regulatory framework.',
+    category: 'Gambling',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-02-03',
+    readTime: '7 min read',
+    image: '/screenshots/dashboard.png',
+    featured: true,
+    content: `
+## Overview of Finland's New Gambling Act
+
+Finland is undergoing a major transformation in its gambling regulatory landscape. The new Gambling Act, set to take effect in 2026, introduces a licensing system that will allow private operators to offer betting and online casino games in the Finnish market for the first time.
+
+## End of the Veikkaus Monopoly
+
+For decades, Finland maintained a state monopoly on gambling through Veikkaus, the national gambling operator. The new legislation marks a historic shift by:
+
+- Opening the market to licensed private operators
+- Maintaining strict regulatory oversight
+- Preserving responsible gambling protections
+
+## Key Licensing Requirements
+
+### Operator Requirements
+
+Companies seeking a Finnish gambling license must demonstrate:
+
+- **Financial Stability**: Minimum capital requirements and proof of financial viability
+- **Technical Competence**: Robust IT infrastructure and security measures
+- **Responsible Gambling Commitment**: Comprehensive player protection programs
+- **AML/KYC Compliance**: Strong anti-money laundering and know-your-customer procedures
+
+### License Categories
+
+The new framework includes separate licenses for:
+
+| License Type | Scope | Duration |
+|--------------|-------|----------|
+| Online Casino | Digital slot games, table games | 5 years |
+| Sports Betting | Online and land-based betting | 5 years |
+| Poker | Online poker rooms and tournaments | 5 years |
+
+## Timeline for Implementation
+
+- **Q1 2026**: Licensing applications open
+- **Q2 2026**: First licenses expected to be granted
+- **Q3 2026**: Licensed operators can begin operations
+- **2027**: Full market transition complete
+
+## Compliance Considerations
+
+### Advertising Restrictions
+
+Finland will implement strict advertising rules:
+
+- No advertising to minors
+- Mandatory responsible gambling messaging
+- Restrictions on bonus promotions
+- Social media advertising guidelines
+
+### Player Protection Measures
+
+Licensed operators must implement:
+
+1. **Deposit Limits**: Mandatory player-set deposit limits
+2. **Self-Exclusion**: National self-exclusion register integration
+3. **Reality Checks**: Session time reminders
+4. **Loss Limits**: Tools for players to limit losses
+
+### Taxation
+
+The new licensing regime includes:
+
+- Gaming revenue tax structure
+- Corporate tax obligations
+- Contributions to responsible gambling funds
+
+## Impact on Operators
+
+### Opportunities
+
+- Access to a new regulated market with high consumer spending
+- Clear regulatory framework providing legal certainty
+- Potential for innovation in gaming products
+
+### Challenges
+
+- Strict compliance requirements
+- Competition with established operators
+- Need for localized responsible gambling programs
+
+## Conclusion
+
+Finland's new Gambling Act represents a significant opportunity for operators willing to meet rigorous regulatory standards. Early preparation for licensing requirements will be essential for success in this newly opened market.
+
+---
+
+*For assistance with Finnish gambling license applications and compliance, [contact the Pimlico XHS team](/contact).*
+    `,
+    isSample: true,
+  },
+  {
     id: 1,
     slug: 'eu-ai-act-compliance-guide-2026',
     title: 'EU AI Act Compliance Guide 2026: What Regulated Entities Need to Know',
@@ -78,6 +182,7 @@ The EU AI Act presents both challenges and opportunities for regulated entities.
 
 *For more information on how Pimlico XHS can help you achieve AI Act compliance, [contact our team](/contact).*
     `,
+    isSample: true,
   },
   {
     id: 2,
@@ -153,6 +258,7 @@ PSD3 represents a significant evolution in European payments regulation. Organiz
 
 *Stay updated on PSD3 developments with Pimlico XHS regulatory monitoring.*
     `,
+    isSample: true,
   },
   {
     id: 3,
@@ -194,6 +300,7 @@ The UK Gambling Commission continues to strengthen its regulatory framework for 
 
 Operators should review their current practices against the new guidance and implement necessary changes to remain compliant.
     `,
+    isSample: true,
   },
   {
     id: 4,
@@ -235,6 +342,7 @@ The Markets in Crypto-Assets (MiCA) regulation establishes a comprehensive frame
 
 Organizations should develop a structured approach to MiCA compliance, including gap analysis, policy updates, and staff training.
     `,
+    isSample: true,
   },
   {
     id: 5,
@@ -279,6 +387,7 @@ As AI regulation intensifies, comprehensive model documentation has become essen
 
 Documentation should be designed to satisfy multiple regulatory frameworks, including the EU AI Act, sector-specific requirements, and emerging standards.
     `,
+    isSample: true,
   },
   {
     id: 6,
@@ -323,5 +432,6 @@ Operating across multiple European gambling jurisdictions requires careful navig
 
 Develop a licensing strategy that balances market access objectives with compliance costs and operational complexity.
     `,
+    isSample: true,
   },
 ];
