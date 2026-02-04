@@ -43,6 +43,9 @@ export default function AdminPage() {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   
+  // Rich text editor ref
+  const textareaRef = { current: null };
+  
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
@@ -56,6 +59,17 @@ export default function AdminPage() {
       setIsAuthenticated(true);
     }
   }, []);
+
+  // Handle Escape key to close preview modal
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && showPreview) {
+        setShowPreview(false);
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showPreview]);
 
   // Load saved articles from localStorage and merge with sample articles
   useEffect(() => {
@@ -142,6 +156,66 @@ export default function AdminPage() {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
   };
+
+  // Rich text editor formatting functions
+  const insertFormatting = (before, after = '', placeholder = '') => {
+    const textarea = document.getElementById('markdown-editor');
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selectedText = text.substring(start, end) || placeholder;
+    
+    const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
+    setMarkdownContent(newText);
+    
+    // Set cursor position after formatting
+    setTimeout(() => {
+      textarea.focus();
+      const newPosition = start + before.length + selectedText.length + after.length;
+      textarea.setSelectionRange(newPosition, newPosition);
+    }, 0);
+  };
+
+  const insertAtCursor = (textToInsert) => {
+    const textarea = document.getElementById('markdown-editor');
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const text = textarea.value;
+    
+    const newText = text.substring(0, start) + textToInsert + text.substring(start);
+    setMarkdownContent(newText);
+    
+    setTimeout(() => {
+      textarea.focus();
+      const newPosition = start + textToInsert.length;
+      textarea.setSelectionRange(newPosition, newPosition);
+    }, 0);
+  };
+
+  const formatBold = () => insertFormatting('**', '**', 'bold text');
+  const formatItalic = () => insertFormatting('*', '*', 'italic text');
+  const formatStrikethrough = () => insertFormatting('~~', '~~', 'strikethrough');
+  const formatCode = () => insertFormatting('`', '`', 'code');
+  const formatCodeBlock = () => insertFormatting('\n```\n', '\n```\n', 'code block');
+  const formatH1 = () => insertFormatting('\n# ', '\n', 'Heading 1');
+  const formatH2 = () => insertFormatting('\n## ', '\n', 'Heading 2');
+  const formatH3 = () => insertFormatting('\n### ', '\n', 'Heading 3');
+  const formatQuote = () => insertFormatting('\n> ', '\n', 'quote');
+  const formatBulletList = () => insertAtCursor('\n- Item 1\n- Item 2\n- Item 3\n');
+  const formatNumberedList = () => insertAtCursor('\n1. Item 1\n2. Item 2\n3. Item 3\n');
+  const formatLink = () => {
+    const url = prompt('Enter URL:');
+    if (url) insertFormatting('[', `](${url})`, 'link text');
+  };
+  const formatImage = () => {
+    const url = prompt('Enter image URL:');
+    if (url) insertAtCursor(`\n![Image description](${url})\n`);
+  };
+  const formatTable = () => insertAtCursor('\n| Header 1 | Header 2 | Header 3 |\n|----------|----------|----------|\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |\n');
+  const formatHorizontalRule = () => insertAtCursor('\n---\n');
 
   const handleTitleChange = (e) => {
     const title = e.target.value;
@@ -941,40 +1015,134 @@ export default function AdminPage() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-sm font-medium text-gray-300">Content (Markdown)</label>
-                  <button
-                    type="button"
-                    onClick={() => setShowPreview(true)}
-                    disabled={!markdownContent}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Preview
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 cursor-pointer transition-colors">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                      Upload .md
+                      <input
+                        type="file"
+                        accept=".md,.markdown,.txt"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowPreview(true)}
+                      disabled={!markdownContent}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      Preview
+                    </button>
+                  </div>
                 </div>
-                <div className="mb-3">
-                  <label className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 cursor-pointer transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    Upload .md file
-                    <input
-                      type="file"
-                      accept=".md,.markdown,.txt"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                  </label>
+                
+                {/* Rich Text Editor Toolbar */}
+                <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-2 flex flex-wrap gap-1">
+                  {/* Headings */}
+                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                    <button type="button" onClick={formatH1} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 1">
+                      <span className="text-xs font-bold">H1</span>
+                    </button>
+                    <button type="button" onClick={formatH2} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 2">
+                      <span className="text-xs font-bold">H2</span>
+                    </button>
+                    <button type="button" onClick={formatH3} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 3">
+                      <span className="text-xs font-bold">H3</span>
+                    </button>
+                  </div>
+                  
+                  {/* Text Formatting */}
+                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                    <button type="button" onClick={formatBold} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bold (Ctrl+B)">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatItalic} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Italic (Ctrl+I)">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatStrikethrough} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Strikethrough">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 19h4v-3h-4v3zM5 4v3h5v3h4V7h5V4H5zM3 14h18v-2H3v2z"/></svg>
+                    </button>
+                  </div>
+                  
+                  {/* Lists */}
+                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                    <button type="button" onClick={formatBulletList} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bullet List">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatNumberedList} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Numbered List">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatQuote} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Quote">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                    </button>
+                  </div>
+                  
+                  {/* Code */}
+                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                    <button type="button" onClick={formatCode} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Inline Code">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatCodeBlock} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Code Block">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/><rect x="11" y="11" width="2" height="2"/></svg>
+                    </button>
+                  </div>
+                  
+                  {/* Insert */}
+                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                    <button type="button" onClick={formatLink} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Link">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatImage} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Image">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatTable} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Table">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h4v4H7V7zm0 6h4v4H7v-4zm6-6h4v4h-4V7zm0 6h4v4h-4v-4z"/></svg>
+                    </button>
+                    <button type="button" onClick={formatHorizontalRule} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Horizontal Rule">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 11h16v2H4z"/></svg>
+                    </button>
+                  </div>
+                  
+                  {/* Help */}
+                  <div className="flex items-center ml-auto">
+                    <span className="text-xs text-gray-500">Markdown supported</span>
+                  </div>
                 </div>
+                
+                {/* Editor Textarea */}
                 <textarea
+                  id="markdown-editor"
                   value={markdownContent}
                   onChange={(e) => setMarkdownContent(e.target.value)}
-                  placeholder="## Introduction&#10;&#10;Write your article content in Markdown format...&#10;&#10;### Key Points&#10;&#10;- Point 1&#10;- Point 2&#10;- Point 3"
-                  rows={15}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono text-sm"
+                  placeholder="## Introduction&#10;&#10;Start writing your article here...&#10;&#10;### Key Points&#10;&#10;- Use the toolbar above for formatting&#10;- Or write Markdown directly&#10;- Preview your article before publishing"
+                  rows={20}
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 rounded-b-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono text-sm resize-y min-h-[400px]"
+                  onKeyDown={(e) => {
+                    // Keyboard shortcuts
+                    if (e.ctrlKey || e.metaKey) {
+                      if (e.key === 'b') { e.preventDefault(); formatBold(); }
+                      if (e.key === 'i') { e.preventDefault(); formatItalic(); }
+                      if (e.key === 'k') { e.preventDefault(); formatLink(); }
+                    }
+                    // Tab key inserts spaces
+                    if (e.key === 'Tab') {
+                      e.preventDefault();
+                      insertAtCursor('  ');
+                    }
+                  }}
                 />
+                <p className="text-gray-500 text-xs mt-2">
+                  Keyboard shortcuts: <kbd className="px-1 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+B</kbd> Bold, 
+                  <kbd className="px-1 py-0.5 bg-gray-700 rounded text-gray-400 ml-1">Ctrl+I</kbd> Italic, 
+                  <kbd className="px-1 py-0.5 bg-gray-700 rounded text-gray-400 ml-1">Ctrl+K</kbd> Link
+                </p>
               </div>
 
               {/* Actions */}
@@ -1005,25 +1173,41 @@ export default function AdminPage() {
 
         {/* Markdown Preview Modal */}
         {showPreview && (
-          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Markdown Preview</h3>
+          <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4" onClick={() => setShowPreview(false)}>
+            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <h3 className="text-lg font-semibold text-gray-900">Article Preview</h3>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded">Preview Mode</span>
+                </div>
                 <button
                   onClick={() => setShowPreview(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
+                  Exit Preview
                 </button>
               </div>
               <div className="flex-1 overflow-auto p-6">
+                {articleImage && (
+                  <div className="mb-6 rounded-xl overflow-hidden">
+                    <img src={articleImage} alt={articleMeta.title} className="w-full h-auto object-cover" />
+                  </div>
+                )}
                 {articleMeta.title && (
                   <h1 className="text-3xl font-bold text-gray-900 mb-4">{articleMeta.title}</h1>
                 )}
                 {articleMeta.excerpt && (
                   <p className="text-xl text-gray-600 mb-6">{articleMeta.excerpt}</p>
+                )}
+                {tags && tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {tags.map((tag, i) => (
+                      <span key={i} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">#{tag}</span>
+                    ))}
+                  </div>
                 )}
                 <div className="prose prose-lg max-w-none">
                   <ReactMarkdown
@@ -1032,7 +1216,7 @@ export default function AdminPage() {
                       h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>,
                       h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">{children}</h3>,
                       h4: ({children}) => <h4 className="text-lg font-semibold text-gray-900 mt-4 mb-2">{children}</h4>,
-                      p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed">{children}</p>,
+                      p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
                       ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ul>,
                       ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ol>,
                       li: ({children}) => <li className="text-gray-600">{children}</li>,
@@ -1058,12 +1242,13 @@ export default function AdminPage() {
                   </ReactMarkdown>
                 </div>
               </div>
-              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+                <p className="text-sm text-gray-500">Press <kbd className="px-1.5 py-0.5 bg-gray-200 rounded text-gray-700 font-mono text-xs">Esc</kbd> or click outside to close</p>
                 <button
                   onClick={() => setShowPreview(false)}
-                  className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                  className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors font-semibold"
                 >
-                  Close Preview
+                  ← Back to Editor
                 </button>
               </div>
             </div>

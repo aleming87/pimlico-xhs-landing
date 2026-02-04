@@ -12,15 +12,39 @@ export async function generateMetadata({ params }) {
     return {
       title: 'Article Not Found - Pimlico XHS™',
       description: 'The requested article could not be found.',
+      openGraph: {
+        title: 'Article Not Found - Pimlico XHS™',
+        description: 'The requested article could not be found.',
+        url: `${baseUrl}/insights/${slug}`,
+        siteName: 'Pimlico XHS™',
+        type: 'website',
+        images: [
+          {
+            url: `${baseUrl}/XHS%20Logo%20BLUE%20on%20WHITE.png`,
+            width: 1200,
+            height: 630,
+            alt: 'Pimlico XHS™',
+          },
+        ],
+      },
     };
   }
 
-  // Use a default OG image if article image is base64 or not set
-  const ogImage = article.image?.startsWith('data:') 
-    ? `${baseUrl}/XHS%20Logo%20BLUE%20on%20WHITE.png`
-    : article.image 
-      ? `${baseUrl}${article.image}`
-      : `${baseUrl}/XHS%20Logo%20BLUE%20on%20WHITE.png`;
+  // Use Dashboard.png as a more relevant article image, or the article's own image if it's a valid path
+  let ogImage = `${baseUrl}/Dashboard.png`;
+  
+  if (article.image) {
+    if (article.image.startsWith('data:')) {
+      // Base64 images can't be used for OG - use default
+      ogImage = `${baseUrl}/Dashboard.png`;
+    } else if (article.image.startsWith('http')) {
+      // External URL - use as is
+      ogImage = article.image;
+    } else {
+      // Relative path - make absolute
+      ogImage = `${baseUrl}${article.image.startsWith('/') ? '' : '/'}${article.image}`;
+    }
+  }
 
   return {
     title: `${article.title} - Pimlico XHS™`,
