@@ -42,6 +42,12 @@ export default function AdminPage() {
   const [editingArticle, setEditingArticle] = useState(null);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  
+  // Search and filter states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterFeatured, setFilterFeatured] = useState('all');
 
   // Check if already authenticated via sessionStorage
   useEffect(() => {
@@ -400,43 +406,191 @@ export default function AdminPage() {
               </button>
             </div>
 
-            {articles.length === 0 ? (
-              <div className="text-center py-16 bg-gray-800 rounded-xl">
-                <p className="text-gray-400 mb-4">No articles published yet</p>
-                <button
-                  onClick={() => setActiveTab('publish')}
-                  className="text-indigo-400 hover:text-indigo-300"
-                >
-                  Publish your first article →
-                </button>
+            {/* Search and Filters */}
+            <div className="mb-6 bg-gray-800 rounded-xl p-4">
+              <div className="flex flex-wrap gap-4">
+                {/* Search Input */}
+                <div className="flex-1 min-w-[200px]">
+                  <div className="relative">
+                    <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                      type="text"
+                      placeholder="Search articles..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
+                </div>
+                
+                {/* Category Filter */}
+                <div>
+                  <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="all">All Categories</option>
+                    <option value="AI Regulation">AI Regulation</option>
+                    <option value="Compliance">Compliance</option>
+                    <option value="Payments">Payments</option>
+                    <option value="Risk Management">Risk Management</option>
+                    <option value="Industry News">Industry News</option>
+                    <option value="Gambling">Gambling</option>
+                    <option value="Technology">Technology</option>
+                  </select>
+                </div>
+                
+                {/* Status Filter */}
+                <div>
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="published">Published</option>
+                    <option value="scheduled">Scheduled</option>
+                  </select>
+                </div>
+                
+                {/* Featured Filter */}
+                <div>
+                  <select
+                    value={filterFeatured}
+                    onChange={(e) => setFilterFeatured(e.target.value)}
+                    className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="all">All Articles</option>
+                    <option value="featured">Featured Only</option>
+                    <option value="not-featured">Not Featured</option>
+                  </select>
+                </div>
               </div>
-            ) : (
-              <div className="bg-gray-800 rounded-xl overflow-hidden">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-700">
-                      <th className="text-left p-4 text-gray-400 font-medium">Title</th>
-                      <th className="text-left p-4 text-gray-400 font-medium">Category</th>
-                      <th className="text-left p-4 text-gray-400 font-medium">Date</th>
-                      <th className="text-left p-4 text-gray-400 font-medium">Status</th>
-                      <th className="text-right p-4 text-gray-400 font-medium">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {articles.map((article) => {
-                      const isScheduled = article.status === 'scheduled' && article.scheduledAt;
-                      const scheduledTime = isScheduled ? new Date(article.scheduledAt) : null;
-                      const isPastScheduled = scheduledTime && scheduledTime <= new Date();
-                      
-                      return (
-                      <tr key={article.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
-                        <td className="p-4">
-                          <div className="flex items-center gap-2">
-                            <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400">
-                              {article.title}
-                            </Link>
-                            {article.isSample && (
-                              <span className="px-1.5 py-0.5 bg-gray-700 text-gray-400 text-xs rounded">Sample</span>
+              
+              {/* Active filters count */}
+              {(searchQuery || filterCategory !== 'all' || filterStatus !== 'all' || filterFeatured !== 'all') && (
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-sm text-gray-400">
+                    Filters active
+                  </span>
+                  <button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setFilterCategory('all');
+                      setFilterStatus('all');
+                      setFilterFeatured('all');
+                    }}
+                    className="text-sm text-indigo-400 hover:text-indigo-300"
+                  >
+                    Clear all
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {(() => {
+              // Apply filters to articles
+              const filteredArticles = articles.filter(article => {
+                // Search filter
+                if (searchQuery) {
+                  const query = searchQuery.toLowerCase();
+                  const matchesSearch = 
+                    article.title.toLowerCase().includes(query) ||
+                    article.excerpt?.toLowerCase().includes(query) ||
+                    article.category?.toLowerCase().includes(query) ||
+                    article.tags?.some(tag => tag.toLowerCase().includes(query));
+                  if (!matchesSearch) return false;
+                }
+                
+                // Category filter
+                if (filterCategory !== 'all' && article.category !== filterCategory) {
+                  return false;
+                }
+                
+                // Status filter
+                if (filterStatus !== 'all') {
+                  const isScheduled = article.status === 'scheduled' && article.scheduledAt;
+                  const scheduledTime = isScheduled ? new Date(article.scheduledAt) : null;
+                  const isPastScheduled = scheduledTime && scheduledTime <= new Date();
+                  const currentStatus = (isScheduled && !isPastScheduled) ? 'scheduled' : 'published';
+                  if (filterStatus !== currentStatus) return false;
+                }
+                
+                // Featured filter
+                if (filterFeatured === 'featured' && !article.featured) return false;
+                if (filterFeatured === 'not-featured' && article.featured) return false;
+                
+                return true;
+              });
+
+              if (articles.length === 0) {
+                return (
+                  <div className="text-center py-16 bg-gray-800 rounded-xl">
+                    <p className="text-gray-400 mb-4">No articles published yet</p>
+                    <button
+                      onClick={() => setActiveTab('publish')}
+                      className="text-indigo-400 hover:text-indigo-300"
+                    >
+                      Publish your first article →
+                    </button>
+                  </div>
+                );
+              }
+
+              if (filteredArticles.length === 0) {
+                return (
+                  <div className="text-center py-16 bg-gray-800 rounded-xl">
+                    <p className="text-gray-400 mb-4">No articles match your filters</p>
+                    <button
+                      onClick={() => {
+                        setSearchQuery('');
+                        setFilterCategory('all');
+                        setFilterStatus('all');
+                        setFilterFeatured('all');
+                      }}
+                      className="text-indigo-400 hover:text-indigo-300"
+                    >
+                      Clear all filters
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
+                <>
+                  <div className="mb-4 text-sm text-gray-400">
+                    Showing {filteredArticles.length} of {articles.length} articles
+                  </div>
+                  <div className="bg-gray-800 rounded-xl overflow-hidden">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-700">
+                          <th className="text-left p-4 text-gray-400 font-medium">Title</th>
+                          <th className="text-left p-4 text-gray-400 font-medium">Category</th>
+                          <th className="text-left p-4 text-gray-400 font-medium">Publish Date</th>
+                          <th className="text-left p-4 text-gray-400 font-medium">Featured</th>
+                          <th className="text-left p-4 text-gray-400 font-medium">Status</th>
+                          <th className="text-right p-4 text-gray-400 font-medium">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredArticles.map((article) => {
+                          const isScheduled = article.status === 'scheduled' && article.scheduledAt;
+                          const scheduledTime = isScheduled ? new Date(article.scheduledAt) : null;
+                          const isPastScheduled = scheduledTime && scheduledTime <= new Date();
+                          
+                          return (
+                          <tr key={article.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400">
+                                  {article.title}
+                                </Link>
+                                {article.isSample && (
+                                  <span className="px-1.5 py-0.5 bg-gray-700 text-gray-400 text-xs rounded">Sample</span>
                             )}
                           </div>
                         </td>
@@ -447,6 +601,13 @@ export default function AdminPage() {
                             <div className="text-xs text-yellow-400 mt-1">
                               ⏱ {scheduledTime.toLocaleString()}
                             </div>
+                          )}
+                        </td>
+                        <td className="p-4">
+                          {article.featured ? (
+                            <span className="px-2 py-1 bg-purple-900/50 text-purple-400 text-xs rounded">★ Featured</span>
+                          ) : (
+                            <span className="text-gray-500 text-sm">—</span>
                           )}
                         </td>
                         <td className="p-4">
@@ -473,10 +634,12 @@ export default function AdminPage() {
                       </tr>
                       );
                     })}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         )}
 
