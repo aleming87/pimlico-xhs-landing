@@ -72,6 +72,7 @@ export default function PricingPage() {
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
             <a href="/gambling" className="text-sm/6 font-semibold text-white">Gambling</a>
+            <a href="/insights" className="text-sm/6 font-semibold text-white">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-indigo-400">Pricing</a>
             <a href="/#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>

@@ -142,6 +142,7 @@ export default function PaymentsPage() {
             <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-blue-600">Payments</a>
             <a href="/gambling" className="text-sm/6 font-semibold text-gray-900">Gambling</a>
+            <a href="/insights" className="text-sm/6 font-semibold text-gray-900">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
             <a href="/#team" className="text-sm/6 font-semibold text-gray-900">Team</a>
           </div>

@@ -56,7 +56,7 @@ function Sitemap() {
         <SitemapHeading>Product</SitemapHeading>
         <SitemapLinks>
           <SitemapLink href="/pricing">Pricing</SitemapLink>
-          <SitemapLink href="#">Analysis</SitemapLink>
+          <SitemapLink href="/insights">Insights</SitemapLink>
           <SitemapLink href="#">API</SitemapLink>
         </SitemapLinks>
       </div>
@@ -64,7 +64,7 @@ function Sitemap() {
         <SitemapHeading>Company</SitemapHeading>
         <SitemapLinks>
           <SitemapLink href="#">Careers</SitemapLink>
-          <SitemapLink href="/blog">Blog</SitemapLink>
+          <SitemapLink href="/insights">Blog</SitemapLink>
           <SitemapLink href="/company">Company</SitemapLink>
         </SitemapLinks>
       </div>
@@ -76,10 +76,10 @@ function Sitemap() {
         </SitemapLinks>
       </div>
       <div>
-        <SitemapHeading>Company</SitemapHeading>
+        <SitemapHeading>Legal</SitemapHeading>
         <SitemapLinks>
-          <SitemapLink href="#">Terms of service</SitemapLink>
-          <SitemapLink href="#">Privacy policy</SitemapLink>
+          <SitemapLink href="/terms-and-conditions">Terms of service</SitemapLink>
+          <SitemapLink href="/privacy">Privacy policy</SitemapLink>
         </SitemapLinks>
       </div>
     </>

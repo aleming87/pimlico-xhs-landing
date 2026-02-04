@@ -160,6 +160,7 @@ export default function GamblingPage() {
             <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
             <a href="/gambling" className="text-sm/6 font-semibold text-emerald-600">Gambling</a>
+            <a href="/insights" className="text-sm/6 font-semibold text-gray-900">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
             <a href="/#team" className="text-sm/6 font-semibold text-gray-900">Team</a>
           </div>

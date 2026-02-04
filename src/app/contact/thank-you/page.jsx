@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ThankYouPage() {
   const [surveyCompleted, setSurveyCompleted] = useState(false);
   const [callBooked, setCallBooked] = useState(false);
+  const [calendlyReady, setCalendlyReady] = useState(false);
+  const calendlyContainerRef = useRef(null);
   const router = useRouter();
   const surveyUrl = "/contact/survey";
   
@@ -15,7 +17,7 @@ export default function ThankYouPage() {
   const confirmationUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}/contact/thank-you/confirmed` 
     : '';
-  const calendlyUrl = `https://calendly.com/andrew-pimlicosolutions/xhs-demo-1?redirect_url=${encodeURIComponent(confirmationUrl)}`;
+  const calendlyUrl = `https://calendly.com/andrew-pimlicosolutions/xhs-demo-1?background_color=111827&text_color=ffffff&primary_color=2563eb${confirmationUrl ? `&redirect_url=${encodeURIComponent(confirmationUrl)}` : ''}`;
 
   useEffect(() => {
     // Check if survey was completed
@@ -43,6 +45,20 @@ export default function ThankYouPage() {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
+
+  useEffect(() => {
+    if (!surveyCompleted || callBooked || !calendlyReady) return;
+    const container = calendlyContainerRef.current;
+    if (!container || typeof window === 'undefined') return;
+
+    if (window.Calendly && typeof window.Calendly.initInlineWidget === 'function') {
+      container.innerHTML = '';
+      window.Calendly.initInlineWidget({
+        url: calendlyUrl,
+        parentElement: container,
+      });
+    }
+  }, [surveyCompleted, callBooked, calendlyReady, calendlyUrl]);
 
   return (
     <div className="bg-gray-900 min-h-screen">
@@ -171,8 +187,9 @@ export default function ThankYouPage() {
                     <div className="mt-4 -mx-4 sm:mx-0">
                       {/* Calendly inline widget - responsive height for mobile */}
                       <div 
+                        ref={calendlyContainerRef}
                         className="calendly-inline-widget" 
-                        data-url="https://calendly.com/andrew-pimlicosolutions/xhs-demo-1?background_color=111827&text_color=ffffff&primary_color=2563eb" 
+                        data-url={calendlyUrl}
                         style={{ minWidth: '100%', height: '600px' }}
                       ></div>
                     </div>
@@ -208,6 +225,7 @@ export default function ThankYouPage() {
       <Script 
         src="https://assets.calendly.com/assets/external/widget.js" 
         strategy="lazyOnload"
+        onLoad={() => setCalendlyReady(true)}
       />
     </div>
   );
