@@ -110,7 +110,7 @@ export default function AdminPage() {
   const [publicationDate, setPublicationDate] = useState(new Date().toISOString().split('T')[0]);
   const [ogImageUrl, setOgImageUrl] = useState('');
   const [isPremium, setIsPremium] = useState(false);
-  const [premiumCutoff, setPremiumCutoff] = useState(30); // Percentage of content shown before paywall
+  const [premiumCutoff, setPremiumCutoff] = useState(10); // Percentage of content shown before paywall
   const [selectedTagCategory, setSelectedTagCategory] = useState('topic');
   const [isUploading, setIsUploading] = useState(false);
   
