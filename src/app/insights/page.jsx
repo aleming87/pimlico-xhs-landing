@@ -236,10 +236,14 @@ export default function InsightsPage() {
                   href={`/insights/${article.slug}`}
                   className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-blue-500 to-blue-700 relative">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-white/30 text-6xl font-bold">XHS<sup className="text-3xl">™</sup></span>
-                    </div>
+                  <div className="aspect-video bg-gradient-to-br from-blue-500 to-blue-700 relative overflow-hidden">
+                    {article.image ? (
+                      <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-white/30 text-6xl font-bold">XHS<sup className="text-3xl">™</sup></span>
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <div className="flex items-center gap-3 text-sm text-gray-500 mb-3">
@@ -274,10 +278,15 @@ export default function InsightsPage() {
                 href={`/insights/${article.slug}`}
                 className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
               >
-                <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 relative">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-gray-300 text-4xl font-bold">XHS<sup className="text-xl">™</sup></span>
-                  </div>
+                <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                  {article.image ? (
+                    <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-gray-300 text-4xl font-bold">XHS<sup className="text-xl">™</sup></span>
+                    </div>
+                  )}
+                </div>
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
