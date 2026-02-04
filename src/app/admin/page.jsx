@@ -64,7 +64,7 @@ export default function AdminPage() {
     
     let customArticles = [];
     if (savedArticles) {
-      customArticles = JSON.parse(savedArticles);
+      customArticles = JSON.parse(savedArticles).map(a => ({ ...a, isSample: false }));
     }
     
     // Get sample articles that haven't been deleted or overridden
@@ -165,6 +165,16 @@ export default function AdminPage() {
 
     const isEditingSample = editingArticle?.isSample;
     
+    // Determine the date - keep original date when editing, use today for new articles
+    let articleDate;
+    if (scheduleEnabled) {
+      articleDate = scheduledDate.split('T')[0];
+    } else if (editingArticle && !isEditingSample) {
+      articleDate = editingArticle.date; // Keep original date when editing
+    } else {
+      articleDate = new Date().toISOString().split('T')[0];
+    }
+    
     const newArticle = {
       id: isEditingSample ? Date.now() : (editingArticle ? editingArticle.id : Date.now()),
       title: articleMeta.title,
@@ -176,7 +186,7 @@ export default function AdminPage() {
       featured: articleMeta.featured,
       image: articleImage,
       tags: tags,
-      date: scheduleEnabled ? scheduledDate.split('T')[0] : new Date().toISOString().split('T')[0],
+      date: articleDate,
       scheduledAt: scheduleEnabled ? scheduledDate : null,
       status: scheduleEnabled ? 'scheduled' : 'published',
       content: markdownContent,
@@ -193,7 +203,8 @@ export default function AdminPage() {
         }
         updatedArticles = [newArticle, ...articles.filter(a => a.id !== editingArticle.id)];
       } else {
-        updatedArticles = articles.map(a => a.id === editingArticle.id ? newArticle : a);
+        // Use string comparison for IDs to handle type mismatches from JSON parsing
+        updatedArticles = articles.map(a => String(a.id) === String(editingArticle.id) ? newArticle : a);
       }
       setSuccessMessage(`“${articleMeta.title}” has been updated successfully!`);
     } else {
