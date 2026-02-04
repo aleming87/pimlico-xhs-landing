@@ -74,8 +74,13 @@ export default function ArticlePageClient() {
     let customArticles = [];
     if (savedArticles) {
       const parsed = JSON.parse(savedArticles);
-      // Filter out scheduled articles that haven't reached their publish time
+      // Filter out drafts and scheduled articles that haven't reached their publish time
       customArticles = parsed.filter(article => {
+        // Hide drafts from public view
+        if (article.status === 'draft') {
+          return false;
+        }
+        // Hide scheduled articles that haven't reached their publish time
         if (article.status === 'scheduled' && article.scheduledAt) {
           return new Date(article.scheduledAt) <= now;
         }

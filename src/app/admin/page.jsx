@@ -361,6 +361,88 @@ export default function AdminPage() {
     }
   };
 
+  // Save as Draft function
+  const handleSaveDraft = () => {
+    if (!articleMeta.title) {
+      alert('Please enter at least a title for your draft');
+      return;
+    }
+
+    try {
+      const isEditingSample = editingArticle?.isSample === true;
+      
+      const draftArticle = {
+        id: isEditingSample ? Date.now() : (editingArticle ? editingArticle.id : Date.now()),
+        title: articleMeta.title,
+        slug: articleMeta.slug || generateSlug(articleMeta.title),
+        excerpt: articleMeta.excerpt,
+        category: articleMeta.category,
+        author: 'Pimlico XHS™ Team',
+        readTime: articleMeta.readTime,
+        featured: articleMeta.featured,
+        image: articleImage,
+        tags: tags,
+        date: new Date().toISOString().split('T')[0],
+        scheduledAt: scheduleEnabled ? scheduledDate : null,
+        status: 'draft',
+        content: markdownContent,
+        lastSaved: new Date().toISOString(),
+      };
+
+      // Get existing custom articles from localStorage
+      const existingCustom = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
+      let newCustomArticles;
+      
+      if (editingArticle && !isEditingSample) {
+        // Update existing draft/article
+        const editId = String(editingArticle.id);
+        let found = false;
+        newCustomArticles = existingCustom.map(a => {
+          if (String(a.id) === editId) {
+            found = true;
+            return draftArticle;
+          }
+          return a;
+        });
+        if (!found) {
+          newCustomArticles = [draftArticle, ...existingCustom];
+        }
+      } else {
+        // New draft
+        newCustomArticles = [draftArticle, ...existingCustom];
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('xhs-articles', JSON.stringify(newCustomArticles));
+      
+      // Update editing state to track this draft
+      setEditingArticle({ ...draftArticle, isSample: false });
+      
+      // Rebuild state with updated articles
+      const deletedIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+      const customSlugs = newCustomArticles.map(a => a.slug);
+      const visibleSamples = sampleArticles
+        .filter(s => !deletedIds.includes(s.id) && !customSlugs.includes(s.slug))
+        .map(s => ({ ...s, isSample: true }));
+      
+      const allArticles = [...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples];
+      setArticles(allArticles);
+
+      // Show success
+      setSuccessMessage(`Draft saved at ${new Date().toLocaleTimeString()}`);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+      
+    } catch (error) {
+      if (error.name === 'QuotaExceededError' || error.message.includes('quota')) {
+        alert('Storage quota exceeded! Try removing the image or using a smaller one.');
+      } else {
+        alert('Error saving draft: ' + error.message);
+      }
+      console.error('Draft save error:', error);
+    }
+  };
+
   const resetForm = () => {
     setMarkdownContent('');
     setArticleImage('');
@@ -633,6 +715,7 @@ export default function AdminPage() {
                     className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-indigo-500"
                   >
                     <option value="all">All Status</option>
+                    <option value="draft">Drafts</option>
                     <option value="published">Published</option>
                     <option value="scheduled">Scheduled</option>
                   </select>
@@ -694,10 +777,14 @@ export default function AdminPage() {
                 
                 // Status filter
                 if (filterStatus !== 'all') {
+                  const isDraft = article.status === 'draft';
                   const isScheduled = article.status === 'scheduled' && article.scheduledAt;
                   const scheduledTime = isScheduled ? new Date(article.scheduledAt) : null;
                   const isPastScheduled = scheduledTime && scheduledTime <= new Date();
-                  const currentStatus = (isScheduled && !isPastScheduled) ? 'scheduled' : 'published';
+                  let currentStatus;
+                  if (isDraft) currentStatus = 'draft';
+                  else if (isScheduled && !isPastScheduled) currentStatus = 'scheduled';
+                  else currentStatus = 'published';
                   if (filterStatus !== currentStatus) return false;
                 }
                 
@@ -793,7 +880,9 @@ export default function AdminPage() {
                           )}
                         </td>
                         <td className="p-4">
-                          {isScheduled && !isPastScheduled ? (
+                          {article.status === 'draft' ? (
+                            <span className="px-2 py-1 bg-orange-900/50 text-orange-400 text-xs rounded">Draft</span>
+                          ) : isScheduled && !isPastScheduled ? (
                             <span className="px-2 py-1 bg-yellow-900/50 text-yellow-400 text-xs rounded">Scheduled</span>
                           ) : (
                             <span className="px-2 py-1 bg-green-900/50 text-green-400 text-xs rounded">Published</span>
@@ -1146,26 +1235,74 @@ export default function AdminPage() {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-4 pt-4">
+              <div className="flex flex-wrap gap-3 pt-4">
+                <button
+                  onClick={handleSaveDraft}
+                  className="px-5 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors font-medium flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                  </svg>
+                  Save Draft
+                </button>
                 <button
                   onClick={handlePublish}
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors font-semibold"
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors font-semibold flex items-center gap-2"
                 >
-                  {editingArticle 
-                    ? '✓ Update Article' 
-                    : scheduleEnabled 
-                      ? '📅 Schedule Article' 
-                      : '🚀 Publish Article'}
+                  {editingArticle?.status === 'draft' ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Publish Draft
+                    </>
+                  ) : editingArticle ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Update Article
+                    </>
+                  ) : scheduleEnabled ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Schedule Article
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                      Publish Article
+                    </>
+                  )}
                 </button>
                 <button
                   onClick={() => {
                     resetForm();
                     setEditingArticle(null);
                   }}
-                  className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                  className="px-5 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
                   Clear
                 </button>
+                {editingArticle && (
+                  <span className="flex items-center text-sm text-gray-500 ml-2">
+                    {editingArticle.status === 'draft' && (
+                      <span className="flex items-center gap-1">
+                        <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                        Editing draft
+                      </span>
+                    )}
+                    {editingArticle.lastSaved && (
+                      <span className="ml-2 text-gray-600">
+                        Last saved: {new Date(editingArticle.lastSaved).toLocaleTimeString()}
+                      </span>
+                    )}
+                  </span>
+                )}
               </div>
             </div>
           </div>
