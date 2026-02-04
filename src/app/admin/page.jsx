@@ -10,6 +10,71 @@ import { sampleArticles as baseSampleArticles } from '@/data/sample-articles';
 // Simple password protection - change this password
 const ADMIN_PASSWORD = "pimlico2026";
 
+// Pimlico Taxonomy Tags Structure (from pimlico_tags_structure_v2_2.7.2)
+const PIMLICO_TAXONOMY = {
+  vertical: ['Gambling', 'Payments', 'Crypto', 'AI'],
+  category: [
+    'Legal Framework', 'Licensing Market Access', 'Crossborder Provisions', 'Competition',
+    'Product Design', 'Marketing Advertising', 'Consumer Protection', 'Player Protection',
+    'Conduct Transparency', 'Governance Risk', 'Operational Resilience ICT', 'Data Privacy',
+    'Data Sharing Open Access', 'KYC Identity', 'AML CFT', 'Fraud Cybercrime',
+    'Reporting Disclosure', 'Taxation', 'Fees Charges', 'Crypto Digital Assets',
+    'AI Governance', 'Technical Standards', 'Innovation Sandboxes Pilots',
+    'Supervisory Priorities Plans', 'Enforcement Sanctions', 'Registers Blocklists'
+  ],
+  topic: [
+    'Online Licensing', 'Land Licensing', 'B2B Licensing', 'Licence Windows', 'Licence Changes',
+    'Lotteries', 'Bingo', 'Horse Racing', 'Pool Betting', 'Gaming Machines',
+    'Age Verification', 'Affordability', 'Limits Controls', 'Self Exclusion', 'VIP Customers',
+    'Slot Design', 'Betting Features', 'Loot Boxes', 'Prediction Markets',
+    'Ad Content', 'Ad Placement', 'Sports Sponsorship', 'Affiliates', 'Bonuses Promotions',
+    'Financial Promotions', 'Gambling Tax', 'Gambling Levies', 'Payments Tax', 'Crypto Tax',
+    'PI Authorisation', 'EMI Authorisation', 'Small Firm Regime', 'Agents Distributors',
+    'Instant Payments', 'Card Payments', 'Account To Account', 'Remittances',
+    'Buy Now Pay Later (BNPL)', 'Open Banking', 'Open Finance',
+    'Strong Customer Authentication (SCA)', 'Safeguarding of Funds', 'Fees Charges',
+    'Refunds Disputes', 'Execution Times', 'VASP Licensing', 'Token Offers', 'Stablecoins',
+    'Crypto Custody', 'DeFi', 'NFTs', 'Crypto Travel Rule', 'Onboarding CDD', 'AML Programmes',
+    'Tx Monitoring', 'Suspicious Reports', 'Sanctions Controls', 'Fraud Scams', 'Geo Blocking',
+    'AI Frameworks', 'AI Risk Tiers', 'AI Use Restrictions', 'AI Governance Controls',
+    'AI Data Training', 'AI Transparency', 'GenAI Labelling', 'AI Credit Scoring', 'AI AML Fraud',
+    'Technical Standards Testing', 'Game Approval Change Control', 'Sports Integrity',
+    'Match Fixing Integrity Reporting', 'Complaints ADR Disputes', 'Payment Blocking',
+    'Payment Method Restrictions', 'Ownership Control Suitability', 'Key Personnel Approvals',
+    'Esports Betting', 'Fantasy Skill Sweepstakes', 'Poker Liquidity', 'Charity Gaming Raffles',
+    'Safer Gambling Interactions', 'Promo Terms Fairness', 'Duty Of Care Liability',
+    'Source Of Funds Wealth', 'Pep High Risk Controls', 'Cash Intensive Controls',
+    'Enforcement Actions', 'Supervisory Priorities Reviews', 'Merchant Acquiring',
+    'Payfac Submerchant Controls', 'Merchant KYB Monitoring', 'App Scam Reimbursement',
+    'Consumer Disclosures Transparency', 'FX DCC Transparency', 'Prudential Capital Liquidity',
+    'Digital Identity', 'KYC Reliance Portability', 'Crypto Market Abuse', 'Crypto Trading Venues',
+    'Token Listing Delisting', 'Crypto Derivatives Leverage', 'Staking Services',
+    'Crypto Lending Borrowing', 'MiCA Implementation', 'PSD2 Implementation', 'DORA Implementation'
+  ],
+  jurisdiction: [
+    'European Union', 'United Kingdom', 'United States', 'Germany', 'France', 'Italy', 'Spain',
+    'Netherlands', 'Sweden', 'Denmark', 'Greece', 'Romania', 'Croatia', 'Malta', 'Portugal',
+    'Belgium', 'Austria', 'Switzerland', 'Ireland', 'Poland', 'Czech Republic', 'Hungary',
+    'Finland', 'Norway', 'Luxembourg', 'Cyprus', 'Estonia', 'Latvia', 'Lithuania',
+    'Canada', 'Mexico', 'Brazil', 'Argentina', 'Colombia', 'Chile', 'Australia', 'New Zealand',
+    'Japan', 'South Korea', 'Singapore', 'Hong Kong', 'India', 'Philippines', 'Malaysia',
+    'United Arab Emirates', 'Saudi Arabia', 'Israel', 'South Africa', 'Nigeria', 'Kenya',
+    'Gibraltar', 'Isle of Man', 'Alderney', 'Curacao', 'Kahnawake'
+  ],
+  type: [
+    'Primary Law', 'Secondary Law', 'Transposing Legislation', 'Rulebook', 'Guideline',
+    'Q And A', 'Technical Standard', 'Code Of Conduct', 'Strategy Plan', 'Risk Report',
+    'Consultation', 'Discussion Paper', 'Enforcement Decision', 'Judicial Decision',
+    'Register Update', 'Licence Decision', 'Supervisory Letter', 'Press Release'
+  ],
+  stage: [
+    'Pre Proposal', 'Proposal', 'Consultation Open', 'Consultation Closed', 'Drafting',
+    'Political Agreement', 'Adoption', 'Publication', 'Entry Into Force', 'Application',
+    'Implementation Measures', 'Transitional Period', 'Review', 'Amendment', 'Repeal Sunset'
+  ],
+  status: ['Indicative', 'Informative', 'Actionable']
+};
+
 // Add isSample flag to sample articles for admin display
 const sampleArticles = baseSampleArticles.map(article => ({
   ...article,
@@ -44,6 +109,10 @@ export default function AdminPage() {
   const [tagInput, setTagInput] = useState('');
   const [publicationDate, setPublicationDate] = useState(new Date().toISOString().split('T')[0]);
   const [ogImageUrl, setOgImageUrl] = useState('');
+  const [isPremium, setIsPremium] = useState(false);
+  const [premiumCutoff, setPremiumCutoff] = useState(30); // Percentage of content shown before paywall
+  const [selectedTagCategory, setSelectedTagCategory] = useState('topic');
+  const [isUploading, setIsUploading] = useState(false);
   
   // Rich text editor ref
   const textareaRef = { current: null };
@@ -266,6 +335,8 @@ export default function AdminPage() {
         scheduledAt: scheduleEnabled ? scheduledDate : null,
         status: scheduleEnabled ? 'scheduled' : 'published',
         content: markdownContent,
+        isPremium: isPremium,
+        premiumCutoff: isPremium ? premiumCutoff : null, // Percentage of content shown before paywall
       };
 
       // Get existing custom articles from localStorage
@@ -453,6 +524,9 @@ export default function AdminPage() {
     setTagInput('');
     setPublicationDate(new Date().toISOString().split('T')[0]);
     setOgImageUrl('');
+    setIsPremium(false);
+    setPremiumCutoff(30);
+    setSelectedTagCategory('topic');
     setArticleMeta({
       title: '',
       slug: '',
@@ -482,6 +556,8 @@ export default function AdminPage() {
     setTags(article.tags || []);
     setPublicationDate(article.date || new Date().toISOString().split('T')[0]);
     setOgImageUrl(article.ogImage || '');
+    setIsPremium(article.isPremium || false);
+    setPremiumCutoff(article.premiumCutoff || 30);
     if (article.scheduledAt) {
       setScheduleEnabled(true);
       setScheduledDate(article.scheduledAt);
@@ -537,8 +613,6 @@ export default function AdminPage() {
       reader.readAsText(file);
     }
   };
-
-  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -974,11 +1048,17 @@ export default function AdminPage() {
                           )}
                         </td>
                         <td className="p-4">
-                          {article.featured ? (
-                            <span className="px-2 py-1 bg-purple-900/50 text-purple-400 text-xs rounded">★ Featured</span>
-                          ) : (
-                            <span className="text-gray-500 text-sm">—</span>
-                          )}
+                          <div className="flex flex-wrap gap-1">
+                            {article.featured && (
+                              <span className="px-2 py-1 bg-purple-900/50 text-purple-400 text-xs rounded">★ Featured</span>
+                            )}
+                            {article.isPremium && (
+                              <span className="px-2 py-1 bg-amber-900/50 text-amber-400 text-xs rounded">⭐ Premium</span>
+                            )}
+                            {!article.featured && !article.isPremium && (
+                              <span className="text-gray-500 text-sm">—</span>
+                            )}
+                          </div>
                         </td>
                         <td className="p-4">
                           {article.status === 'draft' ? (
@@ -1149,7 +1229,7 @@ export default function AdminPage() {
 
               {/* Tags */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Tags</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Tags (Pimlico Taxonomy)</label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {tags.map((tag, index) => (
                     <span key={index} className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-900/50 text-indigo-300 rounded-full text-sm">
@@ -1173,17 +1253,29 @@ export default function AdminPage() {
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
                 />
                 
-                {/* Auto-suggested tags based on category */}
-                <div className="mt-2">
-                  <p className="text-gray-500 text-xs mb-1.5">Suggested tags for {articleMeta.category}:</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {(articleMeta.category === 'AI Regulation' ? [
-                      'AI', 'Artificial Intelligence', 'Machine Learning', 'AI Act', 'EU AI Act', 'Compliance', 'EU Regulation', 'Ethics', 'Automation', 'Data Protection', 'Algorithmic Accountability', 'Risk Assessment', 'High-Risk AI', 'General Purpose AI', 'Foundation Models', 'LLM', 'Generative AI', 'Explainability', 'Transparency', 'Bias', 'Fairness', 'Human Oversight', 'AI Governance', 'AI Safety', 'Regulatory Sandbox', 'CE Marking', 'Conformity Assessment', 'AI Liability', 'Copyright', 'Training Data', 'Deepfakes', 'Facial Recognition', 'Biometrics', 'Predictive Policing', 'Social Scoring', 'Chatbots', 'AI in Healthcare', 'AI in Finance', 'AI in Recruitment', 'Automated Decision-Making'
-                    ] : articleMeta.category === 'Payments' ? [
-                      'Payments', 'PSD2', 'PSD3', 'PSR', 'Open Banking', 'Open Finance', 'Fintech', 'Digital Payments', 'Cross-border Payments', 'AML', 'Anti-Money Laundering', 'KYC', 'Know Your Customer', 'Instant Payments', 'SEPA', 'SWIFT', 'ISO 20022', 'Payment Services', 'E-money', 'EMI', 'PI', 'Payment Institution', 'Card Payments', 'Interchange Fees', 'Merchant Services', 'Acquiring', 'Issuing', 'Strong Customer Authentication', 'SCA', '3D Secure', 'Digital Wallets', 'Mobile Payments', 'BNPL', 'Buy Now Pay Later', 'Cryptocurrency', 'Stablecoins', 'CBDC', 'Central Bank Digital Currency', 'MiCA', 'DeFi', 'Blockchain', 'Tokenization', 'FCA', 'BaFin', 'DNB', 'Passporting', 'Licensing', 'Consumer Protection', 'Fraud Prevention', 'Transaction Monitoring', 'Sanctions Screening', 'AMLD6', 'Travel Rule'
-                    ] : articleMeta.category === 'Gambling' ? [
-                      'Gambling', 'iGaming', 'Licensing', 'Responsible Gaming', 'Responsible Gambling', 'Sports Betting', 'Casino', 'Online Casino', 'Consumer Protection', 'Advertising', 'Marketing Restrictions', 'Self-exclusion', 'Problem Gambling', 'Affordability Checks', 'Source of Funds', 'Player Protection', 'Gambling Commission', 'UKGC', 'MGA', 'Malta Gaming Authority', 'Curacao', 'Gibraltar', 'Isle of Man', 'Alderney', 'Sweden', 'Spelinspektionen', 'Denmark', 'Spillemyndigheden', 'Finland', 'Veikkaus', 'Netherlands', 'KSA', 'Germany', 'GlüStV', 'Spain', 'DGOJ', 'Italy', 'ADM', 'France', 'ANJ', 'Belgium', 'Portugal', 'SRIJ', 'Lottery', 'Poker', 'Bingo', 'Esports Betting', 'Fantasy Sports', 'Affiliate Marketing', 'Bonus Rules', 'Stake Limits', 'Deposit Limits', 'Cooling Off', 'Age Verification', 'ID Verification', 'Game Fairness', 'RNG', 'RTP', 'White Label', 'B2B', 'B2C', 'Payment Processing'
-                    ] : []).filter(tag => !tags.includes(tag)).slice(0, 25).map((suggestedTag) => (
+                {/* Pimlico Taxonomy Tag Suggestions */}
+                <div className="mt-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <label className="text-gray-500 text-xs">Browse by:</label>
+                    <select
+                      value={selectedTagCategory}
+                      onChange={(e) => setSelectedTagCategory(e.target.value)}
+                      className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-indigo-500"
+                    >
+                      <option value="vertical">Vertical</option>
+                      <option value="topic">Topic</option>
+                      <option value="category">Category</option>
+                      <option value="jurisdiction">Jurisdiction</option>
+                      <option value="type">Document Type</option>
+                      <option value="stage">Stage</option>
+                      <option value="status">Status</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1">
+                    {PIMLICO_TAXONOMY[selectedTagCategory]
+                      .filter(tag => !tags.includes(tag))
+                      .slice(0, selectedTagCategory === 'jurisdiction' ? 30 : 40)
+                      .map((suggestedTag) => (
                       <button
                         key={suggestedTag}
                         type="button"
@@ -1194,16 +1286,55 @@ export default function AdminPage() {
                       </button>
                     ))}
                   </div>
-                  {(articleMeta.category === 'AI Regulation' ? 40 : articleMeta.category === 'Payments' ? 53 : 68) - tags.filter(t => (articleMeta.category === 'AI Regulation' ? [
-                      'AI', 'Artificial Intelligence', 'Machine Learning', 'AI Act', 'EU AI Act', 'Compliance', 'EU Regulation', 'Ethics', 'Automation', 'Data Protection', 'Algorithmic Accountability', 'Risk Assessment', 'High-Risk AI', 'General Purpose AI', 'Foundation Models', 'LLM', 'Generative AI', 'Explainability', 'Transparency', 'Bias', 'Fairness', 'Human Oversight', 'AI Governance', 'AI Safety', 'Regulatory Sandbox', 'CE Marking', 'Conformity Assessment', 'AI Liability', 'Copyright', 'Training Data', 'Deepfakes', 'Facial Recognition', 'Biometrics', 'Predictive Policing', 'Social Scoring', 'Chatbots', 'AI in Healthcare', 'AI in Finance', 'AI in Recruitment', 'Automated Decision-Making'
-                    ] : articleMeta.category === 'Payments' ? [
-                      'Payments', 'PSD2', 'PSD3', 'PSR', 'Open Banking', 'Open Finance', 'Fintech', 'Digital Payments', 'Cross-border Payments', 'AML', 'Anti-Money Laundering', 'KYC', 'Know Your Customer', 'Instant Payments', 'SEPA', 'SWIFT', 'ISO 20022', 'Payment Services', 'E-money', 'EMI', 'PI', 'Payment Institution', 'Card Payments', 'Interchange Fees', 'Merchant Services', 'Acquiring', 'Issuing', 'Strong Customer Authentication', 'SCA', '3D Secure', 'Digital Wallets', 'Mobile Payments', 'BNPL', 'Buy Now Pay Later', 'Cryptocurrency', 'Stablecoins', 'CBDC', 'Central Bank Digital Currency', 'MiCA', 'DeFi', 'Blockchain', 'Tokenization', 'FCA', 'BaFin', 'DNB', 'Passporting', 'Licensing', 'Consumer Protection', 'Fraud Prevention', 'Transaction Monitoring', 'Sanctions Screening', 'AMLD6', 'Travel Rule'
-                    ] : [
-                      'Gambling', 'iGaming', 'Licensing', 'Responsible Gaming', 'Responsible Gambling', 'Sports Betting', 'Casino', 'Online Casino', 'Consumer Protection', 'Advertising', 'Marketing Restrictions', 'Self-exclusion', 'Problem Gambling', 'Affordability Checks', 'Source of Funds', 'Player Protection', 'Gambling Commission', 'UKGC', 'MGA', 'Malta Gaming Authority', 'Curacao', 'Gibraltar', 'Isle of Man', 'Alderney', 'Sweden', 'Spelinspektionen', 'Denmark', 'Spillemyndigheden', 'Finland', 'Veikkaus', 'Netherlands', 'KSA', 'Germany', 'GlüStV', 'Spain', 'DGOJ', 'Italy', 'ADM', 'France', 'ANJ', 'Belgium', 'Portugal', 'SRIJ', 'Lottery', 'Poker', 'Bingo', 'Esports Betting', 'Fantasy Sports', 'Affiliate Marketing', 'Bonus Rules', 'Stake Limits', 'Deposit Limits', 'Cooling Off', 'Age Verification', 'ID Verification', 'Game Fairness', 'RNG', 'RTP', 'White Label', 'B2B', 'B2C', 'Payment Processing'
-                    ]).includes(t)).length > 25 && (
-                    <p className="text-gray-600 text-xs mt-1">+ more suggestions available as you add tags</p>
-                  )}
+                  <p className="text-gray-600 text-xs mt-1.5">
+                    {PIMLICO_TAXONOMY[selectedTagCategory].filter(t => !tags.includes(t)).length} tags available in {selectedTagCategory}
+                  </p>
                 </div>
+              </div>
+
+              {/* Premium Content */}
+              <div className="bg-gradient-to-r from-amber-900/20 to-yellow-900/20 border border-amber-700/50 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <input
+                    type="checkbox"
+                    id="premium"
+                    checked={isPremium}
+                    onChange={(e) => setIsPremium(e.target.checked)}
+                    className="w-4 h-4 rounded bg-gray-800 border-amber-700 text-amber-500 focus:ring-amber-500"
+                  />
+                  <label htmlFor="premium" className="text-amber-300 font-medium flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    Premium Content
+                  </label>
+                </div>
+                {isPremium && (
+                  <div className="ml-7 space-y-4">
+                    <div>
+                      <label className="block text-sm text-amber-300/80 mb-2">
+                        Content shown before paywall: <span className="font-bold text-amber-300">{premiumCutoff}%</span>
+                      </label>
+                      <input
+                        type="range"
+                        min="10"
+                        max="75"
+                        step="5"
+                        value={premiumCutoff}
+                        onChange={(e) => setPremiumCutoff(parseInt(e.target.value))}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                      />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>10% (teaser)</span>
+                        <span>75% (almost full)</span>
+                      </div>
+                    </div>
+                    <div className="bg-gray-800/50 rounded-lg p-3 text-xs text-amber-200/70">
+                      <p className="font-medium text-amber-300 mb-1">Preview:</p>
+                      <p>Readers will see the first {premiumCutoff}% of the article, then a paywall with a CTA to try XHS™ for full access.</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Schedule Publishing */}

@@ -26,31 +26,25 @@ export async function generateMetadata({ params }) {
         url: `${baseUrl}/insights/${slug}`,
         siteName: 'Pimlico XHS™',
         type: 'website',
-        images: [
-          {
-            url: `${baseUrl}/Dashboard.png`,
-            width: 1200,
-            height: 630,
-            alt: 'Pimlico XHS™',
-          },
-        ],
       },
     };
   }
 
   // OG Image priority:
-  // 1. Article-specific image in /articles/[slug].png
-  // 2. Custom ogImage field on the article
+  // 1. Custom ogImage field on the article (uploaded via admin)
+  // 2. Article's cover image (if it's a full URL from Vercel Blob)
   // 3. Category-specific default image
-  // 4. General default (Dashboard.png)
-  let ogImage = `${baseUrl}/Dashboard.png`;
+  // 4. No image (let social platforms use their defaults)
+  let ogImage = null;
   
-  // Check for article-specific OG image (must be added to public/articles/)
   if (article.ogImage) {
-    // Custom OG image path specified on article
+    // Custom OG image URL (from Vercel Blob upload)
     ogImage = article.ogImage.startsWith('http') 
       ? article.ogImage 
       : `${baseUrl}${article.ogImage.startsWith('/') ? '' : '/'}${article.ogImage}`;
+  } else if (article.image && article.image.startsWith('http')) {
+    // Article cover image is a public URL (Vercel Blob)
+    ogImage = article.image;
   } else {
     // Use category-specific default
     const categoryImage = categoryImages[article.category];
@@ -61,7 +55,8 @@ export async function generateMetadata({ params }) {
 
   const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from Pimlico XHS™';
 
-  return {
+  // Build the metadata object
+  const metadata = {
     title: `${article.title} - Pimlico XHS™`,
     description: description,
     authors: [{ name: 'Pimlico XHS™ Team' }],
@@ -77,22 +72,11 @@ export async function generateMetadata({ params }) {
       modifiedTime: article.date,
       authors: ['Pimlico XHS™ Team'],
       locale: 'en_US',
-      images: [
-        {
-          url: ogImage,
-          secureUrl: ogImage,
-          width: 1200,
-          height: 630,
-          alt: article.title,
-          type: 'image/png',
-        },
-      ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: ogImage ? 'summary_large_image' : 'summary',
       title: article.title,
       description: description,
-      images: [ogImage],
       creator: '@pimlicoxhs',
       site: '@pimlicoxhs',
     },
@@ -105,6 +89,23 @@ export async function generateMetadata({ params }) {
       follow: true,
     },
   };
+
+  // Only add images if we have an OG image
+  if (ogImage) {
+    metadata.openGraph.images = [
+      {
+        url: ogImage,
+        secureUrl: ogImage,
+        width: 1200,
+        height: 630,
+        alt: article.title,
+        type: 'image/png',
+      },
+    ];
+    metadata.twitter.images = [ogImage];
+  }
+
+  return metadata;
 }
 
 export default function ArticlePage() {
