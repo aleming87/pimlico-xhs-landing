@@ -165,12 +165,12 @@ export default function AdminPage() {
 
     const isEditingSample = editingArticle?.isSample === true;
     
-    // Determine the date - keep original date when editing, use today for new articles
+    // Determine the date
     let articleDate;
     if (scheduleEnabled) {
       articleDate = scheduledDate.split('T')[0];
     } else if (editingArticle && !isEditingSample) {
-      articleDate = editingArticle.date; // Keep original date when editing
+      articleDate = editingArticle.date;
     } else {
       articleDate = new Date().toISOString().split('T')[0];
     }
@@ -190,12 +190,12 @@ export default function AdminPage() {
       scheduledAt: scheduleEnabled ? scheduledDate : null,
       status: scheduleEnabled ? 'scheduled' : 'published',
       content: markdownContent,
-      isSample: false,
     };
 
     // Get existing custom articles from localStorage
     const existingCustom = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
     let newCustomArticles;
+    let actionMessage;
     
     if (editingArticle) {
       if (isEditingSample) {
@@ -206,24 +206,30 @@ export default function AdminPage() {
           localStorage.setItem('xhs-deleted-samples', JSON.stringify(deletedSampleIds));
         }
         newCustomArticles = [newArticle, ...existingCustom];
+        actionMessage = `"${articleMeta.title}" has been updated successfully!`;
       } else {
-        // Editing custom article - find and update it
+        // Editing custom article - find and update it by ID
         const editId = String(editingArticle.id);
-        const foundIndex = existingCustom.findIndex(a => String(a.id) === editId);
-        if (foundIndex >= 0) {
-          newCustomArticles = [...existingCustom];
-          newCustomArticles[foundIndex] = newArticle;
-        } else {
+        let found = false;
+        newCustomArticles = existingCustom.map(a => {
+          if (String(a.id) === editId) {
+            found = true;
+            return newArticle;
+          }
+          return a;
+        });
+        if (!found) {
+          // If not found by ID, add as new
           newCustomArticles = [newArticle, ...existingCustom];
         }
+        actionMessage = `"${articleMeta.title}" has been updated successfully!`;
       }
-      setSuccessMessage(`"${articleMeta.title}" has been updated successfully!`);
     } else {
       // New article
       newCustomArticles = [newArticle, ...existingCustom];
-      setSuccessMessage(scheduleEnabled 
+      actionMessage = scheduleEnabled 
         ? `"${articleMeta.title}" has been scheduled for ${new Date(scheduledDate).toLocaleString()}!`
-        : `"${articleMeta.title}" has been published successfully!`);
+        : `"${articleMeta.title}" has been published successfully!`;
     }
     
     // Save to localStorage
@@ -235,13 +241,19 @@ export default function AdminPage() {
     const visibleSamples = sampleArticles
       .filter(s => !deletedIds.includes(s.id) && !customSlugs.includes(s.slug))
       .map(s => ({ ...s, isSample: true }));
-    setArticles([...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples]);
+    
+    const allArticles = [...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples];
+    setArticles(allArticles);
 
-    // Reset form and switch to articles tab
-    resetForm();
-    setEditingArticle(null);
+    // Show success and redirect
+    setSuccessMessage(actionMessage);
     setShowSuccess(true);
     setActiveTab('articles');
+    
+    // Reset form
+    resetForm();
+    setEditingArticle(null);
+    
     setTimeout(() => setShowSuccess(false), 5000);
   };
 
