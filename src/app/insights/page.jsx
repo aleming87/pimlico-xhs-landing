@@ -141,19 +141,19 @@ export default function InsightsPage() {
           <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-blue-400 to-blue-600 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
         </div>
         
-        <div className="py-32 sm:py-48">
+        <div className="py-16 sm:py-20">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Regulatory <span className="text-blue-600">Insights</span>
               </h1>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
+              <p className="mt-4 text-lg leading-8 text-gray-600">
                 Expert analysis and thought leadership from the Pimlico XHS™ team.
               </p>
             </div>
 
             {/* Category Filter */}
-            <div className="mt-10 flex justify-center gap-3 flex-wrap">
+            <div className="mt-8 flex justify-center gap-3 flex-wrap">
               {categories.map((category) => (
                 <button
                   key={category}
@@ -174,7 +174,7 @@ export default function InsightsPage() {
 
       {/* Featured Articles */}
       {featuredArticles.length > 0 && (
-        <div className="bg-gray-50 py-16 sm:py-24">
+        <div className="bg-gray-50 py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -222,9 +222,9 @@ export default function InsightsPage() {
       )}
 
       {/* All Articles */}
-      <div className="bg-white py-16 sm:py-24">
+      <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
             {selectedCategory === 'All' ? 'All Articles' : selectedCategory}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
