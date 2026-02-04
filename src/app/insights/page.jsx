@@ -42,7 +42,20 @@ export default function InsightsPage() {
       !deletedSampleIds.includes(s.id) && !customSlugs.includes(s.slug)
     );
     
-    setArticles([...customArticles, ...visibleSamples]);
+    // Combine and sort by date (newest first)
+    const allArticles = [...customArticles, ...visibleSamples].sort((a, b) => {
+      // Parse dates - handle various date formats
+      const parseDate = (dateStr) => {
+        if (!dateStr) return new Date(0);
+        // Handle "February 4, 2026" format
+        const parsed = new Date(dateStr);
+        if (!isNaN(parsed)) return parsed;
+        return new Date(0);
+      };
+      return parseDate(b.date) - parseDate(a.date);
+    });
+    
+    setArticles(allArticles);
   }, []);
 
   const filteredArticles = selectedCategory === 'All' 
