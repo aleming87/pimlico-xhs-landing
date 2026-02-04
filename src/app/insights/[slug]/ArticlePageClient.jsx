@@ -59,11 +59,27 @@ export default function ArticlePageClient() {
   const [article, setArticle] = useState(null);
   const [currentUrl, setCurrentUrl] = useState('');
   const [copied, setCopied] = useState(false);
+  const [viewCount, setViewCount] = useState(0);
 
   useEffect(() => {
     // Set current URL for sharing
     if (typeof window !== 'undefined') {
       setCurrentUrl(window.location.href);
+      
+      // Generate or retrieve view count for this article
+      const viewKey = `xhs-views-${params.slug}`;
+      const storedViews = localStorage.getItem(viewKey);
+      if (storedViews) {
+        // Increment by 1 each time
+        const newCount = parseInt(storedViews) + 1;
+        localStorage.setItem(viewKey, newCount.toString());
+        setViewCount(newCount);
+      } else {
+        // Initialize with random value between 165-236
+        const initialViews = Math.floor(Math.random() * (236 - 165 + 1)) + 165;
+        localStorage.setItem(viewKey, initialViews.toString());
+        setViewCount(initialViews);
+      }
     }
     
     // Check localStorage for custom articles first
@@ -191,19 +207,27 @@ export default function ArticlePageClient() {
                 <span>{article.date}</span>
                 <span>•</span>
                 <span>{article.readTime}</span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  {viewCount.toLocaleString()} views
+                </span>
               </div>
               
-              {/* Share buttons - small icons at top */}
-              <div className="flex items-center gap-1">
+              {/* Share buttons - full color icons, compact */}
+              <div className="flex items-center gap-0.5">
                 {/* LinkedIn */}
                 <a
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-[#0A66C2] hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Share on LinkedIn"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="#0A66C2" viewBox="0 0 24 24">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                   </svg>
                 </a>
@@ -213,10 +237,10 @@ export default function ArticlePageClient() {
                   href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Share on X"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="#000000" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </a>
@@ -226,10 +250,10 @@ export default function ArticlePageClient() {
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-[#1877F2] hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Share on Facebook"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="#1877F2" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                   </svg>
                 </a>
@@ -239,10 +263,10 @@ export default function ArticlePageClient() {
                   href={`https://wa.me/?text=${encodeURIComponent(`${shareTitle}\n\n${article.excerpt || ''}\n\n${shareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-[#25D366] hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Share on WhatsApp"
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="#25D366" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
                 </a>
@@ -252,10 +276,10 @@ export default function ArticlePageClient() {
                   href={`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-[#EA4335] hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Share via Gmail"
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#EA4335">
                     <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
                   </svg>
                 </a>
@@ -263,30 +287,13 @@ export default function ArticlePageClient() {
                 {/* Outlook */}
                 <a
                   href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
-                  className="p-2 text-gray-400 hover:text-[#0078D4] hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Share via Outlook"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Share via Email"
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#0078D4">
                     <path d="M24 7.387v10.478c0 .23-.08.424-.238.576-.16.154-.352.231-.574.231h-8.188v-6.29l1.1.914c.079.066.178.099.298.099.12 0 .218-.033.293-.099l5.2-4.326a.487.487 0 0 0 .165-.18.456.456 0 0 0-.023-.476.533.533 0 0 0-.193-.166.554.554 0 0 0-.26-.066H15V6.27h8.188c.222 0 .413.072.574.216.159.144.238.335.238.576v.325zM14.413 6.844l-2.408 2.06-2.408-2.06a.765.765 0 0 0-.503-.186.765.765 0 0 0-.503.186L6.997 8.49V5.438c0-.106.038-.197.115-.273a.375.375 0 0 1 .273-.114h6.24c.105 0 .196.038.272.114a.371.371 0 0 1 .116.273V6.66c-.065.064-.17.12-.316.168a.751.751 0 0 1-.284.016zM15 18.672v-5.936l-1.387-1.156-1.608 1.38-.005.003-2.995 2.562L6 13.057v5.615h9zm-8.188-5.04l-1.387-1.187-.425.363V6.27H1v11.402h5.812V13.63zM0 17.672V6.583l6 4.993-6 6.096zm6.997.672l5.008-4.281 5.008 4.281H6.997z"/>
                   </svg>
                 </a>
-                
-                {/* Copy Link */}
-                <button
-                  onClick={handleCopyLink}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors relative"
-                  title="Copy link"
-                >
-                  {copied ? (
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                  )}
-                </button>
               </div>
             </div>
             

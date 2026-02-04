@@ -1058,7 +1058,29 @@ export default function AdminPage() {
                   placeholder="Type a tag and press Enter..."
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
                 />
-                <p className="text-gray-500 text-xs mt-1">Press Enter to add a tag</p>
+                
+                {/* Auto-suggested tags based on category */}
+                <div className="mt-2">
+                  <p className="text-gray-500 text-xs mb-1.5">Suggested tags for {articleMeta.category}:</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(articleMeta.category === 'AI Regulation' ? [
+                      'AI', 'Machine Learning', 'AI Act', 'Compliance', 'EU Regulation', 'Ethics', 'Automation', 'Data Protection', 'Algorithmic Accountability', 'Risk Assessment'
+                    ] : articleMeta.category === 'Payments' ? [
+                      'Payments', 'PSD2', 'Open Banking', 'Fintech', 'Digital Payments', 'Cross-border', 'AML', 'KYC', 'Instant Payments', 'SEPA'
+                    ] : articleMeta.category === 'Gambling' ? [
+                      'Gambling', 'iGaming', 'Licensing', 'Responsible Gaming', 'Sports Betting', 'Casino', 'Consumer Protection', 'Advertising', 'Self-exclusion', 'Problem Gambling'
+                    ] : []).filter(tag => !tags.includes(tag)).map((suggestedTag) => (
+                      <button
+                        key={suggestedTag}
+                        type="button"
+                        onClick={() => setTags([...tags, suggestedTag])}
+                        className="px-2 py-0.5 bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-gray-200 rounded text-xs transition-colors"
+                      >
+                        + {suggestedTag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               {/* Schedule Publishing */}
