@@ -854,15 +854,36 @@ export default function AdminPage() {
                           return (
                           <tr key={article.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                             <td className="p-4">
-                              <div className="flex items-center gap-2">
-                                <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400">
-                                  {article.title}
-                                </Link>
-                                {article.isSample && (
-                                  <span className="px-1.5 py-0.5 bg-gray-700 text-gray-400 text-xs rounded">Sample</span>
-                            )}
-                          </div>
-                        </td>
+                              <div className="flex items-center gap-3">
+                                {/* Image Thumbnail */}
+                                {article.image ? (
+                                  <img 
+                                    src={article.image} 
+                                    alt="" 
+                                    className="w-12 h-12 object-cover rounded-lg flex-shrink-0 bg-gray-700"
+                                  />
+                                ) : (
+                                  <div className="w-12 h-12 bg-gray-700 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                    <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                  </div>
+                                )}
+                                <div>
+                                  <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400 font-medium">
+                                    {article.title}
+                                  </Link>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    {article.isSample && (
+                                      <span className="px-1.5 py-0.5 bg-gray-700 text-gray-400 text-xs rounded">Sample</span>
+                                    )}
+                                    {article.tags && article.tags.length > 0 && (
+                                      <span className="text-xs text-gray-500">{article.tags.length} tags</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
                         <td className="p-4 text-gray-400">{article.category}</td>
                         <td className="p-4 text-gray-400">
                           {article.date}
@@ -1199,9 +1220,40 @@ export default function AdminPage() {
                     </button>
                   </div>
                   
-                  {/* Help */}
-                  <div className="flex items-center ml-auto">
-                    <span className="text-xs text-gray-500">Markdown supported</span>
+                  {/* Undo/Redo */}
+                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                    <button 
+                      type="button" 
+                      onClick={() => document.getElementById('markdown-editor')?.focus() && document.execCommand('undo')} 
+                      className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" 
+                      title="Undo (Ctrl+Z)"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => document.getElementById('markdown-editor')?.focus() && document.execCommand('redo')} 
+                      className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" 
+                      title="Redo (Ctrl+Y)"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>
+                    </button>
+                  </div>
+                  
+                  {/* Clear */}
+                  <div className="flex items-center">
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        if (markdownContent && confirm('Are you sure you want to clear all content?')) {
+                          setMarkdownContent('');
+                        }
+                      }} 
+                      className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded transition-colors" 
+                      title="Clear All"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
                   </div>
                 </div>
                 
@@ -1212,7 +1264,7 @@ export default function AdminPage() {
                   onChange={(e) => setMarkdownContent(e.target.value)}
                   placeholder="## Introduction&#10;&#10;Start writing your article here...&#10;&#10;### Key Points&#10;&#10;- Use the toolbar above for formatting&#10;- Or write Markdown directly&#10;- Preview your article before publishing"
                   rows={20}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 rounded-b-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono text-sm resize-y min-h-[400px]"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono text-sm resize-y min-h-[400px]"
                   onKeyDown={(e) => {
                     // Keyboard shortcuts
                     if (e.ctrlKey || e.metaKey) {
@@ -1227,11 +1279,27 @@ export default function AdminPage() {
                     }
                   }}
                 />
-                <p className="text-gray-500 text-xs mt-2">
-                  Keyboard shortcuts: <kbd className="px-1 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+B</kbd> Bold, 
-                  <kbd className="px-1 py-0.5 bg-gray-700 rounded text-gray-400 ml-1">Ctrl+I</kbd> Italic, 
-                  <kbd className="px-1 py-0.5 bg-gray-700 rounded text-gray-400 ml-1">Ctrl+K</kbd> Link
-                </p>
+                
+                {/* Editor Status Bar */}
+                <div className="flex items-center justify-between px-4 py-2 bg-gray-900 border border-gray-700 border-t-0 rounded-b-lg text-xs text-gray-500">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      {markdownContent.trim() ? markdownContent.trim().split(/\s+/).length : 0} words
+                    </span>
+                    <span>
+                      {markdownContent.length} characters
+                    </span>
+                    <span>
+                      ~{Math.max(1, Math.ceil((markdownContent.trim() ? markdownContent.trim().split(/\s+/).length : 0) / 200))} min read
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span>Markdown</span>
+                    <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+B</span>
+                    <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+I</span>
+                    <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+K</span>
+                  </div>
+                </div>
               </div>
 
               {/* Actions */}

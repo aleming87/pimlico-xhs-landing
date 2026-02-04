@@ -46,33 +46,50 @@ export async function generateMetadata({ params }) {
     }
   }
 
+  const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from Pimlico XHS™';
+
   return {
     title: `${article.title} - Pimlico XHS™`,
-    description: article.excerpt,
+    description: description,
     authors: [{ name: 'Pimlico XHS™ Team' }],
+    
+    // Important for LinkedIn - must match exactly
     openGraph: {
       title: article.title,
-      description: article.excerpt,
+      description: description,
       url: `${baseUrl}/insights/${slug}`,
       siteName: 'Pimlico XHS™',
       type: 'article',
       publishedTime: article.date,
+      modifiedTime: article.date,
       authors: ['Pimlico XHS™ Team'],
+      locale: 'en_US',
       images: [
         {
           url: ogImage,
+          secureUrl: ogImage,
           width: 1200,
           height: 630,
           alt: article.title,
+          type: 'image/png',
         },
       ],
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
-      description: article.excerpt,
+      description: description,
       images: [ogImage],
       creator: '@pimlicoxhs',
+      site: '@pimlicoxhs',
+    },
+    // Additional metadata for better social sharing
+    alternates: {
+      canonical: `${baseUrl}/insights/${slug}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
     },
   };
 }
