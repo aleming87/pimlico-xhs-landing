@@ -9,7 +9,7 @@ export const sampleArticles = [
     author: 'Pimlico XHS™ Team',
     date: '2026-02-03',
     readTime: '7 min read',
-    image: '/screenshots/dashboard.png',
+    image: '/Dashboard.png',
     featured: true,
     tags: ['gambling-reform', 'licensing', 'marketing-restrictions', 'veikkaus', 'finland', 'nordic'],
     content: `

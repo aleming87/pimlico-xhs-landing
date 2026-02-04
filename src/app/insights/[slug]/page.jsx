@@ -6,7 +6,8 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const article = sampleArticles.find(a => a.slug === slug);
   
-  const baseUrl = 'https://pimlicosolutions.com';
+  // IMPORTANT: Use www subdomain to match Vercel deployment
+  const baseUrl = 'https://www.pimlicosolutions.com';
   
   if (!article) {
     return {
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }) {
         type: 'website',
         images: [
           {
-            url: `${baseUrl}/XHS%20Logo%20BLUE%20on%20WHITE.png`,
+            url: `${baseUrl}/Dashboard.png`,
             width: 1200,
             height: 630,
             alt: 'Pimlico XHS™',
@@ -30,9 +31,10 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  // Use Dashboard.png as a more relevant article image, or the article's own image if it's a valid path
+  // Use Dashboard.png as the default OG image (must be absolute URL)
   let ogImage = `${baseUrl}/Dashboard.png`;
   
+  // Check if article has a valid image path that exists in public folder
   if (article.image) {
     if (article.image.startsWith('data:')) {
       // Base64 images can't be used for OG - use default
@@ -41,8 +43,9 @@ export async function generateMetadata({ params }) {
       // External URL - use as is
       ogImage = article.image;
     } else {
-      // Relative path - make absolute
-      ogImage = `${baseUrl}${article.image.startsWith('/') ? '' : '/'}${article.image}`;
+      // For local paths, always use Dashboard.png for OG (more reliable)
+      // Article images like /screenshots/dashboard.png may not exist
+      ogImage = `${baseUrl}/Dashboard.png`;
     }
   }
 
