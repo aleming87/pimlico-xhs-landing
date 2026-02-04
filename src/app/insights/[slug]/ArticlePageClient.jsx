@@ -355,41 +355,46 @@ export default function ArticlePageClient() {
 
                 {/* Premium Paywall CTA - matching the blue gradient style */}
                 <div className="relative mt-8">
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 sm:p-10">
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 py-16 px-8 sm:py-20 sm:px-12">
                     <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
                     <div className="relative text-center">
-                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6">
                         Unlock Full Access with XHS™
                       </h3>
-                      <p className="text-blue-100 text-base sm:text-lg mb-6 max-w-2xl mx-auto">
-                        Monitor. Analyse. Collaborate. Integrate. Try XHS™ free for <span className="text-white font-semibold">7 days</span>.
+                      
+                      <p className="text-blue-100 text-lg sm:text-xl mb-8 max-w-2xl mx-auto">
+                        Monitor. Analyse. Collaborate. Integrate.
                       </p>
                       
                       {/* Features in a row */}
-                      <div className="flex flex-wrap justify-center gap-4 mb-8 text-sm">
-                        <div className="flex items-center gap-2 text-blue-100">
-                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                          <span>Full article access</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-blue-100">
-                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="flex flex-wrap justify-center gap-6 sm:gap-8 mb-10 text-base">
+                        <div className="flex items-center gap-2 text-white">
+                          <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                           <span>Real-time alerts</span>
                         </div>
-                        <div className="flex items-center gap-2 text-blue-100">
-                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <div className="flex items-center gap-2 text-white">
+                          <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                           <span>Expert analysis</span>
                         </div>
+                        <div className="flex items-center gap-2 text-white">
+                          <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <span>API integrations</span>
+                        </div>
                       </div>
+                      
+                      <p className="text-white text-lg font-semibold mb-8">
+                        Try free for 7 days
+                      </p>
                       
                       <Link
                         href="/contact?trial=true&source=premium-article"
-                        className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                        className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                       >
                         Book a demo
                         <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -424,8 +429,8 @@ export default function ArticlePageClient() {
             )}
           </div>
 
-          {/* Tags Section */}
-          {article.tags && article.tags.length > 0 && (
+          {/* Tags Section - hidden for premium articles */}
+          {!article.isPremium && article.tags && article.tags.length > 0 && (
             <div className="mt-8 pt-6 border-t border-gray-100">
               <div className="flex items-center flex-wrap gap-2">
                 <span className="text-sm font-medium text-gray-500 mr-1">Tags:</span>
@@ -467,18 +472,20 @@ export default function ArticlePageClient() {
             </div>
           )}
 
-          {/* Back to Insights */}
-          <div className="mt-8">
-            <Link 
-              href="/insights" 
-              className="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Browse more articles
-            </Link>
-          </div>
+          {/* Back to Insights - hidden for premium articles */}
+          {!article.isPremium && (
+            <div className="mt-8">
+              <Link 
+                href="/insights" 
+                className="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Browse more articles
+              </Link>
+            </div>
+          )}
         </div>
       </article>
 
