@@ -328,29 +328,24 @@ export default function InsightsPage() {
         </div>
       </div>
 
-      {/* Newsletter CTA */}
+      {/* 7 Day Trial CTA */}
       <div className="bg-gray-900 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Stay ahead of regulatory changes
+            <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              Sign up for a <span className="text-blue-400">7 day trial</span> today
             </h2>
-            <p className="mt-4 text-lg text-gray-300">
-              Subscribe to the XHS<sup>™</sup> newsletter for the latest insights and regulatory updates delivered to your inbox.
+            <p className="mt-6 text-base text-gray-400 sm:text-lg/8">
+              Transform how your team manages compliance with AI-powered workspaces built for regulated industries.
             </p>
-            <form className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-4 py-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-full sm:w-80"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-500 transition-colors"
+            <div className="mt-10 flex items-center justify-center">
+              <a
+                href="/contact"
+                className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:shadow-xl"
               >
-                Subscribe
-              </button>
-            </form>
+                Get started
+              </a>
+            </div>
           </div>
         </div>
       </div>
