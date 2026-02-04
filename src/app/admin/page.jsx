@@ -42,6 +42,8 @@ export default function AdminPage() {
   const [editingArticle, setEditingArticle] = useState(null);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [publicationDate, setPublicationDate] = useState(new Date().toISOString().split('T')[0]);
+  const [ogImageUrl, setOgImageUrl] = useState('');
   
   // Rich text editor ref
   const textareaRef = { current: null };
@@ -240,14 +242,12 @@ export default function AdminPage() {
     try {
       const isEditingSample = editingArticle?.isSample === true;
       
-      // Determine the date
+      // Use the user-specified publication date, or scheduled date, or today
       let articleDate;
-      if (scheduleEnabled) {
+      if (scheduleEnabled && scheduledDate) {
         articleDate = scheduledDate.split('T')[0];
-      } else if (editingArticle && !isEditingSample) {
-        articleDate = editingArticle.date;
       } else {
-        articleDate = new Date().toISOString().split('T')[0];
+        articleDate = publicationDate || new Date().toISOString().split('T')[0];
       }
       
       const newArticle = {
@@ -260,6 +260,7 @@ export default function AdminPage() {
         readTime: articleMeta.readTime,
         featured: articleMeta.featured,
         image: articleImage,
+        ogImage: ogImageUrl || null, // External OG image URL for social sharing
         tags: tags,
         date: articleDate,
         scheduledAt: scheduleEnabled ? scheduledDate : null,
@@ -450,6 +451,8 @@ export default function AdminPage() {
     setScheduledDate('');
     setTags([]);
     setTagInput('');
+    setPublicationDate(new Date().toISOString().split('T')[0]);
+    setOgImageUrl('');
     setArticleMeta({
       title: '',
       slug: '',
@@ -477,6 +480,8 @@ export default function AdminPage() {
     setMarkdownContent(article.content || '');
     setArticleImage(article.image || '');
     setTags(article.tags || []);
+    setPublicationDate(article.date || new Date().toISOString().split('T')[0]);
+    setOgImageUrl(article.ogImage || '');
     if (article.scheduledAt) {
       setScheduleEnabled(true);
       setScheduledDate(article.scheduledAt);
@@ -1019,6 +1024,40 @@ export default function AdminPage() {
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
                   />
                 </div>
+              </div>
+
+              {/* Publication Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Publication Date</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="date"
+                    value={publicationDate}
+                    onChange={(e) => setPublicationDate(e.target.value)}
+                    className="px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setPublicationDate(new Date().toISOString().split('T')[0])}
+                    className="px-3 py-2 text-sm text-gray-400 hover:text-white bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                  >
+                    Today
+                  </button>
+                </div>
+                <p className="text-gray-500 text-xs mt-1">Set a past date to backdate the article, or future for scheduling</p>
+              </div>
+
+              {/* OG Image URL for Social Sharing */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Social Share Image URL <span className="text-gray-500 font-normal">(optional)</span></label>
+                <input
+                  type="url"
+                  value={ogImageUrl}
+                  onChange={(e) => setOgImageUrl(e.target.value)}
+                  placeholder="https://example.com/image.png"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                />
+                <p className="text-gray-500 text-xs mt-1">External image URL (1200x630px) for LinkedIn/Twitter previews. Leave blank to use category default.</p>
               </div>
 
               {/* Featured */}
