@@ -34,6 +34,7 @@ export default function Hero() {
             <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
             <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
             <a href="/gambling" className="text-sm/6 font-semibold text-white">Gambling</a>
+            <a href="/insights" className="text-sm/6 font-semibold text-white">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
             <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
@@ -102,6 +103,13 @@ export default function Hero() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Gambling
+                    </a>
+                    <a 
+                      href="/insights" 
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Insights
                     </a>
                     <a 
                       href="/pricing" 
