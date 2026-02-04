@@ -4,7 +4,13 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
 
+// Simple password protection - change this password
+const ADMIN_PASSWORD = "pimlico2026";
+
 export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [activeTab, setActiveTab] = useState('articles');
   const [articles, setArticles] = useState([]);
   const [markdownContent, setMarkdownContent] = useState('');
@@ -19,6 +25,14 @@ export default function AdminPage() {
   });
   const [showSuccess, setShowSuccess] = useState(false);
 
+  // Check if already authenticated via sessionStorage
+  useEffect(() => {
+    const authStatus = sessionStorage.getItem('xhs-admin-auth');
+    if (authStatus === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   // Load saved articles from localStorage
   useEffect(() => {
     const savedArticles = localStorage.getItem('xhs-articles');
@@ -26,6 +40,65 @@ export default function AdminPage() {
       setArticles(JSON.parse(savedArticles));
     }
   }, []);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('xhs-admin-auth', 'true');
+      setPasswordError('');
+    } else {
+      setPasswordError('Incorrect password');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem('xhs-admin-auth');
+  };
+
+  // Password protection screen
+  if (!isAuthenticated) {
+    return (
+      <div className="bg-gray-900 min-h-screen flex items-center justify-center">
+        <div className="max-w-md w-full mx-4">
+          <div className="bg-gray-800 rounded-2xl p-8 shadow-xl">
+            <div className="text-center mb-8">
+              <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={120} height={32} className="h-8 w-auto mx-auto mb-4" />
+              <h1 className="text-2xl font-bold text-white">Admin Console</h1>
+              <p className="text-gray-400 mt-2">Enter password to continue</p>
+            </div>
+            <form onSubmit={handleLogin}>
+              <div className="mb-4">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-red-400 text-sm mt-2">{passwordError}</p>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors"
+              >
+                Login
+              </button>
+            </form>
+            <div className="mt-6 text-center">
+              <Link href="/" className="text-gray-400 hover:text-white text-sm">
+                ← Back to Site
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const generateSlug = (title) => {
     return title
@@ -110,9 +183,15 @@ export default function AdminPage() {
               <Link href="/" className="text-gray-400 hover:text-white text-sm">
                 ← Back to Site
               </Link>
-              <Link href="/insights" className="text-indigo-400 hover:text-indigo-300 text-sm">
+              <Link href="/insights" className="text-blue-400 hover:text-blue-300 text-sm">
                 View Insights
               </Link>
+              <button
+                onClick={handleLogout}
+                className="text-red-400 hover:text-red-300 text-sm"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>
