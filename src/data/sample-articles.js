@@ -11,6 +11,7 @@ export const sampleArticles = [
     readTime: '7 min read',
     image: '/screenshots/dashboard.png',
     featured: true,
+    tags: ['gambling-reform', 'licensing', 'marketing-restrictions', 'veikkaus', 'finland', 'nordic'],
     content: `
 ## Overview of Finland's New Gambling Act
 
@@ -115,6 +116,7 @@ Finland's new Gambling Act represents a significant opportunity for operators wi
     readTime: '8 min read',
     image: '/screenshots/dashboard.png',
     featured: true,
+    tags: ['eu-ai-act', 'artificial-intelligence', 'compliance', 'financial-services', 'risk-classification'],
     content: `
 ## Introduction
 
@@ -195,6 +197,7 @@ The EU AI Act presents both challenges and opportunities for regulated entities.
     readTime: '6 min read',
     image: '/screenshots/dashboard.png',
     featured: true,
+    tags: ['psd3', 'payments', 'open-banking', 'european-union', 'api-compliance'],
     content: `
 ## Overview of PSD3
 
@@ -271,6 +274,7 @@ PSD3 represents a significant evolution in European payments regulation. Organiz
     readTime: '5 min read',
     image: '/screenshots/dashboard.png',
     featured: false,
+    tags: ['ukgc', 'remote-gambling', 'player-protection', 'responsible-gambling', 'uk'],
     content: `
 ## Recent UKGC Updates
 
@@ -313,6 +317,7 @@ Operators should review their current practices against the new guidance and imp
     readTime: '7 min read',
     image: '/screenshots/dashboard.png',
     featured: false,
+    tags: ['mica', 'crypto', 'digital-assets', 'european-union', 'licensing'],
     content: `
 ## Understanding MiCA
 
@@ -355,6 +360,7 @@ Organizations should develop a structured approach to MiCA compliance, including
     readTime: '10 min read',
     image: '/screenshots/dashboard.png',
     featured: false,
+    tags: ['ai-documentation', 'model-cards', 'compliance', 'financial-services', 'risk-assessment'],
     content: `
 ## The Importance of AI Documentation
 
@@ -400,6 +406,7 @@ Documentation should be designed to satisfy multiple regulatory frameworks, incl
     readTime: '9 min read',
     image: '/screenshots/dashboard.png',
     featured: false,
+    tags: ['multi-jurisdictional', 'gambling-licensing', 'ukgc', 'mga', 'gibraltar', 'isle-of-man'],
     content: `
 ## Multi-Jurisdictional Licensing Challenges
 

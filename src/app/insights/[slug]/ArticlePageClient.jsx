@@ -311,34 +311,43 @@ export default function ArticlePageClient() {
             </ReactMarkdown>
           </div>
 
-          {/* Trial CTA Section */}
-          <div className="mt-12 pt-8 border-t border-gray-200">
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-sm border border-blue-100">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Is your team tracking the latest regulatory developments in {extractCountryFromArticle(article)}?
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    Get real-time alerts, comprehensive analysis, and expert insights with a <strong className="text-blue-600">7-day free trial</strong> of Pimlico XHS™.
-                  </p>
-                  <Link
-                    href="/contact?trial=true"
-                    className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+          {/* Tags Section */}
+          {article.tags && article.tags.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <div className="flex items-center flex-wrap gap-2">
+                <span className="text-sm font-medium text-gray-500 mr-1">Tags:</span>
+                {article.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
                   >
-                    Start Your Free Trial
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </Link>
-                </div>
+                    #{tag.replace(/^#/, '')}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Trial CTA Section */}
+          <div className="mt-10">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 sm:p-10">
+              <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
+              <div className="relative">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+                  Tracking regulatory change in {extractCountryFromArticle(article)}?
+                </h3>
+                <p className="text-blue-100 text-base sm:text-lg mb-6 max-w-2xl">
+                  Get real-time alerts and in-depth analysis with a <span className="text-white font-semibold">7-day free trial</span>.
+                </p>
+                <Link
+                  href="/contact?trial=true"
+                  className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  Speak with us
+                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
               </div>
             </div>
           </div>
