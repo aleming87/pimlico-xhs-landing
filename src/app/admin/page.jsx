@@ -26,9 +26,13 @@ export default function AdminPage() {
   });
   const [articleImage, setArticleImage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [scheduleEnabled, setScheduleEnabled] = useState(false);
   const [scheduledDate, setScheduledDate] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const [editingArticle, setEditingArticle] = useState(null);
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
 
   // Check if already authenticated via sessionStorage
   useEffect(() => {
@@ -133,24 +137,46 @@ export default function AdminPage() {
     }
 
     const newArticle = {
-      id: Date.now(),
+      id: editingArticle ? editingArticle.id : Date.now(),
       ...articleMeta,
       image: articleImage,
+      tags: tags,
       date: scheduleEnabled ? scheduledDate.split('T')[0] : new Date().toISOString().split('T')[0],
       scheduledAt: scheduleEnabled ? scheduledDate : null,
       status: scheduleEnabled ? 'scheduled' : 'published',
       content: markdownContent,
     };
 
-    const updatedArticles = [newArticle, ...articles];
+    let updatedArticles;
+    if (editingArticle) {
+      // Update existing article
+      updatedArticles = articles.map(a => a.id === editingArticle.id ? newArticle : a);
+      setSuccessMessage(`“${articleMeta.title}” has been updated successfully!`);
+    } else {
+      // Add new article
+      updatedArticles = [newArticle, ...articles];
+      setSuccessMessage(scheduleEnabled 
+        ? `“${articleMeta.title}” has been scheduled for ${new Date(scheduledDate).toLocaleString()}!`
+        : `“${articleMeta.title}” has been published successfully!`);
+    }
+    
     setArticles(updatedArticles);
     localStorage.setItem('xhs-articles', JSON.stringify(updatedArticles));
 
     // Reset form
+    resetForm();
+    setEditingArticle(null);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 5000);
+  };
+
+  const resetForm = () => {
     setMarkdownContent('');
     setArticleImage('');
     setScheduleEnabled(false);
     setScheduledDate('');
+    setTags([]);
+    setTagInput('');
     setArticleMeta({
       title: '',
       slug: '',
@@ -161,9 +187,45 @@ export default function AdminPage() {
       featured: false,
       image: '',
     });
+  };
 
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+  const handleEditArticle = (article) => {
+    setEditingArticle(article);
+    setArticleMeta({
+      title: article.title,
+      slug: article.slug,
+      excerpt: article.excerpt || '',
+      category: article.category,
+      author: article.author,
+      readTime: article.readTime,
+      featured: article.featured || false,
+      image: article.image || '',
+    });
+    setMarkdownContent(article.content || '');
+    setArticleImage(article.image || '');
+    setTags(article.tags || []);
+    if (article.scheduledAt) {
+      setScheduleEnabled(true);
+      setScheduledDate(article.scheduledAt);
+    } else {
+      setScheduleEnabled(false);
+      setScheduledDate('');
+    }
+    setActiveTab('publish');
+  };
+
+  const handleAddTag = (e) => {
+    if (e.key === 'Enter' && tagInput.trim()) {
+      e.preventDefault();
+      if (!tags.includes(tagInput.trim())) {
+        setTags([...tags, tagInput.trim()]);
+      }
+      setTagInput('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
   const handleDeleteArticle = (id) => {
@@ -257,8 +319,18 @@ export default function AdminPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Success Message */}
         {showSuccess && (
-          <div className="mb-6 bg-green-900/50 border border-green-500 text-green-300 px-4 py-3 rounded-lg">
-            ✓ Article published successfully!
+          <div className="mb-6 bg-green-900/50 border border-green-500 text-green-300 px-6 py-4 rounded-lg flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-medium">{successMessage}</span>
+            </div>
+            <button onClick={() => setShowSuccess(false)} className="text-green-400 hover:text-green-300">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         )}
 
@@ -326,7 +398,13 @@ export default function AdminPage() {
                             <span className="px-2 py-1 bg-green-900/50 text-green-400 text-xs rounded">Published</span>
                           )}
                         </td>
-                        <td className="p-4 text-right">
+                        <td className="p-4 text-right space-x-3">
+                          <button
+                            onClick={() => handleEditArticle(article)}
+                            className="text-indigo-400 hover:text-indigo-300 text-sm"
+                          >
+                            Edit
+                          </button>
                           <button
                             onClick={() => handleDeleteArticle(article.id)}
                             className="text-red-400 hover:text-red-300 text-sm"
@@ -347,7 +425,22 @@ export default function AdminPage() {
         {/* Publish Tab */}
         {activeTab === 'publish' && (
           <div className="max-w-4xl">
-            <h2 className="text-xl font-semibold text-white mb-6">Publish New Article</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-white">
+                {editingArticle ? 'Edit Article' : 'Publish New Article'}
+              </h2>
+              {editingArticle && (
+                <button
+                  onClick={() => {
+                    setEditingArticle(null);
+                    resetForm();
+                  }}
+                  className="text-gray-400 hover:text-white text-sm"
+                >
+                  ✕ Cancel Edit
+                </button>
+              )}
+            </div>
 
             <div className="space-y-6">
               {/* Title */}
@@ -425,6 +518,34 @@ export default function AdminPage() {
                   className="w-4 h-4 rounded bg-gray-800 border-gray-700 text-indigo-500 focus:ring-indigo-500"
                 />
                 <label htmlFor="featured" className="text-gray-300">Featured article</label>
+              </div>
+
+              {/* Tags */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Tags</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {tags.map((tag, index) => (
+                    <span key={index} className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-900/50 text-indigo-300 rounded-full text-sm">
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTag(tag)}
+                        className="hover:text-indigo-100"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleAddTag}
+                  placeholder="Type a tag and press Enter..."
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                />
+                <p className="text-gray-500 text-xs mt-1">Press Enter to add a tag</p>
               </div>
 
               {/* Schedule Publishing */}
@@ -533,24 +654,16 @@ export default function AdminPage() {
                   onClick={handlePublish}
                   className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors font-semibold"
                 >
-                  {scheduleEnabled ? '📅 Schedule Article' : 'Publish Article'}
+                  {editingArticle 
+                    ? '✓ Update Article' 
+                    : scheduleEnabled 
+                      ? '📅 Schedule Article' 
+                      : '🚀 Publish Article'}
                 </button>
                 <button
                   onClick={() => {
-                    setMarkdownContent('');
-                    setArticleImage('');
-                    setScheduleEnabled(false);
-                    setScheduledDate('');
-                    setArticleMeta({
-                      title: '',
-                      slug: '',
-                      excerpt: '',
-                      category: 'AI Regulation',
-                      author: 'Pimlico XHS™ Team',
-                      readTime: '5 min read',
-                      featured: false,
-                      image: '',
-                    });
+                    resetForm();
+                    setEditingArticle(null);
                   }}
                   className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
