@@ -161,7 +161,13 @@ export default function AdminPage() {
     
     const newArticle = {
       id: isEditingSample ? Date.now() : (editingArticle ? editingArticle.id : Date.now()),
-      ...articleMeta,
+      title: articleMeta.title,
+      slug: articleMeta.slug,
+      excerpt: articleMeta.excerpt,
+      category: articleMeta.category,
+      author: 'Pimlico XHS™ Team',
+      readTime: articleMeta.readTime,
+      featured: articleMeta.featured,
       image: articleImage,
       tags: tags,
       date: scheduleEnabled ? scheduledDate.split('T')[0] : new Date().toISOString().split('T')[0],
@@ -196,10 +202,11 @@ export default function AdminPage() {
     const customArticles = updatedArticles.filter(a => !a.isSample);
     localStorage.setItem('xhs-articles', JSON.stringify(customArticles));
 
-    // Reset form
+    // Reset form and switch to articles tab
     resetForm();
     setEditingArticle(null);
     setShowSuccess(true);
+    setActiveTab('articles'); // Redirect to articles view
     setTimeout(() => setShowSuccess(false), 5000);
   };
 
