@@ -208,7 +208,7 @@ export default function InsightsPage() {
                 Regulatory <span className="text-blue-600">Insights</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                Expert analysis and thought leadership from the Pimlico XHS<sup>™</sup> team. Stay ahead of compliance requirements across AI, Payments, and Gambling regulation.
+                Expert analysis and thought leadership from the Pimlico XHS™ team. Stay ahead of compliance requirements across AI, Payments, and Gambling regulation.
               </p>
             </div>
 
