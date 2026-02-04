@@ -163,98 +163,114 @@ export default function AdminPage() {
       return;
     }
 
-    const isEditingSample = editingArticle?.isSample === true;
-    
-    // Determine the date
-    let articleDate;
-    if (scheduleEnabled) {
-      articleDate = scheduledDate.split('T')[0];
-    } else if (editingArticle && !isEditingSample) {
-      articleDate = editingArticle.date;
-    } else {
-      articleDate = new Date().toISOString().split('T')[0];
-    }
-    
-    const newArticle = {
-      id: isEditingSample ? Date.now() : (editingArticle ? editingArticle.id : Date.now()),
-      title: articleMeta.title,
-      slug: articleMeta.slug,
-      excerpt: articleMeta.excerpt,
-      category: articleMeta.category,
-      author: 'Pimlico XHS™ Team',
-      readTime: articleMeta.readTime,
-      featured: articleMeta.featured,
-      image: articleImage,
-      tags: tags,
-      date: articleDate,
-      scheduledAt: scheduleEnabled ? scheduledDate : null,
-      status: scheduleEnabled ? 'scheduled' : 'published',
-      content: markdownContent,
-    };
-
-    // Get existing custom articles from localStorage
-    const existingCustom = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
-    let newCustomArticles;
-    let actionMessage;
-    
-    if (editingArticle) {
-      if (isEditingSample) {
-        // Editing sample - mark as deleted, add new custom version
-        const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
-        if (!deletedSampleIds.includes(editingArticle.id)) {
-          deletedSampleIds.push(editingArticle.id);
-          localStorage.setItem('xhs-deleted-samples', JSON.stringify(deletedSampleIds));
-        }
-        newCustomArticles = [newArticle, ...existingCustom];
-        actionMessage = `"${articleMeta.title}" has been updated successfully!`;
+    try {
+      const isEditingSample = editingArticle?.isSample === true;
+      
+      // Determine the date
+      let articleDate;
+      if (scheduleEnabled) {
+        articleDate = scheduledDate.split('T')[0];
+      } else if (editingArticle && !isEditingSample) {
+        articleDate = editingArticle.date;
       } else {
-        // Editing custom article - find and update it by ID
-        const editId = String(editingArticle.id);
-        let found = false;
-        newCustomArticles = existingCustom.map(a => {
-          if (String(a.id) === editId) {
-            found = true;
-            return newArticle;
-          }
-          return a;
-        });
-        if (!found) {
-          // If not found by ID, add as new
-          newCustomArticles = [newArticle, ...existingCustom];
-        }
-        actionMessage = `"${articleMeta.title}" has been updated successfully!`;
+        articleDate = new Date().toISOString().split('T')[0];
       }
-    } else {
-      // New article
-      newCustomArticles = [newArticle, ...existingCustom];
-      actionMessage = scheduleEnabled 
-        ? `"${articleMeta.title}" has been scheduled for ${new Date(scheduledDate).toLocaleString()}!`
-        : `"${articleMeta.title}" has been published successfully!`;
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('xhs-articles', JSON.stringify(newCustomArticles));
-    
-    // Rebuild state with updated articles
-    const deletedIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
-    const customSlugs = newCustomArticles.map(a => a.slug);
-    const visibleSamples = sampleArticles
-      .filter(s => !deletedIds.includes(s.id) && !customSlugs.includes(s.slug))
-      .map(s => ({ ...s, isSample: true }));
-    
-    const allArticles = [...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples];
-    setArticles(allArticles);
+      
+      const newArticle = {
+        id: isEditingSample ? Date.now() : (editingArticle ? editingArticle.id : Date.now()),
+        title: articleMeta.title,
+        slug: articleMeta.slug,
+        excerpt: articleMeta.excerpt,
+        category: articleMeta.category,
+        author: 'Pimlico XHS™ Team',
+        readTime: articleMeta.readTime,
+        featured: articleMeta.featured,
+        image: articleImage,
+        tags: tags,
+        date: articleDate,
+        scheduledAt: scheduleEnabled ? scheduledDate : null,
+        status: scheduleEnabled ? 'scheduled' : 'published',
+        content: markdownContent,
+      };
 
-    // Show success and redirect
-    setSuccessMessage(actionMessage);
-    setShowSuccess(true);
-    setActiveTab('articles');
-    
-    // Reset form
-    resetForm();
-    setEditingArticle(null);
-    
-    setTimeout(() => setShowSuccess(false), 5000);
+      // Get existing custom articles from localStorage
+      const existingCustom = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
+      let newCustomArticles;
+      let actionMessage;
+      
+      if (editingArticle) {
+        if (isEditingSample) {
+          // Editing sample - mark as deleted, add new custom version
+          const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+          if (!deletedSampleIds.includes(editingArticle.id)) {
+            deletedSampleIds.push(editingArticle.id);
+            localStorage.setItem('xhs-deleted-samples', JSON.stringify(deletedSampleIds));
+          }
+          newCustomArticles = [newArticle, ...existingCustom];
+          actionMessage = `"${articleMeta.title}" has been updated successfully!`;
+        } else {
+          // Editing custom article - find and update it by ID
+          const editId = String(editingArticle.id);
+          let found = false;
+          newCustomArticles = existingCustom.map(a => {
+            if (String(a.id) === editId) {
+              found = true;
+              return newArticle;
+            }
+            return a;
+          });
+          if (!found) {
+            // If not found by ID, add as new
+            newCustomArticles = [newArticle, ...existingCustom];
+          }
+          actionMessage = `"${articleMeta.title}" has been updated successfully!`;
+        }
+      } else {
+        // New article
+        newCustomArticles = [newArticle, ...existingCustom];
+        actionMessage = scheduleEnabled 
+          ? `"${articleMeta.title}" has been scheduled for ${new Date(scheduledDate).toLocaleString()}!`
+          : `"${articleMeta.title}" has been published successfully!`;
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('xhs-articles', JSON.stringify(newCustomArticles));
+      
+      // Verify save worked
+      const savedData = localStorage.getItem('xhs-articles');
+      const savedArticles = JSON.parse(savedData);
+      const savedArticle = savedArticles.find(a => String(a.id) === String(newArticle.id));
+      
+      if (!savedArticle) {
+        alert('Error: Article was not saved to localStorage');
+        return;
+      }
+      
+      // Rebuild state with updated articles
+      const deletedIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+      const customSlugs = newCustomArticles.map(a => a.slug);
+      const visibleSamples = sampleArticles
+        .filter(s => !deletedIds.includes(s.id) && !customSlugs.includes(s.slug))
+        .map(s => ({ ...s, isSample: true }));
+      
+      const allArticles = [...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples];
+      setArticles(allArticles);
+
+      // Show success and redirect
+      setSuccessMessage(actionMessage);
+      setShowSuccess(true);
+      setActiveTab('articles');
+      
+      // Reset form
+      resetForm();
+      setEditingArticle(null);
+      
+      setTimeout(() => setShowSuccess(false), 5000);
+      
+    } catch (error) {
+      alert('Error saving article: ' + error.message);
+      console.error('Publish error:', error);
+    }
   };
 
   const resetForm = () => {
