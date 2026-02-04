@@ -1,5 +1,6 @@
 "use client";
 
+// Admin Console for XHS Articles Management
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from 'next/link';
