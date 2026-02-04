@@ -169,21 +169,28 @@ export default function ArticlePage() {
   useEffect(() => {
     // Check localStorage for custom articles first
     const savedArticles = localStorage.getItem('xhs-articles');
-    let allArticles = [...sampleArticles];
+    const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+    const now = new Date();
     
+    let customArticles = [];
     if (savedArticles) {
       const parsed = JSON.parse(savedArticles);
       // Filter out scheduled articles that haven't reached their publish time
-      const now = new Date();
-      const visibleArticles = parsed.filter(article => {
+      customArticles = parsed.filter(article => {
         if (article.status === 'scheduled' && article.scheduledAt) {
           return new Date(article.scheduledAt) <= now;
         }
         return true;
       });
-      allArticles = [...visibleArticles, ...sampleArticles];
     }
-
+    
+    // Get sample articles that haven't been deleted or overridden
+    const customSlugs = customArticles.map(a => a.slug);
+    const visibleSamples = sampleArticles.filter(s => 
+      !deletedSampleIds.includes(s.id) && !customSlugs.includes(s.slug)
+    );
+    
+    const allArticles = [...customArticles, ...visibleSamples];
     const found = allArticles.find(a => a.slug === params.slug);
     setArticle(found);
   }, [params.slug]);

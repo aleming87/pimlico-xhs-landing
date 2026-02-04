@@ -7,6 +7,88 @@ import Link from 'next/link';
 // Simple password protection - change this password
 const ADMIN_PASSWORD = "pimlico2026";
 
+// Sample articles data - same as insights page
+const sampleArticles = [
+  {
+    id: 1,
+    slug: 'eu-ai-act-compliance-guide-2026',
+    title: 'EU AI Act Compliance Guide 2026: What Regulated Entities Need to Know',
+    excerpt: 'A comprehensive overview of the EU AI Act requirements for financial services, gambling, and payments companies entering into force this year.',
+    category: 'AI Regulation',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-02-01',
+    readTime: '8 min read',
+    image: '/screenshots/dashboard.png',
+    featured: true,
+    isSample: true,
+  },
+  {
+    id: 2,
+    slug: 'psd3-implementation-timeline',
+    title: 'PSD3 Implementation Timeline: Key Dates and Milestones',
+    excerpt: 'Track the critical milestones for PSD3 compliance and understand how the new payment services directive will reshape the European payments landscape.',
+    category: 'Payments',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-01-28',
+    readTime: '6 min read',
+    image: '/screenshots/dashboard.png',
+    featured: true,
+    isSample: true,
+  },
+  {
+    id: 3,
+    slug: 'ukgc-remote-gambling-updates',
+    title: 'UKGC Remote Gambling: Latest Regulatory Updates',
+    excerpt: 'Analysis of recent UK Gambling Commission guidance on remote gambling operations and player protection measures.',
+    category: 'Gambling',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-01-25',
+    readTime: '5 min read',
+    image: '/screenshots/dashboard.png',
+    featured: false,
+    isSample: true,
+  },
+  {
+    id: 4,
+    slug: 'mica-crypto-compliance-framework',
+    title: 'MiCA Compliance Framework: Building Your Crypto Strategy',
+    excerpt: 'How crypto asset service providers can prepare for Markets in Crypto-Assets regulation requirements across the EU.',
+    category: 'Payments',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-01-20',
+    readTime: '7 min read',
+    image: '/screenshots/dashboard.png',
+    featured: false,
+    isSample: true,
+  },
+  {
+    id: 5,
+    slug: 'ai-model-documentation-requirements',
+    title: 'AI Model Documentation: Meeting Regulatory Requirements',
+    excerpt: 'Best practices for documenting AI/ML models to satisfy emerging regulatory requirements in financial services.',
+    category: 'AI Regulation',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-01-15',
+    readTime: '10 min read',
+    image: '/screenshots/dashboard.png',
+    featured: false,
+    isSample: true,
+  },
+  {
+    id: 6,
+    slug: 'cross-border-gambling-licensing',
+    title: 'Cross-Border Gambling: Navigating Multi-Jurisdictional Licensing',
+    excerpt: 'Strategic approaches to obtaining and maintaining gambling licenses across multiple European jurisdictions.',
+    category: 'Gambling',
+    author: 'Pimlico XHS™ Team',
+    date: '2026-01-10',
+    readTime: '9 min read',
+    image: '/screenshots/dashboard.png',
+    featured: false,
+    isSample: true,
+  },
+];
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -42,12 +124,24 @@ export default function AdminPage() {
     }
   }, []);
 
-  // Load saved articles from localStorage
+  // Load saved articles from localStorage and merge with sample articles
   useEffect(() => {
     const savedArticles = localStorage.getItem('xhs-articles');
+    const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+    
+    let customArticles = [];
     if (savedArticles) {
-      setArticles(JSON.parse(savedArticles));
+      customArticles = JSON.parse(savedArticles);
     }
+    
+    // Get sample articles that haven't been deleted or overridden
+    const customSlugs = customArticles.map(a => a.slug);
+    const visibleSamples = sampleArticles
+      .filter(s => !deletedSampleIds.includes(s.id) && !customSlugs.includes(s.slug))
+      .map(s => ({ ...s, isSample: true }));
+    
+    // Merge: custom articles first, then remaining samples
+    setArticles([...customArticles, ...visibleSamples]);
   }, []);
 
   const handleLogin = (e) => {
@@ -136,8 +230,10 @@ export default function AdminPage() {
       return;
     }
 
+    const isEditingSample = editingArticle?.isSample;
+    
     const newArticle = {
-      id: editingArticle ? editingArticle.id : Date.now(),
+      id: isEditingSample ? Date.now() : (editingArticle ? editingArticle.id : Date.now()),
       ...articleMeta,
       image: articleImage,
       tags: tags,
@@ -145,12 +241,21 @@ export default function AdminPage() {
       scheduledAt: scheduleEnabled ? scheduledDate : null,
       status: scheduleEnabled ? 'scheduled' : 'published',
       content: markdownContent,
+      isSample: false,
     };
 
     let updatedArticles;
     if (editingArticle) {
-      // Update existing article
-      updatedArticles = articles.map(a => a.id === editingArticle.id ? newArticle : a);
+      if (isEditingSample) {
+        const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+        if (!deletedSampleIds.includes(editingArticle.id)) {
+          deletedSampleIds.push(editingArticle.id);
+          localStorage.setItem('xhs-deleted-samples', JSON.stringify(deletedSampleIds));
+        }
+        updatedArticles = [newArticle, ...articles.filter(a => a.id !== editingArticle.id)];
+      } else {
+        updatedArticles = articles.map(a => a.id === editingArticle.id ? newArticle : a);
+      }
       setSuccessMessage(`“${articleMeta.title}” has been updated successfully!`);
     } else {
       // Add new article
@@ -161,7 +266,8 @@ export default function AdminPage() {
     }
     
     setArticles(updatedArticles);
-    localStorage.setItem('xhs-articles', JSON.stringify(updatedArticles));
+    const customArticles = updatedArticles.filter(a => !a.isSample);
+    localStorage.setItem('xhs-articles', JSON.stringify(customArticles));
 
     // Reset form
     resetForm();
@@ -228,11 +334,25 @@ export default function AdminPage() {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleDeleteArticle = (id) => {
+  const handleDeleteArticle = (article) => {
     if (confirm('Are you sure you want to delete this article?')) {
-      const updatedArticles = articles.filter(a => a.id !== id);
+      if (article.isSample) {
+        // For sample articles, track deletion separately
+        const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+        if (!deletedSampleIds.includes(article.id)) {
+          deletedSampleIds.push(article.id);
+          localStorage.setItem('xhs-deleted-samples', JSON.stringify(deletedSampleIds));
+        }
+      }
+      
+      // Remove from current state
+      const updatedArticles = articles.filter(a => a.id !== article.id);
       setArticles(updatedArticles);
-      localStorage.setItem('xhs-articles', JSON.stringify(updatedArticles));
+      
+      // Update localStorage for custom articles only
+      const customArticles = updatedArticles.filter(a => !a.isSample);
+      localStorage.setItem('xhs-articles', JSON.stringify(customArticles));
+    }
     }
   };
 
@@ -378,9 +498,14 @@ export default function AdminPage() {
                       return (
                       <tr key={article.id} className="border-b border-gray-700/50 hover:bg-gray-700/30">
                         <td className="p-4">
-                          <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400">
-                            {article.title}
-                          </Link>
+                          <div className="flex items-center gap-2">
+                            <Link href={`/insights/${article.slug}`} className="text-white hover:text-indigo-400">
+                              {article.title}
+                            </Link>
+                            {article.isSample && (
+                              <span className="px-1.5 py-0.5 bg-gray-700 text-gray-400 text-xs rounded">Sample</span>
+                            )}
+                          </div>
                         </td>
                         <td className="p-4 text-gray-400">{article.category}</td>
                         <td className="p-4 text-gray-400">
@@ -406,7 +531,7 @@ export default function AdminPage() {
                             Edit
                           </button>
                           <button
-                            onClick={() => handleDeleteArticle(article.id)}
+                            onClick={() => handleDeleteArticle(article)}
                             className="text-red-400 hover:text-red-300 text-sm"
                           >
                             Delete
