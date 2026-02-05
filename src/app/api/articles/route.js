@@ -1,6 +1,5 @@
 import { put, list, del } from '@vercel/blob';
 import { NextResponse } from 'next/server';
-import { sampleArticles } from '@/data/sample-articles';
 
 const ARTICLES_BLOB_KEY = 'articles/articles-data.json';
 
@@ -10,38 +9,29 @@ async function getCustomArticlesFromBlob() {
     const { blobs } = await list({ prefix: 'articles/articles-data' });
     
     if (blobs.length === 0) {
-      return { articles: [], deletedSampleIds: [] };
+      return [];
     }
 
     const response = await fetch(blobs[0].url, { cache: 'no-store' });
     const data = await response.json();
-    return data;
+    return data.articles || [];
   } catch (error) {
     console.error('Error fetching from blob:', error);
-    return { articles: [], deletedSampleIds: [] };
+    return [];
   }
 }
 
-// GET - Return all articles (custom + samples, for metadata generation)
+// GET - Return all articles (custom only, no sample articles)
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get('slug');
   
   // Fetch custom articles from blob
-  const { articles: customArticles, deletedSampleIds } = await getCustomArticlesFromBlob();
-  
-  // Get visible sample articles (not deleted, not overridden)
-  const customSlugs = customArticles.map(a => a.slug);
-  const visibleSamples = sampleArticles.filter(s => 
-    !(deletedSampleIds || []).includes(s.id) && !customSlugs.includes(s.slug)
-  );
-  
-  // Combine all articles
-  const allArticles = [...customArticles, ...visibleSamples];
+  const customArticles = await getCustomArticlesFromBlob();
   
   if (slug) {
     // Return single article by slug
-    const article = allArticles.find(a => a.slug === slug);
+    const article = customArticles.find(a => a.slug === slug);
     if (article) {
       return NextResponse.json(article);
     }
@@ -50,9 +40,7 @@ export async function GET(request) {
   
   // Return all articles
   return NextResponse.json({ 
-    articles: allArticles, 
-    customArticles, 
-    deletedSampleIds: deletedSampleIds || [] 
+    articles: customArticles
   });
 }
 

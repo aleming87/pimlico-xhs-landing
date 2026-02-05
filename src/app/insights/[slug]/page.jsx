@@ -1,4 +1,3 @@
-import { sampleArticles } from '@/data/sample-articles';
 import { list } from '@vercel/blob';
 import ArticlePageClient from './ArticlePageClient';
 
@@ -16,36 +15,24 @@ async function getCustomArticlesFromBlob() {
     const { blobs } = await list({ prefix: 'articles/articles-data' });
     
     if (blobs.length === 0) {
-      return { articles: [], deletedSampleIds: [] };
+      return [];
     }
 
     const response = await fetch(blobs[0].url, { cache: 'no-store' });
     const data = await response.json();
-    return data;
+    return data.articles || [];
   } catch (error) {
     console.error('Error fetching from blob:', error);
-    return { articles: [], deletedSampleIds: [] };
+    return [];
   }
 }
 
-// Helper to get article by slug (checks blob first, then samples)
+// Helper to get article by slug (from Vercel Blob only - no sample articles)
 async function getArticleBySlug(slug) {
-  // Try to get from Vercel Blob first (custom articles)
-  const { articles: customArticles, deletedSampleIds } = await getCustomArticlesFromBlob();
+  const customArticles = await getCustomArticlesFromBlob();
   
-  // Check custom articles
-  const customArticle = customArticles.find(a => a.slug === slug);
-  if (customArticle) {
-    return customArticle;
-  }
-  
-  // Check sample articles (if not deleted)
-  const sampleArticle = sampleArticles.find(a => a.slug === slug);
-  if (sampleArticle && !(deletedSampleIds || []).includes(sampleArticle.id)) {
-    return sampleArticle;
-  }
-  
-  return null;
+  // Only return custom articles (no sample articles)
+  return customArticles.find(a => a.slug === slug) || null;
 }
 
 // Generate metadata for social sharing

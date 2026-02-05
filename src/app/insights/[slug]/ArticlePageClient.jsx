@@ -6,7 +6,6 @@ import { Footer } from '@/components/footer';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
-import { sampleArticles } from '@/data/sample-articles';
 
 // Generate realistic view counts based on article age with variation
 const generateViewCount = (dateStr, articleId) => {
@@ -90,16 +89,15 @@ export default function ArticlePageClient() {
       setCurrentUrl(window.location.href);
     }
     
-    // Check localStorage for custom articles first
+    // Check localStorage for custom articles only (no sample articles)
     const savedArticles = localStorage.getItem('xhs-articles');
-    const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
     const now = new Date();
     
-    let customArticles = [];
+    let publishedArticles = [];
     if (savedArticles) {
       const parsed = JSON.parse(savedArticles);
       // Filter out drafts and scheduled articles that haven't reached their publish time
-      customArticles = parsed.filter(article => {
+      publishedArticles = parsed.filter(article => {
         // Hide drafts from public view
         if (article.status === 'draft') {
           return false;
@@ -112,14 +110,7 @@ export default function ArticlePageClient() {
       });
     }
     
-    // Get sample articles that haven't been deleted or overridden
-    const customSlugs = customArticles.map(a => a.slug);
-    const visibleSamples = sampleArticles.filter(s => 
-      !deletedSampleIds.includes(s.id) && !customSlugs.includes(s.slug)
-    );
-    
-    const allArticles = [...customArticles, ...visibleSamples];
-    const found = allArticles.find(a => a.slug === params.slug);
+    const found = publishedArticles.find(a => a.slug === params.slug);
     setArticle(found);
     
     // Generate view count based on article date and ID

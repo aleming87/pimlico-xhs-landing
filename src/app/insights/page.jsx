@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Footer } from '@/components/footer';
 import Link from 'next/link';
-import { sampleArticles } from '@/data/sample-articles';
 
 const categories = ['All', 'AI Regulation', 'Payments', 'Crypto', 'Gambling'];
 
@@ -57,17 +56,16 @@ export default function InsightsPage() {
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('All');
   const [selectedTag, setSelectedTag] = useState('');
 
-  // Load articles from localStorage if available
+  // Load articles from localStorage only (no sample articles)
   useEffect(() => {
     const savedArticles = localStorage.getItem('xhs-articles');
-    const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
     const now = new Date();
     
-    let customArticles = [];
+    let publishedArticles = [];
     if (savedArticles) {
       const parsed = JSON.parse(savedArticles);
       // Filter out drafts and scheduled articles that haven't reached their publish time
-      customArticles = parsed.filter(article => {
+      publishedArticles = parsed.filter(article => {
         // Hide drafts from public view
         if (article.status === 'draft') {
           return false;
@@ -80,14 +78,8 @@ export default function InsightsPage() {
       });
     }
     
-    // Get sample articles that haven't been deleted or overridden
-    const customSlugs = customArticles.map(a => a.slug);
-    const visibleSamples = sampleArticles.filter(s => 
-      !deletedSampleIds.includes(s.id) && !customSlugs.includes(s.slug)
-    );
-    
-    // Combine and sort by date (newest first)
-    const allArticles = [...customArticles, ...visibleSamples].sort((a, b) => {
+    // Sort by date (newest first)
+    const sortedArticles = publishedArticles.sort((a, b) => {
       // Parse dates - handle various date formats
       const parseDate = (dateStr) => {
         if (!dateStr) return new Date(0);
@@ -99,7 +91,7 @@ export default function InsightsPage() {
       return parseDate(b.date) - parseDate(a.date);
     });
     
-    setArticles(allArticles);
+    setArticles(sortedArticles);
     setIsLoading(false);
   }, []);
 
