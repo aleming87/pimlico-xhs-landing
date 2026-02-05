@@ -29,22 +29,70 @@ export default function DatamapScripts() {
       const mapElement = document.querySelector('#hs-users-datamap')
       if (!mapElement || typeof window.Datamap === 'undefined') return
       
+      // All countries from the Pimlico tagging scheme - highlighted by default
+      const taggedCountries = {
+        // Europe
+        'GBR': 'COVERED', 'DEU': 'COVERED', 'FRA': 'COVERED', 'ITA': 'COVERED', 
+        'ESP': 'COVERED', 'NLD': 'COVERED', 'SWE': 'COVERED', 'DNK': 'COVERED',
+        'GRC': 'COVERED', 'ROU': 'COVERED', 'HRV': 'COVERED', 'MLT': 'COVERED',
+        'PRT': 'COVERED', 'BEL': 'COVERED', 'AUT': 'COVERED', 'CHE': 'COVERED',
+        'IRL': 'COVERED', 'POL': 'COVERED', 'CZE': 'COVERED', 'HUN': 'COVERED',
+        'FIN': 'COVERED', 'NOR': 'COVERED', 'LUX': 'COVERED', 'CYP': 'COVERED',
+        'EST': 'COVERED', 'LVA': 'COVERED', 'LTU': 'COVERED', 'SVK': 'COVERED',
+        'SVN': 'COVERED', 'BGR': 'COVERED', 'ISL': 'COVERED', 'UKR': 'COVERED',
+        'ALB': 'COVERED', 'ARM': 'COVERED', 'AZE': 'COVERED', 'BLR': 'COVERED',
+        'BIH': 'COVERED', 'GEO': 'COVERED', 'KAZ': 'COVERED', 'LIE': 'COVERED',
+        'MDA': 'COVERED', 'MNE': 'COVERED', 'MKD': 'COVERED', 'RUS': 'COVERED',
+        'SRB': 'COVERED', 'TUR': 'COVERED',
+        // North America
+        'USA': 'COVERED', 'CAN': 'COVERED', 'MEX': 'COVERED',
+        // South America
+        'BRA': 'COVERED', 'ARG': 'COVERED', 'COL': 'COVERED', 'CHL': 'COVERED', 'PER': 'COVERED',
+        // Asia-Pacific
+        'AUS': 'COVERED', 'NZL': 'COVERED', 'JPN': 'COVERED', 'KOR': 'COVERED',
+        'SGP': 'COVERED', 'HKG': 'COVERED', 'CHN': 'COVERED', 'IND': 'COVERED',
+        'PHL': 'COVERED', 'MYS': 'COVERED', 'THA': 'COVERED', 'VNM': 'COVERED',
+        'IDN': 'COVERED', 'TWN': 'COVERED', 'KHM': 'COVERED', 'LAO': 'COVERED',
+        'MMR': 'COVERED', 'BGD': 'COVERED', 'PAK': 'COVERED', 'LKA': 'COVERED',
+        'NPL': 'COVERED', 'BTN': 'COVERED', 'MNG': 'COVERED', 'BRN': 'COVERED',
+        'MAC': 'COVERED', 'TLS': 'COVERED',
+        // Middle East
+        'ARE': 'COVERED', 'SAU': 'COVERED', 'ISR': 'COVERED', 'QAT': 'COVERED',
+        'BHR': 'COVERED', 'KWT': 'COVERED', 'JOR': 'COVERED', 'LBN': 'COVERED',
+        'IRQ': 'COVERED', 'IRN': 'COVERED', 'OMN': 'COVERED', 'YEM': 'COVERED',
+        'SYR': 'COVERED', 'PSE': 'COVERED',
+        // Africa
+        'ZAF': 'COVERED', 'NGA': 'COVERED', 'KEN': 'COVERED', 'EGY': 'COVERED',
+        'MAR': 'COVERED', 'GHA': 'COVERED', 'ETH': 'COVERED', 'TZA': 'COVERED',
+        'UGA': 'COVERED', 'RWA': 'COVERED', 'SEN': 'COVERED', 'CIV': 'COVERED',
+        'CMR': 'COVERED', 'AGO': 'COVERED', 'MOZ': 'COVERED', 'NAM': 'COVERED',
+        'BWA': 'COVERED', 'ZWE': 'COVERED', 'ZMB': 'COVERED', 'MUS': 'COVERED',
+        'SYC': 'COVERED', 'DZA': 'COVERED', 'TUN': 'COVERED', 'LBY': 'COVERED',
+        'SDN': 'COVERED', 'GAB': 'COVERED', 'COG': 'COVERED', 'COD': 'COVERED',
+        'MDG': 'COVERED', 'MWI': 'COVERED', 'MLI': 'COVERED', 'NER': 'COVERED',
+        'BFA': 'COVERED', 'GIN': 'COVERED', 'GMB': 'COVERED', 'GNB': 'COVERED',
+        'CPV': 'COVERED', 'LBR': 'COVERED', 'SLE': 'COVERED', 'TGO': 'COVERED',
+        'BEN': 'COVERED', 'SOM': 'COVERED', 'DJI': 'COVERED', 'ERI': 'COVERED',
+        'LSO': 'COVERED', 'SWZ': 'COVERED'
+      }
+      
       const dataMap = new window.Datamap({
         element: mapElement,
         projection: 'mercator',
         responsive: true,
         fills: {
           defaultFill: '#374151',
+          COVERED: '#60a5fa',  // Light blue for covered jurisdictions
           AI: '#a78bfa',
           PAYMENTS: '#3b82f6',
           GAMBLING: '#10b981'
         },
-        data: {},
+        data: taggedCountries,
         geographyConfig: {
           borderColor: 'rgba(255, 255, 255, 0.15)',
           borderWidth: 0.5,
           highlightOnHover: true,
-          highlightFillColor: '#6b7280',
+          highlightFillColor: '#93c5fd',
           highlightBorderColor: 'rgba(255, 255, 255, 0.5)',
           highlightBorderWidth: 1,
           popupOnHover: false
