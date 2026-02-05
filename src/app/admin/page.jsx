@@ -231,6 +231,7 @@ export default function AdminPage() {
     cta: { x: 0.94, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
     bottomBar: { height: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
     accentLine: { opacity: 100, width: 100, visible: true, dx: 0, dy: 0 },
+    premiumTag: { scale: 100, opacity: 100, visible: false, dx: 0, dy: 0 },
   };
   const [marketingElements, setMarketingElements] = useState({...DEFAULT_ELEMENTS});
   const elementBoundsRef = useRef({});
@@ -1146,6 +1147,69 @@ export default function AdminPage() {
     ctx.restore();
   };
 
+  // Shared helper: draw premium tag badge
+  const drawPremiumTag = (ctx, template, fontFamily, fontScale, x, y, _b) => {
+    const el = marketingElements;
+    if (el.premiumTag.visible === false) return;
+    const tagScale = (el.premiumTag.scale || 100) / 100;
+    const tagOpacity = (el.premiumTag.opacity ?? 100) / 100;
+    
+    const fontSize = Math.round(template.width * 0.014 * fontScale * tagScale);
+    const text = 'PREMIUM';
+    ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    const textW = ctx.measureText(text).width;
+    const padH = Math.round(fontSize * 0.9);
+    const padV = Math.round(fontSize * 0.55);
+    const tagW = textW + padH * 2 + fontSize * 1.2; // extra space for star icon
+    const tagH = fontSize + padV * 2;
+    const tx = x + (el.premiumTag.dx || 0);
+    const ty = y + (el.premiumTag.dy || 0);
+    
+    ctx.save();
+    ctx.globalAlpha = tagOpacity;
+    
+    // Gold gradient background
+    const grad = ctx.createLinearGradient(tx, ty, tx + tagW, ty + tagH);
+    grad.addColorStop(0, '#b8860b');
+    grad.addColorStop(0.3, '#daa520');
+    grad.addColorStop(0.7, '#f0c040');
+    grad.addColorStop(1, '#daa520');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(tx, ty, tagW, tagH, Math.round(tagH / 2));
+    ctx.fill();
+    
+    // Subtle border/shadow
+    ctx.strokeStyle = 'rgba(255,215,0,0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Star icon
+    const starX = tx + padH + fontSize * 0.15;
+    const starY = ty + tagH / 2;
+    const outerR = fontSize * 0.42;
+    const innerR = outerR * 0.4;
+    ctx.fillStyle = '#1a0f00';
+    ctx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const angle = (i * Math.PI) / 5 - Math.PI / 2;
+      const r = i % 2 === 0 ? outerR : innerR;
+      const px = starX + Math.cos(angle) * r;
+      const py = starY + Math.sin(angle) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+    
+    // Text
+    ctx.fillStyle = '#1a0f00';
+    ctx.fillText(text, tx + padH + fontSize * 1.0, ty + padV + fontSize * 0.88);
+    
+    ctx.restore();
+    if (_b) _b.premiumTag = { x: tx, y: ty, w: tagW, h: tagH };
+  };
+
   // Shared helper: draw bottom bar with balanced logos + CTA
   const drawBottomBar = async (ctx, template, padding, isDark, isGradient, fontFamily, fontScale, pos, _b) => {
     const el = marketingElements;
@@ -1314,6 +1378,9 @@ export default function AdminPage() {
           _b.xhsLogo = {x:_x, y:_y, w:xW, h:xH};
         } catch (e) {}
       }
+
+      // Premium tag — top-right area below XHS logo
+      drawPremiumTag(ctx, template, fontFamily, fontScale, template.width - cardPad - Math.round(template.width * 0.18), cardPad + Math.round(template.height * 0.08), _b);
 
       // Category white box
       if (el.badge.visible !== false) {
@@ -1532,6 +1599,9 @@ export default function AdminPage() {
         }
       }
 
+      // Premium tag — top-right
+      drawPremiumTag(ctx, template, fontFamily, fontScale, template.width - magPad - Math.round(template.width * 0.17), magPad, _b);
+
       // Title — large, dramatic
       if (el.title.visible !== false) {
         const titleText = marketingTitle || marketingArticle.title;
@@ -1702,6 +1772,9 @@ export default function AdminPage() {
           _b.badge = {x:bx, y:by, w:bw, h:bh};
         }
       }
+
+      // Premium tag — near top-right
+      drawPremiumTag(ctx, template, fontFamily, fontScale, template.width * 0.42, padding, _b);
       
       // Title
       if (el.title.visible !== false) {
@@ -1780,7 +1853,7 @@ export default function AdminPage() {
     
     const bounds = elementBoundsRef.current;
     // Check elements from front to back (top-most first)
-    const hitOrder = ['cta', 'subtitle', 'title', 'badge', 'xhsLogo', 'pimlicoLogo', 'accentLine', 'bottomBar', 'image'];
+    const hitOrder = ['premiumTag', 'cta', 'subtitle', 'title', 'badge', 'xhsLogo', 'pimlicoLogo', 'accentLine', 'bottomBar', 'image'];
     for (const key of hitOrder) {
       const b = bounds[key];
       if (!b) continue;
@@ -3316,6 +3389,7 @@ export default function AdminPage() {
                         { key: 'cta', label: '🔗 CTA', hasScale: true, hasOpacity: true },
                         { key: 'bottomBar', label: '▬ Bar', hasHeight: true, hasOpacity: true },
                         { key: 'accentLine', label: '━ Accent', hasOpacity: true, hasWidth: true },
+                        { key: 'premiumTag', label: '⭐ Premium', hasScale: true, hasOpacity: true },
                       ].map(item => {
                         const isVisible = marketingElements[item.key]?.visible !== false;
                         return (
