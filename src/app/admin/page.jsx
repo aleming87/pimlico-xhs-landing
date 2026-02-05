@@ -222,17 +222,19 @@ export default function AdminPage() {
   const [marketingLayout, setMarketingLayout] = useState('classic'); // 'classic', 'card', 'magazine'
   const [marketingDragTarget, setMarketingDragTarget] = useState(null);
   const DEFAULT_ELEMENTS = {
-    pimlicoLogo: { x: 0.06, y: 0.88, scale: 100, opacity: 100 },
-    xhsLogo: { x: 0.22, y: 0.88, scale: 100, opacity: 100 },
-    image: { x: 0.62, y: 0, scale: 100, opacity: 100, zoom: 100 },
-    title: { x: 0.06, y: 0.33, scale: 100, opacity: 100 },
-    subtitle: { x: 0.06, y: null, scale: 100, opacity: 100 },
-    badge: { x: 0.06, y: 0.25, scale: 100, opacity: 100 },
-    cta: { x: 0.94, y: 0.88, scale: 100, opacity: 100 },
-    bottomBar: { height: 100, opacity: 100 },
-    accentLine: { opacity: 100, width: 100 },
+    pimlicoLogo: { x: 0.06, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    xhsLogo: { x: 0.22, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    image: { x: 0.62, y: 0, scale: 100, opacity: 100, zoom: 100, visible: true, dx: 0, dy: 0 },
+    title: { x: 0.06, y: 0.33, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    subtitle: { x: 0.06, y: null, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    badge: { x: 0.06, y: 0.25, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    cta: { x: 0.94, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    bottomBar: { height: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+    accentLine: { opacity: 100, width: 100, visible: true, dx: 0, dy: 0 },
   };
   const [marketingElements, setMarketingElements] = useState({...DEFAULT_ELEMENTS});
+  const elementBoundsRef = useRef({});
+  const dragStartRef = useRef(null);
   // Compat wrapper for drag system
   const marketingPositions = {
     title: marketingElements.title,
@@ -1017,17 +1019,22 @@ export default function AdminPage() {
     return lines;
   };
 
-  // Load an image as a promise (with CORS retry)
+  // Load an image as a promise (with proxy fallback for external URLs)
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new window.Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
     img.onerror = () => {
-      // Retry without crossOrigin for Vercel Blob / external URLs
-      const img2 = new window.Image();
-      img2.onload = () => resolve(img2);
-      img2.onerror = reject;
-      img2.src = src;
+      // Retry via same-origin proxy for external URLs (Vercel Blob etc)
+      if (src.startsWith('http')) {
+        const img2 = new window.Image();
+        img2.crossOrigin = 'anonymous';
+        img2.onload = () => resolve(img2);
+        img2.onerror = reject;
+        img2.src = `/api/proxy-image?url=${encodeURIComponent(src)}`;
+      } else {
+        reject(new Error('Failed to load image: ' + src));
+      }
     };
     img.src = src;
   });
@@ -1055,12 +1062,12 @@ export default function AdminPage() {
   };
 
   // Shared helper: draw bottom bar with balanced logos + CTA
-  const drawBottomBar = async (ctx, template, padding, isDark, isGradient, fontFamily, fontScale, pos) => {
+  const drawBottomBar = async (ctx, template, padding, isDark, isGradient, fontFamily, fontScale, pos, _b) => {
     const el = marketingElements;
     const barScale = (el.bottomBar.height || 100) / 100;
     const barOpacity = (el.bottomBar.opacity || 100) / 100;
     const bottomH = Math.round(template.height * 0.13 * barScale);
-    const bottomY = template.height - bottomH;
+    const bottomY = template.height - bottomH + (el.bottomBar.dy||0);
     
     ctx.save();
     ctx.globalAlpha = barOpacity;
@@ -1069,51 +1076,59 @@ export default function AdminPage() {
     ctx.fillStyle = isDark || isGradient ? 'rgba(0,0,0,0.35)' : 'rgba(249,250,251,0.92)';
     ctx.fillRect(0, bottomY + 1, template.width, bottomH);
     ctx.restore();
+    if (_b) _b.bottomBar = {x:0, y:bottomY, w:template.width, h:bottomH};
     
     const baseLogoH = bottomH * 0.65;
     
     // Pimlico logo
-    const pimScale = (el.pimlicoLogo.scale || 100) / 100;
-    const pimOpacity = (el.pimlicoLogo.opacity ?? 100) / 100;
-    const pimX = Math.round(el.pimlicoLogo.x * template.width);
-    const pimY = bottomY + bottomH * 0.15;
-    const pimH = baseLogoH * pimScale;
-    
-    try {
-      const pimlicoLogoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
-      const pimlicoLogo = await loadImage(pimlicoLogoSrc);
-      const pimW = (pimlicoLogo.width / pimlicoLogo.height) * pimH;
-      ctx.save();
-      ctx.globalAlpha = pimOpacity;
-      ctx.drawImage(pimlicoLogo, pimX, pimY + (baseLogoH - pimH) / 2, pimW, pimH);
-      ctx.restore();
+    if (el.pimlicoLogo.visible !== false) {
+      const pimScale = (el.pimlicoLogo.scale || 100) / 100;
+      const pimOpacity = (el.pimlicoLogo.opacity ?? 100) / 100;
+      const pimX = Math.round(el.pimlicoLogo.x * template.width) + (el.pimlicoLogo.dx||0);
+      const pimY = bottomY + bottomH * 0.15 + (el.pimlicoLogo.dy||0);
+      const pimH = baseLogoH * pimScale;
       
-      // Separator
-      const sepX = pimX + pimW + 18;
-      ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
-      ctx.fillRect(sepX, pimY + 6, 1.5, baseLogoH - 12);
-      
-      // XHS logo
-      const xhsScale = (el.xhsLogo.scale || 100) / 100;
-      const xhsOpacity = (el.xhsLogo.opacity ?? 100) / 100;
-      const xhsLogoSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
-      const xhsLogo = await loadImage(xhsLogoSrc);
-      const xhsBaseH = baseLogoH * 1.5;
-      const xhsScaledH = xhsBaseH * xhsScale;
-      const xhsW = (xhsLogo.width / xhsLogo.height) * xhsScaledH;
-      const xhsY = pimY + (baseLogoH - xhsScaledH) / 2;
-      ctx.save();
-      ctx.globalAlpha = xhsOpacity;
-      ctx.drawImage(xhsLogo, sepX + 18, xhsY, xhsW, xhsScaledH);
-      ctx.restore();
-    } catch (e) {
-      const brandSize = Math.round(template.width * 0.022);
-      ctx.font = `700 ${brandSize}px ${fontFamily}`;
-      ctx.fillStyle = isDark || isGradient ? '#ffffff' : '#0f172a';
-      ctx.fillText('Pimlico XHS™', pimX, bottomY + bottomH / 2 + brandSize * 0.35);
+      try {
+        const pimlicoLogoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
+        const pimlicoLogo = await loadImage(pimlicoLogoSrc);
+        const pimW = (pimlicoLogo.width / pimlicoLogo.height) * pimH;
+        ctx.save();
+        ctx.globalAlpha = pimOpacity;
+        ctx.drawImage(pimlicoLogo, pimX, pimY + (baseLogoH - pimH) / 2, pimW, pimH);
+        ctx.restore();
+        if (_b) _b.pimlicoLogo = {x:pimX, y:pimY, w:pimW, h:pimH};
+        
+        // Separator
+        const sepX = pimX + pimW + 18;
+        ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
+        ctx.fillRect(sepX, pimY + 6, 1.5, baseLogoH - 12);
+        
+        // XHS logo
+        if (el.xhsLogo.visible !== false) {
+          const xhsScale = (el.xhsLogo.scale || 100) / 100;
+          const xhsOpacity = (el.xhsLogo.opacity ?? 100) / 100;
+          const xhsLogoSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
+          const xhsLogo = await loadImage(xhsLogoSrc);
+          const xhsBaseH = baseLogoH * 1.5;
+          const xhsScaledH = xhsBaseH * xhsScale;
+          const xhsW = (xhsLogo.width / xhsLogo.height) * xhsScaledH;
+          const xhsX = sepX + 18 + (el.xhsLogo.dx||0);
+          const xhsY = pimY + (baseLogoH - xhsScaledH) / 2 + (el.xhsLogo.dy||0);
+          ctx.save();
+          ctx.globalAlpha = xhsOpacity;
+          ctx.drawImage(xhsLogo, xhsX, xhsY, xhsW, xhsScaledH);
+          ctx.restore();
+          if (_b) _b.xhsLogo = {x:xhsX, y:xhsY, w:xhsW, h:xhsScaledH};
+        }
+      } catch (e) {
+        const brandSize = Math.round(template.width * 0.022);
+        ctx.font = `700 ${brandSize}px ${fontFamily}`;
+        ctx.fillStyle = isDark || isGradient ? '#ffffff' : '#0f172a';
+        ctx.fillText('Pimlico XHS™', pimX, bottomY + bottomH / 2 + brandSize * 0.35);
+      }
     }
     
-    if (marketingCta) {
+    if (el.cta.visible !== false && marketingCta) {
       const ctaEl = el.cta;
       const ctaOpacity = (ctaEl.opacity ?? 100) / 100;
       const ctaScale = (ctaEl.scale || 100) / 100;
@@ -1123,9 +1138,11 @@ export default function AdminPage() {
       ctx.globalAlpha = ctaOpacity;
       ctx.fillStyle = '#3b82f6';
       const ctaW = ctx.measureText(marketingCta).width;
-      const ctaX = template.width - padding - ctaW;
-      ctx.fillText(marketingCta, ctaX, bottomY + bottomH / 2 + ctaSize * 0.35);
+      const ctaX = template.width - padding - ctaW + (el.cta.dx||0);
+      const ctaY = bottomY + bottomH / 2 + ctaSize * 0.35 + (el.cta.dy||0);
+      ctx.fillText(marketingCta, ctaX, ctaY);
       ctx.restore();
+      if (_b) _b.cta = {x:ctaX - 10, y:ctaY - ctaSize, w:ctaW + 20, h:ctaSize + 10};
     }
     
     return { bottomY, bottomH };
@@ -1142,6 +1159,8 @@ export default function AdminPage() {
     canvas.width = template.width;
     canvas.height = template.height;
     const ctx = canvas.getContext('2d');
+    const el = marketingElements;
+    const _b = {}; // bounds collector
     
     const isDark = marketingTheme === 'dark';
     const isGradient = marketingTheme === 'gradient';
@@ -1178,95 +1197,108 @@ export default function AdminPage() {
       const isVert = marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory';
 
       // Pimlico logo top-left
-      try {
-        const logoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
-        const logo = await loadImage(logoSrc);
-        const pimScale = (marketingElements.pimlicoLogo.scale || 100) / 100;
-        const pimOpacity = (marketingElements.pimlicoLogo.opacity ?? 100) / 100;
-        const lH = Math.round(template.height * 0.055 * pimScale);
-        const lW = (logo.width / logo.height) * lH;
-        ctx.save(); ctx.globalAlpha = pimOpacity;
-        ctx.drawImage(logo, cardPad, cardPad, lW, lH);
-        ctx.restore();
-      } catch (e) {}
+      if (el.pimlicoLogo.visible !== false) {
+        try {
+          const logoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
+          const logo = await loadImage(logoSrc);
+          const pimScale = (el.pimlicoLogo.scale || 100) / 100;
+          const pimOpacity = (el.pimlicoLogo.opacity ?? 100) / 100;
+          const lH = Math.round(template.height * 0.055 * pimScale);
+          const lW = (logo.width / logo.height) * lH;
+          const _x = cardPad + (el.pimlicoLogo.dx||0), _y = cardPad + (el.pimlicoLogo.dy||0);
+          ctx.save(); ctx.globalAlpha = pimOpacity;
+          ctx.drawImage(logo, _x, _y, lW, lH);
+          ctx.restore();
+          _b.pimlicoLogo = {x:_x, y:_y, w:lW, h:lH};
+        } catch (e) {}
+      }
 
       // XHS brandmark top-right
-      try {
-        const xhsSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
-        const xhsLogo = await loadImage(xhsSrc);
-        const xhsScale = (marketingElements.xhsLogo.scale || 100) / 100;
-        const xhsOpacity = (marketingElements.xhsLogo.opacity ?? 100) / 100;
-        const xH = Math.round(template.height * 0.07 * xhsScale);
-        const xW = (xhsLogo.width / xhsLogo.height) * xH;
-        ctx.save(); ctx.globalAlpha = xhsOpacity;
-        ctx.drawImage(xhsLogo, template.width - cardPad - xW, cardPad, xW, xH);
-        ctx.restore();
-      } catch (e) {}
+      if (el.xhsLogo.visible !== false) {
+        try {
+          const xhsSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
+          const xhsLogo = await loadImage(xhsSrc);
+          const xhsScale = (el.xhsLogo.scale || 100) / 100;
+          const xhsOpacity = (el.xhsLogo.opacity ?? 100) / 100;
+          const xH = Math.round(template.height * 0.07 * xhsScale);
+          const xW = (xhsLogo.width / xhsLogo.height) * xH;
+          const _x = template.width - cardPad - xW + (el.xhsLogo.dx||0), _y = cardPad + (el.xhsLogo.dy||0);
+          ctx.save(); ctx.globalAlpha = xhsOpacity;
+          ctx.drawImage(xhsLogo, _x, _y, xW, xH);
+          ctx.restore();
+          _b.xhsLogo = {x:_x, y:_y, w:xW, h:xH};
+        } catch (e) {}
+      }
 
       // Category white box
-      const category = (marketingArticle.category || 'ARTICLE').toUpperCase();
-      const catFontSize = Math.round(template.width * 0.018 * fontScale);
-      ctx.font = `700 ${catFontSize}px ${fontFamily}`;
-      const catTextW = ctx.measureText(category).width;
-      const catBoxPad = Math.round(template.width * 0.015);
-      const catBoxH = catFontSize + catBoxPad * 2;
-      const catBoxW = catTextW + catBoxPad * 3;
-      const catBoxY = cardPad + Math.round(template.height * 0.075);
-      
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.roundRect(cardPad, catBoxY, catBoxW, catBoxH, 8);
-      ctx.fill();
-      // Subtle shadow
-      ctx.shadowColor = 'rgba(0,0,0,0.15)';
-      ctx.shadowBlur = 12;
-      ctx.shadowOffsetY = 4;
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.roundRect(cardPad, catBoxY, catBoxW, catBoxH, 8);
-      ctx.fill();
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
-      
-      ctx.fillStyle = '#0f172a';
-      ctx.fillText(category, cardPad + catBoxPad * 1.5, catBoxY + catBoxPad + catFontSize * 0.85);
+      if (el.badge.visible !== false) {
+        const category = (marketingArticle.category || 'ARTICLE').toUpperCase();
+        const catFontSize = Math.round(template.width * 0.018 * fontScale);
+        ctx.font = `700 ${catFontSize}px ${fontFamily}`;
+        const catTextW = ctx.measureText(category).width;
+        const catBoxPad = Math.round(template.width * 0.015);
+        const catBoxH = catFontSize + catBoxPad * 2;
+        const catBoxW = catTextW + catBoxPad * 3;
+        const catBoxY = cardPad + Math.round(template.height * 0.075);
+        const _bx = cardPad + (el.badge.dx||0), _by = catBoxY + (el.badge.dy||0);
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(_bx, _by, catBoxW, catBoxH, 8);
+        ctx.fill();
+        ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(_bx, _by, catBoxW, catBoxH, 8);
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+        
+        ctx.fillStyle = '#0f172a';
+        ctx.fillText(category, _bx + catBoxPad * 1.5, _by + catBoxPad + catFontSize * 0.85);
+        _b.badge = {x:_bx, y:_by, w:catBoxW, h:catBoxH};
+      }
 
       // Article image (centered, rounded, with shadow)
-      const cardImgScale = (marketingElements.image.scale ?? 100) / 100;
-      const cardImgOpacity = (marketingElements.image.opacity ?? 100) / 100;
-      const imgTopY = catBoxY + catBoxH + Math.round(template.height * 0.04);
+      const cardImgScale = (el.image.scale ?? 100) / 100;
+      const cardImgOpacity = (el.image.opacity ?? 100) / 100;
+      const catBoxYForImg = cardPad + Math.round(template.height * 0.075);
+      const catBoxHForImg = Math.round(template.width * 0.018 * fontScale) + Math.round(template.width * 0.015) * 2;
+      const imgTopY = catBoxYForImg + catBoxHForImg + Math.round(template.height * 0.04);
       const imgAreaH = (isVert ? template.height * 0.42 : template.height * 0.45) * cardImgScale;
       const imgAreaW = template.width - cardPad * 2;
       
-      if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
+      if (el.image.visible !== false && marketingArticle.image && marketingArticle.image.startsWith('http')) {
+        const _ix = cardPad + (el.image.dx||0), _iy = imgTopY + (el.image.dy||0);
         try {
           const img = await loadImage(marketingArticle.image);
-          // Draw shadow behind image
           ctx.shadowColor = 'rgba(0,0,0,0.3)';
           ctx.shadowBlur = 20;
           ctx.shadowOffsetY = 8;
           ctx.fillStyle = '#000';
           ctx.beginPath();
-          ctx.roundRect(cardPad, imgTopY, imgAreaW, imgAreaH, 14);
+          ctx.roundRect(_ix, _iy, imgAreaW, imgAreaH, 14);
           ctx.fill();
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
           ctx.shadowOffsetY = 0;
           
-          // Clip to rounded rect
           ctx.save();
           ctx.beginPath();
-          ctx.roundRect(cardPad, imgTopY, imgAreaW, imgAreaH, 14);
+          ctx.roundRect(_ix, _iy, imgAreaW, imgAreaH, 14);
           ctx.clip();
-          drawImageCover(ctx, img, cardPad, imgTopY, imgAreaW, imgAreaH, cardImgOpacity);
+          drawImageCover(ctx, img, _ix, _iy, imgAreaW, imgAreaH, cardImgOpacity);
           ctx.restore();
+          _b.image = {x:_ix, y:_iy, w:imgAreaW, h:imgAreaH};
         } catch (e) {
-          // Placeholder
           ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
           ctx.beginPath();
-          ctx.roundRect(cardPad, imgTopY, imgAreaW, imgAreaH, 14);
+          ctx.roundRect(_ix, _iy, imgAreaW, imgAreaH, 14);
           ctx.fill();
+          _b.image = {x:_ix, y:_iy, w:imgAreaW, h:imgAreaH};
         }
       }
 
@@ -1275,37 +1307,43 @@ export default function AdminPage() {
       const titleBoxH = template.height - titleBoxY - cardPad;
       const titleBoxW = template.width - cardPad * 2;
       
-      // Shadow
-      ctx.shadowColor = 'rgba(0,0,0,0.15)';
-      ctx.shadowBlur = 12;
-      ctx.shadowOffsetY = 4;
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.roundRect(cardPad, titleBoxY, titleBoxW, titleBoxH, 10);
-      ctx.fill();
-      ctx.shadowColor = 'transparent';
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
-      
-      // Title text inside white box
-      const titleText = marketingTitle || marketingArticle.title;
-      const titleFontSize = Math.round(template.width * (isVert ? 0.04 : 0.028) * fontScale);
-      const titlePadInner = Math.round(template.width * 0.025);
-      ctx.fillStyle = '#0f172a';
-      ctx.font = `${marketingFontWeight} ${titleFontSize}px ${fontFamily}`;
-      const titleMaxW = titleBoxW - titlePadInner * 2;
-      const titleLines = wrapText(ctx, titleText, cardPad + titlePadInner, titleBoxY + titlePadInner + titleFontSize, titleMaxW, titleFontSize * 1.25);
-      titleLines.slice(0, 3).forEach(line => {
-        ctx.fillText(line.text, cardPad + titlePadInner, line.y);
-      });
+      if (el.title.visible !== false) {
+        const _tx = cardPad + (el.title.dx||0), _ty = titleBoxY + (el.title.dy||0);
+        ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(_tx, _ty, titleBoxW, titleBoxH, 10);
+        ctx.fill();
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+        
+        const titleText = marketingTitle || marketingArticle.title;
+        const titleFontSize = Math.round(template.width * (isVert ? 0.04 : 0.028) * fontScale);
+        const titlePadInner = Math.round(template.width * 0.025);
+        ctx.fillStyle = '#0f172a';
+        ctx.font = `${marketingFontWeight} ${titleFontSize}px ${fontFamily}`;
+        const titleMaxW = titleBoxW - titlePadInner * 2;
+        const titleLines = wrapText(ctx, titleText, _tx + titlePadInner, _ty + titlePadInner + titleFontSize, titleMaxW, titleFontSize * 1.25);
+        titleLines.slice(0, 3).forEach(line => {
+          ctx.fillText(line.text, _tx + titlePadInner, line.y);
+        });
+        _b.title = {x:_tx, y:_ty, w:titleBoxW, h:titleBoxH};
+      }
 
       // CTA inside title box, bottom-right
-      if (marketingCta) {
+      if (el.cta.visible !== false && marketingCta) {
+        const _cx = cardPad + (el.cta.dx||0), _cy = titleBoxY + (el.cta.dy||0);
         const ctaSize = Math.round(template.width * 0.014 * fontScale);
         ctx.font = `600 ${ctaSize}px ${fontFamily}`;
         ctx.fillStyle = '#3b82f6';
         const ctaW = ctx.measureText(marketingCta).width;
-        ctx.fillText(marketingCta, cardPad + titleBoxW - titlePadInner - ctaW, titleBoxY + titleBoxH - titlePadInner);
+        const ctaX = _cx + titleBoxW - Math.round(template.width * 0.025) - ctaW;
+        const ctaY = _cy + titleBoxH - Math.round(template.width * 0.025);
+        ctx.fillText(marketingCta, ctaX, ctaY);
+        _b.cta = {x:ctaX - 10, y:ctaY - ctaSize, w:ctaW + 20, h:ctaSize + 10};
       }
 
     // ============================
@@ -1313,13 +1351,13 @@ export default function AdminPage() {
     // ============================
     } else if (marketingLayout === 'magazine') {
       // Full-bleed article image
-      const magImgOpacity = (marketingElements.image.opacity ?? 100) / 100;
-      if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
+      const magImgOpacity = (el.image.opacity ?? 100) / 100;
+      if (el.image.visible !== false && marketingArticle.image && marketingArticle.image.startsWith('http')) {
         try {
           const img = await loadImage(marketingArticle.image);
-          drawImageCover(ctx, img, 0, 0, template.width, template.height, magImgOpacity);
+          drawImageCover(ctx, img, 0 + (el.image.dx||0), 0 + (el.image.dy||0), template.width, template.height, magImgOpacity);
+          _b.image = {x:0, y:0, w:template.width, h:template.height};
         } catch (e) {
-          // Fallback gradient
           const grad = ctx.createLinearGradient(0, 0, template.width, template.height);
           grad.addColorStop(0, '#1e293b');
           grad.addColorStop(1, '#0f172a');
@@ -1341,7 +1379,6 @@ export default function AdminPage() {
       ctx.fillStyle = grad1;
       ctx.fillRect(0, 0, template.width, template.height);
 
-      // Subtle top gradient for logo visibility
       const topGrad = ctx.createLinearGradient(0, 0, 0, template.height * 0.25);
       topGrad.addColorStop(0, `rgba(${overlayColor.join(',')},0.6)`);
       topGrad.addColorStop(1, 'rgba(0,0,0,0)');
@@ -1352,108 +1389,134 @@ export default function AdminPage() {
       const magPad = Math.round(template.width * 0.06);
 
       // Pimlico + XHS logos at top
-      try {
-        const magPimScale = (marketingElements.pimlicoLogo.scale || 100) / 100;
-        const magPimOpacity = (marketingElements.pimlicoLogo.opacity ?? 100) / 100;
-        const logoSrc = '/Pimlico_Logo_Inverted.png';
-        const logo = await loadImage(logoSrc);
-        const lH = Math.round(template.height * 0.05 * magPimScale);
-        const lW = (logo.width / logo.height) * lH;
-        ctx.save(); ctx.globalAlpha = magPimOpacity;
-        ctx.drawImage(logo, magPad, magPad, lW, lH);
-        ctx.restore();
+      if (el.pimlicoLogo.visible !== false) {
+        try {
+          const magPimScale = (el.pimlicoLogo.scale || 100) / 100;
+          const magPimOpacity = (el.pimlicoLogo.opacity ?? 100) / 100;
+          const logo = await loadImage('/Pimlico_Logo_Inverted.png');
+          const lH = Math.round(template.height * 0.05 * magPimScale);
+          const lW = (logo.width / logo.height) * lH;
+          const _px = magPad + (el.pimlicoLogo.dx||0), _py = magPad + (el.pimlicoLogo.dy||0);
+          ctx.save(); ctx.globalAlpha = magPimOpacity;
+          ctx.drawImage(logo, _px, _py, lW, lH);
+          ctx.restore();
+          _b.pimlicoLogo = {x:_px, y:_py, w:lW, h:lH};
 
-        // XHS next to it
-        const magXhsScale = (marketingElements.xhsLogo.scale || 100) / 100;
-        const magXhsOpacity = (marketingElements.xhsLogo.opacity ?? 100) / 100;
-        const xhsSrc = '/XHS_Logo_White.png';
-        const xhsLogo = await loadImage(xhsSrc);
-        const xhsH = lH * 1.4 * magXhsScale;
-        const xhsW = (xhsLogo.width / xhsLogo.height) * xhsH;
-        const sepX = magPad + lW + 14;
-        ctx.fillStyle = 'rgba(255,255,255,0.3)';
-        ctx.fillRect(sepX, magPad + 3, 1.5, lH - 6);
-        ctx.save(); ctx.globalAlpha = magXhsOpacity;
-        ctx.drawImage(xhsLogo, sepX + 14, magPad + (lH - xhsH) / 2, xhsW, xhsH);
-        ctx.restore();
-      } catch (e) {}
+          // XHS next to it
+          if (el.xhsLogo.visible !== false) {
+            const magXhsScale = (el.xhsLogo.scale || 100) / 100;
+            const magXhsOpacity = (el.xhsLogo.opacity ?? 100) / 100;
+            const xhsLogo = await loadImage('/XHS_Logo_White.png');
+            const xhsH = lH * 1.4 * magXhsScale;
+            const xhsW = (xhsLogo.width / xhsLogo.height) * xhsH;
+            const sepX = _px + lW + 14;
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.fillRect(sepX, _py + 3, 1.5, lH - 6);
+            const _xx = sepX + 14 + (el.xhsLogo.dx||0), _xy = _py + (lH - xhsH) / 2 + (el.xhsLogo.dy||0);
+            ctx.save(); ctx.globalAlpha = magXhsOpacity;
+            ctx.drawImage(xhsLogo, _xx, _xy, xhsW, xhsH);
+            ctx.restore();
+            _b.xhsLogo = {x:_xx, y:_xy, w:xhsW, h:xhsH};
+          }
+        } catch (e) {}
+      }
 
       // Category badge
-      const category = marketingArticle.category || '';
-      if (category) {
-        const catFontSize = Math.round(template.width * 0.016 * fontScale);
-        ctx.font = `700 ${catFontSize}px ${fontFamily}`;
-        const catText = category.toUpperCase();
-        const catW = ctx.measureText(catText).width;
-        const catPadH = 16;
-        const catPadV = 10;
-        const catBoxX = magPad;
-        const catBoxY = template.height * (isVert ? 0.55 : 0.52);
-        
-        ctx.fillStyle = 'rgba(59,130,246,0.25)';
-        ctx.beginPath();
-        ctx.roundRect(catBoxX, catBoxY, catW + catPadH * 2, catFontSize + catPadV * 2, 6);
-        ctx.fill();
-        // Blue left accent bar
-        ctx.fillStyle = '#3b82f6';
-        ctx.fillRect(catBoxX, catBoxY, 4, catFontSize + catPadV * 2);
-        ctx.fillText(catText, catBoxX + catPadH, catBoxY + catPadV + catFontSize * 0.85);
+      if (el.badge.visible !== false) {
+        const category = marketingArticle.category || '';
+        if (category) {
+          const catFontSize = Math.round(template.width * 0.016 * fontScale);
+          ctx.font = `700 ${catFontSize}px ${fontFamily}`;
+          const catText = category.toUpperCase();
+          const catW = ctx.measureText(catText).width;
+          const catPadH = 16;
+          const catPadV = 10;
+          const _bx = magPad + (el.badge.dx||0);
+          const _by = template.height * (isVert ? 0.55 : 0.52) + (el.badge.dy||0);
+          const bW = catW + catPadH * 2;
+          const bH = catFontSize + catPadV * 2;
+          
+          ctx.fillStyle = 'rgba(59,130,246,0.25)';
+          ctx.beginPath();
+          ctx.roundRect(_bx, _by, bW, bH, 6);
+          ctx.fill();
+          ctx.fillStyle = '#3b82f6';
+          ctx.fillRect(_bx, _by, 4, bH);
+          ctx.fillText(catText, _bx + catPadH, _by + catPadV + catFontSize * 0.85);
+          _b.badge = {x:_bx, y:_by, w:bW, h:bH};
+        }
       }
 
       // Title — large, dramatic
-      const titleText = marketingTitle || marketingArticle.title;
-      const baseTitleSize = isVert
-        ? template.width * 0.065
-        : template.width * 0.046;
-      const titleSize = Math.round(baseTitleSize * fontScale);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = `${marketingFontWeight} ${titleSize}px ${fontFamily}`;
-      
-      const maxTextW = isVert ? template.width - magPad * 2 : template.width * 0.7;
-      const titleY = template.height * (isVert ? 0.63 : 0.62);
-      const titleLines = wrapText(ctx, titleText, magPad, titleY, maxTextW, titleSize * 1.15);
-      titleLines.slice(0, 4).forEach(line => {
-        ctx.fillText(line.text, magPad, line.y);
-      });
-
-      // Subtitle below title
-      const subtitleText = marketingSubtitle || '';
-      if (subtitleText) {
-        const lastTY = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
-        const subSize = Math.round(titleSize * 0.45);
-        ctx.fillStyle = 'rgba(255,255,255,0.6)';
-        ctx.font = `400 ${subSize}px ${fontFamily}`;
-        const subLines = wrapText(ctx, subtitleText, magPad, lastTY + titleSize * 0.8, maxTextW, subSize * 1.5);
-        subLines.slice(0, 2).forEach(line => {
-          ctx.fillText(line.text, magPad, line.y);
+      if (el.title.visible !== false) {
+        const titleText = marketingTitle || marketingArticle.title;
+        const baseTitleSize = isVert ? template.width * 0.065 : template.width * 0.046;
+        const titleSize = Math.round(baseTitleSize * fontScale);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `${marketingFontWeight} ${titleSize}px ${fontFamily}`;
+        
+        const maxTextW = isVert ? template.width - magPad * 2 : template.width * 0.7;
+        const _tx = magPad + (el.title.dx||0);
+        const titleY = template.height * (isVert ? 0.63 : 0.62) + (el.title.dy||0);
+        const titleLines = wrapText(ctx, titleText, _tx, titleY, maxTextW, titleSize * 1.15);
+        titleLines.slice(0, 4).forEach(line => {
+          ctx.fillText(line.text, _tx, line.y);
         });
+        const lastTitleLine = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
+        _b.title = {x:_tx, y:titleY - titleSize, w:maxTextW, h:lastTitleLine - titleY + titleSize * 1.5};
+
+        // Subtitle below title
+        if (el.subtitle.visible !== false) {
+          const subtitleText = marketingSubtitle || '';
+          if (subtitleText) {
+            const lastTY = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
+            const subSize = Math.round(titleSize * 0.45);
+            const _sx = magPad + (el.subtitle.dx||0);
+            const _sy = lastTY + titleSize * 0.8 + (el.subtitle.dy||0);
+            ctx.fillStyle = 'rgba(255,255,255,0.6)';
+            ctx.font = `400 ${subSize}px ${fontFamily}`;
+            const subLines = wrapText(ctx, subtitleText, _sx, _sy, maxTextW, subSize * 1.5);
+            subLines.slice(0, 2).forEach(line => {
+              ctx.fillText(line.text, _sx, line.y);
+            });
+            _b.subtitle = {x:_sx, y:_sy - subSize, w:maxTextW, h:subSize * 4};
+          }
+        }
       }
 
       // Bottom bar
-      const bottomH = Math.round(template.height * 0.1);
-      const bottomY = template.height - bottomH;
-      ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      ctx.fillRect(0, bottomY, template.width, bottomH);
+      if (el.bottomBar.visible !== false) {
+        const bottomH = Math.round(template.height * 0.1);
+        const bottomY = template.height - bottomH + (el.bottomBar.dy||0);
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fillRect(0, bottomY, template.width, bottomH);
+        _b.bottomBar = {x:0, y:bottomY, w:template.width, h:bottomH};
+      }
 
       // CTA at bottom-right
-      if (marketingCta) {
+      if (el.cta.visible !== false && marketingCta) {
+        const bottomH = Math.round(template.height * 0.1);
+        const bottomY = template.height - bottomH + (el.bottomBar.dy||0);
         const ctaSize = Math.round(template.width * 0.018 * fontScale);
         ctx.font = `600 ${ctaSize}px ${fontFamily}`;
         ctx.fillStyle = '#60a5fa';
         const ctaW = ctx.measureText(marketingCta).width;
-        ctx.fillText(marketingCta, template.width - magPad - ctaW, bottomY + bottomH / 2 + ctaSize * 0.35);
-      }
+        const _cx = template.width - magPad - ctaW + (el.cta.dx||0);
+        const _cy = bottomY + bottomH / 2 + ctaSize * 0.35 + (el.cta.dy||0);
+        ctx.fillText(marketingCta, _cx, _cy);
+        _b.cta = {x:_cx - 10, y:_cy - ctaSize, w:ctaW + 20, h:ctaSize + 10};
 
-      // Read more arrow indicator
-      const arrowX = template.width - magPad;
-      const arrowY = bottomY + bottomH / 2;
-      ctx.strokeStyle = '#60a5fa';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(arrowX - 12, arrowY - 6);
-      ctx.lineTo(arrowX, arrowY);
-      ctx.lineTo(arrowX - 12, arrowY + 6);
-      ctx.stroke();
+        // Arrow indicator
+        const arrowX = template.width - magPad;
+        const arrowY = bottomY + bottomH / 2;
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(arrowX - 12, arrowY - 6);
+        ctx.lineTo(arrowX, arrowY);
+        ctx.lineTo(arrowX - 12, arrowY + 6);
+        ctx.stroke();
+      }
 
     // ============================
     // CLASSIC LAYOUT (default)
@@ -1474,31 +1537,35 @@ export default function AdminPage() {
       ctx.fillRect(0, 0, template.width, template.height);
 
       // Article image
-      const imgEl = marketingElements.image;
+      const imgEl = el.image;
       const imgOpacity = (imgEl.opacity ?? 100) / 100;
       const imgZoom = (imgEl.zoom ?? 100) / 100;
       const imgScale = (imgEl.scale ?? 100) / 100;
-      if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
+      if (el.image.visible !== false && marketingArticle.image && marketingArticle.image.startsWith('http')) {
         try {
           const img = await loadImage(marketingArticle.image);
           
           if (marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory') {
             const imgH = template.height * 0.45 * imgScale;
-            drawImageCover(ctx, img, 0, 0, template.width, imgH, 0.3 * imgOpacity);
-            const fadeGrad = ctx.createLinearGradient(0, imgH * 0.3, 0, imgH);
+            const _iy = (el.image.dy||0);
+            drawImageCover(ctx, img, 0, _iy, template.width, imgH, 0.3 * imgOpacity);
+            const fadeGrad = ctx.createLinearGradient(0, _iy + imgH * 0.3, 0, _iy + imgH);
             fadeGrad.addColorStop(0, isDark || isGradient ? 'rgba(15,23,42,0)' : 'rgba(255,255,255,0)');
             fadeGrad.addColorStop(1, isDark ? '#0f172a' : isGradient ? '#0f2847' : '#ffffff');
             ctx.fillStyle = fadeGrad;
-            ctx.fillRect(0, 0, template.width, imgH);
+            ctx.fillRect(0, _iy, template.width, imgH);
+            _b.image = {x:0, y:_iy, w:template.width, h:imgH};
           } else {
             const imgW = template.width * 0.38 * imgScale;
-            const imgX = Math.round(imgEl.x * template.width);
-            drawImageCover(ctx, img, imgX, 0, imgW, template.height, imgOpacity * 0.25 / 0.25);
+            const imgX = Math.round(imgEl.x * template.width) + (el.image.dx||0);
+            const _iy = (el.image.dy||0);
+            drawImageCover(ctx, img, imgX, _iy, imgW, template.height, imgOpacity);
             const fadeGrad = ctx.createLinearGradient(imgX - 60, 0, imgX + 100, 0);
             fadeGrad.addColorStop(0, isDark ? '#0f172a' : isGradient ? '#0f2847' : '#ffffff');
             fadeGrad.addColorStop(1, 'rgba(15,23,42,0)');
             ctx.fillStyle = fadeGrad;
-            ctx.fillRect(imgX - 60, 0, imgW + 60, template.height);
+            ctx.fillRect(imgX - 60, _iy, imgW + 60, template.height);
+            _b.image = {x:imgX, y:_iy, w:imgW, h:template.height};
           }
         } catch (e) {
           console.log('Could not load article image for marketing asset', e);
@@ -1506,148 +1573,163 @@ export default function AdminPage() {
       }
       
       // Accent line
-      const accentEl = marketingElements.accentLine;
-      const accentOpacity = (accentEl.opacity ?? 100) / 100;
-      const accentWidth = 60 * ((accentEl.width ?? 100) / 100);
-      ctx.save();
-      ctx.globalAlpha = accentOpacity;
-      ctx.fillStyle = '#3b82f6';
-      const accentY = Math.round(pos.badge.y * template.height) - 20;
-      ctx.fillRect(Math.round(pos.badge.x * template.width), accentY, accentWidth, 4);
-      ctx.restore();
+      if (el.accentLine.visible !== false) {
+        const accentEl = el.accentLine;
+        const accentOpacity = (accentEl.opacity ?? 100) / 100;
+        const accentWidth = 60 * ((accentEl.width ?? 100) / 100);
+        ctx.save();
+        ctx.globalAlpha = accentOpacity;
+        ctx.fillStyle = '#3b82f6';
+        const _ax = Math.round(pos.badge.x * template.width) + (el.accentLine.dx||0);
+        const accentY = Math.round(pos.badge.y * template.height) - 20 + (el.accentLine.dy||0);
+        ctx.fillRect(_ax, accentY, accentWidth, 4);
+        ctx.restore();
+        _b.accentLine = {x:_ax, y:accentY, w:accentWidth, h:4};
+      }
       
       // Category badge
-      const badgeEl = marketingElements.badge;
-      const badgeOpacity = (badgeEl.opacity ?? 100) / 100;
-      const badgeScale = (badgeEl.scale ?? 100) / 100;
-      const category = marketingArticle.category || '';
-      if (category) {
-        const badgeFontSize = Math.round(template.width * 0.016 * fontScale * badgeScale);
-        ctx.font = `700 ${badgeFontSize}px ${fontFamily}`;
-        const badgeText = category.toUpperCase();
-        const badgeMetrics = ctx.measureText(badgeText);
-        const badgePadH = 14;
-        const badgePadV = 8;
-        const bx = Math.round(pos.badge.x * template.width);
-        const by = Math.round(pos.badge.y * template.height);
-        const bw = badgeMetrics.width + badgePadH * 2;
-        const bh = badgeFontSize + badgePadV * 2;
-        
-        ctx.save();
-        ctx.globalAlpha = badgeOpacity;
-        ctx.fillStyle = isDark || isGradient ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.1)';
-        ctx.beginPath();
-        ctx.roundRect(bx, by, bw, bh, 6);
-        ctx.fill();
-        ctx.fillStyle = '#3b82f6';
-        ctx.fillText(badgeText, bx + badgePadH, by + badgePadV + badgeFontSize * 0.85);
-        ctx.restore();
+      if (el.badge.visible !== false) {
+        const badgeEl = el.badge;
+        const badgeOpacity = (badgeEl.opacity ?? 100) / 100;
+        const badgeScale = (badgeEl.scale ?? 100) / 100;
+        const category = marketingArticle.category || '';
+        if (category) {
+          const badgeFontSize = Math.round(template.width * 0.016 * fontScale * badgeScale);
+          ctx.font = `700 ${badgeFontSize}px ${fontFamily}`;
+          const badgeText = category.toUpperCase();
+          const badgeMetrics = ctx.measureText(badgeText);
+          const badgePadH = 14;
+          const badgePadV = 8;
+          const bx = Math.round(pos.badge.x * template.width) + (el.badge.dx||0);
+          const by = Math.round(pos.badge.y * template.height) + (el.badge.dy||0);
+          const bw = badgeMetrics.width + badgePadH * 2;
+          const bh = badgeFontSize + badgePadV * 2;
+          
+          ctx.save();
+          ctx.globalAlpha = badgeOpacity;
+          ctx.fillStyle = isDark || isGradient ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.1)';
+          ctx.beginPath();
+          ctx.roundRect(bx, by, bw, bh, 6);
+          ctx.fill();
+          ctx.fillStyle = '#3b82f6';
+          ctx.fillText(badgeText, bx + badgePadH, by + badgePadV + badgeFontSize * 0.85);
+          ctx.restore();
+          _b.badge = {x:bx, y:by, w:bw, h:bh};
+        }
       }
       
       // Title
-      const titleEl = marketingElements.title;
-      const titleOpacity = (titleEl.opacity ?? 100) / 100;
-      const titleScaleEl = (titleEl.scale ?? 100) / 100;
-      const titleText = marketingTitle || marketingArticle.title;
-      const titleColor = isDark || isGradient ? '#ffffff' : '#0f172a';
-      const baseTitleSize = marketingTemplate === 'instagramStory' 
-        ? template.width * 0.065
-        : marketingTemplate === 'instagram'
-          ? template.width * 0.058
-          : template.width * 0.038;
-      const titleSize = Math.round(baseTitleSize * fontScale * titleScaleEl);
-      ctx.save();
-      ctx.globalAlpha = titleOpacity;
-      ctx.fillStyle = titleColor;
-      ctx.font = `${marketingFontWeight} ${titleSize}px ${fontFamily}`;
-      
-      const isVertical = marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory';
-      const maxTextW = isVertical ? template.width - padding * 2 : template.width * 0.55;
-      const titleX = Math.round(pos.title.x * template.width);
-      const titleY = Math.round(pos.title.y * template.height);
-      const titleLines = wrapText(ctx, titleText, titleX, titleY, maxTextW, titleSize * 1.2);
-      titleLines.forEach(line => {
-        ctx.fillText(line.text, titleX, line.y);
-      });
-      ctx.restore();
-      
-      // Subtitle
-      const subEl = marketingElements.subtitle;
-      const subOpacity = (subEl.opacity ?? 100) / 100;
-      const lastTitleY = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
-      const subtitleText = marketingSubtitle || '';
-      if (subtitleText) {
-        const subtitleSize = Math.round(titleSize * 0.5);
+      if (el.title.visible !== false) {
+        const titleEl = el.title;
+        const titleOpacity = (titleEl.opacity ?? 100) / 100;
+        const titleScaleEl = (titleEl.scale ?? 100) / 100;
+        const titleText = marketingTitle || marketingArticle.title;
+        const titleColor = isDark || isGradient ? '#ffffff' : '#0f172a';
+        const baseTitleSize = marketingTemplate === 'instagramStory' 
+          ? template.width * 0.065
+          : marketingTemplate === 'instagram'
+            ? template.width * 0.058
+            : template.width * 0.038;
+        const titleSize = Math.round(baseTitleSize * fontScale * titleScaleEl);
         ctx.save();
-        ctx.globalAlpha = subOpacity;
-        ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.6)' : 'rgba(15,23,42,0.55)';
-        ctx.font = `400 ${subtitleSize}px ${fontFamily}`;
-        const subX = pos.subtitle.x !== undefined ? Math.round((pos.subtitle.x || pos.title.x) * template.width) : titleX;
-        const subY = pos.subtitle.y ? Math.round(pos.subtitle.y * template.height) : lastTitleY + titleSize * 0.9;
-        const subtitleLines = wrapText(ctx, subtitleText, subX, subY, maxTextW, subtitleSize * 1.5);
-        subtitleLines.slice(0, 2).forEach(line => {
-          ctx.fillText(line.text, subX, line.y);
+        ctx.globalAlpha = titleOpacity;
+        ctx.fillStyle = titleColor;
+        ctx.font = `${marketingFontWeight} ${titleSize}px ${fontFamily}`;
+        
+        const isVertical = marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory';
+        const maxTextW = isVertical ? template.width - padding * 2 : template.width * 0.55;
+        const titleX = Math.round(pos.title.x * template.width) + (el.title.dx||0);
+        const titleY = Math.round(pos.title.y * template.height) + (el.title.dy||0);
+        const titleLines = wrapText(ctx, titleText, titleX, titleY, maxTextW, titleSize * 1.2);
+        titleLines.forEach(line => {
+          ctx.fillText(line.text, titleX, line.y);
         });
         ctx.restore();
+        const lastTL = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
+        _b.title = {x:titleX, y:titleY - titleSize, w:maxTextW, h:lastTL - titleY + titleSize * 1.5};
+      
+        // Subtitle
+        if (el.subtitle.visible !== false) {
+          const subEl = el.subtitle;
+          const subOpacity = (subEl.opacity ?? 100) / 100;
+          const lastTitleY = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
+          const subtitleText = marketingSubtitle || '';
+          if (subtitleText) {
+            const subtitleSize = Math.round(titleSize * 0.5);
+            ctx.save();
+            ctx.globalAlpha = subOpacity;
+            ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.6)' : 'rgba(15,23,42,0.55)';
+            ctx.font = `400 ${subtitleSize}px ${fontFamily}`;
+            const subX = (pos.subtitle.x !== undefined ? Math.round((pos.subtitle.x || pos.title.x) * template.width) : titleX) + (el.subtitle.dx||0);
+            const subY = (pos.subtitle.y ? Math.round(pos.subtitle.y * template.height) : lastTitleY + titleSize * 0.9) + (el.subtitle.dy||0);
+            const subtitleLines = wrapText(ctx, subtitleText, subX, subY, maxTextW, subtitleSize * 1.5);
+            subtitleLines.slice(0, 2).forEach(line => {
+              ctx.fillText(line.text, subX, line.y);
+            });
+            ctx.restore();
+            _b.subtitle = {x:subX, y:subY - subtitleSize, w:maxTextW, h:subtitleSize * 4};
+          }
+        }
       }
       
       // Bottom bar with logos + CTA
-      await drawBottomBar(ctx, template, padding, isDark, isGradient, fontFamily, fontScale, pos);
+      if (el.bottomBar.visible !== false) {
+        await drawBottomBar(ctx, template, padding, isDark, isGradient, fontFamily, fontScale, pos, _b);
+      }
     }
     
+    // Store bounds for drag hit testing
+    elementBoundsRef.current = _b;
     setMarketingLoading(false);
   };
 
-  // Canvas drag handling — all elements draggable
+  // Canvas drag handling — bounding-box hit testing, pixel-level offsets
   const handleCanvasMouseDown = (e) => {
     const canvas = marketingCanvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    const x = (e.clientX - rect.left) * scaleX / canvas.width;
-    const y = (e.clientY - rect.top) * scaleY / canvas.height;
+    const px = (e.clientX - rect.left) * scaleX;
+    const py = (e.clientY - rect.top) * scaleY;
     
-    const el = marketingElements;
-    // Check all draggable elements by distance, pick closest
-    const candidates = [
-      { key: 'title', x: el.title.x, y: el.title.y, t: 0.10 },
-      { key: 'badge', x: el.badge.x, y: el.badge.y, t: 0.08 },
-      { key: 'pimlicoLogo', x: el.pimlicoLogo.x, y: el.pimlicoLogo.y, t: 0.08 },
-      { key: 'xhsLogo', x: el.xhsLogo.x, y: el.xhsLogo.y, t: 0.08 },
-      { key: 'cta', x: el.cta.x, y: el.cta.y, t: 0.08 },
-      { key: 'image', x: el.image.x, y: el.image.y ?? 0.3, t: 0.15 },
-    ];
-    if (el.subtitle.y !== null) {
-      candidates.push({ key: 'subtitle', x: el.subtitle.x, y: el.subtitle.y, t: 0.08 });
-    }
-    
-    let best = null;
-    let bestDist = Infinity;
-    for (const c of candidates) {
-      const dist = Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(y - c.y, 2));
-      if (dist < c.t && dist < bestDist) {
-        bestDist = dist;
-        best = c.key;
+    const bounds = elementBoundsRef.current;
+    // Check elements from front to back (top-most first)
+    const hitOrder = ['cta', 'subtitle', 'title', 'badge', 'xhsLogo', 'pimlicoLogo', 'accentLine', 'bottomBar', 'image'];
+    for (const key of hitOrder) {
+      const b = bounds[key];
+      if (!b) continue;
+      if (marketingElements[key]?.visible === false) continue;
+      // Expand hit area slightly for easier grabbing
+      const pad = 15;
+      if (px >= b.x - pad && px <= b.x + b.w + pad && py >= b.y - pad && py <= b.y + b.h + pad) {
+        setMarketingDragTarget(key);
+        dragStartRef.current = { px, py, dx: marketingElements[key]?.dx || 0, dy: marketingElements[key]?.dy || 0 };
+        return;
       }
     }
-    if (best) setMarketingDragTarget(best);
   };
 
   const handleCanvasMouseMove = (e) => {
-    if (!marketingDragTarget) return;
+    if (!marketingDragTarget || !dragStartRef.current) return;
     const canvas = marketingCanvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const px = (e.clientX - rect.left) * scaleX;
+    const py = (e.clientY - rect.top) * scaleY;
+    
+    const ds = dragStartRef.current;
+    const newDx = ds.dx + (px - ds.px);
+    const newDy = ds.dy + (py - ds.py);
     
     setMarketingElements(prev => ({
       ...prev,
       [marketingDragTarget]: {
         ...prev[marketingDragTarget],
-        x: Math.max(0.02, Math.min(0.98, x)),
-        y: Math.max(0.02, Math.min(0.98, y)),
+        dx: Math.round(newDx),
+        dy: Math.round(newDy),
       }
     }));
   };
@@ -1655,6 +1737,7 @@ export default function AdminPage() {
   const handleCanvasMouseUp = () => {
     if (marketingDragTarget) {
       setMarketingDragTarget(null);
+      dragStartRef.current = null;
       setTimeout(() => generateMarketingAsset(), 50);
     }
   };
@@ -3071,7 +3154,7 @@ export default function AdminPage() {
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.elements ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.elements && (
-                    <div className="px-4 pb-4 space-y-3 border-t border-gray-700">
+                    <div className="px-4 pb-4 space-y-2 border-t border-gray-700">
                       {[
                         { key: 'pimlicoLogo', label: '🏢 Pimlico Logo', hasScale: true, hasOpacity: true },
                         { key: 'xhsLogo', label: '🔷 XHS Logo', hasScale: true, hasOpacity: true },
@@ -3082,9 +3165,30 @@ export default function AdminPage() {
                         { key: 'cta', label: '🔗 CTA', hasScale: true, hasOpacity: true },
                         { key: 'bottomBar', label: '▬ Bar', hasHeight: true, hasOpacity: true },
                         { key: 'accentLine', label: '━ Accent', hasOpacity: true, hasWidth: true },
-                      ].map(item => (
-                        <div key={item.key} className="pt-2 first:pt-1">
-                          <p className="text-[11px] font-semibold text-gray-300 mb-1">{item.label}</p>
+                      ].map(item => {
+                        const isVisible = marketingElements[item.key]?.visible !== false;
+                        return (
+                        <div key={item.key} className={`pt-2 first:pt-1 ${!isVisible ? 'opacity-40' : ''}`}>
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="text-[11px] font-semibold text-gray-300">{item.label}</p>
+                            <div className="flex items-center gap-1">
+                              {/* Reset position */}
+                              {(marketingElements[item.key]?.dx || marketingElements[item.key]?.dy) ? (
+                                <button type="button" title="Reset position" onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], dx: 0, dy: 0}}))} className="p-0.5 text-gray-500 hover:text-yellow-400 transition-colors">
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                </button>
+                              ) : null}
+                              {/* Visibility toggle */}
+                              <button type="button" title={isVisible ? 'Hide element' : 'Show element'} onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], visible: !isVisible}}))} className={`p-0.5 transition-colors ${isVisible ? 'text-gray-400 hover:text-red-400' : 'text-red-500 hover:text-green-400'}`}>
+                                {isVisible ? (
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                ) : (
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878l4.242 4.242M21 21l-4.878-4.878" /></svg>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          {isVisible && (
                           <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                             {item.hasScale && (
                               <div>
@@ -3119,8 +3223,10 @@ export default function AdminPage() {
                               </div>
                             )}
                           </div>
+                          )}
                         </div>
-                      ))}
+                        );
+                      })}
                       <button type="button" onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})} className="w-full mt-1 py-1.5 text-xs font-medium text-gray-400 bg-gray-700/50 rounded-lg hover:bg-gray-700 hover:text-white transition-colors">
                         ↺ Reset All
                       </button>
@@ -3203,7 +3309,7 @@ export default function AdminPage() {
                   )}
                   
                   {marketingArticle && (
-                    <p className="mt-3 text-xs text-gray-500">💡 Drag elements on the canvas to reposition. Use Element Controls to adjust scale, opacity & sizing. Click &quot;Generate&quot; to update.</p>
+                    <p className="mt-3 text-xs text-gray-500">💡 Drag any element on the canvas to reposition. Use 👁️ to show/hide elements, sliders to adjust scale & opacity. Click &quot;Generate&quot; to update.</p>
                   )}
                 </div>
               </div>
