@@ -241,7 +241,7 @@ export default function AdminPage() {
     cta: marketingElements.cta,
     badge: marketingElements.badge,
   };
-  const [mktgControlsOpen, setMktgControlsOpen] = useState(false);
+  const [mktgPanelOpen, setMktgPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: false });
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -1017,12 +1017,18 @@ export default function AdminPage() {
     return lines;
   };
 
-  // Load an image as a promise
+  // Load an image as a promise (with CORS retry)
   const loadImage = (src) => new Promise((resolve, reject) => {
     const img = new window.Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
-    img.onerror = reject;
+    img.onerror = () => {
+      // Retry without crossOrigin for Vercel Blob / external URLs
+      const img2 = new window.Image();
+      img2.onload = () => resolve(img2);
+      img2.onerror = reject;
+      img2.src = src;
+    };
     img.src = src;
   });
 
@@ -1592,7 +1598,7 @@ export default function AdminPage() {
     setMarketingLoading(false);
   };
 
-  // Canvas drag handling
+  // Canvas drag handling — all elements draggable
   const handleCanvasMouseDown = (e) => {
     const canvas = marketingCanvasRef.current;
     if (!canvas) return;
@@ -1602,18 +1608,30 @@ export default function AdminPage() {
     const x = (e.clientX - rect.left) * scaleX / canvas.width;
     const y = (e.clientY - rect.top) * scaleY / canvas.height;
     
-    const threshold = 0.08;
     const el = marketingElements;
-    
-    if (Math.abs(x - el.pimlicoLogo.x) < threshold && Math.abs(y - el.pimlicoLogo.y) < threshold) {
-      setMarketingDragTarget('pimlicoLogo');
-    } else if (Math.abs(x - el.badge.x) < threshold && Math.abs(y - el.badge.y) < threshold) {
-      setMarketingDragTarget('badge');
-    } else if (Math.abs(x - el.title.x) < threshold && Math.abs(y - el.title.y) < threshold) {
-      setMarketingDragTarget('title');
-    } else if (Math.abs(x - el.image.x) < threshold && y < 0.6) {
-      setMarketingDragTarget('image');
+    // Check all draggable elements by distance, pick closest
+    const candidates = [
+      { key: 'title', x: el.title.x, y: el.title.y, t: 0.10 },
+      { key: 'badge', x: el.badge.x, y: el.badge.y, t: 0.08 },
+      { key: 'pimlicoLogo', x: el.pimlicoLogo.x, y: el.pimlicoLogo.y, t: 0.08 },
+      { key: 'xhsLogo', x: el.xhsLogo.x, y: el.xhsLogo.y, t: 0.08 },
+      { key: 'cta', x: el.cta.x, y: el.cta.y, t: 0.08 },
+      { key: 'image', x: el.image.x, y: el.image.y ?? 0.3, t: 0.15 },
+    ];
+    if (el.subtitle.y !== null) {
+      candidates.push({ key: 'subtitle', x: el.subtitle.x, y: el.subtitle.y, t: 0.08 });
     }
+    
+    let best = null;
+    let bestDist = Infinity;
+    for (const c of candidates) {
+      const dist = Math.sqrt(Math.pow(x - c.x, 2) + Math.pow(y - c.y, 2));
+      if (dist < c.t && dist < bestDist) {
+        bestDist = dist;
+        best = c.key;
+      }
+    }
+    if (best) setMarketingDragTarget(best);
   };
 
   const handleCanvasMouseMove = (e) => {
@@ -2917,292 +2935,194 @@ export default function AdminPage() {
           <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left: Controls */}
-              <div className="lg:col-span-1 space-y-5">
-                {/* Article Selection */}
-                <div className="bg-gray-800 rounded-xl p-5">
-                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
-                    <span>📄</span> Select Article
-                  </h3>
-                  <div className="space-y-1.5 max-h-52 overflow-y-auto">
-                    {articles.map(article => (
-                      <button
-                        key={article.id}
-                        type="button"
-                        onClick={() => {
-                          setMarketingArticle(article);
-                          setMarketingTitle(article.title || '');
-                          setMarketingSubtitle(article.excerpt || '');
-                          setMarketingElements({...DEFAULT_ELEMENTS});
-                        }}
-                        className={`w-full text-left p-2.5 rounded-lg transition-colors flex items-center gap-3 ${
-                          marketingArticle?.id === article.id
-                            ? 'bg-indigo-900/50 border border-indigo-500'
-                            : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
-                        }`}
-                      >
-                        {article.image ? (
-                          <img src={article.image} alt="" className="w-9 h-9 rounded object-cover flex-shrink-0" />
-                        ) : (
-                          <div className="w-9 h-9 rounded bg-gray-600 flex-shrink-0 flex items-center justify-center text-gray-400">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="text-white text-sm font-medium truncate">{article.title}</p>
-                          <p className="text-gray-400 text-xs">{article.category}</p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Template + Theme Row */}
-                <div className="bg-gray-800 rounded-xl p-5">
-                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
-                    <span>📐</span> Template & Theme
-                  </h3>
-                  <div className="grid grid-cols-3 gap-1.5 mb-4">
-                    {Object.entries(MARKETING_TEMPLATES).map(([key, tmpl]) => (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => setMarketingTemplate(key)}
-                        className={`p-2 rounded-lg text-center transition-colors ${
-                          marketingTemplate === key
-                            ? 'bg-indigo-900/50 border border-indigo-500'
-                            : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
-                        }`}
-                      >
-                        <span className="text-base">{tmpl.icon}</span>
-                        <p className="text-white text-xs font-medium mt-0.5">{tmpl.label}</p>
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    {[
-                      { key: 'dark', label: 'Dark', preview: 'bg-gray-900' },
-                      { key: 'light', label: 'Light', preview: 'bg-white' },
-                      { key: 'gradient', label: 'Gradient', preview: 'bg-gradient-to-br from-blue-900 to-gray-900' },
-                    ].map(t => (
-                      <button
-                        key={t.key}
-                        type="button"
-                        onClick={() => setMarketingTheme(t.key)}
-                        className={`flex-1 p-2 rounded-lg transition-colors border ${
-                          marketingTheme === t.key
-                            ? 'border-indigo-500 bg-indigo-900/30'
-                            : 'border-gray-600 hover:border-gray-500'
-                        }`}
-                      >
-                        <div className={`w-full h-5 rounded ${t.preview} border border-gray-600 mb-1`} />
-                        <p className="text-white text-xs text-center">{t.label}</p>
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {/* Layout Style */}
-                  <div className="mt-4">
-                    <label className="block text-xs text-gray-400 mb-2">Layout Style</label>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {[
-                        { key: 'classic', label: 'Classic', icon: '📋', desc: 'Text + side image' },
-                        { key: 'card', label: 'Card', icon: '🃏', desc: 'Boxed card layout' },
-                        { key: 'magazine', label: 'Magazine', icon: '📰', desc: 'Full-bleed overlay' },
-                      ].map(l => (
-                        <button
-                          key={l.key}
-                          type="button"
-                          onClick={() => setMarketingLayout(l.key)}
-                          className={`p-2.5 rounded-lg text-center transition-colors ${
-                            marketingLayout === l.key
-                              ? 'bg-indigo-900/50 border border-indigo-500'
-                              : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
-                          }`}
-                        >
-                          <span className="text-lg">{l.icon}</span>
-                          <p className="text-white text-xs font-semibold mt-0.5">{l.label}</p>
-                          <p className="text-gray-400 text-[10px]">{l.desc}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Text Content */}
-                <div className="bg-gray-800 rounded-xl p-5">
-                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
-                    <span>✏️</span> Text Content
-                  </h3>
-                  
-                  <label className="block text-xs text-gray-400 mb-1">Title</label>
-                  <textarea
-                    value={marketingTitle}
-                    onChange={(e) => setMarketingTitle(e.target.value)}
-                    placeholder="Article title..."
-                    rows={2}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none mb-3"
-                  />
-                  
-                  <label className="block text-xs text-gray-400 mb-1">Subtitle</label>
-                  <textarea
-                    value={marketingSubtitle}
-                    onChange={(e) => setMarketingSubtitle(e.target.value)}
-                    placeholder="Optional subtitle..."
-                    rows={2}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none mb-3"
-                  />
-                  
-                  <label className="block text-xs text-gray-400 mb-1">Call to Action</label>
-                  <input
-                    type="text"
-                    value={marketingCta}
-                    onChange={(e) => setMarketingCta(e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-
-                {/* Font Settings */}
-                <div className="bg-gray-800 rounded-xl p-5">
-                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
-                    <span>🔤</span> Font Settings
-                  </h3>
-                  
-                  <div className="grid grid-cols-2 gap-3 mb-3">
-                    <div>
-                      <label className="block text-xs text-gray-400 mb-1">Font Family</label>
-                      <select
-                        value={marketingFont}
-                        onChange={(e) => setMarketingFont(e.target.value)}
-                        className="w-full px-2 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500"
-                      >
-                        {Object.entries(FONT_OPTIONS).map(([key, opt]) => (
-                          <option key={key} value={key}>{opt.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs text-gray-400 mb-1">Font Weight</label>
-                      <select
-                        value={marketingFontWeight}
-                        onChange={(e) => setMarketingFontWeight(e.target.value)}
-                        className="w-full px-2 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500"
-                      >
-                        <option value="400">Regular (400)</option>
-                        <option value="500">Medium (500)</option>
-                        <option value="600">Semibold (600)</option>
-                        <option value="700">Bold (700)</option>
-                        <option value="800">Extra Bold (800)</option>
-                        <option value="900">Black (900)</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <label className="block text-xs text-gray-400 mb-1">Font Size Scale: {marketingFontSize}%</label>
-                  <input
-                    type="range"
-                    min="60"
-                    max="150"
-                    value={marketingFontSize}
-                    onChange={(e) => setMarketingFontSize(parseInt(e.target.value))}
-                    className="w-full accent-indigo-500"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-0.5">
-                    <span>60%</span>
-                    <span>100%</span>
-                    <span>150%</span>
-                  </div>
-                </div>
-
-                {/* Element Controls - Collapsible */}
+              <div className="lg:col-span-1 space-y-2">
+                {/* Article Selection — collapsible */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => setMktgControlsOpen(!mktgControlsOpen)}
-                    className="w-full px-5 py-4 flex items-center justify-between text-white hover:bg-gray-750 transition-colors"
-                  >
-                    <h3 className="font-semibold flex items-center gap-2 text-sm">
-                      <span>🎛️</span> Element Controls
-                    </h3>
-                    <svg className={`w-4 h-4 text-gray-400 transition-transform ${mktgControlsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, article: !p.article}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>📄</span> Article {marketingArticle ? <span className="text-xs text-indigo-400 font-normal ml-1 truncate max-w-[140px] inline-block align-bottom">— {marketingArticle.title}</span> : null}</h3>
+                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.article ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
-                  
-                  {mktgControlsOpen && (
-                    <div className="px-5 pb-5 space-y-4 border-t border-gray-700">
-                      {/* Helper: element slider row */}
+                  {mktgPanelOpen.article && (
+                    <div className="px-4 pb-3">
+                      <div className="space-y-1 max-h-40 overflow-y-auto">
+                        {articles.map(article => (
+                          <button
+                            key={article.id}
+                            type="button"
+                            onClick={() => {
+                              setMarketingArticle(article);
+                              setMarketingTitle(article.title || '');
+                              setMarketingSubtitle(article.excerpt || '');
+                              setMarketingElements({...DEFAULT_ELEMENTS});
+                              setMktgPanelOpen(p => ({...p, article: false}));
+                            }}
+                            className={`w-full text-left p-2 rounded-lg transition-colors flex items-center gap-2.5 ${
+                              marketingArticle?.id === article.id
+                                ? 'bg-indigo-900/50 border border-indigo-500'
+                                : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
+                            }`}
+                          >
+                            {article.image ? (
+                              <img src={article.image} alt="" className="w-8 h-8 rounded object-cover flex-shrink-0" />
+                            ) : (
+                              <div className="w-8 h-8 rounded bg-gray-600 flex-shrink-0 flex items-center justify-center text-gray-400">
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                              </div>
+                            )}
+                            <div className="min-w-0">
+                              <p className="text-white text-xs font-medium truncate">{article.title}</p>
+                              <p className="text-gray-400 text-[10px]">{article.category}</p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Template, Theme, Layout — inline compact row */}
+                <div className="bg-gray-800 rounded-xl overflow-hidden">
+                  <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, template: !p.template}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>📐</span> Template & Style <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[marketingTemplate].label} · {marketingTheme} · {marketingLayout}</span></h3>
+                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.template ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {mktgPanelOpen.template && (
+                    <div className="px-4 pb-4 space-y-3">
+                      <div>
+                        <label className="block text-xs text-gray-400 mb-1.5">Template</label>
+                        <select value={marketingTemplate} onChange={(e) => setMarketingTemplate(e.target.value)} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
+                          {Object.entries(MARKETING_TEMPLATES).map(([key, tmpl]) => (
+                            <option key={key} value={key}>{tmpl.icon} {tmpl.label} ({tmpl.width}×{tmpl.height})</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-gray-400 mb-1.5">Theme</label>
+                          <select value={marketingTheme} onChange={(e) => setMarketingTheme(e.target.value)} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="dark">🌙 Dark</option>
+                            <option value="light">☀️ Light</option>
+                            <option value="gradient">🌊 Gradient</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-400 mb-1.5">Layout</label>
+                          <select value={marketingLayout} onChange={(e) => setMarketingLayout(e.target.value)} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="classic">📋 Classic</option>
+                            <option value="card">🃏 Card</option>
+                            <option value="magazine">📰 Magazine</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Text Content — collapsible */}
+                <div className="bg-gray-800 rounded-xl overflow-hidden">
+                  <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, text: !p.text}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>✏️</span> Text Content</h3>
+                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.text ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {mktgPanelOpen.text && (
+                    <div className="px-4 pb-4">
+                      <label className="block text-xs text-gray-400 mb-1">Title</label>
+                      <textarea value={marketingTitle} onChange={(e) => setMarketingTitle(e.target.value)} placeholder="Article title..." rows={2} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none mb-2" />
+                      <label className="block text-xs text-gray-400 mb-1">Subtitle</label>
+                      <textarea value={marketingSubtitle} onChange={(e) => setMarketingSubtitle(e.target.value)} placeholder="Optional subtitle..." rows={1} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none mb-2" />
+                      <label className="block text-xs text-gray-400 mb-1">Call to Action</label>
+                      <input type="text" value={marketingCta} onChange={(e) => setMarketingCta(e.target.value)} className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Font Settings — collapsible */}
+                <div className="bg-gray-800 rounded-xl overflow-hidden">
+                  <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, font: !p.font}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🔤</span> Font Settings <span className="text-xs text-gray-400 font-normal">— {FONT_OPTIONS[marketingFont]?.label}, {marketingFontWeight}, {marketingFontSize}%</span></h3>
+                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.font ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {mktgPanelOpen.font && (
+                    <div className="px-4 pb-4">
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <label className="block text-xs text-gray-400 mb-1">Family</label>
+                          <select value={marketingFont} onChange={(e) => setMarketingFont(e.target.value)} className="w-full px-2 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
+                            {Object.entries(FONT_OPTIONS).map(([key, opt]) => (<option key={key} value={key}>{opt.label}</option>))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-400 mb-1">Weight</label>
+                          <select value={marketingFontWeight} onChange={(e) => setMarketingFontWeight(e.target.value)} className="w-full px-2 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
+                            <option value="400">Regular</option><option value="500">Medium</option><option value="600">Semibold</option><option value="700">Bold</option><option value="800">Extra Bold</option><option value="900">Black</option>
+                          </select>
+                        </div>
+                      </div>
+                      <label className="block text-xs text-gray-400 mb-1">Size: {marketingFontSize}%</label>
+                      <input type="range" min="60" max="150" value={marketingFontSize} onChange={(e) => setMarketingFontSize(parseInt(e.target.value))} className="w-full accent-indigo-500" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Element Controls — collapsible */}
+                <div className="bg-gray-800 rounded-xl overflow-hidden">
+                  <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, elements: !p.elements}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🎛️</span> Element Controls</h3>
+                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.elements ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {mktgPanelOpen.elements && (
+                    <div className="px-4 pb-4 space-y-3 border-t border-gray-700">
                       {[
                         { key: 'pimlicoLogo', label: '🏢 Pimlico Logo', hasScale: true, hasOpacity: true },
                         { key: 'xhsLogo', label: '🔷 XHS Logo', hasScale: true, hasOpacity: true },
-                        { key: 'image', label: '🖼️ Article Image', hasScale: true, hasOpacity: true, hasZoom: true },
+                        { key: 'image', label: '🖼️ Image', hasScale: true, hasOpacity: true },
                         { key: 'title', label: '📝 Title', hasScale: true, hasOpacity: true },
-                        { key: 'badge', label: '🏷️ Category Badge', hasScale: true, hasOpacity: true },
+                        { key: 'badge', label: '🏷️ Badge', hasScale: true, hasOpacity: true },
                         { key: 'subtitle', label: '📄 Subtitle', hasOpacity: true },
-                        { key: 'cta', label: '🔗 Call to Action', hasScale: true, hasOpacity: true },
-                        { key: 'bottomBar', label: '▬ Bottom Bar', hasHeight: true, hasOpacity: true },
-                        { key: 'accentLine', label: '━ Accent Line', hasOpacity: true, hasWidth: true },
+                        { key: 'cta', label: '🔗 CTA', hasScale: true, hasOpacity: true },
+                        { key: 'bottomBar', label: '▬ Bar', hasHeight: true, hasOpacity: true },
+                        { key: 'accentLine', label: '━ Accent', hasOpacity: true, hasWidth: true },
                       ].map(item => (
-                        <div key={item.key} className="pt-3 first:pt-2">
-                          <p className="text-xs font-semibold text-gray-300 mb-2">{item.label}</p>
-                          <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+                        <div key={item.key} className="pt-2 first:pt-1">
+                          <p className="text-[11px] font-semibold text-gray-300 mb-1">{item.label}</p>
+                          <div className="grid grid-cols-2 gap-x-3 gap-y-1">
                             {item.hasScale && (
                               <div>
-                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Scale {marketingElements[item.key]?.scale ?? 100}%</label>
-                                <input
-                                  type="range" min="30" max="200" value={marketingElements[item.key]?.scale ?? 100}
+                                <label className="text-[10px] text-gray-500">Scale {marketingElements[item.key]?.scale ?? 100}%</label>
+                                <input type="range" min="30" max="200" value={marketingElements[item.key]?.scale ?? 100}
                                   onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], scale: parseInt(e.target.value) } }))}
-                                  className="w-full accent-indigo-500 h-1.5"
-                                />
+                                  className="w-full accent-indigo-500 h-1" />
                               </div>
                             )}
                             {item.hasOpacity && (
                               <div>
-                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Opacity {marketingElements[item.key]?.opacity ?? 100}%</label>
-                                <input
-                                  type="range" min="0" max="100" value={marketingElements[item.key]?.opacity ?? 100}
+                                <label className="text-[10px] text-gray-500">Opacity {marketingElements[item.key]?.opacity ?? 100}%</label>
+                                <input type="range" min="0" max="100" value={marketingElements[item.key]?.opacity ?? 100}
                                   onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], opacity: parseInt(e.target.value) } }))}
-                                  className="w-full accent-indigo-500 h-1.5"
-                                />
-                              </div>
-                            )}
-                            {item.hasZoom && (
-                              <div>
-                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Zoom {marketingElements[item.key]?.zoom ?? 100}%</label>
-                                <input
-                                  type="range" min="50" max="200" value={marketingElements[item.key]?.zoom ?? 100}
-                                  onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], zoom: parseInt(e.target.value) } }))}
-                                  className="w-full accent-indigo-500 h-1.5"
-                                />
+                                  className="w-full accent-indigo-500 h-1" />
                               </div>
                             )}
                             {item.hasHeight && (
                               <div>
-                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Height {marketingElements[item.key]?.height ?? 100}%</label>
-                                <input
-                                  type="range" min="30" max="200" value={marketingElements[item.key]?.height ?? 100}
+                                <label className="text-[10px] text-gray-500">Height {marketingElements[item.key]?.height ?? 100}%</label>
+                                <input type="range" min="30" max="200" value={marketingElements[item.key]?.height ?? 100}
                                   onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], height: parseInt(e.target.value) } }))}
-                                  className="w-full accent-indigo-500 h-1.5"
-                                />
+                                  className="w-full accent-indigo-500 h-1" />
                               </div>
                             )}
                             {item.hasWidth && (
                               <div>
-                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Width {marketingElements[item.key]?.width ?? 100}%</label>
-                                <input
-                                  type="range" min="20" max="300" value={marketingElements[item.key]?.width ?? 100}
+                                <label className="text-[10px] text-gray-500">Width {marketingElements[item.key]?.width ?? 100}%</label>
+                                <input type="range" min="20" max="300" value={marketingElements[item.key]?.width ?? 100}
                                   onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], width: parseInt(e.target.value) } }))}
-                                  className="w-full accent-indigo-500 h-1.5"
-                                />
+                                  className="w-full accent-indigo-500 h-1" />
                               </div>
                             )}
                           </div>
                         </div>
                       ))}
-                      
-                      <button
-                        type="button"
-                        onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})}
-                        className="w-full mt-2 py-2 text-xs font-medium text-gray-400 bg-gray-700/50 rounded-lg hover:bg-gray-700 hover:text-white transition-colors"
-                      >
-                        ↺ Reset All Element Controls
+                      <button type="button" onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})} className="w-full mt-1 py-1.5 text-xs font-medium text-gray-400 bg-gray-700/50 rounded-lg hover:bg-gray-700 hover:text-white transition-colors">
+                        ↺ Reset All
                       </button>
                     </div>
                   )}
