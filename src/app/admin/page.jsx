@@ -221,13 +221,27 @@ export default function AdminPage() {
   const [marketingPostText, setMarketingPostText] = useState('');
   const [marketingLayout, setMarketingLayout] = useState('classic'); // 'classic', 'card', 'magazine'
   const [marketingDragTarget, setMarketingDragTarget] = useState(null);
-  const [marketingPositions, setMarketingPositions] = useState({
-    title: { x: 0.06, y: 0.33 },
-    subtitle: { x: 0.06, y: null }, // null = auto below title
-    logo: { x: 0.06, y: 0.88 },
-    cta: { x: 0.94, y: 0.88 }, // right-aligned
-    badge: { x: 0.06, y: 0.25 },
-  });
+  const DEFAULT_ELEMENTS = {
+    pimlicoLogo: { x: 0.06, y: 0.88, scale: 100, opacity: 100 },
+    xhsLogo: { x: 0.22, y: 0.88, scale: 100, opacity: 100 },
+    image: { x: 0.62, y: 0, scale: 100, opacity: 100, zoom: 100 },
+    title: { x: 0.06, y: 0.33, scale: 100, opacity: 100 },
+    subtitle: { x: 0.06, y: null, scale: 100, opacity: 100 },
+    badge: { x: 0.06, y: 0.25, scale: 100, opacity: 100 },
+    cta: { x: 0.94, y: 0.88, scale: 100, opacity: 100 },
+    bottomBar: { height: 100, opacity: 100 },
+    accentLine: { opacity: 100, width: 100 },
+  };
+  const [marketingElements, setMarketingElements] = useState({...DEFAULT_ELEMENTS});
+  // Compat wrapper for drag system
+  const marketingPositions = {
+    title: marketingElements.title,
+    subtitle: marketingElements.subtitle,
+    logo: marketingElements.pimlicoLogo,
+    cta: marketingElements.cta,
+    badge: marketingElements.badge,
+  };
+  const [mktgControlsOpen, setMktgControlsOpen] = useState(false);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -263,7 +277,7 @@ export default function AdminPage() {
       }, 150);
       return () => clearTimeout(timer);
     }
-  }, [marketingArticle, marketingTemplate, marketingTheme, marketingLayout]);
+  }, [marketingArticle, marketingTemplate, marketingTheme, marketingLayout, marketingElements]);
 
   // Load saved articles from localStorage and merge with sample articles
   useEffect(() => {
@@ -1036,51 +1050,76 @@ export default function AdminPage() {
 
   // Shared helper: draw bottom bar with balanced logos + CTA
   const drawBottomBar = async (ctx, template, padding, isDark, isGradient, fontFamily, fontScale, pos) => {
-    const bottomH = Math.round(template.height * 0.13);
+    const el = marketingElements;
+    const barScale = (el.bottomBar.height || 100) / 100;
+    const barOpacity = (el.bottomBar.opacity || 100) / 100;
+    const bottomH = Math.round(template.height * 0.13 * barScale);
     const bottomY = template.height - bottomH;
     
+    ctx.save();
+    ctx.globalAlpha = barOpacity;
     ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
     ctx.fillRect(0, bottomY, template.width, 1);
     ctx.fillStyle = isDark || isGradient ? 'rgba(0,0,0,0.35)' : 'rgba(249,250,251,0.92)';
     ctx.fillRect(0, bottomY + 1, template.width, bottomH);
+    ctx.restore();
     
-    const logoY = bottomY + bottomH * 0.15;
-    const logoH = bottomH * 0.65;
-    const logoX = Math.round(pos.logo.x * template.width);
+    const baseLogoH = bottomH * 0.65;
+    
+    // Pimlico logo
+    const pimScale = (el.pimlicoLogo.scale || 100) / 100;
+    const pimOpacity = (el.pimlicoLogo.opacity ?? 100) / 100;
+    const pimX = Math.round(el.pimlicoLogo.x * template.width);
+    const pimY = bottomY + bottomH * 0.15;
+    const pimH = baseLogoH * pimScale;
     
     try {
-      // Pimlico logo
       const pimlicoLogoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
       const pimlicoLogo = await loadImage(pimlicoLogoSrc);
-      const pimlicoW = (pimlicoLogo.width / pimlicoLogo.height) * logoH;
-      ctx.drawImage(pimlicoLogo, logoX, logoY, pimlicoW, logoH);
+      const pimW = (pimlicoLogo.width / pimlicoLogo.height) * pimH;
+      ctx.save();
+      ctx.globalAlpha = pimOpacity;
+      ctx.drawImage(pimlicoLogo, pimX, pimY + (baseLogoH - pimH) / 2, pimW, pimH);
+      ctx.restore();
       
       // Separator
-      const sepX = logoX + pimlicoW + 18;
+      const sepX = pimX + pimW + 18;
       ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
-      ctx.fillRect(sepX, logoY + 6, 1.5, logoH - 12);
+      ctx.fillRect(sepX, pimY + 6, 1.5, baseLogoH - 12);
       
-      // XHS logo — scaled larger to visually balance with Pimlico logo
+      // XHS logo
+      const xhsScale = (el.xhsLogo.scale || 100) / 100;
+      const xhsOpacity = (el.xhsLogo.opacity ?? 100) / 100;
       const xhsLogoSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
       const xhsLogo = await loadImage(xhsLogoSrc);
-      const xhsScaledH = logoH * 1.5; // Scale XHS logo up significantly
+      const xhsBaseH = baseLogoH * 1.5;
+      const xhsScaledH = xhsBaseH * xhsScale;
       const xhsW = (xhsLogo.width / xhsLogo.height) * xhsScaledH;
-      const xhsY = logoY + (logoH - xhsScaledH) / 2; // Vertically center relative to Pimlico
+      const xhsY = pimY + (baseLogoH - xhsScaledH) / 2;
+      ctx.save();
+      ctx.globalAlpha = xhsOpacity;
       ctx.drawImage(xhsLogo, sepX + 18, xhsY, xhsW, xhsScaledH);
+      ctx.restore();
     } catch (e) {
       const brandSize = Math.round(template.width * 0.022);
       ctx.font = `700 ${brandSize}px ${fontFamily}`;
       ctx.fillStyle = isDark || isGradient ? '#ffffff' : '#0f172a';
-      ctx.fillText('Pimlico XHS™', logoX, bottomY + bottomH / 2 + brandSize * 0.35);
+      ctx.fillText('Pimlico XHS™', pimX, bottomY + bottomH / 2 + brandSize * 0.35);
     }
     
     if (marketingCta) {
-      const ctaSize = Math.round(template.width * 0.018 * fontScale);
+      const ctaEl = el.cta;
+      const ctaOpacity = (ctaEl.opacity ?? 100) / 100;
+      const ctaScale = (ctaEl.scale || 100) / 100;
+      const ctaSize = Math.round(template.width * 0.018 * fontScale * ctaScale);
       ctx.font = `600 ${ctaSize}px ${fontFamily}`;
+      ctx.save();
+      ctx.globalAlpha = ctaOpacity;
       ctx.fillStyle = '#3b82f6';
       const ctaW = ctx.measureText(marketingCta).width;
       const ctaX = template.width - padding - ctaW;
       ctx.fillText(marketingCta, ctaX, bottomY + bottomH / 2 + ctaSize * 0.35);
+      ctx.restore();
     }
     
     return { bottomY, bottomH };
@@ -1136,18 +1175,26 @@ export default function AdminPage() {
       try {
         const logoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
         const logo = await loadImage(logoSrc);
-        const lH = Math.round(template.height * 0.055);
+        const pimScale = (marketingElements.pimlicoLogo.scale || 100) / 100;
+        const pimOpacity = (marketingElements.pimlicoLogo.opacity ?? 100) / 100;
+        const lH = Math.round(template.height * 0.055 * pimScale);
         const lW = (logo.width / logo.height) * lH;
+        ctx.save(); ctx.globalAlpha = pimOpacity;
         ctx.drawImage(logo, cardPad, cardPad, lW, lH);
+        ctx.restore();
       } catch (e) {}
 
       // XHS brandmark top-right
       try {
         const xhsSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
         const xhsLogo = await loadImage(xhsSrc);
-        const xH = Math.round(template.height * 0.07);
+        const xhsScale = (marketingElements.xhsLogo.scale || 100) / 100;
+        const xhsOpacity = (marketingElements.xhsLogo.opacity ?? 100) / 100;
+        const xH = Math.round(template.height * 0.07 * xhsScale);
         const xW = (xhsLogo.width / xhsLogo.height) * xH;
+        ctx.save(); ctx.globalAlpha = xhsOpacity;
         ctx.drawImage(xhsLogo, template.width - cardPad - xW, cardPad, xW, xH);
+        ctx.restore();
       } catch (e) {}
 
       // Category white box
@@ -1180,8 +1227,10 @@ export default function AdminPage() {
       ctx.fillText(category, cardPad + catBoxPad * 1.5, catBoxY + catBoxPad + catFontSize * 0.85);
 
       // Article image (centered, rounded, with shadow)
+      const cardImgScale = (marketingElements.image.scale ?? 100) / 100;
+      const cardImgOpacity = (marketingElements.image.opacity ?? 100) / 100;
       const imgTopY = catBoxY + catBoxH + Math.round(template.height * 0.04);
-      const imgAreaH = isVert ? template.height * 0.42 : template.height * 0.45;
+      const imgAreaH = (isVert ? template.height * 0.42 : template.height * 0.45) * cardImgScale;
       const imgAreaW = template.width - cardPad * 2;
       
       if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
@@ -1204,7 +1253,7 @@ export default function AdminPage() {
           ctx.beginPath();
           ctx.roundRect(cardPad, imgTopY, imgAreaW, imgAreaH, 14);
           ctx.clip();
-          drawImageCover(ctx, img, cardPad, imgTopY, imgAreaW, imgAreaH);
+          drawImageCover(ctx, img, cardPad, imgTopY, imgAreaW, imgAreaH, cardImgOpacity);
           ctx.restore();
         } catch (e) {
           // Placeholder
@@ -1258,10 +1307,11 @@ export default function AdminPage() {
     // ============================
     } else if (marketingLayout === 'magazine') {
       // Full-bleed article image
+      const magImgOpacity = (marketingElements.image.opacity ?? 100) / 100;
       if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
         try {
           const img = await loadImage(marketingArticle.image);
-          drawImageCover(ctx, img, 0, 0, template.width, template.height);
+          drawImageCover(ctx, img, 0, 0, template.width, template.height, magImgOpacity);
         } catch (e) {
           // Fallback gradient
           const grad = ctx.createLinearGradient(0, 0, template.width, template.height);
@@ -1297,21 +1347,29 @@ export default function AdminPage() {
 
       // Pimlico + XHS logos at top
       try {
+        const magPimScale = (marketingElements.pimlicoLogo.scale || 100) / 100;
+        const magPimOpacity = (marketingElements.pimlicoLogo.opacity ?? 100) / 100;
         const logoSrc = '/Pimlico_Logo_Inverted.png';
         const logo = await loadImage(logoSrc);
-        const lH = Math.round(template.height * 0.05);
+        const lH = Math.round(template.height * 0.05 * magPimScale);
         const lW = (logo.width / logo.height) * lH;
+        ctx.save(); ctx.globalAlpha = magPimOpacity;
         ctx.drawImage(logo, magPad, magPad, lW, lH);
+        ctx.restore();
 
         // XHS next to it
+        const magXhsScale = (marketingElements.xhsLogo.scale || 100) / 100;
+        const magXhsOpacity = (marketingElements.xhsLogo.opacity ?? 100) / 100;
         const xhsSrc = '/XHS_Logo_White.png';
         const xhsLogo = await loadImage(xhsSrc);
-        const xhsH = lH * 1.4;
+        const xhsH = lH * 1.4 * magXhsScale;
         const xhsW = (xhsLogo.width / xhsLogo.height) * xhsH;
         const sepX = magPad + lW + 14;
         ctx.fillStyle = 'rgba(255,255,255,0.3)';
         ctx.fillRect(sepX, magPad + 3, 1.5, lH - 6);
+        ctx.save(); ctx.globalAlpha = magXhsOpacity;
         ctx.drawImage(xhsLogo, sepX + 14, magPad + (lH - xhsH) / 2, xhsW, xhsH);
+        ctx.restore();
       } catch (e) {}
 
       // Category badge
@@ -1410,22 +1468,26 @@ export default function AdminPage() {
       ctx.fillRect(0, 0, template.width, template.height);
 
       // Article image
+      const imgEl = marketingElements.image;
+      const imgOpacity = (imgEl.opacity ?? 100) / 100;
+      const imgZoom = (imgEl.zoom ?? 100) / 100;
+      const imgScale = (imgEl.scale ?? 100) / 100;
       if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
         try {
           const img = await loadImage(marketingArticle.image);
           
           if (marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory') {
-            const imgH = template.height * 0.45;
-            drawImageCover(ctx, img, 0, 0, template.width, imgH, 0.3);
+            const imgH = template.height * 0.45 * imgScale;
+            drawImageCover(ctx, img, 0, 0, template.width, imgH, 0.3 * imgOpacity);
             const fadeGrad = ctx.createLinearGradient(0, imgH * 0.3, 0, imgH);
             fadeGrad.addColorStop(0, isDark || isGradient ? 'rgba(15,23,42,0)' : 'rgba(255,255,255,0)');
             fadeGrad.addColorStop(1, isDark ? '#0f172a' : isGradient ? '#0f2847' : '#ffffff');
             ctx.fillStyle = fadeGrad;
             ctx.fillRect(0, 0, template.width, imgH);
           } else {
-            const imgW = template.width * 0.38;
-            const imgX = template.width - imgW;
-            drawImageCover(ctx, img, imgX, 0, imgW, template.height, 0.25);
+            const imgW = template.width * 0.38 * imgScale;
+            const imgX = Math.round(imgEl.x * template.width);
+            drawImageCover(ctx, img, imgX, 0, imgW, template.height, imgOpacity * 0.25 / 0.25);
             const fadeGrad = ctx.createLinearGradient(imgX - 60, 0, imgX + 100, 0);
             fadeGrad.addColorStop(0, isDark ? '#0f172a' : isGradient ? '#0f2847' : '#ffffff');
             fadeGrad.addColorStop(1, 'rgba(15,23,42,0)');
@@ -1438,15 +1500,23 @@ export default function AdminPage() {
       }
       
       // Accent line
-      const accentColor = '#3b82f6';
-      ctx.fillStyle = accentColor;
+      const accentEl = marketingElements.accentLine;
+      const accentOpacity = (accentEl.opacity ?? 100) / 100;
+      const accentWidth = 60 * ((accentEl.width ?? 100) / 100);
+      ctx.save();
+      ctx.globalAlpha = accentOpacity;
+      ctx.fillStyle = '#3b82f6';
       const accentY = Math.round(pos.badge.y * template.height) - 20;
-      ctx.fillRect(Math.round(pos.badge.x * template.width), accentY, 60, 4);
+      ctx.fillRect(Math.round(pos.badge.x * template.width), accentY, accentWidth, 4);
+      ctx.restore();
       
       // Category badge
+      const badgeEl = marketingElements.badge;
+      const badgeOpacity = (badgeEl.opacity ?? 100) / 100;
+      const badgeScale = (badgeEl.scale ?? 100) / 100;
       const category = marketingArticle.category || '';
       if (category) {
-        const badgeFontSize = Math.round(template.width * 0.016 * fontScale);
+        const badgeFontSize = Math.round(template.width * 0.016 * fontScale * badgeScale);
         ctx.font = `700 ${badgeFontSize}px ${fontFamily}`;
         const badgeText = category.toUpperCase();
         const badgeMetrics = ctx.measureText(badgeText);
@@ -1457,15 +1527,21 @@ export default function AdminPage() {
         const bw = badgeMetrics.width + badgePadH * 2;
         const bh = badgeFontSize + badgePadV * 2;
         
+        ctx.save();
+        ctx.globalAlpha = badgeOpacity;
         ctx.fillStyle = isDark || isGradient ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.1)';
         ctx.beginPath();
         ctx.roundRect(bx, by, bw, bh, 6);
         ctx.fill();
         ctx.fillStyle = '#3b82f6';
         ctx.fillText(badgeText, bx + badgePadH, by + badgePadV + badgeFontSize * 0.85);
+        ctx.restore();
       }
       
       // Title
+      const titleEl = marketingElements.title;
+      const titleOpacity = (titleEl.opacity ?? 100) / 100;
+      const titleScaleEl = (titleEl.scale ?? 100) / 100;
       const titleText = marketingTitle || marketingArticle.title;
       const titleColor = isDark || isGradient ? '#ffffff' : '#0f172a';
       const baseTitleSize = marketingTemplate === 'instagramStory' 
@@ -1473,7 +1549,9 @@ export default function AdminPage() {
         : marketingTemplate === 'instagram'
           ? template.width * 0.058
           : template.width * 0.038;
-      const titleSize = Math.round(baseTitleSize * fontScale);
+      const titleSize = Math.round(baseTitleSize * fontScale * titleScaleEl);
+      ctx.save();
+      ctx.globalAlpha = titleOpacity;
       ctx.fillStyle = titleColor;
       ctx.font = `${marketingFontWeight} ${titleSize}px ${fontFamily}`;
       
@@ -1485,12 +1563,17 @@ export default function AdminPage() {
       titleLines.forEach(line => {
         ctx.fillText(line.text, titleX, line.y);
       });
+      ctx.restore();
       
       // Subtitle
+      const subEl = marketingElements.subtitle;
+      const subOpacity = (subEl.opacity ?? 100) / 100;
       const lastTitleY = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
       const subtitleText = marketingSubtitle || '';
       if (subtitleText) {
         const subtitleSize = Math.round(titleSize * 0.5);
+        ctx.save();
+        ctx.globalAlpha = subOpacity;
         ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.6)' : 'rgba(15,23,42,0.55)';
         ctx.font = `400 ${subtitleSize}px ${fontFamily}`;
         const subX = pos.subtitle.x !== undefined ? Math.round((pos.subtitle.x || pos.title.x) * template.width) : titleX;
@@ -1499,6 +1582,7 @@ export default function AdminPage() {
         subtitleLines.slice(0, 2).forEach(line => {
           ctx.fillText(line.text, subX, line.y);
         });
+        ctx.restore();
       }
       
       // Bottom bar with logos + CTA
@@ -1518,16 +1602,17 @@ export default function AdminPage() {
     const x = (e.clientX - rect.left) * scaleX / canvas.width;
     const y = (e.clientY - rect.top) * scaleY / canvas.height;
     
-    // Determine which element was clicked (check proximity)
     const threshold = 0.08;
-    const pos = marketingPositions;
+    const el = marketingElements;
     
-    if (Math.abs(x - pos.logo.x) < threshold && Math.abs(y - pos.logo.y) < threshold) {
-      setMarketingDragTarget('logo');
-    } else if (Math.abs(x - pos.badge.x) < threshold && Math.abs(y - pos.badge.y) < threshold) {
+    if (Math.abs(x - el.pimlicoLogo.x) < threshold && Math.abs(y - el.pimlicoLogo.y) < threshold) {
+      setMarketingDragTarget('pimlicoLogo');
+    } else if (Math.abs(x - el.badge.x) < threshold && Math.abs(y - el.badge.y) < threshold) {
       setMarketingDragTarget('badge');
-    } else if (Math.abs(x - pos.title.x) < threshold && Math.abs(y - pos.title.y) < threshold) {
+    } else if (Math.abs(x - el.title.x) < threshold && Math.abs(y - el.title.y) < threshold) {
       setMarketingDragTarget('title');
+    } else if (Math.abs(x - el.image.x) < threshold && y < 0.6) {
+      setMarketingDragTarget('image');
     }
   };
 
@@ -1539,16 +1624,19 @@ export default function AdminPage() {
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
     
-    setMarketingPositions(prev => ({
+    setMarketingElements(prev => ({
       ...prev,
-      [marketingDragTarget]: { x: Math.max(0.02, Math.min(0.98, x)), y: Math.max(0.02, Math.min(0.98, y)) }
+      [marketingDragTarget]: {
+        ...prev[marketingDragTarget],
+        x: Math.max(0.02, Math.min(0.98, x)),
+        y: Math.max(0.02, Math.min(0.98, y)),
+      }
     }));
   };
 
   const handleCanvasMouseUp = () => {
     if (marketingDragTarget) {
       setMarketingDragTarget(null);
-      // Re-generate after drag
       setTimeout(() => generateMarketingAsset(), 50);
     }
   };
@@ -2844,13 +2932,7 @@ export default function AdminPage() {
                           setMarketingArticle(article);
                           setMarketingTitle(article.title || '');
                           setMarketingSubtitle(article.excerpt || '');
-                          setMarketingPositions({
-                            title: { x: 0.06, y: 0.33 },
-                            subtitle: { x: 0.06, y: null },
-                            logo: { x: 0.06, y: 0.88 },
-                            cta: { x: 0.94, y: 0.88 },
-                            badge: { x: 0.06, y: 0.25 },
-                          });
+                          setMarketingElements({...DEFAULT_ELEMENTS});
                         }}
                         className={`w-full text-left p-2.5 rounded-lg transition-colors flex items-center gap-3 ${
                           marketingArticle?.id === article.id
@@ -3031,6 +3113,101 @@ export default function AdminPage() {
                   </div>
                 </div>
 
+                {/* Element Controls - Collapsible */}
+                <div className="bg-gray-800 rounded-xl overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setMktgControlsOpen(!mktgControlsOpen)}
+                    className="w-full px-5 py-4 flex items-center justify-between text-white hover:bg-gray-750 transition-colors"
+                  >
+                    <h3 className="font-semibold flex items-center gap-2 text-sm">
+                      <span>🎛️</span> Element Controls
+                    </h3>
+                    <svg className={`w-4 h-4 text-gray-400 transition-transform ${mktgControlsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  
+                  {mktgControlsOpen && (
+                    <div className="px-5 pb-5 space-y-4 border-t border-gray-700">
+                      {/* Helper: element slider row */}
+                      {[
+                        { key: 'pimlicoLogo', label: '🏢 Pimlico Logo', hasScale: true, hasOpacity: true },
+                        { key: 'xhsLogo', label: '🔷 XHS Logo', hasScale: true, hasOpacity: true },
+                        { key: 'image', label: '🖼️ Article Image', hasScale: true, hasOpacity: true, hasZoom: true },
+                        { key: 'title', label: '📝 Title', hasScale: true, hasOpacity: true },
+                        { key: 'badge', label: '🏷️ Category Badge', hasScale: true, hasOpacity: true },
+                        { key: 'subtitle', label: '📄 Subtitle', hasOpacity: true },
+                        { key: 'cta', label: '🔗 Call to Action', hasScale: true, hasOpacity: true },
+                        { key: 'bottomBar', label: '▬ Bottom Bar', hasHeight: true, hasOpacity: true },
+                        { key: 'accentLine', label: '━ Accent Line', hasOpacity: true, hasWidth: true },
+                      ].map(item => (
+                        <div key={item.key} className="pt-3 first:pt-2">
+                          <p className="text-xs font-semibold text-gray-300 mb-2">{item.label}</p>
+                          <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
+                            {item.hasScale && (
+                              <div>
+                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Scale {marketingElements[item.key]?.scale ?? 100}%</label>
+                                <input
+                                  type="range" min="30" max="200" value={marketingElements[item.key]?.scale ?? 100}
+                                  onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], scale: parseInt(e.target.value) } }))}
+                                  className="w-full accent-indigo-500 h-1.5"
+                                />
+                              </div>
+                            )}
+                            {item.hasOpacity && (
+                              <div>
+                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Opacity {marketingElements[item.key]?.opacity ?? 100}%</label>
+                                <input
+                                  type="range" min="0" max="100" value={marketingElements[item.key]?.opacity ?? 100}
+                                  onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], opacity: parseInt(e.target.value) } }))}
+                                  className="w-full accent-indigo-500 h-1.5"
+                                />
+                              </div>
+                            )}
+                            {item.hasZoom && (
+                              <div>
+                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Zoom {marketingElements[item.key]?.zoom ?? 100}%</label>
+                                <input
+                                  type="range" min="50" max="200" value={marketingElements[item.key]?.zoom ?? 100}
+                                  onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], zoom: parseInt(e.target.value) } }))}
+                                  className="w-full accent-indigo-500 h-1.5"
+                                />
+                              </div>
+                            )}
+                            {item.hasHeight && (
+                              <div>
+                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Height {marketingElements[item.key]?.height ?? 100}%</label>
+                                <input
+                                  type="range" min="30" max="200" value={marketingElements[item.key]?.height ?? 100}
+                                  onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], height: parseInt(e.target.value) } }))}
+                                  className="w-full accent-indigo-500 h-1.5"
+                                />
+                              </div>
+                            )}
+                            {item.hasWidth && (
+                              <div>
+                                <label className="text-[10px] text-gray-500 uppercase tracking-wider">Width {marketingElements[item.key]?.width ?? 100}%</label>
+                                <input
+                                  type="range" min="20" max="300" value={marketingElements[item.key]?.width ?? 100}
+                                  onChange={(e) => setMarketingElements(prev => ({ ...prev, [item.key]: { ...prev[item.key], width: parseInt(e.target.value) } }))}
+                                  className="w-full accent-indigo-500 h-1.5"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      
+                      <button
+                        type="button"
+                        onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})}
+                        className="w-full mt-2 py-2 text-xs font-medium text-gray-400 bg-gray-700/50 rounded-lg hover:bg-gray-700 hover:text-white transition-colors"
+                      >
+                        ↺ Reset All Element Controls
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Generate Button */}
                 <button
                   type="button"
@@ -3065,13 +3242,7 @@ export default function AdminPage() {
                       {marketingArticle && (
                         <button
                           type="button"
-                          onClick={() => setMarketingPositions({
-                            title: { x: 0.06, y: 0.33 },
-                            subtitle: { x: 0.06, y: null },
-                            logo: { x: 0.06, y: 0.88 },
-                            cta: { x: 0.94, y: 0.88 },
-                            badge: { x: 0.06, y: 0.25 },
-                          })}
+                          onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 transition-colors"
                         >
                           ↺ Reset Layout
@@ -3112,7 +3283,7 @@ export default function AdminPage() {
                   )}
                   
                   {marketingArticle && (
-                    <p className="mt-3 text-xs text-gray-500">💡 Drag the title, badge, or logo on the canvas to reposition. Click "Generate" or change settings to update.</p>
+                    <p className="mt-3 text-xs text-gray-500">💡 Drag elements on the canvas to reposition. Use Element Controls to adjust scale, opacity & sizing. Click &quot;Generate&quot; to update.</p>
                   )}
                 </div>
               </div>
