@@ -162,6 +162,26 @@ export default function AdminPage() {
     setArticles([...customArticles, ...visibleSamples]);
   }, []);
 
+  // Sync articles to Vercel Blob for server-side OG metadata
+  const syncToVercelBlob = async () => {
+    try {
+      const customArticles = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
+      const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+      
+      const response = await fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ articles: customArticles, deletedSampleIds }),
+      });
+      
+      if (!response.ok) {
+        console.error('Failed to sync to Vercel Blob:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error syncing to Vercel Blob:', error);
+    }
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
     if (password === ADMIN_PASSWORD) {
@@ -402,6 +422,9 @@ export default function AdminPage() {
       const allArticles = [...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples];
       setArticles(allArticles);
 
+      // Sync to Vercel Blob for server-side OG metadata
+      await syncToVercelBlob();
+
       // Show success and redirect
       setSuccessMessage(actionMessage);
       setShowSuccess(true);
@@ -434,7 +457,7 @@ export default function AdminPage() {
   };
 
   // Save as Draft function
-  const handleSaveDraft = () => {
+  const handleSaveDraft = async () => {
     if (!articleMeta.title) {
       alert('Please enter at least a title for your draft');
       return;
@@ -499,6 +522,9 @@ export default function AdminPage() {
       
       const allArticles = [...newCustomArticles.map(a => ({ ...a, isSample: false })), ...visibleSamples];
       setArticles(allArticles);
+
+      // Sync to Vercel Blob for server-side OG metadata
+      await syncToVercelBlob();
 
       // Show success
       setSuccessMessage(`Draft saved at ${new Date().toLocaleTimeString()}`);
@@ -582,7 +608,7 @@ export default function AdminPage() {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  const handleDeleteArticle = (article) => {
+  const handleDeleteArticle = async (article) => {
     if (confirm('Are you sure you want to delete this article?')) {
       if (article.isSample) {
         // For sample articles, track deletion separately
@@ -600,6 +626,9 @@ export default function AdminPage() {
       // Update localStorage for custom articles only
       const customArticles = updatedArticles.filter(a => !a.isSample);
       localStorage.setItem('xhs-articles', JSON.stringify(customArticles));
+      
+      // Sync to Vercel Blob
+      await syncToVercelBlob();
     }
   };
 

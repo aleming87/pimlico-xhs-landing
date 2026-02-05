@@ -1,4 +1,5 @@
 import { sampleArticles } from '@/data/sample-articles';
+import { list } from '@vercel/blob';
 import ArticlePageClient from './ArticlePageClient';
 
 // Category-specific default OG images
@@ -6,12 +7,51 @@ const categoryImages = {
   'Gambling': '/articles/og-gambling.png',
   'AI Regulation': '/articles/og-ai-regulation.png', 
   'Payments': '/articles/og-payments.png',
+  'Crypto': '/articles/og-crypto.png',
 };
+
+// Helper to fetch custom articles from Vercel Blob (server-side)
+async function getCustomArticlesFromBlob() {
+  try {
+    const { blobs } = await list({ prefix: 'articles/articles-data' });
+    
+    if (blobs.length === 0) {
+      return { articles: [], deletedSampleIds: [] };
+    }
+
+    const response = await fetch(blobs[0].url, { cache: 'no-store' });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching from blob:', error);
+    return { articles: [], deletedSampleIds: [] };
+  }
+}
+
+// Helper to get article by slug (checks blob first, then samples)
+async function getArticleBySlug(slug) {
+  // Try to get from Vercel Blob first (custom articles)
+  const { articles: customArticles, deletedSampleIds } = await getCustomArticlesFromBlob();
+  
+  // Check custom articles
+  const customArticle = customArticles.find(a => a.slug === slug);
+  if (customArticle) {
+    return customArticle;
+  }
+  
+  // Check sample articles (if not deleted)
+  const sampleArticle = sampleArticles.find(a => a.slug === slug);
+  if (sampleArticle && !(deletedSampleIds || []).includes(sampleArticle.id)) {
+    return sampleArticle;
+  }
+  
+  return null;
+}
 
 // Generate metadata for social sharing
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const article = sampleArticles.find(a => a.slug === slug);
+  const article = await getArticleBySlug(slug);
   
   // IMPORTANT: Use www subdomain to match Vercel deployment
   const baseUrl = 'https://www.pimlicosolutions.com';
