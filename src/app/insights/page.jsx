@@ -6,7 +6,14 @@ import { Footer } from '@/components/footer';
 import Link from 'next/link';
 import { sampleArticles } from '@/data/sample-articles';
 
-const categories = ['All', 'AI Regulation', 'Payments', 'Gambling', 'Crypto'];
+const categories = ['All', 'AI Regulation', 'Payments', 'Crypto', 'Gambling'];
+
+// Common jurisdictions for filtering
+const jurisdictions = [
+  'European Union', 'United Kingdom', 'United States', 'Finland', 'Germany', 
+  'France', 'Malta', 'Gibraltar', 'Sweden', 'Denmark', 'Netherlands', 'Spain',
+  'Italy', 'Australia', 'Canada', 'Singapore'
+];
 
 // Generate realistic view counts based on article age with variation
 const generateViewCount = (dateStr, articleId) => {
@@ -44,6 +51,10 @@ export default function InsightsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [articles, setArticles] = useState(sampleArticles);
+  const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState('All');
+  const [selectedTag, setSelectedTag] = useState('');
 
   // Load articles from localStorage if available
   useEffect(() => {
@@ -90,12 +101,53 @@ export default function InsightsPage() {
     setArticles(allArticles);
   }, []);
 
-  const filteredArticles = selectedCategory === 'All' 
-    ? articles 
-    : articles.filter(a => a.category === selectedCategory);
+  // Get all unique tags from articles for filtering
+  const allTags = [...new Set(articles.flatMap(a => a.tags || []))].sort();
+
+  // Filter articles based on all criteria
+  const filteredArticles = articles.filter(article => {
+    // Category filter
+    if (selectedCategory !== 'All' && article.category !== selectedCategory) {
+      return false;
+    }
+    
+    // Search query filter (searches title, excerpt, and content)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      const searchText = `${article.title} ${article.excerpt || ''} ${article.content || ''}`.toLowerCase();
+      if (!searchText.includes(query)) {
+        return false;
+      }
+    }
+    
+    // Jurisdiction filter (searches in content and tags)
+    if (selectedJurisdiction !== 'All') {
+      const searchText = `${article.title} ${article.content || ''} ${(article.tags || []).join(' ')}`.toLowerCase();
+      if (!searchText.includes(selectedJurisdiction.toLowerCase())) {
+        return false;
+      }
+    }
+    
+    // Tag filter
+    if (selectedTag && !(article.tags || []).includes(selectedTag)) {
+      return false;
+    }
+    
+    return true;
+  });
 
   const featuredArticles = filteredArticles.filter(a => a.featured).slice(0, 2);
   const regularArticles = filteredArticles.filter(a => !a.featured);
+
+  // Check if any filters are active
+  const hasActiveFilters = selectedCategory !== 'All' || searchQuery.trim() || selectedJurisdiction !== 'All' || selectedTag;
+
+  const clearFilters = () => {
+    setSelectedCategory('All');
+    setSearchQuery('');
+    setSelectedJurisdiction('All');
+    setSelectedTag('');
+  };
 
   return (
     <div className="bg-white">
@@ -280,23 +332,107 @@ export default function InsightsPage() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
               {selectedCategory === 'All' ? 'All Articles' : selectedCategory}
+              {hasActiveFilters && (
+                <span className="ml-2 text-sm font-normal text-gray-500">
+                  ({filteredArticles.length} result{filteredArticles.length !== 1 ? 's' : ''})
+                </span>
+              )}
             </h2>
             <div className="flex items-center gap-2">
-              {categories.map((cat) => (
+              {hasActiveFilters && (
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
-                    selectedCategory === cat
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  onClick={clearFilters}
+                  className="text-sm text-gray-500 hover:text-gray-700 underline"
                 >
-                  {cat}
+                  Clear all
                 </button>
-              ))}
+              )}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg border transition-all ${
+                  showFilters || hasActiveFilters
+                    ? 'bg-blue-50 border-blue-200 text-blue-700'
+                    : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filter
+                {hasActiveFilters && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                )}
+              </button>
             </div>
           </div>
+
+          {/* Expandable Filter Panel */}
+          {showFilters && (
+            <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Search */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Search</label>
+                  <div className="relative">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                      type="text"
+                      placeholder="Search by keyword..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                {/* Vertical */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Vertical</label>
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Jurisdiction */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Jurisdiction</label>
+                  <select
+                    value={selectedJurisdiction}
+                    onChange={(e) => setSelectedJurisdiction(e.target.value)}
+                    className="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="All">All Jurisdictions</option>
+                    {jurisdictions.map(j => (
+                      <option key={j} value={j}>{j}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Tag</label>
+                  <select
+                    value={selectedTag}
+                    onChange={(e) => setSelectedTag(e.target.value)}
+                    className="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">All Tags</option>
+                    {allTags.map(tag => (
+                      <option key={tag} value={tag}>{tag.replace(/-/g, ' ')}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularArticles.map((article) => (
               <Link 
