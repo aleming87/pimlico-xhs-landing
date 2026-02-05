@@ -6,15 +6,21 @@ export default function MapSection() {
   const [activeSelection, setActiveSelection] = useState(null)
 
   const handleAIClick = () => {
-    // AI covers major regulatory jurisdictions (less coverage than payments/gambling)
+    // AI covers major regulatory jurisdictions - all from Pimlico tagging scheme
     if (window.highlightCountries) {
       const aiCountries = [
-        'USA', 'CAN',  // North America
-        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'CZE', 'GRC', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL',  // Europe (major markets)
-        'JPN', 'CHN', 'SGP', 'KOR', 'AUS', 'IND', 'HKG', 'TWN',  // APAC (major markets)
-        'BRA', 'CHL', 'ARG', 'COL',  // LATAM (select)
-        'ZAF', 'KEN',  // Africa (select)
-        'ARE', 'SAU', 'ISR'  // Middle East (select)
+        // North America
+        'USA', 'CAN', 'MEX',
+        // Europe
+        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'CZE', 'GRC', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL', 'HUN', 'SVK', 'BGR', 'ROU', 'HRV', 'MLT', 'CYP', 'UKR', 'SRB', 'MKD', 'ALB', 'BIH', 'MNE', 'GEO', 'ARM', 'AZE', 'MDA', 'BLR', 'TUR', 'RUS', 'KAZ',
+        // APAC
+        'JPN', 'CHN', 'SGP', 'KOR', 'AUS', 'NZL', 'IND', 'HKG', 'TWN', 'THA', 'VNM', 'MYS', 'IDN', 'PHL',
+        // LATAM
+        'BRA', 'CHL', 'ARG', 'COL', 'PER',
+        // Africa
+        'ZAF', 'KEN', 'NGA', 'EGY', 'MAR',
+        // Middle East
+        'ARE', 'SAU', 'ISR', 'QAT', 'BHR', 'KWT'
       ]
       window.highlightCountries(aiCountries, 'AI', true)
       setActiveSelection('AI')
@@ -22,24 +28,57 @@ export default function MapSection() {
   }
 
   const handlePaymentsClick = () => {
-    // Payments covers nearly the entire world
-    if (window.highlightRegions) {
-      window.highlightRegions(['NORTH_AMERICA', 'EUROPE', 'MIDDLE_EAST', 'APAC', 'LATAM', 'AFRICA'], 'PAYMENTS', true)
+    // Payments covers nearly the entire world - all from Pimlico tagging scheme
+    if (window.highlightCountries) {
+      const paymentsCountries = [
+        // Europe
+        'GBR', 'DEU', 'FRA', 'ITA', 'ESP', 'NLD', 'SWE', 'DNK', 'GRC', 'ROU', 'HRV', 'MLT',
+        'PRT', 'BEL', 'AUT', 'CHE', 'IRL', 'POL', 'CZE', 'HUN', 'FIN', 'NOR', 'LUX', 'CYP',
+        'EST', 'LVA', 'LTU', 'SVK', 'SVN', 'BGR', 'ISL', 'UKR', 'ALB', 'ARM', 'AZE', 'BLR',
+        'BIH', 'GEO', 'KAZ', 'LIE', 'MDA', 'MNE', 'MKD', 'RUS', 'SRB', 'TUR',
+        // North America
+        'USA', 'CAN', 'MEX',
+        // South America
+        'BRA', 'ARG', 'COL', 'CHL', 'PER',
+        // Asia-Pacific
+        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'CHN', 'IND', 'PHL', 'MYS', 'THA', 'VNM',
+        'IDN', 'TWN', 'KHM', 'LAO', 'MMR', 'BGD', 'PAK', 'LKA', 'NPL', 'BTN', 'MNG', 'BRN', 'MAC', 'TLS',
+        // Middle East
+        'ARE', 'SAU', 'ISR', 'QAT', 'BHR', 'KWT', 'JOR', 'LBN', 'IRQ', 'IRN', 'OMN', 'YEM', 'SYR',
+        // Africa
+        'ZAF', 'NGA', 'KEN', 'EGY', 'MAR', 'GHA', 'ETH', 'TZA', 'UGA', 'RWA', 'SEN', 'CIV',
+        'CMR', 'AGO', 'MOZ', 'NAM', 'BWA', 'ZWE', 'ZMB', 'MUS', 'SYC', 'DZA', 'TUN', 'LBY',
+        'SDN', 'GAB', 'COG', 'COD', 'MDG', 'MWI', 'MLI', 'NER', 'BFA', 'GIN', 'GMB', 'GNB',
+        'CPV', 'LBR', 'SLE', 'TGO', 'BEN', 'SOM', 'DJI', 'ERI', 'LSO', 'SWZ'
+      ]
+      window.highlightCountries(paymentsCountries, 'PAYMENTS', true)
       setActiveSelection('PAYMENTS')
     }
   }
 
   const handleGamblingClick = () => {
-    // Gambling covers nearly the entire world (except countries with strict prohibitions)
+    // Gambling covers same jurisdictions as the Pimlico tagging scheme
     if (window.highlightCountries) {
       const gamblingCountries = [
-        'USA', 'CAN', 'MEX',  // North America
-        'GBR', 'FRA', 'DEU', 'ITA', 'ESP', 'NLD', 'BEL', 'CHE', 'AUT', 'SWE', 'DNK', 'NOR', 'FIN', 'POL', 'IRL', 'PRT', 'MLT', 'CYP', 'GRC', 'CZE', 'SVK', 'HRV', 'BGR', 'ROU', 'EST', 'LVA', 'LTU', 'SVN', 'LUX', 'ISL', 'SRB', 'MKD', 'ALB', 'BIH', 'MNE', 'GEO', 'ARM', 'AZE', 'UKR', 'MDA', 'BLR', 'HUN',  // Europe
-        'BRA', 'ARG', 'CHL', 'COL', 'PER', 'URY', 'PRY', 'ECU', 'BOL', 'VEN', 'PAN', 'CRI', 'GTM', 'HND', 'SLV', 'NIC', 'DOM', 'JAM', 'TTO', 'BHS', 'BRB', 'CUB', 'GUY', 'SUR',  // LATAM
-        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'MAC', 'PHL', 'MYS', 'KHM', 'NPL', 'IND', 'LKA', 'THA', 'VNM', 'IDN', 'TWN', 'LAO', 'MMR', 'BGD', 'BTN', 'MNG', 'CHN',  // APAC
-        'ZAF', 'KEN', 'NGA', 'GHA', 'UGA', 'TZA', 'ZWE', 'ZMB', 'BWA', 'NAM', 'RWA', 'MUS', 'SYC', 'MOZ', 'AGO', 'ETH', 'SEN', 'CIV', 'CMR', 'MDG', 'MWI', 'BEN', 'TGO', 'BFA', 'MLI', 'NER', 'TCD', 'GAB', 'GNQ', 'COG', 'CAF', 'SSD', 'DJI', 'ERI',  // Africa
-        'TUR', 'RUS', 'KAZ', 'UZB', 'TKM', 'TJK', 'KGZ',  // Eastern Europe/Eurasia
-        'ARE', 'QAT', 'BHR', 'OMN', 'ISR', 'JOR', 'LBN', 'EGY'  // Middle East (select - excluding strict prohibition countries)
+        // Europe
+        'GBR', 'DEU', 'FRA', 'ITA', 'ESP', 'NLD', 'SWE', 'DNK', 'GRC', 'ROU', 'HRV', 'MLT',
+        'PRT', 'BEL', 'AUT', 'CHE', 'IRL', 'POL', 'CZE', 'HUN', 'FIN', 'NOR', 'LUX', 'CYP',
+        'EST', 'LVA', 'LTU', 'SVK', 'SVN', 'BGR', 'ISL', 'UKR', 'ALB', 'ARM', 'AZE', 'BLR',
+        'BIH', 'GEO', 'KAZ', 'LIE', 'MDA', 'MNE', 'MKD', 'RUS', 'SRB', 'TUR',
+        // North America
+        'USA', 'CAN', 'MEX',
+        // South America
+        'BRA', 'ARG', 'COL', 'CHL', 'PER',
+        // Asia-Pacific
+        'AUS', 'NZL', 'JPN', 'KOR', 'SGP', 'HKG', 'CHN', 'IND', 'PHL', 'MYS', 'THA', 'VNM',
+        'IDN', 'TWN', 'KHM', 'LAO', 'MMR', 'BGD', 'PAK', 'LKA', 'NPL', 'BTN', 'MNG', 'BRN', 'MAC', 'TLS',
+        // Middle East
+        'ARE', 'SAU', 'ISR', 'QAT', 'BHR', 'KWT', 'JOR', 'LBN', 'IRQ', 'IRN', 'OMN', 'YEM', 'SYR',
+        // Africa
+        'ZAF', 'NGA', 'KEN', 'EGY', 'MAR', 'GHA', 'ETH', 'TZA', 'UGA', 'RWA', 'SEN', 'CIV',
+        'CMR', 'AGO', 'MOZ', 'NAM', 'BWA', 'ZWE', 'ZMB', 'MUS', 'SYC', 'DZA', 'TUN', 'LBY',
+        'SDN', 'GAB', 'COG', 'COD', 'MDG', 'MWI', 'MLI', 'NER', 'BFA', 'GIN', 'GMB', 'GNB',
+        'CPV', 'LBR', 'SLE', 'TGO', 'BEN', 'SOM', 'DJI', 'ERI', 'LSO', 'SWZ'
       ]
       window.highlightCountries(gamblingCountries, 'GAMBLING', true)
       setActiveSelection('GAMBLING')
