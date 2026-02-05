@@ -1734,9 +1734,9 @@ export default function AdminPage() {
                           if (e.key === 'k') { e.preventDefault(); formatLinkVisual(); }
                         }
                       }}
-                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 prose prose-invert max-w-none min-h-[400px] overflow-y-auto"
+                      className="w-full px-4 py-3 bg-white border border-gray-300 border-t-0 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-500 prose max-w-none min-h-[400px] overflow-y-auto"
                       style={{ minHeight: '400px' }}
-                      dangerouslySetInnerHTML={{ __html: htmlContent || '<p style="color: #6b7280;">Start writing your article here...</p>' }}
+                      dangerouslySetInnerHTML={{ __html: htmlContent || '<p style="color: #9ca3af;">Start writing your article here...</p>' }}
                       onFocus={(e) => {
                         // Clear placeholder on focus
                         if (e.currentTarget.innerHTML.includes('Start writing your article here...')) {
