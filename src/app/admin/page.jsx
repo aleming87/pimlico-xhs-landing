@@ -881,12 +881,9 @@ export default function AdminPage() {
                   >
                     <option value="all">All Categories</option>
                     <option value="AI Regulation">AI Regulation</option>
-                    <option value="Compliance">Compliance</option>
                     <option value="Payments">Payments</option>
-                    <option value="Risk Management">Risk Management</option>
-                    <option value="Industry News">Industry News</option>
+                    <option value="Crypto">Crypto</option>
                     <option value="Gambling">Gambling</option>
-                    <option value="Technology">Technology</option>
                   </select>
                 </div>
                 
@@ -1195,6 +1192,7 @@ export default function AdminPage() {
                   >
                     <option value="AI Regulation">AI Regulation</option>
                     <option value="Payments">Payments</option>
+                    <option value="Crypto">Crypto</option>
                     <option value="Gambling">Gambling</option>
                   </select>
                 </div>

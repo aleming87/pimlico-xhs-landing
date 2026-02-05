@@ -347,22 +347,24 @@ export default function InsightsPage() {
                   Clear all
                 </button>
               )}
+              <div className="relative">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg border transition-all ${
+                className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border transition-all ${
                   showFilters || hasActiveFilters
                     ? 'bg-blue-50 border-blue-200 text-blue-700'
                     : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
                 }`}
+                title="Filter articles"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12h.01M6 12a2 2 0 110-4 2 2 0 010 4zm0 0v6m6-10.5h.01M12 6a2 2 0 110-4 2 2 0 010 4zm0 0v12m6 1.5h.01M18 18a2 2 0 110-4 2 2 0 010 4zm0 0v-12" />
                 </svg>
-                Filter
                 {hasActiveFilters && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-blue-600 ring-2 ring-white"></span>
                 )}
               </button>
+              </div>
             </div>
           </div>
 
