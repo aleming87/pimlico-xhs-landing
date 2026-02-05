@@ -34,36 +34,71 @@ const generateViewCount = (dateStr, articleId) => {
 function extractCountryFromArticle(article) {
   if (!article) return null;
   
-  // Common countries and regions to look for in regulatory content
-  const countries = [
-    'Finland', 'Sweden', 'Denmark', 'Norway', 'Iceland',
-    'UK', 'United Kingdom', 'Great Britain', 'Britain',
-    'Germany', 'France', 'Italy', 'Spain', 'Portugal', 'Netherlands', 'Belgium',
-    'Malta', 'Gibraltar', 'Isle of Man', 'Jersey', 'Guernsey',
-    'Ireland', 'Poland', 'Czech Republic', 'Austria', 'Switzerland',
-    'Luxembourg', 'Monaco', 'Liechtenstein', 'Cyprus', 'Greece',
-    'Estonia', 'Latvia', 'Lithuania', 'Romania', 'Bulgaria', 'Hungary',
-    'Croatia', 'Slovenia', 'Slovakia',
-    'USA', 'United States', 'Canada', 'Australia', 'New Zealand',
-    'Singapore', 'Hong Kong', 'Japan', 'South Korea',
-    'UAE', 'Dubai', 'Saudi Arabia',
-    'Brazil', 'Mexico', 'Argentina',
-    'European Union', 'EU', 'Europe', 'European'
+  // Priority countries/regions - check these first (most likely to be primary topic)
+  const priorityJurisdictions = [
+    { search: ['European Union', 'EU ', ' EU', 'EU\'s', 'EU-wide', 'PSD2', 'PSD3', 'MiCA', 'DORA', 'GDPR', 'EU AI Act'], result: 'the European Union' },
+    { search: ['United Kingdom', 'UK ', ' UK', 'UK\'s', 'UKGC', 'FCA ', 'Great Britain', 'Britain'], result: 'the UK' },
+    { search: ['Finland', 'Finnish', 'Veikkaus'], result: 'Finland' },
+    { search: ['Germany', 'German', 'BaFin'], result: 'Germany' },
+    { search: ['France', 'French', 'AMF ', 'ACPR'], result: 'France' },
+    { search: ['Malta', 'Maltese', 'MGA '], result: 'Malta' },
+    { search: ['Gibraltar'], result: 'Gibraltar' },
+    { search: ['Sweden', 'Swedish', 'Spelinspektionen'], result: 'Sweden' },
+    { search: ['Denmark', 'Danish', 'Spillemyndigheden'], result: 'Denmark' },
+    { search: ['Norway', 'Norwegian'], result: 'Norway' },
+    { search: ['Netherlands', 'Dutch', 'KSA '], result: 'the Netherlands' },
+    { search: ['Spain', 'Spanish', 'DGOJ'], result: 'Spain' },
+    { search: ['Italy', 'Italian', 'ADM '], result: 'Italy' },
+    { search: ['Portugal', 'Portuguese'], result: 'Portugal' },
+    { search: ['Belgium', 'Belgian'], result: 'Belgium' },
+    { search: ['Austria', 'Austrian'], result: 'Austria' },
+    { search: ['Switzerland', 'Swiss'], result: 'Switzerland' },
+    { search: ['Ireland', 'Irish'], result: 'Ireland' },
+    { search: ['Poland', 'Polish'], result: 'Poland' },
+    { search: ['Czech Republic', 'Czech'], result: 'the Czech Republic' },
+    { search: ['United States', 'USA', 'U.S.', 'US ', ' US', 'American', 'CFPB', 'SEC ', 'FTC '], result: 'the United States' },
+    { search: ['Canada', 'Canadian'], result: 'Canada' },
+    { search: ['Australia', 'Australian', 'ACMA'], result: 'Australia' },
+    { search: ['New Zealand', 'NZ '], result: 'New Zealand' },
+    { search: ['Singapore', 'MAS '], result: 'Singapore' },
+    { search: ['Hong Kong'], result: 'Hong Kong' },
+    { search: ['Japan', 'Japanese'], result: 'Japan' },
+    { search: ['South Korea', 'Korean'], result: 'South Korea' },
+    { search: ['UAE', 'United Arab Emirates', 'Dubai', 'Abu Dhabi'], result: 'the UAE' },
+    { search: ['Saudi Arabia', 'Saudi'], result: 'Saudi Arabia' },
+    { search: ['Brazil', 'Brazilian'], result: 'Brazil' },
+    { search: ['Mexico', 'Mexican'], result: 'Mexico' },
+    { search: ['Argentina', 'Argentine'], result: 'Argentina' },
+    { search: ['Europe', 'European'], result: 'Europe' },
   ];
   
-  // Check title first, then content
-  const textToSearch = `${article.title} ${article.content || ''}`;
+  // First, check the title only (most reliable indicator of primary jurisdiction)
+  const title = article.title || '';
+  for (const jurisdiction of priorityJurisdictions) {
+    for (const searchTerm of jurisdiction.search) {
+      if (title.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return jurisdiction.result;
+      }
+    }
+  }
   
-  for (const country of countries) {
-    if (textToSearch.toLowerCase().includes(country.toLowerCase())) {
-      // Return normalized country name
-      if (country === 'UK') return 'the UK';
-      if (country === 'United Kingdom' || country === 'Great Britain' || country === 'Britain') return 'the UK';
-      if (country === 'USA' || country === 'United States') return 'the United States';
-      if (country === 'European Union' || country === 'EU') return 'the European Union';
-      if (country === 'Europe' || country === 'European') return 'Europe';
-      if (country === 'UAE') return 'the UAE';
-      return country;
+  // Then check tags if available
+  const tags = (article.tags || []).join(' ');
+  for (const jurisdiction of priorityJurisdictions) {
+    for (const searchTerm of jurisdiction.search) {
+      if (tags.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return jurisdiction.result;
+      }
+    }
+  }
+  
+  // Finally check the first paragraph of content (more likely to mention primary jurisdiction)
+  const contentStart = (article.content || '').slice(0, 500);
+  for (const jurisdiction of priorityJurisdictions) {
+    for (const searchTerm of jurisdiction.search) {
+      if (contentStart.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return jurisdiction.result;
+      }
     }
   }
   
