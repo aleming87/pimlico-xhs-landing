@@ -114,6 +114,8 @@ export default function AdminPage() {
   const [selectedTagCategory, setSelectedTagCategory] = useState('topic');
   const [isUploading, setIsUploading] = useState(false);
   const [editorMode, setEditorMode] = useState('visual'); // 'visual' or 'markdown'
+  const [showTagSuggestions, setShowTagSuggestions] = useState(false);
+  const tagInputRef = useRef(null);
   const [htmlContent, setHtmlContent] = useState(''); // Store visual editor content as HTML
   
   // Rich text editor ref
@@ -604,6 +606,7 @@ export default function AdminPage() {
     setScheduledDate('');
     setTags([]);
     setTagInput('');
+    setShowTagSuggestions(false);
     setPublicationDate(new Date().toISOString().split('T')[0]);
     setOgImageUrl('');
     setIsPremium(false);
@@ -672,6 +675,26 @@ export default function AdminPage() {
     setActiveTab('publish');
   };
 
+  // Get all taxonomy tags flattened for searching
+  const getAllTaxonomyTags = () => {
+    return Object.values(PIMLICO_TAXONOMY).flat();
+  };
+
+  // Filter suggestions based on input
+  const getTagSuggestions = () => {
+    if (!tagInput.trim()) return [];
+    const query = tagInput.toLowerCase();
+    const allTags = getAllTaxonomyTags();
+    return allTags
+      .filter(tag => 
+        tag.toLowerCase().includes(query) && 
+        !tags.includes(tag)
+      )
+      .slice(0, 10); // Limit to 10 suggestions
+  };
+
+  const tagSuggestions = getTagSuggestions();
+
   const handleAddTag = (e) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
@@ -679,7 +702,19 @@ export default function AdminPage() {
         setTags([...tags, tagInput.trim()]);
       }
       setTagInput('');
+      setShowTagSuggestions(false);
+    } else if (e.key === 'Escape') {
+      setShowTagSuggestions(false);
     }
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    if (!tags.includes(suggestion)) {
+      setTags([...tags, suggestion]);
+    }
+    setTagInput('');
+    setShowTagSuggestions(false);
+    tagInputRef.current?.focus();
   };
 
   const handleRemoveTag = (tagToRemove) => {
@@ -715,7 +750,33 @@ export default function AdminPage() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        setMarkdownContent(event.target.result);
+        const content = event.target.result;
+        // Set markdown content
+        setMarkdownContent(content);
+        
+        // If in visual mode, convert markdown to HTML and update the visual editor
+        if (editorMode === 'visual') {
+          const html = content
+            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/~~(.*?)~~/g, '<del>$1</del>')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>');
+          const wrappedHtml = '<p>' + html + '</p>';
+          setHtmlContent(wrappedHtml);
+          // Update visual editor DOM
+          setTimeout(() => {
+            if (editorRef.current) {
+              editorRef.current.innerHTML = wrappedHtml;
+            }
+          }, 100);
+        }
+        
+        // Switch to markdown mode to show the uploaded content directly
+        setEditorMode('markdown');
       };
       reader.readAsText(file);
     }
@@ -1349,14 +1410,67 @@ export default function AdminPage() {
                     </span>
                   ))}
                 </div>
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleAddTag}
-                  placeholder="Type a tag and press Enter..."
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
-                />
+                <div className="relative">
+                  <input
+                    ref={tagInputRef}
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => {
+                      setTagInput(e.target.value);
+                      setShowTagSuggestions(e.target.value.trim().length > 0);
+                    }}
+                    onKeyDown={handleAddTag}
+                    onFocus={() => setShowTagSuggestions(tagInput.trim().length > 0)}
+                    onBlur={() => setTimeout(() => setShowTagSuggestions(false), 200)}
+                    placeholder="Start typing to search tags..."
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                  />
+                  
+                  {/* Live Tag Suggestions Dropdown */}
+                  {showTagSuggestions && tagSuggestions.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      <div className="p-2 text-xs text-gray-500 border-b border-gray-700">
+                        {tagSuggestions.length} matching tag{tagSuggestions.length !== 1 ? 's' : ''} found
+                      </div>
+                      {tagSuggestions.map((suggestion, idx) => {
+                        // Find which category this tag belongs to
+                        const category = Object.entries(PIMLICO_TAXONOMY).find(([_, values]) => 
+                          values.includes(suggestion)
+                        )?.[0] || '';
+                        
+                        return (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              handleSelectSuggestion(suggestion);
+                            }}
+                            className="w-full px-4 py-2 text-left hover:bg-indigo-900/50 flex items-center justify-between group transition-colors"
+                          >
+                            <span className="text-white">
+                              {/* Highlight matching text */}
+                              {suggestion.split(new RegExp(`(${tagInput})`, 'gi')).map((part, i) => 
+                                part.toLowerCase() === tagInput.toLowerCase() ? 
+                                  <span key={i} className="text-indigo-400 font-semibold">{part}</span> : 
+                                  part
+                              )}
+                            </span>
+                            <span className="text-xs text-gray-500 group-hover:text-gray-400 capitalize">
+                              {category}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                  
+                  {showTagSuggestions && tagInput.trim() && tagSuggestions.length === 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 text-gray-400 text-sm">
+                      No matching tags found. Press Enter to add "{tagInput}" as a custom tag.
+                    </div>
+                  )}
+                </div>
                 
                 {/* Pimlico Taxonomy Tag Suggestions */}
                 <div className="mt-3">
