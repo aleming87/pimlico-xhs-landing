@@ -5,12 +5,29 @@ export async function GET(request) {
   }
 
   try {
+    // Validate URL
+    let parsedUrl;
+    try { parsedUrl = new URL(url); } catch { return new Response('Invalid URL', { status: 400 }); }
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      return new Response('Only http/https URLs allowed', { status: 400 });
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
     const response = await fetch(url, {
-      headers: { 'Accept': 'image/*' },
+      headers: {
+        'Accept': 'image/*,*/*',
+        'User-Agent': 'Mozilla/5.0 (compatible; PimlicoProxy/1.0)',
+      },
+      signal: controller.signal,
+      redirect: 'follow',
     });
 
+    clearTimeout(timeout);
+
     if (!response.ok) {
-      return new Response('Failed to fetch image', { status: response.status });
+      return new Response(`Failed to fetch image: ${response.status} ${response.statusText}`, { status: response.status });
     }
 
     const buffer = await response.arrayBuffer();
@@ -24,6 +41,7 @@ export async function GET(request) {
       },
     });
   } catch (e) {
-    return new Response('Image proxy error: ' + e.message, { status: 500 });
+    const msg = e.name === 'AbortError' ? 'Image fetch timed out' : e.message;
+    return new Response('Image proxy error: ' + msg, { status: 500 });
   }
 }

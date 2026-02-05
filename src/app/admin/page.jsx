@@ -251,6 +251,61 @@ export default function AdminPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterFeatured, setFilterFeatured] = useState('all');
 
+  // Marketing presets
+  const [marketingPresets, setMarketingPresets] = useState({});
+  const [presetName, setPresetName] = useState('');
+
+  // Load presets from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('xhs-marketing-presets');
+      if (saved) setMarketingPresets(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  const saveMarketingPreset = (name) => {
+    if (!name.trim()) return;
+    const preset = {
+      elements: marketingElements,
+      template: marketingTemplate,
+      theme: marketingTheme,
+      layout: marketingLayout,
+      font: marketingFont,
+      fontSize: marketingFontSize,
+      fontWeight: marketingFontWeight,
+      title: marketingTitle,
+      subtitle: marketingSubtitle,
+      cta: marketingCta,
+      savedAt: new Date().toISOString(),
+    };
+    const updated = { ...marketingPresets, [name.trim()]: preset };
+    setMarketingPresets(updated);
+    localStorage.setItem('xhs-marketing-presets', JSON.stringify(updated));
+    setPresetName('');
+  };
+
+  const loadMarketingPreset = (name) => {
+    const preset = marketingPresets[name];
+    if (!preset) return;
+    if (preset.elements) setMarketingElements(preset.elements);
+    if (preset.template) setMarketingTemplate(preset.template);
+    if (preset.theme) setMarketingTheme(preset.theme);
+    if (preset.layout) setMarketingLayout(preset.layout);
+    if (preset.font) setMarketingFont(preset.font);
+    if (preset.fontSize) setMarketingFontSize(preset.fontSize);
+    if (preset.fontWeight) setMarketingFontWeight(preset.fontWeight);
+    if (preset.title !== undefined) setMarketingTitle(preset.title);
+    if (preset.subtitle !== undefined) setMarketingSubtitle(preset.subtitle);
+    if (preset.cta) setMarketingCta(preset.cta);
+  };
+
+  const deleteMarketingPreset = (name) => {
+    const updated = { ...marketingPresets };
+    delete updated[name];
+    setMarketingPresets(updated);
+    localStorage.setItem('xhs-marketing-presets', JSON.stringify(updated));
+  };
+
   // Check if already authenticated via sessionStorage
   useEffect(() => {
     const authStatus = sessionStorage.getItem('xhs-admin-auth');
@@ -270,16 +325,20 @@ export default function AdminPage() {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [showPreview]);
 
-  // Auto-generate marketing asset when selections change
+  // Auto-generate marketing asset when ANY settings change (debounced)
+  const autoGenTimerRef = useRef(null);
   useEffect(() => {
     if (marketingArticle && activeTab === 'marketing' && marketingCanvasRef.current) {
-      // Small delay to ensure canvas is mounted
-      const timer = setTimeout(() => {
+      // Skip auto-regen during active drag (mouseUp triggers its own regen)
+      if (marketingDragTarget) return;
+      if (autoGenTimerRef.current) clearTimeout(autoGenTimerRef.current);
+      autoGenTimerRef.current = setTimeout(() => {
         generateMarketingAsset();
-      }, 150);
-      return () => clearTimeout(timer);
+      }, 300);
+      return () => { if (autoGenTimerRef.current) clearTimeout(autoGenTimerRef.current); };
     }
-  }, [marketingArticle, marketingTemplate, marketingTheme, marketingLayout, marketingElements]);
+  }, [marketingArticle, marketingTemplate, marketingTheme, marketingLayout, marketingElements,
+      marketingTitle, marketingSubtitle, marketingCta, marketingFont, marketingFontSize, marketingFontWeight]);
 
   // Load saved articles from localStorage and merge with sample articles
   useEffect(() => {
@@ -1019,23 +1078,49 @@ export default function AdminPage() {
     return lines;
   };
 
-  // Load an image as a promise (with proxy fallback for external URLs)
+  // Load an image as a promise — uses proxy first for external URLs to avoid CORS issues
   const loadImage = (src) => new Promise((resolve, reject) => {
-    const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = () => {
-      // Retry via same-origin proxy for external URLs (Vercel Blob etc)
-      if (src.startsWith('http')) {
+    if (!src) return reject(new Error('No image source'));
+    
+    // For relative/local paths, load directly
+    if (src.startsWith('/') || src.startsWith('data:')) {
+      const img = new window.Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Failed to load local image: ' + src));
+      img.src = src;
+      return;
+    }
+    
+    // For external URLs, try proxy first (avoids CORS), fallback to direct
+    if (src.startsWith('http')) {
+      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(src)}`;
+      const img1 = new window.Image();
+      img1.crossOrigin = 'anonymous';
+      img1.onload = () => resolve(img1);
+      img1.onerror = () => {
+        // Proxy failed — try direct as fallback
+        console.warn('[loadImage] Proxy failed, trying direct:', src);
         const img2 = new window.Image();
         img2.crossOrigin = 'anonymous';
         img2.onload = () => resolve(img2);
-        img2.onerror = reject;
-        img2.src = `/api/proxy-image?url=${encodeURIComponent(src)}`;
-      } else {
-        reject(new Error('Failed to load image: ' + src));
-      }
-    };
+        img2.onerror = () => {
+          // Final attempt: direct without crossOrigin
+          const img3 = new window.Image();
+          img3.onload = () => resolve(img3);
+          img3.onerror = () => reject(new Error('All image load attempts failed: ' + src));
+          img3.src = src;
+        };
+        img2.src = src;
+      };
+      img1.src = proxyUrl;
+      return;
+    }
+    
+    // Unknown scheme — try direct
+    const img = new window.Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Failed to load image: ' + src));
     img.src = src;
   });
 
@@ -1271,7 +1356,7 @@ export default function AdminPage() {
       const imgAreaH = (isVert ? template.height * 0.42 : template.height * 0.45) * cardImgScale;
       const imgAreaW = template.width - cardPad * 2;
       
-      if (el.image.visible !== false && marketingArticle.image && marketingArticle.image.startsWith('http')) {
+      if (el.image.visible !== false && marketingArticle.image) {
         const _ix = cardPad + (el.image.dx||0), _iy = imgTopY + (el.image.dy||0);
         try {
           const img = await loadImage(marketingArticle.image);
@@ -1352,7 +1437,7 @@ export default function AdminPage() {
     } else if (marketingLayout === 'magazine') {
       // Full-bleed article image
       const magImgOpacity = (el.image.opacity ?? 100) / 100;
-      if (el.image.visible !== false && marketingArticle.image && marketingArticle.image.startsWith('http')) {
+      if (el.image.visible !== false && marketingArticle.image) {
         try {
           const img = await loadImage(marketingArticle.image);
           drawImageCover(ctx, img, 0 + (el.image.dx||0), 0 + (el.image.dy||0), template.width, template.height, magImgOpacity);
@@ -1541,7 +1626,7 @@ export default function AdminPage() {
       const imgOpacity = (imgEl.opacity ?? 100) / 100;
       const imgZoom = (imgEl.zoom ?? 100) / 100;
       const imgScale = (imgEl.scale ?? 100) / 100;
-      if (el.image.visible !== false && marketingArticle.image && marketingArticle.image.startsWith('http')) {
+      if (el.image.visible !== false && marketingArticle.image) {
         try {
           const img = await loadImage(marketingArticle.image);
           
@@ -1757,17 +1842,83 @@ export default function AdminPage() {
     const title = marketingTitle || marketingArticle.title;
     const excerpt = marketingArticle.excerpt || '';
     const category = marketingArticle.category || '';
-    const tags = (marketingArticle.tags || []).slice(0, 5).map(t => `#${t.replace(/\\s+/g, '')}`).join(' ');
+    const slug = marketingArticle.slug || '';
+    const link = `pimlicosolutions.com/insights/${slug}`;
+    const tags = (marketingArticle.tags || []).slice(0, 5).map(t => `#${t.replace(/\s+/g, '')}`).join(' ');
+    const catTag = category ? `#${category.replace(/\s+/g, '')}` : '';
+    const coreTags = `${tags}${catTag ? ` ${catTag}` : ''} #RegulatoryIntelligence #Compliance`;
+    
+    // Derive a concise insight sentence from the excerpt
+    const sentences = excerpt.split(/(?<=[.!?])\s+/).filter(s => s.length > 20);
+    const leadSentence = sentences[0] || excerpt.slice(0, 200);
+    const secondSentence = sentences[1] || '';
     
     let post = '';
     if (marketingTemplate === 'linkedin') {
-      post = `🔍 ${title}\n\n${excerpt}\n\nStay ahead of regulatory change — read the full analysis on Pimlico XHS™.\n\n📖 Read more → pimlicosolutions.com/insights/${marketingArticle.slug}\n\n${tags}${category ? `\\n#${category.replace(/\\s+/g, '')}` : ''} #RegulatoryIntelligence #Compliance`;
+      post = [
+        `${title}`,
+        ``,
+        `${leadSentence}`,
+        secondSentence ? `\n${secondSentence}` : '',
+        ``,
+        `For compliance and regulatory affairs teams, staying ahead isn't optional — it's the cost of doing business. Pimlico XHS™ delivers the intelligence you need to anticipate change, not react to it.`,
+        ``,
+        `📖 Read the full analysis → ${link}`,
+        ``,
+        `${coreTags} #RegTech #GRC`,
+      ].filter(Boolean).join('\n');
     } else if (marketingTemplate === 'twitter') {
-      post = `🔍 ${title}\n\n${excerpt.slice(0, 180)}${excerpt.length > 180 ? '...' : ''}\n\n📖 pimlicosolutions.com/insights/${marketingArticle.slug}\n\n${tags}`;
+      // Twitter: tight, punchy, under 280 chars target
+      const tweetExcerpt = excerpt.length > 140 ? excerpt.slice(0, 137) + '...' : excerpt;
+      post = `${title}\n\n${tweetExcerpt}\n\n📖 ${link}\n\n${tags}`;
+      // Trim to safe length
+      if (post.length > 280) {
+        post = `${title}\n\n📖 ${link}\n\n${tags}`;
+      }
     } else if (marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory') {
-      post = `${title}\n\n${excerpt}\n\n📖 Link in bio\n\n.\n.\n.\n${tags} #RegulatoryIntelligence #Compliance #RegTech ${category ? `#${category.replace(/\\s+/g, '')}` : ''}`;
+      post = [
+        `${title}`,
+        ``,
+        `${leadSentence}`,
+        secondSentence ? `\n${secondSentence}` : '',
+        ``,
+        `Pimlico XHS™ — regulatory intelligence for teams that can't afford to fall behind.`,
+        ``,
+        `📖 Link in bio for the full analysis`,
+        ``,
+        `·`,
+        `·`,
+        `·`,
+        ``,
+        `${coreTags} #RegTech #FinTech #GRC`,
+      ].filter(Boolean).join('\n');
+    } else if (marketingTemplate === 'email') {
+      post = [
+        `Subject: ${title}`,
+        ``,
+        `Hi [First Name],`,
+        ``,
+        `${leadSentence}`,
+        secondSentence ? `\n${secondSentence}` : '',
+        ``,
+        `We've published a detailed analysis on Pimlico XHS™ that breaks down what this means for your organisation's compliance strategy.`,
+        ``,
+        `👉 Read the full article: ${link}`,
+        ``,
+        `Best regards,`,
+        `The Pimlico Team`,
+      ].filter(Boolean).join('\n');
     } else {
-      post = `${title}\n\n${excerpt}\n\n📖 Read more: pimlicosolutions.com/insights/${marketingArticle.slug}`;
+      // OG / generic
+      post = [
+        `${title}`,
+        ``,
+        `${leadSentence}`,
+        ``,
+        `📖 Read more: ${link}`,
+        ``,
+        `${coreTags}`,
+      ].filter(Boolean).join('\n');
     }
     setMarketingPostText(post);
   };
@@ -3234,6 +3385,67 @@ export default function AdminPage() {
                   )}
                 </div>
 
+                {/* Presets — save/load settings */}
+                <div className="bg-gray-800 rounded-xl overflow-hidden">
+                  <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, presets: !p.presets}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>💾</span> Presets {Object.keys(marketingPresets).length > 0 && <span className="text-xs text-gray-400 font-normal">— {Object.keys(marketingPresets).length} saved</span>}</h3>
+                    <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.presets ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  {mktgPanelOpen.presets && (
+                    <div className="px-4 pb-4 space-y-2 border-t border-gray-700">
+                      {/* Save new preset */}
+                      <div className="flex gap-2 mt-2">
+                        <input
+                          type="text"
+                          value={presetName}
+                          onChange={(e) => setPresetName(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Enter' && presetName.trim()) saveMarketingPreset(presetName); }}
+                          placeholder="Preset name..."
+                          className="flex-1 px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-xs placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => saveMarketingPreset(presetName)}
+                          disabled={!presetName.trim()}
+                          className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        >
+                          💾 Save
+                        </button>
+                      </div>
+                      {/* Saved presets list */}
+                      {Object.keys(marketingPresets).length > 0 ? (
+                        <div className="space-y-1 max-h-36 overflow-y-auto">
+                          {Object.entries(marketingPresets).map(([name, preset]) => (
+                            <div key={name} className="flex items-center gap-2 bg-gray-700/50 rounded-lg px-3 py-2">
+                              <div className="flex-1 min-w-0">
+                                <div className="text-xs text-white font-medium truncate">{name}</div>
+                                <div className="text-[10px] text-gray-400">{preset.layout} · {preset.theme} · {preset.template}</div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => loadMarketingPreset(name)}
+                                className="px-2 py-1 bg-indigo-600/80 text-white text-[10px] font-medium rounded hover:bg-indigo-500 transition-colors"
+                              >
+                                Load
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => { if (confirm(`Delete preset "${name}"?`)) deleteMarketingPreset(name); }}
+                                className="px-1.5 py-1 text-red-400 hover:text-red-300 text-xs transition-colors"
+                                title="Delete preset"
+                              >
+                                🗑
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[11px] text-gray-500 text-center py-2">No presets saved yet. Adjust your settings then save a preset.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
                 {/* Generate Button */}
                 <button
                   type="button"
@@ -3309,7 +3521,7 @@ export default function AdminPage() {
                   )}
                   
                   {marketingArticle && (
-                    <p className="mt-3 text-xs text-gray-500">💡 Drag any element on the canvas to reposition. Use 👁️ to show/hide elements, sliders to adjust scale & opacity. Click &quot;Generate&quot; to update.</p>
+                    <p className="mt-3 text-xs text-gray-500">💡 Canvas updates live as you change settings. Drag elements to reposition. Use 👁️ to show/hide, sliders to adjust. Save presets with 💾.</p>
                   )}
                 </div>
               </div>
