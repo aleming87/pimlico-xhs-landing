@@ -75,6 +75,91 @@ const PIMLICO_TAXONOMY = {
   status: ['Indicative', 'Informative', 'Actionable']
 };
 
+// Comprehensive markdown to HTML converter
+const markdownToHtml = (markdown) => {
+  if (!markdown) return '';
+  
+  let html = markdown;
+  
+  // Handle code blocks first (to prevent processing markdown inside them)
+  html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  
+  // Handle headers (must be at start of line)
+  html = html.replace(/^#### (.*$)/gim, '<h4>$1</h4>');
+  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+  
+  // Handle horizontal rules
+  html = html.replace(/^---$/gim, '<hr>');
+  html = html.replace(/^\*\*\*$/gim, '<hr>');
+  
+  // Handle blockquotes
+  html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+  
+  // Handle bold and italic (order matters)
+  html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+  
+  // Handle strikethrough
+  html = html.replace(/~~(.*?)~~/g, '<del>$1</del>');
+  
+  // Handle links [text](url) - must handle various URL formats
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  
+  // Handle images ![alt](url)
+  html = html.replace(/!\[([^\]]*?)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;height:auto;">');
+  
+  // Handle unordered lists (- item or * item)
+  html = html.replace(/(?:^[\t ]*[-*] (.+)$\n?)+/gim, (match) => {
+    const items = match.trim().split('\n').map(line => {
+      const itemContent = line.replace(/^[\t ]*[-*] /, '');
+      return `<li>${itemContent}</li>`;
+    }).join('');
+    return `<ul>${items}</ul>`;
+  });
+  
+  // Handle ordered lists (1. item)
+  html = html.replace(/(?:^[\t ]*\d+\. (.+)$\n?)+/gim, (match) => {
+    const items = match.trim().split('\n').map(line => {
+      const itemContent = line.replace(/^[\t ]*\d+\. /, '');
+      return `<li>${itemContent}</li>`;
+    }).join('');
+    return `<ol>${items}</ol>`;
+  });
+  
+  // Handle paragraphs - double newlines become paragraph breaks
+  html = html.replace(/\n\n+/g, '</p><p>');
+  // Single newlines become line breaks
+  html = html.replace(/\n/g, '<br>');
+  
+  // Wrap in paragraph if not already wrapped
+  if (!html.startsWith('<')) {
+    html = '<p>' + html + '</p>';
+  }
+  
+  // Clean up empty paragraphs and fix nested issues
+  html = html.replace(/<p><\/p>/g, '');
+  html = html.replace(/<p>(<h[1-6]>)/g, '$1');
+  html = html.replace(/(<\/h[1-6]>)<\/p>/g, '$1');
+  html = html.replace(/<p>(<ul>)/g, '$1');
+  html = html.replace(/(<\/ul>)<\/p>/g, '$1');
+  html = html.replace(/<p>(<ol>)/g, '$1');
+  html = html.replace(/(<\/ol>)<\/p>/g, '$1');
+  html = html.replace(/<p>(<blockquote>)/g, '$1');
+  html = html.replace(/(<\/blockquote>)<\/p>/g, '$1');
+  html = html.replace(/<p>(<hr>)/g, '$1');
+  html = html.replace(/(<hr>)<\/p>/g, '$1');
+  html = html.replace(/<p>(<pre>)/g, '$1');
+  html = html.replace(/(<\/pre>)<\/p>/g, '$1');
+  
+  return html;
+};
+
 // Add isSample flag to sample articles for admin display
 const sampleArticles = baseSampleArticles.map(article => ({
   ...article,
@@ -754,26 +839,16 @@ export default function AdminPage() {
         // Set markdown content
         setMarkdownContent(content);
         
-        // If in visual mode, convert markdown to HTML and update the visual editor
-        if (editorMode === 'visual') {
-          const html = content
-            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            .replace(/~~(.*?)~~/g, '<del>$1</del>')
-            .replace(/\n\n/g, '</p><p>')
-            .replace(/\n/g, '<br>');
-          const wrappedHtml = '<p>' + html + '</p>';
-          setHtmlContent(wrappedHtml);
-          // Update visual editor DOM
-          setTimeout(() => {
-            if (editorRef.current) {
-              editorRef.current.innerHTML = wrappedHtml;
-            }
-          }, 100);
-        }
+        // Convert markdown to HTML for visual editor
+        const html = markdownToHtml(content);
+        setHtmlContent(html);
+        
+        // Update visual editor DOM if it exists
+        setTimeout(() => {
+          if (editorRef.current) {
+            editorRef.current.innerHTML = html;
+          }
+        }, 100);
         
         // Switch to markdown mode to show the uploaded content directly
         setEditorMode('markdown');
@@ -1646,16 +1721,15 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => {
                           if (editorMode === 'markdown' && markdownContent) {
-                            // Convert markdown to basic HTML when switching to visual
-                            const html = markdownContent
-                              .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                              .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                              .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                              .replace(/~~(.*?)~~/g, '<del>$1</del>')
-                              .replace(/\n/g, '<br>');
+                            // Convert markdown to HTML when switching to visual
+                            const html = markdownToHtml(markdownContent);
                             setHtmlContent(html);
+                            // Update visual editor DOM
+                            setTimeout(() => {
+                              if (editorRef.current) {
+                                editorRef.current.innerHTML = html;
+                              }
+                            }, 50);
                           }
                           setEditorMode('visual');
                         }}
