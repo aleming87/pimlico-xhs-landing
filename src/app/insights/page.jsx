@@ -56,43 +56,52 @@ export default function InsightsPage() {
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('All');
   const [selectedTag, setSelectedTag] = useState('');
 
-  // Load articles from localStorage only (no sample articles)
+  // Load articles from Vercel Blob API (synced across all devices)
   useEffect(() => {
-    const savedArticles = localStorage.getItem('xhs-articles');
-    const now = new Date();
+    const loadArticles = async () => {
+      const now = new Date();
+      
+      try {
+        // Fetch from API which reads from Vercel Blob
+        const response = await fetch('/api/articles');
+        const data = await response.json();
+        
+        let allArticles = data.articles || [];
+        
+        // Filter out drafts and scheduled articles that haven't reached their publish time
+        const publishedArticles = allArticles.filter(article => {
+          // Hide drafts from public view
+          if (article.status === 'draft') {
+            return false;
+          }
+          // Hide scheduled articles that haven't reached their publish time
+          if (article.status === 'scheduled' && article.scheduledAt) {
+            return new Date(article.scheduledAt) <= now;
+          }
+          return true;
+        });
+        
+        // Sort by date (newest first)
+        const sortedArticles = publishedArticles.sort((a, b) => {
+          const parseDate = (dateStr) => {
+            if (!dateStr) return new Date(0);
+            const parsed = new Date(dateStr);
+            if (!isNaN(parsed)) return parsed;
+            return new Date(0);
+          };
+          return parseDate(b.date) - parseDate(a.date);
+        });
+        
+        setArticles(sortedArticles);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+        setArticles([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    let publishedArticles = [];
-    if (savedArticles) {
-      const parsed = JSON.parse(savedArticles);
-      // Filter out drafts and scheduled articles that haven't reached their publish time
-      publishedArticles = parsed.filter(article => {
-        // Hide drafts from public view
-        if (article.status === 'draft') {
-          return false;
-        }
-        // Hide scheduled articles that haven't reached their publish time
-        if (article.status === 'scheduled' && article.scheduledAt) {
-          return new Date(article.scheduledAt) <= now;
-        }
-        return true;
-      });
-    }
-    
-    // Sort by date (newest first)
-    const sortedArticles = publishedArticles.sort((a, b) => {
-      // Parse dates - handle various date formats
-      const parseDate = (dateStr) => {
-        if (!dateStr) return new Date(0);
-        // Handle "February 4, 2026" format
-        const parsed = new Date(dateStr);
-        if (!isNaN(parsed)) return parsed;
-        return new Date(0);
-      };
-      return parseDate(b.date) - parseDate(a.date);
-    });
-    
-    setArticles(sortedArticles);
-    setIsLoading(false);
+    loadArticles();
   }, []);
 
   // Get all unique tags from articles for filtering

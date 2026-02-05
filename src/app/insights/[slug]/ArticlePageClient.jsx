@@ -82,6 +82,7 @@ export default function ArticlePageClient() {
   const [currentUrl, setCurrentUrl] = useState('');
   const [copied, setCopied] = useState(false);
   const [viewCount, setViewCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Set current URL for sharing
@@ -89,40 +90,42 @@ export default function ArticlePageClient() {
       setCurrentUrl(window.location.href);
     }
     
-    // Check localStorage for custom articles only (no sample articles)
-    const savedArticles = localStorage.getItem('xhs-articles');
-    const now = new Date();
-    
-    let publishedArticles = [];
-    if (savedArticles) {
-      const parsed = JSON.parse(savedArticles);
-      // Filter out drafts and scheduled articles that haven't reached their publish time
-      publishedArticles = parsed.filter(article => {
-        // Hide drafts from public view
-        if (article.status === 'draft') {
-          return false;
+    // Fetch article from API (Vercel Blob) - works across all devices
+    const loadArticle = async () => {
+      try {
+        const response = await fetch(`/api/articles?slug=${params.slug}`);
+        
+        if (response.ok) {
+          const found = await response.json();
+          
+          // Check if article should be visible (not draft, not scheduled in future)
+          const now = new Date();
+          if (found.status === 'draft') {
+            setArticle(null);
+          } else if (found.status === 'scheduled' && found.scheduledAt && new Date(found.scheduledAt) > now) {
+            setArticle(null);
+          } else {
+            setArticle(found);
+            
+            // Generate view count based on article date and ID
+            const views = generateViewCount(found.date, found.id);
+            setViewCount(views);
+            
+            // Update document title
+            document.title = `${found.title} - Pimlico XHS™`;
+          }
+        } else {
+          setArticle(null);
         }
-        // Hide scheduled articles that haven't reached their publish time
-        if (article.status === 'scheduled' && article.scheduledAt) {
-          return new Date(article.scheduledAt) <= now;
-        }
-        return true;
-      });
-    }
+      } catch (error) {
+        console.error('Error fetching article:', error);
+        setArticle(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    const found = publishedArticles.find(a => a.slug === params.slug);
-    setArticle(found);
-    
-    // Generate view count based on article date and ID
-    if (found) {
-      const views = generateViewCount(found.date, found.id);
-      setViewCount(views);
-    }
-    
-    // Update document title for custom articles (since server-side metadata only works for sample articles)
-    if (found && !found.isSample) {
-      document.title = `${found.title} - Pimlico XHS™`;
-    }
+    loadArticle();
   }, [params.slug]);
 
   const handleCopyLink = () => {
@@ -130,6 +133,18 @@ export default function ArticlePageClient() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="bg-white min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+          <p className="text-gray-500">Loading article...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!article) {
     return (
