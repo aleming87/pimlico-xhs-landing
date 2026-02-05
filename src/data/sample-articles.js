@@ -9,9 +9,9 @@ export const sampleArticles = [
     author: 'Pimlico XHS™ Team',
     date: '2026-02-03',
     readTime: '7 min read',
-    image: '/Dashboard.png',
+    image: '/AIProductII.png',
     ogImage: '/articles/og-gambling.png', // OG image for social sharing
-    featured: true,
+    featured: false,
     tags: ['gambling-reform', 'licensing', 'marketing-restrictions', 'veikkaus', 'finland', 'nordic'],
     content: `
 ## Overview of Finland's New Gambling Act
@@ -115,8 +115,8 @@ Finland's new Gambling Act represents a significant opportunity for operators wi
     author: 'Pimlico XHS™ Team',
     date: '2026-02-01',
     readTime: '8 min read',
-    image: '/screenshots/dashboard.png',
-    featured: true,
+    image: '/AIProduct.png',
+    featured: false,
     tags: ['eu-ai-act', 'artificial-intelligence', 'compliance', 'financial-services', 'risk-classification'],
     content: `
 ## Introduction
@@ -196,8 +196,8 @@ The EU AI Act presents both challenges and opportunities for regulated entities.
     author: 'Pimlico XHS™ Team',
     date: '2026-01-28',
     readTime: '6 min read',
-    image: '/screenshots/dashboard.png',
-    featured: true,
+    image: '/AIProductIII.png',
+    featured: false,
     tags: ['psd3', 'payments', 'open-banking', 'european-union', 'api-compliance'],
     content: `
 ## Overview of PSD3
@@ -273,7 +273,7 @@ PSD3 represents a significant evolution in European payments regulation. Organiz
     author: 'Pimlico XHS™ Team',
     date: '2026-01-25',
     readTime: '5 min read',
-    image: '/screenshots/dashboard.png',
+    image: '/Dashboard.png',
     featured: false,
     tags: ['ukgc', 'remote-gambling', 'player-protection', 'responsible-gambling', 'uk'],
     content: `
@@ -312,11 +312,11 @@ Operators should review their current practices against the new guidance and imp
     slug: 'mica-crypto-compliance-framework',
     title: 'MiCA Compliance Framework: Building Your Crypto Strategy',
     excerpt: 'How crypto asset service providers can prepare for Markets in Crypto-Assets regulation requirements across the EU.',
-    category: 'Payments',
+    category: 'Crypto',
     author: 'Pimlico XHS™ Team',
     date: '2026-01-20',
     readTime: '7 min read',
-    image: '/screenshots/dashboard.png',
+    image: '/AI4.png',
     featured: false,
     tags: ['mica', 'crypto', 'digital-assets', 'european-union', 'licensing'],
     content: `
@@ -359,7 +359,7 @@ Organizations should develop a structured approach to MiCA compliance, including
     author: 'Pimlico XHS™ Team',
     date: '2026-01-15',
     readTime: '10 min read',
-    image: '/screenshots/dashboard.png',
+    image: '/AIProduct.png',
     featured: false,
     tags: ['ai-documentation', 'model-cards', 'compliance', 'financial-services', 'risk-assessment'],
     content: `
@@ -405,7 +405,7 @@ Documentation should be designed to satisfy multiple regulatory frameworks, incl
     author: 'Pimlico XHS™ Team',
     date: '2026-01-10',
     readTime: '9 min read',
-    image: '/screenshots/dashboard.png',
+    image: '/Map.png',
     featured: false,
     tags: ['multi-jurisdictional', 'gambling-licensing', 'ukgc', 'mga', 'gibraltar', 'isle-of-man'],
     content: `

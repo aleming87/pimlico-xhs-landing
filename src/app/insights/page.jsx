@@ -50,7 +50,8 @@ const generateViewCount = (dateStr, articleId) => {
 export default function InsightsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [articles, setArticles] = useState(sampleArticles);
+  const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedJurisdiction, setSelectedJurisdiction] = useState('All');
@@ -99,6 +100,7 @@ export default function InsightsPage() {
     });
     
     setArticles(allArticles);
+    setIsLoading(false);
   }, []);
 
   // Get all unique tags from articles for filtering
@@ -269,8 +271,20 @@ export default function InsightsPage() {
         </div>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="flex flex-col items-center justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+              <p className="text-gray-500">Loading articles...</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Featured Articles */}
-      {featuredArticles.length > 0 && (
+      {!isLoading && featuredArticles.length > 0 && (
         <div className="bg-gray-50 py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">Featured</h2>
@@ -327,6 +341,7 @@ export default function InsightsPage() {
       )}
 
       {/* All Articles */}
+      {!isLoading && (
       <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -490,6 +505,7 @@ export default function InsightsPage() {
           )}
         </div>
       </div>
+      )}
 
       {/* 7 Day Trial CTA */}
       <div className="bg-gray-900 py-16 sm:py-24">
