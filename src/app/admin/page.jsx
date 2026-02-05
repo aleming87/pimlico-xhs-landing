@@ -647,9 +647,9 @@ export default function AdminPage() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Check file size (max 4.5MB for Vercel Blob free tier)
-    if (file.size > 4.5 * 1024 * 1024) {
-      alert('Image is too large. Please use an image under 4.5MB.');
+    // Check file size (max 50MB for Vercel Blob)
+    if (file.size > 50 * 1024 * 1024) {
+      alert('Image is too large. Please use an image under 50MB.');
       return;
     }
 

@@ -6,7 +6,7 @@ import { Footer } from '@/components/footer';
 import Link from 'next/link';
 import { sampleArticles } from '@/data/sample-articles';
 
-const categories = ['All', 'AI Regulation', 'Payments', 'Gambling'];
+const categories = ['All', 'AI Regulation', 'Payments', 'Gambling', 'Crypto'];
 
 // Generate realistic view counts based on article age with variation
 const generateViewCount = (dateStr, articleId) => {
@@ -277,9 +277,26 @@ export default function InsightsPage() {
       {/* All Articles */}
       <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            {selectedCategory === 'All' ? 'All Articles' : selectedCategory}
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {selectedCategory === 'All' ? 'All Articles' : selectedCategory}
+            </h2>
+            <div className="flex items-center gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
+                    selectedCategory === cat
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularArticles.map((article) => (
               <Link 

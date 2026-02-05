@@ -10,6 +10,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    // Check file size (max 50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      return NextResponse.json({ error: 'File too large. Maximum size is 50MB.' }, { status: 400 });
+    }
+
     // Generate a unique filename
     const timestamp = Date.now();
     const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
@@ -34,9 +39,5 @@ export async function POST(request) {
   }
 }
 
-// Configure for large file uploads
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// Configure for large file uploads (50MB)
+export const maxDuration = 60; // 60 seconds timeout for large uploads
