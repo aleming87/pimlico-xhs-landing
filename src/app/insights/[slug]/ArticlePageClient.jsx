@@ -8,6 +8,29 @@ import { useParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { sampleArticles } from '@/data/sample-articles';
 
+// Generate realistic view counts based on article age with variation
+const generateViewCount = (dateStr, articleId) => {
+  const now = new Date();
+  const articleDate = new Date(dateStr);
+  
+  if (isNaN(articleDate)) return 50;
+  
+  // Calculate days since publication
+  const daysSincePublish = Math.max(0, Math.floor((now - articleDate) / (1000 * 60 * 60 * 24)));
+  
+  // Base views increase with age (logarithmic growth with daily additions)
+  const baseViews = 50 + Math.floor(Math.log2(daysSincePublish + 1) * 80);
+  
+  // Daily view accumulation (older articles have more accumulated views)
+  const dailyAccumulation = daysSincePublish * (15 + Math.floor((articleId * 7) % 10));
+  
+  // Add pseudo-random variation based on article ID for consistency
+  const seed = articleId * 7919 + daysSincePublish * 31;
+  const variation = ((seed % 100) / 100) * 0.3 - 0.15; // ±15% variation
+  
+  return Math.floor((baseViews + dailyAccumulation) * (1 + variation));
+};
+
 // Helper function to extract country/region mentioned in article
 function extractCountryFromArticle(article) {
   if (!article) return null;
@@ -65,21 +88,6 @@ export default function ArticlePageClient() {
     // Set current URL for sharing
     if (typeof window !== 'undefined') {
       setCurrentUrl(window.location.href);
-      
-      // Generate or retrieve view count for this article
-      const viewKey = `xhs-views-${params.slug}`;
-      const storedViews = localStorage.getItem(viewKey);
-      if (storedViews) {
-        // Increment by 1 each time
-        const newCount = parseInt(storedViews) + 1;
-        localStorage.setItem(viewKey, newCount.toString());
-        setViewCount(newCount);
-      } else {
-        // Initialize with random value between 165-236
-        const initialViews = Math.floor(Math.random() * (236 - 165 + 1)) + 165;
-        localStorage.setItem(viewKey, initialViews.toString());
-        setViewCount(initialViews);
-      }
     }
     
     // Check localStorage for custom articles first
@@ -113,6 +121,12 @@ export default function ArticlePageClient() {
     const allArticles = [...customArticles, ...visibleSamples];
     const found = allArticles.find(a => a.slug === params.slug);
     setArticle(found);
+    
+    // Generate view count based on article date and ID
+    if (found) {
+      const views = generateViewCount(found.date, found.id);
+      setViewCount(views);
+    }
     
     // Update document title for custom articles (since server-side metadata only works for sample articles)
     if (found && !found.isSample) {
