@@ -227,26 +227,6 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* Trusted by section */}
-        <div className="bg-gray-900 py-16 sm:py-20">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl lg:max-w-none">
-              <h2 className="text-center text-lg/8 font-semibold text-white">Trusted by</h2>
-              <div className="mx-auto mt-10 flex items-center justify-center gap-x-8 sm:gap-x-12">
-                <img
-                  src="/Microsoft_logo_(2012).svg"
-                  alt="Microsoft"
-                  className="max-h-8 w-auto object-contain brightness-0 invert"
-                />
-                <img
-                  src="/BVNK.svg"
-                  alt="BVNK"
-                  className="max-h-6 w-auto object-contain brightness-0 invert"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </main>
 
       <Footer />
