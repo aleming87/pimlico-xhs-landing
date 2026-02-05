@@ -371,26 +371,39 @@ export default function ArticlePageClient() {
                 {/* Show only the cutoff percentage of content with blur effect */}
                 <div className="relative">
                   <div className="blur-[2px] select-none">
-                    <ReactMarkdown
-                      components={{
-                        h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">{children}</h2>,
-                        h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-3">{children}</h3>,
-                        p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
-                        ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">{children}</ul>,
-                        ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2">{children}</ol>,
-                        li: ({children}) => <li className="text-gray-600">{children}</li>,
-                        strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
-                        a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 pointer-events-none">{children}</a>,
-                        blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500">{children}</blockquote>,
-                        code: ({children}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
-                        hr: () => <hr className="border-gray-200 my-8" />,
-                        table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
-                        th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left">{children}</th>,
-                        td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
-                      }}
-                    >
-                      {article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100)))}
-                    </ReactMarkdown>
+                    {article.contentType === 'html' ? (
+                      <div 
+                        className="article-content"
+                        dangerouslySetInnerHTML={{ 
+                          __html: article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100))) 
+                        }}
+                        style={{
+                          '--prose-headings-color': '#111827',
+                          '--prose-text-color': '#4B5563',
+                        }}
+                      />
+                    ) : (
+                      <ReactMarkdown
+                        components={{
+                          h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">{children}</h2>,
+                          h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-3">{children}</h3>,
+                          p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
+                          ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">{children}</ul>,
+                          ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2">{children}</ol>,
+                          li: ({children}) => <li className="text-gray-600">{children}</li>,
+                          strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
+                          a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 pointer-events-none">{children}</a>,
+                          blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500">{children}</blockquote>,
+                          code: ({children}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
+                          hr: () => <hr className="border-gray-200 my-8" />,
+                          table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
+                          th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left">{children}</th>,
+                          td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
+                        }}
+                      >
+                        {article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100)))}
+                      </ReactMarkdown>
+                    )}
                   </div>
                   
                   {/* Fade-out gradient overlay */}
@@ -449,6 +462,11 @@ export default function ArticlePageClient() {
                   </div>
                 </div>
               </>
+                        ) : article.contentType === 'html' ? (
+              <div 
+                className="article-content [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-gray-900 [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-gray-900 [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-gray-900 [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-gray-600 [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-gray-600 [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-gray-600 [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-gray-600 [&>strong]:text-gray-900 [&>strong]:font-semibold [&_a]:text-blue-600 [&_a:hover]:text-blue-500 [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-500 [&>hr]:border-gray-200 [&>hr]:my-8"
+                dangerouslySetInnerHTML={{ __html: article.content }}
+              />
             ) : (
               <ReactMarkdown
                 components={{

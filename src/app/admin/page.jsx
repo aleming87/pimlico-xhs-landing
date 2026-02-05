@@ -2,7 +2,7 @@
 
 // Admin Console for XHS Articles Management
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { sampleArticles as baseSampleArticles } from '@/data/sample-articles';
@@ -113,9 +113,11 @@ export default function AdminPage() {
   const [premiumCutoff, setPremiumCutoff] = useState(10); // Percentage of content shown before paywall
   const [selectedTagCategory, setSelectedTagCategory] = useState('topic');
   const [isUploading, setIsUploading] = useState(false);
+  const [editorMode, setEditorMode] = useState('visual'); // 'visual' or 'markdown'
+  const [htmlContent, setHtmlContent] = useState(''); // Store visual editor content as HTML
   
   // Rich text editor ref
-  const textareaRef = { current: null };
+  const editorRef = useRef(null);
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -248,7 +250,50 @@ export default function AdminPage() {
       .replace(/(^-|-$)/g, '');
   };
 
-  // Rich text editor formatting functions
+  // Visual editor formatting functions (uses execCommand for contenteditable)
+  const execFormat = (command, value = null) => {
+    document.execCommand(command, false, value);
+    // Focus back on editor
+    document.getElementById('rich-editor')?.focus();
+  };
+
+  const formatBoldVisual = () => execFormat('bold');
+  const formatItalicVisual = () => execFormat('italic');
+  const formatUnderlineVisual = () => execFormat('underline');
+  const formatStrikethroughVisual = () => execFormat('strikeThrough');
+  const formatBulletListVisual = () => execFormat('insertUnorderedList');
+  const formatNumberedListVisual = () => execFormat('insertOrderedList');
+  const formatQuoteVisual = () => execFormat('formatBlock', 'blockquote');
+  const formatH1Visual = () => execFormat('formatBlock', 'h1');
+  const formatH2Visual = () => execFormat('formatBlock', 'h2');
+  const formatH3Visual = () => execFormat('formatBlock', 'h3');
+  const formatParagraphVisual = () => execFormat('formatBlock', 'p');
+  const formatLinkVisual = () => {
+    const url = prompt('Enter URL:');
+    if (url) execFormat('createLink', url);
+  };
+  const formatUnlinkVisual = () => execFormat('unlink');
+  const formatAlignLeftVisual = () => execFormat('justifyLeft');
+  const formatAlignCenterVisual = () => execFormat('justifyCenter');
+  const formatAlignRightVisual = () => execFormat('justifyRight');
+  const formatIndentVisual = () => execFormat('indent');
+  const formatOutdentVisual = () => execFormat('outdent');
+  const formatClearVisual = () => execFormat('removeFormat');
+  const formatHRVisual = () => execFormat('insertHorizontalRule');
+
+  // Get content from visual editor as HTML
+  const getEditorContent = () => {
+    const editor = document.getElementById('rich-editor');
+    return editor ? editor.innerHTML : '';
+  };
+
+  // Set content in visual editor
+  const setEditorContent = (html) => {
+    const editor = document.getElementById('rich-editor');
+    if (editor) editor.innerHTML = html;
+  };
+
+  // Markdown formatting functions (for markdown mode)
   const insertFormatting = (before, after = '', placeholder = '') => {
     const textarea = document.getElementById('markdown-editor');
     if (!textarea) return;
@@ -261,7 +306,6 @@ export default function AdminPage() {
     const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
     setMarkdownContent(newText);
     
-    // Set cursor position after formatting
     setTimeout(() => {
       textarea.focus();
       const newPosition = start + before.length + selectedText.length + after.length;
@@ -318,7 +362,11 @@ export default function AdminPage() {
   };
 
   const handlePublish = async () => {
-    if (!articleMeta.title || !markdownContent) {
+    // Get content based on editor mode
+    const content = editorMode === 'visual' ? htmlContent : markdownContent;
+    const contentType = editorMode === 'visual' ? 'html' : 'markdown';
+    
+    if (!articleMeta.title || !content) {
       alert('Please fill in the title and content');
       return;
     }
@@ -354,7 +402,8 @@ export default function AdminPage() {
         date: articleDate,
         scheduledAt: scheduleEnabled ? scheduledDate : null,
         status: scheduleEnabled ? 'scheduled' : 'published',
-        content: markdownContent,
+        content: content,
+        contentType: contentType, // Track whether content is HTML or markdown
         isPremium: isPremium,
         premiumCutoff: isPremium ? premiumCutoff : null, // Percentage of content shown before paywall
       };
@@ -463,6 +512,10 @@ export default function AdminPage() {
       return;
     }
 
+    // Get content based on editor mode
+    const content = editorMode === 'visual' ? htmlContent : markdownContent;
+    const contentType = editorMode === 'visual' ? 'html' : 'markdown';
+
     try {
       const isEditingSample = editingArticle?.isSample === true;
       
@@ -480,7 +533,8 @@ export default function AdminPage() {
         date: new Date().toISOString().split('T')[0],
         scheduledAt: scheduleEnabled ? scheduledDate : null,
         status: 'draft',
-        content: markdownContent,
+        content: content,
+        contentType: contentType, // Track whether content is HTML or markdown
         lastSaved: new Date().toISOString(),
       };
 
@@ -543,6 +597,8 @@ export default function AdminPage() {
 
   const resetForm = () => {
     setMarkdownContent('');
+    setHtmlContent('');
+    setEditorMode('visual');
     setArticleImage('');
     setScheduleEnabled(false);
     setScheduledDate('');
@@ -553,6 +609,10 @@ export default function AdminPage() {
     setIsPremium(false);
     setPremiumCutoff(30);
     setSelectedTagCategory('topic');
+    // Clear the visual editor content
+    if (editorRef.current) {
+      editorRef.current.innerHTML = '';
+    }
     setArticleMeta({
       title: '',
       slug: '',
@@ -577,7 +637,25 @@ export default function AdminPage() {
       featured: article.featured || false,
       image: article.image || '',
     });
-    setMarkdownContent(article.content || '');
+    
+    // Determine editor mode based on content type
+    if (article.contentType === 'html') {
+      setEditorMode('visual');
+      setHtmlContent(article.content || '');
+      setMarkdownContent('');
+      // Update the visual editor after DOM renders
+      setTimeout(() => {
+        if (editorRef.current) {
+          editorRef.current.innerHTML = article.content || '';
+        }
+      }, 100);
+    } else {
+      // Default to markdown for backward compatibility
+      setEditorMode('markdown');
+      setMarkdownContent(article.content || '');
+      setHtmlContent('');
+    }
+    
     setArticleImage(article.image || '');
     setTags(article.tags || []);
     setPublicationDate(article.date || new Date().toISOString().split('T')[0]);
@@ -1446,8 +1524,67 @@ export default function AdminPage() {
               {/* Markdown Upload */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-300">Content (Markdown)</label>
+                  <label className="block text-sm font-medium text-gray-300">Content</label>
                   <div className="flex items-center gap-2">
+                    {/* Mode Toggle */}
+                    <div className="flex items-center bg-gray-700 rounded-lg p-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (editorMode === 'markdown' && markdownContent) {
+                            // Convert markdown to basic HTML when switching to visual
+                            const html = markdownContent
+                              .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                              .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                              .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                              .replace(/~~(.*?)~~/g, '<del>$1</del>')
+                              .replace(/\n/g, '<br>');
+                            setHtmlContent(html);
+                          }
+                          setEditorMode('visual');
+                        }}
+                        className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                          editorMode === 'visual' 
+                            ? 'bg-indigo-600 text-white' 
+                            : 'text-gray-400 hover:text-white'
+                        }`}
+                      >
+                        Visual
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (editorMode === 'visual' && htmlContent) {
+                            // Convert HTML to markdown when switching
+                            const md = htmlContent
+                              .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
+                              .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
+                              .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
+                              .replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
+                              .replace(/<b>(.*?)<\/b>/gi, '**$1**')
+                              .replace(/<em>(.*?)<\/em>/gi, '*$1*')
+                              .replace(/<i>(.*?)<\/i>/gi, '*$1*')
+                              .replace(/<del>(.*?)<\/del>/gi, '~~$1~~')
+                              .replace(/<br\s*\/?>/gi, '\n')
+                              .replace(/<\/p>/gi, '\n\n')
+                              .replace(/<p[^>]*>/gi, '')
+                              .replace(/<[^>]+>/g, '');
+                            setMarkdownContent(md);
+                          }
+                          setEditorMode('markdown');
+                        }}
+                        className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
+                          editorMode === 'markdown' 
+                            ? 'bg-indigo-600 text-white' 
+                            : 'text-gray-400 hover:text-white'
+                        }`}
+                      >
+                        Markdown
+                      </button>
+                    </div>
+                    
                     <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 cursor-pointer transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -1463,7 +1600,7 @@ export default function AdminPage() {
                     <button
                       type="button"
                       onClick={() => setShowPreview(true)}
-                      disabled={!markdownContent}
+                      disabled={editorMode === 'visual' ? !htmlContent : !markdownContent}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1475,153 +1612,291 @@ export default function AdminPage() {
                   </div>
                 </div>
                 
-                {/* Rich Text Editor Toolbar */}
-                <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-2 flex flex-wrap gap-1">
-                  {/* Headings */}
-                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
-                    <button type="button" onClick={formatH1} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 1">
-                      <span className="text-xs font-bold">H1</span>
-                    </button>
-                    <button type="button" onClick={formatH2} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 2">
-                      <span className="text-xs font-bold">H2</span>
-                    </button>
-                    <button type="button" onClick={formatH3} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 3">
-                      <span className="text-xs font-bold">H3</span>
-                    </button>
-                  </div>
-                  
-                  {/* Text Formatting */}
-                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
-                    <button type="button" onClick={formatBold} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bold (Ctrl+B)">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatItalic} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Italic (Ctrl+I)">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatStrikethrough} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Strikethrough">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 19h4v-3h-4v3zM5 4v3h5v3h4V7h5V4H5zM3 14h18v-2H3v2z"/></svg>
-                    </button>
-                  </div>
-                  
-                  {/* Lists */}
-                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
-                    <button type="button" onClick={formatBulletList} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bullet List">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatNumberedList} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Numbered List">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatQuote} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Quote">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
-                    </button>
-                  </div>
-                  
-                  {/* Code */}
-                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
-                    <button type="button" onClick={formatCode} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Inline Code">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatCodeBlock} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Code Block">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/><rect x="11" y="11" width="2" height="2"/></svg>
-                    </button>
-                  </div>
-                  
-                  {/* Insert */}
-                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
-                    <button type="button" onClick={formatLink} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Link">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatImage} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Image">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatTable} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Table">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h4v4H7V7zm0 6h4v4H7v-4zm6-6h4v4h-4V7zm0 6h4v4h-4v-4z"/></svg>
-                    </button>
-                    <button type="button" onClick={formatHorizontalRule} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Horizontal Rule">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 11h16v2H4z"/></svg>
-                    </button>
-                  </div>
-                  
-                  {/* Undo/Redo */}
-                  <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
-                    <button 
-                      type="button" 
-                      onClick={() => document.getElementById('markdown-editor')?.focus() && document.execCommand('undo')} 
-                      className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" 
-                      title="Undo (Ctrl+Z)"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
-                    </button>
-                    <button 
-                      type="button" 
-                      onClick={() => document.getElementById('markdown-editor')?.focus() && document.execCommand('redo')} 
-                      className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" 
-                      title="Redo (Ctrl+Y)"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>
-                    </button>
-                  </div>
-                  
-                  {/* Clear */}
-                  <div className="flex items-center">
-                    <button 
-                      type="button" 
-                      onClick={() => {
-                        if (markdownContent && confirm('Are you sure you want to clear all content?')) {
-                          setMarkdownContent('');
+                {editorMode === 'visual' ? (
+                  <>
+                    {/* Visual Rich Text Editor Toolbar */}
+                    <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-2 flex flex-wrap gap-1">
+                      {/* Headings */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatH1Visual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 1">
+                          <span className="text-xs font-bold">H1</span>
+                        </button>
+                        <button type="button" onClick={formatH2Visual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 2">
+                          <span className="text-xs font-bold">H2</span>
+                        </button>
+                        <button type="button" onClick={formatH3Visual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 3">
+                          <span className="text-xs font-bold">H3</span>
+                        </button>
+                        <button type="button" onClick={formatParagraphVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Paragraph">
+                          <span className="text-xs font-bold">P</span>
+                        </button>
+                      </div>
+                      
+                      {/* Text Formatting */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatBoldVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bold (Ctrl+B)">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatItalicVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Italic (Ctrl+I)">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatUnderlineVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Underline (Ctrl+U)">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatStrikethroughVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Strikethrough">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 19h4v-3h-4v3zM5 4v3h5v3h4V7h5V4H5zM3 14h18v-2H3v2z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Lists */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatBulletListVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bullet List">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatNumberedListVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Numbered List">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatQuoteVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Quote">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Alignment */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatAlignLeftVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Align Left">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatAlignCenterVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Align Center">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M7 15v2h10v-2H7zm-4 6h18v-2H3v2zm0-8h18v-2H3v2zm4-6v2h10V7H7zM3 3v2h18V3H3z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatAlignRightVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Align Right">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zM3 3v2h18V3H3z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Indent */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatOutdentVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Decrease Indent">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M11 17h10v-2H11v2zm-8-5l4 4V8l-4 4zm0 9h18v-2H3v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatIndentVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Increase Indent">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Insert */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatLinkVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Link">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatUnlinkVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Remove Link">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 7h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.43-.98 2.63-2.31 2.98l1.46 1.46C20.88 15.61 22 13.95 22 12c0-2.76-2.24-5-5-5zm-1 4h-2.19l2 2H16v-2zM2 4.27l3.11 3.11A4.991 4.991 0 002 12c0 2.76 2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1 0-1.59 1.21-2.9 2.76-3.07L8.73 11H8v2h2.73L13 15.27V17h1.73l4.01 4L20 19.74 3.27 3 2 4.27z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatHRVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Horizontal Rule">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 11h16v2H4z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Clear Formatting */}
+                      <div className="flex items-center">
+                        <button type="button" onClick={formatClearVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Clear Formatting">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3.27 5L2 6.27l6.97 6.97L6.5 19h3l1.57-3.66L16.73 21 18 19.73 3.55 5.27 3.27 5zM6 5v.18L8.82 8h2.4l-.72 1.68 2.1 2.1L14.21 8H20V5H6z"/></svg>
+                        </button>
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            if (htmlContent && confirm('Are you sure you want to clear all content?')) {
+                              setHtmlContent('');
+                              if (editorRef.current) editorRef.current.innerHTML = '';
+                            }
+                          }} 
+                          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded transition-colors" 
+                          title="Clear All"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Visual Editor (contenteditable) */}
+                    <div
+                      id="rich-editor"
+                      ref={editorRef}
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => setHtmlContent(e.currentTarget.innerHTML)}
+                      onKeyDown={(e) => {
+                        // Keyboard shortcuts
+                        if (e.ctrlKey || e.metaKey) {
+                          if (e.key === 'b') { e.preventDefault(); formatBoldVisual(); }
+                          if (e.key === 'i') { e.preventDefault(); formatItalicVisual(); }
+                          if (e.key === 'u') { e.preventDefault(); formatUnderlineVisual(); }
+                          if (e.key === 'k') { e.preventDefault(); formatLinkVisual(); }
                         }
-                      }} 
-                      className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded transition-colors" 
-                      title="Clear All"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </button>
-                  </div>
-                </div>
-                
-                {/* Editor Textarea */}
-                <textarea
-                  id="markdown-editor"
-                  value={markdownContent}
-                  onChange={(e) => setMarkdownContent(e.target.value)}
-                  placeholder="## Introduction&#10;&#10;Start writing your article here...&#10;&#10;### Key Points&#10;&#10;- Use the toolbar above for formatting&#10;- Or write Markdown directly&#10;- Preview your article before publishing"
-                  rows={20}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono text-sm resize-y min-h-[400px]"
-                  onKeyDown={(e) => {
-                    // Keyboard shortcuts
-                    if (e.ctrlKey || e.metaKey) {
-                      if (e.key === 'b') { e.preventDefault(); formatBold(); }
-                      if (e.key === 'i') { e.preventDefault(); formatItalic(); }
-                      if (e.key === 'k') { e.preventDefault(); formatLink(); }
-                    }
-                    // Tab key inserts spaces
-                    if (e.key === 'Tab') {
-                      e.preventDefault();
-                      insertAtCursor('  ');
-                    }
-                  }}
-                />
-                
-                {/* Editor Status Bar */}
-                <div className="flex items-center justify-between px-4 py-2 bg-gray-900 border border-gray-700 border-t-0 rounded-b-lg text-xs text-gray-500">
-                  <div className="flex items-center gap-4">
-                    <span>
-                      {markdownContent.trim() ? markdownContent.trim().split(/\s+/).length : 0} words
-                    </span>
-                    <span>
-                      {markdownContent.length} characters
-                    </span>
-                    <span>
-                      ~{Math.max(1, Math.ceil((markdownContent.trim() ? markdownContent.trim().split(/\s+/).length : 0) / 200))} min read
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span>Markdown</span>
-                    <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+B</span>
-                    <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+I</span>
-                    <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+K</span>
-                  </div>
-                </div>
+                      }}
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 prose prose-invert max-w-none min-h-[400px] overflow-y-auto"
+                      style={{ minHeight: '400px' }}
+                      dangerouslySetInnerHTML={{ __html: htmlContent || '<p style="color: #6b7280;">Start writing your article here...</p>' }}
+                      onFocus={(e) => {
+                        // Clear placeholder on focus
+                        if (e.currentTarget.innerHTML.includes('Start writing your article here...')) {
+                          e.currentTarget.innerHTML = '<p></p>';
+                        }
+                      }}
+                    />
+                    
+                    {/* Visual Editor Status Bar */}
+                    <div className="flex items-center justify-between px-4 py-2 bg-gray-900 border border-gray-700 border-t-0 rounded-b-lg text-xs text-gray-500">
+                      <div className="flex items-center gap-4">
+                        <span>
+                          {htmlContent ? htmlContent.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(w => w).length : 0} words
+                        </span>
+                        <span>
+                          {htmlContent ? htmlContent.replace(/<[^>]+>/g, '').length : 0} characters
+                        </span>
+                        <span>
+                          ~{Math.max(1, Math.ceil((htmlContent ? htmlContent.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(w => w).length : 0) / 200))} min read
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-indigo-400">Visual Editor</span>
+                        <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+B</span>
+                        <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+I</span>
+                        <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+U</span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Markdown Editor Toolbar */}
+                    <div className="bg-gray-800 border border-gray-700 rounded-t-lg p-2 flex flex-wrap gap-1">
+                      {/* Headings */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatH1} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 1">
+                          <span className="text-xs font-bold">H1</span>
+                        </button>
+                        <button type="button" onClick={formatH2} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 2">
+                          <span className="text-xs font-bold">H2</span>
+                        </button>
+                        <button type="button" onClick={formatH3} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 3">
+                          <span className="text-xs font-bold">H3</span>
+                        </button>
+                      </div>
+                      
+                      {/* Text Formatting */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatBold} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bold (Ctrl+B)">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatItalic} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Italic (Ctrl+I)">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatStrikethrough} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Strikethrough">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 19h4v-3h-4v3zM5 4v3h5v3h4V7h5V4H5zM3 14h18v-2H3v2z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Lists */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatBulletList} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Bullet List">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatNumberedList} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Numbered List">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2v1zm1-9h1V4H2v1h1v3zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2v1zm5-6v2h14V5H7zm0 14h14v-2H7v2zm0-6h14v-2H7v2z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatQuote} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Quote">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Code */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatCode} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Inline Code">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatCodeBlock} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Code Block">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/><rect x="11" y="11" width="2" height="2"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Insert */}
+                      <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
+                        <button type="button" onClick={formatLink} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Link">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatImage} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Image">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatTable} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Insert Table">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h4v4H7V7zm0 6h4v4H7v-4zm6-6h4v4h-4V7zm0 6h4v4h-4v-4z"/></svg>
+                        </button>
+                        <button type="button" onClick={formatHorizontalRule} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Horizontal Rule">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 11h16v2H4z"/></svg>
+                        </button>
+                      </div>
+                      
+                      {/* Clear */}
+                      <div className="flex items-center">
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            if (markdownContent && confirm('Are you sure you want to clear all content?')) {
+                              setMarkdownContent('');
+                            }
+                          }} 
+                          className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded transition-colors" 
+                          title="Clear All"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Markdown Editor Textarea */}
+                    <textarea
+                      id="markdown-editor"
+                      value={markdownContent}
+                      onChange={(e) => setMarkdownContent(e.target.value)}
+                      placeholder="## Introduction&#10;&#10;Start writing your article here...&#10;&#10;### Key Points&#10;&#10;- Use the toolbar above for formatting&#10;- Or write Markdown directly&#10;- Preview your article before publishing"
+                      rows={20}
+                      className="w-full px-4 py-3 bg-gray-800 border border-gray-700 border-t-0 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono text-sm resize-y min-h-[400px]"
+                      onKeyDown={(e) => {
+                        // Keyboard shortcuts
+                        if (e.ctrlKey || e.metaKey) {
+                          if (e.key === 'b') { e.preventDefault(); formatBold(); }
+                          if (e.key === 'i') { e.preventDefault(); formatItalic(); }
+                          if (e.key === 'k') { e.preventDefault(); formatLink(); }
+                        }
+                        // Tab key inserts spaces
+                        if (e.key === 'Tab') {
+                          e.preventDefault();
+                          insertAtCursor('  ');
+                        }
+                      }}
+                    />
+                    
+                    {/* Markdown Editor Status Bar */}
+                    <div className="flex items-center justify-between px-4 py-2 bg-gray-900 border border-gray-700 border-t-0 rounded-b-lg text-xs text-gray-500">
+                      <div className="flex items-center gap-4">
+                        <span>
+                          {markdownContent.trim() ? markdownContent.trim().split(/\s+/).length : 0} words
+                        </span>
+                        <span>
+                          {markdownContent.length} characters
+                        </span>
+                        <span>
+                          ~{Math.max(1, Math.ceil((markdownContent.trim() ? markdownContent.trim().split(/\s+/).length : 0) / 200))} min read
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-yellow-400">Markdown Mode</span>
+                        <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+B</span>
+                        <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+I</span>
+                        <span className="px-1.5 py-0.5 bg-gray-700 rounded text-gray-400">Ctrl+K</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Actions */}
@@ -1737,36 +2012,43 @@ export default function AdminPage() {
                   </div>
                 )}
                 <div className="prose prose-lg max-w-none">
-                  <ReactMarkdown
-                    components={{
-                      h1: ({children}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h1>,
-                      h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>,
-                      h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">{children}</h3>,
-                      h4: ({children}) => <h4 className="text-lg font-semibold text-gray-900 mt-4 mb-2">{children}</h4>,
-                      p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
-                      ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ul>,
-                      ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ol>,
-                      li: ({children}) => <li className="text-gray-600">{children}</li>,
-                      strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
-                      em: ({children}) => <em className="italic">{children}</em>,
-                      a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 underline">{children}</a>,
-                      blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500 my-4">{children}</blockquote>,
-                      code: ({inline, children}) => inline 
-                        ? <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>
-                        : <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code className="text-sm text-gray-800">{children}</code></pre>,
-                      pre: ({children}) => <div className="my-4">{children}</div>,
-                      hr: () => <hr className="border-gray-200 my-8" />,
-                      table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
-                      thead: ({children}) => <thead className="bg-gray-50">{children}</thead>,
-                      tbody: ({children}) => <tbody>{children}</tbody>,
-                      tr: ({children}) => <tr className="border-b border-gray-200">{children}</tr>,
-                      th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left font-semibold">{children}</th>,
-                      td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
-                      img: ({src, alt}) => <img src={src} alt={alt} className="max-w-full h-auto rounded-lg my-4" />,
-                    }}
-                  >
-                    {markdownContent}
-                  </ReactMarkdown>
+                  {editorMode === 'visual' ? (
+                    <div 
+                      className="article-content [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-gray-900 [&>h1]:mt-8 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-gray-900 [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-gray-900 [&>h3]:mt-6 [&>h3]:mb-3 [&>p]:text-gray-600 [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-gray-600 [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-gray-600 [&>ol]:mb-4 [&>ol]:space-y-2 [&_strong]:text-gray-900 [&_strong]:font-semibold [&_a]:text-blue-600 [&_a:hover]:text-blue-500 [&_a]:underline [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-500 [&>blockquote]:my-4 [&>hr]:border-gray-200 [&>hr]:my-8"
+                      dangerouslySetInnerHTML={{ __html: htmlContent }}
+                    />
+                  ) : (
+                    <ReactMarkdown
+                      components={{
+                        h1: ({children}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h1>,
+                        h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>,
+                        h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">{children}</h3>,
+                        h4: ({children}) => <h4 className="text-lg font-semibold text-gray-900 mt-4 mb-2">{children}</h4>,
+                        p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
+                        ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ul>,
+                        ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ol>,
+                        li: ({children}) => <li className="text-gray-600">{children}</li>,
+                        strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
+                        em: ({children}) => <em className="italic">{children}</em>,
+                        a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 underline">{children}</a>,
+                        blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500 my-4">{children}</blockquote>,
+                        code: ({inline, children}) => inline 
+                          ? <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>
+                          : <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code className="text-sm text-gray-800">{children}</code></pre>,
+                        pre: ({children}) => <div className="my-4">{children}</div>,
+                        hr: () => <hr className="border-gray-200 my-8" />,
+                        table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
+                        thead: ({children}) => <thead className="bg-gray-50">{children}</thead>,
+                        tbody: ({children}) => <tbody>{children}</tbody>,
+                        tr: ({children}) => <tr className="border-b border-gray-200">{children}</tr>,
+                        th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left font-semibold">{children}</th>,
+                        td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
+                        img: ({src, alt}) => <img src={src} alt={alt} className="max-w-full h-auto rounded-lg my-4" />,
+                      }}
+                    >
+                      {markdownContent}
+                    </ReactMarkdown>
+                  )}
                 </div>
               </div>
               <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
