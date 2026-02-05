@@ -317,7 +317,7 @@ export default function AdminPage() {
     });
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!articleMeta.title || !markdownContent) {
       alert('Please fill in the title and content');
       return;
