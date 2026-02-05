@@ -15,7 +15,9 @@ export const metadata = {
   publisher: 'Pimlico XHS™',
   metadataBase: new URL('https://pimlicosolutions.com'),
   icons: {
-    icon: '/favicon.ico',
+    icon: '/Pimlico_SI_Brandmark%20-%20II.png',
+    shortcut: '/Pimlico_SI_Brandmark%20-%20II.png',
+    apple: '/Pimlico_SI_Brandmark%20-%20II.png',
   },
   openGraph: {
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
