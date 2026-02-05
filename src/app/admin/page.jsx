@@ -211,9 +211,22 @@ export default function AdminPage() {
   const [marketingArticle, setMarketingArticle] = useState(null);
   const [marketingTemplate, setMarketingTemplate] = useState('linkedin');
   const [marketingTheme, setMarketingTheme] = useState('dark');
+  const [marketingTitle, setMarketingTitle] = useState('');
   const [marketingSubtitle, setMarketingSubtitle] = useState('');
-  const [marketingCta, setMarketingCta] = useState('Read on pimlico.com');
+  const [marketingCta, setMarketingCta] = useState('Read on pimlicosolutions.com');
   const [marketingLoading, setMarketingLoading] = useState(false);
+  const [marketingFontSize, setMarketingFontSize] = useState(100); // percentage scale
+  const [marketingFontWeight, setMarketingFontWeight] = useState('800');
+  const [marketingFont, setMarketingFont] = useState('system');
+  const [marketingPostText, setMarketingPostText] = useState('');
+  const [marketingDragTarget, setMarketingDragTarget] = useState(null);
+  const [marketingPositions, setMarketingPositions] = useState({
+    title: { x: 0.06, y: 0.33 },
+    subtitle: { x: 0.06, y: null }, // null = auto below title
+    logo: { x: 0.06, y: 0.88 },
+    cta: { x: 0.94, y: 0.88 }, // right-aligned
+    badge: { x: 0.06, y: 0.25 },
+  });
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -960,6 +973,13 @@ export default function AdminPage() {
     email: { width: 600, height: 300, label: 'Email Header', icon: '📧' },
   };
 
+  const FONT_OPTIONS = {
+    system: { label: 'System (Default)', family: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+    serif: { label: 'Serif', family: 'Georgia, "Times New Roman", serif' },
+    mono: { label: 'Monospace', family: '"SF Mono", "Fira Code", "Courier New", monospace' },
+    inter: { label: 'Inter', family: '"Inter", -apple-system, sans-serif' },
+  };
+
   // Helper: wrap text on canvas
   const wrapText = (ctx, text, x, y, maxWidth, lineHeight) => {
     const words = text.split(' ');
@@ -982,6 +1002,37 @@ export default function AdminPage() {
     return lines;
   };
 
+  // Load an image as a promise
+  const loadImage = (src) => new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+
+  // Draw image with aspect ratio preservation (cover mode)
+  const drawImageCover = (ctx, img, dx, dy, dw, dh, alpha = 1) => {
+    const imgRatio = img.width / img.height;
+    const destRatio = dw / dh;
+    let sx, sy, sw, sh;
+    if (imgRatio > destRatio) {
+      sh = img.height;
+      sw = sh * destRatio;
+      sx = (img.width - sw) / 2;
+      sy = 0;
+    } else {
+      sw = img.width;
+      sh = sw / destRatio;
+      sx = 0;
+      sy = (img.height - sh) / 2;
+    }
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+    ctx.restore();
+  };
+
   const generateMarketingAsset = async () => {
     if (!marketingArticle) return;
     setMarketingLoading(true);
@@ -996,6 +1047,9 @@ export default function AdminPage() {
     
     const isDark = marketingTheme === 'dark';
     const isGradient = marketingTheme === 'gradient';
+    const isLight = marketingTheme === 'light';
+    const fontFamily = FONT_OPTIONS[marketingFont]?.family || FONT_OPTIONS.system.family;
+    const fontScale = marketingFontSize / 100;
     
     // --- Draw background ---
     if (isGradient) {
@@ -1011,193 +1065,229 @@ export default function AdminPage() {
     }
     ctx.fillRect(0, 0, template.width, template.height);
 
-    // --- If article has image, draw it ---
+    // --- Draw article image (aspect-ratio-correct) ---
     const padding = Math.round(template.width * 0.06);
-    let imageDrawn = false;
     
     if (marketingArticle.image && marketingArticle.image.startsWith('http')) {
       try {
-        const img = await new Promise((resolve, reject) => {
-          const i = new window.Image();
-          i.crossOrigin = 'anonymous';
-          i.onload = () => resolve(i);
-          i.onerror = reject;
-          i.src = marketingArticle.image;
-        });
+        const img = await loadImage(marketingArticle.image);
         
         if (marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory') {
-          // For square/story: image fills top portion
           const imgH = template.height * 0.45;
-          ctx.save();
-          ctx.globalAlpha = 0.3;
-          ctx.drawImage(img, 0, 0, template.width, imgH);
-          ctx.globalAlpha = 1.0;
+          drawImageCover(ctx, img, 0, 0, template.width, imgH, 0.3);
           // Gradient fade over image
-          const fadeGrad = ctx.createLinearGradient(0, imgH * 0.4, 0, imgH);
-          fadeGrad.addColorStop(0, 'rgba(15,23,42,0)');
-          fadeGrad.addColorStop(1, isDark || isGradient ? '#0f172a' : '#ffffff');
+          const fadeGrad = ctx.createLinearGradient(0, imgH * 0.3, 0, imgH);
+          fadeGrad.addColorStop(0, isDark || isGradient ? 'rgba(15,23,42,0)' : 'rgba(255,255,255,0)');
+          fadeGrad.addColorStop(1, isDark ? '#0f172a' : isGradient ? '#0f2847' : '#ffffff');
           ctx.fillStyle = fadeGrad;
           ctx.fillRect(0, 0, template.width, imgH);
-          ctx.restore();
         } else {
-          // For landscape: image on right side
+          // For landscape: image on right side, aspect-ratio-correct
           const imgW = template.width * 0.38;
           const imgX = template.width - imgW;
-          ctx.save();
-          ctx.globalAlpha = 0.25;
-          ctx.drawImage(img, imgX, 0, imgW, template.height);
-          ctx.globalAlpha = 1.0;
+          drawImageCover(ctx, img, imgX, 0, imgW, template.height, 0.25);
           // Gradient fade from left
-          const fadeGrad = ctx.createLinearGradient(imgX - 50, 0, imgX + 80, 0);
-          fadeGrad.addColorStop(0, isDark || isGradient ? '#0f172a' : '#ffffff');
+          const fadeGrad = ctx.createLinearGradient(imgX - 60, 0, imgX + 100, 0);
+          fadeGrad.addColorStop(0, isDark ? '#0f172a' : isGradient ? '#0f2847' : '#ffffff');
           fadeGrad.addColorStop(1, 'rgba(15,23,42,0)');
           ctx.fillStyle = fadeGrad;
-          ctx.fillRect(imgX - 50, 0, imgW + 50, template.height);
-          ctx.restore();
+          ctx.fillRect(imgX - 60, 0, imgW + 60, template.height);
         }
-        imageDrawn = true;
       } catch (e) {
         console.log('Could not load article image for marketing asset', e);
       }
     }
     
     // --- Accent line ---
+    const pos = marketingPositions;
     const accentColor = '#3b82f6';
     ctx.fillStyle = accentColor;
-    if (marketingTemplate === 'instagramStory') {
-      ctx.fillRect(padding, template.height * 0.38, 80, 5);
-    } else if (marketingTemplate === 'instagram') {
-      ctx.fillRect(padding, template.height * 0.35, 80, 5);
-    } else {
-      ctx.fillRect(padding, template.height * 0.28, 60, 4);
-    }
+    const accentY = Math.round(pos.badge.y * template.height) - 20;
+    ctx.fillRect(Math.round(pos.badge.x * template.width), accentY, 60, 4);
     
     // --- Category badge ---
-    const category = marketingArticle.category || 'Regulatory Intelligence';
-    const badgeFontSize = Math.round(template.width * 0.018);
-    ctx.font = `700 ${badgeFontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-    const badgeText = category.toUpperCase();
-    const badgeMetrics = ctx.measureText(badgeText);
-    const badgePadH = 14;
-    const badgePadV = 8;
-    let badgeY;
-    if (marketingTemplate === 'instagramStory') {
-      badgeY = template.height * 0.40;
-    } else if (marketingTemplate === 'instagram') {
-      badgeY = template.height * 0.37;
-    } else {
-      badgeY = template.height * 0.33;
+    const category = marketingArticle.category || '';
+    if (category) {
+      const badgeFontSize = Math.round(template.width * 0.016 * fontScale);
+      ctx.font = `700 ${badgeFontSize}px ${fontFamily}`;
+      const badgeText = category.toUpperCase();
+      const badgeMetrics = ctx.measureText(badgeText);
+      const badgePadH = 14;
+      const badgePadV = 8;
+      const bx = Math.round(pos.badge.x * template.width);
+      const by = Math.round(pos.badge.y * template.height);
+      const bw = badgeMetrics.width + badgePadH * 2;
+      const bh = badgeFontSize + badgePadV * 2;
+      
+      ctx.fillStyle = isDark || isGradient ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.1)';
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 6);
+      ctx.fill();
+      ctx.fillStyle = '#3b82f6';
+      ctx.fillText(badgeText, bx + badgePadH, by + badgePadV + badgeFontSize * 0.85);
     }
     
-    // Badge background
-    ctx.fillStyle = isDark || isGradient ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.1)';
-    const badgeRadius = 6;
-    const bx = padding, by = badgeY;
-    const bw = badgeMetrics.width + badgePadH * 2, bh = badgeFontSize + badgePadV * 2;
-    ctx.beginPath();
-    ctx.roundRect(bx, by, bw, bh, badgeRadius);
-    ctx.fill();
-    ctx.fillStyle = '#3b82f6';
-    ctx.fillText(badgeText, padding + badgePadH, badgeY + badgePadV + badgeFontSize * 0.85);
-    
     // --- Title ---
+    const titleText = marketingTitle || marketingArticle.title;
     const titleColor = isDark || isGradient ? '#ffffff' : '#0f172a';
-    const titleSize = marketingTemplate === 'instagramStory' 
-      ? Math.round(template.width * 0.065)
+    const baseTitleSize = marketingTemplate === 'instagramStory' 
+      ? template.width * 0.065
       : marketingTemplate === 'instagram'
-        ? Math.round(template.width * 0.06)
-        : Math.round(template.width * 0.04);
+        ? template.width * 0.058
+        : template.width * 0.038;
+    const titleSize = Math.round(baseTitleSize * fontScale);
     ctx.fillStyle = titleColor;
-    ctx.font = `800 ${titleSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    ctx.font = `${marketingFontWeight} ${titleSize}px ${fontFamily}`;
     
-    const maxTextW = imageDrawn && marketingTemplate !== 'instagram' && marketingTemplate !== 'instagramStory' 
-      ? template.width * 0.55 
-      : template.width - padding * 2;
-    const titleY = badgeY + bh + titleSize * 0.8;
-    const titleLines = wrapText(ctx, marketingArticle.title, padding, titleY, maxTextW, titleSize * 1.2);
+    const isVertical = marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory';
+    const maxTextW = isVertical ? template.width - padding * 2 : template.width * 0.55;
+    const titleX = Math.round(pos.title.x * template.width);
+    const titleY = Math.round(pos.title.y * template.height);
+    const titleLines = wrapText(ctx, titleText, titleX, titleY, maxTextW, titleSize * 1.2);
     titleLines.forEach(line => {
-      ctx.fillText(line.text, padding, line.y);
+      ctx.fillText(line.text, titleX, line.y);
     });
     
     // --- Subtitle/Excerpt ---
     const lastTitleY = titleLines.length > 0 ? titleLines[titleLines.length - 1].y : titleY;
-    const subtitleText = marketingSubtitle || marketingArticle.excerpt || '';
+    const subtitleText = marketingSubtitle || '';
     if (subtitleText) {
-      const subtitleSize = Math.round(titleSize * 0.55);
-      ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.6)' : 'rgba(15,23,42,0.6)';
-      ctx.font = `400 ${subtitleSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-      const subtitleY = lastTitleY + titleSize * 1.0;
-      const subtitleLines = wrapText(ctx, subtitleText, padding, subtitleY, maxTextW, subtitleSize * 1.5);
-      subtitleLines.slice(0, 2).forEach(line => { // Max 2 lines
-        ctx.fillText(line.text, padding, line.y);
+      const subtitleSize = Math.round(titleSize * 0.5);
+      ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.6)' : 'rgba(15,23,42,0.55)';
+      ctx.font = `400 ${subtitleSize}px ${fontFamily}`;
+      const subX = pos.subtitle.x !== undefined ? Math.round((pos.subtitle.x || pos.title.x) * template.width) : titleX;
+      const subY = pos.subtitle.y ? Math.round(pos.subtitle.y * template.height) : lastTitleY + titleSize * 0.9;
+      const subtitleLines = wrapText(ctx, subtitleText, subX, subY, maxTextW, subtitleSize * 1.5);
+      subtitleLines.slice(0, 2).forEach(line => {
+        ctx.fillText(line.text, subX, line.y);
       });
     }
     
-    // --- Bottom bar with logo + CTA ---
-    const bottomH = Math.round(template.height * 0.12);
+    // --- Bottom bar with logos + CTA ---
+    const bottomH = Math.round(template.height * 0.13);
     const bottomY = template.height - bottomH;
     
-    // Subtle top border
-    ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+    ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
     ctx.fillRect(0, bottomY, template.width, 1);
-    
-    // Bottom background
-    ctx.fillStyle = isDark || isGradient ? 'rgba(0,0,0,0.3)' : 'rgba(249,250,251,0.9)';
+    ctx.fillStyle = isDark || isGradient ? 'rgba(0,0,0,0.35)' : 'rgba(249,250,251,0.92)';
     ctx.fillRect(0, bottomY + 1, template.width, bottomH);
     
-    // "Pimlico XHS™" brand
-    const brandSize = Math.round(template.width * 0.022);
-    ctx.font = `700 ${brandSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-    ctx.fillStyle = isDark || isGradient ? '#ffffff' : '#0f172a';
-    const brandY = bottomY + bottomH / 2 + brandSize * 0.35;
-    ctx.fillText('Pimlico XHS™', padding, brandY);
+    // --- Draw Pimlico + XHS logos ---
+    const logoY = bottomY + bottomH * 0.2;
+    const logoH = bottomH * 0.55;
+    const logoX = Math.round(pos.logo.x * template.width);
     
-    // Regulatory Intelligence tagline
-    const taglineSize = Math.round(brandSize * 0.7);
-    ctx.font = `400 ${taglineSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-    ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.5)' : 'rgba(15,23,42,0.5)';
-    ctx.fillText('Regulatory Intelligence', padding + ctx.measureText('Pimlico XHS™  ').width + 10, brandY);
-    
-    // CTA on right
-    if (marketingCta) {
-      const ctaSize = Math.round(brandSize * 0.85);
-      ctx.font = `600 ${ctaSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-      ctx.fillStyle = '#3b82f6';
-      const ctaW = ctx.measureText(marketingCta).width;
-      ctx.fillText(marketingCta, template.width - padding - ctaW, brandY);
+    try {
+      // Pimlico logo
+      const pimlicoLogoSrc = isDark || isGradient ? '/Pimlico_Logo_Inverted.png' : '/Pimlico_Logo.png';
+      const pimlicoLogo = await loadImage(pimlicoLogoSrc);
+      const pimlicoW = (pimlicoLogo.width / pimlicoLogo.height) * logoH;
+      ctx.drawImage(pimlicoLogo, logoX, logoY, pimlicoW, logoH);
+      
+      // Separator
+      const sepX = logoX + pimlicoW + 16;
+      ctx.fillStyle = isDark || isGradient ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
+      ctx.fillRect(sepX, logoY + 4, 1.5, logoH - 8);
+      
+      // XHS logo
+      const xhsLogoSrc = isDark || isGradient ? '/XHS_Logo_White.png' : '/XHS Logo BLUE on WHITE.png';
+      const xhsLogo = await loadImage(xhsLogoSrc);
+      const xhsW = (xhsLogo.width / xhsLogo.height) * logoH;
+      ctx.drawImage(xhsLogo, sepX + 16, logoY, xhsW, logoH);
+    } catch (e) {
+      // Fallback to text if logos don't load
+      const brandSize = Math.round(template.width * 0.022);
+      ctx.font = `700 ${brandSize}px ${fontFamily}`;
+      ctx.fillStyle = isDark || isGradient ? '#ffffff' : '#0f172a';
+      ctx.fillText('Pimlico XHS™', logoX, bottomY + bottomH / 2 + brandSize * 0.35);
     }
     
-    // --- Tags pills (if space) ---
-    if (marketingArticle.tags && marketingArticle.tags.length > 0 && (marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory')) {
-      const tagFontSize = Math.round(template.width * 0.022);
-      ctx.font = `500 ${tagFontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-      let tagX = padding;
-      const tagY = bottomY - tagFontSize * 2.5;
-      marketingArticle.tags.slice(0, 4).forEach(tag => {
-        const text = `#${tag}`;
-        const w = ctx.measureText(text).width + 16;
-        ctx.fillStyle = isDark || isGradient ? 'rgba(59,130,246,0.12)' : 'rgba(59,130,246,0.08)';
-        ctx.beginPath();
-        ctx.roundRect(tagX, tagY, w, tagFontSize + 12, 4);
-        ctx.fill();
-        ctx.fillStyle = '#60a5fa';
-        ctx.fillText(text, tagX + 8, tagY + tagFontSize + 2);
-        tagX += w + 8;
-      });
+    // --- CTA on right ---
+    if (marketingCta) {
+      const ctaSize = Math.round(template.width * 0.018 * fontScale);
+      ctx.font = `600 ${ctaSize}px ${fontFamily}`;
+      ctx.fillStyle = '#3b82f6';
+      const ctaW = ctx.measureText(marketingCta).width;
+      const ctaX = template.width - padding - ctaW;
+      ctx.fillText(marketingCta, ctaX, bottomY + bottomH / 2 + ctaSize * 0.35);
     }
     
     setMarketingLoading(false);
   };
 
+  // Canvas drag handling
+  const handleCanvasMouseDown = (e) => {
+    const canvas = marketingCanvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX / canvas.width;
+    const y = (e.clientY - rect.top) * scaleY / canvas.height;
+    
+    // Determine which element was clicked (check proximity)
+    const threshold = 0.08;
+    const pos = marketingPositions;
+    
+    if (Math.abs(x - pos.logo.x) < threshold && Math.abs(y - pos.logo.y) < threshold) {
+      setMarketingDragTarget('logo');
+    } else if (Math.abs(x - pos.badge.x) < threshold && Math.abs(y - pos.badge.y) < threshold) {
+      setMarketingDragTarget('badge');
+    } else if (Math.abs(x - pos.title.x) < threshold && Math.abs(y - pos.title.y) < threshold) {
+      setMarketingDragTarget('title');
+    }
+  };
+
+  const handleCanvasMouseMove = (e) => {
+    if (!marketingDragTarget) return;
+    const canvas = marketingCanvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    
+    setMarketingPositions(prev => ({
+      ...prev,
+      [marketingDragTarget]: { x: Math.max(0.02, Math.min(0.98, x)), y: Math.max(0.02, Math.min(0.98, y)) }
+    }));
+  };
+
+  const handleCanvasMouseUp = () => {
+    if (marketingDragTarget) {
+      setMarketingDragTarget(null);
+      // Re-generate after drag
+      setTimeout(() => generateMarketingAsset(), 50);
+    }
+  };
+
   const downloadMarketingAsset = () => {
     const canvas = marketingCanvasRef.current;
     if (!canvas) return;
-    const template = MARKETING_TEMPLATES[marketingTemplate];
     const link = document.createElement('a');
     const articleSlug = marketingArticle?.slug || 'asset';
     link.download = `pimlico-${articleSlug}-${marketingTemplate}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
+  };
+
+  const generatePostText = () => {
+    if (!marketingArticle) return;
+    const title = marketingTitle || marketingArticle.title;
+    const excerpt = marketingArticle.excerpt || '';
+    const category = marketingArticle.category || '';
+    const tags = (marketingArticle.tags || []).slice(0, 5).map(t => `#${t.replace(/\\s+/g, '')}`).join(' ');
+    
+    let post = '';
+    if (marketingTemplate === 'linkedin') {
+      post = `🔍 ${title}\n\n${excerpt}\n\nStay ahead of regulatory change — read the full analysis on Pimlico XHS™.\n\n📖 Read more → pimlicosolutions.com/insights/${marketingArticle.slug}\n\n${tags}${category ? `\\n#${category.replace(/\\s+/g, '')}` : ''} #RegulatoryIntelligence #Compliance`;
+    } else if (marketingTemplate === 'twitter') {
+      post = `🔍 ${title}\n\n${excerpt.slice(0, 180)}${excerpt.length > 180 ? '...' : ''}\n\n📖 pimlicosolutions.com/insights/${marketingArticle.slug}\n\n${tags}`;
+    } else if (marketingTemplate === 'instagram' || marketingTemplate === 'instagramStory') {
+      post = `${title}\n\n${excerpt}\n\n📖 Link in bio\n\n.\n.\n.\n${tags} #RegulatoryIntelligence #Compliance #RegTech ${category ? `#${category.replace(/\\s+/g, '')}` : ''}`;
+    } else {
+      post = `${title}\n\n${excerpt}\n\n📖 Read more: pimlicosolutions.com/insights/${marketingArticle.slug}`;
+    }
+    setMarketingPostText(post);
   };
 
   return (
@@ -2443,184 +2533,313 @@ export default function AdminPage() {
 
         {/* Marketing Assets Tab */}
         {activeTab === 'marketing' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left: Controls */}
-            <div className="lg:col-span-1 space-y-6">
-              {/* Article Selection */}
-              <div className="bg-gray-800 rounded-xl p-6">
-                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                  <span>📄</span> Select Article
-                </h3>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {articles.map(article => (
-                    <button
-                      key={article.id}
-                      type="button"
-                      onClick={() => {
-                        setMarketingArticle(article);
-                        setMarketingSubtitle(article.excerpt || '');
-                      }}
-                      className={`w-full text-left p-3 rounded-lg transition-colors flex items-center gap-3 ${
-                        marketingArticle?.id === article.id
-                          ? 'bg-indigo-900/50 border border-indigo-500'
-                          : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
-                      }`}
-                    >
-                      {article.image ? (
-                        <img src={article.image} alt="" className="w-10 h-10 rounded object-cover flex-shrink-0" />
-                      ) : (
-                        <div className="w-10 h-10 rounded bg-gray-600 flex-shrink-0 flex items-center justify-center text-gray-400">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left: Controls */}
+              <div className="lg:col-span-1 space-y-5">
+                {/* Article Selection */}
+                <div className="bg-gray-800 rounded-xl p-5">
+                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
+                    <span>📄</span> Select Article
+                  </h3>
+                  <div className="space-y-1.5 max-h-52 overflow-y-auto">
+                    {articles.map(article => (
+                      <button
+                        key={article.id}
+                        type="button"
+                        onClick={() => {
+                          setMarketingArticle(article);
+                          setMarketingTitle(article.title || '');
+                          setMarketingSubtitle(article.excerpt || '');
+                          setMarketingPositions({
+                            title: { x: 0.06, y: 0.33 },
+                            subtitle: { x: 0.06, y: null },
+                            logo: { x: 0.06, y: 0.88 },
+                            cta: { x: 0.94, y: 0.88 },
+                            badge: { x: 0.06, y: 0.25 },
+                          });
+                        }}
+                        className={`w-full text-left p-2.5 rounded-lg transition-colors flex items-center gap-3 ${
+                          marketingArticle?.id === article.id
+                            ? 'bg-indigo-900/50 border border-indigo-500'
+                            : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
+                        }`}
+                      >
+                        {article.image ? (
+                          <img src={article.image} alt="" className="w-9 h-9 rounded object-cover flex-shrink-0" />
+                        ) : (
+                          <div className="w-9 h-9 rounded bg-gray-600 flex-shrink-0 flex items-center justify-center text-gray-400">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="text-white text-sm font-medium truncate">{article.title}</p>
+                          <p className="text-gray-400 text-xs">{article.category}</p>
                         </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Template + Theme Row */}
+                <div className="bg-gray-800 rounded-xl p-5">
+                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
+                    <span>📐</span> Template & Theme
+                  </h3>
+                  <div className="grid grid-cols-3 gap-1.5 mb-4">
+                    {Object.entries(MARKETING_TEMPLATES).map(([key, tmpl]) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setMarketingTemplate(key)}
+                        className={`p-2 rounded-lg text-center transition-colors ${
+                          marketingTemplate === key
+                            ? 'bg-indigo-900/50 border border-indigo-500'
+                            : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
+                        }`}
+                      >
+                        <span className="text-base">{tmpl.icon}</span>
+                        <p className="text-white text-xs font-medium mt-0.5">{tmpl.label}</p>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    {[
+                      { key: 'dark', label: 'Dark', preview: 'bg-gray-900' },
+                      { key: 'light', label: 'Light', preview: 'bg-white' },
+                      { key: 'gradient', label: 'Gradient', preview: 'bg-gradient-to-br from-blue-900 to-gray-900' },
+                    ].map(t => (
+                      <button
+                        key={t.key}
+                        type="button"
+                        onClick={() => setMarketingTheme(t.key)}
+                        className={`flex-1 p-2 rounded-lg transition-colors border ${
+                          marketingTheme === t.key
+                            ? 'border-indigo-500 bg-indigo-900/30'
+                            : 'border-gray-600 hover:border-gray-500'
+                        }`}
+                      >
+                        <div className={`w-full h-5 rounded ${t.preview} border border-gray-600 mb-1`} />
+                        <p className="text-white text-xs text-center">{t.label}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Text Content */}
+                <div className="bg-gray-800 rounded-xl p-5">
+                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
+                    <span>✏️</span> Text Content
+                  </h3>
+                  
+                  <label className="block text-xs text-gray-400 mb-1">Title</label>
+                  <textarea
+                    value={marketingTitle}
+                    onChange={(e) => setMarketingTitle(e.target.value)}
+                    placeholder="Article title..."
+                    rows={2}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none mb-3"
+                  />
+                  
+                  <label className="block text-xs text-gray-400 mb-1">Subtitle</label>
+                  <textarea
+                    value={marketingSubtitle}
+                    onChange={(e) => setMarketingSubtitle(e.target.value)}
+                    placeholder="Optional subtitle..."
+                    rows={2}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none mb-3"
+                  />
+                  
+                  <label className="block text-xs text-gray-400 mb-1">Call to Action</label>
+                  <input
+                    type="text"
+                    value={marketingCta}
+                    onChange={(e) => setMarketingCta(e.target.value)}
+                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                {/* Font Settings */}
+                <div className="bg-gray-800 rounded-xl p-5">
+                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2 text-sm">
+                    <span>🔤</span> Font Settings
+                  </h3>
+                  
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                      <label className="block text-xs text-gray-400 mb-1">Font Family</label>
+                      <select
+                        value={marketingFont}
+                        onChange={(e) => setMarketingFont(e.target.value)}
+                        className="w-full px-2 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500"
+                      >
+                        {Object.entries(FONT_OPTIONS).map(([key, opt]) => (
+                          <option key={key} value={key}>{opt.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-400 mb-1">Font Weight</label>
+                      <select
+                        value={marketingFontWeight}
+                        onChange={(e) => setMarketingFontWeight(e.target.value)}
+                        className="w-full px-2 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500"
+                      >
+                        <option value="400">Regular (400)</option>
+                        <option value="500">Medium (500)</option>
+                        <option value="600">Semibold (600)</option>
+                        <option value="700">Bold (700)</option>
+                        <option value="800">Extra Bold (800)</option>
+                        <option value="900">Black (900)</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <label className="block text-xs text-gray-400 mb-1">Font Size Scale: {marketingFontSize}%</label>
+                  <input
+                    type="range"
+                    min="60"
+                    max="150"
+                    value={marketingFontSize}
+                    onChange={(e) => setMarketingFontSize(parseInt(e.target.value))}
+                    className="w-full accent-indigo-500"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-0.5">
+                    <span>60%</span>
+                    <span>100%</span>
+                    <span>150%</span>
+                  </div>
+                </div>
+
+                {/* Generate Button */}
+                <button
+                  type="button"
+                  onClick={generateMarketingAsset}
+                  disabled={!marketingArticle || marketingLoading}
+                  className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                >
+                  {marketingLoading ? (
+                    <>
+                      <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>🖼️ Generate Asset</>
+                  )}
+                </button>
+              </div>
+
+              {/* Right: Canvas Preview */}
+              <div className="lg:col-span-2 space-y-4">
+                <div className="bg-gray-800 rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-white font-semibold flex items-center gap-2">
+                      <span>👁️</span> Preview
+                      {marketingArticle && (
+                        <span className="text-gray-400 text-sm font-normal">
+                          — {MARKETING_TEMPLATES[marketingTemplate].label} ({MARKETING_TEMPLATES[marketingTemplate].width}×{MARKETING_TEMPLATES[marketingTemplate].height})
+                        </span>
                       )}
-                      <div className="min-w-0">
-                        <p className="text-white text-sm font-medium truncate">{article.title}</p>
-                        <p className="text-gray-400 text-xs">{article.category}</p>
-                      </div>
-                    </button>
-                  ))}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      {marketingArticle && (
+                        <button
+                          type="button"
+                          onClick={() => setMarketingPositions({
+                            title: { x: 0.06, y: 0.33 },
+                            subtitle: { x: 0.06, y: null },
+                            logo: { x: 0.06, y: 0.88 },
+                            cta: { x: 0.94, y: 0.88 },
+                            badge: { x: 0.06, y: 0.25 },
+                          })}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 transition-colors"
+                        >
+                          ↺ Reset Layout
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={downloadMarketingAsset}
+                        disabled={!marketingArticle}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        Download PNG
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {!marketingArticle ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+                      <svg className="w-16 h-16 mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-lg font-medium mb-1">Select an article to get started</p>
+                      <p className="text-sm">Choose an article, pick a template, then generate your asset</p>
+                    </div>
+                  ) : (
+                    <div className="flex justify-center">
+                      <canvas
+                        ref={marketingCanvasRef}
+                        className={`max-w-full h-auto rounded-lg border border-gray-700 shadow-xl ${marketingDragTarget ? 'cursor-grabbing' : 'cursor-grab'}`}
+                        style={{ maxHeight: '65vh' }}
+                        onMouseDown={handleCanvasMouseDown}
+                        onMouseMove={handleCanvasMouseMove}
+                        onMouseUp={handleCanvasMouseUp}
+                        onMouseLeave={handleCanvasMouseUp}
+                      />
+                    </div>
+                  )}
+                  
+                  {marketingArticle && (
+                    <p className="mt-3 text-xs text-gray-500">💡 Drag the title, badge, or logo on the canvas to reposition. Click "Generate" or change settings to update.</p>
+                  )}
                 </div>
               </div>
-
-              {/* Template Selection */}
-              <div className="bg-gray-800 rounded-xl p-6">
-                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                  <span>📐</span> Template
-                </h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(MARKETING_TEMPLATES).map(([key, tmpl]) => (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => setMarketingTemplate(key)}
-                      className={`p-3 rounded-lg text-left transition-colors ${
-                        marketingTemplate === key
-                          ? 'bg-indigo-900/50 border border-indigo-500'
-                          : 'bg-gray-700/50 hover:bg-gray-700 border border-transparent'
-                      }`}
-                    >
-                      <span className="text-lg">{tmpl.icon}</span>
-                      <p className="text-white text-sm font-medium mt-1">{tmpl.label}</p>
-                      <p className="text-gray-500 text-xs">{tmpl.width}×{tmpl.height}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Theme & Style */}
-              <div className="bg-gray-800 rounded-xl p-6">
-                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                  <span>🎨</span> Theme
-                </h3>
-                <div className="flex gap-2 mb-4">
-                  {[
-                    { key: 'dark', label: 'Dark', preview: 'bg-gray-900' },
-                    { key: 'light', label: 'Light', preview: 'bg-white' },
-                    { key: 'gradient', label: 'Gradient', preview: 'bg-gradient-to-br from-blue-900 to-gray-900' },
-                  ].map(t => (
-                    <button
-                      key={t.key}
-                      type="button"
-                      onClick={() => setMarketingTheme(t.key)}
-                      className={`flex-1 p-3 rounded-lg transition-colors border ${
-                        marketingTheme === t.key
-                          ? 'border-indigo-500 bg-indigo-900/30'
-                          : 'border-gray-600 hover:border-gray-500'
-                      }`}
-                    >
-                      <div className={`w-full h-6 rounded ${t.preview} border border-gray-600 mb-2`} />
-                      <p className="text-white text-xs text-center">{t.label}</p>
-                    </button>
-                  ))}
-                </div>
-                
-                {/* Subtitle Override */}
-                <label className="block text-sm text-gray-400 mb-1.5">Subtitle / Tagline</label>
-                <textarea
-                  value={marketingSubtitle}
-                  onChange={(e) => setMarketingSubtitle(e.target.value)}
-                  placeholder="Optional subtitle shown below title..."
-                  rows={2}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none"
-                />
-                
-                {/* CTA Text */}
-                <label className="block text-sm text-gray-400 mb-1.5 mt-3">Call to Action</label>
-                <input
-                  type="text"
-                  value={marketingCta}
-                  onChange={(e) => setMarketingCta(e.target.value)}
-                  placeholder="Read on pimlico.com"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              {/* Generate Button */}
-              <button
-                type="button"
-                onClick={generateMarketingAsset}
-                disabled={!marketingArticle || marketingLoading}
-                className="w-full py-3.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-              >
-                {marketingLoading ? (
-                  <>
-                    <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                    Generating...
-                  </>
-                ) : (
-                  <>🖼️ Generate Asset</>
-                )}
-              </button>
             </div>
 
-            {/* Right: Canvas Preview */}
-            <div className="lg:col-span-2">
+            {/* Post Text Generator */}
+            {marketingArticle && (
               <div className="bg-gray-800 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-white font-semibold flex items-center gap-2">
-                    <span>👁️</span> Preview
-                    {marketingArticle && (
-                      <span className="text-gray-400 text-sm font-normal">
-                        — {MARKETING_TEMPLATES[marketingTemplate].label} ({MARKETING_TEMPLATES[marketingTemplate].width}×{MARKETING_TEMPLATES[marketingTemplate].height})
-                      </span>
-                    )}
+                    <span>📝</span> Post Text for {MARKETING_TEMPLATES[marketingTemplate].label}
                   </h3>
-                  <button
-                    type="button"
-                    onClick={downloadMarketingAsset}
-                    disabled={!marketingArticle}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    Download PNG
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={generatePostText}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-500 transition-colors"
+                    >
+                      ✨ Generate Post Text
+                    </button>
+                    {marketingPostText && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(marketingPostText);
+                        }}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 text-white text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
+                      >
+                        📋 Copy
+                      </button>
+                    )}
+                  </div>
                 </div>
-                
-                {!marketingArticle ? (
-                  <div className="flex flex-col items-center justify-center py-20 text-gray-500">
-                    <svg className="w-16 h-16 mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <p className="text-lg font-medium mb-1">Select an article to get started</p>
-                    <p className="text-sm">Choose an article from the left panel, pick a template, then generate your asset</p>
-                  </div>
-                ) : (
-                  <div className="flex justify-center">
-                    <canvas
-                      ref={marketingCanvasRef}
-                      className="max-w-full h-auto rounded-lg border border-gray-700 shadow-xl"
-                      style={{ maxHeight: '70vh' }}
-                    />
-                  </div>
-                )}
-                
-                {marketingArticle && (
-                  <div className="mt-4 flex items-center gap-3 text-sm text-gray-400">
-                    <span>💡 Tip: Change the template, theme, or subtitle and click Generate again to iterate.</span>
-                  </div>
+                <textarea
+                  value={marketingPostText}
+                  onChange={(e) => setMarketingPostText(e.target.value)}
+                  placeholder="Click 'Generate Post Text' to create a ready-to-post caption for this platform..."
+                  rows={8}
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y font-mono leading-relaxed"
+                />
+                {marketingPostText && (
+                  <p className="mt-2 text-xs text-gray-500">
+                    {marketingPostText.length} characters • Edit the text above to customise before copying
+                  </p>
                 )}
               </div>
-            </div>
+            )}
           </div>
         )}
 
