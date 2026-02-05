@@ -250,12 +250,12 @@ export default function InsightsPage() {
             </div>
 
             {/* Category Filter */}
-            <div className="mt-8 flex justify-center gap-3 flex-wrap">
+            <div className="mt-8 flex justify-center gap-2 sm:gap-3 flex-wrap px-2">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-sm font-semibold transition-all active:scale-95 ${
                     selectedCategory === category
                       ? 'bg-blue-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -273,13 +273,13 @@ export default function InsightsPage() {
       {featuredArticles.length > 0 && (
         <div className="bg-gray-50 py-12 sm:py-16">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Featured</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 sm:mb-8">Featured</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {featuredArticles.map((article) => (
                 <Link 
                   key={article.id} 
                   href={`/insights/${article.slug}`}
-                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200"
+                  className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200 active:scale-[0.98]"
                 >
                   <div className="aspect-video bg-gradient-to-br from-blue-500 to-blue-700 relative overflow-hidden">
                     {article.image ? (
@@ -329,8 +329,8 @@ export default function InsightsPage() {
       {/* All Articles */}
       <div className="bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
               {selectedCategory === 'All' ? 'All Articles' : selectedCategory}
               {hasActiveFilters && (
                 <span className="ml-2 text-sm font-normal text-gray-500">
@@ -338,7 +338,7 @@ export default function InsightsPage() {
                 </span>
               )}
             </h2>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 self-end sm:self-auto">
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
@@ -370,8 +370,8 @@ export default function InsightsPage() {
 
           {/* Expandable Filter Panel */}
           {showFilters && (
-            <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-200 animate-in slide-in-from-top-2 duration-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="mb-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {/* Search */}
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1.5">Search</label>
@@ -435,12 +435,12 @@ export default function InsightsPage() {
               </div>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {regularArticles.map((article) => (
               <Link 
                 key={article.id} 
                 href={`/insights/${article.slug}`}
-                className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
+                className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 active:scale-[0.98]"
               >
                 <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                   {article.image ? (
