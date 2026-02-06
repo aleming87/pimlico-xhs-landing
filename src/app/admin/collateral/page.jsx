@@ -73,10 +73,99 @@ export default function CollateralPage() {
 
   const [panelOpen, setPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: true, presets: false });
 
-  // Presets
-  const [presets, setPresets] = useState({});
+  // Built-in default presets
+  const BUILT_IN_PRESETS = {
+    'Magazine Dark (Default)': {
+      builtIn: true,
+      elements: { ...DEFAULT_ELEMENTS },
+      template: 'linkedin', theme: 'dark', layout: 'magazine',
+      font: 'system', fontSize: 100, fontWeight: '800',
+      title: '', subtitle: '', cta: 'Read on pimlicosolutions.com',
+    },
+    'Magazine Gradient': {
+      builtIn: true,
+      elements: { ...DEFAULT_ELEMENTS },
+      template: 'linkedin', theme: 'gradient', layout: 'magazine',
+      font: 'system', fontSize: 105, fontWeight: '800',
+      title: '', subtitle: '', cta: 'Read on pimlicosolutions.com',
+    },
+    'Classic Dark': {
+      builtIn: true,
+      elements: { ...DEFAULT_ELEMENTS },
+      template: 'linkedin', theme: 'dark', layout: 'classic',
+      font: 'system', fontSize: 100, fontWeight: '800',
+      title: '', subtitle: '', cta: 'Read on pimlicosolutions.com',
+    },
+    'Card Light': {
+      builtIn: true,
+      elements: { ...DEFAULT_ELEMENTS },
+      template: 'linkedin', theme: 'light', layout: 'card',
+      font: 'system', fontSize: 100, fontWeight: '700',
+      title: '', subtitle: '', cta: 'Read on pimlicosolutions.com',
+    },
+    'Instagram Story': {
+      builtIn: true,
+      elements: { ...DEFAULT_ELEMENTS, premiumTag: { ...DEFAULT_ELEMENTS.premiumTag, visible: true } },
+      template: 'instagramStory', theme: 'gradient', layout: 'magazine',
+      font: 'system', fontSize: 110, fontWeight: '800',
+      title: '', subtitle: '', cta: 'pimlicosolutions.com',
+    },
+    'Minimal Clean': {
+      builtIn: true,
+      elements: { ...MINIMAL_ELEMENTS },
+      template: 'linkedin', theme: 'dark', layout: 'magazine',
+      font: 'system', fontSize: 100, fontWeight: '700',
+      title: '', subtitle: '', cta: '',
+    },
+  };
+
+  // Presets — merge built-in + user-saved
+  const [userPresets, setUserPresets] = useState({});
   const [presetName, setPresetName] = useState('');
-  useEffect(() => { try { const s = localStorage.getItem('xhs-marketing-presets'); if (s) setPresets(JSON.parse(s)); } catch {} }, []);
+  useEffect(() => { try { const s = localStorage.getItem('xhs-marketing-presets'); if (s) setUserPresets(JSON.parse(s)); } catch {} }, []);
+
+  const allPresets = { ...BUILT_IN_PRESETS, ...userPresets };
+
+  const savePreset = (name) => {
+    if (!name.trim()) return;
+    const preset = {
+      elements, template, theme, layout, font, fontSize, fontWeight,
+      title, subtitle, cta,
+      savedAt: new Date().toISOString(),
+    };
+    const updated = { ...userPresets, [name.trim()]: preset };
+    setUserPresets(updated);
+    localStorage.setItem('xhs-marketing-presets', JSON.stringify(updated));
+    setPresetName('');
+  };
+
+  const loadPreset = (name) => {
+    const preset = allPresets[name];
+    if (!preset) return;
+    if (preset.elements) {
+      const merged = { ...DEFAULT_ELEMENTS };
+      for (const k of Object.keys(merged)) {
+        if (preset.elements[k]) merged[k] = { ...merged[k], ...preset.elements[k] };
+      }
+      setElements(merged);
+    }
+    if (preset.template) setTemplate(preset.template);
+    if (preset.theme) setTheme(preset.theme);
+    if (preset.layout) setLayout(preset.layout);
+    if (preset.font) setFont(preset.font);
+    if (preset.fontSize) setFontSize(preset.fontSize);
+    if (preset.fontWeight) setFontWeight(preset.fontWeight);
+    if (preset.title !== undefined) setTitle(preset.title || (article?.title || ''));
+    if (preset.subtitle !== undefined) setSubtitle(preset.subtitle || (article?.excerpt || ''));
+    if (preset.cta !== undefined) setCta(preset.cta);
+  };
+
+  const deletePreset = (name) => {
+    const updated = { ...userPresets };
+    delete updated[name];
+    setUserPresets(updated);
+    localStorage.setItem('xhs-marketing-presets', JSON.stringify(updated));
+  };
 
   // Auto-save elements
   useEffect(() => { try { localStorage.setItem('xhs-marketing-elements-last', JSON.stringify(elements)); } catch {} }, [elements]);
@@ -622,6 +711,95 @@ export default function CollateralPage() {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+
+          {/* Presets — save/load settings */}
+          <div className="bg-gray-800 rounded-xl overflow-hidden">
+            <button type="button" onClick={() => setPanelOpen(p => ({...p, presets: !p.presets}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>💾</span> Presets {Object.keys(allPresets).length > 0 && <span className="text-xs text-gray-400 font-normal">— {Object.keys(BUILT_IN_PRESETS).length} built-in{Object.keys(userPresets).length > 0 ? `, ${Object.keys(userPresets).length} saved` : ''}</span>}</h3>
+              <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.presets ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {panelOpen.presets && (
+              <div className="px-4 pb-4 space-y-3 border-t border-gray-700">
+                {/* Save new preset */}
+                <div className="flex gap-2 mt-2">
+                  <input
+                    type="text"
+                    value={presetName}
+                    onChange={(e) => setPresetName(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && presetName.trim()) savePreset(presetName); }}
+                    placeholder="Preset name..."
+                    className="flex-1 px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-xs placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => savePreset(presetName)}
+                    disabled={!presetName.trim()}
+                    className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    💾 Save
+                  </button>
+                </div>
+
+                {/* Built-in presets */}
+                <div>
+                  <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1.5">Built-in Presets</div>
+                  <div className="space-y-1 max-h-44 overflow-y-auto">
+                    {Object.entries(BUILT_IN_PRESETS).map(([name, preset]) => (
+                      <div key={name} className="flex items-center gap-2 bg-gray-700/30 rounded-lg px-3 py-2 border border-gray-700/50 hover:border-gray-600/50 transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs text-white font-medium truncate">{name}</div>
+                          <div className="text-[10px] text-gray-400">{preset.layout} · {preset.theme} · {preset.template}{preset.elements?.premiumTag?.visible ? ' · ⭐' : ''}</div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => loadPreset(name)}
+                          className="px-2.5 py-1 bg-indigo-600/80 text-white text-[10px] font-medium rounded hover:bg-indigo-500 transition-colors"
+                        >
+                          Load
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* User-saved presets */}
+                {Object.keys(userPresets).length > 0 && (
+                  <div>
+                    <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1.5">Your Presets</div>
+                    <div className="space-y-1 max-h-36 overflow-y-auto">
+                      {Object.entries(userPresets).map(([name, preset]) => (
+                        <div key={name} className="flex items-center gap-2 bg-gray-700/50 rounded-lg px-3 py-2">
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs text-white font-medium truncate">{name}</div>
+                            <div className="text-[10px] text-gray-400">{preset.layout} · {preset.theme} · {preset.template} · {preset.savedAt ? new Date(preset.savedAt).toLocaleDateString() : ''}</div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => loadPreset(name)}
+                            className="px-2 py-1 bg-indigo-600/80 text-white text-[10px] font-medium rounded hover:bg-indigo-500 transition-colors"
+                          >
+                            Load
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { if (confirm(`Delete preset "${name}"?`)) deletePreset(name); }}
+                            className="px-1.5 py-1 text-red-400 hover:text-red-300 text-xs transition-colors"
+                            title="Delete preset"
+                          >
+                            🗑
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {Object.keys(userPresets).length === 0 && (
+                  <p className="text-[11px] text-gray-500 text-center py-1">Adjust your settings then save a custom preset above.</p>
+                )}
               </div>
             )}
           </div>
