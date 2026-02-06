@@ -124,7 +124,90 @@ export default function IdeasPage() {
     e.target.value = '';
   };
 
-  // Markdown upload handler
+  // Markdown upload → auto-fill form (single idea, review before saving)
+  const handleMdAutoFill = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const lines = text.split('\n');
+
+      // Extract title: first # heading or first non-empty line
+      let extractedTitle = '';
+      let titleLineIdx = -1;
+      for (let i = 0; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (/^#{1,3}\s+/.test(trimmed)) {
+          extractedTitle = trimmed.replace(/^#{1,3}\s+/, '').trim();
+          titleLineIdx = i;
+          break;
+        }
+      }
+      if (!extractedTitle) {
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].trim()) {
+            extractedTitle = lines[i].trim().replace(/^#+\s*/, '');
+            titleLineIdx = i;
+            break;
+          }
+        }
+      }
+
+      // Extract description: body text after title (skip headings & dividers)
+      let descLines = [];
+      for (let i = (titleLineIdx >= 0 ? titleLineIdx + 1 : 0); i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (/^#{1,3}\s+/.test(trimmed) && descLines.length > 0) break; // stop at next heading
+        if (/^[-*_]{3,}$/.test(trimmed)) continue; // skip dividers
+        if (trimmed) descLines.push(trimmed.replace(/^[-*+]\s+/, ''));
+      }
+      const extractedDesc = descLines.join('\n').trim();
+
+      // Detect priority from keywords
+      const lowerText = text.toLowerCase();
+      let detectedPriority = 'medium';
+      if (lowerText.includes('urgent') || lowerText.includes('critical') || lowerText.includes('breaking') || lowerText.includes('high priority')) {
+        detectedPriority = 'high';
+      } else if (lowerText.includes('low priority') || lowerText.includes('minor') || lowerText.includes('background')) {
+        detectedPriority = 'low';
+      }
+
+      // Detect category tags from content
+      const detectedTags = [];
+      for (const cat of IDEA_CATEGORIES) {
+        if (lowerText.includes(cat.toLowerCase())) detectedTags.push(cat);
+      }
+      // Also grab #hashtags and match against categories
+      const hashTags = text.match(/#(\w{3,})/g);
+      if (hashTags) {
+        for (const ht of hashTags) {
+          const clean = ht.replace('#', '');
+          const match = IDEA_CATEGORIES.find(c => c.toLowerCase().replace(/\s+/g, '') === clean.toLowerCase() || c.toLowerCase() === clean.toLowerCase());
+          if (match && !detectedTags.includes(match)) detectedTags.push(match);
+        }
+      }
+
+      // Auto-fill the form and open it
+      setForm({
+        title: extractedTitle || file.name.replace(/\.(md|markdown|txt)$/i, ''),
+        description: extractedDesc.slice(0, 1000),
+        priority: detectedPriority,
+        tags: detectedTags.slice(0, 6),
+        notes: `Imported from ${file.name}`,
+      });
+      setEditingId(null);
+      setShowAdd(true);
+
+      setMdImportCount(1);
+      setTimeout(() => setMdImportCount(0), 3000);
+    } catch (err) {
+      console.error('Failed to parse markdown file:', file.name, err);
+    }
+    e.target.value = '';
+  };
+
+  // Markdown bulk upload handler (multiple ideas at once)
   const handleMdUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
@@ -234,8 +317,12 @@ export default function IdeasPage() {
             <input type="file" accept=".pdf" multiple onChange={handlePdfUpload} className="hidden" />
           </label>
           <label className="px-4 py-2 bg-gray-700 text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 cursor-pointer">
-            �📄 Upload .md
+            📄 Bulk .md
             <input type="file" accept=".md,.markdown,.txt" multiple onChange={handleMdUpload} className="hidden" />
+          </label>
+          <label className="px-4 py-2 bg-emerald-600/80 text-white text-sm font-medium rounded-lg hover:bg-emerald-500 transition-colors flex items-center gap-2 cursor-pointer">
+            📄 Import .md → Auto-fill
+            <input type="file" accept=".md,.markdown,.txt" onChange={handleMdAutoFill} className="hidden" />
           </label>
           <button onClick={() => { resetForm(); setShowAdd(true); }}
             className="px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-500 transition-colors flex items-center gap-2">
