@@ -22,6 +22,23 @@ export default function IdeasPage() {
   const [filterPriority, setFilterPriority] = useState('all');
   const [searchQ, setSearchQ] = useState('');
   const [mdImportCount, setMdImportCount] = useState(0);
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  const LLM_PROMPT = `You are helping me generate ideas for Pimlico XHS, a cross-border regulatory intelligence platform covering AI Regulation, Payments, Crypto, and Gambling.
+
+For each idea, provide:
+- TITLE: Specific headline (max 120 chars) — include regulation name, jurisdiction, and angle
+- PRIORITY: high (breaking/urgent) | medium (ongoing developments) | low (background/evergreen)
+- TAGS: From [AI Regulation, Payments, Gambling, Crypto, Cross-sector, Enforcement Action, New Legislation, Consultation, Market Trend, Opinion Piece]
+- DESCRIPTION: 2-4 sentences — the angle, why it matters, key points to cover
+- NOTES: Source links, related regulations, cross-references
+
+Example:
+TITLE: EU AI Act — First Enforcement Actions Expected Q1 2026
+PRIORITY: high
+TAGS: AI Regulation, Enforcement Action
+DESCRIPTION: The EU AI Act prohibited practices provisions took effect 2 Feb 2025. Regulators expected to issue first actions in Q1 2026. Analyse likely targets, national authority coordination, and practical compliance steps.
+NOTES: Source: EU AI Office press release (Jan 2026)`;
 
   const resetForm = () => {
     setForm({ title: '', description: '', priority: 'medium', tags: [], notes: '' });
@@ -312,6 +329,10 @@ export default function IdeasPage() {
         </div>
         <div className="flex items-center gap-2">
           {mdImportCount > 0 && <span className="px-3 py-1.5 bg-green-500/15 text-green-300 text-xs font-medium rounded-lg animate-pulse">✓ {mdImportCount} idea{mdImportCount !== 1 ? 's' : ''} imported</span>}
+          <button onClick={() => setShowPrompt(p => !p)}
+            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showPrompt ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
+            🤖 LLM Prompt
+          </button>
           <label className="px-4 py-2 bg-gray-700 text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 cursor-pointer">
             � Upload PDF
             <input type="file" accept=".pdf" multiple onChange={handlePdfUpload} className="hidden" />
@@ -330,6 +351,21 @@ export default function IdeasPage() {
           </button>
         </div>
       </div>
+
+      {/* LLM Prompt Panel */}
+      {showPrompt && (
+        <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Copy this into ChatGPT / Claude / Copilot</h3>
+            <button onClick={() => { navigator.clipboard.writeText(LLM_PROMPT); }}
+              className="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-lg hover:bg-amber-500/30 transition-colors">
+              📋 Copy Prompt
+            </button>
+          </div>
+          <pre className="bg-gray-900 rounded-lg p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-[400px] overflow-y-auto border border-gray-700/50">{LLM_PROMPT}</pre>
+          <p className="text-[11px] text-amber-400/60">Paste this prompt into your LLM, then provide your topic. Copy the output back here using "Import .md → Auto-fill" or "+ New Idea".</p>
+        </div>
+      )}
 
       {/* Add/Edit Form */}
       {showAdd && (

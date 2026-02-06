@@ -40,6 +40,48 @@ export default function DraftingPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [draftItems, setDraftItems] = useState([]);
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  const LLM_PROMPT = `You are helping me draft an article for Pimlico XHS, a cross-border regulatory intelligence platform.
+
+Generate a complete article in Markdown format that I can upload directly. The system auto-detects all fields.
+
+ARTICLE STRUCTURE:
+# [Title — clear, SEO-friendly, 50-80 chars]
+
+[Opening paragraph — the hook. State the key development and why it matters. This becomes the excerpt.]
+
+## Background
+[Regulatory context and history — 2-3 paragraphs]
+
+## Key Developments
+### [Subheading 1]
+[Analysis with bullet points where appropriate]
+
+### [Subheading 2]
+[More detail, data, quotes]
+
+## Implications for Firms
+1. [Practical, actionable takeaway]
+2. [Second takeaway]
+3. [Third takeaway]
+
+## What Comes Next
+[Forward-looking outlook — 1-2 paragraphs]
+
+---
+*This analysis is provided by Pimlico XHS™ for informational purposes. It does not constitute legal advice.*
+
+CATEGORIES (pick one): AI Regulation | Payments | Crypto | Gambling
+
+TAXONOMY TAGS (include relevant ones in content for auto-detection):
+Verticals: Gambling, Payments, Crypto, AI
+Topics: Online Licensing, Age Verification, Affordability, Financial Promotions, Open Banking, VASP Licensing, Stablecoins, AI Frameworks, AI Risk Tiers, AI Governance Controls, GenAI Labelling, Enforcement Actions, MiCA Implementation, PSD2 Implementation, DORA Implementation
+Jurisdictions: European Union, United Kingdom, United States, Germany, France, Malta, Gibraltar, Singapore
+Types: Primary Law, Secondary Law, Guideline, Consultation, Enforcement Decision
+Stages: Proposal, Consultation Open, Adoption, Entry Into Force, Application, Review
+
+Write professionally but accessibly. Target 800-1200 words. Include specific dates, regulation names, and practical implications.`;
 
   useEffect(() => {
     setDraftItems(items.filter(i => i.stage === 'drafting'));
@@ -292,10 +334,31 @@ export default function DraftingPage() {
           <h1 className="text-xl font-bold text-white flex items-center gap-2">✏️ Drafting</h1>
           <p className="text-sm text-gray-400 mt-0.5">{editingArticle ? `Editing: ${editingArticle.title}` : 'Create and publish articles'}</p>
         </div>
-        {editingArticle && (
-          <button onClick={resetForm} className="text-sm text-gray-400 hover:text-white">✕ Cancel Edit</button>
-        )}
+        <div className="flex items-center gap-2">
+          <button onClick={() => setShowPrompt(p => !p)}
+            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showPrompt ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
+            🤖 LLM Prompt
+          </button>
+          {editingArticle && (
+            <button onClick={resetForm} className="text-sm text-gray-400 hover:text-white">✕ Cancel Edit</button>
+          )}
+        </div>
       </div>
+
+      {/* LLM Prompt Panel */}
+      {showPrompt && (
+        <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Generate a full article</h3>
+            <button onClick={() => { navigator.clipboard.writeText(LLM_PROMPT); }}
+              className="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-lg hover:bg-amber-500/30 transition-colors">
+              📋 Copy Prompt
+            </button>
+          </div>
+          <pre className="bg-gray-900 rounded-lg p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-[400px] overflow-y-auto border border-gray-700/50">{LLM_PROMPT}</pre>
+          <p className="text-[11px] text-amber-400/60">Paste this into your LLM with your topic. Save the output as a .md file, then use "Import .md → Auto-fill" to populate all fields instantly.</p>
+        </div>
+      )}
 
       {/* Workflow items from Ideas */}
       {draftItems.length > 0 && !editingArticle && (

@@ -43,6 +43,42 @@ export default function CopyPage() {
   });
   const [newTemplateName, setNewTemplateName] = useState('');
   const [showSaveTemplate, setShowSaveTemplate] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
+
+  const LLM_PROMPT = `You are helping me create social media and email copy for Pimlico XHS, a cross-border regulatory intelligence platform.
+
+I will give you an article title, excerpt, and category. Generate copy for each platform:
+
+PLATFORMS:
+1. LinkedIn (max 3000 chars) — Professional, authoritative. Use 🔹 bullet emoji markers. 3-4 hashtags.
+2. Twitter/X (max 280 chars) — Concise, punchy. Lead with hook. 2-3 hashtags.
+3. Instagram (max 2200 chars) — Engaging, emoji-rich. "Link in bio" CTA. 8-10 hashtags.
+4. Email — Subject line + body. Bullet takeaways. Clear CTA.
+5. Newsletter — Longer, analytical. Cross-references. Forward outlook.
+
+FORMAT each as:
+--- LINKEDIN ---
+[Copy text with line breaks and hashtags]
+
+--- TWITTER ---
+[280 char max copy]
+
+--- INSTAGRAM ---
+[Engaging copy with emojis and hashtags]
+
+--- EMAIL ---
+SUBJECT: [Subject line]
+[Body with bullet points]
+
+--- NEWSLETTER ---
+[Analytical copy]
+
+STYLE RULES:
+- Never open with "We're excited to share..." — lead with insight
+- LinkedIn: bold statement + bullets + link + hashtags
+- Twitter: hook question or bold claim + link
+- Use pimlicosolutions.com/insights/[slug] for links
+- Hashtags: #CamelCase format, relevant to topic`;
 
   useEffect(() => {
     try { localStorage.setItem('xhs-copy-custom-templates', JSON.stringify(customTemplates)); } catch {}
@@ -150,10 +186,37 @@ export default function CopyPage() {
           <p className="text-sm text-gray-400 mt-0.5">Craft platform-specific social & email copy for your articles</p>
         </div>
         <div className="flex items-center gap-2">
+          <button onClick={() => setShowPrompt(p => !p)}
+            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showPrompt ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
+            🤖 LLM Prompt
+          </button>
           <span className="px-2.5 py-1 bg-purple-500/15 text-purple-300 text-[11px] font-medium rounded-full">{copyItemsInPipeline.length} in pipeline</span>
           <span className="px-2.5 py-1 bg-gray-700 text-gray-300 text-[11px] font-medium rounded-full">{history.length} saved</span>
         </div>
       </div>
+
+      {/* LLM Prompt Panel */}
+      {showPrompt && (
+        <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3 mb-5">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Generate multi-platform copy</h3>
+            <button onClick={() => {
+                const articleInfo = selectedArticle ? `\n\nARTICLE:\nTitle: ${selectedArticle.title}\nExcerpt: ${selectedArticle.excerpt || 'N/A'}\nCategory: ${selectedArticle.category || 'N/A'}\nSlug: ${selectedArticle.slug || 'N/A'}` : '';
+                navigator.clipboard.writeText(LLM_PROMPT + articleInfo);
+              }}
+              className="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-lg hover:bg-amber-500/30 transition-colors">
+              📋 {selectedArticle ? 'Copy Prompt + Article' : 'Copy Prompt'}
+            </button>
+          </div>
+          <pre className="bg-gray-900 rounded-lg p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-[350px] overflow-y-auto border border-gray-700/50">{LLM_PROMPT}</pre>
+          {selectedArticle && (
+            <div className="bg-gray-800/50 rounded-lg p-3 text-xs text-gray-400 border border-gray-700/30">
+              <span className="text-amber-300/80 font-semibold">Selected article included in copy:</span> {selectedArticle.title} ({selectedArticle.category})
+            </div>
+          )}
+          <p className="text-[11px] text-amber-400/60">Paste into your LLM. If an article is selected, "Copy Prompt + Article" includes the article details automatically.</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Article Selector */}
