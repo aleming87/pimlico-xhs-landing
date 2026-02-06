@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useArticles } from '../ArticlesContext';
 import { useWorkflow } from '../WorkflowContext';
 
@@ -47,7 +47,7 @@ export default function CollateralPage() {
   const [article, setArticle] = useState(null);
   const [template, setTemplate] = useState('linkedin');
   const [theme, setTheme] = useState('dark');
-  const [layout, setLayout] = useState('classic');
+  const [layout, setLayout] = useState('magazine');
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [cta, setCta] = useState('Read on pimlicosolutions.com');
@@ -71,7 +71,76 @@ export default function CollateralPage() {
     return { ...DEFAULT_ELEMENTS };
   });
 
-  const [panelOpen, setPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: true, presets: false });
+  const [panelOpen, setPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: true, presets: false, flags: false });
+
+  // Undo/redo history
+  const [elementsHistory, setElementsHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const isUndoRedoRef = useRef(false);
+
+  // Push to history on element changes (debounced)
+  const pushHistoryTimerRef = useRef(null);
+  useEffect(() => {
+    if (isUndoRedoRef.current) { isUndoRedoRef.current = false; return; }
+    if (pushHistoryTimerRef.current) clearTimeout(pushHistoryTimerRef.current);
+    pushHistoryTimerRef.current = setTimeout(() => {
+      setElementsHistory(prev => {
+        const newHist = [...prev.slice(0, historyIndex + 1), JSON.parse(JSON.stringify(elements))];
+        if (newHist.length > 40) newHist.shift();
+        setHistoryIndex(newHist.length - 1);
+        return newHist;
+      });
+    }, 500);
+    return () => { if (pushHistoryTimerRef.current) clearTimeout(pushHistoryTimerRef.current); };
+  }, [elements]);
+
+  const undo = useCallback(() => {
+    if (historyIndex <= 0) return;
+    isUndoRedoRef.current = true;
+    const newIdx = historyIndex - 1;
+    setHistoryIndex(newIdx);
+    setElements(JSON.parse(JSON.stringify(elementsHistory[newIdx])));
+  }, [historyIndex, elementsHistory]);
+
+  const redo = useCallback(() => {
+    if (historyIndex >= elementsHistory.length - 1) return;
+    isUndoRedoRef.current = true;
+    const newIdx = historyIndex + 1;
+    setHistoryIndex(newIdx);
+    setElements(JSON.parse(JSON.stringify(elementsHistory[newIdx])));
+  }, [historyIndex, elementsHistory]);
+
+  // Keyboard shortcuts for undo/redo
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); redo(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [undo, redo]);
+
+  // Flag emoji overlay state
+  const FLAG_EMOJIS = [
+    { emoji: '🇬🇧', label: 'UK' }, { emoji: '🇺🇸', label: 'US' }, { emoji: '🇪🇺', label: 'EU' },
+    { emoji: '🇫🇷', label: 'France' }, { emoji: '🇩🇪', label: 'Germany' }, { emoji: '🇮🇹', label: 'Italy' },
+    { emoji: '🇪🇸', label: 'Spain' }, { emoji: '🇳🇱', label: 'Netherlands' }, { emoji: '🇧🇪', label: 'Belgium' },
+    { emoji: '🇨🇭', label: 'Switzerland' }, { emoji: '🇮🇪', label: 'Ireland' }, { emoji: '🇱🇺', label: 'Luxembourg' },
+    { emoji: '🇸🇬', label: 'Singapore' }, { emoji: '🇭🇰', label: 'Hong Kong' }, { emoji: '🇯🇵', label: 'Japan' },
+    { emoji: '🇦🇺', label: 'Australia' }, { emoji: '🇨🇦', label: 'Canada' }, { emoji: '🇧🇷', label: 'Brazil' },
+    { emoji: '🇮🇳', label: 'India' }, { emoji: '🇦🇪', label: 'UAE' }, { emoji: '🇸🇦', label: 'Saudi' },
+    { emoji: '🇰🇷', label: 'Korea' }, { emoji: '🇨🇳', label: 'China' }, { emoji: '🌍', label: 'Globe' },
+  ];
+  const [flagOverlays, setFlagOverlays] = useState(() => {
+    try { const s = localStorage.getItem('xhs-flag-overlays'); return s ? JSON.parse(s) : []; } catch { return []; }
+  });
+  useEffect(() => { try { localStorage.setItem('xhs-flag-overlays', JSON.stringify(flagOverlays)); } catch {} }, [flagOverlays]);
+
+  const addFlagOverlay = (emoji) => {
+    setFlagOverlays(prev => [...prev, { id: Date.now(), emoji, x: 0.85, y: 0.05, scale: 100, dx: 0, dy: 0 }]);
+  };
+  const removeFlagOverlay = (id) => setFlagOverlays(prev => prev.filter(f => f.id !== id));
+  const updateFlagOverlay = (id, updates) => setFlagOverlays(prev => prev.map(f => f.id === id ? { ...f, ...updates } : f));
 
   // Built-in default presets
   const BUILT_IN_PRESETS = {
@@ -405,9 +474,12 @@ export default function CollateralPage() {
       }
       if (el.cta.visible!==false && cta) {
         const bH=Math.round(tmpl.height*0.1),bY=tmpl.height-bH+(el.bottomBar.dy||0);
-        const ctaS=Math.round(tmpl.width*0.018*fScale);ctx.font=`600 ${ctaS}px ${fFamily}`;ctx.fillStyle='#60a5fa';
+        const ctaS=Math.round(tmpl.width*0.018*fScale*(( el.cta.scale||100)/100));ctx.font=`600 ${ctaS}px ${fFamily}`;
+        const ctaOp=(el.cta.opacity??100)/100; ctx.save(); ctx.globalAlpha=ctaOp; ctx.fillStyle='#60a5fa';
         const ctaW=ctx.measureText(cta).width;
-        ctx.fillText(cta,tmpl.width-mp-ctaW+(el.cta.dx||0),bY+bH/2+ctaS*0.35+(el.cta.dy||0));
+        const ctaX=tmpl.width-mp-ctaW+(el.cta.dx||0), ctaY=bY+bH/2+ctaS*0.35+(el.cta.dy||0);
+        ctx.fillText(cta,ctaX,ctaY); ctx.restore();
+        _b.cta={x:ctaX-10,y:ctaY-ctaS,w:ctaW+20,h:ctaS+10};
       }
     // ===== CLASSIC LAYOUT =====
     } else {
@@ -497,6 +569,18 @@ export default function CollateralPage() {
         }
       }
     }
+    // Draw flag emoji overlays
+    if (flagOverlays.length > 0) {
+      for (const flag of flagOverlays) {
+        const flagScale = (flag.scale || 100) / 100;
+        const flagSize = Math.round(tmpl.width * 0.06 * flagScale);
+        const fx = Math.round(flag.x * tmpl.width) + (flag.dx || 0);
+        const fy = Math.round(flag.y * tmpl.height) + (flag.dy || 0);
+        ctx.font = `${flagSize}px sans-serif`;
+        ctx.fillText(flag.emoji, fx, fy + flagSize);
+        _b[`flag_${flag.id}`] = { x: fx, y: fy, w: flagSize, h: flagSize };
+      }
+    }
     elementBoundsRef.current = _b;
     setLoading(false);
   };
@@ -509,7 +593,7 @@ export default function CollateralPage() {
       autoGenTimerRef.current = setTimeout(() => generateAsset(), 300);
       return () => { if (autoGenTimerRef.current) clearTimeout(autoGenTimerRef.current); };
     }
-  }, [article, template, theme, layout, elements, title, subtitle, cta, font, fontSize, fontWeight]);
+  }, [article, template, theme, layout, elements, title, subtitle, cta, font, fontSize, fontWeight, flagOverlays]);
 
   // Drag handlers
   const handleMouseDown = (e) => {
@@ -517,6 +601,13 @@ export default function CollateralPage() {
     const rect = canvas.getBoundingClientRect(), sx = canvas.width / rect.width, sy = canvas.height / rect.height;
     const px = (e.clientX - rect.left) * sx, py = (e.clientY - rect.top) * sy;
     const bounds = elementBoundsRef.current;
+    // Check flag overlays first
+    for (const flag of [...flagOverlays].reverse()) {
+      const b = bounds[`flag_${flag.id}`];
+      if (b && px >= b.x-15 && px <= b.x+b.w+15 && py >= b.y-15 && py <= b.y+b.h+15) {
+        setDragTarget(`flag_${flag.id}`); dragStartRef.current = { px, py, dx: flag.dx||0, dy: flag.dy||0, flagId: flag.id }; return;
+      }
+    }
     for (const key of ['premiumTag','cta','subtitle','title','badge','xhsLogo','pimlicoLogo','accentLine','bottomBar','image']) {
       const b = bounds[key]; if (!b || elements[key]?.visible === false) continue;
       if (px >= b.x-15 && px <= b.x+b.w+15 && py >= b.y-15 && py <= b.y+b.h+15) {
@@ -529,15 +620,20 @@ export default function CollateralPage() {
     const canvas = canvasRef.current; if (!canvas) return;
     const rect = canvas.getBoundingClientRect(), sx = canvas.width/rect.width, sy = canvas.height/rect.height;
     const px=(e.clientX-rect.left)*sx, py=(e.clientY-rect.top)*sy, ds=dragStartRef.current;
-    setElements(prev => ({...prev,[dragTarget]:{...prev[dragTarget],dx:Math.round(ds.dx+(px-ds.px)),dy:Math.round(ds.dy+(py-ds.py))}}));
+    if (dragTarget.startsWith('flag_') && ds.flagId) {
+      updateFlagOverlay(ds.flagId, { dx: Math.round(ds.dx+(px-ds.px)), dy: Math.round(ds.dy+(py-ds.py)) });
+    } else {
+      setElements(prev => ({...prev,[dragTarget]:{...prev[dragTarget],dx:Math.round(ds.dx+(px-ds.px)),dy:Math.round(ds.dy+(py-ds.py))}}));
+    }
   };
   const handleMouseUp = () => { if (dragTarget) { setDragTarget(null); dragStartRef.current=null; setTimeout(()=>generateAsset(),50); } };
 
   const downloadAsset = () => {
     const canvas = canvasRef.current; if (!canvas) return;
     const link = document.createElement('a');
-    const name = article?.slug || 'marketing-asset';
-    link.download = `${name}-${layout}-${template}.png`;
+    const artTitle = (article?.title || 'Marketing Asset').replace(/[^a-zA-Z0-9\s-]/g, '').trim();
+    const dateStr = new Date().toISOString().split('T')[0];
+    link.download = `Pimlico - ${artTitle} - ${dateStr}.png`;
     link.href = canvas.toDataURL('image/png'); link.click();
   };
 
@@ -809,6 +905,43 @@ export default function CollateralPage() {
             className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
             {loading ? <><span className="animate-spin">⏳</span> Generating...</> : '🎨 Generate Asset'}
           </button>
+
+          {/* Flag Emoji Overlays */}
+          <div className="bg-gray-800 rounded-xl overflow-hidden">
+            <button type="button" onClick={() => setPanelOpen(p => ({...p, flags: !p.flags}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
+              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🏳️</span> Flag Overlays {flagOverlays.length > 0 && <span className="text-xs text-gray-400 font-normal">— {flagOverlays.length} placed</span>}</h3>
+              <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.flags?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            {panelOpen.flags && (
+              <div className="px-4 pb-4 space-y-3 border-t border-gray-700">
+                <div className="grid grid-cols-6 gap-1.5 pt-2">
+                  {FLAG_EMOJIS.map(f => (
+                    <button key={f.label} type="button" onClick={() => addFlagOverlay(f.emoji)} title={f.label}
+                      className="p-2 text-xl rounded-lg bg-gray-700/40 hover:bg-gray-600/60 border border-gray-700/50 hover:border-gray-500/50 transition-colors text-center">
+                      {f.emoji}
+                    </button>
+                  ))}
+                </div>
+                {flagOverlays.length > 0 && (
+                  <div className="space-y-1.5">
+                    <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Placed Flags</div>
+                    {flagOverlays.map(f => (
+                      <div key={f.id} className="flex items-center gap-2 bg-gray-700/40 rounded-lg px-3 py-2 border border-gray-700/50">
+                        <span className="text-lg">{f.emoji}</span>
+                        <div className="flex-1">
+                          <label className="text-[10px] text-gray-500">Scale {f.scale}%</label>
+                          <input type="range" min="30" max="300" value={f.scale} onChange={e => updateFlagOverlay(f.id, { scale: parseInt(e.target.value) })} className="w-full accent-indigo-500 h-1"/>
+                        </div>
+                        <button type="button" onClick={() => removeFlagOverlay(f.id)} className="text-red-400 hover:text-red-300 text-xs">✕</button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => setFlagOverlays([])} className="w-full py-1 text-[10px] text-red-400 hover:text-red-300 text-center">Clear All Flags</button>
+                  </div>
+                )}
+                <p className="text-[10px] text-gray-500 text-center">Click a flag to add it, then drag on the canvas to position</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right: Canvas Preview */}
@@ -818,6 +951,8 @@ export default function CollateralPage() {
               🔴 Preview <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[template].label} ({MARKETING_TEMPLATES[template].width}×{MARKETING_TEMPLATES[template].height})</span>
             </h2>
             <div className="flex items-center gap-2">
+              <button type="button" onClick={undo} disabled={historyIndex <= 0} className="px-2.5 py-1.5 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Undo (Ctrl+Z)">↩ Undo</button>
+              <button type="button" onClick={redo} disabled={historyIndex >= elementsHistory.length - 1} className="px-2.5 py-1.5 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Redo (Ctrl+Y)">↪ Redo</button>
               <button type="button" onClick={() => setElements({...DEFAULT_ELEMENTS})} className="px-3 py-1.5 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600">↺ Reset</button>
               <button type="button" onClick={downloadAsset} className="px-4 py-1.5 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-500 flex items-center gap-1">⬇ Download PNG</button>
             </div>

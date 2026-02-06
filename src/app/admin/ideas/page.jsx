@@ -21,6 +21,7 @@ export default function IdeasPage() {
   const [form, setForm] = useState({ title: '', description: '', priority: 'medium', tags: [], notes: '' });
   const [filterPriority, setFilterPriority] = useState('all');
   const [searchQ, setSearchQ] = useState('');
+  const [mdImportCount, setMdImportCount] = useState(0);
 
   const resetForm = () => {
     setForm({ title: '', description: '', priority: 'medium', tags: [], notes: '' });
@@ -44,6 +45,88 @@ export default function IdeasPage() {
     setShowAdd(true);
   };
 
+  // Markdown upload handler
+  const handleMdUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    let imported = 0;
+
+    for (const file of files) {
+      try {
+        const text = await file.text();
+        // Parse markdown: # headings become idea titles, following text becomes description
+        const lines = text.split('\n');
+        let currentTitle = '';
+        let currentDesc = '';
+        let currentTags = [];
+        const flush = () => {
+          if (currentTitle.trim()) {
+            // Auto-detect category tags from content
+            const detectedTags = [];
+            const lowerContent = (currentTitle + ' ' + currentDesc).toLowerCase();
+            for (const cat of IDEA_CATEGORIES) {
+              if (lowerContent.includes(cat.toLowerCase())) detectedTags.push(cat);
+            }
+            addItem({
+              title: currentTitle.trim(),
+              description: currentDesc.trim(),
+              priority: 'medium',
+              tags: detectedTags.length > 0 ? detectedTags : currentTags,
+              notes: `Imported from ${file.name}`,
+              stage: 'ideas',
+            });
+            imported++;
+          }
+          currentTitle = '';
+          currentDesc = '';
+          currentTags = [];
+        };
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          // # or ## headings start new ideas
+          if (/^#{1,3}\s+/.test(trimmed)) {
+            flush();
+            currentTitle = trimmed.replace(/^#{1,3}\s+/, '');
+          }
+          // --- or *** separators also start new sections
+          else if (/^[-*_]{3,}$/.test(trimmed)) {
+            flush();
+          }
+          // Bullet points or text becomes description
+          else if (trimmed) {
+            const cleaned = trimmed.replace(/^[-*+]\s+/, '');
+            currentDesc += (currentDesc ? '\n' : '') + cleaned;
+            // Check for tags like [tag] or #tag
+            const tagMatches = cleaned.match(/#(\w+)/g);
+            if (tagMatches) currentTags.push(...tagMatches.map(t => t.replace('#', '')));
+          }
+        }
+        flush(); // Don't forget the last section
+
+        // If no headings found, treat the whole file as one idea
+        if (imported === 0 && text.trim()) {
+          const firstLine = text.trim().split('\n')[0].replace(/^#+\s*/, '').trim();
+          addItem({
+            title: firstLine || file.name.replace(/\.md$/i, ''),
+            description: text.trim(),
+            priority: 'medium',
+            tags: [],
+            notes: `Imported from ${file.name}`,
+            stage: 'ideas',
+          });
+          imported = 1;
+        }
+      } catch (err) {
+        console.error('Failed to parse markdown file:', file.name, err);
+      }
+    }
+
+    setMdImportCount(imported);
+    setTimeout(() => setMdImportCount(0), 3000);
+    e.target.value = ''; // Reset file input
+  };
+
   const filtered = ideas.filter(idea => {
     if (filterPriority !== 'all' && idea.priority !== filterPriority) return false;
     if (searchQ && !idea.title.toLowerCase().includes(searchQ.toLowerCase()) && !idea.description.toLowerCase().includes(searchQ.toLowerCase())) return false;
@@ -65,10 +148,17 @@ export default function IdeasPage() {
           <h1 className="text-xl font-bold text-white flex items-center gap-2">💡 Ideas</h1>
           <p className="text-sm text-gray-400 mt-0.5">Capture regulatory intelligence ideas and topics to develop</p>
         </div>
-        <button onClick={() => { resetForm(); setShowAdd(true); }}
-          className="px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-500 transition-colors flex items-center gap-2">
-          + New Idea
-        </button>
+        <div className="flex items-center gap-2">
+          {mdImportCount > 0 && <span className="px-3 py-1.5 bg-green-500/15 text-green-300 text-xs font-medium rounded-lg animate-pulse">✓ {mdImportCount} idea{mdImportCount !== 1 ? 's' : ''} imported</span>}
+          <label className="px-4 py-2 bg-gray-700 text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 cursor-pointer">
+            📄 Upload .md
+            <input type="file" accept=".md,.markdown,.txt" multiple onChange={handleMdUpload} className="hidden" />
+          </label>
+          <button onClick={() => { resetForm(); setShowAdd(true); }}
+            className="px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-500 transition-colors flex items-center gap-2">
+            + New Idea
+          </button>
+        </div>
       </div>
 
       {/* Add/Edit Form */}

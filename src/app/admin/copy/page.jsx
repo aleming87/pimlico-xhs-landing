@@ -35,6 +35,18 @@ export default function CopyPage() {
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [variationCount, setVariationCount] = useState(0);
+  const [showImagePreview, setShowImagePreview] = useState(true);
+
+  // Custom templates
+  const [customTemplates, setCustomTemplates] = useState(() => {
+    try { const s = localStorage.getItem('xhs-copy-custom-templates'); return s ? JSON.parse(s) : {}; } catch { return {}; }
+  });
+  const [newTemplateName, setNewTemplateName] = useState('');
+  const [showSaveTemplate, setShowSaveTemplate] = useState(false);
+
+  useEffect(() => {
+    try { localStorage.setItem('xhs-copy-custom-templates', JSON.stringify(customTemplates)); } catch {}
+  }, [customTemplates]);
 
   useEffect(() => {
     try { localStorage.setItem('xhs-copy-drafts', JSON.stringify(copies)); } catch {}
@@ -87,6 +99,41 @@ export default function CopyPage() {
     setHistory(prev => [{ id: Date.now(), articleId: selectedArticle.id, platform: activePlatform, text: currentCopy, timestamp: new Date().toISOString() }, ...prev]);
   };
 
+  // Save current copy as a custom reusable template
+  const saveCustomTemplate = () => {
+    if (!newTemplateName.trim() || !currentCopy) return;
+    const updated = {
+      ...customTemplates,
+      [newTemplateName.trim()]: {
+        label: `✨ ${newTemplateName.trim()}`,
+        text: currentCopy,
+        platform: activePlatform,
+        savedAt: new Date().toISOString(),
+      }
+    };
+    setCustomTemplates(updated);
+    setNewTemplateName('');
+    setShowSaveTemplate(false);
+  };
+
+  const deleteCustomTemplate = (name) => {
+    const updated = { ...customTemplates };
+    delete updated[name];
+    setCustomTemplates(updated);
+  };
+
+  const applyCustomTemplate = (name) => {
+    const tmpl = customTemplates[name];
+    if (!tmpl) return;
+    // Replace article-specific tokens
+    let text = tmpl.text;
+    if (selectedArticle) {
+      text = text.replace(/pimlicosolutions\.com\/insights\/[\w-]+/g, `pimlicosolutions.com/insights/${selectedArticle.slug || 'article'}`);
+    }
+    updateCopy(text);
+    setActiveTemplate(`custom:${name}`);
+  };
+
   const charCount = currentCopy.length;
   const maxChars = PLATFORMS[activePlatform].maxChars;
   const isOverLimit = maxChars && charCount > maxChars;
@@ -130,6 +177,35 @@ export default function CopyPage() {
               ))}
             </div>
           </div>
+
+          {/* Article Image Preview */}
+          {selectedArticle?.image && (
+            <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-white">🖼️ Article Image</h3>
+                <button type="button" onClick={() => setShowImagePreview(!showImagePreview)} className="text-[10px] text-gray-500 hover:text-gray-300">
+                  {showImagePreview ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              {showImagePreview && (
+                <div className="space-y-2">
+                  <img
+                    src={selectedArticle.image.startsWith('http') ? `/api/proxy-image?url=${encodeURIComponent(selectedArticle.image)}` : selectedArticle.image}
+                    alt={selectedArticle.title}
+                    className="w-full rounded-lg border border-gray-700/50 object-cover max-h-48"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                  <button type="button" onClick={() => {
+                    const imgUrl = selectedArticle.image.startsWith('http') ? selectedArticle.image : `${window.location.origin}${selectedArticle.image}`;
+                    navigator.clipboard.writeText(imgUrl);
+                    setCopiedId('image'); setTimeout(() => setCopiedId(null), 2000);
+                  }} className="w-full py-1.5 text-[11px] text-indigo-400 hover:text-indigo-300 bg-gray-700/40 rounded-lg hover:bg-gray-700/60 transition-colors text-center">
+                    {copiedId === 'image' ? '✓ URL Copied' : '📋 Copy Image URL'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Pipeline Items */}
           {copyItemsInPipeline.length > 0 && (
@@ -176,7 +252,7 @@ export default function CopyPage() {
               </div>
 
               {/* Action buttons */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <button type="button" onClick={generateVariation} disabled={!currentCopy}
                   className="px-4 py-2 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 disabled:opacity-40 flex items-center gap-1">
                   🔄 Variation
@@ -185,12 +261,31 @@ export default function CopyPage() {
                   className="px-4 py-2 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 flex items-center gap-1">
                   {copiedId === activePlatform ? '✓ Copied' : '📋 Copy'}
                 </button>
+                <button type="button" onClick={() => setShowSaveTemplate(!showSaveTemplate)} disabled={!currentCopy}
+                  className="px-4 py-2 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 disabled:opacity-40 flex items-center gap-1">
+                  📝 Save Template
+                </button>
                 <div className="flex-1" />
                 <button type="button" onClick={saveToPipeline} disabled={!currentCopy}
                   className="px-5 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 disabled:opacity-40 flex items-center gap-1">
                   💾 Save to Pipeline
                 </button>
               </div>
+
+              {/* Save as Template inline */}
+              {showSaveTemplate && (
+                <div className="flex gap-2 bg-gray-800/80 rounded-xl p-3 border border-indigo-500/30">
+                  <input
+                    type="text" value={newTemplateName} onChange={e => setNewTemplateName(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') saveCustomTemplate(); }}
+                    placeholder="Template name..." autoFocus
+                    className="flex-1 px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-xs placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+                  <button type="button" onClick={saveCustomTemplate} disabled={!newTemplateName.trim()}
+                    className="px-4 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 disabled:opacity-40">Save</button>
+                  <button type="button" onClick={() => { setShowSaveTemplate(false); setNewTemplateName(''); }}
+                    className="px-2 py-1.5 text-gray-400 hover:text-white text-xs">✕</button>
+                </div>
+              )}
 
               {/* Quick preview of all platforms */}
               <div className="bg-gray-800/60 rounded-xl p-3 border border-gray-700/30">
@@ -230,6 +325,26 @@ export default function CopyPage() {
               ))}
             </div>
           </div>
+
+          {/* Custom Saved Templates */}
+          {Object.keys(customTemplates).length > 0 && (
+            <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
+              <h3 className="text-sm font-semibold text-white mb-2">✨ Your Templates</h3>
+              <div className="space-y-1.5">
+                {Object.entries(customTemplates).map(([name, tmpl]) => (
+                  <div key={name} className={`flex items-center gap-1.5 rounded-lg transition-colors ${activeTemplate === `custom:${name}` ? 'bg-indigo-600/20 border border-indigo-500/30' : 'hover:bg-gray-700/50'}`}>
+                    <button type="button" onClick={() => applyCustomTemplate(name)} disabled={!selectedArticle}
+                      className="flex-1 text-left px-3 py-2 text-xs text-gray-300 hover:text-white disabled:opacity-40 truncate">
+                      {tmpl.label}
+                      <span className="block text-[9px] text-gray-500">{tmpl.platform ? PLATFORMS[tmpl.platform]?.icon : ''} {tmpl.savedAt ? new Date(tmpl.savedAt).toLocaleDateString() : ''}</span>
+                    </button>
+                    <button type="button" onClick={() => { if (confirm(`Delete template "${name}"?`)) deleteCustomTemplate(name); }}
+                      className="px-1.5 py-1 text-red-400/60 hover:text-red-400 text-[10px] mr-1">🗑</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* History */}
           {history.length > 0 && (
