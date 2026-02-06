@@ -10,6 +10,33 @@ import { sampleArticles as baseSampleArticles } from '@/data/sample-articles';
 // Simple password protection - change this password
 const ADMIN_PASSWORD = "pimlico2026";
 
+// Marketing asset element defaults
+const DEFAULT_ELEMENTS = {
+  pimlicoLogo: { x: 0.06, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  xhsLogo: { x: 0.22, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  image: { x: 0.62, y: 0, scale: 100, opacity: 100, zoom: 100, visible: true, dx: 0, dy: 0 },
+  title: { x: 0.06, y: 0.33, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  subtitle: { x: 0.06, y: null, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  badge: { x: 0.06, y: 0.25, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  cta: { x: 0.94, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  bottomBar: { height: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
+  accentLine: { opacity: 100, width: 100, visible: true, dx: 0, dy: 0 },
+  premiumTag: { scale: 100, opacity: 100, visible: false, dx: 0, dy: 0 },
+};
+
+// Blank canvas — everything hidden except background
+const BLANK_ELEMENTS = Object.fromEntries(
+  Object.entries(DEFAULT_ELEMENTS).map(([k, v]) => [k, { ...v, visible: false, dx: 0, dy: 0 }])
+);
+
+// Minimal — just image, title, and bottom bar
+const MINIMAL_ELEMENTS = Object.fromEntries(
+  Object.entries(DEFAULT_ELEMENTS).map(([k, v]) => [
+    k,
+    { ...v, visible: ['image', 'title', 'bottomBar', 'pimlicoLogo', 'xhsLogo'].includes(k), dx: 0, dy: 0 }
+  ])
+);
+
 // Pimlico Taxonomy Tags Structure (from pimlico_tags_structure_v2_2.7.2)
 const PIMLICO_TAXONOMY = {
   vertical: ['Gambling', 'Payments', 'Crypto', 'AI'],
@@ -221,19 +248,22 @@ export default function AdminPage() {
   const [marketingPostText, setMarketingPostText] = useState('');
   const [marketingLayout, setMarketingLayout] = useState('classic'); // 'classic', 'card', 'magazine'
   const [marketingDragTarget, setMarketingDragTarget] = useState(null);
-  const DEFAULT_ELEMENTS = {
-    pimlicoLogo: { x: 0.06, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    xhsLogo: { x: 0.22, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    image: { x: 0.62, y: 0, scale: 100, opacity: 100, zoom: 100, visible: true, dx: 0, dy: 0 },
-    title: { x: 0.06, y: 0.33, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    subtitle: { x: 0.06, y: null, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    badge: { x: 0.06, y: 0.25, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    cta: { x: 0.94, y: 0.88, scale: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    bottomBar: { height: 100, opacity: 100, visible: true, dx: 0, dy: 0 },
-    accentLine: { opacity: 100, width: 100, visible: true, dx: 0, dy: 0 },
-    premiumTag: { scale: 100, opacity: 100, visible: false, dx: 0, dy: 0 },
-  };
-  const [marketingElements, setMarketingElements] = useState({...DEFAULT_ELEMENTS});
+  const [marketingElements, setMarketingElements] = useState(() => {
+    // Try to load last-used element settings from localStorage
+    try {
+      const saved = localStorage.getItem('xhs-marketing-elements-last');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Deep merge: ensure every key from defaults exists with all its properties
+        const merged = {};
+        for (const k of Object.keys(DEFAULT_ELEMENTS)) {
+          merged[k] = { ...DEFAULT_ELEMENTS[k], ...(parsed[k] || {}) };
+        }
+        return merged;
+      }
+    } catch {}
+    return { ...DEFAULT_ELEMENTS };
+  });
   const elementBoundsRef = useRef({});
   const dragStartRef = useRef(null);
   // Compat wrapper for drag system
@@ -244,7 +274,7 @@ export default function AdminPage() {
     cta: marketingElements.cta,
     badge: marketingElements.badge,
   };
-  const [mktgPanelOpen, setMktgPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: false });
+  const [mktgPanelOpen, setMktgPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: true, presets: false });
   
   // Search and filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -288,7 +318,14 @@ export default function AdminPage() {
   const loadMarketingPreset = (name) => {
     const preset = marketingPresets[name];
     if (!preset) return;
-    if (preset.elements) setMarketingElements(preset.elements);
+    // Merge saved elements with defaults so new keys (like premiumTag) don't break
+    if (preset.elements) {
+      const merged = { ...DEFAULT_ELEMENTS };
+      for (const k of Object.keys(merged)) {
+        if (preset.elements[k]) merged[k] = { ...merged[k], ...preset.elements[k] };
+      }
+      setMarketingElements(merged);
+    }
     if (preset.template) setMarketingTemplate(preset.template);
     if (preset.theme) setMarketingTheme(preset.theme);
     if (preset.layout) setMarketingLayout(preset.layout);
@@ -306,6 +343,13 @@ export default function AdminPage() {
     setMarketingPresets(updated);
     localStorage.setItem('xhs-marketing-presets', JSON.stringify(updated));
   };
+
+  // Auto-save element settings to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('xhs-marketing-elements-last', JSON.stringify(marketingElements));
+    } catch {}
+  }, [marketingElements]);
 
   // Check if already authenticated via sessionStorage
   useEffect(() => {
@@ -3260,7 +3304,7 @@ export default function AdminPage() {
                               setMarketingArticle(article);
                               setMarketingTitle(article.title || '');
                               setMarketingSubtitle(article.excerpt || '');
-                              setMarketingElements({...DEFAULT_ELEMENTS});
+                              // Keep current element settings — don't reset
                               setMktgPanelOpen(p => ({...p, article: false}));
                             }}
                             className={`w-full text-left p-2 rounded-lg transition-colors flex items-center gap-2.5 ${
@@ -3374,47 +3418,77 @@ export default function AdminPage() {
                 {/* Element Controls — collapsible */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, elements: !p.elements}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🎛️</span> Element Controls</h3>
+                    <h3 className="font-semibold flex items-center gap-2 text-sm">
+                      <span>🎛️</span> Elements
+                      <span className="text-xs text-gray-400 font-normal">— {Object.values(marketingElements).filter(e => e.visible !== false).length}/{Object.keys(marketingElements).length} on</span>
+                    </h3>
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.elements ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.elements && (
                     <div className="px-4 pb-4 space-y-2 border-t border-gray-700">
+                      {/* Quick mode toggles */}
+                      <div className="flex gap-1.5 pt-2">
+                        <button type="button" onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})}
+                          className="flex-1 py-1.5 text-[10px] font-semibold bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-lg hover:bg-indigo-600/50 transition-colors">
+                          ✦ All On
+                        </button>
+                        <button type="button" onClick={() => setMarketingElements({...MINIMAL_ELEMENTS})}
+                          className="flex-1 py-1.5 text-[10px] font-semibold bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-600/40 transition-colors">
+                          ◐ Minimal
+                        </button>
+                        <button type="button" onClick={() => setMarketingElements({...BLANK_ELEMENTS})}
+                          className="flex-1 py-1.5 text-[10px] font-semibold bg-gray-600/30 text-gray-300 border border-gray-500/30 rounded-lg hover:bg-gray-600/50 transition-colors">
+                          ○ Blank
+                        </button>
+                      </div>
+                      {/* Element list */}
                       {[
-                        { key: 'pimlicoLogo', label: '🏢 Pimlico Logo', hasScale: true, hasOpacity: true },
-                        { key: 'xhsLogo', label: '🔷 XHS Logo', hasScale: true, hasOpacity: true },
                         { key: 'image', label: '🖼️ Image', hasScale: true, hasOpacity: true },
                         { key: 'title', label: '📝 Title', hasScale: true, hasOpacity: true },
-                        { key: 'badge', label: '🏷️ Badge', hasScale: true, hasOpacity: true },
                         { key: 'subtitle', label: '📄 Subtitle', hasOpacity: true },
+                        { key: 'badge', label: '🏷️ Category', hasScale: true, hasOpacity: true },
+                        { key: 'pimlicoLogo', label: '🏢 Pimlico Logo', hasScale: true, hasOpacity: true },
+                        { key: 'xhsLogo', label: '🔷 XHS Logo', hasScale: true, hasOpacity: true },
                         { key: 'cta', label: '🔗 CTA', hasScale: true, hasOpacity: true },
-                        { key: 'bottomBar', label: '▬ Bar', hasHeight: true, hasOpacity: true },
-                        { key: 'accentLine', label: '━ Accent', hasOpacity: true, hasWidth: true },
-                        { key: 'premiumTag', label: '⭐ Premium', hasScale: true, hasOpacity: true },
+                        { key: 'bottomBar', label: '▬ Bottom Bar', hasHeight: true, hasOpacity: true },
+                        { key: 'accentLine', label: '━ Accent Line', hasOpacity: true, hasWidth: true },
+                        { key: 'premiumTag', label: '⭐ Premium Tag', hasScale: true, hasOpacity: true },
                       ].map(item => {
                         const isVisible = marketingElements[item.key]?.visible !== false;
+                        const hasMoved = marketingElements[item.key]?.dx || marketingElements[item.key]?.dy;
                         return (
-                        <div key={item.key} className={`pt-2 first:pt-1 ${!isVisible ? 'opacity-40' : ''}`}>
-                          <div className="flex items-center justify-between mb-1">
-                            <p className="text-[11px] font-semibold text-gray-300">{item.label}</p>
+                        <div key={item.key} className={`rounded-lg transition-all ${isVisible ? 'bg-gray-700/40 border border-gray-600/50' : 'bg-gray-800/50 border border-gray-700/30'}`}>
+                          <div className="flex items-center justify-between px-2.5 py-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], visible: !isVisible}}))}
+                              className={`flex items-center gap-2 text-[11px] font-semibold transition-colors ${isVisible ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
+                              <span className={`w-2 h-2 rounded-full ${isVisible ? 'bg-green-400' : 'bg-gray-600'}`} />
+                              {item.label}
+                            </button>
                             <div className="flex items-center gap-1">
-                              {/* Reset position */}
-                              {(marketingElements[item.key]?.dx || marketingElements[item.key]?.dy) ? (
+                              {hasMoved ? (
                                 <button type="button" title="Reset position" onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], dx: 0, dy: 0}}))} className="p-0.5 text-gray-500 hover:text-yellow-400 transition-colors">
                                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                                 </button>
                               ) : null}
-                              {/* Visibility toggle */}
-                              <button type="button" title={isVisible ? 'Hide element' : 'Show element'} onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], visible: !isVisible}}))} className={`p-0.5 transition-colors ${isVisible ? 'text-gray-400 hover:text-red-400' : 'text-red-500 hover:text-green-400'}`}>
-                                {isVisible ? (
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                                ) : (
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878l4.242 4.242M21 21l-4.878-4.878" /></svg>
-                                )}
+                              <button
+                                type="button"
+                                title={isVisible ? 'Remove from canvas' : 'Add to canvas'}
+                                onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], visible: !isVisible}}))}
+                                className={`px-1.5 py-0.5 text-[9px] font-bold rounded transition-colors ${
+                                  isVisible
+                                    ? 'text-red-400 hover:bg-red-500/20 hover:text-red-300'
+                                    : 'text-green-400 bg-green-500/10 hover:bg-green-500/20 hover:text-green-300'
+                                }`}
+                              >
+                                {isVisible ? '✕' : '+ ADD'}
                               </button>
                             </div>
                           </div>
                           {isVisible && (
-                          <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+                          <div className="grid grid-cols-2 gap-x-3 gap-y-1 px-2.5 pb-2">
                             {item.hasScale && (
                               <div>
                                 <label className="text-[10px] text-gray-500">Scale {marketingElements[item.key]?.scale ?? 100}%</label>
@@ -3452,9 +3526,6 @@ export default function AdminPage() {
                         </div>
                         );
                       })}
-                      <button type="button" onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})} className="w-full mt-1 py-1.5 text-xs font-medium text-gray-400 bg-gray-700/50 rounded-lg hover:bg-gray-700 hover:text-white transition-colors">
-                        ↺ Reset All
-                      </button>
                     </div>
                   )}
                 </div>
@@ -3595,7 +3666,7 @@ export default function AdminPage() {
                   )}
                   
                   {marketingArticle && (
-                    <p className="mt-3 text-xs text-gray-500">💡 Canvas updates live as you change settings. Drag elements to reposition. Use 👁️ to show/hide, sliders to adjust. Save presets with 💾.</p>
+                    <p className="mt-3 text-xs text-gray-500">💡 Start Blank and add elements, or use All On. Drag to reposition. Canvas updates live. Settings auto-saved between sessions.</p>
                   )}
                 </div>
               </div>
