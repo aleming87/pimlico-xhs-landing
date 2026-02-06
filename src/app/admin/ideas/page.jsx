@@ -414,30 +414,68 @@ export default function IdeasPage() {
         <div className="space-y-2">
           {filtered.map(idea => {
             const pri = PRIORITIES.find(p => p.key === idea.priority);
+            const status = idea.status || 'pending'; // pending | accepted | rejected
+            const statusStyles = {
+              pending: 'border-gray-700/50',
+              accepted: 'border-emerald-500/40 bg-emerald-500/5',
+              rejected: 'border-red-500/30 bg-red-500/5 opacity-60',
+            };
             return (
-              <div key={idea.id} className="bg-gray-800/70 border border-gray-700/50 rounded-xl p-4 hover:border-gray-600/70 transition-colors group">
+              <div key={idea.id} className={`bg-gray-800/70 border rounded-xl p-4 hover:border-gray-600/70 transition-colors group ${statusStyles[status]}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full border ${pri?.color}`}>{pri?.label}</span>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      {/* Inline priority dropdown */}
+                      <select
+                        value={idea.priority || 'medium'}
+                        onChange={e => updateItem(idea.id, { priority: e.target.value })}
+                        className={`px-2 py-0.5 text-[10px] font-semibold rounded-full border appearance-none cursor-pointer focus:outline-none ${pri?.color || 'text-gray-400 bg-gray-700 border-gray-600'}`}
+                        style={{ paddingRight: '18px', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 4px center' }}
+                      >
+                        {PRIORITIES.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
+                      </select>
+                      {/* Status badge */}
+                      {status === 'accepted' && <span className="px-2 py-0.5 text-[10px] font-semibold text-emerald-300 bg-emerald-500/20 rounded-full border border-emerald-500/30">✓ Accepted</span>}
+                      {status === 'rejected' && <span className="px-2 py-0.5 text-[10px] font-semibold text-red-300 bg-red-500/20 rounded-full border border-red-500/30">✗ Rejected</span>}
                       {idea.tags.map(t => (
                         <span key={t} className="px-2 py-0.5 text-[10px] text-purple-300/70 bg-purple-500/10 rounded-full">{t}</span>
                       ))}
                     </div>
-                    <h3 className="text-sm font-semibold text-white">{idea.title}</h3>
+                    <h3 className={`text-sm font-semibold ${status === 'rejected' ? 'text-gray-500 line-through' : 'text-white'}`}>{idea.title}</h3>
                     {idea.description && <p className="text-xs text-gray-400 mt-1 line-clamp-2">{idea.description}</p>}
                     {idea.notes && <p className="text-[11px] text-gray-500 mt-1 italic">📎 {idea.notes}</p>}
                     <p className="text-[10px] text-gray-600 mt-2">{new Date(idea.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* Accept / Reject buttons */}
+                    {status !== 'accepted' && (
+                      <button onClick={() => updateItem(idea.id, { status: 'accepted' })} title="Accept Idea"
+                        className="p-1.5 text-emerald-400/70 hover:text-emerald-300 rounded-lg hover:bg-emerald-500/10 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                      </button>
+                    )}
+                    {status !== 'rejected' && (
+                      <button onClick={() => updateItem(idea.id, { status: 'rejected' })} title="Reject Idea"
+                        className="p-1.5 text-orange-400/70 hover:text-orange-300 rounded-lg hover:bg-orange-500/10 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                      </button>
+                    )}
+                    {(status === 'accepted' || status === 'rejected') && (
+                      <button onClick={() => updateItem(idea.id, { status: 'pending' })} title="Reset to Pending"
+                        className="p-1.5 text-gray-400/70 hover:text-gray-300 rounded-lg hover:bg-gray-500/10 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                    )}
                     <button onClick={() => startEdit(idea)} title="Edit"
                       className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-gray-700/50 transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                     </button>
-                    <button onClick={() => moveToStage(idea.id, 'drafting')} title="Move to Drafting"
-                      className="p-1.5 text-blue-400/70 hover:text-blue-300 rounded-lg hover:bg-blue-500/10 transition-colors">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                    </button>
+                    {status === 'accepted' && (
+                      <button onClick={() => moveToStage(idea.id, 'drafting')} title="Move to Drafting"
+                        className="p-1.5 text-blue-400/70 hover:text-blue-300 rounded-lg hover:bg-blue-500/10 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                      </button>
+                    )}
                     <button onClick={() => { if (confirm('Delete this idea?')) deleteItem(idea.id); }} title="Delete"
                       className="p-1.5 text-red-400/50 hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
