@@ -300,24 +300,46 @@ export default function DraftingPage() {
       {/* Workflow items from Ideas */}
       {draftItems.length > 0 && !editingArticle && (
         <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
-          <h3 className="text-xs font-semibold text-blue-300 mb-2">📥 Items moved to Drafting ({draftItems.length})</h3>
+          <h3 className="text-xs font-semibold text-blue-300 mb-2">📥 Ideas ready for drafting ({draftItems.length})</h3>
           <div className="space-y-1.5">
-            {draftItems.slice(0, 5).map(item => (
-              <div key={item.id} className="flex items-center justify-between bg-gray-800/50 rounded-lg px-3 py-2">
-                <span className="text-xs text-white">{item.title}</span>
-                <button onClick={() => {
-                    setMeta(prev => ({
-                      ...prev,
-                      title: item.title,
-                      slug: slugify(item.title),
-                      excerpt: item.description || '',
-                      category: (item.tags || []).find(t => ['AI Regulation', 'Payments', 'Crypto', 'Gambling'].includes(t)) || prev.category,
-                    }));
-                    if (item.tags?.length) setTags(item.tags);
-                  }}
-                  className="text-[10px] text-blue-400 hover:text-blue-300">Use as draft →</button>
-              </div>
-            ))}
+            {draftItems.slice(0, 8).map(item => {
+              const priColor = item.priority === 'high' ? 'text-red-400 bg-red-500/15' : item.priority === 'low' ? 'text-gray-400 bg-gray-500/15' : 'text-yellow-400 bg-yellow-500/15';
+              return (
+                <div key={item.id} className="flex items-center justify-between bg-gray-800/50 rounded-lg px-3 py-2.5 group hover:bg-gray-800/80 transition-colors">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${priColor}`}>{(item.priority || 'med').slice(0,3).toUpperCase()}</span>
+                    <span className="text-xs text-white truncate">{item.title}</span>
+                    {item.tags?.length > 0 && <span className="text-[9px] text-purple-400/60 hidden group-hover:inline">({item.tags.slice(0,2).join(', ')})</span>}
+                  </div>
+                  <button onClick={() => {
+                      // Auto-fill ALL fields from the idea
+                      const detectedCategory = (item.tags || []).find(t => ['AI Regulation', 'Payments', 'Crypto', 'Gambling'].includes(t)) || 'AI Regulation';
+                      setMeta(prev => ({
+                        ...prev,
+                        title: item.title,
+                        slug: slugify(item.title),
+                        excerpt: item.description || '',
+                        category: detectedCategory,
+                      }));
+                      // Set tags (filter out category-level tags, keep specific ones)
+                      if (item.tags?.length) setTags(item.tags);
+                      // Pre-populate content body with a structured markdown skeleton
+                      const skeleton = `# ${item.title}\n\n${item.description || ''}\n\n## Background\n\n[Provide regulatory context and history here]\n\n## Key Developments\n\n[Main analysis and findings]\n\n## Implications for Firms\n\n1. [Practical takeaway 1]\n2. [Practical takeaway 2]\n3. [Practical takeaway 3]\n\n## What Comes Next\n\n[Forward-looking outlook]\n\n---\n\n*This analysis is provided by Pimlico XHS™ for informational purposes. It does not constitute legal advice.*`;
+                      setContent(skeleton);
+                      // Calculate read time for the skeleton
+                      const wc = skeleton.split(/\s+/).filter(w => w).length;
+                      setMeta(prev => ({ ...prev, readTime: `${Math.max(1, Math.ceil(wc / 200))} min read` }));
+                      // Show success
+                      setSuccessMsg(`Loaded "${item.title}" — edit the skeleton and publish`);
+                      setShowSuccess(true);
+                      setTimeout(() => setShowSuccess(false), 3000);
+                    }}
+                    className="px-2.5 py-1 text-[10px] font-semibold text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-500/25 rounded-md transition-colors ml-2 whitespace-nowrap">
+                    Load → Auto-fill
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
