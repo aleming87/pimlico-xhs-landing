@@ -45,6 +45,85 @@ export default function IdeasPage() {
     setShowAdd(true);
   };
 
+  // PDF upload handler
+  const handlePdfUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    let imported = 0;
+
+    // Dynamically load pdf.js from CDN if not already loaded
+    if (!window.pdfjsLib) {
+      try {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      } catch {
+        alert('Failed to load PDF reader. Please check your internet connection.');
+        e.target.value = '';
+        return;
+      }
+    }
+
+    for (const file of files) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(' ');
+          fullText += pageText + '\n';
+        }
+
+        if (!fullText.trim()) continue;
+
+        // Split on double newlines to get sections, or treat as one idea
+        const paragraphs = fullText.split(/\n{2,}/).filter(p => p.trim());
+        if (paragraphs.length <= 3) {
+          // Treat whole PDF as one idea
+          const title = paragraphs[0]?.trim().slice(0, 120) || file.name.replace(/\.pdf$/i, '');
+          const description = paragraphs.slice(1).join('\n').trim();
+          const detectedTags = [];
+          const lowerContent = fullText.toLowerCase();
+          for (const cat of IDEA_CATEGORIES) {
+            if (lowerContent.includes(cat.toLowerCase())) detectedTags.push(cat);
+          }
+          addItem({ title, description, priority: 'medium', tags: detectedTags, notes: `Imported from PDF: ${file.name} (${pdf.numPages} pages)`, stage: 'ideas' });
+          imported++;
+        } else {
+          // Multiple sections — each major section becomes an idea
+          for (let j = 0; j < paragraphs.length; j++) {
+            const para = paragraphs[j].trim();
+            if (para.length < 10) continue; // skip tiny fragments
+            const title = para.split(/[.!?\n]/)[0].trim().slice(0, 120);
+            const description = para.length > title.length ? para.slice(title.length).trim() : '';
+            const detectedTags = [];
+            const lowerContent = para.toLowerCase();
+            for (const cat of IDEA_CATEGORIES) {
+              if (lowerContent.includes(cat.toLowerCase())) detectedTags.push(cat);
+            }
+            addItem({ title, description, priority: 'medium', tags: detectedTags, notes: `Imported from PDF: ${file.name} (section ${j + 1})`, stage: 'ideas' });
+            imported++;
+          }
+        }
+      } catch (err) {
+        console.error('Failed to parse PDF file:', file.name, err);
+        alert(`Could not read ${file.name}. Make sure it's a valid PDF.`);
+      }
+    }
+
+    setMdImportCount(imported);
+    setTimeout(() => setMdImportCount(0), 3000);
+    e.target.value = '';
+  };
+
   // Markdown upload handler
   const handleMdUpload = async (e) => {
     const files = Array.from(e.target.files || []);
@@ -151,7 +230,11 @@ export default function IdeasPage() {
         <div className="flex items-center gap-2">
           {mdImportCount > 0 && <span className="px-3 py-1.5 bg-green-500/15 text-green-300 text-xs font-medium rounded-lg animate-pulse">✓ {mdImportCount} idea{mdImportCount !== 1 ? 's' : ''} imported</span>}
           <label className="px-4 py-2 bg-gray-700 text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 cursor-pointer">
-            📄 Upload .md
+            � Upload PDF
+            <input type="file" accept=".pdf" multiple onChange={handlePdfUpload} className="hidden" />
+          </label>
+          <label className="px-4 py-2 bg-gray-700 text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2 cursor-pointer">
+            �📄 Upload .md
             <input type="file" accept=".md,.markdown,.txt" multiple onChange={handleMdUpload} className="hidden" />
           </label>
           <button onClick={() => { resetForm(); setShowAdd(true); }}

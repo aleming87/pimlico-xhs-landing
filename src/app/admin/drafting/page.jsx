@@ -78,12 +78,121 @@ export default function DraftingPage() {
     setIsUploading(false);
   };
 
+  const CATEGORIES = ['AI Regulation', 'Payments', 'Crypto', 'Gambling'];
+
+  // Smart MD upload: auto-fills title, excerpt, category, tags, and content
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => setContent(reader.result);
+    reader.onload = () => {
+      const text = reader.result;
+      const lines = text.split('\n');
+
+      // --- Extract Title: first # heading or first non-empty line ---
+      let extractedTitle = '';
+      let titleLineIdx = -1;
+      for (let i = 0; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (/^#{1,2}\s+/.test(trimmed)) {
+          extractedTitle = trimmed.replace(/^#{1,2}\s+/, '').trim();
+          titleLineIdx = i;
+          break;
+        }
+      }
+      if (!extractedTitle) {
+        // Fallback: first non-empty line
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].trim()) {
+            extractedTitle = lines[i].trim().replace(/^#+\s*/, '');
+            titleLineIdx = i;
+            break;
+          }
+        }
+      }
+
+      // --- Extract Excerpt: first paragraph of body text (non-heading, non-empty) ---
+      let extractedExcerpt = '';
+      let excerptEndIdx = titleLineIdx;
+      for (let i = titleLineIdx + 1; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (!trimmed) continue; // skip blank lines
+        if (/^#{1,3}\s+/.test(trimmed)) break; // stop at next heading
+        if (/^[-*_]{3,}$/.test(trimmed)) continue; // skip dividers
+        // Collect paragraph text
+        let para = '';
+        for (let j = i; j < lines.length; j++) {
+          const l = lines[j].trim();
+          if (!l || /^#{1,3}\s+/.test(l)) { excerptEndIdx = j; break; }
+          para += (para ? ' ' : '') + l.replace(/^[-*+]\s+/, '');
+          excerptEndIdx = j + 1;
+        }
+        extractedExcerpt = para.slice(0, 280);
+        break;
+      }
+
+      // --- Detect Category from content ---
+      const lowerText = text.toLowerCase();
+      const categoryScores = {};
+      const CATEGORY_KEYWORDS = {
+        'AI Regulation': ['ai regulation', 'artificial intelligence', 'ai act', 'ai framework', 'machine learning', 'ai governance', 'ai risk', 'genai', 'foundation model'],
+        'Payments': ['payment', 'psd2', 'psd3', 'open banking', 'financial promotion', 'fintech', 'dora', 'emi', 'psp', 'iban'],
+        'Crypto': ['crypto', 'mica', 'vasp', 'stablecoin', 'digital asset', 'token', 'blockchain', 'defi', 'web3'],
+        'Gambling': ['gambling', 'gaming', 'betting', 'casino', 'slot', 'lottery', 'igaming', 'age verification', 'self exclusion', 'affordability', 'ukgc'],
+      };
+      for (const [cat, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+        categoryScores[cat] = keywords.reduce((score, kw) => score + (lowerText.includes(kw) ? 1 : 0), 0);
+      }
+      const bestCat = Object.entries(categoryScores).sort((a, b) => b[1] - a[1])[0];
+      const detectedCategory = bestCat && bestCat[1] > 0 ? bestCat[0] : 'AI Regulation';
+
+      // --- Extract Tags from taxonomy ---
+      const detectedTags = [];
+      const allTaxTags = Object.values(PIMLICO_TAXONOMY).flat();
+      for (const tag of allTaxTags) {
+        if (lowerText.includes(tag.toLowerCase()) && !detectedTags.includes(tag)) {
+          detectedTags.push(tag);
+        }
+      }
+      // Also grab any #hashtags from the markdown
+      const hashTags = text.match(/#(\w{3,})/g);
+      if (hashTags) {
+        for (const ht of hashTags) {
+          const clean = ht.replace('#', '');
+          // Match against taxonomy
+          const match = allTaxTags.find(t => t.toLowerCase() === clean.toLowerCase());
+          if (match && !detectedTags.includes(match)) detectedTags.push(match);
+        }
+      }
+
+      // --- Extract Content: everything after title/excerpt ---
+      let contentBody = '';
+      const contentStartIdx = Math.max(titleLineIdx + 1, 0);
+      contentBody = lines.slice(contentStartIdx).join('\n').trim();
+
+      // --- Calculate read time ---
+      const wordCount = contentBody.split(/\s+/).filter(w => w).length;
+      const readMins = Math.max(1, Math.ceil(wordCount / 200));
+
+      // --- Auto-fill all fields ---
+      setMeta(prev => ({
+        ...prev,
+        title: extractedTitle || prev.title,
+        slug: extractedTitle ? slugify(extractedTitle) : prev.slug,
+        excerpt: extractedExcerpt || prev.excerpt,
+        category: detectedCategory,
+        readTime: `${readMins} min read`,
+      }));
+      setContent(contentBody);
+      setTags(detectedTags.slice(0, 12)); // Cap at 12 tags
+
+      // Show success feedback
+      setSuccessMsg(`Imported "${extractedTitle}" — ${detectedTags.length} tags detected, ${wordCount} words`);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 4000);
+    };
     reader.readAsText(file);
+    e.target.value = '';
   };
 
   const resetForm = () => {
@@ -173,7 +282,16 @@ export default function DraftingPage() {
             {draftItems.slice(0, 5).map(item => (
               <div key={item.id} className="flex items-center justify-between bg-gray-800/50 rounded-lg px-3 py-2">
                 <span className="text-xs text-white">{item.title}</span>
-                <button onClick={() => { setMeta(prev => ({ ...prev, title: item.title, excerpt: item.description })); }}
+                <button onClick={() => {
+                    setMeta(prev => ({
+                      ...prev,
+                      title: item.title,
+                      slug: slugify(item.title),
+                      excerpt: item.description || '',
+                      category: (item.tags || []).find(t => ['AI Regulation', 'Payments', 'Crypto', 'Gambling'].includes(t)) || prev.category,
+                    }));
+                    if (item.tags?.length) setTags(item.tags);
+                  }}
                   className="text-[10px] text-blue-400 hover:text-blue-300">Use as draft →</button>
               </div>
             ))}
@@ -299,8 +417,8 @@ export default function DraftingPage() {
                 <button onClick={() => { if (editorMode === 'markdown' && content) { setHtmlContent(content); } setEditorMode('visual'); }}
                   className={`px-3 py-1 text-xs rounded-md ${editorMode === 'visual' ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Visual</button>
               </div>
-              <label className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 cursor-pointer">
-                📄 Upload .md
+              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600/80 text-white text-xs rounded-lg hover:bg-emerald-500 cursor-pointer font-medium transition-colors">
+                📄 Import .md → Auto-fill
                 <input type="file" accept=".md,.markdown,.txt" onChange={handleFileUpload} className="hidden" />
               </label>
             </div>

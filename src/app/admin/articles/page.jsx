@@ -52,6 +52,66 @@ export default function ArticlesPage() {
   const hasFilters = searchQuery || filterCategory !== 'all' || filterStatus !== 'all' || filterFeatured !== 'all';
   const clearFilters = () => { setSearchQuery(''); setFilterCategory('all'); setFilterStatus('all'); setFilterFeatured('all'); };
 
+  const downloadArticlePdf = (article) => {
+    const dateStr = article.date ? new Date(article.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    const tagsHtml = (article.tags || []).map(t => `<span style="display:inline-block;background:#f0f0f0;color:#444;padding:2px 10px;border-radius:12px;font-size:11px;margin-right:6px;">${t}</span>`).join('');
+
+    // Convert markdown content to basic HTML
+    let bodyHtml = article.content || '';
+    if (!bodyHtml.includes('<')) {
+      bodyHtml = bodyHtml
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+        .replace(/\n{2,}/g, '</p><p>')
+        .replace(/\n/g, '<br/>');
+      bodyHtml = '<p>' + bodyHtml + '</p>';
+    }
+
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>${article.title || 'Article'}</title>
+<style>
+  @page { margin: 2cm; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; max-width: 700px; margin: 0 auto; padding: 40px 20px; line-height: 1.7; }
+  .header { border-bottom: 2px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }
+  .brand { font-size: 13px; font-weight: 700; color: #6366f1; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+  h1 { font-size: 28px; margin: 0 0 10px 0; color: #111; line-height: 1.3; }
+  .meta { font-size: 13px; color: #666; margin-bottom: 8px; }
+  .excerpt { font-size: 16px; color: #444; font-style: italic; margin: 16px 0; padding-left: 16px; border-left: 3px solid #6366f1; }
+  .tags { margin-top: 12px; }
+  .content { font-size: 15px; }
+  .content h2 { font-size: 22px; color: #222; margin-top: 28px; }
+  .content h3 { font-size: 18px; color: #333; margin-top: 22px; }
+  .content p { margin: 12px 0; }
+  .content ul, .content ol { margin: 12px 0; padding-left: 24px; }
+  .content li { margin: 4px 0; }
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 11px; color: #999; text-align: center; }
+  @media print { body { padding: 0; } }
+</style></head><body>
+  <div class="header">
+    <div class="brand">Pimlico XHS\u2122</div>
+    <h1>${article.title || ''}</h1>
+    <div class="meta">
+      ${article.author || 'Pimlico XHS\u2122 Team'} &middot; ${dateStr} &middot; ${article.readTime || ''}
+      ${article.category ? ` &middot; ${article.category}` : ''}
+    </div>
+    ${article.excerpt ? `<div class="excerpt">${article.excerpt}</div>` : ''}
+    ${tagsHtml ? `<div class="tags">${tagsHtml}</div>` : ''}
+  </div>
+  <div class="content">${bodyHtml}</div>
+  <div class="footer">\u00A9 ${new Date().getFullYear()} Pimlico XHS\u2122 \u2014 Cross-Border Regulatory Intelligence \u2014 pimlicosolutions.com</div>
+</body></html>`;
+
+    const printWin = window.open('', '_blank', 'width=800,height=900');
+    if (!printWin) { alert('Please allow popups to download PDF.'); return; }
+    printWin.document.write(html);
+    printWin.document.close();
+    setTimeout(() => { printWin.focus(); printWin.print(); }, 400);
+  };
+
   return (
     <div className="p-6 max-w-[1200px] mx-auto space-y-5">
       <div className="flex items-center justify-between">
@@ -158,6 +218,7 @@ export default function ArticlesPage() {
                       </td>
                       <td className="p-4 text-right space-x-2">
                         <Link href={`/insights/${article.slug}`} className="text-xs text-gray-400 hover:text-white">View</Link>
+                        <button onClick={() => downloadArticlePdf(article)} className="text-xs text-indigo-400/70 hover:text-indigo-300">⬇ PDF</button>
                         <button onClick={() => handleDelete(article)} className="text-xs text-red-400/70 hover:text-red-300">Delete</button>
                       </td>
                     </tr>
