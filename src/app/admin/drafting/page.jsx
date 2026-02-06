@@ -24,6 +24,7 @@ export default function DraftingPage() {
   });
   const [content, setContent] = useState('');
   const [editorMode, setEditorMode] = useState('markdown');
+  const [showPreview, setShowPreview] = useState(false);
   const [htmlContent, setHtmlContent] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
@@ -255,6 +256,28 @@ export default function DraftingPage() {
 
   const wordCount = (editorMode === 'visual' ? htmlContent.replace(/<[^>]+>/g, ' ') : content).trim().split(/\s+/).filter(w => w).length;
 
+  // Simple markdown → HTML renderer for preview
+  const renderMarkdown = (md) => {
+    if (!md) return '<p style="color:#6b7280;">Nothing to preview yet. Start writing above.</p>';
+    let html = md
+      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`(.+?)`/g, '<code style="background:#1e293b;padding:2px 6px;border-radius:4px;font-size:13px;">$1</code>')
+      .replace(/^\> (.+)$/gm, '<blockquote style="border-left:3px solid #6366f1;padding-left:12px;color:#94a3b8;margin:12px 0;">$1</blockquote>')
+      .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#818cf8;text-decoration:underline;">$1</a>')
+      .replace(/^---$/gm, '<hr style="border-color:#334155;margin:20px 0;"/>')
+      .replace(/\n{2,}/g, '</p><p>')
+      .replace(/\n/g, '<br/>');
+    // Wrap consecutive <li> in <ul>
+    html = html.replace(/(<li>.*?<\/li>(\s*<br\/>)?)+/gs, (match) => '<ul style="padding-left:20px;margin:8px 0;">' + match.replace(/<br\/>/g, '') + '</ul>');
+    return '<p>' + html + '</p>';
+  };
+
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-5">
       {/* Success Toast */}
@@ -412,10 +435,12 @@ export default function DraftingPage() {
             <label className="text-xs font-medium text-gray-400">Content</label>
             <div className="flex items-center gap-2">
               <div className="flex bg-gray-700 rounded-lg p-0.5">
-                <button onClick={() => setEditorMode('markdown')}
-                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'markdown' ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Markdown</button>
-                <button onClick={() => { if (editorMode === 'markdown' && content) { setHtmlContent(content); } setEditorMode('visual'); }}
-                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'visual' ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Visual</button>
+                <button onClick={() => { setEditorMode('markdown'); setShowPreview(false); }}
+                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'markdown' && !showPreview ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Markdown</button>
+                <button onClick={() => { if (editorMode === 'markdown' && content) { setHtmlContent(content); } setEditorMode('visual'); setShowPreview(false); }}
+                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'visual' && !showPreview ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Visual</button>
+                <button onClick={() => setShowPreview(p => !p)}
+                  className={`px-3 py-1 text-xs rounded-md ${showPreview ? 'bg-emerald-600 text-white' : 'text-gray-400'}`}>👁 Preview</button>
               </div>
               <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600/80 text-white text-xs rounded-lg hover:bg-emerald-500 cursor-pointer font-medium transition-colors">
                 📄 Import .md → Auto-fill
@@ -424,7 +449,44 @@ export default function DraftingPage() {
             </div>
           </div>
 
-          {editorMode === 'visual' ? (
+          {showPreview ? (
+            /* Article Preview */
+            <div className="bg-white rounded-lg border border-gray-300 p-8 min-h-[400px] overflow-y-auto max-h-[700px]">
+              {/* Preview Header */}
+              <div className="border-b border-gray-200 pb-5 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  {meta.category && <span className="px-2.5 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-semibold rounded-full">{meta.category}</span>}
+                  {meta.featured && <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] rounded-full">★ Featured</span>}
+                  {isPremium && <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] rounded-full">⭐ Premium</span>}
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900 leading-tight">{meta.title || 'Untitled Article'}</h1>
+                {meta.excerpt && <p className="text-gray-500 mt-2 text-sm italic border-l-3 border-indigo-400 pl-3">{meta.excerpt}</p>}
+                <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
+                  <span>{meta.author}</span>
+                  <span>·</span>
+                  <span>{publicationDate ? new Date(publicationDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No date'}</span>
+                  <span>·</span>
+                  <span>{meta.readTime}</span>
+                </div>
+                {meta.image && <img src={meta.image} alt="" className="w-full h-48 object-cover rounded-lg mt-4" />}
+                {tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {tags.map(t => <span key={t} className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded-full">{t}</span>)}
+                  </div>
+                )}
+              </div>
+              {/* Preview Body */}
+              <div
+                className="prose prose-sm max-w-none text-gray-800"
+                style={{ lineHeight: 1.75, fontSize: '15px' }}
+                dangerouslySetInnerHTML={{ __html: editorMode === 'visual' ? (htmlContent || '<p style="color:#9ca3af;">No content yet.</p>') : renderMarkdown(content) }}
+              />
+              {/* Preview Footer */}
+              <div className="mt-8 pt-4 border-t border-gray-200 text-center text-[11px] text-gray-400">
+                © {new Date().getFullYear()} Pimlico XHS™ — Cross-Border Regulatory Intelligence
+              </div>
+            </div>
+          ) : editorMode === 'visual' ? (
             <div ref={editorRef} contentEditable suppressContentEditableWarning
               onInput={e => setHtmlContent(e.currentTarget.innerHTML)}
               className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 prose max-w-none min-h-[400px] overflow-y-auto focus:outline-none"
