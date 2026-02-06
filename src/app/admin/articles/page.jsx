@@ -3,12 +3,38 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useArticles } from '../ArticlesContext';
 
+// Gift link token generator — must match the one in ArticlePageClient.jsx
+function generateGiftToken(slug) {
+  const str = slug + '-pimlico-xhs-gift-2026';
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+function generateGiftUrl(slug) {
+  if (typeof window === 'undefined') return '';
+  const token = generateGiftToken(slug);
+  return `${window.location.origin}/insights/${slug}?gift=${token}`;
+}
+
 export default function ArticlesPage() {
   const { articles, setArticles, deleteArticle } = useArticles();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterFeatured, setFilterFeatured] = useState('all');
+  const [copiedGiftId, setCopiedGiftId] = useState(null);
+
+  const handleCopyGiftLink = (article) => {
+    const url = generateGiftUrl(article.slug);
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedGiftId(article.id);
+      setTimeout(() => setCopiedGiftId(null), 2000);
+    });
+  };
 
   const filteredArticles = articles.filter(article => {
     if (searchQuery) {
@@ -218,6 +244,11 @@ export default function ArticlesPage() {
                       </td>
                       <td className="p-4 text-right space-x-2">
                         <Link href={`/insights/${article.slug}`} className="text-xs text-gray-400 hover:text-white">View</Link>
+                        {article.isPremium && (
+                          <button onClick={() => handleCopyGiftLink(article)} className={`text-xs transition-colors ${copiedGiftId === article.id ? 'text-green-400' : 'text-amber-400/70 hover:text-amber-300'}`}>
+                            {copiedGiftId === article.id ? '✓ Copied!' : '🎁 Gift Link'}
+                          </button>
+                        )}
                         <button onClick={() => downloadArticlePdf(article)} className="text-xs text-indigo-400/70 hover:text-indigo-300">⬇ PDF</button>
                         <button onClick={() => handleDelete(article)} className="text-xs text-red-400/70 hover:text-red-300">Delete</button>
                       </td>

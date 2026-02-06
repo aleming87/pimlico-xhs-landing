@@ -4,8 +4,19 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Footer } from '@/components/footer';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+
+// Gift link token generator — must match the one in admin/articles/page.jsx
+function generateGiftToken(slug) {
+  const str = slug + '-pimlico-xhs-gift-2026';
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
 
 // Generate realistic view counts based on article age with variation
 const generateViewCount = (dateStr, articleId) => {
@@ -112,12 +123,28 @@ function extractCountryFromArticle(article) {
 
 export default function ArticlePageClient() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [article, setArticle] = useState(null);
   const [currentUrl, setCurrentUrl] = useState('');
   const [copied, setCopied] = useState(false);
   const [viewCount, setViewCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Admin bypass: check sessionStorage for admin auth
+  const [isAdmin, setIsAdmin] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsAdmin(sessionStorage.getItem('xhs-admin-auth') === 'true');
+    }
+  }, []);
+
+  // Gift link bypass: check ?gift=TOKEN in URL
+  const giftParam = searchParams.get('gift');
+  const hasGiftAccess = !!(params.slug && giftParam && giftParam === generateGiftToken(params.slug));
+
+  // Combined: should we bypass the premium paywall?
+  const hasFullAccess = isAdmin || hasGiftAccess;
 
   useEffect(() => {
     // Set current URL for sharing
@@ -364,9 +391,25 @@ export default function ArticlePageClient() {
             </div>
           </header>
 
+          {/* Admin / Gift access banner */}
+          {article.isPremium && hasFullAccess && (
+            <div className={`mb-6 rounded-xl px-4 py-3 flex items-center gap-3 text-sm font-medium ${
+              isAdmin
+                ? 'bg-indigo-50 border border-indigo-200 text-indigo-700'
+                : 'bg-amber-50 border border-amber-200 text-amber-700'
+            }`}>
+              <span>{isAdmin ? '🔓' : '🎁'}</span>
+              <span>
+                {isAdmin
+                  ? 'Admin access — viewing full premium article'
+                  : 'Gift link — you have full access to this article'}
+              </span>
+            </div>
+          )}
+
           {/* Article Body - with justified text */}
           <div className="prose prose-lg max-w-none">
-            {article.isPremium && article.premiumCutoff ? (
+            {article.isPremium && article.premiumCutoff && !hasFullAccess ? (
               <>
                 {/* Show only the cutoff percentage of content with blur effect */}
                 <div className="relative">
@@ -491,8 +534,8 @@ export default function ArticlePageClient() {
             )}
           </div>
 
-          {/* Tags Section - hidden for premium articles */}
-          {!article.isPremium && article.tags && article.tags.length > 0 && (
+          {/* Tags Section - hidden for paywalled premium articles, shown for admin/gift */}
+          {(!article.isPremium || hasFullAccess) && article.tags && article.tags.length > 0 && (
             <div className="mt-8 pt-6 border-t border-gray-100">
               <div className="flex items-center flex-wrap gap-2">
                 <span className="text-sm font-medium text-gray-500 mr-1">Tags:</span>
@@ -508,8 +551,8 @@ export default function ArticlePageClient() {
             </div>
           )}
 
-          {/* Trial CTA Section - only show for non-premium articles */}
-          {!article.isPremium && (
+          {/* Trial CTA Section - show for non-premium or when full access granted */}
+          {(!article.isPremium || hasFullAccess) && (
             <div className="mt-10">
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 sm:p-10">
                 <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
@@ -534,8 +577,8 @@ export default function ArticlePageClient() {
             </div>
           )}
 
-          {/* Back to Insights - hidden for premium articles */}
-          {!article.isPremium && (
+          {/* Back to Insights */}
+          {(!article.isPremium || hasFullAccess) && (
             <div className="mt-8">
               <Link 
                 href="/insights" 
