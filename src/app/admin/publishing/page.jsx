@@ -20,6 +20,13 @@ const POST_STATUSES = {
 
 const TIME_SLOTS = ['07:00','08:00','09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];
 
+const CATEGORY_COLORS_MAP = {
+  'Gambling': { dot: 'bg-red-500', text: 'text-red-300', bg: 'bg-red-500/15 text-red-300' },
+  'AI Regulation': { dot: 'bg-violet-500', text: 'text-violet-300', bg: 'bg-violet-500/15 text-violet-300' },
+  'Payments': { dot: 'bg-emerald-500', text: 'text-emerald-300', bg: 'bg-emerald-500/15 text-emerald-300' },
+  'Crypto': { dot: 'bg-amber-500', text: 'text-amber-300', bg: 'bg-amber-500/15 text-amber-300' },
+};
+
 const LINKEDIN_POST_FORMATS = {
   hook: { label: '🎣 Hook + Value', build: (a) => `${a.title}\n\nHere's what you need to know:\n\n→ Key insight from our latest analysis\n→ What this means for your firm\n→ How to prepare now\n\nThe regulatory landscape doesn't wait. Neither should you.\n\n🔗 Full article: pimlicosolutions.com/insights/${a.slug || 'article'}\n\n#RegTech #Compliance #${(a.category||'Regulation').replace(/\s+/g,'')}` },
   storytelling: { label: '📖 Storytelling', build: (a) => `Last week, a client asked me:\n\n"How do we stay ahead of ${a.category?.toLowerCase() || 'regulatory'} changes?"\n\nMy answer surprised them.\n\nIn our latest piece, "${a.title}", we break down:\n\n1️⃣ The key shifts happening right now\n2️⃣ What firms are getting wrong\n3️⃣ The 3-step framework that works\n\nThe firms that adapt first will lead.\n\n🔗 pimlicosolutions.com/insights/${a.slug || 'article'}\n\n#${(a.category||'Regulation').replace(/\s+/g,'')} #RegulatoryCompliance #Pimlico` },
@@ -48,6 +55,7 @@ export default function PublishingPage() {
   const [showPreview, setShowPreview] = useState(true);
   const [calMonth, setCalMonth] = useState(new Date().getMonth());
   const [calYear, setCalYear] = useState(new Date().getFullYear());
+  const [selectedCalDay, setSelectedCalDay] = useState(null);
   const textareaRef = useRef(null);
 
   useEffect(() => { try { localStorage.setItem('xhs-publishing-posts-v2', JSON.stringify(posts)); } catch {} }, [posts]);
@@ -151,12 +159,20 @@ export default function PublishingPage() {
     for (let i = 0; i < firstDay; i++) days.push(null);
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      days.push({ day: d, date: dateStr, posts: posts.filter(p => p.scheduledDate === dateStr) });
+      const dayPosts = posts.filter(p => p.scheduledDate === dateStr);
+      const dayArticles = articles.filter(a => a.date && a.date.startsWith(dateStr));
+      days.push({ day: d, date: dateStr, posts: dayPosts, articles: dayArticles });
     }
     return days;
-  }, [posts, calMonth, calYear]);
+  }, [posts, articles, calMonth, calYear]);
 
   const today = new Date().toISOString().split('T')[0];
+
+  // Selected day detail data
+  const selectedDayData = useMemo(() => {
+    if (!selectedCalDay) return null;
+    return calendarData.find(d => d && d.date === selectedCalDay) || null;
+  }, [selectedCalDay, calendarData]);
 
   return (
     <div className="p-6 max-w-[1400px] mx-auto">
@@ -569,32 +585,235 @@ export default function PublishingPage() {
 
       {/* ==================== CALENDAR VIEW ==================== */}
       {view === 'calendar' && (
-        <div className="bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-            <button type="button" onClick={() => { if (calMonth===0){setCalMonth(11);setCalYear(y=>y-1);}else setCalMonth(m=>m-1); }} className="text-gray-400 hover:text-white text-sm px-2">←</button>
-            <h3 className="text-sm font-semibold text-white">{new Date(calYear, calMonth).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</h3>
-            <button type="button" onClick={() => { if (calMonth===11){setCalMonth(0);setCalYear(y=>y+1);}else setCalMonth(m=>m+1); }} className="text-gray-400 hover:text-white text-sm px-2">→</button>
-          </div>
-          <div className="grid grid-cols-7">
-            {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => (
-              <div key={d} className="px-2 py-2 text-center text-[10px] font-semibold text-gray-500 border-b border-gray-700">{d}</div>
-            ))}
-            {calendarData.map((day, i) => (
-              <div key={i} className={`min-h-[80px] p-1.5 border-b border-r border-gray-700/50 ${day?.date===today?'bg-indigo-600/10':''} ${!day?'bg-gray-800/30':''}`}>
-                {day && (
-                  <>
-                    <div className={`text-[11px] font-medium mb-1 ${day.date===today?'text-indigo-300':'text-gray-400'}`}>{day.day}</div>
-                    {day.posts.slice(0,3).map(p => (
-                      <div key={p.id} className={`text-[9px] px-1 py-0.5 rounded mb-0.5 truncate cursor-pointer hover:opacity-80 ${POST_STATUSES[p.status]?.color?.split(' ').slice(0,2).join(' ') || 'bg-gray-700 text-gray-400'}`}
-                        onClick={() => editPost(p)}>
-                        {PLATFORMS[p.platform]?.icon} {p.text?.slice(0,20)}
-                      </div>
-                    ))}
-                    {day.posts.length>3 && <div className="text-[9px] text-gray-500">+{day.posts.length-3} more</div>}
-                  </>
-                )}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Calendar Grid */}
+          <div className="lg:col-span-8 bg-gray-800 rounded-xl border border-gray-700/50 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+              <button type="button" onClick={() => { if (calMonth===0){setCalMonth(11);setCalYear(y=>y-1);}else setCalMonth(m=>m-1); setSelectedCalDay(null); }} className="text-gray-400 hover:text-white text-sm px-3 py-1 rounded-lg hover:bg-gray-700/50 transition-colors">← Prev</button>
+              <div className="text-center">
+                <h3 className="text-sm font-semibold text-white">{new Date(calYear, calMonth).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</h3>
+                <button type="button" onClick={() => { setCalMonth(new Date().getMonth()); setCalYear(new Date().getFullYear()); setSelectedCalDay(today); }} className="text-[10px] text-indigo-400 hover:text-indigo-300 mt-0.5">Go to today</button>
               </div>
-            ))}
+              <button type="button" onClick={() => { if (calMonth===11){setCalMonth(0);setCalYear(y=>y+1);}else setCalMonth(m=>m+1); setSelectedCalDay(null); }} className="text-gray-400 hover:text-white text-sm px-3 py-1 rounded-lg hover:bg-gray-700/50 transition-colors">Next →</button>
+            </div>
+            <div className="grid grid-cols-7">
+              {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => (
+                <div key={d} className="px-2 py-2 text-center text-[10px] font-semibold text-gray-500 border-b border-gray-700">{d}</div>
+              ))}
+              {calendarData.map((day, i) => {
+                const isToday = day?.date === today;
+                const isSelected = day?.date === selectedCalDay;
+                const hasArticles = day?.articles?.length > 0;
+                const hasPosts = day?.posts?.length > 0;
+                const totalItems = (day?.articles?.length || 0) + (day?.posts?.length || 0);
+                return (
+                  <div key={i}
+                    onClick={() => day && setSelectedCalDay(day.date === selectedCalDay ? null : day.date)}
+                    className={`min-h-[90px] p-1.5 border-b border-r border-gray-700/50 transition-colors cursor-pointer
+                      ${!day ? 'bg-gray-800/30 cursor-default' : 'hover:bg-gray-700/30'}
+                      ${isToday ? 'bg-indigo-600/10' : ''}
+                      ${isSelected ? 'bg-indigo-600/20 ring-1 ring-inset ring-indigo-500/40' : ''}`}>
+                    {day && (
+                      <>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className={`text-[11px] font-medium ${isToday ? 'bg-indigo-600 text-white px-1.5 py-0.5 rounded-full' : 'text-gray-400'}`}>{day.day}</span>
+                          {totalItems > 0 && <span className="text-[8px] text-gray-500 bg-gray-700/60 px-1 rounded-full">{totalItems}</span>}
+                        </div>
+                        {/* Articles on this day */}
+                        {day.articles.slice(0, 2).map(a => {
+                          const cc = CATEGORY_COLORS_MAP[a.category];
+                          return (
+                            <div key={a.id} className={`text-[9px] px-1.5 py-0.5 rounded mb-0.5 truncate flex items-center gap-1 ${cc?.bg || 'bg-gray-500/15 text-gray-300'}`}>
+                              <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${cc?.dot || 'bg-gray-400'}`} />
+                              {a.title.slice(0, 22)}{a.title.length > 22 ? '…' : ''}
+                            </div>
+                          );
+                        })}
+                        {/* Social posts on this day */}
+                        {day.posts.slice(0, 2).map(p => (
+                          <div key={p.id} className={`text-[9px] px-1.5 py-0.5 rounded mb-0.5 truncate cursor-pointer hover:opacity-80 ${POST_STATUSES[p.status]?.color?.split(' ').slice(0,2).join(' ') || 'bg-gray-700 text-gray-400'}`}
+                            onClick={(e) => { e.stopPropagation(); editPost(p); }}>
+                            {PLATFORMS[p.platform]?.icon} {p.text?.slice(0,18)}
+                          </div>
+                        ))}
+                        {totalItems > 4 && <div className="text-[8px] text-gray-500 mt-0.5">+{totalItems - 4} more</div>}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {/* Legend */}
+            <div className="px-4 py-2.5 border-t border-gray-700/50 flex items-center gap-4 flex-wrap">
+              <span className="text-[10px] text-gray-500 font-medium">Legend:</span>
+              {Object.entries(CATEGORY_COLORS_MAP).map(([cat, cc]) => (
+                <div key={cat} className="flex items-center gap-1">
+                  <div className={`w-2 h-2 rounded-full ${cc.dot}`} />
+                  <span className="text-[10px] text-gray-400">{cat}</span>
+                </div>
+              ))}
+              <div className="flex items-center gap-1"><span className="text-[10px]">📝</span><span className="text-[10px] text-gray-400">Draft post</span></div>
+              <div className="flex items-center gap-1"><span className="text-[10px]">✅</span><span className="text-[10px] text-gray-400">Published post</span></div>
+            </div>
+          </div>
+
+          {/* Day Detail Sidebar */}
+          <div className="lg:col-span-4 space-y-4">
+            {selectedDayData ? (
+              <>
+                <div className="bg-gray-800 rounded-xl border border-gray-700/50 p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-semibold text-white">
+                      📅 {new Date(selectedCalDay + 'T00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+                    </h3>
+                    <button type="button" onClick={() => setSelectedCalDay(null)} className="text-gray-500 hover:text-white text-xs">✕</button>
+                  </div>
+
+                  {/* Articles published this day */}
+                  {selectedDayData.articles.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider">📰 Articles Published</h4>
+                      <div className="space-y-2">
+                        {selectedDayData.articles.map(a => {
+                          const cc = CATEGORY_COLORS_MAP[a.category];
+                          return (
+                            <div key={a.id} className="bg-gray-700/30 rounded-lg p-3">
+                              <div className="flex items-start gap-2">
+                                {a.image && <img src={a.image} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-gray-600/50" />}
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs text-white font-medium leading-snug">{a.title}</p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${cc?.bg || 'bg-gray-500/15 text-gray-300'}`}>{a.category}</span>
+                                    {a.readTime && <span className="text-[9px] text-gray-500">{a.readTime}</span>}
+                                    {a.isPremium && <span className="text-[9px] text-amber-400">⭐ Premium</span>}
+                                  </div>
+                                </div>
+                              </div>
+                              <p className="text-[10px] text-gray-400 mt-2 line-clamp-2">{a.excerpt}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Social posts this day */}
+                  {selectedDayData.posts.length > 0 && (
+                    <div>
+                      <h4 className="text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider">📢 Social Posts</h4>
+                      <div className="space-y-2">
+                        {selectedDayData.posts.map(p => (
+                          <div key={p.id} className="bg-gray-700/30 rounded-lg p-3">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <span className={`px-2 py-0.5 rounded-full text-[9px] font-medium border ${POST_STATUSES[p.status]?.color}`}>
+                                {POST_STATUSES[p.status]?.icon} {POST_STATUSES[p.status]?.label}
+                              </span>
+                              <span className="text-xs">{PLATFORMS[p.platform]?.icon}</span>
+                              <span className="text-[10px] text-gray-500">{PLATFORMS[p.platform]?.label}</span>
+                              {p.scheduledTime && <span className="text-[10px] text-gray-500 ml-auto">⏰ {p.scheduledTime}</span>}
+                            </div>
+                            <p className="text-[11px] text-gray-300 whitespace-pre-wrap line-clamp-4">{p.text}</p>
+                            <div className="flex gap-1.5 mt-2">
+                              <button type="button" onClick={() => editPost(p)}
+                                className="px-2 py-1 text-[9px] text-gray-400 hover:text-white bg-gray-700/60 rounded hover:bg-gray-600 transition-colors">✏️ Edit</button>
+                              <button type="button" onClick={() => copyToClipboard(p.text, `cal-${p.id}`)}
+                                className="px-2 py-1 text-[9px] text-gray-400 hover:text-white bg-gray-700/60 rounded hover:bg-gray-600 transition-colors">
+                                {copiedId === `cal-${p.id}` ? '✓ Copied' : '📋 Copy'}
+                              </button>
+                              {p.status !== 'published' && (
+                                <button type="button" onClick={() => markPublished(p.id)}
+                                  className="px-2 py-1 text-[9px] text-green-400/60 hover:text-green-300 bg-gray-700/60 rounded hover:bg-green-500/10 transition-colors">✅ Publish</button>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Empty day */}
+                  {selectedDayData.articles.length === 0 && selectedDayData.posts.length === 0 && (
+                    <div className="text-center py-6">
+                      <span className="text-2xl mb-2 block">📭</span>
+                      <p className="text-sm text-gray-400">Nothing scheduled</p>
+                      <p className="text-[10px] text-gray-500 mt-1">Use the Composer to create posts for this date</p>
+                      <button type="button" onClick={() => { setScheduledDate(selectedCalDay); setView('composer'); }}
+                        className="mt-3 px-4 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors">
+                        + Schedule for this day
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Month Summary */}
+                <div className="bg-gray-800 rounded-xl border border-gray-700/50 p-4">
+                  <h4 className="text-[11px] font-semibold text-gray-400 mb-2">📊 This Month</h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-gray-700/30 rounded-lg p-2 text-center">
+                      <span className="text-lg font-bold text-white">{calendarData.filter(d => d?.articles?.length).length}</span>
+                      <p className="text-[9px] text-gray-500">Articles published</p>
+                    </div>
+                    <div className="bg-gray-700/30 rounded-lg p-2 text-center">
+                      <span className="text-lg font-bold text-white">{calendarData.reduce((s, d) => s + (d?.posts?.length || 0), 0)}</span>
+                      <p className="text-[9px] text-gray-500">Social posts</p>
+                    </div>
+                    <div className="bg-gray-700/30 rounded-lg p-2 text-center">
+                      <span className="text-lg font-bold text-green-400">{calendarData.reduce((s, d) => s + (d?.posts?.filter(p => p.status === 'published').length || 0), 0)}</span>
+                      <p className="text-[9px] text-gray-500">Posts published</p>
+                    </div>
+                    <div className="bg-gray-700/30 rounded-lg p-2 text-center">
+                      <span className="text-lg font-bold text-blue-400">{calendarData.reduce((s, d) => s + (d?.posts?.filter(p => p.status === 'scheduled').length || 0), 0)}</span>
+                      <p className="text-[9px] text-gray-500">Posts scheduled</p>
+                    </div>
+                  </div>
+                  {/* Category breakdown for month */}
+                  <div className="mt-3 pt-3 border-t border-gray-700/40">
+                    <h5 className="text-[10px] text-gray-500 mb-1.5">Articles by category</h5>
+                    <div className="flex flex-wrap gap-1.5">
+                      {(() => {
+                        const monthArticles = calendarData.flatMap(d => d?.articles || []);
+                        const catCounts = {};
+                        monthArticles.forEach(a => { catCounts[a.category || 'Other'] = (catCounts[a.category || 'Other'] || 0) + 1; });
+                        return Object.entries(catCounts).map(([cat, count]) => {
+                          const cc = CATEGORY_COLORS_MAP[cat];
+                          return <span key={cat} className={`text-[9px] px-2 py-0.5 rounded-full ${cc?.bg || 'bg-gray-500/15 text-gray-300'}`}>{cat}: {count}</span>;
+                        });
+                      })()}
+                      {calendarData.flatMap(d => d?.articles || []).length === 0 && <span className="text-[9px] text-gray-500">No articles this month</span>}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              /* No day selected — show month overview */
+              <div className="bg-gray-800 rounded-xl border border-gray-700/50 p-4">
+                <h3 className="text-sm font-semibold text-white mb-3">📅 Calendar Guide</h3>
+                <div className="space-y-3">
+                  <p className="text-xs text-gray-400">Click any day to see detailed articles and social posts.</p>
+                  <div className="bg-gray-700/30 rounded-lg p-3">
+                    <h4 className="text-[11px] font-semibold text-white mb-2">This month at a glance</h4>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-gray-400">📰 Articles published</span>
+                        <span className="text-xs font-bold text-white">{calendarData.filter(d => d?.articles?.length).length}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-gray-400">📢 Social posts</span>
+                        <span className="text-xs font-bold text-white">{calendarData.reduce((s, d) => s + (d?.posts?.length || 0), 0)}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-gray-400">📅 Days with activity</span>
+                        <span className="text-xs font-bold text-white">{calendarData.filter(d => d && ((d.articles?.length || 0) + (d.posts?.length || 0)) > 0).length}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gradient-to-r from-indigo-900/20 to-purple-900/20 rounded-lg p-3 border border-indigo-500/20">
+                    <p className="text-[11px] text-indigo-300 font-medium">💡 Tip</p>
+                    <p className="text-[10px] text-gray-400 mt-1">Schedule posts on days without articles to maintain consistent audience engagement. Aim for 2-3 posts per article.</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
