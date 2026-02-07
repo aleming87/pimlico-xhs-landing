@@ -208,10 +208,12 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
         }
       }
 
-      // --- Extract Content: everything after title/excerpt ---
+      // --- Extract Content: everything after title + excerpt paragraph ---
       let contentBody = '';
-      const contentStartIdx = Math.max(titleLineIdx + 1, 0);
+      const contentStartIdx = Math.max(excerptEndIdx, titleLineIdx + 1);
       contentBody = lines.slice(contentStartIdx).join('\n').trim();
+      // Strip leading blank lines
+      contentBody = contentBody.replace(/^\n+/, '');
 
       // --- Calculate read time ---
       const wordCount = contentBody.split(/\s+/).filter(w => w).length;
@@ -298,26 +300,145 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
 
   const wordCount = (editorMode === 'visual' ? htmlContent.replace(/<[^>]+>/g, ' ') : content).trim().split(/\s+/).filter(w => w).length;
 
-  // Simple markdown → HTML renderer for preview
+  // Comprehensive markdown → HTML renderer for preview & visual editor
   const renderMarkdown = (md) => {
     if (!md) return '<p style="color:#6b7280;">Nothing to preview yet. Start writing above.</p>';
-    let html = md
-      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/`(.+?)`/g, '<code style="background:#1e293b;padding:2px 6px;border-radius:4px;font-size:13px;">$1</code>')
-      .replace(/^\> (.+)$/gm, '<blockquote style="border-left:3px solid #6366f1;padding-left:12px;color:#94a3b8;margin:12px 0;">$1</blockquote>')
-      .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#818cf8;text-decoration:underline;">$1</a>')
-      .replace(/^---$/gm, '<hr style="border-color:#334155;margin:20px 0;"/>')
-      .replace(/\n{2,}/g, '</p><p>')
-      .replace(/\n/g, '<br/>');
-    // Wrap consecutive <li> in <ul>
-    html = html.replace(/(<li>.*?<\/li>(\s*<br\/>)?)+/gs, (match) => '<ul style="padding-left:20px;margin:8px 0;">' + match.replace(/<br\/>/g, '') + '</ul>');
-    return '<p>' + html + '</p>';
+
+    const lines = md.split('\n');
+    const out = [];
+    let inCodeBlock = false, codeLang = '', codeLines = [];
+    let listStack = []; // 'ul' or 'ol'
+
+    const closeAllLists = () => {
+      while (listStack.length) out.push(`</${listStack.pop()}>`);
+    };
+
+    const inlineFormat = (text) => {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/`(.+?)`/g, '<code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:13px;color:#4338ca;">$1</code>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#4f46e5;text-decoration:underline;">$1</a>')
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:8px 0;"/>');
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      // Fenced code blocks
+      if (/^```/.test(line)) {
+        if (!inCodeBlock) {
+          closeAllLists();
+          inCodeBlock = true;
+          codeLang = line.replace('```', '').trim();
+          codeLines = [];
+        } else {
+          out.push(`<pre style="background:#1e293b;color:#e2e8f0;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px;line-height:1.6;margin:12px 0;"><code>${codeLines.join('\n').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`);
+          inCodeBlock = false;
+        }
+        continue;
+      }
+      if (inCodeBlock) { codeLines.push(line); continue; }
+
+      const trimmed = line.trim();
+
+      // Blank line
+      if (!trimmed) {
+        closeAllLists();
+        continue;
+      }
+
+      // Horizontal rule
+      if (/^[-*_]{3,}$/.test(trimmed)) {
+        closeAllLists();
+        out.push('<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;"/>');
+        continue;
+      }
+
+      // Headings
+      const headingMatch = trimmed.match(/^(#{1,4})\s+(.+)$/);
+      if (headingMatch) {
+        closeAllLists();
+        const level = headingMatch[1].length;
+        const text = inlineFormat(headingMatch[2]);
+        const styles = {
+          1: 'font-size:28px;font-weight:800;color:#111827;margin:28px 0 12px;line-height:1.3;',
+          2: 'font-size:22px;font-weight:700;color:#111827;margin:24px 0 10px;line-height:1.35;',
+          3: 'font-size:18px;font-weight:600;color:#1f2937;margin:20px 0 8px;line-height:1.4;',
+          4: 'font-size:16px;font-weight:600;color:#374151;margin:16px 0 6px;line-height:1.4;',
+        };
+        out.push(`<h${level} style="${styles[level]}">${text}</h${level}>`);
+        continue;
+      }
+
+      // Blockquote
+      if (/^>\s?/.test(trimmed)) {
+        closeAllLists();
+        const quoteText = inlineFormat(trimmed.replace(/^>\s?/, ''));
+        out.push(`<blockquote style="border-left:4px solid #6366f1;padding:8px 16px;color:#6b7280;margin:12px 0;background:#f8fafc;border-radius:0 6px 6px 0;font-style:italic;">${quoteText}</blockquote>`);
+        continue;
+      }
+
+      // Ordered list item (1. 2. 3. etc)
+      const olMatch = trimmed.match(/^(\d+)\.\s+(.+)$/);
+      if (olMatch) {
+        if (!listStack.length || listStack[listStack.length - 1] !== 'ol') {
+          closeAllLists();
+          out.push('<ol style="padding-left:24px;margin:8px 0;list-style-type:decimal;">');
+          listStack.push('ol');
+        }
+        out.push(`<li style="color:#374151;margin:4px 0;line-height:1.7;">${inlineFormat(olMatch[2])}</li>`);
+        continue;
+      }
+
+      // Unordered list item (- or * or +)
+      const ulMatch = trimmed.match(/^[-*+]\s+(.+)$/);
+      if (ulMatch) {
+        if (!listStack.length || listStack[listStack.length - 1] !== 'ul') {
+          closeAllLists();
+          out.push('<ul style="padding-left:24px;margin:8px 0;list-style-type:disc;">');
+          listStack.push('ul');
+        }
+        out.push(`<li style="color:#374151;margin:4px 0;line-height:1.7;">${inlineFormat(ulMatch[1])}</li>`);
+        continue;
+      }
+
+      // Table row
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        // Check if this is a separator row (|---|---|)
+        if (/^\|[\s-:|]+\|$/.test(trimmed)) continue;
+        closeAllLists();
+        const cells = trimmed.split('|').filter(c => c.trim()).map(c => inlineFormat(c.trim()));
+        // Peek ahead: if next row is separator, this is a header row
+        const nextLine = (lines[i + 1] || '').trim();
+        const isHeader = /^\|[\s-:|]+\|$/.test(nextLine);
+        if (isHeader) {
+          out.push('<table style="width:100%;border-collapse:collapse;margin:12px 0;"><thead><tr>');
+          cells.forEach(c => out.push(`<th style="border:1px solid #e5e7eb;padding:8px 12px;background:#f9fafb;color:#111827;text-align:left;font-weight:600;font-size:13px;">${c}</th>`));
+          out.push('</tr></thead><tbody>');
+        } else {
+          out.push('<tr>');
+          cells.forEach(c => out.push(`<td style="border:1px solid #e5e7eb;padding:8px 12px;color:#4b5563;font-size:14px;">${c}</td>`));
+          out.push('</tr>');
+          // Check if next line is not a table row — close table
+          const next = (lines[i + 1] || '').trim();
+          if (!next.startsWith('|')) out.push('</tbody></table>');
+        }
+        continue;
+      }
+
+      // Regular paragraph
+      closeAllLists();
+      out.push(`<p style="color:#374151;margin:8px 0;line-height:1.8;font-size:15px;">${inlineFormat(trimmed)}</p>`);
+    }
+
+    // Close any remaining open tags
+    closeAllLists();
+    if (inCodeBlock) {
+      out.push(`<pre style="background:#1e293b;color:#e2e8f0;padding:16px;border-radius:8px;overflow-x:auto;font-size:13px;"><code>${codeLines.join('\n').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`);
+    }
+
+    return out.join('\n');
   };
 
   return (
@@ -522,7 +643,7 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
               <div className="flex bg-gray-700 rounded-lg p-0.5">
                 <button onClick={() => { setEditorMode('markdown'); setShowPreview(false); }}
                   className={`px-3 py-1 text-xs rounded-md ${editorMode === 'markdown' && !showPreview ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Markdown</button>
-                <button onClick={() => { if (editorMode === 'markdown' && content) { setHtmlContent(content); } setEditorMode('visual'); setShowPreview(false); }}
+                <button onClick={() => { if (editorMode === 'markdown' && content) { setHtmlContent(renderMarkdown(content)); } setEditorMode('visual'); setShowPreview(false); }}
                   className={`px-3 py-1 text-xs rounded-md ${editorMode === 'visual' && !showPreview ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Visual</button>
                 <button onClick={() => setShowPreview(p => !p)}
                   className={`px-3 py-1 text-xs rounded-md ${showPreview ? 'bg-emerald-600 text-white' : 'text-gray-400'}`}>👁 Preview</button>
@@ -572,11 +693,55 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
               </div>
             </div>
           ) : editorMode === 'visual' ? (
-            <div ref={editorRef} contentEditable suppressContentEditableWarning
-              onInput={e => setHtmlContent(e.currentTarget.innerHTML)}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 prose max-w-none min-h-[400px] overflow-y-auto focus:outline-none"
-              dangerouslySetInnerHTML={{ __html: htmlContent || '<p style="color:#9ca3af;">Start writing...</p>' }}
-              onFocus={e => { if (e.currentTarget.innerHTML.includes('Start writing...')) e.currentTarget.innerHTML = '<p></p>'; }} />
+            <div>
+              {/* Formatting Toolbar */}
+              <div className="flex items-center gap-0.5 px-2 py-1.5 bg-gray-100 border border-gray-300 rounded-t-lg border-b-0 flex-wrap">
+                {[
+                  { label: 'B', cmd: 'bold', title: 'Bold (Ctrl+B)', style: 'font-bold' },
+                  { label: 'I', cmd: 'italic', title: 'Italic (Ctrl+I)', style: 'italic' },
+                  { label: 'H2', cmd: 'formatBlock', arg: 'h2', title: 'Heading 2' },
+                  { label: 'H3', cmd: 'formatBlock', arg: 'h3', title: 'Heading 3' },
+                  { label: '¶', cmd: 'formatBlock', arg: 'p', title: 'Paragraph' },
+                ].map(btn => (
+                  <button key={btn.label} type="button" title={btn.title}
+                    onClick={() => { document.execCommand(btn.cmd, false, btn.arg || null); editorRef.current && setHtmlContent(editorRef.current.innerHTML); }}
+                    className={`px-2.5 py-1 text-xs font-semibold rounded hover:bg-gray-200 text-gray-700 ${btn.style || ''}`}>
+                    {btn.label}
+                  </button>
+                ))}
+                <span className="w-px h-5 bg-gray-300 mx-1" />
+                {[
+                  { label: '• List', cmd: 'insertUnorderedList', title: 'Bullet list' },
+                  { label: '1. List', cmd: 'insertOrderedList', title: 'Numbered list' },
+                  { label: '"', cmd: 'formatBlock', arg: 'blockquote', title: 'Blockquote', style: 'italic' },
+                ].map(btn => (
+                  <button key={btn.label} type="button" title={btn.title}
+                    onClick={() => { document.execCommand(btn.cmd, false, btn.arg || null); editorRef.current && setHtmlContent(editorRef.current.innerHTML); }}
+                    className={`px-2.5 py-1 text-xs font-medium rounded hover:bg-gray-200 text-gray-700 ${btn.style || ''}`}>
+                    {btn.label}
+                  </button>
+                ))}
+                <span className="w-px h-5 bg-gray-300 mx-1" />
+                <button type="button" title="Insert link"
+                  onClick={() => {
+                    const url = prompt('Enter URL:');
+                    if (url) { document.execCommand('createLink', false, url); editorRef.current && setHtmlContent(editorRef.current.innerHTML); }
+                  }}
+                  className="px-2.5 py-1 text-xs font-medium rounded hover:bg-gray-200 text-gray-700">🔗 Link</button>
+                <button type="button" title="Insert horizontal rule"
+                  onClick={() => { document.execCommand('insertHorizontalRule', false, null); editorRef.current && setHtmlContent(editorRef.current.innerHTML); }}
+                  className="px-2.5 py-1 text-xs font-medium rounded hover:bg-gray-200 text-gray-700">— HR</button>
+                <button type="button" title="Remove formatting"
+                  onClick={() => { document.execCommand('removeFormat', false, null); editorRef.current && setHtmlContent(editorRef.current.innerHTML); }}
+                  className="px-2.5 py-1 text-xs font-medium rounded hover:bg-gray-200 text-gray-500 ml-auto">✕ Clear</button>
+              </div>
+              <div ref={editorRef} contentEditable suppressContentEditableWarning
+                onInput={e => setHtmlContent(e.currentTarget.innerHTML)}
+                className="w-full px-6 py-4 bg-white border border-gray-300 rounded-b-lg text-gray-900 prose prose-sm max-w-none min-h-[400px] max-h-[700px] overflow-y-auto focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                style={{ lineHeight: 1.75, fontSize: '15px' }}
+                dangerouslySetInnerHTML={{ __html: htmlContent || '<p style="color:#9ca3af;">Start writing or switch from Markdown to import content...</p>' }}
+                onFocus={e => { if (e.currentTarget.innerHTML.includes('Start writing')) e.currentTarget.innerHTML = '<p><br></p>'; }} />
+            </div>
           ) : (
             <textarea value={content} onChange={e => setContent(e.target.value)} rows={20}
               placeholder="## Introduction&#10;&#10;Start writing your article here..."
