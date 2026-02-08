@@ -41,6 +41,11 @@ export default function DraftingPage() {
   const [successMsg, setSuccessMsg] = useState('');
   const [draftItems, setDraftItems] = useState([]);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState(null);
+  const [showDrafts, setShowDrafts] = useState(false);
+  const autoSaveTimerRef = useRef(null);
+
+  const AUTOSAVE_KEY = 'xhs-drafting-autosave';
 
   const LLM_PROMPT = `You are helping me draft an article for Pimlico XHS, a cross-border regulatory intelligence platform.
 
@@ -86,6 +91,120 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
   useEffect(() => {
     setDraftItems(items.filter(i => i.stage === 'drafting'));
   }, [items]);
+
+  // Saved article drafts (articles with status='draft')
+  const savedDrafts = articles.filter(a => a.status === 'draft');
+
+  // ─── Auto-save: persist form state to localStorage every 30s ─────
+  const getFormSnapshot = () => ({
+    meta, content, htmlContent, editorMode, tags, publicationDate,
+    isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl,
+    editingArticleId: editingArticle?.id || null,
+    savedAt: new Date().toISOString(),
+  });
+
+  const restoreFromSnapshot = (snap) => {
+    if (!snap) return;
+    if (snap.meta) setMeta(snap.meta);
+    if (snap.content) setContent(snap.content);
+    if (snap.htmlContent) setHtmlContent(snap.htmlContent);
+    if (snap.editorMode) setEditorMode(snap.editorMode);
+    if (snap.tags) setTags(snap.tags);
+    if (snap.publicationDate) setPublicationDate(snap.publicationDate);
+    if (snap.isPremium !== undefined) setIsPremium(snap.isPremium);
+    if (snap.premiumCutoff !== undefined) setPremiumCutoff(snap.premiumCutoff);
+    if (snap.scheduleEnabled !== undefined) setScheduleEnabled(snap.scheduleEnabled);
+    if (snap.scheduledDate) setScheduledDate(snap.scheduledDate);
+    if (snap.ogImageUrl) setOgImageUrl(snap.ogImageUrl);
+    if (snap.editingArticleId) {
+      const art = articles.find(a => a.id === snap.editingArticleId);
+      if (art) setEditingArticle(art);
+    }
+    if (snap.savedAt) setLastSavedAt(snap.savedAt);
+  };
+
+  // Recover auto-saved draft on mount (only if no editingArticle and form is empty)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(AUTOSAVE_KEY);
+      if (saved && !meta.title && !content) {
+        const snap = JSON.parse(saved);
+        // Only restore if it has meaningful content
+        if (snap.meta?.title || snap.content) {
+          restoreFromSnapshot(snap);
+          setSuccessMsg(`Draft recovered from ${new Date(snap.savedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`);
+          setShowSuccess(true);
+          setTimeout(() => setShowSuccess(false), 3000);
+        }
+      }
+    } catch {}
+  }, [articles.length]); // re-run when articles load so editingArticle can be resolved
+
+  // Auto-save timer: save to localStorage every 30 seconds if there's content
+  useEffect(() => {
+    if (autoSaveTimerRef.current) clearInterval(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setInterval(() => {
+      if (meta.title || content || htmlContent) {
+        try {
+          localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(getFormSnapshot()));
+          setLastSavedAt(new Date().toISOString());
+        } catch {}
+      }
+    }, 30000);
+    return () => { if (autoSaveTimerRef.current) clearInterval(autoSaveTimerRef.current); };
+  }, [meta, content, htmlContent, editorMode, tags, publicationDate, isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl, editingArticle]);
+
+  // Also save on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        const snap = {
+          meta, content, htmlContent, editorMode, tags, publicationDate,
+          isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl,
+          editingArticleId: editingArticle?.id || null,
+          savedAt: new Date().toISOString(),
+        };
+        if (snap.meta?.title || snap.content || snap.htmlContent) {
+          localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(snap));
+        }
+      } catch {}
+    };
+  }, []);
+
+  // Load a saved draft article into the editor
+  const loadDraft = (article) => {
+    setEditingArticle(article);
+    setMeta({
+      title: article.title || '',
+      slug: article.slug || '',
+      excerpt: article.excerpt || '',
+      category: article.category || 'AI Regulation',
+      author: article.author || 'Pimlico XHS™ Team',
+      readTime: article.readTime || '5 min read',
+      featured: article.featured || false,
+      image: article.image || '',
+    });
+    // Detect if content is HTML or markdown
+    const isHtml = article.content && /<[a-z][\s\S]*>/i.test(article.content);
+    if (isHtml) {
+      setEditorMode('visual');
+      setHtmlContent(article.content || '');
+      setContent('');
+    } else {
+      setEditorMode('markdown');
+      setContent(article.content || '');
+      setHtmlContent('');
+    }
+    setTags(article.tags || []);
+    setPublicationDate(article.date || new Date().toISOString().split('T')[0]);
+    setIsPremium(article.isPremium || false);
+    setPremiumCutoff(article.premiumCutoff || 10);
+    setOgImageUrl(article.ogImage || '');
+    setShowDrafts(false);
+    setSuccessMsg(`Loaded draft: "${article.title}"`);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
 
   const slugify = (text) => text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
 
@@ -245,7 +364,8 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     setContent(''); setHtmlContent(''); setTags([]); setTagInput('');
     setPublicationDate(new Date().toISOString().split('T')[0]);
     setIsPremium(false); setPremiumCutoff(10); setScheduleEnabled(false); setScheduledDate('');
-    setOgImageUrl(''); setEditingArticle(null);
+    setOgImageUrl(''); setEditingArticle(null); setLastSavedAt(null);
+    try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
   };
 
   const handlePublish = () => {
@@ -271,13 +391,15 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     setSuccessMsg(editingArticle ? 'Article updated!' : scheduleEnabled ? 'Article scheduled!' : 'Article published!');
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
+    try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
     resetForm();
   };
 
   const handleSaveDraft = () => {
     if (!meta.title) { alert('Please add a title.'); return; }
+    const articleId = editingArticle?.id || Date.now();
     const article = {
-      id: editingArticle?.id || Date.now(), ...meta, date: publicationDate, tags,
+      id: articleId, ...meta, date: publicationDate, tags,
       content: editorMode === 'visual' ? htmlContent : content,
       isPremium, premiumCutoff: isPremium ? premiumCutoff : null,
       ogImage: ogImageUrl || meta.image, status: 'draft', lastSaved: new Date().toISOString(),
@@ -289,6 +411,11 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
       updated = [article, ...articles];
     }
     setArticles(updated);
+    // Set editingArticle so subsequent saves update instead of duplicating
+    setEditingArticle(article);
+    setLastSavedAt(new Date().toISOString());
+    // Clear auto-save since we just did a real save
+    try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
     setSuccessMsg('Draft saved!');
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
@@ -456,10 +583,21 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
           <p className="text-sm text-gray-400 mt-0.5">{editingArticle ? `Editing: ${editingArticle.title}` : 'Create and publish articles'}</p>
         </div>
         <div className="flex items-center gap-2">
+          {savedDrafts.length > 0 && (
+            <button onClick={() => setShowDrafts(p => !p)}
+              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showDrafts ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
+              📂 Drafts ({savedDrafts.length})
+            </button>
+          )}
           <button onClick={() => setShowPrompt(p => !p)}
             className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showPrompt ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
             🤖 LLM Prompt
           </button>
+          {lastSavedAt && (
+            <span className="text-[10px] text-gray-500 flex items-center gap-1">
+              💾 {new Date(lastSavedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          )}
           {editingArticle && (
             <button onClick={resetForm} className="text-sm text-gray-400 hover:text-white">✕ Cancel Edit</button>
           )}
@@ -478,6 +616,52 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
           </div>
           <pre className="bg-gray-900 rounded-lg p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-[400px] overflow-y-auto border border-gray-700/50">{LLM_PROMPT}</pre>
           <p className="text-[11px] text-amber-400/60">Paste this into your LLM with your topic. Save the output as a .md file, then use "Import .md → Auto-fill" to populate all fields instantly.</p>
+        </div>
+      )}
+
+      {/* Saved Drafts Panel */}
+      {showDrafts && savedDrafts.length > 0 && (
+        <div className="bg-blue-500/5 border border-blue-500/20 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-blue-300 flex items-center gap-2">📂 Your Saved Drafts</h3>
+            <button onClick={() => setShowDrafts(false)} className="text-xs text-gray-500 hover:text-white">✕ Close</button>
+          </div>
+          <div className="space-y-2">
+            {savedDrafts.map(draft => (
+              <div key={draft.id} className="flex items-center justify-between bg-gray-800/60 rounded-lg px-4 py-3 group hover:bg-gray-800/80 transition-colors border border-gray-700/40">
+                <div className="flex-1 min-w-0 mr-3">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-white font-medium truncate">{draft.title}</p>
+                    {editingArticle?.id === draft.id && (
+                      <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[9px] font-bold rounded">EDITING</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1">
+                    {draft.category && <span className="text-[10px] text-indigo-400">{draft.category}</span>}
+                    {draft.lastSaved && <span className="text-[10px] text-gray-500">Saved {new Date(draft.lastSaved).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at {new Date(draft.lastSaved).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>}
+                    {draft.tags?.length > 0 && <span className="text-[10px] text-gray-500">{draft.tags.length} tags</span>}
+                    <span className="text-[10px] text-gray-600">{draft.content ? `${draft.content.split(/\s+/).length} words` : 'Empty'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button onClick={() => loadDraft(draft)}
+                    className="px-3 py-1.5 text-xs font-semibold text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-500/25 rounded-lg transition-colors">
+                    ✏️ Edit
+                  </button>
+                  <button onClick={() => {
+                    if (confirm(`Delete draft "${draft.title}"?`)) {
+                      setArticles(articles.filter(a => a.id !== draft.id));
+                      if (editingArticle?.id === draft.id) resetForm();
+                    }
+                  }}
+                    className="px-2 py-1.5 text-xs text-red-400/50 hover:text-red-400 bg-gray-700/30 hover:bg-red-500/10 rounded-lg transition-colors">
+                    🗑
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-gray-500 mt-2">💡 Drafts auto-save every 30 seconds. Your work is safe even if you navigate away.</p>
         </div>
       )}
 
