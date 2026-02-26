@@ -47,6 +47,7 @@ Ease of Use: ${data.easeOfUseRating}/5
 Coverage Comments: ${data.coverageComments || 'N/A'}
 Missed Jurisdictions: ${data.missedJurisdictions || 'N/A'}
 Missed Topics or Regulations: ${data.missedTopics || 'N/A'}
+Missed Updates (What, When, Where): ${data.missedUpdates || 'N/A'}
 Would Recommend Adding Sources: ${data.recommendSources}
 Suggested Sources: ${data.suggestedSources || 'N/A'}
 
@@ -186,7 +187,8 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Coverage Comments:</td><td style="color: #1e293b; font-size: 14px;">${data.coverageComments || 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Jurisdictions:</td><td style="color: #1e293b; font-size: 14px;">${data.missedJurisdictions || 'N/A'}</td></tr>
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Topics:</td><td style="color: #1e293b; font-size: 14px;">${data.missedTopics || 'N/A'}</td></tr>
-                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">Recommend Adding Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.recommendSources}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Updates (What/When/Where):</td><td style="color: #1e293b; font-size: 14px;">${data.missedUpdates || 'N/A'}</td></tr>
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Recommend Adding Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.recommendSources}</td></tr>
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Suggested Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.suggestedSources || 'N/A'}</td></tr>
               </table>
             </td>

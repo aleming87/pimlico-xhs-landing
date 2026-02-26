@@ -205,6 +205,7 @@ export default function XHSMonitoringSurveyPage() {
       coverageComments: formData.get('coverage-comments'),
       missedJurisdictions: formData.get('missed-jurisdictions'),
       missedTopics: formData.get('missed-topics'),
+      missedUpdates: formData.get('missed-updates'),
       recommendSources,
       suggestedSources: formData.get('suggested-sources'),
 
@@ -488,6 +489,19 @@ export default function XHSMonitoringSurveyPage() {
                   name="missed-topics"
                   rows={2}
                   placeholder="e.g. Would like more granular coverage of crypto custody regulations..."
+                  className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                />
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="missed-updates" className="block text-sm font-semibold text-white mb-2">
+                  Have we missed any specific regulatory updates? If so, please tell us what, when, and where.
+                </label>
+                <textarea
+                  id="missed-updates"
+                  name="missed-updates"
+                  rows={3}
+                  placeholder="e.g. The FCA published updated guidance on payment services on 15 Jan 2026 but it didn't appear on XHS™..."
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
