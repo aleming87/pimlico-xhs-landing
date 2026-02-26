@@ -62,7 +62,15 @@ Desired Future Integrations: ${data.desiredIntegrations && data.desiredIntegrati
 
 ---------------------------------------------------
 
-📄 COUNTRY REPORTS
+� SUPPORT EXPERIENCE
+
+Support Channels Used: ${data.supportChannelsUsed && data.supportChannelsUsed.length > 0 ? data.supportChannelsUsed.join(', ') : 'N/A'}
+Support Rating: ${data.supportRating ? data.supportRating + '/5' : 'N/A'}
+Support Feedback: ${data.supportFeedback || 'N/A'}
+
+---------------------------------------------------
+
+�📄 COUNTRY REPORTS
 
 Has Used Country Reports: ${data.usedCountryReports}
 Country Reports Rating: ${data.countryReportsRating ? data.countryReportsRating + '/5' : 'N/A'}
@@ -86,6 +94,13 @@ Most Valuable Feature: ${data.mostValuableFeature || 'N/A'}
 Desired Features: ${data.desiredFeatures && data.desiredFeatures.length > 0 ? data.desiredFeatures.join(', ') : 'N/A'}
 Other Feature Suggestions: ${data.otherFeatureSuggestions || 'N/A'}
 Additional Comments: ${data.additionalComments || 'N/A'}
+
+---------------------------------------------------
+
+🧪 BETA / EARLY ACCESS
+
+Interested in Trying New Features: ${data.betaInterest || 'N/A'}
+Preferred Contact Methods: ${data.preferredContactMethods && data.preferredContactMethods.length > 0 ? data.preferredContactMethods.join(', ') : 'N/A'}
 
 ---------------------------------------------------
 
@@ -207,6 +222,18 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
             </td>
           </tr>
 
+          <!-- Support Experience -->
+          <tr>
+            <td style="padding: 0 30px 30px;">
+              <h2 style="margin: 0 0 20px; color: #2563eb; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">🛟 Support Experience</h2>
+              <table width="100%" cellpadding="8" cellspacing="0">
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Channels Used:</td><td style="color: #1e293b; font-size: 14px;">${data.supportChannelsUsed && data.supportChannelsUsed.length > 0 ? data.supportChannelsUsed.join(', ') : 'N/A'}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">Support Rating:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.supportRating ? data.supportRating + '/5' : 'N/A'}</td></tr>
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Support Feedback:</td><td style="color: #1e293b; font-size: 14px;">${data.supportFeedback || 'N/A'}</td></tr>
+              </table>
+            </td>
+          </tr>
+
           <!-- Country Reports -->
           <tr>
             <td style="padding: 0 30px 30px;">
@@ -242,6 +269,17 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Desired Features:</td><td style="color: #1e293b; font-size: 14px;">${data.desiredFeatures && data.desiredFeatures.length > 0 ? data.desiredFeatures.join(', ') : 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Other Suggestions:</td><td style="color: #1e293b; font-size: 14px;">${data.otherFeatureSuggestions || 'N/A'}</td></tr>
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Additional Comments:</td><td style="color: #1e293b; font-size: 14px;">${data.additionalComments || 'N/A'}</td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Beta / Early Access -->
+          <tr>
+            <td style="padding: 0 30px 30px;">
+              <h2 style="margin: 0 0 20px; color: #2563eb; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">🧪 Beta / Early Access</h2>
+              <table width="100%" cellpadding="8" cellspacing="0">
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Interested in Trying New Features:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.betaInterest || 'N/A'}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">Preferred Contact Methods:</td><td style="color: #1e293b; font-size: 14px;">${data.preferredContactMethods && data.preferredContactMethods.length > 0 ? data.preferredContactMethods.join(', ') : 'N/A'}</td></tr>
               </table>
             </td>
           </tr>

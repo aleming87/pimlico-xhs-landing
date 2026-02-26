@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const TOTAL_SECTIONS = 7;
+const TOTAL_SECTIONS = 8;
 
 export default function XHSMonitoringSurveyPage() {
   const router = useRouter();
@@ -37,6 +37,14 @@ export default function XHSMonitoringSurveyPage() {
   const [selectedDesiredFeatures, setSelectedDesiredFeatures] = useState([]);
   const [selectedDesiredIntegrations, setSelectedDesiredIntegrations] = useState([]);
   const [usageFrequency, setUsageFrequency] = useState('');
+
+  // Support
+  const [supportChannelsUsed, setSupportChannelsUsed] = useState([]);
+  const [supportRating, setSupportRating] = useState(0);
+
+  // Beta interest
+  const [betaInterest, setBetaInterest] = useState('');
+  const [preferredContactMethods, setPreferredContactMethods] = useState([]);
 
   // Progress tracking
   useEffect(() => {
@@ -90,6 +98,19 @@ export default function XHSMonitoringSurveyPage() {
   };
 
   // Data
+  const supportChannelOptions = [
+    'Email',
+    'WhatsApp',
+    'In-app support',
+  ];
+
+  const contactMethodOptions = [
+    'Email',
+    'WhatsApp',
+    'Phone call',
+    'In-app notification',
+  ];
+
   const desiredIntegrationOptions = [
     'Microsoft Teams',
     'Google Workspace',
@@ -215,6 +236,15 @@ export default function XHSMonitoringSurveyPage() {
       integrationFeedback: formData.get('integration-feedback'),
       desiredIntegrations: selectedDesiredIntegrations,
 
+      // Support
+      supportChannelsUsed,
+      supportRating: supportChannelsUsed.length > 0 && !supportChannelsUsed.includes('Haven\'t used support') ? supportRating : null,
+      supportFeedback: formData.get('support-feedback'),
+
+      // Beta / Early access
+      betaInterest,
+      preferredContactMethods,
+
       // Country Reports
       usedCountryReports,
       countryReportsRating: usedCountryReports === 'Yes' ? countryReportsRating : null,
@@ -257,7 +287,7 @@ export default function XHSMonitoringSurveyPage() {
   const isFormValid = validFields.email && overallSatisfaction > 0 && npsScore !== null;
   const progressPercent = Math.round(((currentSection + 1) / TOTAL_SECTIONS) * 100);
 
-  const sectionNames = ['About You', 'Platform Ratings', 'Coverage', 'Slack Integration', 'Country Reports', 'News', 'Features & Improvements'];
+  const sectionNames = ['About You', 'Platform Ratings', 'Coverage', 'Slack Integration', 'Support', 'Country Reports', 'News', 'Features & Improvements'];
 
   return (
     <div className="bg-gray-900 min-h-screen">
@@ -624,10 +654,76 @@ export default function XHSMonitoringSurveyPage() {
               </div>
             </div>
 
-            {/* SECTION 5: COUNTRY REPORTS */}
+            {/* SECTION 5: SUPPORT */}
             <div data-section="4" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">5</span>
+                <h2 className="text-2xl font-semibold text-white">Support</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">Tell us about your experience with XHS™ support</p>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Which support channels have you used? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {[...supportChannelOptions, 'Haven\'t used support'].map((channel) => (
+                    <button
+                      key={channel}
+                      type="button"
+                      onClick={() => {
+                        if (channel === 'Haven\'t used support') {
+                          setSupportChannelsUsed(['Haven\'t used support']);
+                          setSupportRating(0);
+                        } else {
+                          const filtered = supportChannelsUsed.filter(c => c !== 'Haven\'t used support');
+                          if (filtered.includes(channel)) {
+                            setSupportChannelsUsed(filtered.filter(c => c !== channel));
+                          } else {
+                            setSupportChannelsUsed([...filtered, channel]);
+                          }
+                        }
+                      }}
+                      className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                        supportChannelsUsed.includes(channel)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}
+                    >
+                      {channel}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {supportChannelsUsed.length > 0 && !supportChannelsUsed.includes('Haven\'t used support') && (
+                <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
+                  <StarRating
+                    value={supportRating}
+                    onChange={setSupportRating}
+                    label="How would you rate the support you received?"
+                  />
+
+                  <div>
+                    <label htmlFor="support-feedback" className="block text-sm font-semibold text-white mb-2">
+                      Any feedback on your support experience?
+                    </label>
+                    <textarea
+                      id="support-feedback"
+                      name="support-feedback"
+                      rows={2}
+                      placeholder="e.g. Quick response times, very helpful team..."
+                      className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SECTION 6: COUNTRY REPORTS */}
+            <div data-section="5" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">6</span>
                 <h2 className="text-2xl font-semibold text-white">Country Reports</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Share your thoughts on the XHS™ country reports</p>
@@ -695,10 +791,10 @@ export default function XHSMonitoringSurveyPage() {
               )}
             </div>
 
-            {/* SECTION 6: NEWS COVERAGE */}
-            <div data-section="5" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+            {/* SECTION 7: NEWS COVERAGE */}
+            <div data-section="6" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">6</span>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">7</span>
                 <h2 className="text-2xl font-semibold text-white">News Coverage</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">We're exploring adding integrated news coverage to XHS™</p>
@@ -764,10 +860,10 @@ export default function XHSMonitoringSurveyPage() {
               )}
             </div>
 
-            {/* SECTION 7: IMPROVEMENTS & FUTURE FEATURES */}
-            <div data-section="6" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+            {/* SECTION 8: IMPROVEMENTS & FUTURE FEATURES */}
+            <div data-section="7" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">7</span>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">8</span>
                 <h2 className="text-2xl font-semibold text-white">Improvements & Future Features</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Tell us what you'd like to see next on XHS™</p>
@@ -845,6 +941,52 @@ export default function XHSMonitoringSurveyPage() {
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
+
+              {/* Beta / Early Access Interest */}
+              <div className="border-t border-white/10 pt-6 mb-6">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Would you be interested in being contacted to try new features before they launch?
+                </label>
+                <div className="flex gap-4">
+                  {['Yes', 'No', 'Maybe'].map((option) => (
+                    <label key={option} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="beta-interest-radio"
+                        value={option}
+                        checked={betaInterest === option}
+                        onChange={(e) => setBetaInterest(e.target.value)}
+                        className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                      />
+                      <span className="text-gray-300">{option}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {(betaInterest === 'Yes' || betaInterest === 'Maybe') && (
+                <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    How would you prefer to be contacted? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {contactMethodOptions.map((method) => (
+                      <button
+                        key={method}
+                        type="button"
+                        onClick={() => toggleSelection(method, preferredContactMethods, setPreferredContactMethods)}
+                        className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                          preferredContactMethods.includes(method)
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        }`}
+                      >
+                        {method}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* NPS — placed at end of final section for natural closure */}
               <div className="border-t border-white/10 pt-6">
