@@ -16,6 +16,8 @@ const NAV_ITEMS = [
   { href: '/admin/publishing', label: 'Publishing',  icon: '🚀', group: 'pipeline', step: 5 },
   { type: 'divider', label: 'Library' },
   { href: '/admin/articles',   label: 'Articles',    icon: '📁', group: 'library' },
+  { type: 'divider', label: 'Feedback' },
+  { href: '/admin/surveys',    label: 'Surveys',     icon: '📋', group: 'feedback' },
 ];
 
 function LoginScreen({ password, setPassword, passwordError, handleLogin }) {

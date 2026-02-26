@@ -66,14 +66,14 @@ export async function POST(request) {
       console.error('⚠️ Failed to persist to blob (continuing with email):', blobError);
     }
     
-    console.log('📧 XHS™ Monitoring Survey Data Received');
+    console.log('📧 XHS™ Copilot Feedback Data Received');
     console.log('- RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
     console.log('- CONTACT_EMAIL:', process.env.CONTACT_EMAIL || 'NOT SET');
     
     // Format the comprehensive email report
     const emailReport = `
 ====================================================
-XHS™ MONITORING FEEDBACK SURVEY - INDIVIDUAL USER
+XHS™ COPILOT FEEDBACK SURVEY - INDIVIDUAL USER
 ====================================================
 
 👤 CONTACT INFORMATION
@@ -108,12 +108,8 @@ Ease of Use: ${data.easeOfUseRating}/5
 
 Other Regulatory Sources Used: ${data.otherRegSources && data.otherRegSources.length > 0 ? data.otherRegSources.join(', ') : 'N/A'}
 Source Specifics: ${data.otherRegSourcesSpecifics || 'N/A'}
-Coverage Comments: ${data.coverageComments || 'N/A'}
-Missed Jurisdictions: ${data.missedJurisdictions || 'N/A'}
-Missed Topics or Regulations: ${data.missedTopics || 'N/A'}
+Missing Jurisdictions/Topics/Areas: ${data.coverageMissedItems || 'N/A'}
 Missed Updates (What, When, Where): ${data.missedUpdates || 'N/A'}
-Would Recommend Adding Sources: ${data.recommendSources}
-Suggested Sources: ${data.suggestedSources || 'N/A'}
 
 ---------------------------------------------------
 
@@ -153,11 +149,19 @@ Preferred News Topics: ${data.preferredNewsTopics && data.preferredNewsTopics.le
 
 🔮 IMPROVEMENTS & FUTURE FEATURES
 
-What Would They Change: ${data.whatWouldChange || 'N/A'}
 Most Valuable Feature: ${data.mostValuableFeature || 'N/A'}
+What Would They Change: ${data.whatWouldChange || 'N/A'}
 Desired Features: ${data.desiredFeatures && data.desiredFeatures.length > 0 ? data.desiredFeatures.join(', ') : 'N/A'}
-Other Feature Suggestions: ${data.otherFeatureSuggestions || 'N/A'}
 Additional Comments: ${data.additionalComments || 'N/A'}
+
+---------------------------------------------------
+
+🤖 AI & COMPLIANCE
+
+AI Tools Used: ${data.aiToolsUsed && data.aiToolsUsed.length > 0 ? data.aiToolsUsed.join(', ') : 'N/A'}
+AI Trust Level: ${data.aiTrustLevel || 'N/A'}
+Interest in Personalised AI Features: ${data.aiFeatureInterest || 'N/A'}
+Desired AI Capabilities: ${data.desiredAiFeatures && data.desiredAiFeatures.length > 0 ? data.desiredAiFeatures.join(', ') : 'N/A'}
 
 ---------------------------------------------------
 
@@ -193,16 +197,16 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
       try {
         // Send to team
         const teamEmailResult = await resend.emails.send({
-          from: 'Pimlico XHS™ Monitoring Survey <onboarding@resend.dev>',
+          from: 'Pimlico XHS™ Copilot Survey <onboarding@resend.dev>',
           to: recipientEmail,
-          subject: `📊 XHS™ MONITORING FEEDBACK - ${data.firstName} ${data.lastName} from ${data.company} | NPS: ${data.npsScore}/10`,
+          subject: `📊 XHS™ COPILOT FEEDBACK - ${data.firstName} ${data.lastName} from ${data.company} | NPS: ${data.npsScore}/10`,
           html: `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XHS™ Monitoring Survey Submission</title>
+  <title>XHS™ Copilot Survey Submission</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; color: #1e293b;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc;">
@@ -213,7 +217,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
           <!-- Header -->
           <tr>
             <td style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 30px; text-align: center;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">📊 XHS™ Monitoring Feedback</h1>
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">📊 XHS™ Copilot Feedback</h1>
               <p style="margin: 8px 0 0; color: #bfdbfe; font-size: 14px;">Individual User Survey Response</p>
             </td>
           </tr>
@@ -265,12 +269,8 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
               <table width="100%" cellpadding="8" cellspacing="0">
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Other Regulatory Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.otherRegSources && data.otherRegSources.length > 0 ? data.otherRegSources.join(', ') : 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Source Specifics:</td><td style="color: #1e293b; font-size: 14px;">${data.otherRegSourcesSpecifics || 'N/A'}</td></tr>
-                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Coverage Comments:</td><td style="color: #1e293b; font-size: 14px;">${data.coverageComments || 'N/A'}</td></tr>
-                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Jurisdictions:</td><td style="color: #1e293b; font-size: 14px;">${data.missedJurisdictions || 'N/A'}</td></tr>
-                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Topics:</td><td style="color: #1e293b; font-size: 14px;">${data.missedTopics || 'N/A'}</td></tr>
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missing Jurisdictions/Topics/Areas:</td><td style="color: #1e293b; font-size: 14px;">${data.coverageMissedItems || 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Updates (What/When/Where):</td><td style="color: #1e293b; font-size: 14px;">${data.missedUpdates || 'N/A'}</td></tr>
-                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Recommend Adding Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.recommendSources}</td></tr>
-                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Suggested Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.suggestedSources || 'N/A'}</td></tr>
               </table>
             </td>
           </tr>
@@ -333,8 +333,20 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Most Valuable Feature:</td><td style="color: #1e293b; font-size: 14px;">${data.mostValuableFeature || 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">What Would Change:</td><td style="color: #1e293b; font-size: 14px;">${data.whatWouldChange || 'N/A'}</td></tr>
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Desired Features:</td><td style="color: #1e293b; font-size: 14px;">${data.desiredFeatures && data.desiredFeatures.length > 0 ? data.desiredFeatures.join(', ') : 'N/A'}</td></tr>
-                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Other Suggestions:</td><td style="color: #1e293b; font-size: 14px;">${data.otherFeatureSuggestions || 'N/A'}</td></tr>
-                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Additional Comments:</td><td style="color: #1e293b; font-size: 14px;">${data.additionalComments || 'N/A'}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Additional Comments:</td><td style="color: #1e293b; font-size: 14px;">${data.additionalComments || 'N/A'}</td></tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- AI & Compliance -->
+          <tr>
+            <td style="padding: 0 30px 30px;">
+              <h2 style="margin: 0 0 20px; color: #2563eb; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">🤖 AI & Compliance</h2>
+              <table width="100%" cellpadding="8" cellspacing="0">
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">AI Tools Used:</td><td style="color: #1e293b; font-size: 14px;">${data.aiToolsUsed && data.aiToolsUsed.length > 0 ? data.aiToolsUsed.join(', ') : 'N/A'}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">AI Trust Level:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.aiTrustLevel || 'N/A'}</td></tr>
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Interest in Personalised AI:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.aiFeatureInterest || 'N/A'}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">Desired AI Capabilities:</td><td style="color: #1e293b; font-size: 14px;">${data.desiredAiFeatures && data.desiredAiFeatures.length > 0 ? data.desiredAiFeatures.join(', ') : 'N/A'}</td></tr>
               </table>
             </td>
           </tr>
@@ -416,7 +428,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
               </p>
               
               <p style="margin: 0 0 20px; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
-                Thank you for taking the time to share your experience with the XHS™ monitoring platform. Your feedback is invaluable in helping us improve the platform and build the features that matter most to you.
+                Thank you for taking the time to share your feedback on XHS™ Copilot. Your input is invaluable in helping us improve the platform and build the features that matter most to you.
               </p>
               
               <p style="margin: 0 0 20px; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
@@ -483,7 +495,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
       });
     }
   } catch (error) {
-    console.error('❌ XHS™ Monitoring Survey submission error:', error);
+    console.error('❌ XHS™ Copilot Feedback submission error:', error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }

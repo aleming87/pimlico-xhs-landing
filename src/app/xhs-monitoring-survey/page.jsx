@@ -47,6 +47,12 @@ export default function XHSMonitoringSurveyPage() {
   const [betaInterest, setBetaInterest] = useState('');
   const [preferredContactMethods, setPreferredContactMethods] = useState([]);
 
+  // AI
+  const [selectedAiTools, setSelectedAiTools] = useState([]);
+  const [aiTrustLevel, setAiTrustLevel] = useState('');
+  const [aiFeatureInterest, setAiFeatureInterest] = useState('');
+  const [selectedAiFeatures, setSelectedAiFeatures] = useState([]);
+
   // Progress tracking
   useEffect(() => {
     const handleScroll = () => {
@@ -124,6 +130,29 @@ export default function XHSMonitoringSurveyPage() {
     'Internal compliance team',
     'LinkedIn / social media',
     'News outlets (FT, Reuters, etc.)',
+    'Other',
+  ];
+
+  const aiToolOptions = [
+    'ChatGPT / OpenAI',
+    'Microsoft Copilot',
+    'Google Gemini',
+    'Claude (Anthropic)',
+    'Perplexity',
+    'Firm-specific AI tools',
+    'RegTech AI tools',
+    'None \u2014 I don\'t use AI tools',
+    'Other',
+  ];
+
+  const aiFeatureOptions = [
+    'AI-generated regulatory summaries',
+    'Natural language search across regulations',
+    'Personalised regulatory change alerts',
+    'AI compliance gap analysis',
+    'Automated impact assessments',
+    'AI-drafted compliance responses',
+    'Regulatory Q&A chatbot',
     'Other',
   ];
 
@@ -241,12 +270,8 @@ export default function XHSMonitoringSurveyPage() {
       // Coverage
       otherRegSources: selectedOtherSources,
       otherRegSourcesSpecifics: formData.get('other-reg-sources-specifics'),
-      coverageComments: formData.get('coverage-comments'),
-      missedJurisdictions: formData.get('missed-jurisdictions'),
-      missedTopics: formData.get('missed-topics'),
+      coverageMissedItems: formData.get('coverage-missed-items'),
       missedUpdates: formData.get('missed-updates'),
-      recommendSources,
-      suggestedSources: formData.get('suggested-sources'),
 
       // Slack Integration
       usedSlackIntegration,
@@ -263,6 +288,12 @@ export default function XHSMonitoringSurveyPage() {
       betaInterest,
       preferredContactMethods,
 
+      // AI
+      aiToolsUsed: selectedAiTools,
+      aiTrustLevel,
+      aiFeatureInterest,
+      desiredAiFeatures: selectedAiFeatures,
+
       // Country Reports
       usedCountryReports,
       countryReportsRating: usedCountryReports === 'Yes' ? countryReportsRating : null,
@@ -275,10 +306,9 @@ export default function XHSMonitoringSurveyPage() {
       preferredNewsTopics: selectedNewsTopics,
 
       // Improvements
-      whatWouldChange: formData.get('what-would-change'),
       mostValuableFeature: formData.get('most-valuable-feature'),
+      whatWouldChange: formData.get('what-would-change'),
       desiredFeatures: selectedDesiredFeatures,
-      otherFeatureSuggestions: formData.get('other-feature-suggestions'),
       additionalComments: formData.get('additional-comments'),
     };
 
@@ -305,7 +335,7 @@ export default function XHSMonitoringSurveyPage() {
   const isFormValid = validFields.email && overallSatisfaction > 0 && npsScore !== null;
   const progressPercent = Math.round(((currentSection + 1) / TOTAL_SECTIONS) * 100);
 
-  const sectionNames = ['About You', 'Platform Ratings', 'Coverage', 'Slack Integration', 'Support', 'Country Reports', 'News', 'Features & Improvements'];
+  const sectionNames = ['About You', 'Platform Ratings', 'Coverage', 'Slack Integration', 'Support', 'Country Reports', 'News', 'AI, Features & Improvements'];
 
   return (
     <div className="bg-gray-900 min-h-screen">
@@ -342,7 +372,7 @@ export default function XHSMonitoringSurveyPage() {
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
-              XHS™ Monitoring Feedback
+              XHS™ Copilot Feedback
             </h1>
             <p className="text-lg text-gray-300 mb-2">
               Help us understand how you're finding the platform so we can continue to improve it for you
@@ -536,92 +566,30 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="coverage-comments" className="block text-sm font-semibold text-white mb-2">
-                  How are you finding the regulatory coverage overall?
+                <label htmlFor="coverage-missed-items" className="block text-sm font-semibold text-white mb-2">
+                  Are there any jurisdictions, topics, or regulatory areas you feel are missing from XHS™?
                 </label>
                 <textarea
-                  id="coverage-comments"
-                  name="coverage-comments"
-                  rows={3}
-                  placeholder="e.g. Good breadth across EU but could use more APAC coverage..."
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                />
-              </div>
-
-              <div className="mb-6">
-                <label htmlFor="missed-jurisdictions" className="block text-sm font-semibold text-white mb-2">
-                  Are there any jurisdictions we've missed or you'd like us to add?
-                </label>
-                <textarea
-                  id="missed-jurisdictions"
-                  name="missed-jurisdictions"
+                  id="coverage-missed-items"
+                  name="coverage-missed-items"
                   rows={2}
-                  placeholder="e.g. Would like to see more coverage of South-East Asian markets..."
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                />
-              </div>
-
-              <div className="mb-6">
-                <label htmlFor="missed-topics" className="block text-sm font-semibold text-white mb-2">
-                  Are there any regulatory topics or areas we've missed?
-                </label>
-                <textarea
-                  id="missed-topics"
-                  name="missed-topics"
-                  rows={2}
-                  placeholder="e.g. Would like more granular coverage of crypto custody regulations..."
+                  placeholder="e.g. More APAC coverage, crypto custody regulations, South-East Asian markets..."
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
 
               <div className="mb-6">
                 <label htmlFor="missed-updates" className="block text-sm font-semibold text-white mb-2">
-                  Have we missed any specific regulatory updates? If so, please tell us what, when, and where.
+                  Have we missed any specific updates? Tell us what, when, and where.
                 </label>
                 <textarea
                   id="missed-updates"
                   name="missed-updates"
-                  rows={3}
-                  placeholder="e.g. The FCA published updated guidance on payment services on 15 Jan 2026 but it didn't appear on XHS™..."
+                  rows={2}
+                  placeholder="e.g. The FCA published updated payment services guidance on 15 Jan 2026 but it didn't appear on XHS™..."
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
-                  Would you recommend we add additional regulatory sources?
-                </label>
-                <div className="flex gap-4">
-                  {['Yes', 'No', 'Not sure'].map((option) => (
-                    <label key={option} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="recommend-sources-radio"
-                        value={option}
-                        checked={recommendSources === option}
-                        onChange={(e) => setRecommendSources(e.target.value)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-600"
-                      />
-                      <span className="text-gray-300">{option}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {recommendSources === 'Yes' && (
-                <div className="mb-6 bg-white/5 rounded-xl p-4 border border-white/5">
-                  <label htmlFor="suggested-sources" className="block text-sm font-semibold text-white mb-2">
-                    Which sources would you like us to add?
-                  </label>
-                  <textarea
-                    id="suggested-sources"
-                    name="suggested-sources"
-                    rows={2}
-                    placeholder="e.g. Specific regulatory bodies, gazettes, publications..."
-                    className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                  />
-                </div>
-              )}
             </div>
 
             {/* SECTION 4: SLACK INTEGRATION */}
@@ -911,23 +879,129 @@ export default function XHSMonitoringSurveyPage() {
               )}
             </div>
 
-            {/* SECTION 8: IMPROVEMENTS & FUTURE FEATURES */}
+            {/* SECTION 8: AI, FEATURES & IMPROVEMENTS */}
             <div data-section="7" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">8</span>
-                <h2 className="text-2xl font-semibold text-white">Improvements & Future Features</h2>
+                <h2 className="text-2xl font-semibold text-white">AI, Features & Improvements</h2>
               </div>
-              <p className="text-sm text-gray-400 mb-6 ml-11">Tell us what you'd like to see next on XHS™</p>
+              <p className="text-sm text-gray-400 mb-6 ml-11">Help us shape the future of XHS™</p>
+
+              {/* AI sub-section */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Which AI tools do you currently use for compliance-related work? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {aiToolOptions.map((tool) => (
+                    <button
+                      key={tool}
+                      type="button"
+                      onClick={() => {
+                        if (tool === 'None \u2014 I don\'t use AI tools') {
+                          setSelectedAiTools(['None \u2014 I don\'t use AI tools']);
+                        } else {
+                          const filtered = selectedAiTools.filter(t => t !== 'None \u2014 I don\'t use AI tools');
+                          if (filtered.includes(tool)) {
+                            setSelectedAiTools(filtered.filter(t => t !== tool));
+                          } else {
+                            setSelectedAiTools([...filtered, tool]);
+                          }
+                        }
+                      }}
+                      className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                        selectedAiTools.includes(tool)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}
+                    >
+                      {tool}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  How much do you trust AI-generated output for compliance decisions?
+                </label>
+                <div className="flex flex-wrap gap-3">
+                  {['Fully trust \u2014 use as-is', 'Mostly trust \u2014 light review', 'Somewhat trust \u2014 always verify', 'Don\'t trust \u2014 won\'t rely on it', 'Haven\'t tried'].map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => setAiTrustLevel(level)}
+                      className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                        aiTrustLevel === level
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Would you be interested in personalised AI features within XHS™?
+                </label>
+                <div className="flex gap-4 flex-wrap">
+                  {['Very interested', 'Somewhat interested', 'Not interested', 'Need to know more'].map((option) => (
+                    <label key={option} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="ai-feature-interest-radio"
+                        value={option}
+                        checked={aiFeatureInterest === option}
+                        onChange={(e) => setAiFeatureInterest(e.target.value)}
+                        className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                      />
+                      <span className="text-gray-300">{option}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {(aiFeatureInterest === 'Very interested' || aiFeatureInterest === 'Somewhat interested') && (
+                <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    Which AI capabilities would be most valuable to you? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {aiFeatureOptions.map((feature) => (
+                      <button
+                        key={feature}
+                        type="button"
+                        onClick={() => toggleSelection(feature, selectedAiFeatures, setSelectedAiFeatures)}
+                        className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                          selectedAiFeatures.includes(feature)
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        }`}
+                      >
+                        {feature}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Platform improvements divider */}
+              <div className="border-t border-white/10 pt-6 mb-6">
+                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Platform improvements</p>
+              </div>
 
               <div className="mb-6">
                 <label htmlFor="most-valuable-feature" className="block text-sm font-semibold text-white mb-2">
-                  What's the single most valuable feature of XHS™ monitoring for you?
+                  What’s the single most valuable feature of XHS™ for you?
                 </label>
-                <textarea
+                <input
                   id="most-valuable-feature"
                   name="most-valuable-feature"
-                  rows={2}
-                  placeholder="e.g. The jurisdiction-level filtering saves me hours each week..."
+                  type="text"
+                  placeholder="e.g. Jurisdiction-level filtering, Slack alerts, country reports..."
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
@@ -968,27 +1042,14 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="other-feature-suggestions" className="block text-sm font-semibold text-white mb-2">
-                  Any other feature ideas or suggestions?
-                </label>
-                <textarea
-                  id="other-feature-suggestions"
-                  name="other-feature-suggestions"
-                  rows={2}
-                  placeholder="We'd love to hear any ideas you have..."
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
-                />
-              </div>
-
-              <div className="mb-6">
                 <label htmlFor="additional-comments" className="block text-sm font-semibold text-white mb-2">
-                  Anything else you'd like to share?
+                  Any other feedback, ideas, or suggestions?
                 </label>
                 <textarea
                   id="additional-comments"
                   name="additional-comments"
-                  rows={3}
-                  placeholder="Any additional feedback, comments, or suggestions..."
+                  rows={2}
+                  placeholder="We'd love to hear anything else you'd like to share..."
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
