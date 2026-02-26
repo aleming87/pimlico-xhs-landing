@@ -513,7 +513,7 @@ export default function InsightsPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Sign up for a <span className="text-blue-400">7 day trial</span> today
+              Sign up for a <span className="text-blue-400">14-day trial</span> today
             </h2>
             <p className="mt-6 text-base text-gray-400 sm:text-lg/8">
               Transform how your team manages compliance with AI-powered workspaces built for regulated industries.

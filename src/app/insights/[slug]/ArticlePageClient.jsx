@@ -489,7 +489,7 @@ export default function ArticlePageClient() {
                       </div>
                       
                       <p className="text-white text-lg font-semibold mb-8">
-                        Try free for 7 days
+                        Try free for 14 days
                       </p>
                       
                       <Link
@@ -561,7 +561,7 @@ export default function ArticlePageClient() {
                     Tracking regulatory change in {extractCountryFromArticle(article)}?
                   </h3>
                   <p className="text-blue-100 text-base sm:text-lg mb-6 max-w-2xl">
-                    Get real-time alerts and in-depth analysis with a <span className="text-white font-semibold">7-day free trial</span>.
+                    Get real-time alerts and in-depth analysis with a <span className="text-white font-semibold">14-day free trial</span>.
                   </p>
                   <Link
                     href="/contact?trial=true"
