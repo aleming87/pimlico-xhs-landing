@@ -1,13 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+
+const TOTAL_SECTIONS = 7;
 
 export default function XHSMonitoringSurveyPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [currentSection, setCurrentSection] = useState(0);
   const [validFields, setValidFields] = useState({
     firstName: false,
     lastName: false,
@@ -27,12 +30,30 @@ export default function XHSMonitoringSurveyPage() {
 
   // Toggles
   const [recommendSources, setRecommendSources] = useState('');
-  const [usedIntegrations, setUsedIntegrations] = useState('');
-  const [selectedIntegrations, setSelectedIntegrations] = useState([]);
+  const [usedSlackIntegration, setUsedSlackIntegration] = useState('');
   const [usedCountryReports, setUsedCountryReports] = useState('');
   const [newsCoverageBeneficial, setNewsCoverageBeneficial] = useState('');
   const [selectedNewsTopics, setSelectedNewsTopics] = useState([]);
   const [selectedDesiredFeatures, setSelectedDesiredFeatures] = useState([]);
+  const [selectedDesiredIntegrations, setSelectedDesiredIntegrations] = useState([]);
+  const [usageFrequency, setUsageFrequency] = useState('');
+
+  // Progress tracking
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('[data-section]');
+      let current = 0;
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight / 2) {
+          current = index;
+        }
+      });
+      setCurrentSection(current);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Email validation
   const freeEmailProviders = [
@@ -69,18 +90,16 @@ export default function XHSMonitoringSurveyPage() {
   };
 
   // Data
-  const integrationOptions = [
-    'Slack',
+  const desiredIntegrationOptions = [
     'Microsoft Teams',
     'Google Workspace',
-    'Salesforce',
-    'Hubspot',
     'Jira',
     'Asana',
+    'Salesforce',
+    'Hubspot',
     'OneTrust (GRC)',
     'ServiceNow (GRC)',
     'API / Custom Integration',
-    'Email Alerts',
     'Other'
   ];
 
@@ -119,40 +138,43 @@ export default function XHSMonitoringSurveyPage() {
     }
   };
 
-  // Star rating component
-  const StarRating = ({ value, onChange, label, required }) => (
-    <div className="mb-6">
-      <label className="block text-sm font-semibold text-white mb-3">
-        {label} {required && <span className="text-red-400">*</span>}
-      </label>
-      <div className="flex gap-2">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => onChange(star)}
-            className="group relative"
-          >
-            <svg
-              className={`h-9 w-9 transition-colors ${
-                star <= value ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400'
-              }`}
-              fill="currentColor"
-              viewBox="0 0 20 20"
+  // Star rating component with labels
+  const StarRating = ({ value, onChange, label, required }) => {
+    const ratingLabels = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+    return (
+      <div className="mb-6">
+        <label className="block text-sm font-semibold text-white mb-3">
+          {label} {required && <span className="text-red-400">*</span>}
+        </label>
+        <div className="flex items-center gap-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              onClick={() => onChange(star)}
+              className="group relative"
+              aria-label={`${star} star - ${ratingLabels[star - 1]}`}
             >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
-              {star}
+              <svg
+                className={`h-9 w-9 transition-colors ${
+                  star <= value ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400'
+                }`}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            </button>
+          ))}
+          {value > 0 && (
+            <span className="ml-3 text-sm text-gray-400 self-center">
+              {value}/5 — {ratingLabels[value - 1]}
             </span>
-          </button>
-        ))}
-        {value > 0 && (
-          <span className="ml-3 text-sm text-gray-400 self-center">{value}/5</span>
-        )}
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -167,6 +189,9 @@ export default function XHSMonitoringSurveyPage() {
       email: formData.get('email'),
       agreedToPolicy: formData.get('privacy-policy') === 'on',
       marketingConsent: formData.get('marketing-consent') === 'on',
+
+      // Usage
+      usageFrequency,
 
       // Ratings
       overallSatisfaction,
@@ -183,11 +208,11 @@ export default function XHSMonitoringSurveyPage() {
       recommendSources,
       suggestedSources: formData.get('suggested-sources'),
 
-      // Integrations
-      usedIntegrations,
-      integrationsUsed: selectedIntegrations,
-      integrationRating: usedIntegrations === 'Yes' ? integrationRating : null,
+      // Slack Integration
+      usedSlackIntegration,
+      integrationRating: usedSlackIntegration === 'Yes' ? integrationRating : null,
       integrationFeedback: formData.get('integration-feedback'),
+      desiredIntegrations: selectedDesiredIntegrations,
 
       // Country Reports
       usedCountryReports,
@@ -229,15 +254,34 @@ export default function XHSMonitoringSurveyPage() {
   };
 
   const isFormValid = validFields.email && overallSatisfaction > 0 && npsScore !== null;
+  const progressPercent = Math.round(((currentSection + 1) / TOTAL_SECTIONS) * 100);
+
+  const sectionNames = ['About You', 'Platform Ratings', 'Coverage', 'Slack Integration', 'Country Reports', 'News', 'Features & Improvements'];
 
   return (
     <div className="bg-gray-900 min-h-screen">
+      {/* Progress Bar — fixed at top */}
+      <div className="fixed top-0 inset-x-0 z-[60]">
+        <div className="h-1 bg-gray-800">
+          <div
+            className="h-1 bg-blue-500 transition-all duration-500 ease-out"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+        <div className="bg-gray-900/80 backdrop-blur-sm border-b border-white/5 px-6 py-2 flex items-center justify-between">
+          <span className="text-xs text-gray-500">
+            Section {currentSection + 1} of {TOTAL_SECTIONS}: <span className="text-gray-400">{sectionNames[currentSection]}</span>
+          </span>
+          <span className="text-xs text-gray-500">{progressPercent}% complete</span>
+        </div>
+      </div>
+
       {/* Navigation */}
-      <header className="absolute inset-x-0 top-0 z-50">
+      <header className="absolute inset-x-0 top-0 z-50 mt-10">
         <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
           <div className="flex lg:flex-1">
             <a href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Pimlico XHS</span>
+              <span className="sr-only">Pimlico XHS™</span>
               <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
             </a>
           </div>
@@ -245,22 +289,28 @@ export default function XHSMonitoringSurveyPage() {
       </header>
 
       {/* Form */}
-      <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
+      <div className="isolate px-6 py-24 sm:py-32 lg:px-8 mt-10">
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
-              XHS Monitoring Feedback
+              XHS™ Monitoring Feedback
             </h1>
-            <p className="text-lg text-gray-300">
+            <p className="text-lg text-gray-300 mb-2">
               Help us understand how you're finding the platform so we can continue to improve it for you
+            </p>
+            <p className="text-sm text-gray-500">
+              Estimated time: 3–5 minutes · All responses are confidential
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
 
-            {/* CONTACT INFORMATION */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-6">Contact Information</h2>
+            {/* SECTION 1: CONTACT INFORMATION */}
+            <div data-section="0" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">1</span>
+                <h2 className="text-2xl font-semibold text-white">About You</h2>
+              </div>
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 <div>
                   <label htmlFor="first-name" className="block text-sm font-semibold text-white">
@@ -329,18 +379,44 @@ export default function XHSMonitoringSurveyPage() {
                     )}
                   </div>
                 </div>
+
+                {/* Usage frequency — warm-up question */}
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-semibold text-white mb-3">
+                    How often do you use XHS™? <span className="text-red-400">*</span>
+                  </label>
+                  <div className="flex flex-wrap gap-3">
+                    {['Daily', 'Several times a week', 'Weekly', 'A few times a month', 'Rarely'].map((freq) => (
+                      <button
+                        key={freq}
+                        type="button"
+                        onClick={() => setUsageFrequency(freq)}
+                        className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                          usageFrequency === freq
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        }`}
+                      >
+                        {freq}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* OVERALL PLATFORM RATINGS */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">Platform Ratings</h2>
-              <p className="text-sm text-gray-400 mb-6">Rate the following aspects of XHS monitoring on a scale of 1-5</p>
+            {/* SECTION 2: PLATFORM RATINGS */}
+            <div data-section="1" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">2</span>
+                <h2 className="text-2xl font-semibold text-white">Platform Ratings</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">Rate the following aspects of XHS™ monitoring on a scale of 1–5</p>
 
               <StarRating
                 value={overallSatisfaction}
                 onChange={setOverallSatisfaction}
-                label="Overall satisfaction with XHS monitoring"
+                label="Overall satisfaction with XHS™ monitoring"
                 required
               />
               <StarRating
@@ -369,10 +445,13 @@ export default function XHSMonitoringSurveyPage() {
               />
             </div>
 
-            {/* COVERAGE & SOURCES */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">Coverage & Sources</h2>
-              <p className="text-sm text-gray-400 mb-6">Help us understand if we're covering the right ground</p>
+            {/* SECTION 3: COVERAGE & SOURCES */}
+            <div data-section="2" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">3</span>
+                <h2 className="text-2xl font-semibold text-white">Coverage & Sources</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">Help us understand if we're covering the right ground</p>
 
               <div className="mb-6">
                 <label htmlFor="coverage-comments" className="block text-sm font-semibold text-white mb-2">
@@ -450,27 +529,29 @@ export default function XHSMonitoringSurveyPage() {
               )}
             </div>
 
-            {/* INTEGRATIONS */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">Integrations</h2>
-              <p className="text-sm text-gray-400 mb-6">Tell us about your experience with XHS integrations</p>
+            {/* SECTION 4: SLACK INTEGRATION */}
+            <div data-section="3" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">4</span>
+                <h2 className="text-2xl font-semibold text-white">Slack Integration</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">XHS™ currently offers a Slack integration for regulatory alerts — tell us how it's working</p>
 
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-white mb-3">
-                  Have you used any of the XHS integrations? <span className="text-red-400">*</span>
+                  Have you used the XHS™ Slack integration? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4">
-                  {['Yes', 'No', 'Not aware of them'].map((option) => (
+                  {['Yes', 'No', 'Not aware of it'].map((option) => (
                     <label key={option} className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
-                        name="used-integrations-radio"
+                        name="used-slack-radio"
                         value={option}
-                        checked={usedIntegrations === option}
+                        checked={usedSlackIntegration === option}
                         onChange={(e) => {
-                          setUsedIntegrations(e.target.value);
+                          setUsedSlackIntegration(e.target.value);
                           if (e.target.value !== 'Yes') {
-                            setSelectedIntegrations([]);
                             setIntegrationRating(0);
                           }
                         }}
@@ -482,56 +563,60 @@ export default function XHSMonitoringSurveyPage() {
                 </div>
               </div>
 
-              {usedIntegrations === 'Yes' && (
+              {usedSlackIntegration === 'Yes' && (
                 <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
-                  <div className="mb-6">
-                    <label className="block text-sm font-semibold text-white mb-3">
-                      Which integrations have you used?
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {integrationOptions.map((integration) => (
-                        <button
-                          key={integration}
-                          type="button"
-                          onClick={() => toggleSelection(integration, selectedIntegrations, setSelectedIntegrations)}
-                          className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
-                            selectedIntegrations.includes(integration)
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                          }`}
-                        >
-                          {integration}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
                   <StarRating
                     value={integrationRating}
                     onChange={setIntegrationRating}
-                    label="How well are the integrations working for you?"
+                    label="How well is the Slack integration working for you?"
                   />
 
-                  <div>
+                  <div className="mb-6">
                     <label htmlFor="integration-feedback" className="block text-sm font-semibold text-white mb-2">
-                      Any specific feedback on the integrations?
+                      Any specific feedback on the Slack integration?
                     </label>
                     <textarea
                       id="integration-feedback"
                       name="integration-feedback"
                       rows={2}
-                      placeholder="e.g. Slack alerts are great but would like more filtering options..."
+                      placeholder="e.g. Alerts are timely but would like more filtering options, formatting could be improved..."
                       className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                     />
                   </div>
                 </div>
               )}
+
+              {/* Desired integrations — always visible */}
+              <div className="mb-2">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Which other integrations would you find valuable? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {desiredIntegrationOptions.map((integration) => (
+                    <button
+                      key={integration}
+                      type="button"
+                      onClick={() => toggleSelection(integration, selectedDesiredIntegrations, setSelectedDesiredIntegrations)}
+                      className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                        selectedDesiredIntegrations.includes(integration)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}
+                    >
+                      {integration}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {/* COUNTRY REPORTS */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">Country Reports</h2>
-              <p className="text-sm text-gray-400 mb-6">Share your thoughts on the XHS country reports</p>
+            {/* SECTION 5: COUNTRY REPORTS */}
+            <div data-section="4" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">5</span>
+                <h2 className="text-2xl font-semibold text-white">Country Reports</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">Share your thoughts on the XHS™ country reports</p>
 
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-white mb-3">
@@ -596,10 +681,13 @@ export default function XHSMonitoringSurveyPage() {
               )}
             </div>
 
-            {/* NEWS COVERAGE */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">News Coverage</h2>
-              <p className="text-sm text-gray-400 mb-6">We're exploring adding integrated news coverage to the platform</p>
+            {/* SECTION 6: NEWS COVERAGE */}
+            <div data-section="5" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">6</span>
+                <h2 className="text-2xl font-semibold text-white">News Coverage</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">We're exploring adding integrated news coverage to XHS™</p>
 
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-white mb-3">
@@ -662,14 +750,17 @@ export default function XHSMonitoringSurveyPage() {
               )}
             </div>
 
-            {/* IMPROVEMENTS & FUTURE FEATURES */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">Improvements & Future Features</h2>
-              <p className="text-sm text-gray-400 mb-6">Tell us what you'd like to see next</p>
+            {/* SECTION 7: IMPROVEMENTS & FUTURE FEATURES */}
+            <div data-section="6" className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">7</span>
+                <h2 className="text-2xl font-semibold text-white">Improvements & Future Features</h2>
+              </div>
+              <p className="text-sm text-gray-400 mb-6 ml-11">Tell us what you'd like to see next on XHS™</p>
 
               <div className="mb-6">
                 <label htmlFor="most-valuable-feature" className="block text-sm font-semibold text-white mb-2">
-                  What's the single most valuable feature of XHS monitoring for you?
+                  What's the single most valuable feature of XHS™ monitoring for you?
                 </label>
                 <textarea
                   id="most-valuable-feature"
@@ -728,7 +819,7 @@ export default function XHSMonitoringSurveyPage() {
                 />
               </div>
 
-              <div>
+              <div className="mb-6">
                 <label htmlFor="additional-comments" className="block text-sm font-semibold text-white mb-2">
                   Anything else you'd like to share?
                 </label>
@@ -740,16 +831,11 @@ export default function XHSMonitoringSurveyPage() {
                   className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
                 />
               </div>
-            </div>
 
-            {/* NPS SCORE */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-2">Recommendation</h2>
-              <p className="text-sm text-gray-400 mb-6">One last question</p>
-
-              <div>
+              {/* NPS — placed at end of final section for natural closure */}
+              <div className="border-t border-white/10 pt-6">
                 <label className="block text-sm font-semibold text-white mb-4">
-                  How likely are you to recommend XHS monitoring to a colleague? <span className="text-red-400">*</span>
+                  How likely are you to recommend XHS™ to a colleague? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
@@ -807,7 +893,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
               <div className="text-sm">
                 <label htmlFor="marketing-consent" className="text-gray-300">
-                  I would like to receive marketing communications about Pimlico XHS products and services
+                  I would like to receive marketing communications about Pimlico XHS™ products and services
                 </label>
               </div>
             </div>
