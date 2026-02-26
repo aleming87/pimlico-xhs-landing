@@ -1,8 +1,70 @@
 import { NextResponse } from 'next/server';
+import { put, list } from '@vercel/blob';
 
+const BLOB_PREFIX = 'xhs-monitoring-survey/';
+const BLOB_INDEX_KEY = 'xhs-monitoring-survey/index.json';
+
+// ─── Helpers: read / append to Vercel Blob ─────────────────────────
+async function getResponsesFromBlob() {
+  try {
+    const { blobs } = await list({ prefix: 'xhs-monitoring-survey/index' });
+    if (blobs.length === 0) return [];
+    const res = await fetch(blobs[0].url, { cache: 'no-store' });
+    const data = await res.json();
+    return data.responses || [];
+  } catch (error) {
+    console.error('Error reading survey blob:', error);
+    return [];
+  }
+}
+
+async function saveResponsesToBlob(responses) {
+  try {
+    // Delete existing index first
+    const { del } = await import('@vercel/blob');
+    const { blobs } = await list({ prefix: 'xhs-monitoring-survey/index' });
+    for (const blob of blobs) {
+      await del(blob.url);
+    }
+  } catch (e) {
+    // Ignore deletion errors
+  }
+
+  await put(BLOB_INDEX_KEY, JSON.stringify({ responses, updatedAt: new Date().toISOString() }, null, 2), {
+    access: 'public',
+    addRandomSuffix: false,
+    contentType: 'application/json',
+  });
+}
+
+// ─── GET: Return all saved responses (for admin dashboard) ────────
+export async function GET() {
+  try {
+    const responses = await getResponsesFromBlob();
+    return NextResponse.json({ success: true, responses });
+  } catch (error) {
+    console.error('Error fetching survey responses:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+// ─── POST: Submit survey, persist, and send emails ────────────────
 export async function POST(request) {
   try {
     const data = await request.json();
+
+    // Add metadata
+    data.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    data.submittedAt = new Date().toISOString();
+
+    // Persist to Vercel Blob
+    try {
+      const existing = await getResponsesFromBlob();
+      await saveResponsesToBlob([data, ...existing]);
+      console.log('✅ Survey response persisted to Vercel Blob');
+    } catch (blobError) {
+      console.error('⚠️ Failed to persist to blob (continuing with email):', blobError);
+    }
     
     console.log('📧 XHS™ Monitoring Survey Data Received');
     console.log('- RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
@@ -44,6 +106,8 @@ Ease of Use: ${data.easeOfUseRating}/5
 
 🌍 COVERAGE FEEDBACK
 
+Other Regulatory Sources Used: ${data.otherRegSources && data.otherRegSources.length > 0 ? data.otherRegSources.join(', ') : 'N/A'}
+Source Specifics: ${data.otherRegSourcesSpecifics || 'N/A'}
 Coverage Comments: ${data.coverageComments || 'N/A'}
 Missed Jurisdictions: ${data.missedJurisdictions || 'N/A'}
 Missed Topics or Regulations: ${data.missedTopics || 'N/A'}
@@ -199,6 +263,8 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
             <td style="padding: 0 30px 30px;">
               <h2 style="margin: 0 0 20px; color: #2563eb; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">🌍 Coverage Feedback</h2>
               <table width="100%" cellpadding="8" cellspacing="0">
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Other Regulatory Sources:</td><td style="color: #1e293b; font-size: 14px;">${data.otherRegSources && data.otherRegSources.length > 0 ? data.otherRegSources.join(', ') : 'N/A'}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Source Specifics:</td><td style="color: #1e293b; font-size: 14px;">${data.otherRegSourcesSpecifics || 'N/A'}</td></tr>
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Coverage Comments:</td><td style="color: #1e293b; font-size: 14px;">${data.coverageComments || 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Jurisdictions:</td><td style="color: #1e293b; font-size: 14px;">${data.missedJurisdictions || 'N/A'}</td></tr>
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600; vertical-align: top;">Missed Topics:</td><td style="color: #1e293b; font-size: 14px;">${data.missedTopics || 'N/A'}</td></tr>
@@ -391,7 +457,8 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
         return NextResponse.json({ 
           success: true, 
           message: 'Survey submitted successfully',
-          emailSent: true 
+          emailSent: true,
+          id: data.id 
         });
       } catch (emailError) {
         console.error('❌ Email sending error:', emailError);
@@ -401,7 +468,8 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
           success: true, 
           message: 'Survey submitted successfully (email notification may have failed)',
           emailSent: false,
-          emailError: emailError.message 
+          emailError: emailError.message,
+          id: data.id 
         });
       }
     } else {
@@ -410,7 +478,8 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
       return NextResponse.json({ 
         success: true, 
         message: 'Survey submitted successfully (no email service configured)',
-        emailSent: false 
+        emailSent: false,
+        id: data.id 
       });
     }
   } catch (error) {

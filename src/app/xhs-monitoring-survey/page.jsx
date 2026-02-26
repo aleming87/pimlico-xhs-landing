@@ -37,6 +37,7 @@ export default function XHSMonitoringSurveyPage() {
   const [selectedDesiredFeatures, setSelectedDesiredFeatures] = useState([]);
   const [selectedDesiredIntegrations, setSelectedDesiredIntegrations] = useState([]);
   const [usageFrequency, setUsageFrequency] = useState('');
+  const [selectedOtherSources, setSelectedOtherSources] = useState([]);
 
   // Support
   const [supportChannelsUsed, setSupportChannelsUsed] = useState([]);
@@ -109,6 +110,21 @@ export default function XHSMonitoringSurveyPage() {
     'WhatsApp',
     'Phone call',
     'In-app notification',
+  ];
+
+  const otherSourceOptions = [
+    'Regulator websites directly',
+    'Law firm updates / client alerts',
+    'Consulting firm briefings',
+    'Industry body publications',
+    'Thomson Reuters Regulatory Intelligence',
+    'Compliance.ai / Ascent',
+    'CUBE',
+    'Corlytics',
+    'Internal compliance team',
+    'LinkedIn / social media',
+    'News outlets (FT, Reuters, etc.)',
+    'Other',
   ];
 
   const desiredIntegrationOptions = [
@@ -223,6 +239,8 @@ export default function XHSMonitoringSurveyPage() {
       npsScore,
 
       // Coverage
+      otherRegSources: selectedOtherSources,
+      otherRegSourcesSpecifics: formData.get('other-reg-sources-specifics'),
       coverageComments: formData.get('coverage-comments'),
       missedJurisdictions: formData.get('missed-jurisdictions'),
       missedTopics: formData.get('missed-topics'),
@@ -483,6 +501,39 @@ export default function XHSMonitoringSurveyPage() {
                 <h2 className="text-2xl font-semibold text-white">Coverage & Sources</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Help us understand if we're covering the right ground</p>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-white mb-3">
+                  Beyond XHS™, what other sources do you use to keep on top of regulatory change? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {otherSourceOptions.map((source) => (
+                    <button
+                      key={source}
+                      type="button"
+                      onClick={() => toggleSelection(source, selectedOtherSources, setSelectedOtherSources)}
+                      className={`px-4 py-2.5 rounded-full text-sm transition-all min-h-[44px] flex items-center ${
+                        selectedOtherSources.includes(source)
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}
+                    >
+                      {source}
+                    </button>
+                  ))}
+                </div>
+                {selectedOtherSources.length > 0 && (
+                  <div className="mt-3">
+                    <input
+                      id="other-reg-sources-specifics"
+                      name="other-reg-sources-specifics"
+                      type="text"
+                      placeholder="Any specific names, publications, or tools? (optional)"
+                      className="block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                    />
+                  </div>
+                )}
+              </div>
 
               <div className="mb-6">
                 <label htmlFor="coverage-comments" className="block text-sm font-semibold text-white mb-2">
