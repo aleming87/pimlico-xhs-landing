@@ -5,8 +5,7 @@ const WorkflowContext = createContext(null);
 
 // Workflow stages
 export const STAGES = [
-  { key: 'ideas',       label: 'Ideas',       icon: '💡', color: 'purple' },
-  { key: 'drafting',    label: 'Drafting',     icon: '✏️', color: 'blue' },
+  { key: 'drafting',    label: 'Drafts',       icon: '✏️', color: 'blue' },
   { key: 'collateral',  label: 'Collateral',   icon: '🎨', color: 'indigo' },
   { key: 'copy',        label: 'Copy',         icon: '📝', color: 'cyan' },
   { key: 'publishing',  label: 'Publishing',   icon: '🚀', color: 'green' },
@@ -23,6 +22,7 @@ function loadItems() {
 
 export function WorkflowProvider({ children }) {
   const [items, setItems] = useState([]);
+  const visibleItems = items.filter(item => STAGES.some(stage => stage.key === item.stage));
 
   useEffect(() => { setItems(loadItems()); }, []);
 
@@ -68,15 +68,15 @@ export function WorkflowProvider({ children }) {
   const getByStage = (stage) => items.filter(i => i.stage === stage);
 
   const stats = {
-    total: items.length,
-    byStage: Object.fromEntries(STAGES.map(s => [s.key, items.filter(i => i.stage === s.key).length])),
-    thisWeek: items.filter(i => {
+    total: visibleItems.length,
+    byStage: Object.fromEntries(STAGES.map(s => [s.key, visibleItems.filter(i => i.stage === s.key).length])),
+    thisWeek: visibleItems.filter(i => {
       const d = new Date(i.updatedAt);
       const now = new Date();
       const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       return d >= weekAgo;
     }).length,
-    scheduled: items.filter(i => i.scheduledDate).length,
+    scheduled: visibleItems.filter(i => i.scheduledDate).length,
   };
 
   return (

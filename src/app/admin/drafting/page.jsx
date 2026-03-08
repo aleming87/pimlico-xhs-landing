@@ -1,8 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import { useArticles } from '../ArticlesContext';
-import { useWorkflow } from '../WorkflowContext';
+import { DRAFT_FLOW_STEPS, DRAFT_SERIES } from './draft-flow-config';
 
 // Pimlico Taxonomy Tags
 const PIMLICO_TAXONOMY = {
@@ -13,9 +12,193 @@ const PIMLICO_TAXONOMY = {
   stage: ['Proposal', 'Consultation Open', 'Adoption', 'Entry Into Force', 'Application', 'Review'],
 };
 
+const CATEGORY_OPTIONS = ['AI Regulation', 'Payments', 'Crypto', 'Gambling'];
+const DEFAULT_SERIES_KEY = DRAFT_SERIES[0].key;
+const DEFAULT_ENGAGEMENTS = {
+  newsletterLine: '',
+  linkedinTeaser: '',
+  coverImagePrompt: '',
+  internalNotes: '',
+};
+
+const CATEGORY_KEYWORDS = {
+  'AI Regulation': ['ai regulation', 'artificial intelligence', 'ai act', 'ai framework', 'machine learning', 'ai governance', 'ai risk', 'genai', 'foundation model'],
+  'Payments': ['payment', 'psd2', 'psd3', 'open banking', 'financial promotion', 'fintech', 'dora', 'emi', 'psp', 'iban'],
+  'Crypto': ['crypto', 'mica', 'vasp', 'stablecoin', 'digital asset', 'token', 'blockchain', 'defi', 'web3'],
+  'Gambling': ['gambling', 'gaming', 'betting', 'casino', 'slot', 'lottery', 'igaming', 'age verification', 'self exclusion', 'affordability', 'ukgc'],
+};
+
+const SERIES_KEYWORDS = {
+  'what-matters-brief': ['week', 'weekly', 'roundup', 'digest', 'brief', 'what matters'],
+  'regulatory-influencer': ['bigger picture', 'flagship', 'market impact', 'trend', 'influencer', 'landscape'],
+  'implementation-note': ['implementation', 'practical', 'operational', 'product team', 'legal team', 'compliance team'],
+  'cross-border-lens': ['cross-border', 'jurisdiction', 'compare', 'comparison', 'divergence', 'multi-country'],
+  'supervisory-signal': ['authority', 'supervisor', 'enforcement', 'investigation', 'fine', 'licensing action'],
+  'compliance-horizon': ['deadline', 'timeline', 'milestone', 'horizon', 'upcoming dates', 'commencement'],
+};
+
+const slugifyText = (text = '') => text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+
+const uniqueStrings = (values = []) => Array.from(new Set(values.map(v => String(v || '').trim()).filter(Boolean)));
+
+const normaliseCategory = (value) => {
+  if (!value) return 'AI Regulation';
+  const cleaned = String(value).trim();
+  if (/^ai$/i.test(cleaned)) return 'AI Regulation';
+  const exact = CATEGORY_OPTIONS.find(option => option.toLowerCase() === cleaned.toLowerCase());
+  return exact || 'AI Regulation';
+};
+
+const detectCategoryFromText = (text = '') => {
+  const lowerText = text.toLowerCase();
+  const best = Object.entries(CATEGORY_KEYWORDS)
+    .map(([category, keywords]) => [category, keywords.reduce((score, keyword) => score + (lowerText.includes(keyword) ? 1 : 0), 0)])
+    .sort((a, b) => b[1] - a[1])[0];
+  return best && best[1] > 0 ? best[0] : 'AI Regulation';
+};
+
+const detectTagsFromText = (text = '') => {
+  const lowerText = text.toLowerCase();
+  const allTags = Object.values(PIMLICO_TAXONOMY).flat();
+  const detected = allTags.filter(tag => lowerText.includes(tag.toLowerCase()));
+  const hashTags = text.match(/#([\w-]{3,})/g) || [];
+
+  hashTags.forEach((hashTag) => {
+    const cleaned = hashTag.replace('#', '').toLowerCase();
+    const match = allTags.find(tag => tag.toLowerCase().replace(/[\s-]+/g, '') === cleaned.replace(/[\s-]+/g, ''));
+    if (match) detected.push(match);
+  });
+
+  return uniqueStrings(detected).slice(0, 12);
+};
+
+const extractTitleAndExcerpt = (text = '', fallbackName = 'untitled-draft') => {
+  const lines = text.split('\n');
+  let title = '';
+  let titleLineIdx = -1;
+
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (/^#{1,2}\s+/.test(trimmed)) {
+      title = trimmed.replace(/^#{1,2}\s+/, '').trim();
+      titleLineIdx = i;
+      break;
+    }
+  }
+
+  if (!title) {
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim()) {
+        title = lines[i].trim().replace(/^#+\s*/, '');
+        titleLineIdx = i;
+        break;
+      }
+    }
+  }
+
+  let excerpt = '';
+  let excerptEndIdx = titleLineIdx;
+  for (let i = titleLineIdx + 1; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (!trimmed || /^[-*_]{3,}$/.test(trimmed)) continue;
+    if (/^#{1,3}\s+/.test(trimmed)) break;
+
+    let paragraph = '';
+    for (let j = i; j < lines.length; j++) {
+      const current = lines[j].trim();
+      if (!current || /^#{1,3}\s+/.test(current)) {
+        excerptEndIdx = j;
+        break;
+      }
+      paragraph += `${paragraph ? ' ' : ''}${current.replace(/^[-*+]\s+/, '')}`;
+      excerptEndIdx = j + 1;
+    }
+    excerpt = paragraph.slice(0, 280);
+    break;
+  }
+
+  return {
+    title: title || fallbackName.replace(/\.(md|markdown|txt|pdf)$/i, ''),
+    excerpt,
+    titleLineIdx,
+    excerptEndIdx,
+  };
+};
+
+const buildSeriesDraft = ({ seriesKey, title, excerpt, officialSources = [] }) => {
+  const series = DRAFT_SERIES.find(item => item.key === seriesKey) || DRAFT_SERIES[0];
+  const sourceLines = officialSources.length > 0
+    ? officialSources.map(source => `- ${source}`).join('\n')
+    : '- [Add official source]';
+
+  const sections = series.headings
+    .filter(heading => heading !== 'Intro')
+    .map((heading) => {
+      if (heading === 'Sources') {
+        return `## ${heading}\n\n${sourceLines}`;
+      }
+      return `## ${heading}\n\n[Add ${heading.toLowerCase()}]`;
+    })
+    .join('\n\n');
+
+  return `# ${title || series.label}\n\n${excerpt || '[Lead with the development, why it matters, and who should care.]'}\n\n${sections}\n\n---\n\n*This analysis is provided by Pimlico XHS™ for informational purposes. It does not constitute legal advice.*`;
+};
+
+const suggestSeriesKey = (text = '') => {
+  const lowerText = text.toLowerCase();
+  const best = Object.entries(SERIES_KEYWORDS)
+    .map(([seriesKey, keywords]) => [seriesKey, keywords.reduce((score, keyword) => score + (lowerText.includes(keyword) ? 1 : 0), 0)])
+    .sort((a, b) => b[1] - a[1])[0];
+  return best && best[1] > 0 ? best[0] : DEFAULT_SERIES_KEY;
+};
+
+const parseBooleanValue = (value = '') => /^(true|yes|1)$/i.test(String(value).trim());
+
+const parseListValue = (value = '') => {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) return [];
+  if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+    return uniqueStrings(trimmed.slice(1, -1).split(',').map(item => item.replace(/^['"]|['"]$/g, '').trim()));
+  }
+  return uniqueStrings(trimmed.split(',').map(item => item.trim()));
+};
+
+const parseFrontmatter = (text = '') => {
+  const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+  if (!match) return null;
+
+  const frontmatter = {};
+  const lines = match[1].split(/\r?\n/);
+  let currentKey = null;
+
+  lines.forEach((line) => {
+    const keyMatch = line.match(/^([A-Za-z][\w-]*):\s*(.*)$/);
+    if (keyMatch) {
+      currentKey = keyMatch[1];
+      const rawValue = keyMatch[2].trim();
+      if (!rawValue) {
+        frontmatter[currentKey] = [];
+      } else {
+        frontmatter[currentKey] = rawValue.replace(/^['"]|['"]$/g, '');
+      }
+      return;
+    }
+
+    const listMatch = line.match(/^\s*-\s+(.*)$/);
+    if (listMatch && currentKey) {
+      if (!Array.isArray(frontmatter[currentKey])) frontmatter[currentKey] = [];
+      frontmatter[currentKey].push(listMatch[1].trim().replace(/^['"]|['"]$/g, ''));
+    }
+  });
+
+  return {
+    frontmatter,
+    body: text.slice(match[0].length),
+  };
+};
+
 export default function DraftingPage() {
   const { articles, setArticles } = useArticles();
-  const { items, addItem, updateItem } = useWorkflow();
   const editorRef = useRef(null);
 
   const [meta, setMeta] = useState({
@@ -39,58 +222,46 @@ export default function DraftingPage() {
   const [editingArticle, setEditingArticle] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
-  const [draftItems, setDraftItems] = useState([]);
   const [showPrompt, setShowPrompt] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState(null);
   const [showDrafts, setShowDrafts] = useState(false);
+  const [selectedSeries, setSelectedSeries] = useState(DEFAULT_SERIES_KEY);
+  const [officialSources, setOfficialSources] = useState([]);
+  const [sourceInput, setSourceInput] = useState('');
+  const [sourceText, setSourceText] = useState('');
+  const [sourceFileName, setSourceFileName] = useState('');
+  const [engagements, setEngagements] = useState(DEFAULT_ENGAGEMENTS);
+  const [showEngagements, setShowEngagements] = useState(false);
   const autoSaveTimerRef = useRef(null);
 
   const AUTOSAVE_KEY = 'xhs-drafting-autosave';
 
-  const LLM_PROMPT = `You are helping me draft an article for Pimlico XHS, a cross-border regulatory intelligence platform.
+  const activeSeries = DRAFT_SERIES.find(series => series.key === selectedSeries) || DRAFT_SERIES[0];
 
-Generate a complete article in Markdown format that I can upload directly. The system auto-detects all fields.
+  const LLM_PROMPT = `You are helping me draft a ${activeSeries.label} for Pimlico XHS, a cross-border regulatory intelligence platform.
 
-ARTICLE STRUCTURE:
-# [Title — clear, SEO-friendly, 50-80 chars]
+SERIES:
+- ${activeSeries.label}
+- ${activeSeries.description}
+- Short command: ${activeSeries.shortCommand}
 
-[Opening paragraph — the hook. State the key development and why it matters. This becomes the excerpt.]
+Generate a complete draft package in Markdown format that I can import directly.
 
-## Background
-[Regulatory context and history — 2-3 paragraphs]
+INCLUDE:
+- Title
+- Excerpt
+- Category (${CATEGORY_OPTIONS.join(' | ')})
+- Tags
+- Official sources
+- Body using this structure:
 
-## Key Developments
-### [Subheading 1]
-[Analysis with bullet points where appropriate]
+# [Title]
 
-### [Subheading 2]
-[More detail, data, quotes]
+[Opening paragraph / excerpt]
 
-## Implications for Firms
-1. [Practical, actionable takeaway]
-2. [Second takeaway]
-3. [Third takeaway]
+${activeSeries.headings.filter(heading => heading !== 'Intro').map(heading => `## ${heading}`).join('\n')}
 
-## What Comes Next
-[Forward-looking outlook — 1-2 paragraphs]
-
----
-*This analysis is provided by Pimlico XHS™ for informational purposes. It does not constitute legal advice.*
-
-CATEGORIES (pick one): AI Regulation | Payments | Crypto | Gambling
-
-TAXONOMY TAGS (include relevant ones in content for auto-detection):
-Verticals: Gambling, Payments, Crypto, AI
-Topics: Online Licensing, Age Verification, Affordability, Financial Promotions, Open Banking, VASP Licensing, Stablecoins, AI Frameworks, AI Risk Tiers, AI Governance Controls, GenAI Labelling, Enforcement Actions, MiCA Implementation, PSD2 Implementation, DORA Implementation
-Jurisdictions: European Union, United Kingdom, United States, Germany, France, Malta, Gibraltar, Singapore
-Types: Primary Law, Secondary Law, Guideline, Consultation, Enforcement Decision
-Stages: Proposal, Consultation Open, Adoption, Entry Into Force, Application, Review
-
-Write professionally but accessibly. Target 800-1200 words. Include specific dates, regulation names, and practical implications.`;
-
-  useEffect(() => {
-    setDraftItems(items.filter(i => i.stage === 'drafting'));
-  }, [items]);
+Keep it clean and publication-ready. Use specific dates, named authorities, and practical implications.`;
 
   // Saved article drafts (articles with status='draft')
   const savedDrafts = articles.filter(a => a.status === 'draft');
@@ -98,7 +269,8 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
   // ─── Auto-save: persist form state to localStorage every 30s ─────
   const getFormSnapshot = () => ({
     meta, content, htmlContent, editorMode, tags, publicationDate,
-    isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl,
+    isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl, selectedSeries,
+    officialSources, sourceInput, sourceText, sourceFileName, engagements,
     editingArticleId: editingArticle?.id || null,
     savedAt: new Date().toISOString(),
   });
@@ -116,6 +288,12 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     if (snap.scheduleEnabled !== undefined) setScheduleEnabled(snap.scheduleEnabled);
     if (snap.scheduledDate) setScheduledDate(snap.scheduledDate);
     if (snap.ogImageUrl) setOgImageUrl(snap.ogImageUrl);
+    if (snap.selectedSeries) setSelectedSeries(snap.selectedSeries);
+    if (snap.officialSources) setOfficialSources(snap.officialSources);
+    if (snap.sourceInput) setSourceInput(snap.sourceInput);
+    if (snap.sourceText) setSourceText(snap.sourceText);
+    if (snap.sourceFileName) setSourceFileName(snap.sourceFileName);
+    if (snap.engagements) setEngagements({ ...DEFAULT_ENGAGEMENTS, ...snap.engagements });
     if (snap.editingArticleId) {
       const art = articles.find(a => a.id === snap.editingArticleId);
       if (art) setEditingArticle(art);
@@ -160,7 +338,8 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
       try {
         const snap = {
           meta, content, htmlContent, editorMode, tags, publicationDate,
-          isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl,
+          isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl, selectedSeries,
+          officialSources, sourceInput, sourceText, sourceFileName, engagements,
           editingArticleId: editingArticle?.id || null,
           savedAt: new Date().toISOString(),
         };
@@ -200,18 +379,27 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     setIsPremium(article.isPremium || false);
     setPremiumCutoff(article.premiumCutoff || 10);
     setOgImageUrl(article.ogImage || '');
+    setSelectedSeries(article.series || DEFAULT_SERIES_KEY);
+    setOfficialSources(article.officialSources || []);
+    setEngagements({
+      newsletterLine: article.newsletterLine || '',
+      linkedinTeaser: article.linkedinTeaser || '',
+      coverImagePrompt: article.coverImagePrompt || '',
+      internalNotes: article.internalNotes || '',
+    });
+    setSourceInput('');
+    setSourceText('');
+    setSourceFileName(article.sourceFileName || '');
     setShowDrafts(false);
     setSuccessMsg(`Loaded draft: "${article.title}"`);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
-  const slugify = (text) => text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
-
   const handleTitleChange = (e) => {
     const title = e.target.value;
-    const shouldAutoSlug = !meta.slug || meta.slug === slugify(meta.title);
-    setMeta(prev => ({ ...prev, title, ...(shouldAutoSlug ? { slug: slugify(title) } : {}) }));
+    const shouldAutoSlug = !meta.slug || meta.slug === slugifyText(meta.title);
+    setMeta(prev => ({ ...prev, title, ...(shouldAutoSlug ? { slug: slugifyText(title) } : {}) }));
   };
 
   const handleImageUpload = async (e) => {
@@ -240,122 +428,231 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     setIsUploading(false);
   };
 
-  const CATEGORIES = ['AI Regulation', 'Payments', 'Crypto', 'Gambling'];
+  const applyDraftPayload = (payload, { replaceMetadata = true, replaceContent = true, toast } = {}) => {
+    const nextSeriesKey = payload.series || selectedSeries || DEFAULT_SERIES_KEY;
+    const nextSeries = DRAFT_SERIES.find(series => series.key === nextSeriesKey) || DRAFT_SERIES[0];
+    const nextSources = uniqueStrings(replaceMetadata ? (payload.officialSources || []) : [...officialSources, ...(payload.officialSources || [])]);
+
+    setSelectedSeries(nextSeriesKey);
+    setMeta(prev => ({
+      ...prev,
+      title: replaceMetadata ? (payload.title || prev.title) : (prev.title || payload.title || ''),
+      slug: replaceMetadata
+        ? (payload.slug || (payload.title ? slugifyText(payload.title) : prev.slug))
+        : (prev.slug || payload.slug || (payload.title ? slugifyText(payload.title) : '')),
+      excerpt: replaceMetadata ? (payload.excerpt || prev.excerpt) : (prev.excerpt || payload.excerpt || ''),
+      category: replaceMetadata ? normaliseCategory(payload.category || prev.category) : (prev.category || normaliseCategory(payload.category)),
+      readTime: replaceMetadata ? (payload.readTime || prev.readTime || nextSeries.defaultReadTime) : (prev.readTime || payload.readTime || nextSeries.defaultReadTime),
+    }));
+    setTags(replaceMetadata ? (payload.tags || []) : uniqueStrings([...tags, ...(payload.tags || [])]));
+    setPublicationDate(payload.publicationDate || publicationDate);
+    setOfficialSources(nextSources);
+    setIsPremium(replaceMetadata ? (payload.premium ?? nextSeries.defaultPremium) : isPremium);
+    setSourceText(payload.sourceText || sourceText);
+    setSourceFileName(payload.sourceFileName || sourceFileName);
+    setEngagements(prev => ({
+      ...prev,
+      ...(replaceMetadata ? payload.engagements : Object.fromEntries(Object.entries(payload.engagements || {}).filter(([, value]) => value))),
+    }));
+
+    if (replaceContent) {
+      const draftBody = payload.content || buildSeriesDraft({
+        seriesKey: nextSeriesKey,
+        title: payload.title || meta.title,
+        excerpt: payload.excerpt || meta.excerpt,
+        officialSources: nextSources,
+      });
+      setContent(draftBody);
+      setEditorMode('markdown');
+      setShowPreview(false);
+      setHtmlContent('');
+    }
+
+    if (toast) {
+      setSuccessMsg(toast);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
+  };
+
+  const buildPayloadFromText = (text, fallbackName, overrides = {}) => {
+    const { title, excerpt, excerptEndIdx } = extractTitleAndExcerpt(text, fallbackName);
+    const contentBody = text.split('\n').slice(Math.max(excerptEndIdx, 1)).join('\n').trim();
+    const seriesKey = overrides.series || selectedSeries || suggestSeriesKey(text);
+
+    return {
+      title,
+      slug: slugifyText(title),
+      excerpt,
+      category: overrides.category || detectCategoryFromText(text),
+      series: seriesKey,
+      publicationDate,
+      readTime: overrides.readTime || (DRAFT_SERIES.find(series => series.key === seriesKey)?.defaultReadTime || activeSeries.defaultReadTime),
+      premium: overrides.premium,
+      tags: overrides.tags || detectTagsFromText(text),
+      officialSources: uniqueStrings([...(overrides.officialSources || []), ...(officialSources || [])]),
+      engagements: overrides.engagements || {},
+      content: contentBody || buildSeriesDraft({ seriesKey, title, excerpt, officialSources: overrides.officialSources || officialSources }),
+      sourceText: text,
+      sourceFileName: fallbackName,
+    };
+  };
+
+  const handleSeriesSelect = (seriesKey) => {
+    if (seriesKey === selectedSeries) return;
+
+    const nextSeries = DRAFT_SERIES.find(series => series.key === seriesKey) || DRAFT_SERIES[0];
+    const shouldReplaceBody = !content.trim() || window.confirm(`Switch to ${nextSeries.label}? This updates the draft body structure but keeps your metadata.`);
+    const currentSeries = activeSeries;
+
+    setSelectedSeries(seriesKey);
+    setMeta(prev => ({
+      ...prev,
+      readTime: !prev.readTime || prev.readTime === currentSeries.defaultReadTime ? nextSeries.defaultReadTime : prev.readTime,
+    }));
+    if (isPremium === currentSeries.defaultPremium) setIsPremium(nextSeries.defaultPremium);
+
+    if (shouldReplaceBody) {
+      setContent(buildSeriesDraft({
+        seriesKey,
+        title: meta.title,
+        excerpt: meta.excerpt,
+        officialSources,
+      }));
+      setEditorMode('markdown');
+      setShowPreview(false);
+      setHtmlContent('');
+    }
+  };
+
+  const handleSuggestSeries = () => {
+    const basis = [sourceInput, sourceText, meta.title, meta.excerpt, content].filter(Boolean).join('\n');
+    if (!basis.trim()) {
+      alert('Add a source link, upload a source, or start the draft first.');
+      return;
+    }
+    const suggestion = suggestSeriesKey(basis);
+    handleSeriesSelect(suggestion);
+    setSuccessMsg(`Suggested series: ${DRAFT_SERIES.find(series => series.key === suggestion)?.label}`);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const handlePasteLink = () => {
+    if (!sourceInput.trim()) return;
+    const nextSources = uniqueStrings([...officialSources, sourceInput]);
+    setOfficialSources(nextSources);
+    setSourceInput('');
+    setSuccessMsg('Official source added');
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 2000);
+  };
+
+  const handleOfficialSourcesChange = (value) => {
+    setOfficialSources(uniqueStrings(value.split(/\r?\n/)));
+  };
+
+  const loadPdfText = async (file) => {
+    if (!window.pdfjsLib) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let extractedText = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      extractedText += `${textContent.items.map(item => item.str).join(' ')}\n`;
+    }
+    return extractedText.trim();
+  };
+
+  const handleSourceFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = file.type === 'application/pdf' || /\.pdf$/i.test(file.name)
+        ? await loadPdfText(file)
+        : await file.text();
+
+      const payload = buildPayloadFromText(text, file.name, {
+        series: selectedSeries,
+        officialSources,
+      });
+
+      setSourceFileName(file.name);
+      setSourceText(text);
+      applyDraftPayload(payload, {
+        replaceMetadata: false,
+        replaceContent: !content.trim(),
+        toast: `Source loaded: ${file.name}`,
+      });
+    } catch (error) {
+      console.error('Failed to process source file', error);
+      alert(`Could not read ${file.name}. Try a text, markdown, or PDF file.`);
+    }
+
+    e.target.value = '';
+  };
 
   // Smart MD upload: auto-fills title, excerpt, category, tags, and content
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = reader.result;
-      const lines = text.split('\n');
+    try {
+      const text = await file.text();
+      const parsed = parseFrontmatter(text);
 
-      // --- Extract Title: first # heading or first non-empty line ---
-      let extractedTitle = '';
-      let titleLineIdx = -1;
-      for (let i = 0; i < lines.length; i++) {
-        const trimmed = lines[i].trim();
-        if (/^#{1,2}\s+/.test(trimmed)) {
-          extractedTitle = trimmed.replace(/^#{1,2}\s+/, '').trim();
-          titleLineIdx = i;
-          break;
-        }
+      if (parsed?.frontmatter) {
+        const fm = parsed.frontmatter;
+        const seriesKey = fm.series || selectedSeries || DEFAULT_SERIES_KEY;
+        applyDraftPayload({
+          title: fm.title || '',
+          slug: fm.slug || (fm.title ? slugifyText(fm.title) : ''),
+          excerpt: fm.excerpt || '',
+          category: normaliseCategory(fm.category),
+          series: seriesKey,
+          publicationDate: fm.publicationDate || fm.date || publicationDate,
+          readTime: fm.readTime || (DRAFT_SERIES.find(series => series.key === seriesKey)?.defaultReadTime || activeSeries.defaultReadTime),
+          premium: Array.isArray(fm.premium) ? false : parseBooleanValue(fm.premium),
+          tags: Array.isArray(fm.tags) ? uniqueStrings(fm.tags) : parseListValue(fm.tags),
+          officialSources: Array.isArray(fm.officialSources) ? uniqueStrings(fm.officialSources) : parseListValue(fm.officialSources),
+          engagements: {
+            newsletterLine: fm.newsletterLine || '',
+            linkedinTeaser: fm.linkedinTeaser || '',
+            coverImagePrompt: fm.coverImagePrompt || '',
+            internalNotes: fm.internalNotes || '',
+          },
+          content: parsed.body.trim(),
+          sourceText: text,
+          sourceFileName: file.name,
+        }, {
+          replaceMetadata: true,
+          replaceContent: true,
+          toast: `Imported ${file.name}`,
+        });
+      } else {
+        const payload = buildPayloadFromText(text, file.name, { series: selectedSeries, officialSources });
+        applyDraftPayload(payload, {
+          replaceMetadata: true,
+          replaceContent: true,
+          toast: `Imported ${file.name}`,
+        });
       }
-      if (!extractedTitle) {
-        // Fallback: first non-empty line
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].trim()) {
-            extractedTitle = lines[i].trim().replace(/^#+\s*/, '');
-            titleLineIdx = i;
-            break;
-          }
-        }
-      }
+    } catch (error) {
+      console.error('Failed to import markdown file', error);
+      alert(`Could not import ${file.name}.`);
+    }
 
-      // --- Extract Excerpt: first paragraph of body text (non-heading, non-empty) ---
-      let extractedExcerpt = '';
-      let excerptEndIdx = titleLineIdx;
-      for (let i = titleLineIdx + 1; i < lines.length; i++) {
-        const trimmed = lines[i].trim();
-        if (!trimmed) continue; // skip blank lines
-        if (/^#{1,3}\s+/.test(trimmed)) break; // stop at next heading
-        if (/^[-*_]{3,}$/.test(trimmed)) continue; // skip dividers
-        // Collect paragraph text
-        let para = '';
-        for (let j = i; j < lines.length; j++) {
-          const l = lines[j].trim();
-          if (!l || /^#{1,3}\s+/.test(l)) { excerptEndIdx = j; break; }
-          para += (para ? ' ' : '') + l.replace(/^[-*+]\s+/, '');
-          excerptEndIdx = j + 1;
-        }
-        extractedExcerpt = para.slice(0, 280);
-        break;
-      }
-
-      // --- Detect Category from content ---
-      const lowerText = text.toLowerCase();
-      const categoryScores = {};
-      const CATEGORY_KEYWORDS = {
-        'AI Regulation': ['ai regulation', 'artificial intelligence', 'ai act', 'ai framework', 'machine learning', 'ai governance', 'ai risk', 'genai', 'foundation model'],
-        'Payments': ['payment', 'psd2', 'psd3', 'open banking', 'financial promotion', 'fintech', 'dora', 'emi', 'psp', 'iban'],
-        'Crypto': ['crypto', 'mica', 'vasp', 'stablecoin', 'digital asset', 'token', 'blockchain', 'defi', 'web3'],
-        'Gambling': ['gambling', 'gaming', 'betting', 'casino', 'slot', 'lottery', 'igaming', 'age verification', 'self exclusion', 'affordability', 'ukgc'],
-      };
-      for (const [cat, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-        categoryScores[cat] = keywords.reduce((score, kw) => score + (lowerText.includes(kw) ? 1 : 0), 0);
-      }
-      const bestCat = Object.entries(categoryScores).sort((a, b) => b[1] - a[1])[0];
-      const detectedCategory = bestCat && bestCat[1] > 0 ? bestCat[0] : 'AI Regulation';
-
-      // --- Extract Tags from taxonomy ---
-      const detectedTags = [];
-      const allTaxTags = Object.values(PIMLICO_TAXONOMY).flat();
-      for (const tag of allTaxTags) {
-        if (lowerText.includes(tag.toLowerCase()) && !detectedTags.includes(tag)) {
-          detectedTags.push(tag);
-        }
-      }
-      // Also grab any #hashtags from the markdown
-      const hashTags = text.match(/#(\w{3,})/g);
-      if (hashTags) {
-        for (const ht of hashTags) {
-          const clean = ht.replace('#', '');
-          // Match against taxonomy
-          const match = allTaxTags.find(t => t.toLowerCase() === clean.toLowerCase());
-          if (match && !detectedTags.includes(match)) detectedTags.push(match);
-        }
-      }
-
-      // --- Extract Content: everything after title + excerpt paragraph ---
-      let contentBody = '';
-      const contentStartIdx = Math.max(excerptEndIdx, titleLineIdx + 1);
-      contentBody = lines.slice(contentStartIdx).join('\n').trim();
-      // Strip leading blank lines
-      contentBody = contentBody.replace(/^\n+/, '');
-
-      // --- Calculate read time ---
-      const wordCount = contentBody.split(/\s+/).filter(w => w).length;
-      const readMins = Math.max(1, Math.ceil(wordCount / 200));
-
-      // --- Auto-fill all fields ---
-      setMeta(prev => ({
-        ...prev,
-        title: extractedTitle || prev.title,
-        slug: extractedTitle ? slugify(extractedTitle) : prev.slug,
-        excerpt: extractedExcerpt || prev.excerpt,
-        category: detectedCategory,
-        readTime: `${readMins} min read`,
-      }));
-      setContent(contentBody);
-      setTags(detectedTags.slice(0, 12)); // Cap at 12 tags
-
-      // Show success feedback
-      setSuccessMsg(`Imported "${extractedTitle}" — ${detectedTags.length} tags detected, ${wordCount} words`);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 4000);
-    };
-    reader.readAsText(file);
     e.target.value = '';
   };
 
@@ -365,6 +662,8 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     setPublicationDate(new Date().toISOString().split('T')[0]);
     setIsPremium(false); setPremiumCutoff(10); setScheduleEnabled(false); setScheduledDate('');
     setOgImageUrl(''); setEditingArticle(null); setLastSavedAt(null);
+    setSelectedSeries(DEFAULT_SERIES_KEY); setOfficialSources([]); setSourceInput(''); setSourceText(''); setSourceFileName('');
+    setEngagements(DEFAULT_ENGAGEMENTS); setShowEngagements(false);
     try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
   };
 
@@ -376,7 +675,13 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     const article = {
       id: editingArticle?.id || Date.now(),
       ...meta, date: publicationDate, tags,
+      series: selectedSeries, officialSources,
       content: articleContent, isPremium, premiumCutoff: isPremium ? premiumCutoff : null,
+      newsletterLine: engagements.newsletterLine,
+      linkedinTeaser: engagements.linkedinTeaser,
+      coverImagePrompt: engagements.coverImagePrompt,
+      internalNotes: engagements.internalNotes,
+      sourceFileName,
       ogImage: ogImageUrl || meta.image, status: scheduleEnabled ? 'scheduled' : 'published',
       ...(scheduleEnabled && scheduledDate ? { scheduledAt: scheduledDate } : {}),
     };
@@ -400,8 +705,14 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
     const articleId = editingArticle?.id || Date.now();
     const article = {
       id: articleId, ...meta, date: publicationDate, tags,
+      series: selectedSeries, officialSources,
       content: editorMode === 'visual' ? htmlContent : content,
       isPremium, premiumCutoff: isPremium ? premiumCutoff : null,
+      newsletterLine: engagements.newsletterLine,
+      linkedinTeaser: engagements.linkedinTeaser,
+      coverImagePrompt: engagements.coverImagePrompt,
+      internalNotes: engagements.internalNotes,
+      sourceFileName,
       ogImage: ogImageUrl || meta.image, status: 'draft', lastSaved: new Date().toISOString(),
     };
     let updated;
@@ -579,8 +890,8 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">✏️ Drafting</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{editingArticle ? `Editing: ${editingArticle.title}` : 'Create and publish articles'}</p>
+          <h1 className="text-xl font-bold text-white flex items-center gap-2">✏️ Drafts</h1>
+          <p className="text-sm text-gray-400 mt-0.5">{editingArticle ? `Editing: ${editingArticle.title}` : 'Draft-first workflow: source in, one draft package out'}</p>
         </div>
         <div className="flex items-center gap-2">
           {savedDrafts.length > 0 && (
@@ -604,6 +915,14 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
         </div>
       </div>
 
+      <div className="flex flex-wrap gap-2">
+        {DRAFT_FLOW_STEPS.map(step => (
+          <span key={step} className="px-2.5 py-1 bg-gray-800/80 border border-gray-700/60 rounded-full text-[10px] uppercase tracking-[0.14em] text-gray-400">
+            {step.replace(/-/g, ' ')}
+          </span>
+        ))}
+      </div>
+
       {/* LLM Prompt Panel */}
       {showPrompt && (
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3">
@@ -618,6 +937,64 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
           <p className="text-[11px] text-amber-400/60">Paste this into your LLM with your topic. Save the output as a .md file, then use "Import .md → Auto-fill" to populate all fields instantly.</p>
         </div>
       )}
+
+      <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 space-y-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="text-sm font-semibold text-white">Source intake</h2>
+            <p className="text-xs text-gray-500 mt-0.5">Paste an official link, upload source material, import a draft payload, or let the editor suggest the best series.</p>
+          </div>
+          {sourceFileName && <span className="px-2.5 py-1 bg-gray-700/70 rounded-full text-[10px] text-gray-300">Loaded source: {sourceFileName}</span>}
+        </div>
+        <div className="flex flex-col lg:flex-row gap-2">
+          <input
+            type="url"
+            value={sourceInput}
+            onChange={e => setSourceInput(e.target.value)}
+            placeholder="Paste official source link..."
+            className="flex-1 px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+          />
+          <div className="flex flex-wrap gap-2">
+            <button onClick={handlePasteLink} className="px-3.5 py-2.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 transition-colors">Paste link</button>
+            <label className="px-3.5 py-2.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 transition-colors cursor-pointer">
+              Upload file
+              <input type="file" accept=".pdf,.txt,.md,.markdown" onChange={handleSourceFileUpload} className="hidden" />
+            </label>
+            <label className="px-3.5 py-2.5 bg-emerald-600/90 text-white text-sm rounded-lg hover:bg-emerald-500 transition-colors cursor-pointer">
+              Import .md
+              <input type="file" accept=".md,.markdown,.txt" onChange={handleFileUpload} className="hidden" />
+            </label>
+            <button onClick={handleSuggestSeries} className="px-3.5 py-2.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-500 transition-colors">Suggest series</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 space-y-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="text-sm font-semibold text-white">Series</h2>
+            <p className="text-xs text-gray-500 mt-0.5">Choose the editorial frame before drafting. This updates the body structure, not your metadata.</p>
+          </div>
+          <span className="px-2.5 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-[11px] font-medium">{activeSeries.shortCommand}</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+          {DRAFT_SERIES.map(series => (
+            <button
+              key={series.key}
+              type="button"
+              onClick={() => handleSeriesSelect(series.key)}
+              className={`text-left rounded-xl border px-4 py-3 transition-colors ${selectedSeries === series.key ? 'border-indigo-500/40 bg-indigo-500/10' : 'border-gray-700/60 bg-gray-900/40 hover:bg-gray-900/70'}`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className={`text-sm font-semibold ${selectedSeries === series.key ? 'text-white' : 'text-gray-200'}`}>{series.label}</span>
+                <span className="text-[10px] text-gray-500">{series.defaultReadTime}</span>
+              </div>
+              <p className="text-[11px] text-gray-500 mt-1">{series.description}</p>
+              <p className="text-[10px] text-indigo-300/80 mt-2 uppercase tracking-[0.14em]">{series.shortCommand}</p>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Saved Drafts Panel */}
       {showDrafts && savedDrafts.length > 0 && (
@@ -665,54 +1042,21 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
         </div>
       )}
 
-      {/* Workflow items from Ideas */}
-      {draftItems.length > 0 && !editingArticle && (
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4">
-          <h3 className="text-xs font-semibold text-blue-300 mb-2">📥 Ideas ready for drafting ({draftItems.length})</h3>
-          <div className="space-y-1.5">
-            {draftItems.slice(0, 8).map(item => {
-              const priColor = item.priority === 'high' ? 'text-red-400 bg-red-500/15' : item.priority === 'low' ? 'text-gray-400 bg-gray-500/15' : 'text-yellow-400 bg-yellow-500/15';
-              return (
-                <div key={item.id} className="flex items-center justify-between bg-gray-800/50 rounded-lg px-3 py-2.5 group hover:bg-gray-800/80 transition-colors">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${priColor}`}>{(item.priority || 'med').slice(0,3).toUpperCase()}</span>
-                    <span className="text-xs text-white truncate">{item.title}</span>
-                    {item.tags?.length > 0 && <span className="text-[9px] text-purple-400/60 hidden group-hover:inline">({item.tags.slice(0,2).join(', ')})</span>}
-                  </div>
-                  <button onClick={() => {
-                      // Auto-fill ALL fields from the idea
-                      const detectedCategory = (item.tags || []).find(t => ['AI Regulation', 'Payments', 'Crypto', 'Gambling'].includes(t)) || 'AI Regulation';
-                      setMeta(prev => ({
-                        ...prev,
-                        title: item.title,
-                        slug: slugify(item.title),
-                        excerpt: item.description || '',
-                        category: detectedCategory,
-                      }));
-                      // Set tags (filter out category-level tags, keep specific ones)
-                      if (item.tags?.length) setTags(item.tags);
-                      // Pre-populate content body with a structured markdown skeleton
-                      const skeleton = `# ${item.title}\n\n${item.description || ''}\n\n## Background\n\n[Provide regulatory context and history here]\n\n## Key Developments\n\n[Main analysis and findings]\n\n## Implications for Firms\n\n1. [Practical takeaway 1]\n2. [Practical takeaway 2]\n3. [Practical takeaway 3]\n\n## What Comes Next\n\n[Forward-looking outlook]\n\n---\n\n*This analysis is provided by Pimlico XHS™ for informational purposes. It does not constitute legal advice.*`;
-                      setContent(skeleton);
-                      // Calculate read time for the skeleton
-                      const wc = skeleton.split(/\s+/).filter(w => w).length;
-                      setMeta(prev => ({ ...prev, readTime: `${Math.max(1, Math.ceil(wc / 200))} min read` }));
-                      // Show success
-                      setSuccessMsg(`Loaded "${item.title}" — edit the skeleton and publish`);
-                      setShowSuccess(true);
-                      setTimeout(() => setShowSuccess(false), 3000);
-                    }}
-                    className="px-2.5 py-1 text-[10px] font-semibold text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-500/25 rounded-md transition-colors ml-2 whitespace-nowrap">
-                    Load → Auto-fill
-                  </button>
-                </div>
-              );
-            })}
+      <div className="space-y-5">
+        <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4">
+          <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Draft package</h3>
+              <p className="text-xs text-gray-500 mt-0.5">Current frame: {activeSeries.label}</p>
+            </div>
+            <div className="flex flex-wrap gap-2 text-[10px] text-gray-400">
+              <span className="px-2 py-1 bg-gray-900/70 rounded-full border border-gray-700/60">Series: {activeSeries.label}</span>
+              <span className="px-2 py-1 bg-gray-900/70 rounded-full border border-gray-700/60">Default read: {activeSeries.defaultReadTime}</span>
+              <span className="px-2 py-1 bg-gray-900/70 rounded-full border border-gray-700/60">Premium default: {activeSeries.defaultPremium ? 'Yes' : 'No'}</span>
+            </div>
           </div>
         </div>
-      )}
 
-      <div className="space-y-5">
         {/* Title + Slug */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
@@ -737,13 +1081,24 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
             rows={2} className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none" />
         </div>
 
+        <div>
+          <label className="block text-xs font-medium text-gray-400 mb-1.5">Official Sources</label>
+          <textarea
+            value={officialSources.join('\n')}
+            onChange={e => handleOfficialSourcesChange(e.target.value)}
+            rows={3}
+            placeholder="One source URL or citation per line..."
+            className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y"
+          />
+        </div>
+
         {/* Category / Read Time / Date */}
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-medium text-gray-400 mb-1.5">Category</label>
             <select value={meta.category} onChange={e => setMeta(p => ({ ...p, category: e.target.value }))}
               className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
-              <option>AI Regulation</option><option>Payments</option><option>Crypto</option><option>Gambling</option>
+              {CATEGORY_OPTIONS.map(option => <option key={option}>{option}</option>)}
             </select>
           </div>
           <div>
@@ -832,10 +1187,7 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
                 <button onClick={() => setShowPreview(p => !p)}
                   className={`px-3 py-1 text-xs rounded-md ${showPreview ? 'bg-emerald-600 text-white' : 'text-gray-400'}`}>👁 Preview</button>
               </div>
-              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600/80 text-white text-xs rounded-lg hover:bg-emerald-500 cursor-pointer font-medium transition-colors">
-                📄 Import .md → Auto-fill
-                <input type="file" accept=".md,.markdown,.txt" onChange={handleFileUpload} className="hidden" />
-              </label>
+              <span className="px-3 py-1.5 bg-gray-800 border border-gray-700 text-[11px] text-gray-400 rounded-lg">{activeSeries.label}</span>
             </div>
           </div>
 
@@ -846,6 +1198,7 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
               <div className="border-b border-gray-200 pb-5 mb-6">
                 <div className="flex items-center gap-2 mb-3">
                   {meta.category && <span className="px-2.5 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-semibold rounded-full">{meta.category}</span>}
+                  {selectedSeries && <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-semibold rounded-full">{activeSeries.label}</span>}
                   {meta.featured && <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] rounded-full">★ Featured</span>}
                   {isPremium && <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] rounded-full">⭐ Premium</span>}
                 </div>
@@ -935,6 +1288,65 @@ Write professionally but accessibly. Target 800-1200 words. Include specific dat
             <span>{wordCount} words · ~{Math.max(1, Math.ceil(wordCount / 200))} min read</span>
             <span>{editorMode === 'visual' ? 'Visual' : 'Markdown'}</span>
           </div>
+        </div>
+
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setShowEngagements(prev => !prev)}
+            className="w-full px-4 py-3 flex items-center justify-between text-left"
+          >
+            <div>
+              <span className="text-sm font-semibold text-white">📣 Engagements drawer</span>
+              <p className="text-[11px] text-gray-500 mt-0.5">Newsletter line, LinkedIn teaser, cover image prompt, and internal notes.</p>
+            </div>
+            <span className="text-gray-400 text-sm">{showEngagements ? '−' : '+'}</span>
+          </button>
+
+          {showEngagements && (
+            <div className="border-t border-gray-700 p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">Newsletter Line</label>
+                <input
+                  type="text"
+                  value={engagements.newsletterLine}
+                  onChange={e => setEngagements(prev => ({ ...prev, newsletterLine: e.target.value }))}
+                  placeholder="One-line newsletter sell..."
+                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">LinkedIn Teaser</label>
+                <input
+                  type="text"
+                  value={engagements.linkedinTeaser}
+                  onChange={e => setEngagements(prev => ({ ...prev, linkedinTeaser: e.target.value }))}
+                  placeholder="Short teaser for the post opener..."
+                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">Cover Image Prompt</label>
+                <textarea
+                  value={engagements.coverImagePrompt}
+                  onChange={e => setEngagements(prev => ({ ...prev, coverImagePrompt: e.target.value }))}
+                  rows={3}
+                  placeholder="Prompt for visual generation or design handoff..."
+                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">Internal Notes</label>
+                <textarea
+                  value={engagements.internalNotes}
+                  onChange={e => setEngagements(prev => ({ ...prev, internalNotes: e.target.value }))}
+                  rows={3}
+                  placeholder="Editorial notes, follow-ups, packaging reminders..."
+                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Schedule */}

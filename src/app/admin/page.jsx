@@ -13,7 +13,6 @@ const STAGE_COLORS = {
 };
 
 const STAGE_HREFS = {
-  ideas: '/admin/ideas',
   drafting: '/admin/drafting',
   collateral: '/admin/collateral',
   copy: '/admin/copy',
@@ -316,7 +315,7 @@ export default function DashboardPage() {
 
       {/* ─── Pipeline Flow ────────────────────────────────── */}
       <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-5">
-        <h2 className="text-sm font-semibold text-white mb-4">📋 Pipeline Flow</h2>
+        <h2 className="text-sm font-semibold text-white mb-4">📋 Draft Workflow</h2>
         <div className="flex items-center gap-2">
           {STAGES.map((stage, i) => {
             const count = stats.byStage[stage.key] || 0;
@@ -491,8 +490,7 @@ export default function DashboardPage() {
           <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4">
             <h2 className="text-sm font-semibold text-white mb-3">⚡ Quick Actions</h2>
             <div className="space-y-1.5">
-              <Link href="/admin/ideas" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-purple-300 bg-purple-500/10 rounded-lg hover:bg-purple-500/20 transition-colors">💡 Capture new idea</Link>
-              <Link href="/admin/drafting" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-blue-300 bg-blue-500/10 rounded-lg hover:bg-blue-500/20 transition-colors">✏️ Draft an article</Link>
+              <Link href="/admin/drafting" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-blue-300 bg-blue-500/10 rounded-lg hover:bg-blue-500/20 transition-colors">✏️ Start a draft package</Link>
               <Link href="/admin/collateral" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-indigo-300 bg-indigo-500/10 rounded-lg hover:bg-blue-500/20 transition-colors">🎨 Create marketing asset</Link>
               <Link href="/admin/publishing" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-green-300 bg-green-500/10 rounded-lg hover:bg-green-500/20 transition-colors">🚀 Schedule a post</Link>
             </div>
@@ -533,7 +531,7 @@ export default function DashboardPage() {
             ) : (
               <div className="text-center py-8">
                 <p className="text-gray-500 text-xs">No pipeline items yet</p>
-                <Link href="/admin/ideas" className="text-indigo-400 text-xs hover:text-indigo-300 mt-1 inline-block">+ Start with an idea →</Link>
+                <Link href="/admin/drafting" className="text-indigo-400 text-xs hover:text-indigo-300 mt-1 inline-block">+ Start with a draft →</Link>
               </div>
             )}
           </div>
