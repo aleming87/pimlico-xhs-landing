@@ -1,7 +1,8 @@
 "use client";
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { useArticles } from '../ArticlesContext';
-import { DRAFT_FLOW_STEPS, DRAFT_SERIES } from './draft-flow-config';
+import { DRAFT_SERIES } from './draft-flow-config';
 
 // Pimlico Taxonomy Tags
 const PIMLICO_TAXONOMY = {
@@ -163,6 +164,76 @@ const parseListValue = (value = '') => {
   return uniqueStrings(trimmed.split(',').map(item => item.trim()));
 };
 
+const getFrontmatterValue = (frontmatter = {}, ...keys) => {
+  for (const key of keys) {
+    if (frontmatter[key] !== undefined) return frontmatter[key];
+  }
+  return undefined;
+};
+
+const normaliseSeriesValue = (value = '') => String(value || '').trim().toLowerCase().replace(/[\s_]+/g, '-');
+
+const resolveSeriesKey = (...candidates) => {
+  for (const candidate of candidates) {
+    const normalized = normaliseSeriesValue(candidate);
+    if (!normalized) continue;
+    const match = DRAFT_SERIES.find(series => [series.key, series.label, series.shortCommand].some(value => normaliseSeriesValue(value) === normalized));
+    if (match) return match.key;
+  }
+  return DEFAULT_SERIES_KEY;
+};
+
+const comparableText = (value = '') => String(value || '')
+  .replace(/^#{1,6}\s+/gm, '')
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1')
+  .replace(/[*_`>#-]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .toLowerCase();
+
+const isMateriallySame = (left = '', right = '') => {
+  const a = comparableText(left);
+  const b = comparableText(right);
+  if (!a || !b) return false;
+  return a === b || (a.length > 40 && b.length > 40 && (a.includes(b) || b.includes(a)));
+};
+
+const normaliseImportedBody = ({ body = '', title = '', excerpt = '' }) => {
+  let lines = body.split(/\r?\n/);
+
+  while (lines.length && !lines[0].trim()) lines.shift();
+
+  const firstLine = lines[0]?.trim() || '';
+  if (/^#\s+/.test(firstLine) && isMateriallySame(firstLine.replace(/^#\s+/, ''), title)) {
+    lines.shift();
+    while (lines.length && !lines[0].trim()) lines.shift();
+  }
+
+  const paragraphLines = [];
+  let paragraphEndIndex = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (!trimmed) {
+      if (paragraphLines.length) {
+        paragraphEndIndex = i;
+        break;
+      }
+      continue;
+    }
+    if (/^#{1,6}\s+/.test(trimmed)) break;
+    paragraphLines.push(trimmed.replace(/^[-*+]\s+/, ''));
+    paragraphEndIndex = i + 1;
+  }
+
+  if (excerpt && paragraphLines.length && isMateriallySame(paragraphLines.join(' '), excerpt)) {
+    lines = lines.slice(paragraphEndIndex);
+    while (lines.length && !lines[0].trim()) lines.shift();
+  }
+
+  return lines.join('\n').trim();
+};
+
 const parseFrontmatter = (text = '') => {
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
   if (!match) return null;
@@ -200,6 +271,8 @@ const parseFrontmatter = (text = '') => {
 export default function DraftingPage() {
   const { articles, setArticles } = useArticles();
   const editorRef = useRef(null);
+  const sourceUploadInputRef = useRef(null);
+  const importFileInputRef = useRef(null);
 
   const [meta, setMeta] = useState({
     title: '', slug: '', excerpt: '', category: 'AI Regulation',
@@ -222,46 +295,52 @@ export default function DraftingPage() {
   const [editingArticle, setEditingArticle] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
-  const [showPrompt, setShowPrompt] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState(null);
   const [showDrafts, setShowDrafts] = useState(false);
   const [selectedSeries, setSelectedSeries] = useState(DEFAULT_SERIES_KEY);
   const [officialSources, setOfficialSources] = useState([]);
-  const [sourceInput, setSourceInput] = useState('');
   const [sourceText, setSourceText] = useState('');
   const [sourceFileName, setSourceFileName] = useState('');
   const [engagements, setEngagements] = useState(DEFAULT_ENGAGEMENTS);
   const [showEngagements, setShowEngagements] = useState(false);
+  const [theme, setTheme] = useState('dark');
   const autoSaveTimerRef = useRef(null);
 
   const AUTOSAVE_KEY = 'xhs-drafting-autosave';
 
   const activeSeries = DRAFT_SERIES.find(series => series.key === selectedSeries) || DRAFT_SERIES[0];
+  const isLightTheme = theme === 'light';
+  const pageShellClass = isLightTheme ? 'bg-gray-50 text-gray-900 rounded-[28px]' : 'text-white';
+  const sectionClass = isLightTheme ? 'bg-white border-gray-200 shadow-sm' : 'bg-gray-800/50 border-gray-700/50';
+  const labelClass = isLightTheme ? 'text-gray-600' : 'text-gray-400';
+  const helperTextClass = isLightTheme ? 'text-gray-500' : 'text-gray-500';
+  const inputClass = isLightTheme
+    ? 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:border-indigo-500'
+    : 'w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500';
+  const compactInputClass = isLightTheme
+    ? 'w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 text-sm focus:outline-none focus:border-indigo-500'
+    : 'w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500';
+  const secondaryButtonClass = isLightTheme
+    ? 'px-3.5 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-100 transition-colors'
+    : 'px-3.5 py-2.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 transition-colors';
+  const primaryButtonClass = 'px-3.5 py-2.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-500 transition-colors';
+  const mutedButtonClass = isLightTheme ? 'text-gray-500 hover:text-gray-900' : 'text-gray-500 hover:text-white';
+  const seriesActiveClass = 'border-indigo-500 bg-indigo-600 text-white';
+  const seriesInactiveClass = isLightTheme ? 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50' : 'border-gray-700 bg-transparent text-gray-300 hover:bg-gray-800';
+  const tagClass = isLightTheme ? 'inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full text-xs' : 'inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-900/50 text-indigo-300 rounded-full text-xs';
+  const footerBarClass = isLightTheme ? 'bg-gray-100 text-gray-500' : 'bg-gray-800/50 text-gray-500';
+  const dividerClass = isLightTheme ? 'border-gray-200' : 'border-gray-800';
 
-  const LLM_PROMPT = `You are helping me draft a ${activeSeries.label} for Pimlico XHS, a cross-border regulatory intelligence platform.
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('xhs-drafts-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') setTheme(savedTheme);
+    } catch {}
+  }, []);
 
-SERIES:
-- ${activeSeries.label}
-- ${activeSeries.description}
-- Short command: ${activeSeries.shortCommand}
-
-Generate a complete draft package in Markdown format that I can import directly.
-
-INCLUDE:
-- Title
-- Excerpt
-- Category (${CATEGORY_OPTIONS.join(' | ')})
-- Tags
-- Official sources
-- Body using this structure:
-
-# [Title]
-
-[Opening paragraph / excerpt]
-
-${activeSeries.headings.filter(heading => heading !== 'Intro').map(heading => `## ${heading}`).join('\n')}
-
-Keep it clean and publication-ready. Use specific dates, named authorities, and practical implications.`;
+  useEffect(() => {
+    try { localStorage.setItem('xhs-drafts-theme', theme); } catch {}
+  }, [theme]);
 
   // Saved article drafts (articles with status='draft')
   const savedDrafts = articles.filter(a => a.status === 'draft');
@@ -270,7 +349,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
   const getFormSnapshot = () => ({
     meta, content, htmlContent, editorMode, tags, publicationDate,
     isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl, selectedSeries,
-    officialSources, sourceInput, sourceText, sourceFileName, engagements,
+    officialSources, sourceText, sourceFileName, engagements, theme,
     editingArticleId: editingArticle?.id || null,
     savedAt: new Date().toISOString(),
   });
@@ -290,10 +369,10 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
     if (snap.ogImageUrl) setOgImageUrl(snap.ogImageUrl);
     if (snap.selectedSeries) setSelectedSeries(snap.selectedSeries);
     if (snap.officialSources) setOfficialSources(snap.officialSources);
-    if (snap.sourceInput) setSourceInput(snap.sourceInput);
     if (snap.sourceText) setSourceText(snap.sourceText);
     if (snap.sourceFileName) setSourceFileName(snap.sourceFileName);
     if (snap.engagements) setEngagements({ ...DEFAULT_ENGAGEMENTS, ...snap.engagements });
+    if (snap.theme) setTheme(snap.theme);
     if (snap.editingArticleId) {
       const art = articles.find(a => a.id === snap.editingArticleId);
       if (art) setEditingArticle(art);
@@ -339,7 +418,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
         const snap = {
           meta, content, htmlContent, editorMode, tags, publicationDate,
           isPremium, premiumCutoff, scheduleEnabled, scheduledDate, ogImageUrl, selectedSeries,
-          officialSources, sourceInput, sourceText, sourceFileName, engagements,
+          officialSources, sourceText, sourceFileName, engagements, theme,
           editingArticleId: editingArticle?.id || null,
           savedAt: new Date().toISOString(),
         };
@@ -387,7 +466,6 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
       coverImagePrompt: article.coverImagePrompt || '',
       internalNotes: article.internalNotes || '',
     });
-    setSourceInput('');
     setSourceText('');
     setSourceFileName(article.sourceFileName || '');
     setShowDrafts(false);
@@ -429,9 +507,10 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
   };
 
   const applyDraftPayload = (payload, { replaceMetadata = true, replaceContent = true, toast } = {}) => {
-    const nextSeriesKey = payload.series || selectedSeries || DEFAULT_SERIES_KEY;
+    const nextSeriesKey = resolveSeriesKey(payload.seriesKey, payload.series, selectedSeries, DEFAULT_SERIES_KEY);
     const nextSeries = DRAFT_SERIES.find(series => series.key === nextSeriesKey) || DRAFT_SERIES[0];
     const nextSources = uniqueStrings(replaceMetadata ? (payload.officialSources || []) : [...officialSources, ...(payload.officialSources || [])]);
+    const importedBody = String(payload.content || '').trim();
 
     setSelectedSeries(nextSeriesKey);
     setMeta(prev => ({
@@ -456,7 +535,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
     }));
 
     if (replaceContent) {
-      const draftBody = payload.content || buildSeriesDraft({
+      const draftBody = importedBody || buildSeriesDraft({
         seriesKey: nextSeriesKey,
         title: payload.title || meta.title,
         excerpt: payload.excerpt || meta.excerpt,
@@ -476,21 +555,22 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
   };
 
   const buildPayloadFromText = (text, fallbackName, overrides = {}) => {
-    const { title, excerpt, excerptEndIdx } = extractTitleAndExcerpt(text, fallbackName);
-    const contentBody = text.split('\n').slice(Math.max(excerptEndIdx, 1)).join('\n').trim();
-    const seriesKey = overrides.series || selectedSeries || suggestSeriesKey(text);
+    const { title, excerpt, titleLineIdx } = extractTitleAndExcerpt(text, fallbackName);
+    const rawBody = text.split('\n').slice(Math.max(titleLineIdx + 1, 0)).join('\n').trim();
+    const contentBody = normaliseImportedBody({ body: rawBody, title, excerpt });
+    const seriesKey = resolveSeriesKey(overrides.seriesKey, overrides.series, selectedSeries, suggestSeriesKey(text));
 
     return {
       title,
       slug: slugifyText(title),
       excerpt,
       category: overrides.category || detectCategoryFromText(text),
-      series: seriesKey,
+      seriesKey,
       publicationDate,
       readTime: overrides.readTime || (DRAFT_SERIES.find(series => series.key === seriesKey)?.defaultReadTime || activeSeries.defaultReadTime),
       premium: overrides.premium,
       tags: overrides.tags || detectTagsFromText(text),
-      officialSources: uniqueStrings([...(overrides.officialSources || []), ...(officialSources || [])]),
+      officialSources: overrides.officialSources !== undefined ? uniqueStrings(overrides.officialSources) : uniqueStrings(officialSources),
       engagements: overrides.engagements || {},
       content: contentBody || buildSeriesDraft({ seriesKey, title, excerpt, officialSources: overrides.officialSources || officialSources }),
       sourceText: text,
@@ -526,7 +606,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
   };
 
   const handleSuggestSeries = () => {
-    const basis = [sourceInput, sourceText, meta.title, meta.excerpt, content].filter(Boolean).join('\n');
+    const basis = [officialSources.join('\n'), sourceText, meta.title, meta.excerpt, content].filter(Boolean).join('\n');
     if (!basis.trim()) {
       alert('Add a source link, upload a source, or start the draft first.');
       return;
@@ -538,11 +618,11 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
-  const handlePasteLink = () => {
-    if (!sourceInput.trim()) return;
-    const nextSources = uniqueStrings([...officialSources, sourceInput]);
+  const handlePasteLinkAction = () => {
+    const pastedLink = window.prompt('Paste official source link');
+    if (!pastedLink?.trim()) return;
+    const nextSources = uniqueStrings([...officialSources, pastedLink]);
     setOfficialSources(nextSources);
-    setSourceInput('');
     setSuccessMsg('Official source added');
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 2000);
@@ -585,7 +665,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
         : await file.text();
 
       const payload = buildPayloadFromText(text, file.name, {
-        series: selectedSeries,
+        seriesKey: selectedSeries,
         officialSources,
       });
 
@@ -614,25 +694,42 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
 
       if (parsed?.frontmatter) {
         const fm = parsed.frontmatter;
-        const seriesKey = fm.series || selectedSeries || DEFAULT_SERIES_KEY;
+        const importedTitle = getFrontmatterValue(fm, 'title') || '';
+        const importedExcerpt = getFrontmatterValue(fm, 'excerpt') || '';
+        const importedSeriesKey = resolveSeriesKey(
+          getFrontmatterValue(fm, 'series_key'),
+          getFrontmatterValue(fm, 'series'),
+          selectedSeries,
+          DEFAULT_SERIES_KEY,
+        );
+        const importedOfficialSourcesValue = getFrontmatterValue(fm, 'official_sources', 'officialSources');
+        const importedOfficialSources = Array.isArray(importedOfficialSourcesValue)
+          ? uniqueStrings(importedOfficialSourcesValue)
+          : parseListValue(importedOfficialSourcesValue);
+        const importedBody = normaliseImportedBody({
+          body: parsed.body.trim(),
+          title: importedTitle,
+          excerpt: importedExcerpt,
+        });
+
         applyDraftPayload({
-          title: fm.title || '',
-          slug: fm.slug || (fm.title ? slugifyText(fm.title) : ''),
-          excerpt: fm.excerpt || '',
-          category: normaliseCategory(fm.category),
-          series: seriesKey,
-          publicationDate: fm.publicationDate || fm.date || publicationDate,
-          readTime: fm.readTime || (DRAFT_SERIES.find(series => series.key === seriesKey)?.defaultReadTime || activeSeries.defaultReadTime),
-          premium: Array.isArray(fm.premium) ? false : parseBooleanValue(fm.premium),
-          tags: Array.isArray(fm.tags) ? uniqueStrings(fm.tags) : parseListValue(fm.tags),
-          officialSources: Array.isArray(fm.officialSources) ? uniqueStrings(fm.officialSources) : parseListValue(fm.officialSources),
+          title: importedTitle,
+          slug: getFrontmatterValue(fm, 'slug') || (importedTitle ? slugifyText(importedTitle) : ''),
+          excerpt: importedExcerpt,
+          category: normaliseCategory(getFrontmatterValue(fm, 'category')),
+          seriesKey: importedSeriesKey,
+          publicationDate: getFrontmatterValue(fm, 'publication_date', 'publicationDate', 'date') || publicationDate,
+          readTime: getFrontmatterValue(fm, 'read_time', 'readTime') || (DRAFT_SERIES.find(series => series.key === importedSeriesKey)?.defaultReadTime || activeSeries.defaultReadTime),
+          premium: Array.isArray(getFrontmatterValue(fm, 'premium')) ? false : parseBooleanValue(getFrontmatterValue(fm, 'premium')),
+          tags: Array.isArray(getFrontmatterValue(fm, 'tags')) ? uniqueStrings(getFrontmatterValue(fm, 'tags')) : parseListValue(getFrontmatterValue(fm, 'tags')),
+          officialSources: importedOfficialSources,
           engagements: {
-            newsletterLine: fm.newsletterLine || '',
-            linkedinTeaser: fm.linkedinTeaser || '',
-            coverImagePrompt: fm.coverImagePrompt || '',
-            internalNotes: fm.internalNotes || '',
+            newsletterLine: getFrontmatterValue(fm, 'newsletter_line', 'newsletterLine') || '',
+            linkedinTeaser: getFrontmatterValue(fm, 'linkedin_teaser', 'linkedinTeaser') || '',
+            coverImagePrompt: getFrontmatterValue(fm, 'cover_image_prompt', 'coverImagePrompt') || '',
+            internalNotes: getFrontmatterValue(fm, 'internal_notes', 'internalNotes') || '',
           },
-          content: parsed.body.trim(),
+          content: importedBody,
           sourceText: text,
           sourceFileName: file.name,
         }, {
@@ -641,7 +738,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
           toast: `Imported ${file.name}`,
         });
       } else {
-        const payload = buildPayloadFromText(text, file.name, { series: selectedSeries, officialSources });
+        const payload = buildPayloadFromText(text, file.name, { seriesKey: selectedSeries, officialSources });
         applyDraftPayload(payload, {
           replaceMetadata: true,
           replaceContent: true,
@@ -662,7 +759,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
     setPublicationDate(new Date().toISOString().split('T')[0]);
     setIsPremium(false); setPremiumCutoff(10); setScheduleEnabled(false); setScheduledDate('');
     setOgImageUrl(''); setEditingArticle(null); setLastSavedAt(null);
-    setSelectedSeries(DEFAULT_SERIES_KEY); setOfficialSources([]); setSourceInput(''); setSourceText(''); setSourceFileName('');
+    setSelectedSeries(DEFAULT_SERIES_KEY); setOfficialSources([]); setSourceText(''); setSourceFileName('');
     setEngagements(DEFAULT_ENGAGEMENTS); setShowEngagements(false);
     try { localStorage.removeItem(AUTOSAVE_KEY); } catch {}
   };
@@ -880,7 +977,7 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-5">
+    <div className={`p-6 max-w-6xl mx-auto space-y-6 ${pageShellClass}`}>
       {/* Success Toast */}
       {showSuccess && (
         <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-semibold animate-pulse">
@@ -888,109 +985,63 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">✏️ Drafts</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{editingArticle ? `Editing: ${editingArticle.title}` : 'Draft-first workflow: source in, one draft package out'}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          {savedDrafts.length > 0 && (
-            <button onClick={() => setShowDrafts(p => !p)}
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showDrafts ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
-              📂 Drafts ({savedDrafts.length})
-            </button>
-          )}
-          <button onClick={() => setShowPrompt(p => !p)}
-            className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 ${showPrompt ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
-            🤖 LLM Prompt
-          </button>
-          {lastSavedAt && (
-            <span className="text-[10px] text-gray-500 flex items-center gap-1">
-              💾 {new Date(lastSavedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-            </span>
-          )}
-          {editingArticle && (
-            <button onClick={resetForm} className="text-sm text-gray-400 hover:text-white">✕ Cancel Edit</button>
-          )}
-        </div>
-      </div>
+      <input ref={sourceUploadInputRef} type="file" accept=".pdf,.txt,.md,.markdown" onChange={handleSourceFileUpload} className="hidden" />
+      <input ref={importFileInputRef} type="file" accept=".md,.markdown,.txt" onChange={handleFileUpload} className="hidden" />
 
-      <div className="flex flex-wrap gap-2">
-        {DRAFT_FLOW_STEPS.map(step => (
-          <span key={step} className="px-2.5 py-1 bg-gray-800/80 border border-gray-700/60 rounded-full text-[10px] uppercase tracking-[0.14em] text-gray-400">
-            {step.replace(/-/g, ' ')}
-          </span>
-        ))}
-      </div>
-
-      {/* LLM Prompt Panel */}
-      {showPrompt && (
-        <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Generate a full article</h3>
-            <button onClick={() => { navigator.clipboard.writeText(LLM_PROMPT); }}
-              className="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-lg hover:bg-amber-500/30 transition-colors">
-              📋 Copy Prompt
-            </button>
-          </div>
-          <pre className="bg-gray-900 rounded-lg p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-[400px] overflow-y-auto border border-gray-700/50">{LLM_PROMPT}</pre>
-          <p className="text-[11px] text-amber-400/60">Paste this into your LLM with your topic. Save the output as a .md file, then use "Import .md → Auto-fill" to populate all fields instantly.</p>
-        </div>
-      )}
-
-      <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 space-y-3">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            <h2 className="text-sm font-semibold text-white">Source intake</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Paste an official link, upload source material, import a draft payload, or let the editor suggest the best series.</p>
-          </div>
-          {sourceFileName && <span className="px-2.5 py-1 bg-gray-700/70 rounded-full text-[10px] text-gray-300">Loaded source: {sourceFileName}</span>}
-        </div>
-        <div className="flex flex-col lg:flex-row gap-2">
-          <input
-            type="url"
-            value={sourceInput}
-            onChange={e => setSourceInput(e.target.value)}
-            placeholder="Paste official source link..."
-            className="flex-1 px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex items-center gap-4 min-w-0">
+          <Image
+            src={isLightTheme ? '/Pimlico_Logo.png' : '/Pimlico_Logo_Inverted.png'}
+            alt="Pimlico"
+            width={118}
+            height={30}
+            className="h-7 w-auto flex-shrink-0"
           />
-          <div className="flex flex-wrap gap-2">
-            <button onClick={handlePasteLink} className="px-3.5 py-2.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 transition-colors">Paste link</button>
-            <label className="px-3.5 py-2.5 bg-gray-700 text-white text-sm rounded-lg hover:bg-gray-600 transition-colors cursor-pointer">
-              Upload file
-              <input type="file" accept=".pdf,.txt,.md,.markdown" onChange={handleSourceFileUpload} className="hidden" />
-            </label>
-            <label className="px-3.5 py-2.5 bg-emerald-600/90 text-white text-sm rounded-lg hover:bg-emerald-500 transition-colors cursor-pointer">
-              Import .md
-              <input type="file" accept=".md,.markdown,.txt" onChange={handleFileUpload} className="hidden" />
-            </label>
-            <button onClick={handleSuggestSeries} className="px-3.5 py-2.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-500 transition-colors">Suggest series</button>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className={`text-2xl font-semibold ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>Drafts</h1>
+              <button
+                type="button"
+                onClick={() => setShowDrafts(prev => !prev)}
+                className={`${secondaryButtonClass} py-1.5 px-2.5 text-xs`}
+              >
+                {savedDrafts.length} drafts
+              </button>
+            </div>
+            <p className={`text-sm mt-0.5 ${labelClass}`}>{editingArticle ? `Editing: ${editingArticle.title}` : 'One source in, one draft package out.'}</p>
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 xl:justify-end">
+          <button
+            type="button"
+            onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
+            className={`${secondaryButtonClass} inline-flex items-center gap-2`}
+          >
+            <span>{isLightTheme ? '☀️' : '🌙'}</span>
+            <span>{isLightTheme ? 'Light' : 'Dark'}</span>
+          </button>
+          <button type="button" onClick={handlePasteLinkAction} className={secondaryButtonClass}>Paste link</button>
+          <button type="button" onClick={() => sourceUploadInputRef.current?.click()} className={secondaryButtonClass}>Upload file</button>
+          <button type="button" onClick={() => importFileInputRef.current?.click()} className={secondaryButtonClass}>Import .md</button>
+          <button type="button" onClick={handleSuggestSeries} className={primaryButtonClass}>Suggest series</button>
+          {lastSavedAt && <span className={`text-[11px] ml-1 ${helperTextClass}`}>Saved {new Date(lastSavedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>}
+          {editingArticle && (
+            <button onClick={resetForm} className={`text-sm ${mutedButtonClass}`}>✕ Cancel Edit</button>
+          )}
         </div>
       </div>
 
-      <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 space-y-3">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div>
-            <h2 className="text-sm font-semibold text-white">Series</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Choose the editorial frame before drafting. This updates the body structure, not your metadata.</p>
-          </div>
-          <span className="px-2.5 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-[11px] font-medium">{activeSeries.shortCommand}</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+      <div className={`border rounded-2xl p-3 ${sectionClass}`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-2">
           {DRAFT_SERIES.map(series => (
             <button
               key={series.key}
               type="button"
               onClick={() => handleSeriesSelect(series.key)}
-              className={`text-left rounded-xl border px-4 py-3 transition-colors ${selectedSeries === series.key ? 'border-indigo-500/40 bg-indigo-500/10' : 'border-gray-700/60 bg-gray-900/40 hover:bg-gray-900/70'}`}
+              className={`text-left rounded-xl border px-4 py-3 transition-colors ${selectedSeries === series.key ? seriesActiveClass : seriesInactiveClass}`}
             >
-              <div className="flex items-center justify-between gap-2">
-                <span className={`text-sm font-semibold ${selectedSeries === series.key ? 'text-white' : 'text-gray-200'}`}>{series.label}</span>
-                <span className="text-[10px] text-gray-500">{series.defaultReadTime}</span>
-              </div>
-              <p className="text-[11px] text-gray-500 mt-1">{series.description}</p>
-              <p className="text-[10px] text-indigo-300/80 mt-2 uppercase tracking-[0.14em]">{series.shortCommand}</p>
+              <span className="text-sm font-medium leading-tight block">{series.label}</span>
             </button>
           ))}
         </div>
@@ -998,31 +1049,31 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
 
       {/* Saved Drafts Panel */}
       {showDrafts && savedDrafts.length > 0 && (
-        <div className="bg-blue-500/5 border border-blue-500/20 rounded-xl p-4">
+        <div className={`border rounded-xl p-4 ${sectionClass}`}>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-blue-300 flex items-center gap-2">📂 Your Saved Drafts</h3>
-            <button onClick={() => setShowDrafts(false)} className="text-xs text-gray-500 hover:text-white">✕ Close</button>
+            <h3 className={`text-sm font-semibold flex items-center gap-2 ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>📂 Your Saved Drafts</h3>
+            <button onClick={() => setShowDrafts(false)} className={`text-xs ${mutedButtonClass}`}>✕ Close</button>
           </div>
           <div className="space-y-2">
             {savedDrafts.map(draft => (
-              <div key={draft.id} className="flex items-center justify-between bg-gray-800/60 rounded-lg px-4 py-3 group hover:bg-gray-800/80 transition-colors border border-gray-700/40">
+              <div key={draft.id} className={`flex items-center justify-between rounded-lg px-4 py-3 group transition-colors border ${isLightTheme ? 'bg-white hover:bg-gray-50 border-gray-200' : 'bg-gray-800/60 hover:bg-gray-800/80 border-gray-700/40'}`}>
                 <div className="flex-1 min-w-0 mr-3">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm text-white font-medium truncate">{draft.title}</p>
+                    <p className={`text-sm font-medium truncate ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>{draft.title}</p>
                     {editingArticle?.id === draft.id && (
                       <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[9px] font-bold rounded">EDITING</span>
                     )}
                   </div>
                   <div className="flex items-center gap-3 mt-1">
-                    {draft.category && <span className="text-[10px] text-indigo-400">{draft.category}</span>}
-                    {draft.lastSaved && <span className="text-[10px] text-gray-500">Saved {new Date(draft.lastSaved).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at {new Date(draft.lastSaved).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>}
-                    {draft.tags?.length > 0 && <span className="text-[10px] text-gray-500">{draft.tags.length} tags</span>}
-                    <span className="text-[10px] text-gray-600">{draft.content ? `${draft.content.split(/\s+/).length} words` : 'Empty'}</span>
+                    {draft.category && <span className="text-[10px] text-indigo-500">{draft.category}</span>}
+                    {draft.lastSaved && <span className={`text-[10px] ${helperTextClass}`}>Saved {new Date(draft.lastSaved).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at {new Date(draft.lastSaved).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>}
+                    {draft.tags?.length > 0 && <span className={`text-[10px] ${helperTextClass}`}>{draft.tags.length} tags</span>}
+                    <span className={`text-[10px] ${helperTextClass}`}>{draft.content ? `${draft.content.split(/\s+/).length} words` : 'Empty'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button onClick={() => loadDraft(draft)}
-                    className="px-3 py-1.5 text-xs font-semibold text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-500/25 rounded-lg transition-colors">
+                    className={`${secondaryButtonClass} px-3 py-1.5 text-xs font-semibold`}>
                     ✏️ Edit
                   </button>
                   <button onClick={() => {
@@ -1031,91 +1082,77 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
                       if (editingArticle?.id === draft.id) resetForm();
                     }
                   }}
-                    className="px-2 py-1.5 text-xs text-red-400/50 hover:text-red-400 bg-gray-700/30 hover:bg-red-500/10 rounded-lg transition-colors">
+                    className={`px-2 py-1.5 text-xs rounded-lg transition-colors ${isLightTheme ? 'text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100' : 'text-red-400/50 hover:text-red-400 bg-gray-700/30 hover:bg-red-500/10'}`}>
                     🗑
                   </button>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-[10px] text-gray-500 mt-2">💡 Drafts auto-save every 30 seconds. Your work is safe even if you navigate away.</p>
+          <p className={`text-[10px] mt-2 ${helperTextClass}`}>💡 Drafts auto-save every 30 seconds. Your work is safe even if you navigate away.</p>
         </div>
       )}
 
       <div className="space-y-5">
-        <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4">
-          <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-            <div>
-              <h3 className="text-sm font-semibold text-white">Draft package</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Current frame: {activeSeries.label}</p>
-            </div>
-            <div className="flex flex-wrap gap-2 text-[10px] text-gray-400">
-              <span className="px-2 py-1 bg-gray-900/70 rounded-full border border-gray-700/60">Series: {activeSeries.label}</span>
-              <span className="px-2 py-1 bg-gray-900/70 rounded-full border border-gray-700/60">Default read: {activeSeries.defaultReadTime}</span>
-              <span className="px-2 py-1 bg-gray-900/70 rounded-full border border-gray-700/60">Premium default: {activeSeries.defaultPremium ? 'Yes' : 'No'}</span>
-            </div>
-          </div>
-        </div>
-
         {/* Title + Slug */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">Title</label>
+            <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Title</label>
             <input type="text" value={meta.title} onChange={handleTitleChange} placeholder="Enter article title..."
-              className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+              className={inputClass} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">URL Slug</label>
+            <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>URL Slug</label>
             <div className="flex items-center">
-              <span className="text-xs text-gray-500 mr-1">/insights/</span>
+              <span className={`text-xs mr-1 ${helperTextClass}`}>/insights/</span>
               <input type="text" value={meta.slug} onChange={e => setMeta(p => ({ ...p, slug: e.target.value }))} placeholder="article-slug"
-                className="flex-1 px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+                className={compactInputClass} />
             </div>
           </div>
         </div>
 
         {/* Excerpt */}
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1.5">Excerpt</label>
+          <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Excerpt</label>
           <textarea value={meta.excerpt} onChange={e => setMeta(p => ({ ...p, excerpt: e.target.value }))} placeholder="Brief description..."
-            rows={2} className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none" />
+            rows={2} className={`${inputClass} resize-none`} />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1.5">Official Sources</label>
+          <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Official Sources</label>
           <textarea
             value={officialSources.join('\n')}
             onChange={e => handleOfficialSourcesChange(e.target.value)}
             rows={3}
             placeholder="One source URL or citation per line..."
-            className="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y"
+            className={`${inputClass} resize-y`}
           />
         </div>
 
         {/* Category / Read Time / Date */}
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">Category</label>
+            <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Category</label>
             <select value={meta.category} onChange={e => setMeta(p => ({ ...p, category: e.target.value }))}
-              className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500">
+              className={compactInputClass}>
               {CATEGORY_OPTIONS.map(option => <option key={option}>{option}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">Read Time</label>
+            <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Read Time</label>
             <input type="text" value={meta.readTime} onChange={e => setMeta(p => ({ ...p, readTime: e.target.value }))}
-              className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500" />
+              className={compactInputClass} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5">Publication Date</label>
+            <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Publication Date</label>
             <input type="date" value={publicationDate} onChange={e => setPublicationDate(e.target.value)}
-              className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500" />
+              className={compactInputClass} />
           </div>
         </div>
 
         {/* Image Upload */}
         <div className="flex items-center gap-4">
-          <label className={`inline-flex items-center gap-2 px-4 py-2 ${isUploading ? 'bg-gray-600 cursor-wait' : 'bg-gray-700 hover:bg-gray-600 cursor-pointer'} text-white text-sm rounded-lg transition-colors`}>
+          <label className={`inline-flex items-center gap-2 px-4 py-2 ${isUploading ? 'bg-gray-600 cursor-wait' : isLightTheme ? 'bg-white border border-gray-300 hover:bg-gray-100 cursor-pointer' : 'bg-gray-700 hover:bg-gray-600 cursor-pointer'} ${isLightTheme ? 'text-gray-700' : 'text-white'} text-sm rounded-lg transition-colors`}>
             {isUploading ? '⏳ Uploading...' : '🖼️ Cover Image'}
             <input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploading} className="hidden" />
           </label>
@@ -1126,12 +1163,12 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
             </div>
           )}
           <div className="flex items-center gap-3 ml-auto">
-            <label className="flex items-center gap-2 text-sm text-gray-400">
-              <input type="checkbox" checked={meta.featured} onChange={e => setMeta(p => ({ ...p, featured: e.target.checked }))} className="rounded bg-gray-800 border-gray-700 text-indigo-500" />
+            <label className={`flex items-center gap-2 text-sm ${labelClass}`}>
+              <input type="checkbox" checked={meta.featured} onChange={e => setMeta(p => ({ ...p, featured: e.target.checked }))} className={`rounded ${isLightTheme ? 'bg-white border-gray-300 text-indigo-500' : 'bg-gray-800 border-gray-700 text-indigo-500'}`} />
               Featured
             </label>
-            <label className="flex items-center gap-2 text-sm text-amber-400/80">
-              <input type="checkbox" checked={isPremium} onChange={e => setIsPremium(e.target.checked)} className="rounded bg-gray-800 border-amber-700 text-amber-500" />
+            <label className={`flex items-center gap-2 text-sm ${isLightTheme ? 'text-amber-600' : 'text-amber-400/80'}`}>
+              <input type="checkbox" checked={isPremium} onChange={e => setIsPremium(e.target.checked)} className={`rounded ${isLightTheme ? 'bg-white border-amber-300 text-amber-500' : 'bg-gray-800 border-amber-700 text-amber-500'}`} />
               ⭐ Premium
             </label>
           </div>
@@ -1139,36 +1176,36 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
 
         {/* Tags */}
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1.5">Tags</label>
+          <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Tags</label>
           <div className="flex flex-wrap gap-1.5 mb-2">
             {tags.map(tag => (
-              <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-900/50 text-indigo-300 rounded-full text-xs">
-                {tag} <button onClick={() => setTags(t => t.filter(x => x !== tag))} className="hover:text-white">×</button>
+              <span key={tag} className={tagClass}>
+                {tag} <button onClick={() => setTags(t => t.filter(x => x !== tag))} className={isLightTheme ? 'hover:text-gray-900' : 'hover:text-white'}>×</button>
               </span>
             ))}
           </div>
           <div className="relative">
             <input type="text" value={tagInput} onChange={e => setTagInput(e.target.value)} placeholder="Search taxonomy tags..."
               onKeyDown={e => { if (e.key === 'Enter' && tagInput.trim()) { setTags(t => [...t, tagInput.trim()]); setTagInput(''); e.preventDefault(); } }}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+              className={isLightTheme ? 'w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:border-indigo-500' : 'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500'} />
             {tagSuggestions.length > 0 && (
-              <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-40 overflow-y-auto">
+              <div className={`absolute z-50 w-full mt-1 rounded-lg shadow-xl max-h-40 overflow-y-auto ${isLightTheme ? 'bg-white border border-gray-200' : 'bg-gray-800 border border-gray-600'}`}>
                 {tagSuggestions.map(s => (
                   <button key={s} type="button" onMouseDown={e => { e.preventDefault(); setTags(t => [...t, s]); setTagInput(''); }}
-                    className="w-full px-3 py-2 text-left text-sm text-white hover:bg-indigo-900/50">{s}</button>
+                    className={`w-full px-3 py-2 text-left text-sm ${isLightTheme ? 'text-gray-900 hover:bg-indigo-50' : 'text-white hover:bg-indigo-900/50'}`}>{s}</button>
                 ))}
               </div>
             )}
           </div>
           <div className="flex items-center gap-2 mt-2">
             <select value={selectedTagCat} onChange={e => setSelectedTagCat(e.target.value)}
-              className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-white text-xs">
+              className={isLightTheme ? 'px-2 py-1 bg-white border border-gray-300 rounded text-gray-900 text-xs' : 'px-2 py-1 bg-gray-800 border border-gray-700 rounded text-white text-xs'}>
               {Object.keys(PIMLICO_TAXONOMY).map(k => <option key={k} value={k}>{k}</option>)}
             </select>
             <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto">
               {PIMLICO_TAXONOMY[selectedTagCat].filter(t => !tags.includes(t)).slice(0, 15).map(t => (
                 <button key={t} onClick={() => setTags(prev => [...prev, t])}
-                  className="px-2 py-0.5 bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white rounded text-[10px]">+ {t}</button>
+                  className={isLightTheme ? 'px-2 py-0.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded text-[10px]' : 'px-2 py-0.5 bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white rounded text-[10px]'}>+ {t}</button>
               ))}
             </div>
           </div>
@@ -1177,17 +1214,17 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
         {/* Content Editor */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-medium text-gray-400">Content</label>
+            <label className={`text-xs font-medium ${labelClass}`}>Content</label>
             <div className="flex items-center gap-2">
-              <div className="flex bg-gray-700 rounded-lg p-0.5">
+              <div className={`flex rounded-lg p-0.5 ${isLightTheme ? 'bg-gray-100 border border-gray-200' : 'bg-gray-700'}`}>
                 <button onClick={() => { setEditorMode('markdown'); setShowPreview(false); }}
-                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'markdown' && !showPreview ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Markdown</button>
+                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'markdown' && !showPreview ? 'bg-indigo-600 text-white' : isLightTheme ? 'text-gray-600' : 'text-gray-400'}`}>Markdown</button>
                 <button onClick={() => { if (editorMode === 'markdown' && content) { setHtmlContent(renderMarkdown(content)); } setEditorMode('visual'); setShowPreview(false); }}
-                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'visual' && !showPreview ? 'bg-indigo-600 text-white' : 'text-gray-400'}`}>Visual</button>
+                  className={`px-3 py-1 text-xs rounded-md ${editorMode === 'visual' && !showPreview ? 'bg-indigo-600 text-white' : isLightTheme ? 'text-gray-600' : 'text-gray-400'}`}>Visual</button>
                 <button onClick={() => setShowPreview(p => !p)}
-                  className={`px-3 py-1 text-xs rounded-md ${showPreview ? 'bg-emerald-600 text-white' : 'text-gray-400'}`}>👁 Preview</button>
+                  className={`px-3 py-1 text-xs rounded-md ${showPreview ? 'bg-indigo-600 text-white' : isLightTheme ? 'text-gray-600' : 'text-gray-400'}`}>Preview</button>
               </div>
-              <span className="px-3 py-1.5 bg-gray-800 border border-gray-700 text-[11px] text-gray-400 rounded-lg">{activeSeries.label}</span>
+              <span className={`px-3 py-1.5 text-[11px] rounded-lg border ${isLightTheme ? 'bg-white border-gray-300 text-gray-600' : 'bg-gray-800 border-gray-700 text-gray-400'}`}>{activeSeries.label}</span>
             </div>
           </div>
 
@@ -1282,67 +1319,67 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
           ) : (
             <textarea value={content} onChange={e => setContent(e.target.value)} rows={20}
               placeholder="## Introduction&#10;&#10;Start writing your article here..."
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono resize-y min-h-[400px]" />
+              className={`${isLightTheme ? 'w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:border-indigo-500 font-mono resize-y min-h-[520px]' : 'w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono resize-y min-h-[520px]'}`} />
           )}
-          <div className="flex items-center justify-between px-3 py-1.5 bg-gray-800/50 rounded-b-lg text-[10px] text-gray-500 -mt-1">
+          <div className={`flex items-center justify-between px-3 py-1.5 rounded-b-lg text-[10px] -mt-1 ${footerBarClass}`}>
             <span>{wordCount} words · ~{Math.max(1, Math.ceil(wordCount / 200))} min read</span>
             <span>{editorMode === 'visual' ? 'Visual' : 'Markdown'}</span>
           </div>
         </div>
 
-        <div className="bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden">
+        <div className={`border rounded-lg overflow-hidden ${sectionClass}`}>
           <button
             type="button"
             onClick={() => setShowEngagements(prev => !prev)}
             className="w-full px-4 py-3 flex items-center justify-between text-left"
           >
             <div>
-              <span className="text-sm font-semibold text-white">📣 Engagements drawer</span>
-              <p className="text-[11px] text-gray-500 mt-0.5">Newsletter line, LinkedIn teaser, cover image prompt, and internal notes.</p>
+              <span className={`text-sm font-semibold ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>📣 Engagements drawer</span>
+              <p className={`text-[11px] mt-0.5 ${helperTextClass}`}>Newsletter line, LinkedIn teaser, cover image prompt, and internal notes.</p>
             </div>
-            <span className="text-gray-400 text-sm">{showEngagements ? '−' : '+'}</span>
+            <span className={`text-sm ${labelClass}`}>{showEngagements ? '−' : '+'}</span>
           </button>
 
           {showEngagements && (
-            <div className="border-t border-gray-700 p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className={`border-t p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 ${isLightTheme ? 'border-gray-200' : 'border-gray-700'}`}>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Newsletter Line</label>
+                <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Newsletter Line</label>
                 <input
                   type="text"
                   value={engagements.newsletterLine}
                   onChange={e => setEngagements(prev => ({ ...prev, newsletterLine: e.target.value }))}
                   placeholder="One-line newsletter sell..."
-                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                  className={compactInputClass}
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">LinkedIn Teaser</label>
+                <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>LinkedIn Teaser</label>
                 <input
                   type="text"
                   value={engagements.linkedinTeaser}
                   onChange={e => setEngagements(prev => ({ ...prev, linkedinTeaser: e.target.value }))}
                   placeholder="Short teaser for the post opener..."
-                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+                  className={compactInputClass}
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Cover Image Prompt</label>
+                <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Cover Image Prompt</label>
                 <textarea
                   value={engagements.coverImagePrompt}
                   onChange={e => setEngagements(prev => ({ ...prev, coverImagePrompt: e.target.value }))}
                   rows={3}
                   placeholder="Prompt for visual generation or design handoff..."
-                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y"
+                  className={`${compactInputClass} resize-y`}
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Internal Notes</label>
+                <label className={`block text-xs font-medium mb-1.5 ${labelClass}`}>Internal Notes</label>
                 <textarea
                   value={engagements.internalNotes}
                   onChange={e => setEngagements(prev => ({ ...prev, internalNotes: e.target.value }))}
                   rows={3}
                   placeholder="Editorial notes, follow-ups, packaging reminders..."
-                  className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-y"
+                  className={`${compactInputClass} resize-y`}
                 />
               </div>
             </div>
@@ -1351,28 +1388,28 @@ Keep it clean and publication-ready. Use specific dates, named authorities, and 
 
         {/* Schedule */}
         {scheduleEnabled && (
-          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
-            <label className="block text-xs text-gray-400 mb-2">Publish date & time</label>
+          <div className={`border rounded-lg p-4 ${sectionClass}`}>
+            <label className={`block text-xs mb-2 ${labelClass}`}>Publish date & time</label>
             <input type="datetime-local" value={scheduledDate} onChange={e => setScheduledDate(e.target.value)}
-              className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-indigo-500" />
+              className={`${compactInputClass} max-w-xs`} />
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-3 pt-2 border-t border-gray-800">
+        <div className={`flex items-center gap-3 pt-2 border-t ${dividerClass}`}>
           <button onClick={handleSaveDraft}
-            className="px-5 py-2.5 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-500 transition-colors font-medium">
+            className={`${secondaryButtonClass} px-5 py-2.5 font-medium`}>
             💾 Save Draft
           </button>
           <button onClick={handlePublish}
             className="px-6 py-2.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-500 transition-colors font-semibold">
             {editingArticle ? '✓ Update' : scheduleEnabled ? '📅 Schedule' : '🚀 Publish'}
           </button>
-          <label className="flex items-center gap-2 text-xs text-gray-400 ml-2">
-            <input type="checkbox" checked={scheduleEnabled} onChange={e => setScheduleEnabled(e.target.checked)} className="rounded bg-gray-800 border-gray-700 text-indigo-500" />
+          <label className={`flex items-center gap-2 text-xs ml-2 ${labelClass}`}>
+            <input type="checkbox" checked={scheduleEnabled} onChange={e => setScheduleEnabled(e.target.checked)} className={`rounded ${isLightTheme ? 'bg-white border-gray-300 text-indigo-500' : 'bg-gray-800 border-gray-700 text-indigo-500'}`} />
             Schedule
           </label>
-          <button onClick={resetForm} className="ml-auto px-4 py-2 text-sm text-gray-500 hover:text-white transition-colors">Clear</button>
+          <button onClick={resetForm} className={`ml-auto px-4 py-2 text-sm transition-colors ${mutedButtonClass}`}>Clear</button>
         </div>
       </div>
     </div>
