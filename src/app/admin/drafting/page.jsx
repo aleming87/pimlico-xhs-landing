@@ -31,11 +31,15 @@ const CATEGORY_KEYWORDS = {
 
 const SERIES_KEYWORDS = {
   'what-matters-brief': ['week', 'weekly', 'roundup', 'digest', 'brief', 'what matters'],
-  'regulatory-influencer': ['bigger picture', 'flagship', 'market impact', 'trend', 'influencer', 'landscape'],
+  'regulatory-catalyst': ['bigger picture', 'flagship', 'market impact', 'trend', 'catalyst', 'landscape', 'influencer'],
   'implementation-note': ['implementation', 'practical', 'operational', 'product team', 'legal team', 'compliance team'],
   'cross-border-lens': ['cross-border', 'jurisdiction', 'compare', 'comparison', 'divergence', 'multi-country'],
   'supervisory-signal': ['authority', 'supervisor', 'enforcement', 'investigation', 'fine', 'licensing action'],
   'compliance-horizon': ['deadline', 'timeline', 'milestone', 'horizon', 'upcoming dates', 'commencement'],
+};
+
+const LEGACY_SERIES_ALIASES = {
+  'regulatory-influencer': 'regulatory-catalyst',
 };
 
 const slugifyText = (text = '') => text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
@@ -175,7 +179,7 @@ const normaliseSeriesValue = (value = '') => String(value || '').trim().toLowerC
 
 const resolveSeriesKey = (...candidates) => {
   for (const candidate of candidates) {
-    const normalized = normaliseSeriesValue(candidate);
+    const normalized = LEGACY_SERIES_ALIASES[normaliseSeriesValue(candidate)] || normaliseSeriesValue(candidate);
     if (!normalized) continue;
     const match = DRAFT_SERIES.find(series => [series.key, series.label, series.shortCommand].some(value => normaliseSeriesValue(value) === normalized));
     if (match) return match.key;

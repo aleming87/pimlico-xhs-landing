@@ -9,9 +9,9 @@ export const DRAFT_SERIES = [
     defaultPremium: false,
   },
   {
-    key: 'regulatory-influencer',
-    label: 'Regulatory Influencer',
-    shortCommand: 'Draft influencer',
+    key: 'regulatory-catalyst',
+    label: 'Regulatory Catalyst',
+    shortCommand: 'Draft catalyst',
     description: 'Flagship analysis piece for a bigger regulatory development.',
     headings: ['Intro', 'The Bigger Picture', 'Why This Matters Now', 'What Firms Should Watch', 'What Comes Next', 'Sources'],
     defaultReadTime: '8 min read',
