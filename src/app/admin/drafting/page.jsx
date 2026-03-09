@@ -310,7 +310,7 @@ export default function DraftingPage() {
 
   const activeSeries = DRAFT_SERIES.find(series => series.key === selectedSeries) || DRAFT_SERIES[0];
   const isLightTheme = theme === 'light';
-  const pageShellClass = isLightTheme ? 'bg-gray-50 text-gray-900 rounded-[28px]' : 'text-white';
+  const pageShellClass = isLightTheme ? 'min-h-screen -m-6 px-6 py-6 bg-gray-50 text-gray-900' : 'min-h-screen text-white';
   const sectionClass = isLightTheme ? 'bg-white border-gray-200 shadow-sm' : 'bg-gray-800/50 border-gray-700/50';
   const labelClass = isLightTheme ? 'text-gray-600' : 'text-gray-400';
   const helperTextClass = isLightTheme ? 'text-gray-500' : 'text-gray-500';
