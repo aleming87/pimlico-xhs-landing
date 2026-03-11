@@ -14,11 +14,14 @@ const STAGE_COLORS = {
 };
 
 const STAGE_HREFS = {
+  ideas: '/admin/ideas',
   drafting: '/admin/drafting',
   collateral: '/admin/collateral',
   copy: '/admin/copy',
   publishing: '/admin/publishing',
 };
+
+const FALLBACK_STAGE_COLOR = { bg: 'bg-gray-500/15', border: 'border-gray-500/30', text: 'text-gray-300', bar: 'bg-gray-500' };
 
 const CATEGORY_COLORS = {
   'Gambling':      { bg: 'bg-red-500/15', text: 'text-red-300', bar: 'bg-red-500', ring: 'ring-red-500/30' },
@@ -516,9 +519,10 @@ export default function DashboardPage() {
             {recentActivity.length > 0 ? (
               <div className="space-y-1.5">
                 {recentActivity.map(item => {
-                  const c = STAGE_COLORS[item.stage];
+                  const c = STAGE_COLORS[item.stage] || FALLBACK_STAGE_COLOR;
+                  const stageHref = STAGE_HREFS[item.stage] || '/admin';
                   return (
-                    <Link key={item.id} href={STAGE_HREFS[item.stage]} className="flex items-center gap-2.5 bg-gray-700/30 rounded-lg px-3 py-2 hover:bg-gray-700/50 transition-colors group">
+                    <Link key={item.id} href={stageHref} className="flex items-center gap-2.5 bg-gray-700/30 rounded-lg px-3 py-2 hover:bg-gray-700/50 transition-colors group">
                       <span className={`px-1.5 py-0.5 text-[9px] font-semibold rounded-full ${c.bg} ${c.text} ${c.border} border`}>
                         {STAGES.find(s => s.key === item.stage)?.icon}
                       </span>
