@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useArticles } from '../ArticlesContext';
 import { useWorkflow } from '../WorkflowContext';
+import { readJsonStorage, writeJsonStorage } from '../storage';
 
 const PLATFORMS = {
   linkedin: { label: 'LinkedIn', icon: '💼', maxChars: 3000, tone: 'Professional, authoritative', hashtags: 4 },
@@ -25,25 +26,20 @@ export default function CopyPage() {
 
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [activePlatform, setActivePlatform] = useState('linkedin');
-  const [copies, setCopies] = useState(() => {
-    try { const s = localStorage.getItem('xhs-copy-drafts'); return s ? JSON.parse(s) : {}; } catch { return {}; }
-  });
+  const [copies, setCopies] = useState({});
   const [activeTemplate, setActiveTemplate] = useState(null);
-  const [history, setHistory] = useState(() => {
-    try { const s = localStorage.getItem('xhs-copy-history'); return s ? JSON.parse(s) : []; } catch { return []; }
-  });
+  const [history, setHistory] = useState([]);
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [variationCount, setVariationCount] = useState(0);
   const [showImagePreview, setShowImagePreview] = useState(true);
 
   // Custom templates
-  const [customTemplates, setCustomTemplates] = useState(() => {
-    try { const s = localStorage.getItem('xhs-copy-custom-templates'); return s ? JSON.parse(s) : {}; } catch { return {}; }
-  });
+  const [customTemplates, setCustomTemplates] = useState({});
   const [newTemplateName, setNewTemplateName] = useState('');
   const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [storageLoaded, setStorageLoaded] = useState(false);
 
   const LLM_PROMPT = `You are helping me create social media and email copy for Pimlico XHS, a cross-border regulatory intelligence platform.
 
@@ -81,15 +77,25 @@ STYLE RULES:
 - Hashtags: #CamelCase format, relevant to topic`;
 
   useEffect(() => {
-    try { localStorage.setItem('xhs-copy-custom-templates', JSON.stringify(customTemplates)); } catch {}
-  }, [customTemplates]);
+    setCopies(readJsonStorage('xhs-copy-drafts', {}));
+    setHistory(readJsonStorage('xhs-copy-history', []));
+    setCustomTemplates(readJsonStorage('xhs-copy-custom-templates', {}));
+    setStorageLoaded(true);
+  }, []);
 
   useEffect(() => {
-    try { localStorage.setItem('xhs-copy-drafts', JSON.stringify(copies)); } catch {}
-  }, [copies]);
+    if (!storageLoaded) return;
+    writeJsonStorage('xhs-copy-custom-templates', customTemplates);
+  }, [customTemplates, storageLoaded]);
+
   useEffect(() => {
-    try { localStorage.setItem('xhs-copy-history', JSON.stringify(history.slice(0, 50))); } catch {}
-  }, [history]);
+    if (!storageLoaded) return;
+    writeJsonStorage('xhs-copy-drafts', copies);
+  }, [copies, storageLoaded]);
+  useEffect(() => {
+    if (!storageLoaded) return;
+    writeJsonStorage('xhs-copy-history', history.slice(0, 50));
+  }, [history, storageLoaded]);
 
   const getCopyKey = (articleId, platform) => `${articleId}-${platform}`;
 

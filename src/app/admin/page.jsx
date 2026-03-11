@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useWorkflow, STAGES } from './WorkflowContext';
 import { useArticles } from './ArticlesContext';
+import { readJsonStorage } from './storage';
 
 const STAGE_COLORS = {
   ideas: { bg: 'bg-purple-500/15', border: 'border-purple-500/30', text: 'text-purple-300', bar: 'bg-purple-500' },
@@ -178,11 +179,16 @@ export default function DashboardPage() {
   const { items, stats, getByStage } = useWorkflow();
   const { articles } = useArticles();
   const [recentActivity, setRecentActivity] = useState([]);
+  const [publishingPosts, setPublishingPosts] = useState([]);
 
   useEffect(() => {
     const sorted = [...items].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     setRecentActivity(sorted.slice(0, 8));
   }, [items]);
+
+  useEffect(() => {
+    setPublishingPosts(readJsonStorage('xhs-publishing-posts-v2', []));
+  }, []);
 
   const totalPipeline = stats.total;
   const completionPct = totalPipeline > 0
@@ -263,10 +269,6 @@ export default function DashboardPage() {
     return { categories: cats, topTags, premiumCount, featuredCount, totalWords, avgWords: Math.round(totalWords / totalArticles), avgReadTime, healthScore, avgSeo, seoScores, needsAttention, articlesByLength, monthLabels, monthCounts, articlesWithImage, articlesWithExcerpt, articlesWithTags, articlesWithOgImage };
   }, [articles]);
 
-  // Social posts stats from localStorage
-  const publishingPosts = useMemo(() => {
-    try { const s = localStorage.getItem('xhs-publishing-posts-v2'); return s ? JSON.parse(s) : []; } catch { return []; }
-  }, []);
   const publishedPosts = publishingPosts.filter(p => p.status === 'published').length;
   const scheduledPosts = publishingPosts.filter(p => p.status === 'scheduled').length;
 

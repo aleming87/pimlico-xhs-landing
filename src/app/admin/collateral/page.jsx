@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useArticles } from '../ArticlesContext';
 import { useWorkflow } from '../WorkflowContext';
+import { readJsonStorage, writeJsonStorage } from '../storage';
 
 // Marketing asset element defaults
 const DEFAULT_ELEMENTS = {
@@ -57,19 +58,9 @@ export default function CollateralPage() {
   const [loading, setLoading] = useState(false);
   const [dragTarget, setDragTarget] = useState(null);
   const [postText, setPostText] = useState('');
+  const [storageLoaded, setStorageLoaded] = useState(false);
 
-  const [elements, setElements] = useState(() => {
-    try {
-      const saved = localStorage.getItem('xhs-marketing-elements-last');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const merged = {};
-        for (const k of Object.keys(DEFAULT_ELEMENTS)) merged[k] = { ...DEFAULT_ELEMENTS[k], ...(parsed[k] || {}) };
-        return merged;
-      }
-    } catch {}
-    return { ...DEFAULT_ELEMENTS };
-  });
+  const [elements, setElements] = useState({ ...DEFAULT_ELEMENTS });
 
   const [panelOpen, setPanelOpen] = useState({ article: true, template: false, text: false, font: false, elements: true, presets: false, flags: false });
 
@@ -131,10 +122,24 @@ export default function CollateralPage() {
     { emoji: '🇮🇳', label: 'India' }, { emoji: '🇦🇪', label: 'UAE' }, { emoji: '🇸🇦', label: 'Saudi' },
     { emoji: '🇰🇷', label: 'Korea' }, { emoji: '🇨🇳', label: 'China' }, { emoji: '🌍', label: 'Globe' },
   ];
-  const [flagOverlays, setFlagOverlays] = useState(() => {
-    try { const s = localStorage.getItem('xhs-flag-overlays'); return s ? JSON.parse(s) : []; } catch { return []; }
-  });
-  useEffect(() => { try { localStorage.setItem('xhs-flag-overlays', JSON.stringify(flagOverlays)); } catch {} }, [flagOverlays]);
+  const [flagOverlays, setFlagOverlays] = useState([]);
+
+  useEffect(() => {
+    const savedElements = readJsonStorage('xhs-marketing-elements-last', null);
+    if (savedElements) {
+      const merged = {};
+      for (const k of Object.keys(DEFAULT_ELEMENTS)) merged[k] = { ...DEFAULT_ELEMENTS[k], ...(savedElements[k] || {}) };
+      setElements(merged);
+    }
+
+    setFlagOverlays(readJsonStorage('xhs-flag-overlays', []));
+    setStorageLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!storageLoaded) return;
+    writeJsonStorage('xhs-flag-overlays', flagOverlays);
+  }, [flagOverlays, storageLoaded]);
 
   const addFlagOverlay = (emoji) => {
     setFlagOverlays(prev => [...prev, { id: Date.now(), emoji, x: 0.85, y: 0.05, scale: 100, dx: 0, dy: 0 }]);
@@ -237,7 +242,10 @@ export default function CollateralPage() {
   };
 
   // Auto-save elements
-  useEffect(() => { try { localStorage.setItem('xhs-marketing-elements-last', JSON.stringify(elements)); } catch {} }, [elements]);
+  useEffect(() => {
+    if (!storageLoaded) return;
+    writeJsonStorage('xhs-marketing-elements-last', elements);
+  }, [elements, storageLoaded]);
 
   // Compat wrapper
   const positions = { title: elements.title, subtitle: elements.subtitle, logo: elements.pimlicoLogo, cta: elements.cta, badge: elements.badge };

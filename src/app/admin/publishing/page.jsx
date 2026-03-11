@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useArticles } from '../ArticlesContext';
 import { useWorkflow } from '../WorkflowContext';
+import { readJsonStorage, writeJsonStorage } from '../storage';
 
 const PLATFORMS = {
   linkedin: { label: 'LinkedIn', icon: '💼', color: '#0A66C2', maxChars: 3000, cta: 'Post on LinkedIn', tips: ['Professional tone', 'Tag companies with @', '3-5 relevant hashtags', 'Include line breaks for readability', 'First line is your hook — make it count'] },
@@ -39,9 +40,7 @@ export default function PublishingPage() {
   const { articles } = useArticles();
   const { items, addItem, updateItem, moveToStage } = useWorkflow();
 
-  const [posts, setPosts] = useState(() => {
-    try { const s = localStorage.getItem('xhs-publishing-posts-v2'); return s ? JSON.parse(s) : []; } catch { return []; }
-  });
+  const [posts, setPosts] = useState([]);
   const [view, setView] = useState('composer');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [activePlatform, setActivePlatform] = useState('linkedin');
@@ -57,15 +56,22 @@ export default function PublishingPage() {
   const [calYear, setCalYear] = useState(new Date().getFullYear());
   const [selectedCalDay, setSelectedCalDay] = useState(null);
   const textareaRef = useRef(null);
+  const [storageLoaded, setStorageLoaded] = useState(false);
 
-  useEffect(() => { try { localStorage.setItem('xhs-publishing-posts-v2', JSON.stringify(posts)); } catch {} }, [posts]);
+  useEffect(() => {
+    setPosts(readJsonStorage('xhs-publishing-posts-v2', []));
+    setStorageLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!storageLoaded) return;
+    writeJsonStorage('xhs-publishing-posts-v2', posts);
+  }, [posts, storageLoaded]);
 
   // Pull copy drafts from localStorage
   const getCopyDraft = (articleId, platform) => {
-    try {
-      const drafts = JSON.parse(localStorage.getItem('xhs-copy-drafts') || '{}');
-      return drafts[`${articleId}-${platform}`] || drafts[`${articleId}-linkedin`] || '';
-    } catch { return ''; }
+    const drafts = readJsonStorage('xhs-copy-drafts', {});
+    return drafts[`${articleId}-${platform}`] || drafts[`${articleId}-linkedin`] || '';
   };
 
   const copyItems = items.filter(i => i.stage === 'copy');
