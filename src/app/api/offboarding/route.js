@@ -307,7 +307,7 @@ Submitted: ${new Date().toISOString()}
 
     <!-- Footer -->
     <div style="text-align:center;padding-top:16px;">
-      <p style="color:#6b7280;font-size:12px;margin:0;">Pimlico XHS™ Trial Completion Survey</p>
+      <p style="color:#6b7280;font-size:12px;margin:0;">Pimlico XHS™ Trial Completion</p>
     </div>
   </div>
 </body>
@@ -325,9 +325,9 @@ Submitted: ${new Date().toISOString()}
           Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from: 'Pimlico XHS Feedback <onboarding@resend.dev>',
+          from: 'Pimlico XHS™ Feedback <onboarding@resend.dev>',
           to: [toEmail],
-          subject: `XHS Trial Survey — ${name} ${company ? `(${company})` : ''} — ${avgRating}/5 avg`.trim(),
+          subject: `XHS™ Trial Completion — ${name} ${company ? `(${company})` : ''} — ${avgRating}/5 avg`.trim(),
           html: htmlReport,
           text: plainReport,
         }),

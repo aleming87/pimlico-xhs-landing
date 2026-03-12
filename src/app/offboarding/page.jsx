@@ -310,7 +310,7 @@ export default function OffboardingPage() {
         <header className="absolute inset-x-0 top-0 z-50">
           <nav className="flex items-center justify-between p-6 lg:px-8">
             <a href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Pimlico XHS</span>
+              <span className="sr-only">Pimlico XHS™</span>
               <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
             </a>
           </nav>
@@ -346,7 +346,7 @@ export default function OffboardingPage() {
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8">
           <a href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Pimlico XHS</span>
+            <span className="sr-only">Pimlico XHS™</span>
             <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
           </a>
         </nav>
@@ -357,7 +357,7 @@ export default function OffboardingPage() {
           {/* Header */}
           <div className="text-center mb-10 pt-12">
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-3">
-              XHS Trial Completion Survey
+              XHS™ Trial Completion
             </h1>
             <p className="text-base text-gray-400">
               Help us understand your experience — your feedback shapes what we build next
