@@ -20,6 +20,8 @@ export async function POST(request) {
       missingFeatures = '',
       mostValuable = '',
       overallRating = 0,
+      upcomingFeatureInterest = {},
+      keepInTouch = 'N/A',
       wouldRecommend = 'N/A',
       meetExpectations = 'N/A',
       additionalFeedback = '',
@@ -38,6 +40,9 @@ export async function POST(request) {
     const avgRating = ratedFeatures.length > 0
       ? (ratedFeatures.reduce((a, b) => a + b, 0) / ratedFeatures.length).toFixed(1)
       : 'N/A';
+
+    // Interest level labels
+    const interestLabel = (n) => (['', 'Not interested', 'Slightly interested', 'Moderately interested', 'Very interested', 'Must-have'])[n] || 'N/A';
 
     // Build plain text report
     const plainReport = `
@@ -69,6 +74,16 @@ ${selectedImprovements.length > 0 ? selectedImprovements.map(i => `• ${i}`).jo
 
 Most Valuable Feature: ${mostValuable || 'Not specified'}
 Missing Features: ${missingFeatures || 'None mentioned'}
+
+====================================================
+🚀 UPCOMING FEATURES INTEREST
+====================================================
+
+${Object.entries(upcomingFeatureInterest).map(([label, val]) =>
+  `${label}: ${interestLabel(val)} (${val}/5)`
+).join('\n') || 'No upcoming features rated'}
+
+Keep in Touch: ${keepInTouch}
 
 ====================================================
 📊 OVERALL EXPERIENCE
@@ -154,6 +169,43 @@ Submitted: ${new Date().toISOString()}
       </div>` : ''}
 
       ${!selectedImprovements.length && !mostValuable && !missingFeatures ? '<p style="color:#6b7280;font-size:14px;margin:0;">No improvement feedback provided</p>' : ''}
+    </div>
+
+    <!-- Upcoming Features Card -->
+    <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
+      <div style="margin-bottom:16px;">
+        <h2 style="color:#ffffff;font-size:16px;margin:0 0 4px 0;display:inline;">🚀 Upcoming Features Interest</h2>
+        <span style="display:inline-block;margin-left:8px;padding:2px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;background-color:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.3);color:#d8b4fe;border-radius:12px;vertical-align:middle;">Preview</span>
+      </div>
+      
+      <table style="width:100%;border-collapse:collapse;">
+        ${Object.entries(upcomingFeatureInterest).map(([label, val], i) => {
+          const barColor = val >= 4 ? '#a855f7' : val >= 3 ? '#7c3aed' : '#6b7280';
+          return `
+        <tr style="background-color:${i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent'};">
+          <td style="color:#e5e7eb;padding:10px 12px;font-size:14px;border-radius:6px 0 0 6px;width:140px;">${label}</td>
+          <td style="padding:10px 12px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="flex:1;background-color:rgba(255,255,255,0.1);border-radius:4px;height:8px;">
+                <div style="width:${val * 20}%;background-color:${barColor};border-radius:4px;height:8px;"></div>
+              </div>
+              <span style="color:#9ca3af;font-size:12px;white-space:nowrap;">${val}/5</span>
+            </div>
+            <p style="color:#6b7280;font-size:11px;margin:2px 0 0 0;">${interestLabel(val)}</p>
+          </td>
+        </tr>`;
+        }).join('') || '<tr><td style="color:#6b7280;padding:10px 12px;font-size:14px;">No upcoming features rated</td></tr>'}
+      </table>
+
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
+        <p style="color:#9ca3af;font-size:13px;margin:0 0 4px 0;">Keep in touch about these features:</p>
+        <p style="font-size:14px;margin:0;"><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:13px;${
+          keepInTouch === 'Yes please' ? 'background-color:rgba(34,197,94,0.2);color:#86efac;' :
+          keepInTouch === 'Maybe later' ? 'background-color:rgba(234,179,8,0.2);color:#fde047;' :
+          keepInTouch === 'No thanks' ? 'background-color:rgba(239,68,68,0.2);color:#fca5a5;' :
+          'color:#9ca3af;'
+        }">${keepInTouch}</span></p>
+      </div>
     </div>
 
     <!-- Overall Card -->

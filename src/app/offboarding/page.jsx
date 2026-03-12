@@ -32,6 +32,13 @@ const IMPROVEMENT_AREAS = [
   'Compliance calendar improvements',
 ];
 
+const UPCOMING_FEATURES = [
+  { key: 'projects', label: 'Projects', desc: 'Organise regulatory items into workstreams and track progress against compliance objectives' },
+  { key: 'lens', label: 'Lens', desc: 'AI-powered analysis that surfaces the regulatory changes most relevant to your business' },
+  { key: 'competitors', label: 'Competitors', desc: 'See how peer organisations are responding to the same regulatory developments' },
+  { key: 'blocklists', label: 'Blocklists', desc: 'Filter out noise by blocking jurisdictions, topics, or sources you don\u2019t need to track' },
+];
+
 export default function OffboardingPage() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,13 +59,17 @@ export default function OffboardingPage() {
   const [missingFeatures, setMissingFeatures] = useState('');
   const [mostValuable, setMostValuable] = useState('');
 
-  // Step 4 — Overall + future
+  // Step 4 — Upcoming features
+  const [upcomingInterest, setUpcomingInterest] = useState({});
+  const [keepInTouch, setKeepInTouch] = useState('');
+
+  // Step 5 — Overall + future
   const [overallRating, setOverallRating] = useState(0);
   const [wouldRecommend, setWouldRecommend] = useState('');
   const [meetExpectations, setMeetExpectations] = useState('');
   const [additionalFeedback, setAdditionalFeedback] = useState('');
 
-  const TOTAL_STEPS = 4;
+  const TOTAL_STEPS = 5;
 
   const setFeatureRating = (key, value) => {
     setRatings(prev => ({ ...prev, [key]: value }));
@@ -68,6 +79,10 @@ export default function OffboardingPage() {
     setSelectedImprovements(prev =>
       prev.includes(item) ? prev.filter(x => x !== item) : [...prev, item]
     );
+  };
+
+  const setUpcomingRating = (key, value) => {
+    setUpcomingInterest(prev => ({ ...prev, [key]: value }));
   };
 
   const canProceed = () => {
@@ -84,6 +99,12 @@ export default function OffboardingPage() {
         if (ratings[f.key]) featureRatings[f.label] = ratings[f.key];
       });
 
+      // Map upcoming feature keys to labels
+      const upcomingFeatureInterest = {};
+      UPCOMING_FEATURES.forEach(f => {
+        if (upcomingInterest[f.key]) upcomingFeatureInterest[f.label] = upcomingInterest[f.key];
+      });
+
       const res = await fetch('/api/offboarding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,6 +114,8 @@ export default function OffboardingPage() {
           selectedImprovements,
           missingFeatures,
           mostValuable,
+          upcomingFeatureInterest,
+          keepInTouch,
           overallRating,
           wouldRecommend,
           meetExpectations,
@@ -359,8 +382,87 @@ export default function OffboardingPage() {
             </div>
           )}
 
-          {/* Step 4 — Overall experience */}
+          {/* Step 4 — Upcoming features */}
           {step === 4 && (
+            <div className="space-y-6">
+              <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-xl font-semibold text-white">Coming Soon</h2>
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full">Preview</span>
+                </div>
+                <p className="text-sm text-gray-400 mb-6">We&apos;re building new capabilities. How interested are you in each?</p>
+
+                <div className="space-y-3">
+                  {UPCOMING_FEATURES.map((feature) => (
+                    <div
+                      key={feature.key}
+                      className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-white mb-0.5">{feature.label}</p>
+                          <p className="text-xs text-gray-500 leading-relaxed">{feature.desc}</p>
+                        </div>
+                        <div className="flex gap-1.5 flex-shrink-0">
+                          {[
+                            { val: 1, label: 'Not interested', color: 'gray' },
+                            { val: 2, label: 'Slightly', color: 'gray' },
+                            { val: 3, label: 'Moderate', color: 'blue' },
+                            { val: 4, label: 'Very', color: 'blue' },
+                            { val: 5, label: 'Must-have', color: 'blue' },
+                          ].map(({ val, label }) => (
+                            <button
+                              key={val}
+                              type="button"
+                              onClick={() => setUpcomingRating(feature.key, val)}
+                              title={label}
+                              className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
+                                upcomingInterest[feature.key] === val
+                                  ? val >= 3
+                                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
+                                    : 'bg-gray-600 text-white'
+                                  : 'bg-white/10 text-gray-500 hover:bg-white/20 hover:text-gray-300'
+                              }`}
+                            >
+                              {val}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-3 flex justify-end">
+                  <p className="text-[11px] text-gray-600">1 = Not interested &nbsp;·&nbsp; 5 = Must-have</p>
+                </div>
+              </div>
+
+              {/* Keep in touch */}
+              <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
+                <h3 className="text-base font-semibold text-white mb-2">Stay in the loop?</h3>
+                <p className="text-sm text-gray-400 mb-4">Would you like us to keep you updated as these features launch?</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {['Yes please', 'Maybe later', 'No thanks'].map(opt => (
+                    <button
+                      key={opt} type="button"
+                      onClick={() => setKeepInTouch(opt)}
+                      className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                        keepInTouch === opt
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                      }`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 5 — Overall experience */}
+          {step === 5 && (
             <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
                 <h2 className="text-xl font-semibold text-white mb-4">Overall experience</h2>
