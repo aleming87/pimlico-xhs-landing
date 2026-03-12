@@ -53,10 +53,10 @@ const CR_DETAIL_AREAS = [
 ];
 
 const UPCOMING_FEATURES = [
-  { key: 'projects', label: 'Projects', desc: 'Organise regulatory items into workstreams and track progress against compliance objectives' },
-  { key: 'lens', label: 'Lens', desc: 'AI-powered analysis that surfaces the regulatory changes most relevant to your business' },
-  { key: 'competitors', label: 'Competitors', desc: 'See how peer organisations are responding to the same regulatory developments' },
-  { key: 'blocklists', label: 'Blocklists', desc: 'Filter out noise by blocking jurisdictions, topics, or sources you don\u2019t need to track' },
+  { key: 'projects', label: 'Projects™', desc: 'Organise regulatory items into workstreams and track progress against compliance objectives' },
+  { key: 'lens', label: 'Lens™', desc: 'Drill down into the technical standards and trends impacting your business' },
+  { key: 'competitors', label: 'Competitors™', desc: 'Track competitor licences and emerging trends across jurisdictions' },
+  { key: 'blocklists', label: 'Blocklists™', desc: 'Monitor blocked URLs across jurisdictions to stay ahead of enforcement actions' },
 ];
 
 const DETAIL_LABELS = [
@@ -357,7 +357,7 @@ export default function OffboardingPage() {
           {/* Header */}
           <div className="text-center mb-10 pt-12">
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-3">
-              Trial Completion Survey
+              XHS Trial Completion Survey
             </h1>
             <p className="text-base text-gray-400">
               Help us understand your experience — your feedback shapes what we build next

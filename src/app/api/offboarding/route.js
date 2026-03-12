@@ -327,7 +327,7 @@ Submitted: ${new Date().toISOString()}
         body: JSON.stringify({
           from: 'Pimlico XHS Feedback <onboarding@resend.dev>',
           to: [toEmail],
-          subject: `Trial Survey — ${name} ${company ? `(${company})` : ''} — ${avgRating}/5 avg`.trim(),
+          subject: `XHS Trial Survey — ${name} ${company ? `(${company})` : ''} — ${avgRating}/5 avg`.trim(),
           html: htmlReport,
           text: plainReport,
         }),
