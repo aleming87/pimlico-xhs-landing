@@ -3,41 +3,33 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const PLATFORM_FEATURES = [
-  'Regulatory Intelligence Feed',
-  'Jurisdiction Tracker',
-  'AI-Powered Summaries',
-  'Cross-Border Comparison',
-  'Compliance Calendar / Deadlines',
-  'Alerts & Notifications',
-  'Document Library',
-  'Team Collaboration / Workspace',
-  'Reporting / Dashboards',
-  'API / Integrations',
+// Features to rate — each with a label and description
+const FEATURE_RATINGS = [
+  { key: 'regulatoryMonitoring', label: 'Regulatory Monitoring', desc: 'Tracking regulatory developments across jurisdictions' },
+  { key: 'feed', label: 'Regulatory Feed', desc: 'The main feed of regulatory updates and intelligence' },
+  { key: 'updateFrequency', label: 'Frequency of Updates', desc: 'How often new regulatory content is published' },
+  { key: 'updateDetail', label: 'Detail of Updates', desc: 'Depth and quality of regulatory analysis provided' },
+  { key: 'integrations', label: 'Integrations', desc: 'Connections with your existing tools and workflows' },
+  { key: 'easeOfUse', label: 'Ease of Use', desc: 'Overall simplicity and intuitiveness of the platform' },
+  { key: 'navigation', label: 'Ease of Navigation', desc: 'Finding what you need quickly and efficiently' },
+  { key: 'statusSystem', label: 'Status System', desc: 'Tracking regulatory lifecycle stages and progress' },
+  { key: 'filters', label: 'Filters & Search', desc: 'Ability to narrow down content by jurisdiction, topic, etc.' },
+  { key: 'alerts', label: 'Alerts & Notifications', desc: 'Staying informed about relevant regulatory changes' },
+  { key: 'crossBorder', label: 'Cross-Border Comparison', desc: 'Comparing regulatory approaches across jurisdictions' },
+  { key: 'reporting', label: 'Reporting & Dashboards', desc: 'Visualising compliance status and regulatory landscape' },
 ];
 
-const LEAVING_REASONS = [
-  'Too expensive / budget constraints',
-  'Missing features I need',
-  'Data quality or coverage issues',
-  'Difficult to use / poor UX',
-  'Not enough time to evaluate properly',
-  'Chose a competitor product',
-  'No longer need this type of solution',
-  'Internal priorities changed',
-  'Poor onboarding / support experience',
-  'Other',
-];
-
-const COMPETITOR_OPTIONS = [
-  'LexisNexis',
-  'Thomson Reuters',
-  'Vixio',
-  'Regology',
-  'Qube',
-  'Built in-house',
-  'None — going without',
-  'Other',
+const IMPROVEMENT_AREAS = [
+  'More jurisdictions covered',
+  'More granular topic filtering',
+  'Better AI-powered summaries',
+  'Faster update turnaround',
+  'More integration options',
+  'Better team collaboration features',
+  'Improved mobile experience',
+  'More customisable alerts',
+  'API access / developer tools',
+  'Compliance calendar improvements',
 ];
 
 export default function OffboardingPage() {
@@ -49,67 +41,61 @@ export default function OffboardingPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [role, setRole] = useState('');
   const [trialDuration, setTrialDuration] = useState('');
 
-  // Step 2 — Overall + reason
-  const [overallRating, setOverallRating] = useState(0);
-  const [primaryReason, setPrimaryReason] = useState('');
-  const [reasonDetail, setReasonDetail] = useState('');
+  // Step 2 — Feature ratings
+  const [ratings, setRatings] = useState({});
 
-  // Step 3 — Features
-  const [featuresUsed, setFeaturesUsed] = useState([]);
-  const [featureRatings, setFeatureRatings] = useState({});
-  const [mostValuable, setMostValuable] = useState('');
-  const [leastValuable, setLeastValuable] = useState('');
+  // Step 3 — Improvements & missing
+  const [selectedImprovements, setSelectedImprovements] = useState([]);
   const [missingFeatures, setMissingFeatures] = useState('');
+  const [mostValuable, setMostValuable] = useState('');
 
-  // Step 4 — Data & UX
-  const [dataQuality, setDataQuality] = useState(0);
-  const [coverageGaps, setCoverageGaps] = useState('');
-  const [easeOfUse, setEaseOfUse] = useState(0);
-  const [uiImprovements, setUiImprovements] = useState('');
-
-  // Step 5 — Future intent
+  // Step 4 — Overall + future
+  const [overallRating, setOverallRating] = useState(0);
   const [wouldRecommend, setWouldRecommend] = useState('');
-  const [switchingTo, setSwitchingTo] = useState('');
-  const [switchingReason, setSwitchingReason] = useState('');
-  const [comeback, setComeback] = useState('');
-  const [comebackConditions, setComebackConditions] = useState('');
+  const [meetExpectations, setMeetExpectations] = useState('');
   const [additionalFeedback, setAdditionalFeedback] = useState('');
 
-  const TOTAL_STEPS = 5;
+  const TOTAL_STEPS = 4;
 
-  const toggleFeature = (f) => {
-    setFeaturesUsed(prev =>
-      prev.includes(f) ? prev.filter(x => x !== f) : [...prev, f]
-    );
+  const setFeatureRating = (key, value) => {
+    setRatings(prev => ({ ...prev, [key]: value }));
   };
 
-  const setFeatureRating = (feature, rating) => {
-    setFeatureRatings(prev => ({ ...prev, [feature]: rating }));
+  const toggleImprovement = (item) => {
+    setSelectedImprovements(prev =>
+      prev.includes(item) ? prev.filter(x => x !== item) : [...prev, item]
+    );
   };
 
   const canProceed = () => {
     if (step === 1) return name.trim() && email.trim();
-    if (step === 2) return overallRating > 0 && primaryReason;
     return true;
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      // Map ratings keys back to labels for the email
+      const featureRatings = {};
+      FEATURE_RATINGS.forEach(f => {
+        if (ratings[f.key]) featureRatings[f.label] = ratings[f.key];
+      });
+
       const res = await fetch('/api/offboarding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name, email, company, trialDuration,
-          overallRating, primaryReason, reasonDetail,
-          featuresUsed, featureRatings,
-          mostValuable, leastValuable, missingFeatures,
-          dataQuality, coverageGaps,
-          easeOfUse, uiImprovements,
-          wouldRecommend, switchingTo, switchingReason,
-          comeback, comebackConditions,
+          name, email, company, role, trialDuration,
+          featureRatings,
+          selectedImprovements,
+          missingFeatures,
+          mostValuable,
+          overallRating,
+          wouldRecommend,
+          meetExpectations,
           additionalFeedback,
         }),
       });
@@ -124,23 +110,20 @@ export default function OffboardingPage() {
   };
 
   // Star rating component
-  const StarRating = ({ value, onChange, label }) => (
-    <div>
-      {label && <p className="text-sm text-gray-400 mb-2">{label}</p>}
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map(n => (
-          <button
-            key={n}
-            type="button"
-            onClick={() => onChange(n)}
-            className={`text-2xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
-              n <= value ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400'
-            }`}
-          >
-            ★
-          </button>
-        ))}
-      </div>
+  const StarRating = ({ value, onChange, size = 'text-2xl' }) => (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map(n => (
+        <button
+          key={n}
+          type="button"
+          onClick={() => onChange(n)}
+          className={`${size} transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+            n <= value ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400'
+          }`}
+        >
+          ★
+        </button>
+      ))}
     </div>
   );
 
@@ -164,10 +147,7 @@ export default function OffboardingPage() {
             </div>
             <h1 className="text-3xl font-bold text-white mb-4">Thank you for your feedback</h1>
             <p className="text-gray-400 text-lg mb-8">
-              Your insights are invaluable to us. We take every piece of feedback seriously and use it to improve Pimlico XHS™ for everyone.
-            </p>
-            <p className="text-gray-500 text-sm mb-8">
-              If you change your mind, you&apos;re always welcome back. Your data will be retained for 30 days.
+              Your insights help us make Pimlico XHS™ better for everyone. We genuinely appreciate you taking the time.
             </p>
             <a
               href="/"
@@ -198,10 +178,10 @@ export default function OffboardingPage() {
           {/* Header */}
           <div className="text-center mb-10 pt-12">
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-3">
-              We&apos;re sorry to see you go
+              Trial Completion Survey
             </h1>
             <p className="text-base text-gray-400">
-              Help us understand your experience so we can do better
+              Help us understand how we did — rate the features you experienced
             </p>
           </div>
 
@@ -221,9 +201,9 @@ export default function OffboardingPage() {
 
           {/* Step 1 — Your details */}
           {step === 1 && (
-            <div className="space-y-6 animate-in fade-in">
+            <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Your details</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">About you</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-1">Name <span className="text-red-400">*</span></label>
@@ -250,9 +230,17 @@ export default function OffboardingPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">How long was your trial?</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Role</label>
+                    <input
+                      type="text" value={role} onChange={e => setRole(e.target.value)}
+                      placeholder="e.g. Compliance Officer, Head of Legal..."
+                      className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">How long did you trial the platform?</label>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      {['Less than 1 week', '1-2 weeks', '2-4 weeks', 'Over 1 month'].map(opt => (
+                      {['Less than 1 week', '1–2 weeks', '2–4 weeks', 'Over 1 month'].map(opt => (
                         <button
                           key={opt} type="button"
                           onClick={() => setTrialDuration(opt)}
@@ -272,127 +260,93 @@ export default function OffboardingPage() {
             </div>
           )}
 
-          {/* Step 2 — Overall experience + reason */}
+          {/* Step 2 — Feature ratings */}
           {step === 2 && (
-            <div className="space-y-6 animate-in fade-in">
+            <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Overall experience</h2>
+                <h2 className="text-xl font-semibold text-white mb-1">Rate our features</h2>
+                <p className="text-sm text-gray-400 mb-6">How would you rate each feature you experienced? Skip any you didn&apos;t use.</p>
 
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    How would you rate your overall experience? <span className="text-red-400">*</span>
-                  </label>
-                  <StarRating value={overallRating} onChange={setOverallRating} />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    What is the main reason you&apos;re leaving? <span className="text-red-400">*</span>
-                  </label>
-                  <div className="space-y-2">
-                    {LEAVING_REASONS.map(reason => (
-                      <button
-                        key={reason}
-                        type="button"
-                        onClick={() => setPrimaryReason(reason)}
-                        className={`w-full text-left py-3 px-4 rounded-lg text-sm font-medium transition-all ${
-                          primaryReason === reason
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                        }`}
-                      >
-                        {reason}
-                      </button>
-                    ))}
-                  </div>
-                  {primaryReason && (
-                    <div className="mt-4">
-                      <label className="block text-sm text-gray-400 mb-1">Tell us more (optional)</label>
-                      <textarea
-                        value={reasonDetail}
-                        onChange={e => setReasonDetail(e.target.value)}
-                        rows={3}
-                        placeholder="Any additional detail..."
-                        className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
-                      />
+                <div className="space-y-1">
+                  {FEATURE_RATINGS.map((feature, i) => (
+                    <div
+                      key={feature.key}
+                      className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 px-4 py-3 rounded-lg ${
+                        i % 2 === 0 ? 'bg-white/[0.03]' : ''
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-white">{feature.label}</p>
+                        <p className="text-xs text-gray-500">{feature.desc}</p>
+                      </div>
+                      <div className="flex gap-0.5 flex-shrink-0">
+                        {[1, 2, 3, 4, 5].map(n => (
+                          <button
+                            key={n} type="button"
+                            onClick={() => setFeatureRating(feature.key, n)}
+                            className={`text-lg min-w-[36px] min-h-[36px] flex items-center justify-center transition-colors ${
+                              n <= (ratings[feature.key] || 0) ? 'text-yellow-400' : 'text-gray-700 hover:text-gray-500'
+                            }`}
+                          >
+                            ★
+                          </button>
+                        ))}
+                        {ratings[feature.key] && (
+                          <button
+                            type="button"
+                            onClick={() => setFeatureRating(feature.key, 0)}
+                            className="text-xs text-gray-600 hover:text-gray-400 ml-1 min-w-[28px]"
+                            title="Clear"
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  )}
+                  ))}
                 </div>
               </div>
             </div>
           )}
 
-          {/* Step 3 — Feature feedback */}
+          {/* Step 3 — Improvements & most valuable */}
           {step === 3 && (
-            <div className="space-y-6 animate-in fade-in">
+            <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Feature feedback</h2>
+                <h2 className="text-xl font-semibold text-white mb-1">Improvements</h2>
+                <p className="text-sm text-gray-400 mb-5">What would make the platform more valuable to you?</p>
 
                 <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Which features did you use?</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Areas for improvement</label>
                   <p className="text-xs text-gray-500 mb-3">Select all that apply</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {PLATFORM_FEATURES.map(f => (
+                    {IMPROVEMENT_AREAS.map(item => (
                       <button
-                        key={f} type="button"
-                        onClick={() => toggleFeature(f)}
+                        key={item} type="button"
+                        onClick={() => toggleImprovement(item)}
                         className={`py-2.5 px-4 rounded-lg text-sm font-medium text-left transition-all ${
-                          featuresUsed.includes(f)
+                          selectedImprovements.includes(item)
                             ? 'bg-blue-600 text-white'
                             : 'bg-white/10 text-gray-300 hover:bg-white/20'
                         }`}
                       >
-                        {f}
+                        {item}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {featuresUsed.length > 0 && (
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-300 mb-3">Rate the features you used</label>
-                    <div className="space-y-3">
-                      {featuresUsed.map(f => (
-                        <div key={f} className="flex items-center justify-between gap-3 bg-white/5 rounded-lg px-4 py-2">
-                          <span className="text-sm text-gray-300 truncate">{f}</span>
-                          <div className="flex gap-0.5 flex-shrink-0">
-                            {[1, 2, 3, 4, 5].map(n => (
-                              <button
-                                key={n} type="button"
-                                onClick={() => setFeatureRating(f, n)}
-                                className={`text-lg min-w-[32px] min-h-[32px] flex items-center justify-center ${
-                                  n <= (featureRatings[f] || 0) ? 'text-yellow-400' : 'text-gray-600'
-                                }`}
-                              >
-                                ★
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">What was the most valuable feature?</label>
+                    <label className="block text-sm text-gray-400 mb-1">Which feature did you find most valuable?</label>
                     <input
                       type="text" value={mostValuable} onChange={e => setMostValuable(e.target.value)}
-                      placeholder="The feature you found most useful..."
+                      placeholder="The feature that stood out most..."
                       className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">What was the least valuable feature?</label>
-                    <input
-                      type="text" value={leastValuable} onChange={e => setLeastValuable(e.target.value)}
-                      placeholder="The feature you found least useful..."
-                      className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-1">What features were missing?</label>
+                    <label className="block text-sm text-gray-400 mb-1">Any features you felt were missing?</label>
                     <textarea
                       value={missingFeatures} onChange={e => setMissingFeatures(e.target.value)}
                       rows={3}
@@ -405,48 +359,37 @@ export default function OffboardingPage() {
             </div>
           )}
 
-          {/* Step 4 — Data quality & UX */}
+          {/* Step 4 — Overall experience */}
           {step === 4 && (
-            <div className="space-y-6 animate-in fade-in">
+            <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Data & usability</h2>
+                <h2 className="text-xl font-semibold text-white mb-4">Overall experience</h2>
 
                 <div className="mb-6">
-                  <StarRating value={dataQuality} onChange={setDataQuality} label="How would you rate the quality of our regulatory data?" />
-                </div>
-
-                <div className="mb-6">
-                  <label className="block text-sm text-gray-400 mb-1">Were there any coverage gaps? (jurisdictions, topics, etc.)</label>
-                  <textarea
-                    value={coverageGaps} onChange={e => setCoverageGaps(e.target.value)}
-                    rows={3}
-                    placeholder="E.g. Missing coverage for a specific jurisdiction or topic area..."
-                    className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
-                  />
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    How would you rate your overall experience?
+                  </label>
+                  <StarRating value={overallRating} onChange={setOverallRating} />
                 </div>
 
                 <div className="mb-6">
-                  <StarRating value={easeOfUse} onChange={setEaseOfUse} label="How easy was the platform to use?" />
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Did the platform meet your expectations?</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['Exceeded expectations', 'Met expectations', 'Below expectations'].map(opt => (
+                      <button
+                        key={opt} type="button"
+                        onClick={() => setMeetExpectations(opt)}
+                        className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
+                          meetExpectations === opt
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Any suggestions for improving the interface?</label>
-                  <textarea
-                    value={uiImprovements} onChange={e => setUiImprovements(e.target.value)}
-                    rows={3}
-                    placeholder="What would have made the platform easier or more intuitive..."
-                    className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Step 5 — Future intent */}
-          {step === 5 && (
-            <div className="space-y-6 animate-in fade-in">
-              <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Looking ahead</h2>
 
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-300 mb-2">Would you recommend Pimlico XHS™ to a colleague?</label>
@@ -467,70 +410,12 @@ export default function OffboardingPage() {
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Are you switching to another solution?</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                    {COMPETITOR_OPTIONS.map(opt => (
-                      <button
-                        key={opt} type="button"
-                        onClick={() => setSwitchingTo(switchingTo === opt ? '' : opt)}
-                        className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all text-left ${
-                          switchingTo === opt
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                  {switchingTo && switchingTo !== 'None — going without' && (
-                    <div className="mt-3">
-                      <label className="block text-sm text-gray-400 mb-1">What made you choose them?</label>
-                      <input
-                        type="text" value={switchingReason} onChange={e => setSwitchingReason(e.target.value)}
-                        placeholder="e.g. Better pricing, specific feature, existing relationship..."
-                        className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Would you consider coming back in the future?</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {['Yes', 'Maybe', 'No'].map(opt => (
-                      <button
-                        key={opt} type="button"
-                        onClick={() => setComeback(opt)}
-                        className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
-                          comeback === opt
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                  {(comeback === 'Yes' || comeback === 'Maybe') && (
-                    <div className="mt-3">
-                      <label className="block text-sm text-gray-400 mb-1">What would bring you back?</label>
-                      <input
-                        type="text" value={comebackConditions} onChange={e => setComebackConditions(e.target.value)}
-                        placeholder="e.g. Lower pricing, specific feature, broader coverage..."
-                        className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                  )}
-                </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Anything else you&apos;d like to share?</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Any other feedback?</label>
                   <textarea
                     value={additionalFeedback} onChange={e => setAdditionalFeedback(e.target.value)}
                     rows={4}
-                    placeholder="Any additional thoughts, suggestions, or feedback..."
+                    placeholder="Anything else you'd like us to know..."
                     className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
                   />
                 </div>
@@ -588,7 +473,7 @@ export default function OffboardingPage() {
           {/* Skip link */}
           <div className="text-center mt-6">
             <a href="/" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
-              Skip survey and return to site
+              Skip and return to site
             </a>
           </div>
         </div>
