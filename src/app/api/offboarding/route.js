@@ -15,19 +15,18 @@ export async function POST(request) {
       company = 'N/A',
       role = 'N/A',
       trialDuration = 'N/A',
-      featureRatings = {},
-      selectedImprovements = [],
-      missingFeatures = '',
-      mostValuable = '',
-      overallRating = 0,
+      sections = {},
       upcomingFeatureInterest = {},
       keepInTouch = 'N/A',
+      overallRating = 0,
       wouldRecommend = 'N/A',
       meetExpectations = 'N/A',
+      mostValuable = '',
+      missingFeatures = '',
       additionalFeedback = '',
     } = data;
 
-    // Helper: render stars as text
+    /* ── Helpers ── */
     const starsText = (n) => '★'.repeat(n || 0) + '☆'.repeat(5 - (n || 0));
     const starsHtml = (n) => {
       const filled = '★'.repeat(n || 0);
@@ -35,23 +34,61 @@ export async function POST(request) {
       return `<span style="color:#facc15">${filled}</span><span style="color:#4b5563">${empty}</span>`;
     };
 
-    // Calculate average feature rating
-    const ratedFeatures = Object.values(featureRatings).filter(v => v > 0);
-    const avgRating = ratedFeatures.length > 0
-      ? (ratedFeatures.reduce((a, b) => a + b, 0) / ratedFeatures.length).toFixed(1)
-      : 'N/A';
+    const detailLabel = (n) => {
+      const labels = { 1: 'Far too little', 2: 'A bit too little', 3: 'Just right', 4: 'A bit too much', 5: 'Far too much' };
+      return labels[n] || 'Not rated';
+    };
 
-    // Interest level labels
+    const detailColor = (n) => {
+      if (n === 3) return '#22c55e';
+      if (n === 2 || n === 4) return '#eab308';
+      if (n === 1 || n === 5) return '#ef4444';
+      return '#6b7280';
+    };
+
     const interestLabel = (n) => (['', 'Not interested', 'Slightly interested', 'Moderately interested', 'Very interested', 'Must-have'])[n] || 'N/A';
 
-    // Build plain text report
+    /* ── Section stats ── */
+    const sectionMeta = [
+      { key: 'ui', label: 'User Interface & Experience', icon: '🖥️' },
+      { key: 'regulatory', label: 'Regulatory Monitoring', icon: '📡', hasDetail: true },
+      { key: 'countryReports', label: 'Country Reports', icon: '🌍', hasDetail: true },
+      { key: 'integrations', label: 'Integrations', icon: '🔗' },
+    ];
+
+    // Collect all ratings for an overall average
+    const allRatings = [];
+    sectionMeta.forEach(({ key }) => {
+      const sec = sections[key];
+      if (sec?.ratings) Object.values(sec.ratings).forEach(v => { if (v > 0) allRatings.push(v); });
+    });
+    const avgRating = allRatings.length > 0
+      ? (allRatings.reduce((a, b) => a + b, 0) / allRatings.length).toFixed(1)
+      : 'N/A';
+
+    /* ── Plain text report ── */
+    const sectionPlain = sectionMeta.map(({ key, label, icon, hasDetail }) => {
+      const sec = sections[key] || {};
+      const ratings = sec.ratings || {};
+      const ratingLines = Object.entries(ratings).map(([k, v]) => `  ${k}: ${starsText(v)} (${v}/5)`).join('\n');
+      return `
+${icon} ${label.toUpperCase()}
+${'─'.repeat(50)}
+Used: ${sec.used || 'Not answered'}
+${ratingLines || '  No ratings provided'}${hasDetail && sec.detailLevel ? `\n  Level of Detail: ${detailLabel(sec.detailLevel)}` : ''}
+${sec.feedback ? `  Improvement feedback: ${sec.feedback}` : '  No improvement feedback'}`;
+    }).join('\n');
+
+    const upcomingPlain = Object.entries(upcomingFeatureInterest).map(([label, val]) =>
+      `  ${label}: ${interestLabel(val)} (${val}/5)`
+    ).join('\n') || '  No upcoming features rated';
+
     const plainReport = `
 ====================================================
 TRIAL COMPLETION SURVEY
 ====================================================
 
 👤 USER INFORMATION
-
 Name: ${name}
 Email: ${email}
 Company: ${company}
@@ -59,39 +96,23 @@ Role: ${role}
 Trial Duration: ${trialDuration}
 
 ====================================================
-⭐ FEATURE RATINGS (Average: ${avgRating}/5)
-====================================================
-
-${Object.entries(featureRatings).map(([label, val]) =>
-  `${label}: ${starsText(val)} (${val}/5)`
-).join('\n') || 'No features rated'}
-
-====================================================
-🔧 IMPROVEMENTS REQUESTED
-====================================================
-
-${selectedImprovements.length > 0 ? selectedImprovements.map(i => `• ${i}`).join('\n') : 'None selected'}
-
-Most Valuable Feature: ${mostValuable || 'Not specified'}
-Missing Features: ${missingFeatures || 'None mentioned'}
+FEATURE RATINGS BY SECTION (Average: ${avgRating}/5)
+====================================================${sectionPlain}
 
 ====================================================
 🚀 UPCOMING FEATURES INTEREST
 ====================================================
-
-${Object.entries(upcomingFeatureInterest).map(([label, val]) =>
-  `${label}: ${interestLabel(val)} (${val}/5)`
-).join('\n') || 'No upcoming features rated'}
-
+${upcomingPlain}
 Keep in Touch: ${keepInTouch}
 
 ====================================================
 📊 OVERALL EXPERIENCE
 ====================================================
-
 Overall Rating: ${starsText(overallRating)} (${overallRating}/5)
 Met Expectations: ${meetExpectations}
 Would Recommend: ${wouldRecommend}
+Most Valuable Feature: ${mostValuable || 'Not specified'}
+Missing Features: ${missingFeatures || 'None mentioned'}
 
 Additional Feedback:
 ${additionalFeedback || 'None provided'}
@@ -101,7 +122,53 @@ Submitted: ${new Date().toISOString()}
 ====================================================
 `.trim();
 
-    // Build HTML email
+    /* ── HTML section builder ── */
+    const buildSectionHtml = ({ key, label, icon, hasDetail }) => {
+      const sec = sections[key] || {};
+      const ratings = sec.ratings || {};
+      const ratingEntries = Object.entries(ratings);
+      const usedBadge = sec.used === 'Yes'
+        ? '<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:rgba(34,197,94,0.2);color:#86efac;">Used</span>'
+        : sec.used === 'No'
+        ? '<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:rgba(239,68,68,0.15);color:#fca5a5;">Not used</span>'
+        : '<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:rgba(107,114,128,0.2);color:#9ca3af;">Not answered</span>';
+
+      const sectionAvg = ratingEntries.length > 0
+        ? (ratingEntries.reduce((a, [, v]) => a + v, 0) / ratingEntries.length).toFixed(1)
+        : null;
+
+      return `
+    <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <h3 style="color:#ffffff;font-size:15px;margin:0;">${icon} ${label}</h3>
+        ${usedBadge}
+      </div>
+
+      ${ratingEntries.length > 0 ? `
+      ${sectionAvg ? `<p style="color:#9ca3af;font-size:12px;margin:0 0 12px 0;">Section average: <strong style="color:#facc15;">${sectionAvg}/5</strong></p>` : ''}
+      <table style="width:100%;border-collapse:collapse;">
+        ${ratingEntries.map(([k, v], i) => `
+        <tr style="background-color:${i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent'};">
+          <td style="color:#e5e7eb;padding:8px 12px;font-size:13px;">${k}</td>
+          <td style="padding:8px 12px;font-size:15px;text-align:right;white-space:nowrap;">${starsHtml(v)} <span style="color:#9ca3af;font-size:11px;margin-left:4px;">${v}/5</span></td>
+        </tr>`).join('')}
+      </table>` : '<p style="color:#6b7280;font-size:13px;margin:0;">No ratings provided</p>'}
+
+      ${hasDetail && sec.detailLevel ? `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 4px 0;">Level of Detail:</p>
+        <span style="display:inline-block;padding:3px 12px;border-radius:12px;font-size:13px;font-weight:600;color:${detailColor(sec.detailLevel)};">${detailLabel(sec.detailLevel)}</span>
+      </div>` : ''}
+
+      ${sec.feedback ? `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 4px 0;">💬 Improvement feedback:</p>
+        <p style="color:#ffffff;font-size:13px;margin:0;line-height:1.5;">${sec.feedback}</p>
+      </div>` : ''}
+    </div>`;
+    };
+
+    /* ── Full HTML email ── */
     const htmlReport = `
 <!DOCTYPE html>
 <html>
@@ -111,14 +178,15 @@ Submitted: ${new Date().toISOString()}
 </head>
 <body style="margin:0;padding:0;background-color:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:640px;margin:0 auto;padding:32px 20px;">
-    
+
     <!-- Header -->
     <div style="text-align:center;margin-bottom:32px;">
       <h1 style="color:#ffffff;font-size:24px;margin:0 0 8px 0;">Trial Completion Survey</h1>
       <p style="color:#9ca3af;font-size:14px;margin:0;">Submitted ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+      <p style="color:#60a5fa;font-size:13px;margin:8px 0 0 0;">Average feature rating: <strong style="color:#facc15;">${avgRating}/5</strong> across ${allRatings.length} ratings</p>
     </div>
 
-    <!-- User Info Card -->
+    <!-- User Info -->
     <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
       <h2 style="color:#ffffff;font-size:16px;margin:0 0 16px 0;">👤 User Information</h2>
       <table style="width:100%;border-collapse:collapse;">
@@ -130,60 +198,26 @@ Submitted: ${new Date().toISOString()}
       </table>
     </div>
 
-    <!-- Feature Ratings Card -->
-    <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
-      <h2 style="color:#ffffff;font-size:16px;margin:0 0 4px 0;">⭐ Feature Ratings</h2>
-      <p style="color:#9ca3af;font-size:13px;margin:0 0 16px 0;">Average: <strong style="color:#facc15;">${avgRating}/5</strong> &nbsp;|&nbsp; ${ratedFeatures.length} features rated</p>
-      
-      <table style="width:100%;border-collapse:collapse;">
-        ${Object.entries(featureRatings).map(([label, val], i) => `
-        <tr style="background-color:${i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent'};">
-          <td style="color:#e5e7eb;padding:10px 12px;font-size:14px;border-radius:6px 0 0 6px;">${label}</td>
-          <td style="color:#ffffff;padding:10px 12px;font-size:16px;text-align:right;white-space:nowrap;border-radius:0 6px 6px 0;">${starsHtml(val)} <span style="color:#9ca3af;font-size:12px;margin-left:4px;">${val}/5</span></td>
-        </tr>`).join('') || '<tr><td style="color:#6b7280;padding:10px 12px;font-size:14px;">No features were rated</td></tr>'}
-      </table>
+    <!-- Section Ratings -->
+    <div style="margin-bottom:4px;">
+      <h2 style="color:#ffffff;font-size:16px;margin:0 0 16px 0;">⭐ Feature Ratings by Section</h2>
     </div>
 
-    <!-- Improvements Card -->
-    <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
-      <h2 style="color:#ffffff;font-size:16px;margin:0 0 16px 0;">🔧 Feedback & Improvements</h2>
-      
-      ${selectedImprovements.length > 0 ? `
-      <div style="margin-bottom:16px;">
-        <p style="color:#9ca3af;font-size:13px;margin:0 0 8px 0;">Areas for improvement:</p>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${selectedImprovements.map(item => `<span style="display:inline-block;background-color:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;padding:4px 12px;border-radius:20px;font-size:13px;">${item}</span>`).join('')}
-        </div>
-      </div>` : ''}
+    ${sectionMeta.map(s => buildSectionHtml(s)).join('')}
 
-      ${mostValuable ? `
-      <div style="margin-bottom:12px;">
-        <p style="color:#9ca3af;font-size:13px;margin:0 0 4px 0;">Most valuable feature:</p>
-        <p style="color:#ffffff;font-size:14px;margin:0;">${mostValuable}</p>
-      </div>` : ''}
-
-      ${missingFeatures ? `
-      <div>
-        <p style="color:#9ca3af;font-size:13px;margin:0 0 4px 0;">Missing features:</p>
-        <p style="color:#ffffff;font-size:14px;margin:0;">${missingFeatures}</p>
-      </div>` : ''}
-
-      ${!selectedImprovements.length && !mostValuable && !missingFeatures ? '<p style="color:#6b7280;font-size:14px;margin:0;">No improvement feedback provided</p>' : ''}
-    </div>
-
-    <!-- Upcoming Features Card -->
+    <!-- Upcoming Features -->
     <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
       <div style="margin-bottom:16px;">
         <h2 style="color:#ffffff;font-size:16px;margin:0 0 4px 0;display:inline;">🚀 Upcoming Features Interest</h2>
         <span style="display:inline-block;margin-left:8px;padding:2px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;background-color:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.3);color:#d8b4fe;border-radius:12px;vertical-align:middle;">Preview</span>
       </div>
-      
+
       <table style="width:100%;border-collapse:collapse;">
         ${Object.entries(upcomingFeatureInterest).map(([label, val], i) => {
           const barColor = val >= 4 ? '#a855f7' : val >= 3 ? '#7c3aed' : '#6b7280';
           return `
         <tr style="background-color:${i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent'};">
-          <td style="color:#e5e7eb;padding:10px 12px;font-size:14px;border-radius:6px 0 0 6px;width:140px;">${label}</td>
+          <td style="color:#e5e7eb;padding:10px 12px;font-size:14px;width:140px;">${label}</td>
           <td style="padding:10px 12px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <div style="flex:1;background-color:rgba(255,255,255,0.1);border-radius:4px;height:8px;">
@@ -208,10 +242,10 @@ Submitted: ${new Date().toISOString()}
       </div>
     </div>
 
-    <!-- Overall Card -->
+    <!-- Overall -->
     <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
       <h2 style="color:#ffffff;font-size:16px;margin:0 0 16px 0;">📊 Overall Experience</h2>
-      
+
       <table style="width:100%;border-collapse:collapse;">
         <tr>
           <td style="color:#9ca3af;padding:8px 0;font-size:14px;width:160px;">Overall Rating</td>
@@ -234,9 +268,21 @@ Submitted: ${new Date().toISOString()}
         </tr>
       </table>
 
+      ${mostValuable ? `
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 4px 0;">Most valuable feature:</p>
+        <p style="color:#ffffff;font-size:14px;margin:0;">${mostValuable}</p>
+      </div>` : ''}
+
+      ${missingFeatures ? `
+      <div style="margin-top:12px;">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 4px 0;">Missing features:</p>
+        <p style="color:#ffffff;font-size:14px;margin:0;">${missingFeatures}</p>
+      </div>` : ''}
+
       ${additionalFeedback ? `
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);">
-        <p style="color:#9ca3af;font-size:13px;margin:0 0 6px 0;">Additional feedback:</p>
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 6px 0;">Additional feedback:</p>
         <p style="color:#ffffff;font-size:14px;margin:0;line-height:1.6;">${additionalFeedback}</p>
       </div>` : ''}
     </div>
@@ -249,10 +295,9 @@ Submitted: ${new Date().toISOString()}
 </body>
 </html>`.trim();
 
-    // Attempt to send via Resend
+    /* ── Send via Resend ── */
     if (process.env.RESEND_API_KEY) {
       const toEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
-
       console.log(`📤 Sending trial survey email to: ${toEmail}`);
 
       const resendRes = await fetch('https://api.resend.com/emails', {
@@ -264,7 +309,7 @@ Submitted: ${new Date().toISOString()}
         body: JSON.stringify({
           from: 'Pimlico XHS Feedback <onboarding@resend.dev>',
           to: [toEmail],
-          subject: `Trial Completion Survey — ${name} ${company ? `(${company})` : ''}`.trim(),
+          subject: `Trial Survey — ${name} ${company ? `(${company})` : ''} — ${avgRating}/5 avg`.trim(),
           html: htmlReport,
           text: plainReport,
         }),
@@ -275,32 +320,19 @@ Submitted: ${new Date().toISOString()}
 
       if (!resendRes.ok) {
         console.error('❌ Resend error:', resendData);
-        return NextResponse.json(
-          { success: false, error: 'Failed to send email', details: resendData },
-          { status: 500 }
-        );
+        return NextResponse.json({ success: false, error: 'Failed to send email', details: resendData }, { status: 500 });
       }
 
-      return NextResponse.json({
-        success: true,
-        message: 'Trial completion survey submitted and emailed',
-        emailId: resendData.id,
-      });
+      return NextResponse.json({ success: true, message: 'Trial completion survey submitted and emailed', emailId: resendData.id });
     }
 
-    // Fallback: no Resend key — just log
+    // Fallback
     console.log('⚠️ No RESEND_API_KEY — logging survey only');
     console.log(plainReport);
+    return NextResponse.json({ success: true, message: 'Survey received (email not configured)' });
 
-    return NextResponse.json({
-      success: true,
-      message: 'Survey received (email not configured)',
-    });
   } catch (error) {
     console.error('❌ Trial survey error:', error);
-    return NextResponse.json(
-      { success: false, error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
