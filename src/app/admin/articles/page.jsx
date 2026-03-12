@@ -66,12 +66,23 @@ function ArticleEditor({ article, onSave, onCancel }) {
   const handleImageUpload = async (e, type) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Client-side size check
+    if (file.size > 4 * 1024 * 1024) {
+      alert('Image too large (max 4MB). Please compress or resize it first.');
+      return;
+    }
     setUploading(true);
     setUploadType(type);
     try {
       const fd = new FormData();
       fd.append('file', file);
       const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      // Handle non-JSON responses (e.g. Vercel edge errors)
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const text = await res.text();
+        throw new Error(text.slice(0, 200) || `Server returned ${res.status}`);
+      }
       const data = await res.json();
       if (data.url) {
         set(type, data.url);
