@@ -385,6 +385,7 @@ export default function DraftingPage() {
   };
 
   // Pick up a pending draft sent from the Ideas widget on the dashboard
+  // Uses the same markdown processing pipeline as the "Import .md" button
   const pendingDraftLoadedRef = useRef(false);
   useEffect(() => {
     if (pendingDraftLoadedRef.current) return;
@@ -399,30 +400,74 @@ export default function DraftingPage() {
       const pending = JSON.parse(raw);
       if (!pending?.title && !pending?.content) return;
 
-      // Build a payload compatible with applyDraftPayload
       const text = pending.content || '';
-      const detectedCategory = detectCategoryFromText([pending.title, pending.excerpt, text].join(' '));
-      const detectedTags = pending.tags?.length ? pending.tags : detectTagsFromText(text);
-      const detectedSeries = suggestSeriesKey(text);
+      const fileName = pending.fileName || `${slugifyText(pending.title || 'idea')}.md`;
 
-      applyDraftPayload({
-        title: pending.title || '',
-        slug: slugifyText(pending.title || ''),
-        excerpt: pending.excerpt || '',
-        category: detectedCategory,
-        seriesKey: detectedSeries,
-        tags: detectedTags,
-        content: text,
-        sourceText: text,
-        sourceFileName: pending.fileName || '',
-        officialSources: [],
-        engagements: {},
-      }, {
-        replaceMetadata: true,
-        replaceContent: true,
-        toast: `Loaded idea: "${pending.title}"`,
-      });
-    } catch {}
+      // Process exactly like handleFileUpload does — parse frontmatter first, then fall back
+      const parsed = parseFrontmatter(text);
+
+      if (parsed?.frontmatter) {
+        const fm = parsed.frontmatter;
+        const importedTitle = getFrontmatterValue(fm, 'title') || pending.title || '';
+        const importedExcerpt = getFrontmatterValue(fm, 'excerpt') || pending.excerpt || '';
+        const importedSeriesKey = resolveSeriesKey(
+          getFrontmatterValue(fm, 'series_key'),
+          getFrontmatterValue(fm, 'series'),
+          DEFAULT_SERIES_KEY,
+        );
+        const importedOfficialSourcesValue = getFrontmatterValue(fm, 'official_sources', 'officialSources');
+        const importedOfficialSources = Array.isArray(importedOfficialSourcesValue)
+          ? uniqueStrings(importedOfficialSourcesValue)
+          : parseListValue(importedOfficialSourcesValue);
+        const importedBody = normaliseImportedBody({
+          body: parsed.body.trim(),
+          title: importedTitle,
+          excerpt: importedExcerpt,
+        });
+        const detectedTags = Array.isArray(getFrontmatterValue(fm, 'tags'))
+          ? uniqueStrings(getFrontmatterValue(fm, 'tags'))
+          : (pending.tags?.length ? pending.tags : parseListValue(getFrontmatterValue(fm, 'tags')));
+
+        applyDraftPayload({
+          title: importedTitle,
+          slug: getFrontmatterValue(fm, 'slug') || (importedTitle ? slugifyText(importedTitle) : ''),
+          excerpt: importedExcerpt,
+          category: normaliseCategory(getFrontmatterValue(fm, 'category') || detectCategoryFromText(text)),
+          seriesKey: importedSeriesKey,
+          publicationDate: getFrontmatterValue(fm, 'publication_date', 'publicationDate', 'date') || publicationDate,
+          readTime: getFrontmatterValue(fm, 'read_time', 'readTime') || (DRAFT_SERIES.find(s => s.key === importedSeriesKey)?.defaultReadTime || activeSeries.defaultReadTime),
+          premium: Array.isArray(getFrontmatterValue(fm, 'premium')) ? false : parseBooleanValue(getFrontmatterValue(fm, 'premium')),
+          tags: detectedTags,
+          officialSources: importedOfficialSources,
+          engagements: {
+            newsletterLine: getFrontmatterValue(fm, 'newsletter_line', 'newsletterLine') || '',
+            linkedinTeaser: getFrontmatterValue(fm, 'linkedin_teaser', 'linkedinTeaser') || '',
+            coverImagePrompt: getFrontmatterValue(fm, 'cover_image_prompt', 'coverImagePrompt') || '',
+            internalNotes: getFrontmatterValue(fm, 'internal_notes', 'internalNotes') || '',
+          },
+          content: importedBody,
+          sourceText: text,
+          sourceFileName: fileName,
+        }, {
+          replaceMetadata: true,
+          replaceContent: true,
+          toast: `Loaded idea: "${importedTitle}"`,
+        });
+      } else {
+        // No frontmatter — use buildPayloadFromText which properly extracts
+        // title + excerpt from the markdown and normalises the body
+        const overrides = {};
+        if (pending.tags?.length) overrides.tags = pending.tags;
+        const payload = buildPayloadFromText(text, fileName, overrides);
+        applyDraftPayload(payload, {
+          replaceMetadata: true,
+          replaceContent: true,
+          toast: `Loaded idea: "${payload.title}"`,
+        });
+      }
+    } catch (err) {
+      console.error('Failed to load pending draft from Ideas', err);
+    }
   }, []);
 
   // Recover auto-saved draft on mount (only if no editingArticle, form is empty, and no pending draft was loaded)
