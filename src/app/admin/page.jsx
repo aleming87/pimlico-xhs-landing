@@ -58,7 +58,9 @@ function IdeasWidget() {
   const [catFilter, setCatFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [expandedId, setExpandedId] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const fileRef = useRef(null);
+  const dragCounter = useRef(0);
 
   useEffect(() => {
     setDrafts(readJsonStorage('xhs-idea-drafts', []));
@@ -104,14 +106,40 @@ function IdeasWidget() {
     };
   };
 
-  const handleUpload = async (e) => {
-    const files = Array.from(e.target.files || []);
-    if (!files.length) return;
+  const processFiles = async (fileList) => {
+    const validExts = ['.md', '.markdown', '.txt'];
+    const files = Array.from(fileList).filter(f => validExts.some(ext => f.name.toLowerCase().endsWith(ext)));
+    if (!files.length) {
+      setImportMsg('No .md files found');
+      setTimeout(() => setImportMsg(''), 3000);
+      return;
+    }
     const parsed = await Promise.all(files.map(parseMd));
     setDrafts(prev => [...parsed, ...prev]);
     setImportMsg(`${parsed.length} file${parsed.length > 1 ? 's' : ''} uploaded`);
     setTimeout(() => setImportMsg(''), 3000);
+  };
+
+  const handleUpload = async (e) => {
+    await processFiles(e.target.files || []);
     e.target.value = '';
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    dragCounter.current++;
+    if (e.dataTransfer.items?.length) setIsDragging(true);
+  };
+  const handleDragLeave = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current <= 0) { setIsDragging(false); dragCounter.current = 0; }
+  };
+  const handleDragOver = (e) => { e.preventDefault(); e.stopPropagation(); };
+  const handleDrop = async (e) => {
+    e.preventDefault(); e.stopPropagation();
+    setIsDragging(false); dragCounter.current = 0;
+    await processFiles(e.dataTransfer.files);
   };
 
   const removeDraft = (id) => {
@@ -184,7 +212,18 @@ function IdeasWidget() {
   const formatWords = (n) => n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
 
   return (
-    <div className="bg-gray-800/50 rounded-xl border border-gray-700/50">
+    <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 relative"
+      onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onDrop={handleDrop}>
+      {/* Drag overlay */}
+      {isDragging && (
+        <div className="absolute inset-0 z-50 bg-indigo-600/10 backdrop-blur-sm border-2 border-dashed border-indigo-400 rounded-xl flex flex-col items-center justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-3">
+            <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+          </div>
+          <p className="text-indigo-300 text-sm font-semibold">Drop .md files here</p>
+          <p className="text-indigo-400/60 text-xs mt-1">Multiple files supported</p>
+        </div>
+      )}
       {/* Header bar */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700/40">
         <div className="flex items-center gap-3">
@@ -354,10 +393,11 @@ function IdeasWidget() {
             ) : (
               <>
                 <p className="text-gray-400 text-sm font-medium">No article ideas yet</p>
-                <p className="text-gray-500 text-xs mt-1 max-w-sm mx-auto">Upload markdown files to build your ideas repository. Each file will be parsed for title, tags, and content preview.</p>
+                <p className="text-gray-500 text-xs mt-1 max-w-sm mx-auto">Upload or drag & drop markdown files to build your ideas repository. Each file will be parsed for title, tags, and content preview.</p>
                 <button onClick={() => fileRef.current?.click()} className="mt-4 px-5 py-2.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20">
                   Upload your first .md file →
                 </button>
+                <p className="text-gray-600 text-[10px] mt-2">or drag & drop files anywhere on this panel</p>
               </>
             )}
           </div>
