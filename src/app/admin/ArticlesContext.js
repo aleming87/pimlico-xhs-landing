@@ -6,6 +6,20 @@ const sampleArticles = baseSampleArticles.map(a => ({ ...a, isSample: true }));
 
 const ArticlesContext = createContext(null);
 
+// Sync custom articles to Vercel Blob so they appear on the public site
+async function syncToBlob(customArticles) {
+  try {
+    const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+    await fetch('/api/articles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ articles: customArticles, deletedSampleIds }),
+    });
+  } catch (error) {
+    console.error('Blob sync failed:', error);
+  }
+}
+
 export function ArticlesProvider({ children }) {
   const [articles, setArticles] = useState([]);
 
@@ -29,6 +43,7 @@ export function ArticlesProvider({ children }) {
     setArticles(updated);
     const custom = updated.filter(a => !a.isSample);
     localStorage.setItem('xhs-articles', JSON.stringify(custom));
+    syncToBlob(custom);
   };
 
   const deleteArticle = (article) => {

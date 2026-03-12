@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useArticles } from '../ArticlesContext';
 
@@ -20,6 +20,247 @@ function generateGiftUrl(slug) {
   return `${window.location.origin}/insights/${slug}?gift=${token}`;
 }
 
+const CATEGORIES = ['AI Regulation', 'Payments', 'Crypto', 'Gambling'];
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// ─── Article Editor Modal ─────────────────────────────────────────
+function ArticleEditor({ article, onSave, onCancel }) {
+  const [form, setForm] = useState({
+    title: article.title || '',
+    slug: article.slug || '',
+    excerpt: article.excerpt || '',
+    category: article.category || 'AI Regulation',
+    author: article.author || 'Pimlico XHS™ Team',
+    date: article.date || new Date().toISOString().split('T')[0],
+    readTime: article.readTime || '',
+    image: article.image || '',
+    ogImage: article.ogImage || '',
+    featured: article.featured || false,
+    isPremium: article.isPremium || false,
+    status: article.status || 'published',
+    content: article.content || '',
+    tags: (article.tags || []).join(', '),
+  });
+  const [uploading, setUploading] = useState(false);
+  const [uploadType, setUploadType] = useState(null); // 'image' or 'ogImage'
+  const imgRef = useRef(null);
+  const ogRef = useRef(null);
+
+  const set = (key, val) => setForm(prev => {
+    const next = { ...prev, [key]: val };
+    // Auto-generate slug from title if slug was auto-derived
+    if (key === 'title' && (prev.slug === slugify(prev.title) || !prev.slug)) {
+      next.slug = slugify(val);
+    }
+    // Auto-calculate read time from content
+    if (key === 'content') {
+      const words = val.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+      next.readTime = `${Math.max(1, Math.ceil(words / 250))} min read`;
+    }
+    return next;
+  });
+
+  const handleImageUpload = async (e, type) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadType(type);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.url) {
+        set(type, data.url);
+      } else {
+        alert('Upload failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Upload failed: ' + err.message);
+    } finally {
+      setUploading(false);
+      setUploadType(null);
+    }
+  };
+
+  const handleSave = () => {
+    if (!form.title.trim()) { alert('Title is required'); return; }
+    const tags = form.tags.split(',').map(t => t.trim()).filter(Boolean);
+    onSave({
+      ...article,
+      ...form,
+      tags,
+      slug: form.slug || slugify(form.title),
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm overflow-y-auto py-8">
+      <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-3xl shadow-2xl mx-4">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700/50">
+          <h2 className="text-lg font-semibold text-white">Edit Article</h2>
+          <button onClick={onCancel} className="text-gray-400 hover:text-white transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+          {/* Title & Slug */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Title *</label>
+              <input value={form.title} onChange={e => set('title', e.target.value)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Slug</label>
+              <input value={form.slug} onChange={e => set('slug', e.target.value)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-300 font-mono focus:outline-none focus:border-indigo-500" />
+            </div>
+          </div>
+
+          {/* Excerpt */}
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">Excerpt</label>
+            <textarea value={form.excerpt} onChange={e => set('excerpt', e.target.value)} rows={2}
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 resize-none" />
+          </div>
+
+          {/* Category, Author, Date, Status */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Category</label>
+              <select value={form.category} onChange={e => set('category', e.target.value)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Author</label>
+              <input value={form.author} onChange={e => set('author', e.target.value)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Date</label>
+              <input type="date" value={form.date} onChange={e => set('date', e.target.value)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Status</label>
+              <select value={form.status} onChange={e => set('status', e.target.value)}
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="scheduled">Scheduled</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Images */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Main Image */}
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Cover Image</label>
+              <div className="bg-gray-800 border border-gray-600 rounded-lg p-3">
+                {form.image ? (
+                  <div className="relative group">
+                    <img src={form.image} alt="Cover" className="w-full h-32 object-cover rounded-lg" />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                      <button onClick={() => imgRef.current?.click()}
+                        className="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-500">Replace</button>
+                      <button onClick={() => set('image', '')}
+                        className="px-3 py-1.5 bg-red-600 text-white text-xs rounded-lg hover:bg-red-500">Remove</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => imgRef.current?.click()}
+                    className="w-full h-32 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center hover:border-indigo-500 transition-colors">
+                    <svg className="w-8 h-8 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span className="text-xs text-gray-500">{uploading && uploadType === 'image' ? 'Uploading...' : 'Upload cover image'}</span>
+                  </button>
+                )}
+                <input ref={imgRef} type="file" accept="image/*" onChange={e => handleImageUpload(e, 'image')} className="hidden" />
+                {form.image && <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="Or paste image URL"
+                  className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-[11px] text-gray-400 mt-2 focus:outline-none focus:border-indigo-500 font-mono" />}
+              </div>
+            </div>
+
+            {/* OG Image */}
+            <div>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">OG / Social Image</label>
+              <div className="bg-gray-800 border border-gray-600 rounded-lg p-3">
+                {form.ogImage ? (
+                  <div className="relative group">
+                    <img src={form.ogImage} alt="OG" className="w-full h-32 object-cover rounded-lg" />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                      <button onClick={() => ogRef.current?.click()}
+                        className="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-500">Replace</button>
+                      <button onClick={() => set('ogImage', '')}
+                        className="px-3 py-1.5 bg-red-600 text-white text-xs rounded-lg hover:bg-red-500">Remove</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={() => ogRef.current?.click()}
+                    className="w-full h-32 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center hover:border-indigo-500 transition-colors">
+                    <svg className="w-8 h-8 text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span className="text-xs text-gray-500">{uploading && uploadType === 'ogImage' ? 'Uploading...' : 'Upload OG image'}</span>
+                  </button>
+                )}
+                <input ref={ogRef} type="file" accept="image/*" onChange={e => handleImageUpload(e, 'ogImage')} className="hidden" />
+                {form.ogImage && <input value={form.ogImage} onChange={e => set('ogImage', e.target.value)} placeholder="Or paste image URL"
+                  className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-[11px] text-gray-400 mt-2 focus:outline-none focus:border-indigo-500 font-mono" />}
+              </div>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">Tags <span className="text-gray-600">(comma-separated)</span></label>
+            <input value={form.tags} onChange={e => set('tags', e.target.value)}
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="e.g. ai-regulation, compliance, eu" />
+          </div>
+
+          {/* Toggles */}
+          <div className="flex items-center gap-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={form.featured} onChange={e => set('featured', e.target.checked)} className="rounded border-gray-600 bg-gray-800 text-indigo-500 focus:ring-indigo-500" />
+              <span className="text-xs text-gray-300">Featured article</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={form.isPremium} onChange={e => set('isPremium', e.target.checked)} className="rounded border-gray-600 bg-gray-800 text-amber-500 focus:ring-amber-500" />
+              <span className="text-xs text-gray-300">Premium (paywall)</span>
+            </label>
+            <span className="text-xs text-gray-500 ml-auto">{form.readTime || 'auto'}</span>
+          </div>
+
+          {/* Content */}
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1.5">Content <span className="text-gray-600">(Markdown or HTML)</span></label>
+            <textarea value={form.content} onChange={e => set('content', e.target.value)} rows={14}
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-300 font-mono focus:outline-none focus:border-indigo-500 resize-y leading-relaxed" />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-700/50">
+          <button onClick={onCancel} className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">Cancel</button>
+          <div className="flex items-center gap-2">
+            {uploading && <span className="text-xs text-amber-400 animate-pulse">Uploading image...</span>}
+            <button onClick={handleSave} disabled={uploading}
+              className="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ArticlesPage() {
   const { articles, setArticles, deleteArticle } = useArticles();
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,6 +268,8 @@ export default function ArticlesPage() {
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterFeatured, setFilterFeatured] = useState('all');
   const [copiedGiftId, setCopiedGiftId] = useState(null);
+  const [editingArticle, setEditingArticle] = useState(null);
+  const [saveMsg, setSaveMsg] = useState('');
 
   const handleCopyGiftLink = (article) => {
     const url = generateGiftUrl(article.slug);
@@ -34,6 +277,14 @@ export default function ArticlesPage() {
       setCopiedGiftId(article.id);
       setTimeout(() => setCopiedGiftId(null), 2000);
     });
+  };
+
+  const handleSaveArticle = (updated) => {
+    const newArticles = articles.map(a => a.id === updated.id ? { ...a, ...updated } : a);
+    setArticles(newArticles);
+    setEditingArticle(null);
+    setSaveMsg('Article saved & synced');
+    setTimeout(() => setSaveMsg(''), 3000);
   };
 
   const filteredArticles = articles.filter(article => {
@@ -138,6 +389,31 @@ export default function ArticlesPage() {
     setTimeout(() => { printWin.focus(); printWin.print(); }, 400);
   };
 
+  const [syncing, setSyncing] = useState(false);
+
+  const handleForceSync = async () => {
+    setSyncing(true);
+    try {
+      const customArticles = JSON.parse(localStorage.getItem('xhs-articles') || '[]');
+      const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
+      const res = await fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ articles: customArticles, deletedSampleIds }),
+      });
+      if (res.ok) {
+        setSaveMsg('Synced to live site');
+        setTimeout(() => setSaveMsg(''), 3000);
+      } else {
+        alert('Sync failed — check console');
+      }
+    } catch (err) {
+      alert('Sync error: ' + err.message);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   return (
     <div className="p-6 max-w-[1200px] mx-auto space-y-5">
       <div className="flex items-center justify-between">
@@ -146,6 +422,11 @@ export default function ArticlesPage() {
           <p className="text-sm text-gray-400 mt-0.5">{articles.length} total articles</p>
         </div>
         <div className="flex items-center gap-2">
+          <button onClick={handleForceSync} disabled={syncing}
+            className="px-3 py-2 bg-green-700 text-green-100 text-sm rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            {syncing ? 'Syncing...' : 'Sync to Site'}
+          </button>
           <button onClick={handleExport}
             className="px-3 py-2 bg-gray-700 text-gray-300 text-sm rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
@@ -244,6 +525,7 @@ export default function ArticlesPage() {
                       </td>
                       <td className="p-4 text-right space-x-2">
                         <Link href={`/insights/${article.slug}`} className="text-xs text-gray-400 hover:text-white">View</Link>
+                        <button onClick={() => setEditingArticle(article)} className="text-xs text-indigo-400 hover:text-indigo-300 font-medium">Edit</button>
                         {article.isPremium && (
                           <button onClick={() => handleCopyGiftLink(article)} className={`text-xs transition-colors ${copiedGiftId === article.id ? 'text-green-400' : 'text-amber-400/70 hover:text-amber-300'}`}>
                             {copiedGiftId === article.id ? '✓ Copied!' : '🎁 Gift Link'}
@@ -268,6 +550,18 @@ export default function ArticlesPage() {
           ) : (
             <Link href="/admin/drafting" className="mt-3 text-indigo-400 text-sm hover:text-indigo-300 inline-block">Draft your first article →</Link>
           )}
+        </div>
+      )}
+
+      {/* Edit modal */}
+      {editingArticle && (
+        <ArticleEditor article={editingArticle} onSave={handleSaveArticle} onCancel={() => setEditingArticle(null)} />
+      )}
+
+      {/* Save confirmation */}
+      {saveMsg && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-green-600 text-white text-sm font-medium rounded-xl shadow-lg animate-pulse">
+          ✓ {saveMsg}
         </div>
       )}
     </div>
