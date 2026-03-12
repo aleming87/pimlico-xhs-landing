@@ -173,16 +173,12 @@ export default function OffboardingPage() {
       </div>
       <div className="flex gap-0.5 flex-shrink-0">
         {[1, 2, 3, 4, 5].map(n => (
-          <button key={n} type="button" onClick={() => onRate(n)}
+          <button key={n} type="button" onClick={() => onRate(n === value ? 0 : n)}
             className={`text-lg min-w-[36px] min-h-[36px] flex items-center justify-center transition-colors ${
               n <= (value || 0) ? 'text-yellow-400' : 'text-gray-700 hover:text-gray-500'
             }`}
           >★</button>
         ))}
-        {value > 0 && (
-          <button type="button" onClick={() => onRate(0)}
-            className="text-xs text-gray-600 hover:text-gray-400 ml-1 min-w-[28px]" title="Clear">✕</button>
-        )}
       </div>
     </div>
   );
@@ -280,7 +276,7 @@ export default function OffboardingPage() {
   const StarRating = ({ value, onChange }) => (
     <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map(n => (
-        <button key={n} type="button" onClick={() => onChange(n)}
+        <button key={n} type="button" onClick={() => onChange(n === value ? 0 : n)}
           className={`text-2xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
             n <= value ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400'
           }`}
