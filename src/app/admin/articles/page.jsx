@@ -413,10 +413,13 @@ export default function ArticlesPage() {
         body: JSON.stringify({ articles: customArticles, deletedSampleIds }),
       });
       if (res.ok) {
-        setSaveMsg('Synced to live site');
-        setTimeout(() => setSaveMsg(''), 3000);
+        const result = await res.json();
+        setSaveMsg(`Synced ${customArticles.length} article(s) to live site`);
+        setTimeout(() => setSaveMsg(''), 4000);
       } else {
-        alert('Sync failed — check console');
+        let errMsg = `Server returned ${res.status}`;
+        try { const data = await res.json(); errMsg = data.error || errMsg; } catch {}
+        alert(`Sync failed: ${errMsg}`);
       }
     } catch (err) {
       alert('Sync error: ' + err.message);

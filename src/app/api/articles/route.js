@@ -1,4 +1,4 @@
-import { put, list, del } from '@vercel/blob';
+import { put, list } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 const ARTICLES_BLOB_KEY = 'articles/articles-data.json';
@@ -47,6 +47,13 @@ export async function GET(request) {
 // POST - Save articles to Vercel Blob
 export async function POST(request) {
   try {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return NextResponse.json(
+        { error: 'BLOB_READ_WRITE_TOKEN is not configured. Add it in Vercel project settings → Environment Variables.' },
+        { status: 500 }
+      );
+    }
+
     const { articles, deletedSampleIds } = await request.json();
     
     const data = {
@@ -55,26 +62,18 @@ export async function POST(request) {
       updatedAt: new Date().toISOString(),
     };
     
-    // Delete existing blob if it exists
-    try {
-      const { blobs } = await list({ prefix: 'articles/articles-data' });
-      for (const blob of blobs) {
-        await del(blob.url);
-      }
-    } catch (e) {
-      // Ignore deletion errors
-    }
-    
-    // Upload new JSON
+    // Upload new JSON — allowOverwrite ensures we can replace the existing blob
     const blob = await put(ARTICLES_BLOB_KEY, JSON.stringify(data, null, 2), {
       access: 'public',
       addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: 'application/json',
     });
 
     return NextResponse.json({
       success: true,
       url: blob.url,
+      articleCount: (articles || []).length,
     });
   } catch (error) {
     console.error('Error saving articles:', error);

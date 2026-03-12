@@ -10,13 +10,23 @@ const ArticlesContext = createContext(null);
 async function syncToBlob(customArticles) {
   try {
     const deletedSampleIds = JSON.parse(localStorage.getItem('xhs-deleted-samples') || '[]');
-    await fetch('/api/articles', {
+    const res = await fetch('/api/articles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ articles: customArticles, deletedSampleIds }),
     });
+    if (!res.ok) {
+      let errMsg = `Sync failed (${res.status})`;
+      try { const data = await res.json(); errMsg = data.error || errMsg; } catch {}
+      console.error('Blob sync error:', errMsg);
+      return { ok: false, error: errMsg };
+    }
+    const result = await res.json();
+    console.log(`Synced ${customArticles.length} article(s) to site`, result.url);
+    return { ok: true, url: result.url };
   } catch (error) {
     console.error('Blob sync failed:', error);
+    return { ok: false, error: error.message };
   }
 }
 
