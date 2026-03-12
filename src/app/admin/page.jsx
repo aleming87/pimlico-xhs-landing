@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useWorkflow, STAGES } from './WorkflowContext';
 import { useArticles } from './ArticlesContext';
 import { readJsonStorage, writeJsonStorage } from './storage';
@@ -50,6 +51,7 @@ function DonutChart({ segments, size = 100 }) {
 // Ideas Repository Widget — full-width centrepiece
 function IdeasWidget() {
   const { items, addItem, moveToStage, getByStage } = useWorkflow();
+  const router = useRouter();
   const ideas = getByStage('ideas');
   const [drafts, setDrafts] = useState([]);
   const [importMsg, setImportMsg] = useState('');
@@ -152,16 +154,33 @@ function IdeasWidget() {
   };
 
   const sendToDrafting = (draft) => {
-    addItem({
+    // Store the idea data for the drafting page to pick up
+    const pendingDraft = {
       title: draft.title,
-      description: draft.excerpt,
-      notes: draft.content,
-      tags: draft.tags,
-      stage: 'drafting',
-      priority: 'medium',
-      sourceFile: draft.fileName,
-    });
-    removeDraft(draft.id);
+      excerpt: draft.excerpt || '',
+      content: draft.content || '',
+      tags: draft.tags || [],
+      fileName: draft.fileName || null,
+      source: draft.source,
+    };
+    try { localStorage.setItem('xhs-pending-draft', JSON.stringify(pendingDraft)); } catch {}
+
+    if (draft.source === 'upload') {
+      addItem({
+        title: draft.title,
+        description: draft.excerpt,
+        notes: draft.content,
+        tags: draft.tags,
+        stage: 'drafting',
+        priority: 'medium',
+        sourceFile: draft.fileName,
+      });
+      removeDraft(draft.id);
+    } else {
+      moveToStage(draft.id, 'drafting');
+    }
+
+    router.push('/admin/drafting');
   };
 
   // Merge uploaded drafts + pipeline ideas into a unified list
@@ -350,7 +369,7 @@ function IdeasWidget() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1">
-                  <button onClick={(e) => { e.stopPropagation(); isUpload ? sendToDrafting(idea) : moveToStage(idea.id, 'drafting'); }} title="Send to Drafting"
+                  <button onClick={(e) => { e.stopPropagation(); sendToDrafting(idea); }} title="Send to Drafting"
                     className="px-3 py-1.5 text-[11px] font-semibold text-indigo-300 bg-indigo-500/15 rounded-lg hover:bg-indigo-500/25 transition-colors whitespace-nowrap">
                     Draft →
                   </button>

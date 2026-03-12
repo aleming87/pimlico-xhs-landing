@@ -384,8 +384,50 @@ export default function DraftingPage() {
     if (snap.savedAt) setLastSavedAt(snap.savedAt);
   };
 
-  // Recover auto-saved draft on mount (only if no editingArticle and form is empty)
+  // Pick up a pending draft sent from the Ideas widget on the dashboard
+  const pendingDraftLoadedRef = useRef(false);
   useEffect(() => {
+    if (pendingDraftLoadedRef.current) return;
+    try {
+      const raw = localStorage.getItem('xhs-pending-draft');
+      if (!raw) return;
+      localStorage.removeItem('xhs-pending-draft');
+      // Also clear auto-save so the pending draft isn't overwritten by stale data
+      localStorage.removeItem(AUTOSAVE_KEY);
+      pendingDraftLoadedRef.current = true;
+
+      const pending = JSON.parse(raw);
+      if (!pending?.title && !pending?.content) return;
+
+      // Build a payload compatible with applyDraftPayload
+      const text = pending.content || '';
+      const detectedCategory = detectCategoryFromText([pending.title, pending.excerpt, text].join(' '));
+      const detectedTags = pending.tags?.length ? pending.tags : detectTagsFromText(text);
+      const detectedSeries = suggestSeriesKey(text);
+
+      applyDraftPayload({
+        title: pending.title || '',
+        slug: slugifyText(pending.title || ''),
+        excerpt: pending.excerpt || '',
+        category: detectedCategory,
+        seriesKey: detectedSeries,
+        tags: detectedTags,
+        content: text,
+        sourceText: text,
+        sourceFileName: pending.fileName || '',
+        officialSources: [],
+        engagements: {},
+      }, {
+        replaceMetadata: true,
+        replaceContent: true,
+        toast: `Loaded idea: "${pending.title}"`,
+      });
+    } catch {}
+  }, []);
+
+  // Recover auto-saved draft on mount (only if no editingArticle, form is empty, and no pending draft was loaded)
+  useEffect(() => {
+    if (pendingDraftLoadedRef.current) return;
     try {
       const saved = localStorage.getItem(AUTOSAVE_KEY);
       if (saved && !meta.title && !content) {
