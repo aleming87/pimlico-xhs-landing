@@ -47,13 +47,17 @@ function DonutChart({ segments, size = 100 }) {
   );
 }
 
-// Ideas Repository Widget
+// Ideas Repository Widget — full-width centrepiece
 function IdeasWidget() {
   const { items, addItem, moveToStage, getByStage } = useWorkflow();
   const ideas = getByStage('ideas');
   const [drafts, setDrafts] = useState([]);
   const [importMsg, setImportMsg] = useState('');
   const [storageReady, setStorageReady] = useState(false);
+  const [search, setSearch] = useState('');
+  const [catFilter, setCatFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('newest');
+  const [expandedId, setExpandedId] = useState(null);
   const fileRef = useRef(null);
 
   useEffect(() => {
@@ -76,21 +80,26 @@ function IdeasWidget() {
     }
     const lower = text.toLowerCase();
     const tags = IDEA_CATEGORIES.filter(c => lower.includes(c.toLowerCase()));
+    const wordCount = text.split(/\s+/).filter(Boolean).length;
     const bodyLines = [];
     let pastTitle = false;
     for (const line of lines) {
       const t = line.trim();
       if (!pastTitle && (/^#{1,3}\s+/.test(t) || t === title)) { pastTitle = true; continue; }
       if (pastTitle && t && !/^[-*_]{3,}$/.test(t)) bodyLines.push(t);
-      if (bodyLines.length >= 3) break;
+      if (bodyLines.length >= 5) break;
     }
+    // Count headings for structure indicator
+    const headings = lines.filter(l => /^#{1,4}\s+/.test(l.trim())).length;
     return {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       title: title.slice(0, 140),
-      excerpt: bodyLines.join(' ').slice(0, 300),
+      excerpt: bodyLines.join(' ').slice(0, 500),
       content: text,
       fileName: file.name,
       tags,
+      wordCount,
+      headings,
       uploadedAt: new Date().toISOString(),
     };
   };
@@ -111,6 +120,7 @@ function IdeasWidget() {
       writeJsonStorage('xhs-idea-drafts', updated);
       return updated;
     });
+    if (expandedId === id) setExpandedId(null);
   };
 
   const sendToDrafting = (draft) => {
@@ -126,83 +136,242 @@ function IdeasWidget() {
     removeDraft(draft.id);
   };
 
-  const workflowIdeas = ideas.slice(0, 5);
+  // Merge uploaded drafts + pipeline ideas into a unified list
+  const allIdeas = useMemo(() => {
+    const uploaded = drafts.map(d => ({ ...d, source: 'upload' }));
+    const pipeline = ideas.map(i => ({
+      id: i.id, title: i.title, excerpt: i.description || '', content: i.notes || '',
+      tags: i.tags || [], fileName: null, wordCount: (i.notes || '').split(/\s+/).filter(Boolean).length,
+      headings: 0, uploadedAt: i.createdAt || i.updatedAt, source: 'pipeline',
+    }));
+    return [...uploaded, ...pipeline];
+  }, [drafts, ideas]);
+
+  // Filter & sort
+  const filtered = useMemo(() => {
+    let list = allIdeas;
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(i => i.title.toLowerCase().includes(q) || i.excerpt.toLowerCase().includes(q) || (i.tags || []).some(t => t.toLowerCase().includes(q)));
+    }
+    if (catFilter !== 'all') {
+      list = list.filter(i => (i.tags || []).some(t => t === catFilter));
+    }
+    if (sortBy === 'newest') list.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+    else if (sortBy === 'oldest') list.sort((a, b) => new Date(a.uploadedAt) - new Date(b.uploadedAt));
+    else if (sortBy === 'alpha') list.sort((a, b) => a.title.localeCompare(b.title));
+    else if (sortBy === 'longest') list.sort((a, b) => (b.wordCount || 0) - (a.wordCount || 0));
+    return list;
+  }, [allIdeas, search, catFilter, sortBy]);
+
+  // Tag stats for the filter chips
+  const tagCounts = useMemo(() => {
+    const map = {};
+    allIdeas.forEach(i => (i.tags || []).forEach(t => { map[t] = (map[t] || 0) + 1; }));
+    return map;
+  }, [allIdeas]);
+
+  const activeTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+  const uploadCount = drafts.length;
+  const pipelineCount = ideas.length;
+  const totalWords = allIdeas.reduce((s, i) => s + (i.wordCount || 0), 0);
+
+  const formatDate = (d) => {
+    if (!d) return '';
+    return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
+  };
+
+  const formatWords = (n) => n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
 
   return (
-    <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-5">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-white">Article Ideas</h2>
+    <div className="bg-gray-800/50 rounded-xl border border-gray-700/50">
+      {/* Header bar */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700/40">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+            <span className="text-lg">💡</span>
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-white">Article Ideas</h2>
+            <p className="text-[11px] text-gray-500">{allIdeas.length} idea{allIdeas.length !== 1 ? 's' : ''} · {formatWords(totalWords)} words total</p>
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           {importMsg && <span className="text-xs text-green-400 animate-pulse">{importMsg}</span>}
-          <label className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 transition-colors cursor-pointer">
+          <label className="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors cursor-pointer shadow-lg shadow-indigo-500/20">
             Upload .md
             <input ref={fileRef} type="file" accept=".md,.markdown,.txt" multiple onChange={handleUpload} className="hidden" />
           </label>
-          <Link href="/admin/ideas" className="px-3 py-1.5 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 transition-colors">
-            All Ideas
+          <Link href="/admin/ideas" className="px-4 py-2 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 transition-colors">
+            Manage Ideas
           </Link>
         </div>
       </div>
 
-      {drafts.length > 0 && (
-        <div className="space-y-2 mb-4">
-          <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Uploaded Drafts</p>
-          {drafts.map(draft => (
-            <div key={draft.id} className="flex items-center gap-3 bg-gray-700/30 rounded-lg px-3 py-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center flex-shrink-0">
-                <span className="text-sm">📄</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-white font-medium truncate">{draft.title}</p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] text-gray-500">{draft.fileName}</span>
-                  {draft.tags.slice(0, 2).map(t => (
-                    <span key={t} className="text-[9px] text-gray-500 bg-gray-700/50 px-1.5 py-0.5 rounded">{t}</span>
-                  ))}
+      {/* Stats row */}
+      <div className="grid grid-cols-4 gap-px bg-gray-700/30 border-b border-gray-700/40">
+        {[
+          { label: 'Uploaded', value: uploadCount, icon: '📄' },
+          { label: 'Pipeline', value: pipelineCount, icon: '🔄' },
+          { label: 'Total Ideas', value: allIdeas.length, icon: '💡' },
+          { label: 'Total Words', value: formatWords(totalWords), icon: '📝' },
+        ].map(s => (
+          <div key={s.label} className="bg-gray-800/30 px-4 py-3 text-center">
+            <span className="text-xs">{s.icon}</span>
+            <p className="text-lg font-bold text-white mt-0.5">{s.value}</p>
+            <p className="text-[10px] text-gray-500">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Search + filter bar */}
+      <div className="px-6 py-3 border-b border-gray-700/40 space-y-3">
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" placeholder="Search ideas by title, content, or tag..." value={search} onChange={e => setSearch(e.target.value)}
+              className="w-full bg-gray-700/40 border border-gray-600/40 rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-colors" />
+          </div>
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)}
+            className="bg-gray-700/40 border border-gray-600/40 rounded-lg px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-indigo-500/50 appearance-none cursor-pointer">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="alpha">A → Z</option>
+            <option value="longest">Longest first</option>
+          </select>
+        </div>
+        {activeTags.length > 0 && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button onClick={() => setCatFilter('all')}
+              className={`px-2.5 py-1 rounded-full text-[10px] font-medium transition-colors ${catFilter === 'all' ? 'bg-indigo-500/25 text-indigo-300 border border-indigo-500/40' : 'bg-gray-700/40 text-gray-400 border border-gray-600/30 hover:text-gray-300'}`}>
+              All ({allIdeas.length})
+            </button>
+            {activeTags.map(([tag, count]) => (
+              <button key={tag} onClick={() => setCatFilter(catFilter === tag ? 'all' : tag)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-medium transition-colors ${catFilter === tag ? 'bg-indigo-500/25 text-indigo-300 border border-indigo-500/40' : 'bg-gray-700/40 text-gray-400 border border-gray-600/30 hover:text-gray-300'}`}>
+                {tag} ({count})
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Ideas list */}
+      <div className="divide-y divide-gray-700/30 max-h-[600px] overflow-y-auto">
+        {filtered.length > 0 ? filtered.map(idea => {
+          const isExpanded = expandedId === idea.id;
+          const isUpload = idea.source === 'upload';
+          const catColor = idea.tags?.[0] ? (CATEGORY_COLORS[idea.tags[0]] || DEFAULT_CAT_COLOR) : DEFAULT_CAT_COLOR;
+          return (
+            <div key={idea.id} className="group">
+              <div className="flex items-start gap-4 px-6 py-4 hover:bg-gray-700/20 transition-colors cursor-pointer"
+                onClick={() => setExpandedId(isExpanded ? null : idea.id)}>
+                {/* Source badge */}
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${isUpload ? 'bg-indigo-500/15' : 'bg-purple-500/15'}`}>
+                  <span className="text-lg">{isUpload ? '📄' : '💡'}</span>
+                </div>
+
+                {/* Main content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-semibold text-white truncate">{idea.title}</h3>
+                    <span className={`px-1.5 py-0.5 text-[9px] font-medium rounded-full ${isUpload ? 'bg-indigo-500/15 text-indigo-400' : 'bg-purple-500/15 text-purple-400'}`}>
+                      {isUpload ? 'Uploaded' : 'Pipeline'}
+                    </span>
+                  </div>
+                  {idea.excerpt && (
+                    <p className={`text-xs text-gray-400 leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}>{idea.excerpt}</p>
+                  )}
+                  <div className="flex items-center gap-3 mt-2 flex-wrap">
+                    {idea.tags?.map(t => {
+                      const tc = CATEGORY_COLORS[t] || DEFAULT_CAT_COLOR;
+                      return (
+                        <span key={t} className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${tc.bg} ${tc.text}`}>{t}</span>
+                      );
+                    })}
+                    {idea.wordCount > 0 && (
+                      <span className="text-[10px] text-gray-500 flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        {idea.wordCount.toLocaleString()} words
+                      </span>
+                    )}
+                    {idea.headings > 0 && (
+                      <span className="text-[10px] text-gray-500">{idea.headings} section{idea.headings !== 1 ? 's' : ''}</span>
+                    )}
+                    {idea.fileName && (
+                      <span className="text-[10px] text-gray-600">{idea.fileName}</span>
+                    )}
+                    {idea.uploadedAt && (
+                      <span className="text-[10px] text-gray-600">{formatDate(idea.uploadedAt)}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1">
+                  <button onClick={(e) => { e.stopPropagation(); isUpload ? sendToDrafting(idea) : moveToStage(idea.id, 'drafting'); }} title="Send to Drafting"
+                    className="px-3 py-1.5 text-[11px] font-semibold text-indigo-300 bg-indigo-500/15 rounded-lg hover:bg-indigo-500/25 transition-colors whitespace-nowrap">
+                    Draft →
+                  </button>
+                  {isUpload && (
+                    <button onClick={(e) => { e.stopPropagation(); removeDraft(idea.id); }} title="Remove"
+                      className="p-1.5 text-gray-500 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  )}
                 </div>
               </div>
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => sendToDrafting(draft)} title="Send to Drafting"
-                  className="px-2.5 py-1 text-[10px] font-semibold text-indigo-300 bg-indigo-500/15 rounded-md hover:bg-indigo-500/25 transition-colors">
-                  Draft →
-                </button>
-                <button onClick={() => removeDraft(draft.id)} title="Remove"
-                  className="p-1 text-gray-500 hover:text-red-400 transition-colors">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
-      {workflowIdeas.length > 0 && (
-        <div className="space-y-2">
-          {drafts.length > 0 && <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Pipeline Ideas</p>}
-          {workflowIdeas.map(idea => (
-            <div key={idea.id} className="flex items-center gap-3 bg-gray-700/30 rounded-lg px-3 py-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-purple-500/15 flex items-center justify-center flex-shrink-0">
-                <span className="text-sm">💡</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-white font-medium truncate">{idea.title}</p>
-                <p className="text-[10px] text-gray-500 mt-0.5 truncate">{idea.description || 'No description'}</p>
-              </div>
-              <button onClick={() => moveToStage(idea.id, 'drafting')} title="Send to Drafting"
-                className="px-2.5 py-1 text-[10px] font-semibold text-indigo-300 bg-indigo-500/15 rounded-md hover:bg-indigo-500/25 transition-colors opacity-0 group-hover:opacity-100">
-                Draft →
-              </button>
+              {/* Expanded content preview */}
+              {isExpanded && idea.content && (
+                <div className="px-6 pb-4 pt-0">
+                  <div className="ml-14 bg-gray-900/60 border border-gray-700/40 rounded-lg p-4 max-h-[300px] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Content Preview</span>
+                      <div className="flex items-center gap-3 text-[10px] text-gray-500">
+                        {idea.wordCount > 0 && <span>{idea.wordCount.toLocaleString()} words</span>}
+                        {idea.wordCount > 0 && <span>~{Math.ceil(idea.wordCount / 250)} min read</span>}
+                      </div>
+                    </div>
+                    <pre className="text-xs text-gray-400 whitespace-pre-wrap font-mono leading-relaxed">{idea.content.slice(0, 3000)}{idea.content.length > 3000 ? '\n\n… (truncated)' : ''}</pre>
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-      )}
+          );
+        }) : (
+          <div className="text-center py-16 px-6">
+            <div className="w-16 h-16 rounded-2xl bg-gray-700/30 flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">💡</span>
+            </div>
+            {search || catFilter !== 'all' ? (
+              <>
+                <p className="text-gray-400 text-sm font-medium">No ideas match your filters</p>
+                <button onClick={() => { setSearch(''); setCatFilter('all'); }} className="mt-2 text-indigo-400 text-xs hover:text-indigo-300">Clear filters</button>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-400 text-sm font-medium">No article ideas yet</p>
+                <p className="text-gray-500 text-xs mt-1 max-w-sm mx-auto">Upload markdown files to build your ideas repository. Each file will be parsed for title, tags, and content preview.</p>
+                <button onClick={() => fileRef.current?.click()} className="mt-4 px-5 py-2.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20">
+                  Upload your first .md file →
+                </button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
 
-      {drafts.length === 0 && workflowIdeas.length === 0 && (
-        <div className="text-center py-8">
-          <p className="text-gray-500 text-xs">No ideas yet — upload .md files or add ideas from the Ideas page</p>
-          <button onClick={() => fileRef.current?.click()} className="mt-2 text-indigo-400 text-xs hover:text-indigo-300">
-            Upload your first article draft →
-          </button>
+      {/* Footer with count */}
+      {filtered.length > 0 && (
+        <div className="px-6 py-3 border-t border-gray-700/40 flex items-center justify-between">
+          <p className="text-[11px] text-gray-500">
+            Showing {filtered.length} of {allIdeas.length} idea{allIdeas.length !== 1 ? 's' : ''}
+            {search || catFilter !== 'all' ? ' (filtered)' : ''}
+          </p>
+          <p className="text-[11px] text-gray-600">Click an idea to preview content</p>
         </div>
       )}
     </div>
@@ -292,13 +461,12 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Two Column: Ideas + Category */}
+      {/* Ideas Widget — centrepiece */}
+      <IdeasWidget />
+
+      {/* Bottom row: Category + Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         <div className="lg:col-span-7">
-          <IdeasWidget />
-        </div>
-
-        <div className="lg:col-span-5 space-y-5">
           {/* Category Breakdown */}
           <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-5">
             <h2 className="text-sm font-semibold text-white mb-4">Category Breakdown</h2>
@@ -323,9 +491,11 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+        </div>
 
+        <div className="lg:col-span-5">
           {/* Quick Actions */}
-          <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4">
+          <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4 h-full">
             <h2 className="text-sm font-semibold text-white mb-3">Quick Actions</h2>
             <div className="space-y-1.5">
               <Link href="/admin/drafting" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 bg-gray-700/40 rounded-lg hover:bg-gray-700/60 transition-colors">✏️ Start a draft</Link>
