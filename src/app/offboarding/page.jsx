@@ -33,10 +33,23 @@ const CR_RATINGS = [
   { key: 'cr_crossBorder', label: 'Cross-Border Comparison', desc: 'Comparing regulatory approaches across jurisdictions' },
 ];
 
-const INT_RATINGS = [
-  { key: 'int_easeOfSetup', label: 'Ease of Setup', desc: 'How simple it was to connect your tools' },
-  { key: 'int_reliability', label: 'Reliability', desc: 'Consistency and dependability of the connection' },
-  { key: 'int_range', label: 'Range of Options', desc: 'Variety of integrations available' },
+const SLACK_RATINGS = [
+  { key: 'int_overall', label: 'Overall Rating', desc: 'How useful was the Slack integration overall?' },
+  { key: 'int_easeOfSetup', label: 'Ease of Setup', desc: 'How simple was it to connect Slack to your watchlist?' },
+  { key: 'int_notifications', label: 'Level of Notifications', desc: 'Were you getting the right amount of alerts in Slack?' },
+  { key: 'int_reliability', label: 'Reliability', desc: 'Consistency and dependability of the Slack notifications' },
+  { key: 'int_usefulness', label: 'Usefulness', desc: 'How valuable were the Slack notifications to your workflow?' },
+];
+
+const CR_DETAIL_AREAS = [
+  'Q&A / FAQs',
+  'Requirements & obligations',
+  'Licensing information',
+  'Security standards',
+  'Technical standards',
+  'Context & outlook',
+  'Enforcement & penalties',
+  'Timeline & deadlines',
 ];
 
 const UPCOMING_FEATURES = [
@@ -73,6 +86,8 @@ export default function OffboardingPage() {
   const [ratings, setRatings] = useState({});            // flat: { ui_easeOfUse: 4, reg_coverage: 3, ... }
   const [detailLevel, setDetailLevel] = useState({});    // { reg: 3, cr: 2 }
   const [sectionFeedback, setSectionFeedback] = useState({}); // { ui: '...', reg: '...', cr: '...', int: '...' }
+  const [crDetailAreas, setCrDetailAreas] = useState([]);     // areas needing more detail in country reports
+  const [watchlistSetup, setWatchlistSetup] = useState('');   // did they set up a watchlist?
 
   // Step 4 — Upcoming features
   const [upcomingInterest, setUpcomingInterest] = useState({});
@@ -94,6 +109,7 @@ export default function OffboardingPage() {
   const setDetail = (section, value) => setDetailLevel(prev => ({ ...prev, [section]: value }));
   const setFeedback = (section, value) => setSectionFeedback(prev => ({ ...prev, [section]: value }));
   const setUpcoming = (key, value) => setUpcomingInterest(prev => ({ ...prev, [key]: value }));
+  const toggleCrDetailArea = (area) => setCrDetailAreas(prev => prev.includes(area) ? prev.filter(x => x !== area) : [...prev, area]);
 
   const canProceed = () => {
     if (step === 1) return name.trim() && email.trim();
@@ -135,11 +151,13 @@ export default function OffboardingPage() {
               used: sectionUsed.cr || 'Not answered',
               ratings: buildSectionRatings(CR_RATINGS),
               detailLevel: detailLevel.cr || null,
+              detailAreasNeedingMore: crDetailAreas,
               feedback: sectionFeedback.cr || '',
             },
             integrations: {
               used: sectionUsed.int || 'Not answered',
-              ratings: buildSectionRatings(INT_RATINGS),
+              ratings: buildSectionRatings(SLACK_RATINGS),
+              watchlistSetup,
               feedback: sectionFeedback.int || '',
             },
           },
@@ -192,7 +210,7 @@ export default function OffboardingPage() {
           <button key={d.val} type="button" onClick={() => onChange(d.val)}
             className={`flex-1 py-2.5 px-1 rounded-lg text-xs font-medium transition-all text-center leading-tight ${
               value === d.val
-                ? d.val === 3 ? 'bg-green-600 text-white' : d.val < 3 ? 'bg-amber-600 text-white' : 'bg-amber-600 text-white'
+                ? 'bg-blue-600 text-white'
                 : 'bg-white/10 text-gray-400 hover:bg-white/20'
             }`}
           >{d.short}</button>
@@ -452,14 +470,58 @@ export default function OffboardingPage() {
                 ratingItems={CR_RATINGS}
                 detailSection="cr" detailLabel="Level of Detail in Reports"
                 feedbackPrompt="How could we improve country reports?"
-              />
+              >
+                {/* Conditional: if detail level is below 'Just right', ask which areas need more */}
+                {detailLevel.cr > 0 && detailLevel.cr < 3 && (
+                  <div className="px-4 py-4">
+                    <p className="text-sm font-medium text-white mb-1">Which areas need more detail?</p>
+                    <p className="text-xs text-gray-500 mb-3">Select all that apply</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {CR_DETAIL_AREAS.map(area => (
+                        <button key={area} type="button" onClick={() => toggleCrDetailArea(area)}
+                          className={`py-2 px-3 rounded-lg text-xs font-medium text-left transition-all ${
+                            crDetailAreas.includes(area)
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-white/10 text-gray-400 hover:bg-white/20'
+                          }`}>{area}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </SectionCard>
 
-              {/* Integrations Section */}
+              {/* Watchlist question — prerequisite for Slack integration */}
+              <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+                <div className="px-5 pt-5 pb-3 flex items-center gap-2">
+                  <span className="text-lg">📋</span>
+                  <h3 className="text-lg font-semibold text-white">Watchlist</h3>
+                </div>
+                <div className="px-5 pb-4">
+                  <div className="flex items-center justify-between px-4 py-3 bg-white/[0.03] rounded-lg">
+                    <p className="text-sm text-gray-300">Did you set up a <span className="text-white font-medium">watchlist</span>?</p>
+                    <div className="flex gap-2">
+                      {['Yes', 'No'].map(opt => (
+                        <button key={opt} type="button" onClick={() => setWatchlistSetup(opt)}
+                          className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                            watchlistSetup === opt
+                              ? opt === 'Yes' ? 'bg-blue-600 text-white' : 'bg-gray-600 text-white'
+                              : 'bg-white/10 text-gray-400 hover:bg-white/20'
+                          }`}>{opt}</button>
+                      ))}
+                    </div>
+                  </div>
+                  {watchlistSetup === 'No' && (
+                    <p className="text-xs text-gray-500 mt-2 px-4">A watchlist is needed to use the Slack integration. You can skip the integration section below.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Slack Integration Section — only show if they set up a watchlist */}
               <SectionCard
-                icon="🔗" title="Integrations"
-                sectionKey="int" usedLabel="any integrations"
-                ratingItems={INT_RATINGS}
-                feedbackPrompt="How could we improve integrations?"
+                icon="💬" title="Slack Integration"
+                sectionKey="int" usedLabel="the Slack integration"
+                ratingItems={SLACK_RATINGS}
+                feedbackPrompt="How could we improve the Slack integration?"
               />
             </div>
           )}

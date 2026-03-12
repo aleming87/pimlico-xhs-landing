@@ -53,7 +53,7 @@ export async function POST(request) {
       { key: 'ui', label: 'User Interface & Experience', icon: '🖥️' },
       { key: 'regulatory', label: 'Regulatory Monitoring', icon: '📡', hasDetail: true },
       { key: 'countryReports', label: 'Country Reports', icon: '🌍', hasDetail: true },
-      { key: 'integrations', label: 'Integrations', icon: '🔗' },
+      { key: 'integrations', label: 'Slack Integration', icon: '💬' },
     ];
 
     // Collect all ratings for an overall average
@@ -71,11 +71,15 @@ export async function POST(request) {
       const sec = sections[key] || {};
       const ratings = sec.ratings || {};
       const ratingLines = Object.entries(ratings).map(([k, v]) => `  ${k}: ${starsText(v)} (${v}/5)`).join('\n');
+      const detailAreas = (key === 'countryReports' && sec.detailAreasNeedingMore?.length)
+        ? `\n  Areas needing more detail: ${sec.detailAreasNeedingMore.join(', ')}` : '';
+      const watchlist = (key === 'integrations' && sec.watchlistSetup)
+        ? `\nWatchlist set up: ${sec.watchlistSetup}` : '';
       return `
 ${icon} ${label.toUpperCase()}
 ${'─'.repeat(50)}
-Used: ${sec.used || 'Not answered'}
-${ratingLines || '  No ratings provided'}${hasDetail && sec.detailLevel ? `\n  Level of Detail: ${detailLabel(sec.detailLevel)}` : ''}
+Used: ${sec.used || 'Not answered'}${watchlist}
+${ratingLines || '  No ratings provided'}${hasDetail && sec.detailLevel ? `\n  Level of Detail: ${detailLabel(sec.detailLevel)}` : ''}${detailAreas}
 ${sec.feedback ? `  Improvement feedback: ${sec.feedback}` : '  No improvement feedback'}`;
     }).join('\n');
 
@@ -158,6 +162,20 @@ Submitted: ${new Date().toISOString()}
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
         <p style="color:#9ca3af;font-size:12px;margin:0 0 4px 0;">Level of Detail:</p>
         <span style="display:inline-block;padding:3px 12px;border-radius:12px;font-size:13px;font-weight:600;color:${detailColor(sec.detailLevel)};">${detailLabel(sec.detailLevel)}</span>
+      </div>` : ''}
+
+      ${key === 'countryReports' && sec.detailAreasNeedingMore?.length ? `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 8px 0;">Areas needing more detail:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${sec.detailAreasNeedingMore.map(area => `<span style="display:inline-block;background-color:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;padding:4px 12px;border-radius:20px;font-size:12px;">${area}</span>`).join('')}
+        </div>
+      </div>` : ''}
+
+      ${key === 'integrations' && sec.watchlistSetup ? `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);">
+        <p style="color:#9ca3af;font-size:12px;margin:0 0 4px 0;">Watchlist set up:</p>
+        <span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:${sec.watchlistSetup === 'Yes' ? 'rgba(34,197,94,0.2);color:#86efac' : 'rgba(239,68,68,0.15);color:#fca5a5'};">${sec.watchlistSetup}</span>
       </div>` : ''}
 
       ${sec.feedback ? `
