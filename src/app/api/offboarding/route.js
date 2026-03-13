@@ -1,6 +1,48 @@
 import { NextResponse } from 'next/server';
+import { put, list } from '@vercel/blob';
 
-export async function POST(request) {
+const BLOB_INDEX_KEY = 'trial-completion-survey/index.json';
+
+/* ── Blob helpers ── */
+async function getResponsesFromBlob() {
+  try {
+    const { blobs } = await list({ prefix: 'trial-completion-survey/index' });
+    if (blobs.length === 0) return [];
+    const res = await fetch(blobs[0].url, { cache: 'no-store' });
+    const data = await res.json();
+    return data.responses || [];
+  } catch (error) {
+    console.error('Error reading trial survey blob:', error);
+    return [];
+  }
+}
+
+async function saveResponsesToBlob(responses) {
+  try {
+    const { del } = await import('@vercel/blob');
+    const { blobs } = await list({ prefix: 'trial-completion-survey/index' });
+    for (const blob of blobs) await del(blob.url);
+  } catch (e) { /* ignore deletion errors */ }
+
+  await put(BLOB_INDEX_KEY, JSON.stringify({ responses, updatedAt: new Date().toISOString() }, null, 2), {
+    access: 'public',
+    addRandomSuffix: false,
+    contentType: 'application/json',
+  });
+}
+
+/* ── GET: return all saved responses (for admin dashboard) ── */
+export async function GET() {
+  try {
+    const responses = await getResponsesFromBlob();
+    return NextResponse.json({ success: true, responses });
+  } catch (error) {
+    console.error('Error fetching trial survey responses:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+/* ── POST: submit survey, persist, and email ── */export async function POST(request) {
   try {
     const data = await request.json();
 
@@ -15,6 +57,7 @@ export async function POST(request) {
       company = 'N/A',
       role = 'N/A',
       trialDuration = 'N/A',
+      onboarding = {},
       sections = {},
       upcomingFeatureInterest = {},
       keepInTouch = 'N/A',
@@ -98,6 +141,15 @@ Email: ${email}
 Company: ${company}
 Role: ${role}
 Trial Duration: ${trialDuration}
+
+====================================================
+🎓 ONBOARDING EXPERIENCE
+====================================================
+Onboarding Rating: ${starsText(onboarding.rating)} (${onboarding.rating || 0}/5)
+Sign-up Ease: ${onboarding.signUpEase || 'N/A'}
+Access Issues: ${onboarding.accessIssues || 'N/A'}
+Video Would Help: ${onboarding.videoWouldHelp || 'N/A'}
+Used Onboarding Guide: ${onboarding.usedOnboardingGuide || 'N/A'}
 
 ====================================================
 FEATURE RATINGS BY SECTION (Average: ${avgRating}/5)
@@ -216,6 +268,18 @@ Submitted: ${new Date().toISOString()}
       </table>
     </div>
 
+    <!-- Onboarding -->
+    <div style="background-color:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;margin-bottom:20px;">
+      <h2 style="color:#ffffff;font-size:16px;margin:0 0 16px 0;">🎓 Onboarding Experience</h2>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="color:#9ca3af;padding:6px 0;font-size:14px;width:160px;">Onboarding Rating</td><td style="padding:6px 0;font-size:18px;">${starsHtml(onboarding.rating)} <span style="color:#9ca3af;font-size:13px;margin-left:4px;">${onboarding.rating || 0}/5</span></td></tr>
+        <tr><td style="color:#9ca3af;padding:6px 0;font-size:14px;">Sign-up Ease</td><td style="color:#ffffff;padding:6px 0;font-size:14px;">${onboarding.signUpEase || 'N/A'}</td></tr>
+        <tr><td style="color:#9ca3af;padding:6px 0;font-size:14px;">Access Issues</td><td style="padding:6px 0;font-size:14px;"><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;${onboarding.accessIssues === 'No issues' ? 'background:rgba(34,197,94,0.2);color:#86efac' : onboarding.accessIssues === 'Minor issues' ? 'background:rgba(234,179,8,0.2);color:#fde047' : onboarding.accessIssues === 'Significant issues' ? 'background:rgba(239,68,68,0.2);color:#fca5a5' : 'color:#9ca3af'}">${onboarding.accessIssues || 'N/A'}</span></td></tr>
+        <tr><td style="color:#9ca3af;padding:6px 0;font-size:14px;">Video Would Help</td><td style="color:#ffffff;padding:6px 0;font-size:14px;">${onboarding.videoWouldHelp || 'N/A'}</td></tr>
+        <tr><td style="color:#9ca3af;padding:6px 0;font-size:14px;">Used Onboarding Guide</td><td style="padding:6px 0;font-size:14px;"><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;${onboarding.usedOnboardingGuide === 'Yes' ? 'background:rgba(34,197,94,0.2);color:#86efac' : onboarding.usedOnboardingGuide === 'Didn\u2019t know about it' ? 'background:rgba(234,179,8,0.2);color:#fde047' : 'color:#9ca3af'}">${onboarding.usedOnboardingGuide || 'N/A'}</span></td></tr>
+      </table>
+    </div>
+
     <!-- Section Ratings -->
     <div style="margin-bottom:4px;">
       <h2 style="color:#ffffff;font-size:16px;margin:0 0 16px 0;">⭐ Feature Ratings by Section</h2>
@@ -327,7 +391,7 @@ Submitted: ${new Date().toISOString()}
         body: JSON.stringify({
           from: 'Pimlico XHS™ Feedback <onboarding@resend.dev>',
           to: [toEmail],
-          subject: `XHS™ Trial Completion — ${name} ${company ? `(${company})` : ''} — ${avgRating}/5 avg`.trim(),
+          subject: `XHS™ Trial Completion - ${name} ${company ? `(${company})` : ''} - ${avgRating}/5 avg`.trim(),
           html: htmlReport,
           text: plainReport,
         }),

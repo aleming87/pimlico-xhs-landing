@@ -55,7 +55,7 @@ const CR_DETAIL_AREAS = [
 const UPCOMING_FEATURES = [
   { key: 'projects', label: 'Projects™', desc: 'Organise regulatory items into workstreams and track progress against compliance objectives' },
   { key: 'lens', label: 'Lens™', desc: 'Drill down into the technical standards and trends impacting your business' },
-  { key: 'competitors', label: 'Competitors™', desc: 'Track competitor licences and emerging trends across jurisdictions' },
+  { key: 'competitors', label: 'Competitors™', desc: 'Track competitor licences, enforcements, deals and products across jurisdictions' },
   { key: 'blocklists', label: 'Blocklists™', desc: 'Monitor blocked URLs across jurisdictions to stay ahead of enforcement actions' },
 ];
 
@@ -74,12 +74,17 @@ export default function OffboardingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // Step 1 — Identity
+  // Step 1 - Identity & Onboarding
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [role, setRole] = useState('');
   const [trialDuration, setTrialDuration] = useState('');
+  const [onboardingRating, setOnboardingRating] = useState(0);
+  const [signUpEase, setSignUpEase] = useState('');
+  const [accessIssues, setAccessIssues] = useState('');
+  const [videoWouldHelp, setVideoWouldHelp] = useState('');
+  const [usedOnboardingGuide, setUsedOnboardingGuide] = useState('');
 
   // Steps 2 & 3 — Sectioned ratings
   const [sectionUsed, setSectionUsed] = useState({});   // { ui: 'Yes', reg: 'No', cr: 'Yes', int: 'No' }
@@ -135,6 +140,13 @@ export default function OffboardingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name, email, company, role, trialDuration,
+          onboarding: {
+            rating: onboardingRating,
+            signUpEase,
+            accessIssues,
+            videoWouldHelp,
+            usedOnboardingGuide,
+          },
           sections: {
             ui: {
               used: sectionUsed.ui || 'Not answered',
@@ -328,7 +340,7 @@ export default function OffboardingPage() {
             </p>
             {keepInTouch === 'Yes please' && (
               <p className="text-sm text-blue-400 mb-6">
-                We&apos;ll keep you in the loop as new features launch — look out for updates from us soon.
+                We&apos;ll keep you in the loop as new features launch - look out for updates from us soon.
               </p>
             )}
             <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors">
@@ -360,7 +372,7 @@ export default function OffboardingPage() {
               XHS™ Trial Completion
             </h1>
             <p className="text-base text-gray-400">
-              Help us understand your experience — your feedback shapes what we build next
+              Share more about your experience - your feedback is important to us
             </p>
           </div>
 
@@ -381,7 +393,7 @@ export default function OffboardingPage() {
           </div>
 
           {/* ═══════════════════════════════════════════
-              STEP 1 — About You
+              STEP 1 - About You
               ═══════════════════════════════════════════ */}
           {step === 1 && (
             <div className="space-y-6">
@@ -423,16 +435,92 @@ export default function OffboardingPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Onboarding Experience - compact quick-fire section */}
+              <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
+                <h2 className="text-xl font-semibold text-white mb-1">Onboarding experience</h2>
+                <p className="text-xs text-gray-500 mb-4">A few quick questions about getting started</p>
+
+                <div className="space-y-4">
+                  {/* Overall onboarding rating */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">How would you rate the onboarding experience?</label>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map(n => (
+                        <button key={n} type="button" onClick={() => setOnboardingRating(n === onboardingRating ? 0 : n)}
+                          className={`text-2xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+                            n <= onboardingRating ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400'
+                          }`}
+                        >★</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Sign-up ease */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">How easy was it to sign up?</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {['Very easy', 'Straightforward', 'Difficult'].map(opt => (
+                        <button key={opt} type="button" onClick={() => setSignUpEase(opt)}
+                          className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
+                            signUpEase === opt ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                          }`}>{opt}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Access issues */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Were there any issues with access?</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {['No issues', 'Minor issues', 'Significant issues'].map(opt => (
+                        <button key={opt} type="button" onClick={() => setAccessIssues(opt)}
+                          className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
+                            accessIssues === opt ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                          }`}>{opt}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Video walkthrough */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Would a video walkthrough have helped?</label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {['Yes', 'Maybe', 'No'].map(opt => (
+                          <button key={opt} type="button" onClick={() => setVideoWouldHelp(opt)}
+                            className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
+                              videoWouldHelp === opt ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                            }`}>{opt}</button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Onboarding guide */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Did you use the onboarding guide?</label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {['Yes', 'No', 'Didn\u2019t know about it'].map(opt => (
+                          <button key={opt} type="button" onClick={() => setUsedOnboardingGuide(opt)}
+                            className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
+                              usedOnboardingGuide === opt ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                            }`}>{opt}</button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
           {/* ═══════════════════════════════════════════
-              STEP 2 — UI & Regulatory Monitoring
+              STEP 2 - UI & Regulatory Monitoring
               ═══════════════════════════════════════════ */}
           {step === 2 && (
             <div className="space-y-5">
               <div className="text-center mb-2">
-                <p className="text-xs text-gray-500">Rate each area you used — skip what you didn&apos;t try</p>
+                <p className="text-xs text-gray-500">Rate each area you used - skip what you didn&apos;t try</p>
               </div>
 
               {/* UI Section */}
@@ -455,12 +543,12 @@ export default function OffboardingPage() {
           )}
 
           {/* ═══════════════════════════════════════════
-              STEP 3 — Country Reports & Integrations
+              STEP 3 - Country Reports & Integrations
               ═══════════════════════════════════════════ */}
           {step === 3 && (
             <div className="space-y-5">
               <div className="text-center mb-2">
-                <p className="text-xs text-gray-500">Rate each area you used — skip what you didn&apos;t try</p>
+                <p className="text-xs text-gray-500">Rate each area you used - skip what you didn&apos;t try</p>
               </div>
 
               {/* Country Reports Section */}
@@ -527,14 +615,14 @@ export default function OffboardingPage() {
           )}
 
           {/* ═══════════════════════════════════════════
-              STEP 4 — Upcoming Features
+              STEP 4 - Upcoming Features
               ═══════════════════════════════════════════ */}
           {step === 4 && (
             <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
                 <div className="flex items-center gap-2 mb-1">
                   <h2 className="text-xl font-semibold text-white">Coming Soon</h2>
-                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full">Preview</span>
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full">Preview</span>
                 </div>
                 <p className="text-sm text-gray-400 mb-6">We&apos;re building new capabilities. How interested are you in each?</p>
 
@@ -557,7 +645,7 @@ export default function OffboardingPage() {
                             <button key={val} type="button" onClick={() => setUpcoming(feature.key, val)} title={label}
                               className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
                                 upcomingInterest[feature.key] === val
-                                  ? val >= 3 ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25' : 'bg-gray-600 text-white'
+                                  ? val >= 3 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25' : 'bg-gray-600 text-white'
                                   : 'bg-white/10 text-gray-500 hover:bg-white/20 hover:text-gray-300'
                               }`}
                             >{val}</button>
@@ -581,7 +669,7 @@ export default function OffboardingPage() {
                   {['Yes please', 'Maybe later', 'No thanks'].map(opt => (
                     <button key={opt} type="button" onClick={() => setKeepInTouch(opt)}
                       className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
-                        keepInTouch === opt ? 'bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        keepInTouch === opt ? 'bg-blue-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
                       }`}>{opt}</button>
                   ))}
                 </div>
@@ -590,7 +678,7 @@ export default function OffboardingPage() {
           )}
 
           {/* ═══════════════════════════════════════════
-              STEP 5 — Overall Experience
+              STEP 5 - Overall Experience
               ═══════════════════════════════════════════ */}
           {step === 5 && (
             <div className="space-y-6">
@@ -645,7 +733,7 @@ export default function OffboardingPage() {
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Anything else you&apos;d like us to know?</label>
                     <textarea value={additionalFeedback} onChange={e => setAdditionalFeedback(e.target.value)} rows={3}
-                      placeholder="Open feedback — anything goes..."
+                      placeholder="Open feedback - anything goes..."
                       className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none" />
                   </div>
                 </div>
