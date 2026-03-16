@@ -127,7 +127,7 @@ export default function PricingPage() {
 
       <main>
         {/* Pricing section */}
-        <div className="bg-gray-900 pt-24 sm:pt-32">
+        <div className="bg-gray-900 pt-24 sm:pt-32 pb-24 sm:pb-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-4xl text-center">
               <div className="flex items-center justify-center gap-4 mb-6">
