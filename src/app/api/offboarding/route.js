@@ -377,6 +377,22 @@ Submitted: ${new Date().toISOString()}
 </body>
 </html>`.trim();
 
+    /* ── Persist to Vercel Blob ── */
+    const submissionData = {
+      ...data,
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      submittedAt: new Date().toISOString(),
+      avgRating: avgRating !== 'N/A' ? Number(avgRating) : null,
+    };
+
+    try {
+      const existing = await getResponsesFromBlob();
+      await saveResponsesToBlob([submissionData, ...existing]);
+      console.log('✅ Trial survey response persisted to Vercel Blob');
+    } catch (blobError) {
+      console.error('⚠️ Failed to persist to blob (continuing with email):', blobError);
+    }
+
     /* ── Send via Resend ── */
     if (process.env.RESEND_API_KEY) {
       const toEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
