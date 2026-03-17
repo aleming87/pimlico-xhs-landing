@@ -75,6 +75,11 @@ export default function Page() {
                   alt="BVNK"
                   className="max-h-6 w-auto object-contain"
                 />
+                <img
+                  src="/mastercard.jpg"
+                  alt="Mastercard"
+                  className="max-h-8 w-auto object-contain"
+                />
               </div>
             </div>
           </div>
