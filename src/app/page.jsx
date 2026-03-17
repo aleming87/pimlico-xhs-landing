@@ -76,7 +76,7 @@ export default function Page() {
                   className="max-h-6 w-auto object-contain"
                 />
                 <img
-                  src="/mastercard.jpg"
+                  src="/Mastercard.svg"
                   alt="Mastercard"
                   className="max-h-8 w-auto object-contain"
                 />
