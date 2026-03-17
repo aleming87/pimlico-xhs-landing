@@ -42,6 +42,19 @@ export async function GET() {
   }
 }
 
+/* ── PUT: seed/import a response (persist only, no email) ── */
+export async function PUT(request) {
+  try {
+    const data = await request.json();
+    const existing = await getResponsesFromBlob();
+    await saveResponsesToBlob([data, ...existing]);
+    return NextResponse.json({ success: true, total: existing.length + 1 });
+  } catch (error) {
+    console.error('Error seeding trial survey response:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
 /* ── POST: submit survey, persist, and email ── */export async function POST(request) {
   try {
     const data = await request.json();
