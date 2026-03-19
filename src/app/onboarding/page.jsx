@@ -118,7 +118,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const [scheduleTraining, setScheduleTraining] = useState(false);
   const [preferredTrainingDate, setPreferredTrainingDate] = useState('');
   const [wantOnboardingGuide, setWantOnboardingGuide] = useState(false);
-  const [participateInSurveys, setParticipateInSurveys] = useState(false);
+  const [participateInReviews, setParticipateInReviews] = useState(false);
+  const [reviewProducts, setReviewProducts] = useState([]);
   const [participateInInterviews, setParticipateInInterviews] = useState(false);
   const [tryNewProducts, setTryNewProducts] = useState(false);
   const [productsOfInterest, setProductsOfInterest] = useState([]);
@@ -262,7 +263,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           scheduleTraining,
           preferredTrainingDate,
           wantOnboardingGuide,
-          participateInSurveys,
+          participateInReviews,
+          reviewProducts,
           participateInInterviews,
           tryNewProducts,
           productsOfInterest,
@@ -733,18 +735,55 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   <div className="flex items-start gap-4">
                     <button
                       type="button"
-                      onClick={() => setParticipateInSurveys(!participateInSurveys)}
+                      onClick={() => {
+                        setParticipateInReviews(!participateInReviews);
+                        if (participateInReviews) setReviewProducts([]);
+                      }}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        participateInSurveys ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
+                        participateInReviews ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInSurveys && <span className="text-xs">{'\u2713'}</span>}
+                      {participateInReviews && <span className="text-xs">{'\u2713'}</span>}
                     </button>
-                    <div>
-                      <p className="text-slate-800 font-medium text-sm">Participate in product surveys</p>
+                    <div className="flex-1">
+                      <p className="text-slate-800 font-medium text-sm">Participate in product reviews</p>
                       <p className="text-xs text-slate-500 mt-0.5">Help us improve by sharing feedback on features and workflows</p>
                     </div>
                   </div>
+
+                  {participateInReviews && (
+                    <div className="ml-9 space-y-2">
+                      <p className="text-sm text-slate-700 font-medium mb-3">Which products would you like to review?</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {PRODUCTS.map(p => {
+                          const selected = reviewProducts.includes(p.key);
+                          return (
+                            <button
+                              key={p.key}
+                              type="button"
+                              onClick={() => setReviewProducts(prev => selected ? prev.filter(k => k !== p.key) : [...prev, p.key])}
+                              className={`text-left p-3.5 rounded-xl border transition-all ${
+                                selected
+                                  ? 'bg-blue-50 border-blue-300 ring-1 ring-blue-200'
+                                  : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <span className="text-lg">{p.icon}</span>
+                                <span className={`font-semibold text-sm ${selected ? 'text-blue-800' : 'text-slate-800'}`}>{p.label}</span>
+                                {selected && (
+                                  <svg className="w-4 h-4 text-blue-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                              </div>
+                              <p className={`text-xs mt-1.5 leading-relaxed ${selected ? 'text-blue-600' : 'text-slate-500'}`}>{p.desc}</p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex items-start gap-4">
                     <button

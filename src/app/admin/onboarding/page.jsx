@@ -153,7 +153,8 @@ export default function AdminOnboardingPage() {
       scheduleTraining: s.scheduleTraining ? 'Yes' : 'No',
       preferredTrainingDate: s.preferredTrainingDate || '',
       wantOnboardingGuide: s.wantOnboardingGuide ? 'Yes' : 'No',
-      participateInSurveys: s.participateInSurveys ? 'Yes' : 'No',
+      participateInReviews: s.participateInReviews ? 'Yes' : 'No',
+      reviewProducts: (s.reviewProducts || []).join('; '),
       participateInInterviews: s.participateInInterviews ? 'Yes' : 'No',
       tryNewProducts: s.tryNewProducts ? 'Yes' : 'No',
       productsOfInterest: (s.productsOfInterest || []).join('; '),
@@ -756,8 +757,8 @@ function SubmissionCard({ submission: s }) {
               <div className={`p-2.5 rounded-lg ${s.wantOnboardingGuide ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
                 📖 Guide: {s.wantOnboardingGuide ? 'Yes' : 'No'}
               </div>
-              <div className={`p-2.5 rounded-lg ${s.participateInSurveys ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
-                📊 Surveys: {s.participateInSurveys ? 'Yes' : 'No'}
+              <div className={`p-2.5 rounded-lg ${s.participateInReviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
+                📊 Reviews: {s.participateInReviews ? 'Yes' : 'No'}
               </div>
               <div className={`p-2.5 rounded-lg ${s.participateInInterviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
                 🎤 Interviews: {s.participateInInterviews ? 'Yes' : 'No'}
