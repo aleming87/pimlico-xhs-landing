@@ -101,6 +101,7 @@ export async function POST(request) {
         maxSeats: maxSeats || 10,
         maxJurisdictions: maxJurisdictions || 20,
         verticals: verticals || ['Gambling', 'Payments', 'Crypto', 'AI'],
+        allowedDomains: Array.isArray(body.allowedDomains) ? body.allowedDomains : [],
         notes: notes || '',
         createdAt: new Date().toISOString(),
         active: true,

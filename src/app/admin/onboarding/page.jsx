@@ -31,7 +31,7 @@ export default function AdminOnboardingPage() {
   const [selectedOrg, setSelectedOrg] = useState(null);
 
   // Create org form
-  const [newOrg, setNewOrg] = useState({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], notes: '' });
+  const [newOrg, setNewOrg] = useState({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], allowedDomains: '', notes: '' });
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState('');
   const [createSuccess, setCreateSuccess] = useState('');
@@ -64,13 +64,19 @@ export default function AdminOnboardingPage() {
       const res = await fetch('/api/onboarding', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create-org', ...newOrg }),
+        body: JSON.stringify({
+          action: 'create-org',
+          ...newOrg,
+          allowedDomains: newOrg.allowedDomains
+            ? newOrg.allowedDomains.split(',').map(d => d.trim().toLowerCase()).filter(Boolean)
+            : [],
+        }),
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.error);
       setOrgs([...orgs, data.org]);
       setCreateSuccess(`Organisation created! Link: pimlicosolutions.com/onboarding/${data.org.slug}`);
-      setNewOrg({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], notes: '' });
+      setNewOrg({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], allowedDomains: '', notes: '' });
     } catch (err) {
       setCreateError(err.message);
     } finally {
@@ -433,6 +439,9 @@ export default function AdminOnboardingPage() {
                     {org.notes && (
                       <p className="text-xs text-gray-500 mt-2 italic">Notes: {org.notes}</p>
                     )}
+                    {org.allowedDomains?.length > 0 && (
+                      <p className="text-xs text-blue-400 mt-1">Allowed domains: {org.allowedDomains.join(', ')}</p>
+                    )}
 
                     {orgSubs.length > 0 && (
                       <div className="mt-4 pt-4 border-t border-gray-700/40">
@@ -620,6 +629,18 @@ export default function AdminOnboardingPage() {
               </div>
 
               <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Allowed Email Domains</label>
+                <input
+                  type="text"
+                  value={newOrg.allowedDomains}
+                  onChange={e => setNewOrg({ ...newOrg, allowedDomains: e.target.value })}
+                  placeholder="e.g. mozzartbet.com, mozzartbet.co.uk"
+                  className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Comma-separated. Team member emails must match these domains. Leave blank to allow any business email.</p>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1.5">Internal Notes</label>
                 <textarea
                   value={newOrg.notes}
@@ -635,6 +656,7 @@ export default function AdminOnboardingPage() {
                 <h3 className="text-sm font-medium text-blue-300 mb-2">Preview</h3>
                 <p className="text-white text-sm font-mono">pimlicosolutions.com/onboarding/{newOrg.slug || '...'}</p>
                 <p className="text-xs text-gray-400 mt-1">{newOrg.maxSeats} seats · {newOrg.maxJurisdictions} jurisdictions · {newOrg.verticals.join(', ')}</p>
+                {newOrg.allowedDomains && <p className="text-xs text-blue-400 mt-1">Domains: {newOrg.allowedDomains}</p>}
               </div>
 
               {createError && (

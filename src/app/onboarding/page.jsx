@@ -1,23 +1,33 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { useState } from "react";
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   Jurisdiction Data â€” grouped by region
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* -----------------------------------------------
+   Jurisdiction Data - grouped by region
+   ----------------------------------------------- */
 const JURISDICTION_GROUPS = {
-  'European Union': [
-    'European Union', 'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic',
-    'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Ireland',
-    'Italy', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Netherlands', 'Poland', 'Portugal',
-    'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden',
+  'Northern Europe': [
+    'United Kingdom', 'Ireland', 'Denmark', 'Sweden', 'Finland', 'Norway',
+    'Iceland', 'Estonia', 'Latvia', 'Lithuania', 'Guernsey', 'Isle of Man',
+    'Jersey', 'Alderney', 'Gibraltar',
   ],
-  'Europe (Non-EU)': [
-    'United Kingdom', 'Switzerland', 'Norway', 'Iceland', 'Liechtenstein', 'Albania',
-    'Armenia', 'Azerbaijan', 'Belarus', 'Bosnia and Herzegovina', 'Georgia', 'Gibraltar',
-    'Guernsey', 'Isle of Man', 'Jersey', 'Alderney', 'Kazakhstan', 'Moldova', 'Montenegro',
-    'North Macedonia', 'Russia', 'Serbia', 'Turkey', 'Ukraine',
+  'Western Europe': [
+    'France', 'Germany', 'Netherlands', 'Belgium', 'Luxembourg', 'Austria',
+    'Switzerland', 'Liechtenstein',
+  ],
+  'Southern Europe': [
+    'Spain', 'Portugal', 'Italy', 'Malta', 'Greece', 'Cyprus', 'Slovenia',
+    'Croatia', 'Albania', 'Montenegro', 'North Macedonia',
+    'Bosnia and Herzegovina',
+  ],
+  'Central & Eastern Europe': [
+    'Poland', 'Czech Republic', 'Slovakia', 'Hungary', 'Romania', 'Bulgaria',
+    'Serbia', 'Moldova', 'Ukraine', 'Belarus', 'Russia', 'Turkey',
+    'Georgia', 'Armenia', 'Azerbaijan', 'Kazakhstan',
+  ],
+  'European Union (Supranational)': [
+    'European Union',
   ],
   'North America': [
     'United States', 'Canada', 'Mexico',
@@ -37,7 +47,7 @@ const JURISDICTION_GROUPS = {
   ],
   'Central America & Caribbean': [
     'Antigua and Barbuda', 'Anguilla', 'Aruba', 'Bahamas', 'Barbados', 'Belize', 'Bermuda',
-    'British Virgin Islands', 'Cayman Islands', 'Costa Rica', 'Cuba', 'CuraÃ§ao', 'Dominica',
+    'British Virgin Islands', 'Cayman Islands', 'Costa Rica', 'Cuba', 'Curacao', 'Dominica',
     'Dominican Republic', 'El Salvador', 'Guatemala', 'Haiti', 'Honduras', 'Jamaica',
     'Montserrat', 'Nicaragua', 'Panama', 'Saint Kitts', 'Saint Vincent and the Grenadines',
     'Trinidad and Tobago', 'Turks & Caicos Islands', 'US Virgin Islands',
@@ -73,17 +83,17 @@ const JURISDICTION_GROUPS = {
 };
 
 const PRODUCTS = [
-  { key: 'projects',    label: 'Projectsâ„¢',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives', icon: 'ðŸ“‹' },
-  { key: 'blocklists',  label: 'Blocklistsâ„¢',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time', icon: 'ðŸš«' },
-  { key: 'competitors', label: 'Competitorsâ„¢',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions', icon: 'ðŸ¢' },
-  { key: 'lens',        label: 'Lensâ„¢',         desc: 'Drill down into the technical standards and regulatory trends impacting your business', icon: 'ðŸ”' },
-  { key: 'technical',   label: 'Technicalâ„¢',    desc: 'Access and compare technical standards, testing requirements and certification frameworks', icon: 'âš™ï¸' },
-  { key: 'partners',    label: 'Partnersâ„¢',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions', icon: 'ðŸ¤' },
+  { key: 'projects',    label: 'Projects',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives', icon: '\uD83D\uDCCB' },
+  { key: 'blocklists',  label: 'Blocklists',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time', icon: '\uD83D\uDEAB' },
+  { key: 'competitors', label: 'Competitors',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions', icon: '\uD83C\uDFE2' },
+  { key: 'lens',        label: 'Lens',         desc: 'Drill down into the technical standards and regulatory trends impacting your business', icon: '\uD83D\uDD0D' },
+  { key: 'technical',   label: 'Technical',    desc: 'Access and compare technical standards, testing requirements and certification frameworks', icon: '\u2699\uFE0F' },
+  { key: 'partners',    label: 'Partners',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions', icon: '\uD83E\uDD1D' },
 ];
 
 const VERTICALS = ['Gambling', 'Payments', 'Crypto', 'AI'];
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ----------------------------------------------- */
 
 export default function OnboardingPage() {
   return <OnboardingForm orgSlug="general" />;
@@ -94,17 +104,17 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // Step 1 â€” Company & Team
+  // Step 1 - Company & Team
   const [company, setCompany] = useState(orgConfig?.name || '');
   const [teamMembers, setTeamMembers] = useState([{ name: '', email: '', role: '' }]);
 
-  // Step 2 â€” Verticals & Jurisdictions
+  // Step 2 - Verticals & Jurisdictions
   const [selectedVerticals, setSelectedVerticals] = useState([]);
   const [selectedJurisdictions, setSelectedJurisdictions] = useState([]);
   const [expandedRegions, setExpandedRegions] = useState({});
   const [jurisdictionSearch, setJurisdictionSearch] = useState('');
 
-  // Step 3 â€” Preferences
+  // Step 3 - Preferences
   const [scheduleTraining, setScheduleTraining] = useState(false);
   const [preferredTrainingDate, setPreferredTrainingDate] = useState('');
   const [wantOnboardingGuide, setWantOnboardingGuide] = useState(false);
@@ -117,11 +127,12 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const maxJurisdictions = orgConfig?.maxJurisdictions || 50;
   const maxSeats = orgConfig?.maxSeats || 50;
   const availableVerticals = orgConfig?.verticals || VERTICALS;
+  const allowedDomains = orgConfig?.allowedDomains || [];
 
   const totalSteps = 3;
   const progress = Math.round((step / totalSteps) * 100);
 
-  /* â”€â”€ Team member handlers â”€â”€ */
+  /* -- Team member handlers -- */
   const addTeamMember = () => {
     if (teamMembers.length < maxSeats) {
       setTeamMembers([...teamMembers, { name: '', email: '', role: '' }]);
@@ -140,7 +151,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     setTeamMembers(updated);
   };
 
-  /* â”€â”€ Jurisdiction handlers â”€â”€ */
+  /* -- Jurisdiction handlers -- */
   const toggleRegion = (region) => {
     setExpandedRegions(prev => ({ ...prev, [region]: !prev[region] }));
   };
@@ -170,10 +181,6 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     return JURISDICTION_GROUPS[region].every(j => selectedJurisdictions.includes(j));
   };
 
-  const isRegionPartiallySelected = (region) => {
-    return JURISDICTION_GROUPS[region].some(j => selectedJurisdictions.includes(j));
-  };
-
   const filteredGroups = jurisdictionSearch
     ? Object.fromEntries(
         Object.entries(JURISDICTION_GROUPS).map(([region, jurisdictions]) => [
@@ -183,21 +190,21 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
       )
     : JURISDICTION_GROUPS;
 
-  /* â”€â”€ Product toggle â”€â”€ */
+  /* -- Product toggle -- */
   const toggleProduct = (key) => {
     setProductsOfInterest(prev =>
       prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
     );
   };
 
-  /* â”€â”€ Vertical toggle â”€â”€ */
+  /* -- Vertical toggle -- */
   const toggleVertical = (v) => {
     setSelectedVerticals(prev =>
       prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v]
     );
   };
 
-  /* â”€â”€ Validation â”€â”€ */
+  /* -- Validation -- */
   const freeEmailProviders = [
     'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
     'icloud.com', 'mail.com', 'protonmail.com', 'zoho.com', 'yandex.com',
@@ -207,18 +214,38 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!regex.test(email)) return false;
     const domain = email.split('@')[1]?.toLowerCase();
-    return !freeEmailProviders.includes(domain);
+    if (freeEmailProviders.includes(domain)) return false;
+    return true;
+  };
+
+  const isDomainAllowed = (email) => {
+    if (!allowedDomains.length) return true;
+    const domain = email.split('@')[1]?.toLowerCase();
+    return allowedDomains.some(d => domain === d.toLowerCase());
+  };
+
+  const getEmailError = (email) => {
+    if (!email) return null;
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email)) return 'Invalid email format';
+    const domain = email.split('@')[1]?.toLowerCase();
+    if (freeEmailProviders.includes(domain)) return 'Please use a business email';
+    if (allowedDomains.length && !isDomainAllowed(email)) {
+      return `Email must use one of: ${allowedDomains.join(', ')}`;
+    }
+    return null;
   };
 
   const canProceedStep1 = company.trim() &&
     teamMembers.length > 0 &&
     teamMembers[0].name.trim() &&
     teamMembers[0].email.trim() &&
-    isValidEmail(teamMembers[0].email);
+    isValidEmail(teamMembers[0].email) &&
+    isDomainAllowed(teamMembers[0].email);
 
   const canProceedStep2 = selectedVerticals.length > 0 && selectedJurisdictions.length > 0;
 
-  /* â”€â”€ Submit â”€â”€ */
+  /* -- Submit -- */
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -252,7 +279,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     }
   };
 
-  /* â”€â”€ Thank You Screen â”€â”€ */
+  /* -- Thank You Screen -- */
   if (submitted) {
     return (
       <div className="bg-slate-50 min-h-screen flex items-center justify-center px-6">
@@ -265,11 +292,11 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           <h1 className="text-3xl font-bold text-slate-900 mb-4">Welcome Aboard!</h1>
           <p className="text-slate-600 text-lg mb-2">Your onboarding form has been submitted successfully.</p>
           <p className="text-slate-500 mb-8">
-            We&apos;ll review your team details and jurisdiction selections, then reach out with next steps
+            {"We'll review your team details and jurisdiction selections, then reach out with next steps"}
             {scheduleTraining ? ' and schedule your training call' : ''}.
           </p>
           <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors">
-            â† Back to Pimlico
+            Back to Pimlico
           </a>
         </div>
       </div>
@@ -304,18 +331,18 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-3">
-              {orgConfig ? `${orgConfig.name} â€” Onboarding` : 'Platform Onboarding'}
+              {orgConfig ? `${orgConfig.name} \u2014 Onboarding` : 'Platform Onboarding'}
             </h1>
             <p className="text-base text-slate-500">
-              Set up your team and configure your Pimlico XHSâ„¢ workspace
+              {"Set up your team and configure your Pimlico XHS\u2122 workspace"}
             </p>
             {/* Step indicators */}
             <div className="flex items-center justify-center gap-2 sm:gap-4 mt-8">
               {[
-                { n: 1, label: 'Team', icon: 'ðŸ‘¥' },
-                { n: 2, label: 'Jurisdictions', icon: 'ðŸŒ' },
-                { n: 3, label: 'Preferences', icon: 'âš™ï¸' },
-              ].map(({ n, label, icon }) => (
+                { n: 1, label: 'Team' },
+                { n: 2, label: 'Jurisdictions' },
+                { n: 3, label: 'Preferences' },
+              ].map(({ n, label }) => (
                 <div key={n} className="flex items-center gap-2">
                   <button
                     type="button"
@@ -330,7 +357,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         : 'bg-slate-200 text-slate-400 cursor-default'
                     }`}
                   >
-                    {n < step ? 'âœ“' : n}
+                    {n < step ? '\u2713' : n}
                   </button>
                   <span className={`text-sm hidden sm:inline font-medium ${
                     n === step ? 'text-slate-900' : n < step ? 'text-blue-700' : 'text-slate-400'
@@ -343,7 +370,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             </div>
           </div>
 
-          {/* â•â•â•â•â•â•â•â•â•â•â•â• STEP 1: Company & Team â•â•â•â•â•â•â•â•â•â•â•â• */}
+          {/* STEP 1: Company & Team */}
           {step === 1 && (
             <div className="space-y-6 animate-fade-in">
               {/* Company */}
@@ -362,6 +389,15 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     className="mt-2 block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-50 disabled:text-slate-500"
                   />
                 </div>
+
+                {/* Allowed domains notice */}
+                {allowedDomains.length > 0 && (
+                  <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-xs text-blue-700">
+                      Team member emails must match: <strong>{allowedDomains.join(', ')}</strong>
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Team Members */}
@@ -388,7 +424,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <div key={i} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-sm font-medium text-slate-700">
-                          {i === 0 ? 'ðŸ‘‘ Primary Contact' : `Team Member ${i + 1}`}
+                          {i === 0 ? 'Primary Contact' : `Team Member ${i + 1}`}
                         </span>
                         {i > 0 && (
                           <button
@@ -424,8 +460,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                             placeholder="jane@company.com"
                             className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
-                          {member.email && !isValidEmail(member.email) && (
-                            <p className="mt-1 text-xs text-red-500">Please use a business email</p>
+                          {member.email && getEmailError(member.email) && (
+                            <p className="mt-1 text-xs text-red-500">{getEmailError(member.email)}</p>
                           )}
                         </div>
                         <div>
@@ -451,13 +487,13 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   disabled={!canProceedStep1}
                   className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
-                  Continue â†’
+                  {"Continue \u2192"}
                 </button>
               </div>
             </div>
           )}
 
-          {/* â•â•â•â•â•â•â•â•â•â•â•â• STEP 2: Verticals & Jurisdictions â•â•â•â•â•â•â•â•â•â•â•â• */}
+          {/* STEP 2: Verticals & Jurisdictions */}
           {step === 2 && (
             <div className="space-y-6 animate-fade-in">
               {/* Verticals */}
@@ -519,7 +555,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-xs text-blue-800 font-medium"
                       >
                         {j}
-                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-blue-600 ml-0.5 text-blue-400">Ã—</button>
+                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-blue-600 ml-0.5 text-blue-400">{'\u00D7'}</button>
                       </span>
                     ))}
                     <button
@@ -547,7 +583,9 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           className="w-full flex items-center justify-between p-3 hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <span className={`text-xs text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}>â–¶</span>
+                            <svg className={`w-3 h-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M6.293 4.293a1 1 0 011.414 0L14 10.586a1 1 0 01-1.414 1.414L6.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd" />
+                            </svg>
                             <span className="text-sm font-medium text-slate-800">{region}</span>
                             {selectedCount > 0 && (
                               <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full">
@@ -596,7 +634,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                         : 'text-slate-600 hover:bg-white border border-transparent hover:border-slate-300'
                                     }`}
                                   >
-                                    <span className="mr-1.5">{isSelected ? 'â˜‘' : 'â˜'}</span>
+                                    <span className="mr-1.5">{isSelected ? '\u2611' : '\u2610'}</span>
                                     {j}
                                   </button>
                                 );
@@ -616,7 +654,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   onClick={() => setStep(1)}
                   className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
-                  â† Back
+                  {"\u2190 Back"}
                 </button>
                 <button
                   type="button"
@@ -624,13 +662,13 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   disabled={!canProceedStep2}
                   className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
-                  Continue â†’
+                  {"Continue \u2192"}
                 </button>
               </div>
             </div>
           )}
 
-          {/* â•â•â•â•â•â•â•â•â•â•â•â• STEP 3: Preferences â•â•â•â•â•â•â•â•â•â•â•â• */}
+          {/* STEP 3: Preferences */}
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
               {/* Training */}
@@ -647,11 +685,11 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         scheduleTraining ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {scheduleTraining && <span className="text-xs">âœ“</span>}
+                      {scheduleTraining && <span className="text-xs">{'\u2713'}</span>}
                     </button>
                     <div className="flex-1">
                       <p className="text-slate-800 font-medium text-sm">Schedule a video call training with our team</p>
-                      <p className="text-xs text-slate-500 mt-0.5">We&apos;ll walk your team through the platform features and best practices</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{"We'll walk your team through the platform features and best practices"}</p>
                       {scheduleTraining && (
                         <div className="mt-3">
                           <label className="block text-xs font-medium text-slate-500 mb-1">Preferred date/time (optional)</label>
@@ -676,7 +714,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         wantOnboardingGuide ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {wantOnboardingGuide && <span className="text-xs">âœ“</span>}
+                      {wantOnboardingGuide && <span className="text-xs">{'\u2713'}</span>}
                     </button>
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Send us an onboarding guide</p>
@@ -689,7 +727,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               {/* Engagement */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-900 mb-2">Engagement Preferences</h2>
-                <p className="text-sm text-slate-500 mb-5">Let us know how you&apos;d like to engage with us beyond the platform</p>
+                <p className="text-sm text-slate-500 mb-5">{"Let us know how you'd like to engage with us beyond the platform"}</p>
 
                 <div className="space-y-5">
                   <div className="flex items-start gap-4">
@@ -700,7 +738,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         participateInSurveys ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInSurveys && <span className="text-xs">âœ“</span>}
+                      {participateInSurveys && <span className="text-xs">{'\u2713'}</span>}
                     </button>
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Participate in product surveys</p>
@@ -716,7 +754,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         participateInInterviews ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInInterviews && <span className="text-xs">âœ“</span>}
+                      {participateInInterviews && <span className="text-xs">{'\u2713'}</span>}
                     </button>
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Open to user interviews</p>
@@ -735,7 +773,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         tryNewProducts ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {tryNewProducts && <span className="text-xs">âœ“</span>}
+                      {tryNewProducts && <span className="text-xs">{'\u2713'}</span>}
                     </button>
                     <div className="flex-1">
                       <p className="text-slate-800 font-medium text-sm">Interested in trying new products</p>
@@ -795,7 +833,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
               {/* Summary panel */}
               <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
-                <h3 className="text-base font-semibold text-blue-900 mb-4">ðŸ“‹ Submission Summary</h3>
+                <h3 className="text-base font-semibold text-blue-900 mb-4">Submission Summary</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-blue-600 text-xs font-medium">Company</span>
@@ -831,7 +869,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   onClick={() => setStep(2)}
                   className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
-                  â† Back
+                  {"\u2190 Back"}
                 </button>
                 <button
                   type="button"
@@ -845,7 +883,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       Submitting...
                     </>
                   ) : (
-                    'Submit Onboarding â†’'
+                    "Submit Onboarding \u2192"
                   )}
                 </button>
               </div>
