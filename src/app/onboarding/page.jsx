@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 
 /* ───────────────────────────────────────
    Jurisdiction Data — grouped by region
@@ -73,12 +73,12 @@ const JURISDICTION_GROUPS = {
 };
 
 const PRODUCTS = [
-  { key: 'xhs', label: 'XHS™ Horizon Scanner', desc: 'Real-time regulatory monitoring across jurisdictions' },
-  { key: 'projects', label: 'Projects™', desc: 'Organise regulatory items into workstreams and track compliance' },
-  { key: 'lens', label: 'Lens™', desc: 'Deep-dive into technical standards and regulatory trends' },
-  { key: 'competitors', label: 'Competitors™', desc: 'Track competitor licences, enforcements, and market activity' },
-  { key: 'blocklists', label: 'Blocklists™', desc: 'Monitor blocked URLs and enforcement actions across jurisdictions' },
-  { key: 'countryReports', label: 'Country Reports', desc: 'Comprehensive regulatory landscape reports by jurisdiction' },
+  { key: 'projects',    label: 'Projects™',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives', icon: '📋' },
+  { key: 'blocklists',  label: 'Blocklists™',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time', icon: '🚫' },
+  { key: 'competitors', label: 'Competitors™',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions', icon: '🏢' },
+  { key: 'lens',        label: 'Lens™',         desc: 'Drill down into the technical standards and regulatory trends impacting your business', icon: '🔍' },
+  { key: 'technical',   label: 'Technical™',    desc: 'Access and compare technical standards, testing requirements and certification frameworks', icon: '⚙️' },
+  { key: 'partners',    label: 'Partners™',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions', icon: '🤝' },
 ];
 
 const VERTICALS = ['Gambling', 'Payments', 'Crypto', 'AI'];
@@ -255,20 +255,20 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   /* ── Thank You Screen ── */
   if (submitted) {
     return (
-      <div className="bg-gray-900 min-h-screen flex items-center justify-center px-6">
+      <div className="bg-slate-50 min-h-screen flex items-center justify-center px-6">
         <div className="max-w-lg w-full text-center">
-          <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-teal-200">
+            <svg className="w-10 h-10 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-4">Welcome Aboard!</h1>
-          <p className="text-gray-300 text-lg mb-2">Your onboarding form has been submitted successfully.</p>
-          <p className="text-gray-400 mb-8">
-            We'll review your team details and jurisdiction selections, then reach out with next steps
+          <h1 className="text-3xl font-bold text-slate-900 mb-4">Welcome Aboard!</h1>
+          <p className="text-slate-600 text-lg mb-2">Your onboarding form has been submitted successfully.</p>
+          <p className="text-slate-500 mb-8">
+            We&apos;ll review your team details and jurisdiction selections, then reach out with next steps
             {scheduleTraining ? ' and schedule your training call' : ''}.
           </p>
-          <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition-colors">
+          <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors">
             ← Back to Pimlico
           </a>
         </div>
@@ -277,53 +277,67 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   }
 
   return (
-    <div className="bg-gray-900 min-h-screen">
+    <div className="bg-slate-50 min-h-screen">
       {/* Navigation */}
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-          <div className="flex lg:flex-1">
-            <a href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Pimlico XHS</span>
-              <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
-            </a>
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <nav aria-label="Global" className="flex items-center justify-between px-6 py-4 lg:px-8 max-w-5xl mx-auto">
+          <a href="/" className="flex items-center gap-3">
+            <Image src="/Pimlico_Logo.png" alt="Pimlico" width={110} height={30} className="h-7 w-auto" />
+          </a>
+          <div className="flex items-center gap-3">
+            <Image src="/XHS Logo BLUE on WHITE.png" alt="XHS" width={50} height={20} className="h-5 w-auto" />
+            <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ONBOARDING</span>
           </div>
         </nav>
       </header>
 
       {/* Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-gray-800">
+      <div className="sticky top-[57px] z-50 h-1 bg-slate-200">
         <div
-          className="h-full bg-blue-500 transition-all duration-500 ease-out"
+          className="h-full bg-teal-500 transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
+      <div className="px-6 py-12 lg:px-8">
         <div className="mx-auto max-w-3xl">
           {/* Header */}
-          <div className="text-center mb-12 pt-12">
-            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-3">
               {orgConfig ? `${orgConfig.name} — Onboarding` : 'Platform Onboarding'}
             </h1>
-            <p className="text-lg text-gray-300">
+            <p className="text-base text-slate-500">
               Set up your team and configure your Pimlico XHS™ workspace
             </p>
-            <div className="flex items-center justify-center gap-4 mt-6">
-              {[1, 2, 3].map(s => (
-                <div key={s} className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
-                    s < step ? 'bg-green-500 text-white' :
-                    s === step ? 'bg-blue-600 text-white' :
-                    'bg-gray-700 text-gray-400'
+            {/* Step indicators */}
+            <div className="flex items-center justify-center gap-2 sm:gap-4 mt-8">
+              {[
+                { n: 1, label: 'Team', icon: '👥' },
+                { n: 2, label: 'Jurisdictions', icon: '🌍' },
+                { n: 3, label: 'Preferences', icon: '⚙️' },
+              ].map(({ n, label, icon }) => (
+                <div key={n} className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (n < step) setStep(n);
+                    }}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      n < step
+                        ? 'bg-teal-600 text-white cursor-pointer hover:bg-teal-700'
+                        : n === step
+                        ? 'bg-teal-600 text-white ring-4 ring-teal-100'
+                        : 'bg-slate-200 text-slate-400 cursor-default'
+                    }`}
+                  >
+                    {n < step ? '✓' : n}
+                  </button>
+                  <span className={`text-sm hidden sm:inline font-medium ${
+                    n === step ? 'text-slate-900' : n < step ? 'text-teal-700' : 'text-slate-400'
                   }`}>
-                    {s < step ? '✓' : s}
-                  </div>
-                  <span className={`text-sm hidden sm:inline ${
-                    s === step ? 'text-white font-medium' : 'text-gray-500'
-                  }`}>
-                    {s === 1 ? 'Team' : s === 2 ? 'Jurisdictions' : 'Preferences'}
+                    {label}
                   </span>
-                  {s < 3 && <div className="w-8 h-px bg-gray-700 hidden sm:block" />}
+                  {n < 3 && <div className={`w-8 h-px hidden sm:block ${n < step ? 'bg-teal-400' : 'bg-slate-300'}`} />}
                 </div>
               ))}
             </div>
@@ -333,11 +347,11 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {step === 1 && (
             <div className="space-y-6 animate-fade-in">
               {/* Company */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-2xl font-semibold text-white mb-6">Company Information</h2>
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h2 className="text-xl font-semibold text-slate-900 mb-5">Company Information</h2>
                 <div>
-                  <label className="block text-sm font-semibold text-white">
-                    Company Name <span className="text-red-400">*</span>
+                  <label className="block text-sm font-semibold text-slate-700">
+                    Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -345,17 +359,17 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     onChange={e => setCompany(e.target.value)}
                     placeholder="e.g. Mozzartbet"
                     disabled={!!orgConfig?.name}
-                    className="mt-2.5 block w-full rounded-md bg-white/10 px-3.5 py-2 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 disabled:opacity-50"
+                    className="mt-2 block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 disabled:bg-slate-50 disabled:text-slate-500"
                   />
                 </div>
               </div>
 
               {/* Team Members */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <div className="flex items-center justify-between mb-6">
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 className="text-2xl font-semibold text-white">Team Members</h2>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <h2 className="text-xl font-semibold text-slate-900">Team Members</h2>
+                    <p className="text-sm text-slate-500 mt-1">
                       Add the people who will use the platform ({teamMembers.length}/{maxSeats} seats)
                     </p>
                   </div>
@@ -363,24 +377,24 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     type="button"
                     onClick={addTeamMember}
                     disabled={teamMembers.length >= maxSeats}
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
                     + Add Member
                   </button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {teamMembers.map((member, i) => (
-                    <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/5">
+                    <div key={i} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-300">
+                        <span className="text-sm font-medium text-slate-700">
                           {i === 0 ? '👑 Primary Contact' : `Team Member ${i + 1}`}
                         </span>
                         {i > 0 && (
                           <button
                             type="button"
                             onClick={() => removeTeamMember(i)}
-                            className="text-red-400 hover:text-red-300 text-sm"
+                            className="text-red-500 hover:text-red-700 text-sm font-medium"
                           >
                             Remove
                           </button>
@@ -388,40 +402,40 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
-                          <label className="block text-xs text-gray-400 mb-1">
-                            Full Name {i === 0 && <span className="text-red-400">*</span>}
+                          <label className="block text-xs font-medium text-slate-500 mb-1">
+                            Full Name {i === 0 && <span className="text-red-500">*</span>}
                           </label>
                           <input
                             type="text"
                             value={member.name}
                             onChange={e => updateTeamMember(i, 'name', e.target.value)}
                             placeholder="Jane Smith"
-                            className="block w-full rounded-md bg-white/10 px-3 py-2 text-sm text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs text-gray-400 mb-1">
-                            Business Email {i === 0 && <span className="text-red-400">*</span>}
+                          <label className="block text-xs font-medium text-slate-500 mb-1">
+                            Business Email {i === 0 && <span className="text-red-500">*</span>}
                           </label>
                           <input
                             type="email"
                             value={member.email}
                             onChange={e => updateTeamMember(i, 'email', e.target.value)}
                             placeholder="jane@company.com"
-                            className="block w-full rounded-md bg-white/10 px-3 py-2 text-sm text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           />
                           {member.email && !isValidEmail(member.email) && (
-                            <p className="mt-1 text-xs text-red-400">Please use a business email</p>
+                            <p className="mt-1 text-xs text-red-500">Please use a business email</p>
                           )}
                         </div>
                         <div>
-                          <label className="block text-xs text-gray-400 mb-1">Role / Title</label>
+                          <label className="block text-xs font-medium text-slate-500 mb-1">Role / Title</label>
                           <input
                             type="text"
                             value={member.role}
                             onChange={e => updateTeamMember(i, 'role', e.target.value)}
                             placeholder="e.g. Compliance Manager"
-                            className="block w-full rounded-md bg-white/10 px-3 py-2 text-sm text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           />
                         </div>
                       </div>
@@ -430,13 +444,12 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                 </div>
               </div>
 
-              {/* Navigation */}
-              <div className="flex justify-end pt-4">
+              <div className="flex justify-end pt-2">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
                   disabled={!canProceedStep1}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
                   Continue →
                 </button>
@@ -448,19 +461,19 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {step === 2 && (
             <div className="space-y-6 animate-fade-in">
               {/* Verticals */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-2xl font-semibold text-white mb-2">Focus Areas</h2>
-                <p className="text-sm text-gray-400 mb-4">Which regulatory verticals are relevant to your organisation?</p>
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h2 className="text-xl font-semibold text-slate-900 mb-2">Focus Areas</h2>
+                <p className="text-sm text-slate-500 mb-4">Which regulatory verticals are relevant to your organisation?</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {availableVerticals.map(v => (
                     <button
                       key={v}
                       type="button"
                       onClick={() => toggleVertical(v)}
-                      className={`py-3 px-4 rounded-lg font-medium transition-all ${
+                      className={`py-3 px-4 rounded-lg font-medium transition-all border ${
                         selectedVerticals.includes(v)
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                          ? 'bg-teal-600 text-white border-teal-600 shadow-sm'
+                          : 'bg-white text-slate-600 border-slate-300 hover:border-teal-400 hover:text-teal-700'
                       }`}
                     >
                       {v}
@@ -470,46 +483,49 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               </div>
 
               {/* Jurisdictions */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
                 <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-2xl font-semibold text-white">Jurisdictions</h2>
+                  <h2 className="text-xl font-semibold text-slate-900">Jurisdictions</h2>
                   <span className={`text-sm font-medium px-3 py-1 rounded-full ${
                     selectedJurisdictions.length >= maxJurisdictions
-                      ? 'bg-amber-500/20 text-amber-300'
-                      : 'bg-blue-500/20 text-blue-300'
+                      ? 'bg-amber-100 text-amber-700'
+                      : 'bg-teal-50 text-teal-700'
                   }`}>
                     {selectedJurisdictions.length} / {maxJurisdictions}
                   </span>
                 </div>
-                <p className="text-sm text-gray-400 mb-4">Select the jurisdictions your team needs to monitor</p>
+                <p className="text-sm text-slate-500 mb-4">Select the jurisdictions your team needs to monitor</p>
 
                 {/* Search */}
-                <div className="mb-4">
+                <div className="mb-4 relative">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                   <input
                     type="text"
                     value={jurisdictionSearch}
                     onChange={e => setJurisdictionSearch(e.target.value)}
                     placeholder="Search jurisdictions..."
-                    className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                    className="block w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   />
                 </div>
 
                 {/* Selected chips */}
                 {selectedJurisdictions.length > 0 && (
-                  <div className="mb-4 flex flex-wrap gap-2">
+                  <div className="mb-4 flex flex-wrap gap-1.5">
                     {selectedJurisdictions.map(j => (
                       <span
                         key={j}
-                        className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-xs text-white"
+                        className="inline-flex items-center gap-1 rounded-full bg-teal-50 border border-teal-200 px-2.5 py-1 text-xs text-teal-800 font-medium"
                       >
                         {j}
-                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-gray-200 ml-0.5">×</button>
+                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-teal-600 ml-0.5 text-teal-400">×</button>
                       </span>
                     ))}
                     <button
                       type="button"
                       onClick={() => setSelectedJurisdictions([])}
-                      className="text-xs text-red-400 hover:text-red-300 px-2 py-1"
+                      className="text-xs text-red-500 hover:text-red-700 px-2 py-1 font-medium"
                     >
                       Clear all
                     </button>
@@ -517,32 +533,30 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                 )}
 
                 {/* Region accordion */}
-                <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+                <div className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1">
                   {Object.entries(filteredGroups).map(([region, jurisdictions]) => {
                     const isExpanded = expandedRegions[region] || !!jurisdictionSearch;
                     const selectedCount = jurisdictions.filter(j => selectedJurisdictions.includes(j)).length;
                     const allSelected = isRegionFullySelected(region) && !jurisdictionSearch;
-                    const partialSelected = isRegionPartiallySelected(region);
 
                     return (
-                      <div key={region} className="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
-                        {/* Region header */}
+                      <div key={region} className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
                         <button
                           type="button"
                           onClick={() => toggleRegion(region)}
-                          className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors"
+                          className="w-full flex items-center justify-between p-3 hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <span className={`text-xs transition-transform ${isExpanded ? 'rotate-90' : ''}`}>▶</span>
-                            <span className="text-sm font-medium text-white">{region}</span>
+                            <span className={`text-xs text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}>▶</span>
+                            <span className="text-sm font-medium text-slate-800">{region}</span>
                             {selectedCount > 0 && (
-                              <span className="bg-blue-500/20 text-blue-300 text-xs px-2 py-0.5 rounded-full">
+                              <span className="bg-teal-100 text-teal-700 text-xs font-medium px-2 py-0.5 rounded-full">
                                 {selectedCount}
                               </span>
                             )}
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-500">{jurisdictions.length} jurisdictions</span>
+                            <span className="text-xs text-slate-400">{jurisdictions.length}</span>
                             {!jurisdictionSearch && (
                               <button
                                 type="button"
@@ -550,10 +564,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                   e.stopPropagation();
                                   allSelected ? deselectAllInRegion(region) : selectAllInRegion(region);
                                 }}
-                                className={`text-xs px-2 py-0.5 rounded transition-colors ${
+                                className={`text-xs px-2 py-0.5 rounded font-medium transition-colors ${
                                   allSelected
-                                    ? 'text-red-400 hover:text-red-300'
-                                    : 'text-blue-400 hover:text-blue-300'
+                                    ? 'text-red-500 hover:text-red-700'
+                                    : 'text-teal-600 hover:text-teal-800'
                                 }`}
                               >
                                 {allSelected ? 'Deselect all' : 'Select all'}
@@ -562,10 +576,9 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           </div>
                         </button>
 
-                        {/* Jurisdiction checkboxes */}
                         {isExpanded && (
                           <div className="px-3 pb-3">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
                               {jurisdictions.map(j => {
                                 const isSelected = selectedJurisdictions.includes(j);
                                 const isDisabled = !isSelected && selectedJurisdictions.length >= maxJurisdictions;
@@ -577,10 +590,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                     disabled={isDisabled}
                                     className={`text-left text-xs px-2.5 py-1.5 rounded-md transition-colors ${
                                       isSelected
-                                        ? 'bg-blue-600/30 text-blue-200 border border-blue-500/40'
+                                        ? 'bg-teal-100 text-teal-800 font-medium border border-teal-300'
                                         : isDisabled
-                                        ? 'text-gray-600 cursor-not-allowed'
-                                        : 'text-gray-300 hover:bg-white/10 border border-transparent'
+                                        ? 'text-slate-300 cursor-not-allowed'
+                                        : 'text-slate-600 hover:bg-white border border-transparent hover:border-slate-300'
                                     }`}
                                   >
                                     <span className="mr-1.5">{isSelected ? '☑' : '☐'}</span>
@@ -597,12 +610,11 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                 </div>
               </div>
 
-              {/* Navigation */}
-              <div className="flex justify-between pt-4">
+              <div className="flex justify-between pt-2">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="px-6 py-3 text-gray-400 hover:text-white transition-colors"
+                  className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
                   ← Back
                 </button>
@@ -610,7 +622,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   type="button"
                   onClick={() => setStep(3)}
                   disabled={!canProceedStep2}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
                   Continue →
                 </button>
@@ -622,8 +634,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
               {/* Training */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-2xl font-semibold text-white mb-6">Training & Support</h2>
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h2 className="text-xl font-semibold text-slate-900 mb-5">Training & Support</h2>
 
                 <div className="space-y-5">
                   {/* Video call training */}
@@ -631,24 +643,24 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <button
                       type="button"
                       onClick={() => setScheduleTraining(!scheduleTraining)}
-                      className={`mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center transition-colors ${
-                        scheduleTraining ? 'bg-blue-600 text-white' : 'bg-white/10 border border-white/20'
+                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
+                        scheduleTraining ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {scheduleTraining && <span className="text-sm">✓</span>}
+                      {scheduleTraining && <span className="text-xs">✓</span>}
                     </button>
                     <div className="flex-1">
-                      <p className="text-white font-medium">Schedule a video call training with our team</p>
-                      <p className="text-sm text-gray-400">We'll walk your team through the platform features and best practices</p>
+                      <p className="text-slate-800 font-medium text-sm">Schedule a video call training with our team</p>
+                      <p className="text-xs text-slate-500 mt-0.5">We&apos;ll walk your team through the platform features and best practices</p>
                       {scheduleTraining && (
                         <div className="mt-3">
-                          <label className="block text-xs text-gray-400 mb-1">Preferred date/time (optional)</label>
+                          <label className="block text-xs font-medium text-slate-500 mb-1">Preferred date/time (optional)</label>
                           <input
                             type="text"
                             value={preferredTrainingDate}
                             onChange={e => setPreferredTrainingDate(e.target.value)}
                             placeholder="e.g. Next Tuesday afternoon, or any weekday morning"
-                            className="block w-full rounded-md bg-white/10 px-3 py-2 text-sm text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                           />
                         </div>
                       )}
@@ -660,39 +672,39 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <button
                       type="button"
                       onClick={() => setWantOnboardingGuide(!wantOnboardingGuide)}
-                      className={`mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center transition-colors ${
-                        wantOnboardingGuide ? 'bg-blue-600 text-white' : 'bg-white/10 border border-white/20'
+                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
+                        wantOnboardingGuide ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {wantOnboardingGuide && <span className="text-sm">✓</span>}
+                      {wantOnboardingGuide && <span className="text-xs">✓</span>}
                     </button>
                     <div>
-                      <p className="text-white font-medium">Send us an onboarding guide</p>
-                      <p className="text-sm text-gray-400">Get a comprehensive PDF guide with setup instructions and tips</p>
+                      <p className="text-slate-800 font-medium text-sm">Send us an onboarding guide</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Get a comprehensive PDF guide with setup instructions and tips</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Engagement */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-2xl font-semibold text-white mb-2">Engagement Preferences</h2>
-                <p className="text-sm text-gray-400 mb-6">Let us know how you'd like to engage with us beyond the platform</p>
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h2 className="text-xl font-semibold text-slate-900 mb-2">Engagement Preferences</h2>
+                <p className="text-sm text-slate-500 mb-5">Let us know how you&apos;d like to engage with us beyond the platform</p>
 
                 <div className="space-y-5">
                   <div className="flex items-start gap-4">
                     <button
                       type="button"
                       onClick={() => setParticipateInSurveys(!participateInSurveys)}
-                      className={`mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center transition-colors ${
-                        participateInSurveys ? 'bg-blue-600 text-white' : 'bg-white/10 border border-white/20'
+                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
+                        participateInSurveys ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInSurveys && <span className="text-sm">✓</span>}
+                      {participateInSurveys && <span className="text-xs">✓</span>}
                     </button>
                     <div>
-                      <p className="text-white font-medium">Participate in product surveys</p>
-                      <p className="text-sm text-gray-400">Help us improve by sharing feedback on features and workflows</p>
+                      <p className="text-slate-800 font-medium text-sm">Participate in product surveys</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Help us improve by sharing feedback on features and workflows</p>
                     </div>
                   </div>
 
@@ -700,15 +712,15 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <button
                       type="button"
                       onClick={() => setParticipateInInterviews(!participateInInterviews)}
-                      className={`mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center transition-colors ${
-                        participateInInterviews ? 'bg-blue-600 text-white' : 'bg-white/10 border border-white/20'
+                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
+                        participateInInterviews ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInInterviews && <span className="text-sm">✓</span>}
+                      {participateInInterviews && <span className="text-xs">✓</span>}
                     </button>
                     <div>
-                      <p className="text-white font-medium">Open to user interviews</p>
-                      <p className="text-sm text-gray-400">Occasional 30-minute calls to discuss your experience and needs</p>
+                      <p className="text-slate-800 font-medium text-sm">Open to user interviews</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Occasional 30-minute calls to discuss your experience and needs</p>
                     </div>
                   </div>
 
@@ -719,94 +731,105 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         setTryNewProducts(!tryNewProducts);
                         if (tryNewProducts) setProductsOfInterest([]);
                       }}
-                      className={`mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center transition-colors ${
-                        tryNewProducts ? 'bg-blue-600 text-white' : 'bg-white/10 border border-white/20'
+                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
+                        tryNewProducts ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {tryNewProducts && <span className="text-sm">✓</span>}
+                      {tryNewProducts && <span className="text-xs">✓</span>}
                     </button>
                     <div className="flex-1">
-                      <p className="text-white font-medium">Interested in trying new products</p>
-                      <p className="text-sm text-gray-400">Be among the first to access new features and tools</p>
+                      <p className="text-slate-800 font-medium text-sm">Interested in trying new products</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Be among the first to access new features and tools</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Products of Interest */}
                 {tryNewProducts && (
-                  <div className="mt-5 ml-10 space-y-2">
-                    <p className="text-sm text-gray-300 font-medium mb-3">Which products interest you?</p>
-                    {PRODUCTS.map(p => (
-                      <button
-                        key={p.key}
-                        type="button"
-                        onClick={() => toggleProduct(p.key)}
-                        className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                          productsOfInterest.includes(p.key)
-                            ? 'bg-blue-600/20 border-blue-500/40 text-white'
-                            : 'bg-white/5 border-white/5 text-gray-300 hover:bg-white/10'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm">{productsOfInterest.includes(p.key) ? '☑' : '☐'}</span>
-                          <span className="font-medium text-sm">{p.label}</span>
-                        </div>
-                        <p className="text-xs text-gray-400 mt-1 ml-6">{p.desc}</p>
-                      </button>
-                    ))}
+                  <div className="mt-5 ml-9 space-y-2">
+                    <p className="text-sm text-slate-700 font-medium mb-3">Which products interest you?</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {PRODUCTS.map(p => (
+                        <button
+                          key={p.key}
+                          type="button"
+                          onClick={() => toggleProduct(p.key)}
+                          className={`text-left p-3.5 rounded-xl border transition-all ${
+                            productsOfInterest.includes(p.key)
+                              ? 'bg-teal-50 border-teal-300 ring-1 ring-teal-200'
+                              : 'bg-white border-slate-200 hover:border-teal-300 hover:shadow-sm'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <span className="text-lg">{p.icon}</span>
+                            <span className={`font-semibold text-sm ${
+                              productsOfInterest.includes(p.key) ? 'text-teal-800' : 'text-slate-800'
+                            }`}>{p.label}</span>
+                            {productsOfInterest.includes(p.key) && (
+                              <svg className="w-4 h-4 text-teal-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </div>
+                          <p className={`text-xs mt-1.5 leading-relaxed ${
+                            productsOfInterest.includes(p.key) ? 'text-teal-600' : 'text-slate-500'
+                          }`}>{p.desc}</p>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* Additional Notes */}
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                <h2 className="text-2xl font-semibold text-white mb-4">Additional Notes</h2>
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h2 className="text-xl font-semibold text-slate-900 mb-4">Additional Notes</h2>
                 <textarea
                   value={additionalNotes}
                   onChange={e => setAdditionalNotes(e.target.value)}
                   rows={4}
                   placeholder="Anything else you'd like us to know about your team's needs..."
-                  className="block w-full rounded-md bg-white/10 px-3.5 py-2.5 text-base text-white outline outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500"
+                  className="block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 />
               </div>
 
               {/* Summary panel */}
-              <div className="bg-blue-950/40 rounded-2xl p-6 border border-blue-500/20">
-                <h3 className="text-lg font-semibold text-white mb-4">📋 Submission Summary</h3>
+              <div className="bg-teal-50 rounded-2xl p-6 border border-teal-200">
+                <h3 className="text-base font-semibold text-teal-900 mb-4">📋 Submission Summary</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-400">Company</span>
-                    <p className="text-white font-medium">{company}</p>
+                    <span className="text-teal-600 text-xs font-medium">Company</span>
+                    <p className="text-teal-900 font-medium">{company}</p>
                   </div>
                   <div>
-                    <span className="text-gray-400">Team Members</span>
-                    <p className="text-white font-medium">{teamMembers.filter(m => m.name.trim()).length}</p>
+                    <span className="text-teal-600 text-xs font-medium">Team Members</span>
+                    <p className="text-teal-900 font-medium">{teamMembers.filter(m => m.name.trim()).length}</p>
                   </div>
                   <div>
-                    <span className="text-gray-400">Verticals</span>
-                    <p className="text-white font-medium">{selectedVerticals.join(', ')}</p>
+                    <span className="text-teal-600 text-xs font-medium">Verticals</span>
+                    <p className="text-teal-900 font-medium">{selectedVerticals.join(', ')}</p>
                   </div>
                   <div>
-                    <span className="text-gray-400">Jurisdictions</span>
-                    <p className="text-white font-medium">{selectedJurisdictions.length}</p>
+                    <span className="text-teal-600 text-xs font-medium">Jurisdictions</span>
+                    <p className="text-teal-900 font-medium">{selectedJurisdictions.length}</p>
                   </div>
                   <div>
-                    <span className="text-gray-400">Training Call</span>
-                    <p className="text-white font-medium">{scheduleTraining ? 'Yes' : 'No'}</p>
+                    <span className="text-teal-600 text-xs font-medium">Training Call</span>
+                    <p className="text-teal-900 font-medium">{scheduleTraining ? 'Yes' : 'No'}</p>
                   </div>
                   <div>
-                    <span className="text-gray-400">Onboarding Guide</span>
-                    <p className="text-white font-medium">{wantOnboardingGuide ? 'Yes' : 'No'}</p>
+                    <span className="text-teal-600 text-xs font-medium">Onboarding Guide</span>
+                    <p className="text-teal-900 font-medium">{wantOnboardingGuide ? 'Yes' : 'No'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Navigation */}
-              <div className="flex justify-between pt-4">
+              <div className="flex justify-between pt-2">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="px-6 py-3 text-gray-400 hover:text-white transition-colors"
+                  className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
                   ← Back
                 </button>
@@ -814,11 +837,12 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="px-8 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-500 disabled:opacity-60 transition-colors flex items-center gap-2"
+                  className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:opacity-60 transition-colors shadow-sm flex items-center gap-2"
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="animate-spin">⏳</span> Submitting...
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Submitting...
                     </>
                   ) : (
                     'Submit Onboarding →'
