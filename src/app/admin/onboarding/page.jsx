@@ -155,6 +155,7 @@ export default function AdminOnboardingPage() {
       wantOnboardingGuide: s.wantOnboardingGuide ? 'Yes' : 'No',
       participateInReviews: s.participateInReviews ? 'Yes' : 'No',
       reviewProducts: (s.reviewProducts || []).join('; '),
+      participateInSurveys: s.participateInSurveys ? 'Yes' : 'No',
       participateInInterviews: s.participateInInterviews ? 'Yes' : 'No',
       tryNewProducts: s.tryNewProducts ? 'Yes' : 'No',
       productsOfInterest: (s.productsOfInterest || []).join('; '),
@@ -758,7 +759,10 @@ function SubmissionCard({ submission: s }) {
                 📖 Guide: {s.wantOnboardingGuide ? 'Yes' : 'No'}
               </div>
               <div className={`p-2.5 rounded-lg ${s.participateInReviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
-                📊 Reviews: {s.participateInReviews ? 'Yes' : 'No'}
+                � Reviews: {s.participateInReviews ? 'Yes' : 'No'}
+              </div>
+              <div className={`p-2.5 rounded-lg ${s.participateInSurveys ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
+                📊 Surveys: {s.participateInSurveys ? 'Yes' : 'No'}
               </div>
               <div className={`p-2.5 rounded-lg ${s.participateInInterviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
                 🎤 Interviews: {s.participateInInterviews ? 'Yes' : 'No'}
