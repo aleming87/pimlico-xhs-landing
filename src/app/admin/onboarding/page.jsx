@@ -1,6 +1,22 @@
 "use client";
 import { useState, useEffect, useMemo } from 'react';
 
+const ACCESS_DURATION_OPTIONS = [
+  { value: '7days', label: '7 Days' },
+  { value: '14days', label: '14 Days' },
+  { value: '1month', label: '1 Month' },
+  { value: '2months', label: '2 Months' },
+  { value: '3months', label: '3 Months' },
+  { value: '6months', label: '6 Months' },
+  { value: '9months', label: '9 Months' },
+  { value: '12months', label: '12 Months' },
+];
+
+function formatDuration(val) {
+  const opt = ACCESS_DURATION_OPTIONS.find(o => o.value === val);
+  return opt ? opt.label : val || '3 Months';
+}
+
 /* ─── Helpers ─── */
 function StatCard({ icon, label, value, sub, color = 'blue' }) {
   const colors = {
@@ -31,7 +47,7 @@ export default function AdminOnboardingPage() {
   const [selectedOrg, setSelectedOrg] = useState(null);
 
   // Create org form
-  const [newOrg, setNewOrg] = useState({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], allowedDomains: '', notes: '' });
+  const [newOrg, setNewOrg] = useState({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, accessDuration: '3months', verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], allowedDomains: '', notes: '' });
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState('');
   const [createSuccess, setCreateSuccess] = useState('');
@@ -76,7 +92,7 @@ export default function AdminOnboardingPage() {
       if (!data.success) throw new Error(data.error);
       setOrgs([...orgs, data.org]);
       setCreateSuccess(`Organisation created! Link: pimlicosolutions.com/onboarding/${data.org.slug}`);
-      setNewOrg({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], allowedDomains: '', notes: '' });
+      setNewOrg({ name: '', slug: '', maxSeats: 10, maxJurisdictions: 20, accessDuration: '3months', verticals: ['Gambling', 'Payments', 'Crypto', 'AI'], allowedDomains: '', notes: '' });
     } catch (err) {
       setCreateError(err.message);
     } finally {
@@ -154,11 +170,8 @@ export default function AdminOnboardingPage() {
       preferredTrainingDate: s.preferredTrainingDate || '',
       wantOnboardingGuide: s.wantOnboardingGuide ? 'Yes' : 'No',
       participateInReviews: s.participateInReviews ? 'Yes' : 'No',
-      reviewProducts: (s.reviewProducts || []).join('; '),
       participateInSurveys: s.participateInSurveys ? 'Yes' : 'No',
       participateInInterviews: s.participateInInterviews ? 'Yes' : 'No',
-      tryNewProducts: s.tryNewProducts ? 'Yes' : 'No',
-      productsOfInterest: (s.productsOfInterest || []).join('; '),
       additionalNotes: s.additionalNotes || '',
       submittedAt: s.submittedAt,
     };
@@ -330,6 +343,7 @@ export default function AdminOnboardingPage() {
                       <div className="flex items-center gap-4 text-xs text-gray-400">
                         <span>👥 {org.maxSeats} seats</span>
                         <span>🌍 {org.maxJurisdictions} jurisdictions</span>
+                        <span>⏱ {formatDuration(org.accessDuration)}</span>
                         <span>📋 {orgSubs.length} submissions</span>
                       </div>
                     </div>
@@ -602,6 +616,21 @@ export default function AdminOnboardingPage() {
                 </div>
               </div>
 
+              {/* Access Duration */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Access Duration</label>
+                <select
+                  value={newOrg.accessDuration}
+                  onChange={e => setNewOrg({ ...newOrg, accessDuration: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                >
+                  {ACCESS_DURATION_OPTIONS.map(o => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">How long the team will have access to the platform</p>
+              </div>
+
               {/* Verticals toggle */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Available Verticals</label>
@@ -657,7 +686,7 @@ export default function AdminOnboardingPage() {
               <div className="bg-blue-950/40 rounded-xl p-4 border border-blue-500/20">
                 <h3 className="text-sm font-medium text-blue-300 mb-2">Preview</h3>
                 <p className="text-white text-sm font-mono">pimlicosolutions.com/onboarding/{newOrg.slug || '...'}</p>
-                <p className="text-xs text-gray-400 mt-1">{newOrg.maxSeats} seats · {newOrg.maxJurisdictions} jurisdictions · {newOrg.verticals.join(', ')}</p>
+                <p className="text-xs text-gray-400 mt-1">{newOrg.maxSeats} seats · {newOrg.maxJurisdictions} jurisdictions · {formatDuration(newOrg.accessDuration)} access · {newOrg.verticals.join(', ')}</p>
                 {newOrg.allowedDomains && <p className="text-xs text-blue-400 mt-1">Domains: {newOrg.allowedDomains}</p>}
               </div>
 

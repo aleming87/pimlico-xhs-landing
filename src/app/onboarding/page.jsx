@@ -108,7 +108,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const [teamMembers, setTeamMembers] = useState([{ name: '', email: '', role: '' }]);
 
   // Step 2 - Verticals & Jurisdictions
-  const [selectedVerticals, setSelectedVerticals] = useState([]);
+  const [selectedVerticals] = useState(orgConfig?.verticals || VERTICALS);
   const [selectedJurisdictions, setSelectedJurisdictions] = useState([]);
   const [expandedRegions, setExpandedRegions] = useState({});
   const [jurisdictionSearch, setJurisdictionSearch] = useState('');
@@ -224,13 +224,6 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
   const filteredGroups = getFilteredRegions();
 
-  /* -- Vertical toggle -- */
-  const toggleVertical = (v) => {
-    setSelectedVerticals(prev =>
-      prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v]
-    );
-  };
-
   /* -- Validation -- */
   const freeEmailProviders = [
     'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
@@ -270,7 +263,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     isValidEmail(teamMembers[0].email) &&
     isDomainAllowed(teamMembers[0].email);
 
-  const canProceedStep2 = selectedVerticals.length > 0 && selectedJurisdictions.length > 0;
+  const canProceedStep2 = selectedJurisdictions.length > 0;
 
   /* -- Submit -- */
   const handleSubmit = async () => {
@@ -529,22 +522,16 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             <div className="space-y-6 animate-fade-in">
               {/* Verticals */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">Focus Areas</h2>
-                <p className="text-sm text-slate-500 mb-4">Which regulatory verticals are relevant to your organisation?</p>
+                <h2 className="text-xl font-semibold text-slate-900 mb-2">Verticals</h2>
+                <p className="text-sm text-slate-500 mb-4">Your organisation has been configured for the following regulatory verticals</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {availableVerticals.map(v => (
-                    <button
+                    <div
                       key={v}
-                      type="button"
-                      onClick={() => toggleVertical(v)}
-                      className={`py-3 px-4 rounded-lg font-medium transition-all border ${
-                        selectedVerticals.includes(v)
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                          : 'bg-white text-slate-600 border-slate-300 hover:border-blue-400 hover:text-blue-700'
-                      }`}
+                      className="py-3 px-4 rounded-lg font-medium border bg-blue-600 text-white border-blue-600 shadow-sm text-center"
                     >
                       {v}
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -561,7 +548,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     {selectedJurisdictions.length} / {maxJurisdictions}
                   </span>
                 </div>
-                <p className="text-sm text-slate-500 mb-4">Select the jurisdictions your team needs to monitor</p>
+                <p className="text-sm text-slate-500 mb-4">Select your jurisdictions</p>
 
                 {/* Search */}
                 <div className="mb-4 relative">
@@ -592,7 +579,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <button
                       type="button"
                       onClick={() => setSelectedJurisdictions([])}
-                      className="text-xs text-red-500 hover:text-red-700 px-2 py-1 font-medium"
+                      className="text-xs text-blue-500 hover:text-blue-700 px-2 py-1 font-medium"
                     >
                       Clear all
                     </button>
@@ -642,7 +629,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                 }}
                                 className={`text-xs px-2 py-0.5 rounded font-medium transition-colors ${
                                   allSelected
-                                    ? 'text-red-500 hover:text-red-700'
+                                    ? 'text-blue-500 hover:text-blue-700'
                                     : 'text-blue-600 hover:text-blue-800'
                                 }`}
                               >
@@ -690,7 +677,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                           }}
                                           className={`text-[10px] px-1.5 py-0.5 rounded font-medium transition-colors ${
                                             subAllSelected
-                                              ? 'text-red-500 hover:text-red-700'
+                                              ? 'text-blue-500 hover:text-blue-700'
                                               : 'text-blue-600 hover:text-blue-800'
                                           }`}
                                         >
@@ -922,8 +909,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   ))}
                 </div>
 
-                <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <p className="text-xs text-amber-800"><strong>Feedback commitment:</strong> {"As part of onboarding, we'll send short surveys and schedule check-ins to make sure the platform is working for your team. Your input directly shapes the product."}</p>
+                <div className="mt-5 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-700"><strong>Feedback commitment:</strong> {"As part of onboarding, we'll send short surveys and schedule check-ins to make sure the platform is working for your team. Your input directly shapes the product."}</p>
                 </div>
               </div>
 
