@@ -112,6 +112,23 @@ export async function POST(request) {
       return NextResponse.json({ success: true, org: newOrg });
     }
 
+    /* ─── Delete Organisation ─── */
+    if (action === 'delete-org') {
+      const { slug } = body;
+      if (!slug) {
+        return NextResponse.json({ success: false, error: 'Slug is required' }, { status: 400 });
+      }
+      const data = await readBlob('onboarding/orgs', { orgs: [] });
+      const orgs = data.orgs || [];
+      const idx = orgs.findIndex(o => o.slug === slug);
+      if (idx === -1) {
+        return NextResponse.json({ success: false, error: 'Organisation not found' }, { status: 404 });
+      }
+      orgs.splice(idx, 1);
+      await writeBlob(BLOB_ORGS_KEY, { orgs, updatedAt: new Date().toISOString() });
+      return NextResponse.json({ success: true });
+    }
+
     /* ─── Update Organisation ─── */
     if (action === 'update-org') {
       const { slug, updates } = body;

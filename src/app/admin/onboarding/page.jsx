@@ -78,6 +78,24 @@ export default function AdminOnboardingPage() {
     }
   }
 
+  /* ─── Delete organisation ─── */
+  async function deleteOrg(org) {
+    if (!confirm(`Delete "${org.name}"? This will permanently remove the onboarding link /onboarding/${org.slug}. Existing submissions will not be deleted.`)) return;
+    try {
+      const res = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete-org', slug: org.slug }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrgs(orgs.filter(o => o.slug !== org.slug));
+      }
+    } catch (err) {
+      console.error('Delete error:', err);
+    }
+  }
+
   /* ─── Toggle org active state ─── */
   async function toggleOrgActive(org) {
     try {
@@ -372,6 +390,12 @@ export default function AdminOnboardingPage() {
                           }`}
                         >
                           {org.active ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button
+                          onClick={() => deleteOrg(org)}
+                          className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-red-600/20 text-red-300 hover:bg-red-600/40"
+                        >
+                          🗑 Delete
                         </button>
                       </div>
                     </div>
