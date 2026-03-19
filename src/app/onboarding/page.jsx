@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useState } from "react";
 
-/* ───────────────────────────────────────
-   Jurisdiction Data — grouped by region
-   ─────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Jurisdiction Data â€” grouped by region
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const JURISDICTION_GROUPS = {
   'European Union': [
     'European Union', 'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic',
@@ -37,7 +37,7 @@ const JURISDICTION_GROUPS = {
   ],
   'Central America & Caribbean': [
     'Antigua and Barbuda', 'Anguilla', 'Aruba', 'Bahamas', 'Barbados', 'Belize', 'Bermuda',
-    'British Virgin Islands', 'Cayman Islands', 'Costa Rica', 'Cuba', 'Curaçao', 'Dominica',
+    'British Virgin Islands', 'Cayman Islands', 'Costa Rica', 'Cuba', 'CuraÃ§ao', 'Dominica',
     'Dominican Republic', 'El Salvador', 'Guatemala', 'Haiti', 'Honduras', 'Jamaica',
     'Montserrat', 'Nicaragua', 'Panama', 'Saint Kitts', 'Saint Vincent and the Grenadines',
     'Trinidad and Tobago', 'Turks & Caicos Islands', 'US Virgin Islands',
@@ -73,17 +73,17 @@ const JURISDICTION_GROUPS = {
 };
 
 const PRODUCTS = [
-  { key: 'projects',    label: 'Projects™',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives', icon: '📋' },
-  { key: 'blocklists',  label: 'Blocklists™',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time', icon: '🚫' },
-  { key: 'competitors', label: 'Competitors™',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions', icon: '🏢' },
-  { key: 'lens',        label: 'Lens™',         desc: 'Drill down into the technical standards and regulatory trends impacting your business', icon: '🔍' },
-  { key: 'technical',   label: 'Technical™',    desc: 'Access and compare technical standards, testing requirements and certification frameworks', icon: '⚙️' },
-  { key: 'partners',    label: 'Partners™',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions', icon: '🤝' },
+  { key: 'projects',    label: 'Projectsâ„¢',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives', icon: 'ðŸ“‹' },
+  { key: 'blocklists',  label: 'Blocklistsâ„¢',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time', icon: 'ðŸš«' },
+  { key: 'competitors', label: 'Competitorsâ„¢',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions', icon: 'ðŸ¢' },
+  { key: 'lens',        label: 'Lensâ„¢',         desc: 'Drill down into the technical standards and regulatory trends impacting your business', icon: 'ðŸ”' },
+  { key: 'technical',   label: 'Technicalâ„¢',    desc: 'Access and compare technical standards, testing requirements and certification frameworks', icon: 'âš™ï¸' },
+  { key: 'partners',    label: 'Partnersâ„¢',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions', icon: 'ðŸ¤' },
 ];
 
 const VERTICALS = ['Gambling', 'Payments', 'Crypto', 'AI'];
 
-/* ─────────────────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 export default function OnboardingPage() {
   return <OnboardingForm orgSlug="general" />;
@@ -94,17 +94,17 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // Step 1 — Company & Team
+  // Step 1 â€” Company & Team
   const [company, setCompany] = useState(orgConfig?.name || '');
   const [teamMembers, setTeamMembers] = useState([{ name: '', email: '', role: '' }]);
 
-  // Step 2 — Verticals & Jurisdictions
+  // Step 2 â€” Verticals & Jurisdictions
   const [selectedVerticals, setSelectedVerticals] = useState([]);
   const [selectedJurisdictions, setSelectedJurisdictions] = useState([]);
   const [expandedRegions, setExpandedRegions] = useState({});
   const [jurisdictionSearch, setJurisdictionSearch] = useState('');
 
-  // Step 3 — Preferences
+  // Step 3 â€” Preferences
   const [scheduleTraining, setScheduleTraining] = useState(false);
   const [preferredTrainingDate, setPreferredTrainingDate] = useState('');
   const [wantOnboardingGuide, setWantOnboardingGuide] = useState(false);
@@ -121,7 +121,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const totalSteps = 3;
   const progress = Math.round((step / totalSteps) * 100);
 
-  /* ── Team member handlers ── */
+  /* â”€â”€ Team member handlers â”€â”€ */
   const addTeamMember = () => {
     if (teamMembers.length < maxSeats) {
       setTeamMembers([...teamMembers, { name: '', email: '', role: '' }]);
@@ -140,7 +140,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     setTeamMembers(updated);
   };
 
-  /* ── Jurisdiction handlers ── */
+  /* â”€â”€ Jurisdiction handlers â”€â”€ */
   const toggleRegion = (region) => {
     setExpandedRegions(prev => ({ ...prev, [region]: !prev[region] }));
   };
@@ -183,21 +183,21 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
       )
     : JURISDICTION_GROUPS;
 
-  /* ── Product toggle ── */
+  /* â”€â”€ Product toggle â”€â”€ */
   const toggleProduct = (key) => {
     setProductsOfInterest(prev =>
       prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
     );
   };
 
-  /* ── Vertical toggle ── */
+  /* â”€â”€ Vertical toggle â”€â”€ */
   const toggleVertical = (v) => {
     setSelectedVerticals(prev =>
       prev.includes(v) ? prev.filter(x => x !== v) : [...prev, v]
     );
   };
 
-  /* ── Validation ── */
+  /* â”€â”€ Validation â”€â”€ */
   const freeEmailProviders = [
     'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com',
     'icloud.com', 'mail.com', 'protonmail.com', 'zoho.com', 'yandex.com',
@@ -218,7 +218,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
   const canProceedStep2 = selectedVerticals.length > 0 && selectedJurisdictions.length > 0;
 
-  /* ── Submit ── */
+  /* â”€â”€ Submit â”€â”€ */
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
@@ -252,13 +252,13 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
     }
   };
 
-  /* ── Thank You Screen ── */
+  /* â”€â”€ Thank You Screen â”€â”€ */
   if (submitted) {
     return (
       <div className="bg-slate-50 min-h-screen flex items-center justify-center px-6">
         <div className="max-w-lg w-full text-center">
-          <div className="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-teal-200">
-            <svg className="w-10 h-10 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-blue-200">
+            <svg className="w-10 h-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
@@ -268,8 +268,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             We&apos;ll review your team details and jurisdiction selections, then reach out with next steps
             {scheduleTraining ? ' and schedule your training call' : ''}.
           </p>
-          <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors">
-            ← Back to Pimlico
+          <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+            â† Back to Pimlico
           </a>
         </div>
       </div>
@@ -285,7 +285,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             <Image src="/Pimlico_Logo.png" alt="Pimlico" width={110} height={30} className="h-7 w-auto" />
           </a>
           <div className="flex items-center gap-3">
-            <Image src="/XHS Logo BLUE on WHITE.png" alt="XHS" width={50} height={20} className="h-5 w-auto" />
+            <Image src="/XHS Logo BLUE on WHITE.png" alt="XHS" width={80} height={32} className="h-8 w-auto" />
             <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ONBOARDING</span>
           </div>
         </nav>
@@ -294,7 +294,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
       {/* Progress Bar */}
       <div className="sticky top-[57px] z-50 h-1 bg-slate-200">
         <div
-          className="h-full bg-teal-500 transition-all duration-500 ease-out"
+          className="h-full bg-blue-500 transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -304,17 +304,17 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-3">
-              {orgConfig ? `${orgConfig.name} — Onboarding` : 'Platform Onboarding'}
+              {orgConfig ? `${orgConfig.name} â€” Onboarding` : 'Platform Onboarding'}
             </h1>
             <p className="text-base text-slate-500">
-              Set up your team and configure your Pimlico XHS™ workspace
+              Set up your team and configure your Pimlico XHSâ„¢ workspace
             </p>
             {/* Step indicators */}
             <div className="flex items-center justify-center gap-2 sm:gap-4 mt-8">
               {[
-                { n: 1, label: 'Team', icon: '👥' },
-                { n: 2, label: 'Jurisdictions', icon: '🌍' },
-                { n: 3, label: 'Preferences', icon: '⚙️' },
+                { n: 1, label: 'Team', icon: 'ðŸ‘¥' },
+                { n: 2, label: 'Jurisdictions', icon: 'ðŸŒ' },
+                { n: 3, label: 'Preferences', icon: 'âš™ï¸' },
               ].map(({ n, label, icon }) => (
                 <div key={n} className="flex items-center gap-2">
                   <button
@@ -324,26 +324,26 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     }}
                     className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                       n < step
-                        ? 'bg-teal-600 text-white cursor-pointer hover:bg-teal-700'
+                        ? 'bg-blue-600 text-white cursor-pointer hover:bg-blue-700'
                         : n === step
-                        ? 'bg-teal-600 text-white ring-4 ring-teal-100'
+                        ? 'bg-blue-600 text-white ring-4 ring-blue-100'
                         : 'bg-slate-200 text-slate-400 cursor-default'
                     }`}
                   >
-                    {n < step ? '✓' : n}
+                    {n < step ? 'âœ“' : n}
                   </button>
                   <span className={`text-sm hidden sm:inline font-medium ${
-                    n === step ? 'text-slate-900' : n < step ? 'text-teal-700' : 'text-slate-400'
+                    n === step ? 'text-slate-900' : n < step ? 'text-blue-700' : 'text-slate-400'
                   }`}>
                     {label}
                   </span>
-                  {n < 3 && <div className={`w-8 h-px hidden sm:block ${n < step ? 'bg-teal-400' : 'bg-slate-300'}`} />}
+                  {n < 3 && <div className={`w-8 h-px hidden sm:block ${n < step ? 'bg-blue-400' : 'bg-slate-300'}`} />}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ════════════ STEP 1: Company & Team ════════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â•â• STEP 1: Company & Team â•â•â•â•â•â•â•â•â•â•â•â• */}
           {step === 1 && (
             <div className="space-y-6 animate-fade-in">
               {/* Company */}
@@ -359,7 +359,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     onChange={e => setCompany(e.target.value)}
                     placeholder="e.g. Mozzartbet"
                     disabled={!!orgConfig?.name}
-                    className="mt-2 block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 disabled:bg-slate-50 disabled:text-slate-500"
+                    className="mt-2 block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-50 disabled:text-slate-500"
                   />
                 </div>
               </div>
@@ -377,7 +377,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     type="button"
                     onClick={addTeamMember}
                     disabled={teamMembers.length >= maxSeats}
-                    className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
                     + Add Member
                   </button>
@@ -388,7 +388,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <div key={i} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
                       <div className="flex items-center justify-between mb-3">
                         <span className="text-sm font-medium text-slate-700">
-                          {i === 0 ? '👑 Primary Contact' : `Team Member ${i + 1}`}
+                          {i === 0 ? 'ðŸ‘‘ Primary Contact' : `Team Member ${i + 1}`}
                         </span>
                         {i > 0 && (
                           <button
@@ -410,7 +410,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                             value={member.name}
                             onChange={e => updateTeamMember(i, 'name', e.target.value)}
                             placeholder="Jane Smith"
-                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
                         </div>
                         <div>
@@ -422,7 +422,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                             value={member.email}
                             onChange={e => updateTeamMember(i, 'email', e.target.value)}
                             placeholder="jane@company.com"
-                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
                           {member.email && !isValidEmail(member.email) && (
                             <p className="mt-1 text-xs text-red-500">Please use a business email</p>
@@ -435,7 +435,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                             value={member.role}
                             onChange={e => updateTeamMember(i, 'role', e.target.value)}
                             placeholder="e.g. Compliance Manager"
-                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
                         </div>
                       </div>
@@ -449,15 +449,15 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   type="button"
                   onClick={() => setStep(2)}
                   disabled={!canProceedStep1}
-                  className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
-                  Continue →
+                  Continue â†’
                 </button>
               </div>
             </div>
           )}
 
-          {/* ════════════ STEP 2: Verticals & Jurisdictions ════════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â•â• STEP 2: Verticals & Jurisdictions â•â•â•â•â•â•â•â•â•â•â•â• */}
           {step === 2 && (
             <div className="space-y-6 animate-fade-in">
               {/* Verticals */}
@@ -472,8 +472,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       onClick={() => toggleVertical(v)}
                       className={`py-3 px-4 rounded-lg font-medium transition-all border ${
                         selectedVerticals.includes(v)
-                          ? 'bg-teal-600 text-white border-teal-600 shadow-sm'
-                          : 'bg-white text-slate-600 border-slate-300 hover:border-teal-400 hover:text-teal-700'
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                          : 'bg-white text-slate-600 border-slate-300 hover:border-blue-400 hover:text-blue-700'
                       }`}
                     >
                       {v}
@@ -489,7 +489,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   <span className={`text-sm font-medium px-3 py-1 rounded-full ${
                     selectedJurisdictions.length >= maxJurisdictions
                       ? 'bg-amber-100 text-amber-700'
-                      : 'bg-teal-50 text-teal-700'
+                      : 'bg-blue-50 text-blue-700'
                   }`}>
                     {selectedJurisdictions.length} / {maxJurisdictions}
                   </span>
@@ -506,7 +506,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     value={jurisdictionSearch}
                     onChange={e => setJurisdictionSearch(e.target.value)}
                     placeholder="Search jurisdictions..."
-                    className="block w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    className="block w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -516,10 +516,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     {selectedJurisdictions.map(j => (
                       <span
                         key={j}
-                        className="inline-flex items-center gap-1 rounded-full bg-teal-50 border border-teal-200 px-2.5 py-1 text-xs text-teal-800 font-medium"
+                        className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-xs text-blue-800 font-medium"
                       >
                         {j}
-                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-teal-600 ml-0.5 text-teal-400">×</button>
+                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-blue-600 ml-0.5 text-blue-400">Ã—</button>
                       </span>
                     ))}
                     <button
@@ -547,10 +547,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           className="w-full flex items-center justify-between p-3 hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <span className={`text-xs text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}>▶</span>
+                            <span className={`text-xs text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}>â–¶</span>
                             <span className="text-sm font-medium text-slate-800">{region}</span>
                             {selectedCount > 0 && (
-                              <span className="bg-teal-100 text-teal-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                              <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full">
                                 {selectedCount}
                               </span>
                             )}
@@ -567,7 +567,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                 className={`text-xs px-2 py-0.5 rounded font-medium transition-colors ${
                                   allSelected
                                     ? 'text-red-500 hover:text-red-700'
-                                    : 'text-teal-600 hover:text-teal-800'
+                                    : 'text-blue-600 hover:text-blue-800'
                                 }`}
                               >
                                 {allSelected ? 'Deselect all' : 'Select all'}
@@ -590,13 +590,13 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                     disabled={isDisabled}
                                     className={`text-left text-xs px-2.5 py-1.5 rounded-md transition-colors ${
                                       isSelected
-                                        ? 'bg-teal-100 text-teal-800 font-medium border border-teal-300'
+                                        ? 'bg-blue-100 text-blue-800 font-medium border border-blue-300'
                                         : isDisabled
                                         ? 'text-slate-300 cursor-not-allowed'
                                         : 'text-slate-600 hover:bg-white border border-transparent hover:border-slate-300'
                                     }`}
                                   >
-                                    <span className="mr-1.5">{isSelected ? '☑' : '☐'}</span>
+                                    <span className="mr-1.5">{isSelected ? 'â˜‘' : 'â˜'}</span>
                                     {j}
                                   </button>
                                 );
@@ -616,21 +616,21 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   onClick={() => setStep(1)}
                   className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
-                  ← Back
+                  â† Back
                 </button>
                 <button
                   type="button"
                   onClick={() => setStep(3)}
                   disabled={!canProceedStep2}
-                  className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
-                  Continue →
+                  Continue â†’
                 </button>
               </div>
             </div>
           )}
 
-          {/* ════════════ STEP 3: Preferences ════════════ */}
+          {/* â•â•â•â•â•â•â•â•â•â•â•â• STEP 3: Preferences â•â•â•â•â•â•â•â•â•â•â•â• */}
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
               {/* Training */}
@@ -644,10 +644,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       type="button"
                       onClick={() => setScheduleTraining(!scheduleTraining)}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        scheduleTraining ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                        scheduleTraining ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {scheduleTraining && <span className="text-xs">✓</span>}
+                      {scheduleTraining && <span className="text-xs">âœ“</span>}
                     </button>
                     <div className="flex-1">
                       <p className="text-slate-800 font-medium text-sm">Schedule a video call training with our team</p>
@@ -660,7 +660,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                             value={preferredTrainingDate}
                             onChange={e => setPreferredTrainingDate(e.target.value)}
                             placeholder="e.g. Next Tuesday afternoon, or any weekday morning"
-                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
                         </div>
                       )}
@@ -673,10 +673,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       type="button"
                       onClick={() => setWantOnboardingGuide(!wantOnboardingGuide)}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        wantOnboardingGuide ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                        wantOnboardingGuide ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {wantOnboardingGuide && <span className="text-xs">✓</span>}
+                      {wantOnboardingGuide && <span className="text-xs">âœ“</span>}
                     </button>
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Send us an onboarding guide</p>
@@ -697,10 +697,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       type="button"
                       onClick={() => setParticipateInSurveys(!participateInSurveys)}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        participateInSurveys ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                        participateInSurveys ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInSurveys && <span className="text-xs">✓</span>}
+                      {participateInSurveys && <span className="text-xs">âœ“</span>}
                     </button>
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Participate in product surveys</p>
@@ -713,10 +713,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       type="button"
                       onClick={() => setParticipateInInterviews(!participateInInterviews)}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        participateInInterviews ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                        participateInInterviews ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {participateInInterviews && <span className="text-xs">✓</span>}
+                      {participateInInterviews && <span className="text-xs">âœ“</span>}
                     </button>
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Open to user interviews</p>
@@ -732,10 +732,10 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                         if (tryNewProducts) setProductsOfInterest([]);
                       }}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        tryNewProducts ? 'bg-teal-600 border-teal-600 text-white' : 'bg-white border-slate-300'
+                        tryNewProducts ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
-                      {tryNewProducts && <span className="text-xs">✓</span>}
+                      {tryNewProducts && <span className="text-xs">âœ“</span>}
                     </button>
                     <div className="flex-1">
                       <p className="text-slate-800 font-medium text-sm">Interested in trying new products</p>
@@ -756,23 +756,23 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           onClick={() => toggleProduct(p.key)}
                           className={`text-left p-3.5 rounded-xl border transition-all ${
                             productsOfInterest.includes(p.key)
-                              ? 'bg-teal-50 border-teal-300 ring-1 ring-teal-200'
-                              : 'bg-white border-slate-200 hover:border-teal-300 hover:shadow-sm'
+                              ? 'bg-blue-50 border-blue-300 ring-1 ring-blue-200'
+                              : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
                             <span className="text-lg">{p.icon}</span>
                             <span className={`font-semibold text-sm ${
-                              productsOfInterest.includes(p.key) ? 'text-teal-800' : 'text-slate-800'
+                              productsOfInterest.includes(p.key) ? 'text-blue-800' : 'text-slate-800'
                             }`}>{p.label}</span>
                             {productsOfInterest.includes(p.key) && (
-                              <svg className="w-4 h-4 text-teal-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-4 h-4 text-blue-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
                               </svg>
                             )}
                           </div>
                           <p className={`text-xs mt-1.5 leading-relaxed ${
-                            productsOfInterest.includes(p.key) ? 'text-teal-600' : 'text-slate-500'
+                            productsOfInterest.includes(p.key) ? 'text-blue-600' : 'text-slate-500'
                           }`}>{p.desc}</p>
                         </button>
                       ))}
@@ -789,37 +789,37 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   onChange={e => setAdditionalNotes(e.target.value)}
                   rows={4}
                   placeholder="Anything else you'd like us to know about your team's needs..."
-                  className="block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
 
               {/* Summary panel */}
-              <div className="bg-teal-50 rounded-2xl p-6 border border-teal-200">
-                <h3 className="text-base font-semibold text-teal-900 mb-4">📋 Submission Summary</h3>
+              <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
+                <h3 className="text-base font-semibold text-blue-900 mb-4">ðŸ“‹ Submission Summary</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-teal-600 text-xs font-medium">Company</span>
-                    <p className="text-teal-900 font-medium">{company}</p>
+                    <span className="text-blue-600 text-xs font-medium">Company</span>
+                    <p className="text-blue-900 font-medium">{company}</p>
                   </div>
                   <div>
-                    <span className="text-teal-600 text-xs font-medium">Team Members</span>
-                    <p className="text-teal-900 font-medium">{teamMembers.filter(m => m.name.trim()).length}</p>
+                    <span className="text-blue-600 text-xs font-medium">Team Members</span>
+                    <p className="text-blue-900 font-medium">{teamMembers.filter(m => m.name.trim()).length}</p>
                   </div>
                   <div>
-                    <span className="text-teal-600 text-xs font-medium">Verticals</span>
-                    <p className="text-teal-900 font-medium">{selectedVerticals.join(', ')}</p>
+                    <span className="text-blue-600 text-xs font-medium">Verticals</span>
+                    <p className="text-blue-900 font-medium">{selectedVerticals.join(', ')}</p>
                   </div>
                   <div>
-                    <span className="text-teal-600 text-xs font-medium">Jurisdictions</span>
-                    <p className="text-teal-900 font-medium">{selectedJurisdictions.length}</p>
+                    <span className="text-blue-600 text-xs font-medium">Jurisdictions</span>
+                    <p className="text-blue-900 font-medium">{selectedJurisdictions.length}</p>
                   </div>
                   <div>
-                    <span className="text-teal-600 text-xs font-medium">Training Call</span>
-                    <p className="text-teal-900 font-medium">{scheduleTraining ? 'Yes' : 'No'}</p>
+                    <span className="text-blue-600 text-xs font-medium">Training Call</span>
+                    <p className="text-blue-900 font-medium">{scheduleTraining ? 'Yes' : 'No'}</p>
                   </div>
                   <div>
-                    <span className="text-teal-600 text-xs font-medium">Onboarding Guide</span>
-                    <p className="text-teal-900 font-medium">{wantOnboardingGuide ? 'Yes' : 'No'}</p>
+                    <span className="text-blue-600 text-xs font-medium">Onboarding Guide</span>
+                    <p className="text-blue-900 font-medium">{wantOnboardingGuide ? 'Yes' : 'No'}</p>
                   </div>
                 </div>
               </div>
@@ -831,13 +831,13 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   onClick={() => setStep(2)}
                   className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
-                  ← Back
+                  â† Back
                 </button>
                 <button
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="px-8 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 disabled:opacity-60 transition-colors shadow-sm flex items-center gap-2"
+                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm flex items-center gap-2"
                 >
                   {isSubmitting ? (
                     <>
@@ -845,7 +845,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       Submitting...
                     </>
                   ) : (
-                    'Submit Onboarding →'
+                    'Submit Onboarding â†’'
                   )}
                 </button>
               </div>
