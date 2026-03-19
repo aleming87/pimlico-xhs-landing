@@ -100,6 +100,7 @@ export async function POST(request) {
         slug,
         maxSeats: maxSeats || 10,
         maxJurisdictions: maxJurisdictions || 20,
+        accessDuration: body.accessDuration || '3months',
         verticals: verticals || ['Gambling', 'Payments', 'Crypto', 'AI'],
         allowedDomains: Array.isArray(body.allowedDomains) ? body.allowedDomains : [],
         notes: notes || '',
@@ -155,10 +156,10 @@ export async function POST(request) {
         scheduleTraining,
         preferredTrainingDate,
         wantOnboardingGuide,
+        participateInReviews,
+        reviewProducts,
         participateInSurveys,
         participateInInterviews,
-        tryNewProducts,
-        productsOfInterest,
         additionalNotes,
       } = body;
 
@@ -172,10 +173,10 @@ export async function POST(request) {
         scheduleTraining: scheduleTraining || false,
         preferredTrainingDate: preferredTrainingDate || '',
         wantOnboardingGuide: wantOnboardingGuide || false,
+        participateInReviews: participateInReviews || false,
+        reviewProducts: reviewProducts || [],
         participateInSurveys: participateInSurveys || false,
         participateInInterviews: participateInInterviews || false,
-        tryNewProducts: tryNewProducts || false,
-        productsOfInterest: productsOfInterest || [],
         additionalNotes: additionalNotes || '',
         submittedAt: new Date().toISOString(),
       };
@@ -218,8 +219,8 @@ ${submission.jurisdictions.map(j => `  • ${j}`).join('\n') || '  None selected
   • Onboarding Guide: ${submission.wantOnboardingGuide ? 'Yes' : 'No'}
   • Participate in Surveys: ${submission.participateInSurveys ? 'Yes' : 'No'}
   • Participate in Interviews: ${submission.participateInInterviews ? 'Yes' : 'No'}
-  • Try New Products: ${submission.tryNewProducts ? 'Yes' : 'No'}
-${submission.productsOfInterest.length ? `  • Products of Interest: ${submission.productsOfInterest.join(', ')}` : ''}
+  • Try Products Early: ${submission.participateInReviews ? 'Yes' : 'No'}
+${submission.reviewProducts.length ? `  • Products of Interest: ${submission.reviewProducts.join(', ')}` : ''}
 
 ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''}
 

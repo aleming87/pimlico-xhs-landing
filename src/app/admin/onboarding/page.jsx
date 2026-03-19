@@ -52,6 +52,10 @@ export default function AdminOnboardingPage() {
   const [createError, setCreateError] = useState('');
   const [createSuccess, setCreateSuccess] = useState('');
 
+  // Edit org
+  const [editOrg, setEditOrg] = useState(null);
+  const [editSaving, setEditSaving] = useState(false);
+
   useEffect(() => { loadData(); }, []);
 
   async function loadData() {
@@ -118,6 +122,48 @@ export default function AdminOnboardingPage() {
     }
   }
 
+  /* ─── Open edit modal ─── */
+  function openEditOrg(org) {
+    setEditOrg({
+      ...org,
+      allowedDomains: Array.isArray(org.allowedDomains) ? org.allowedDomains.join(', ') : (org.allowedDomains || ''),
+    });
+  }
+
+  /* ─── Save org edits ─── */
+  async function handleSaveEdit() {
+    if (!editOrg) return;
+    setEditSaving(true);
+    try {
+      const updates = {
+        name: editOrg.name,
+        maxSeats: editOrg.maxSeats,
+        maxJurisdictions: editOrg.maxJurisdictions,
+        accessDuration: editOrg.accessDuration,
+        verticals: editOrg.verticals,
+        allowedDomains: typeof editOrg.allowedDomains === 'string'
+          ? editOrg.allowedDomains.split(',').map(d => d.trim().toLowerCase()).filter(Boolean)
+          : editOrg.allowedDomains || [],
+        notes: editOrg.notes || '',
+        active: editOrg.active,
+      };
+      const res = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update-org', slug: editOrg.slug, updates }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrgs(orgs.map(o => o.slug === editOrg.slug ? data.org : o));
+        setEditOrg(null);
+      }
+    } catch (err) {
+      console.error('Edit error:', err);
+    } finally {
+      setEditSaving(false);
+    }
+  }
+
   /* ─── Toggle org active state ─── */
   async function toggleOrgActive(org) {
     try {
@@ -170,6 +216,7 @@ export default function AdminOnboardingPage() {
       preferredTrainingDate: s.preferredTrainingDate || '',
       wantOnboardingGuide: s.wantOnboardingGuide ? 'Yes' : 'No',
       participateInReviews: s.participateInReviews ? 'Yes' : 'No',
+      reviewProducts: (s.reviewProducts || []).join('; '),
       participateInSurveys: s.participateInSurveys ? 'Yes' : 'No',
       participateInInterviews: s.participateInInterviews ? 'Yes' : 'No',
       additionalNotes: s.additionalNotes || '',
@@ -402,6 +449,12 @@ export default function AdminOnboardingPage() {
                           className="px-3 py-1.5 bg-gray-700 text-gray-300 text-xs font-medium rounded-lg hover:bg-gray-600 transition-colors"
                         >
                           📋 Copy Link
+                        </button>
+                        <button
+                          onClick={() => openEditOrg(org)}
+                          className="px-3 py-1.5 bg-indigo-600/20 text-indigo-300 text-xs font-medium rounded-lg hover:bg-indigo-600/30 transition-colors"
+                        >
+                          ✏️ Edit
                         </button>
                         <button
                           onClick={() => toggleOrgActive(org)}
@@ -712,6 +765,153 @@ export default function AdminOnboardingPage() {
           </div>
         </div>
       )}
+      {/* ════ EDIT ORG MODAL ════ */}
+      {editOrg && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-gray-900 rounded-2xl border border-gray-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-white">Edit Organisation</h2>
+              <button onClick={() => setEditOrg(null)} className="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Organisation Name</label>
+                <input
+                  type="text"
+                  value={editOrg.name}
+                  onChange={e => setEditOrg({ ...editOrg, name: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">URL Slug</label>
+                <p className="text-sm text-gray-500 font-mono bg-gray-800 rounded-lg px-3.5 py-2.5 border border-gray-700">/onboarding/{editOrg.slug}</p>
+                <p className="text-xs text-gray-600 mt-1">Slug cannot be changed after creation</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Max Seats</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="500"
+                    value={editOrg.maxSeats}
+                    onChange={e => setEditOrg({ ...editOrg, maxSeats: parseInt(e.target.value) || 10 })}
+                    className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Max Jurisdictions</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="300"
+                    value={editOrg.maxJurisdictions}
+                    onChange={e => setEditOrg({ ...editOrg, maxJurisdictions: parseInt(e.target.value) || 20 })}
+                    className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Access Duration</label>
+                <select
+                  value={editOrg.accessDuration || '3months'}
+                  onChange={e => setEditOrg({ ...editOrg, accessDuration: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                >
+                  {ACCESS_DURATION_OPTIONS.map(o => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Verticals</label>
+                <div className="flex gap-2">
+                  {['Gambling', 'Payments', 'Crypto', 'AI'].map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => {
+                        setEditOrg(prev => ({
+                          ...prev,
+                          verticals: prev.verticals.includes(v)
+                            ? prev.verticals.filter(x => x !== v)
+                            : [...prev.verticals, v]
+                        }));
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                        editOrg.verticals.includes(v)
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-gray-700 text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Allowed Email Domains</label>
+                <input
+                  type="text"
+                  value={editOrg.allowedDomains}
+                  onChange={e => setEditOrg({ ...editOrg, allowedDomains: e.target.value })}
+                  placeholder="e.g. company.com, company.co.uk"
+                  className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Comma-separated. Leave blank to allow any business email.</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Internal Notes</label>
+                <textarea
+                  value={editOrg.notes || ''}
+                  onChange={e => setEditOrg({ ...editOrg, notes: e.target.value })}
+                  rows={3}
+                  className="w-full px-3.5 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <label className="text-sm font-medium text-gray-300">Status:</label>
+                <button
+                  type="button"
+                  onClick={() => setEditOrg({ ...editOrg, active: !editOrg.active })}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    editOrg.active
+                      ? 'bg-green-600/20 text-green-300'
+                      : 'bg-red-600/20 text-red-300'
+                  }`}
+                >
+                  {editOrg.active ? 'Active' : 'Inactive'}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setEditOrg(null)}
+                className="flex-1 py-2.5 bg-gray-700 text-gray-300 font-medium rounded-xl hover:bg-gray-600 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveEdit}
+                disabled={editSaving || !editOrg.name.trim()}
+                className="flex-1 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+              >
+                {editSaving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -787,21 +987,18 @@ function SubmissionCard({ submission: s }) {
               <div className={`p-2.5 rounded-lg ${s.wantOnboardingGuide ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
                 📖 Guide: {s.wantOnboardingGuide ? 'Yes' : 'No'}
               </div>
-              <div className={`p-2.5 rounded-lg ${s.participateInReviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
-                � Reviews: {s.participateInReviews ? 'Yes' : 'No'}
-              </div>
               <div className={`p-2.5 rounded-lg ${s.participateInSurveys ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
                 📊 Surveys: {s.participateInSurveys ? 'Yes' : 'No'}
               </div>
               <div className={`p-2.5 rounded-lg ${s.participateInInterviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
                 🎤 Interviews: {s.participateInInterviews ? 'Yes' : 'No'}
               </div>
-              <div className={`p-2.5 rounded-lg ${s.tryNewProducts ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
-                🧪 New Products: {s.tryNewProducts ? 'Yes' : 'No'}
+              <div className={`p-2.5 rounded-lg ${s.participateInReviews ? 'bg-green-500/10 text-green-300' : 'bg-white/[0.03] text-gray-500'}`}>
+                🧪 Try Products Early: {s.participateInReviews ? 'Yes' : 'No'}
               </div>
-              {s.productsOfInterest?.length > 0 && (
+              {s.reviewProducts?.length > 0 && (
                 <div className="p-2.5 rounded-lg bg-indigo-500/10 text-indigo-300">
-                  Products: {s.productsOfInterest.join(', ')}
+                  Products: {s.reviewProducts.join(', ')}
                 </div>
               )}
             </div>
