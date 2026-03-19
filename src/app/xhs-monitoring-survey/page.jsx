@@ -234,7 +234,7 @@ export default function XHSMonitoringSurveyPage() {
           ))}
           {value > 0 && (
             <span className="ml-3 text-sm text-gray-400 self-center">
-              {value}/5 — {ratingLabels[value - 1]}
+              {value}/5 - {ratingLabels[value - 1]}
             </span>
           )}
         </div>
@@ -598,7 +598,7 @@ export default function XHSMonitoringSurveyPage() {
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">4</span>
                 <h2 className="text-2xl font-semibold text-white">Slack Integration</h2>
               </div>
-              <p className="text-sm text-gray-400 mb-6 ml-11">XHS™ currently offers a Slack integration for regulatory alerts — tell us how it's working</p>
+              <p className="text-sm text-gray-400 mb-6 ml-11">XHS™ currently offers a Slack integration for regulatory alerts - tell us how it's working</p>
 
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-white mb-3">
