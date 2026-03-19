@@ -191,7 +191,7 @@ export async function POST(request) {
         try {
           const { Resend } = await import('resend');
           const resend = new Resend(process.env.RESEND_API_KEY);
-          const recipientEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
+          const recipientEmails = ['andrew@pimlicosolutions.com', 'contact@pimlicosolutions.com'];
 
           const teamList = submission.teamMembers
             .map((m, i) => `  ${i + 1}. ${m.name} <${m.email}>${m.role ? ` — ${m.role}` : ''}`)
@@ -229,7 +229,7 @@ ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''
 
           await resend.emails.send({
             from: 'Pimlico Onboarding <onboarding@resend.dev>',
-            to: recipientEmail,
+            to: recipientEmails,
             subject: `🚀 NEW ONBOARDING — ${submission.company} (${submission.teamMembers.length} users)`,
             text: emailReport,
           });
