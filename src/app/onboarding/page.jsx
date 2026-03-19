@@ -82,12 +82,12 @@ const JURISDICTION_GROUPS = {
 };
 
 const PRODUCTS = [
-  { key: 'projects',    label: 'Projects',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives', icon: '\uD83D\uDCCB' },
-  { key: 'blocklists',  label: 'Blocklists',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time', icon: '\uD83D\uDEAB' },
-  { key: 'competitors', label: 'Competitors',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions', icon: '\uD83C\uDFE2' },
-  { key: 'lens',        label: 'Lens',         desc: 'Drill down into the technical standards and regulatory trends impacting your business', icon: '\uD83D\uDD0D' },
-  { key: 'technical',   label: 'Technical',    desc: 'Access and compare technical standards, testing requirements and certification frameworks', icon: '\u2699\uFE0F' },
-  { key: 'partners',    label: 'Partners',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions', icon: '\uD83E\uDD1D' },
+  { key: 'projects',    label: 'Projects\u2122',     desc: 'Organise regulatory items into workstreams and track progress against compliance objectives' },
+  { key: 'blocklists',  label: 'Blocklists\u2122',   desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time' },
+  { key: 'competitors', label: 'Competitors\u2122',  desc: 'Track competitor licences, enforcements, deals and products across jurisdictions' },
+  { key: 'lens',        label: 'Lens\u2122',         desc: 'Drill down into the technical standards and regulatory trends impacting your business' },
+  { key: 'technical',   label: 'Technical\u2122',    desc: 'Access and compare technical standards, testing requirements and certification frameworks' },
+  { key: 'partners',    label: 'Partners\u2122',     desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions' },
 ];
 
 const VERTICALS = ['Gambling', 'Payments', 'Crypto', 'AI'];
@@ -118,11 +118,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const [preferredTrainingDate, setPreferredTrainingDate] = useState('');
   const [wantOnboardingGuide, setWantOnboardingGuide] = useState(false);
   const [participateInReviews, setParticipateInReviews] = useState(false);
-  const [reviewProducts, setReviewProducts] = useState([]);
   const [participateInSurveys, setParticipateInSurveys] = useState(false);
   const [participateInInterviews, setParticipateInInterviews] = useState(false);
-  const [tryNewProducts, setTryNewProducts] = useState(false);
-  const [productsOfInterest, setProductsOfInterest] = useState([]);
   const [additionalNotes, setAdditionalNotes] = useState('');
 
   const maxJurisdictions = orgConfig?.maxJurisdictions || 50;
@@ -227,13 +224,6 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
   const filteredGroups = getFilteredRegions();
 
-  /* -- Product toggle -- */
-  const toggleProduct = (key) => {
-    setProductsOfInterest(prev =>
-      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
-    );
-  };
-
   /* -- Vertical toggle -- */
   const toggleVertical = (v) => {
     setSelectedVerticals(prev =>
@@ -300,11 +290,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           preferredTrainingDate,
           wantOnboardingGuide,
           participateInReviews,
-          reviewProducts,
           participateInSurveys,
           participateInInterviews,
-          tryNewProducts,
-          productsOfInterest,
           additionalNotes,
         }),
       });
@@ -375,7 +362,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {/* Header */}
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-3">
-              {orgConfig ? `${orgConfig.name} \u2014 Onboarding` : 'Platform Onboarding'}
+              {orgConfig ? `${orgConfig.name} \u2014 Onboarding` : 'XHS\u2122 Platform Onboarding'}
             </h1>
             <p className="text-base text-slate-500">
               {"Set up your team and configure your Pimlico XHS\u2122 workspace"}
@@ -804,61 +791,6 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           {/* STEP 3: Preferences */}
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
-              {/* Onboarding Timeline */}
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">Your Onboarding Journey</h2>
-                <p className="text-sm text-slate-500 mb-6">{"Here's what to expect over the next few weeks as we get you up and running"}</p>
-
-                <div className="relative">
-                  {/* Vertical line */}
-                  <div className="absolute left-[17px] top-2 bottom-2 w-px bg-blue-200" />
-
-                  <div className="space-y-6">
-                    {/* Week 1 */}
-                    <div className="flex gap-4">
-                      <div className="relative z-10 w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">W1</div>
-                      <div className="flex-1 bg-blue-50 rounded-xl p-4 border border-blue-100">
-                        <h3 className="text-sm font-semibold text-slate-900">Week 1 \u2014 Setup & Access</h3>
-                        <ul className="mt-2 space-y-1.5 text-xs text-slate-600">
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Account activation and team invites sent</li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Jurisdiction and vertical configuration applied</li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Welcome call or training session (if requested)</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* Week 2 */}
-                    <div className="flex gap-4">
-                      <div className="relative z-10 w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">W2</div>
-                      <div className="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200">
-                        <h3 className="text-sm font-semibold text-slate-900">Week 2 \u2014 Explore & Configure</h3>
-                        <ul className="mt-2 space-y-1.5 text-xs text-slate-600">
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Team begins using projects, blocklists and monitoring tools</li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Product survey sent to gather initial impressions</li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Dedicated support available for questions and fine-tuning</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* Week 3 */}
-                    <div className="flex gap-4">
-                      <div className="relative z-10 w-9 h-9 rounded-full bg-blue-400 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">W3</div>
-                      <div className="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200">
-                        <h3 className="text-sm font-semibold text-slate-900">Week 3 \u2014 Review & Optimise</h3>
-                        <ul className="mt-2 space-y-1.5 text-xs text-slate-600">
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Check-in call to review usage and answer questions</li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Product review opportunity for in-depth feedback</li>
-                          <li className="flex items-start gap-2"><span className="text-blue-500 mt-0.5">\u2022</span>Workspace optimisation based on your team\u2019s workflow</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <p className="text-xs text-amber-800"><strong>Feedback commitment:</strong> As part of onboarding, we\u2019ll send short surveys and schedule check-ins to make sure the platform is working for your team. Your input directly shapes the product.</p>
-                </div>
-              </div>
               {/* Training */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-900 mb-5">Training & Support</h2>
@@ -912,64 +844,27 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                 </div>
               </div>
 
-              {/* Engagement */}
+              {/* Feedback & Engagement */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
                 <h2 className="text-xl font-semibold text-slate-900 mb-2">Feedback & Engagement</h2>
-                <p className="text-sm text-slate-500 mb-5">We\u2019ll check in regularly during onboarding. Let us know how you\u2019d like to contribute beyond that.</p>
+                <p className="text-sm text-slate-500 mb-5">{"We'll check in regularly during onboarding. Let us know how you'd like to contribute beyond that."}</p>
 
                 <div className="space-y-5">
                   <div className="flex items-start gap-4">
                     <button
                       type="button"
-                      onClick={() => {
-                        setParticipateInReviews(!participateInReviews);
-                        if (participateInReviews) setReviewProducts([]);
-                      }}
+                      onClick={() => setParticipateInReviews(!participateInReviews)}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
                         participateInReviews ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
                       }`}
                     >
                       {participateInReviews && <span className="text-xs">{'\u2713'}</span>}
                     </button>
-                    <div className="flex-1">
-                      <p className="text-slate-800 font-medium text-sm">Participate in product reviews</p>
+                    <div>
+                      <p className="text-slate-800 font-medium text-sm">{"Participate in XHS\u2122 product reviews"}</p>
                       <p className="text-xs text-slate-500 mt-0.5">In-depth feedback sessions on specific products after your first few weeks</p>
                     </div>
                   </div>
-
-                  {participateInReviews && (
-                    <div className="ml-9 space-y-2">
-                      <p className="text-sm text-slate-700 font-medium mb-3">Which products would you like to review?</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {PRODUCTS.map(p => {
-                          const selected = reviewProducts.includes(p.key);
-                          return (
-                            <button
-                              key={p.key}
-                              type="button"
-                              onClick={() => setReviewProducts(prev => selected ? prev.filter(k => k !== p.key) : [...prev, p.key])}
-                              className={`text-left p-3.5 rounded-xl border transition-all ${
-                                selected
-                                  ? 'bg-blue-50 border-blue-300 ring-1 ring-blue-200'
-                                  : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'
-                              }`}
-                            >
-                              <div className="flex items-center gap-2.5">
-                                <span className="text-lg">{p.icon}</span>
-                                <span className={`font-semibold text-sm ${selected ? 'text-blue-800' : 'text-slate-800'}`}>{p.label}</span>
-                                {selected && (
-                                  <svg className="w-4 h-4 text-blue-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                                  </svg>
-                                )}
-                              </div>
-                              <p className={`text-xs mt-1.5 leading-relaxed ${selected ? 'text-blue-600' : 'text-slate-500'}`}>{p.desc}</p>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
 
                   <div className="flex items-start gap-4">
                     <button
@@ -982,7 +877,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       {participateInSurveys && <span className="text-xs">{'\u2713'}</span>}
                     </button>
                     <div>
-                      <p className="text-slate-800 font-medium text-sm">Participate in product surveys</p>
+                      <p className="text-slate-800 font-medium text-sm">{"Participate in XHS\u2122 product surveys"}</p>
                       <p className="text-xs text-slate-500 mt-0.5">Quick periodic surveys to help us track satisfaction and prioritise improvements</p>
                     </div>
                   </div>
@@ -1002,62 +897,34 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       <p className="text-xs text-slate-500 mt-0.5">Occasional 30-minute calls to discuss your experience and needs</p>
                     </div>
                   </div>
+                </div>
+              </div>
 
-                  <div className="flex items-start gap-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setTryNewProducts(!tryNewProducts);
-                        if (tryNewProducts) setProductsOfInterest([]);
-                      }}
-                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        tryNewProducts ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
-                      }`}
-                    >
-                      {tryNewProducts && <span className="text-xs">{'\u2713'}</span>}
-                    </button>
-                    <div className="flex-1">
-                      <p className="text-slate-800 font-medium text-sm">Interested in trying new products</p>
-                      <p className="text-xs text-slate-500 mt-0.5">Be among the first to access new features and tools</p>
+              {/* Horizontal Onboarding Timeline */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h2 className="text-lg font-semibold text-slate-900 mb-1">Your Onboarding Journey</h2>
+                <p className="text-xs text-slate-500 mb-5">{"What to expect over the first 3 weeks"}</p>
+
+                <div className="flex items-start gap-0">
+                  {[
+                    { week: 'W1', title: 'Setup & Access', desc: 'Account activation, team invites, configuration' },
+                    { week: 'W2', title: 'Explore & Configure', desc: 'Start using tools, initial survey, dedicated support' },
+                    { week: 'W3', title: 'Review & Optimise', desc: 'Check-in call, feedback review, workspace tuning' },
+                  ].map((step, i) => (
+                    <div key={step.week} className="flex-1 flex flex-col items-center text-center relative">
+                      {i < 2 && <div className="absolute top-4 left-[calc(50%+16px)] right-0 h-px bg-blue-200 z-0" />}
+                      <div className={`relative z-10 w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-bold ${
+                        i === 0 ? 'bg-blue-600' : i === 1 ? 'bg-blue-500' : 'bg-blue-400'
+                      }`}>{step.week}</div>
+                      <p className="text-xs font-semibold text-slate-800 mt-2">{step.title}</p>
+                      <p className="text-[11px] text-slate-500 mt-0.5 px-2 leading-snug">{step.desc}</p>
                     </div>
-                  </div>
+                  ))}
                 </div>
 
-                {/* Products of Interest */}
-                {tryNewProducts && (
-                  <div className="mt-5 ml-9 space-y-2">
-                    <p className="text-sm text-slate-700 font-medium mb-3">Which products interest you?</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {PRODUCTS.map(p => (
-                        <button
-                          key={p.key}
-                          type="button"
-                          onClick={() => toggleProduct(p.key)}
-                          className={`text-left p-3.5 rounded-xl border transition-all ${
-                            productsOfInterest.includes(p.key)
-                              ? 'bg-blue-50 border-blue-300 ring-1 ring-blue-200'
-                              : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <span className="text-lg">{p.icon}</span>
-                            <span className={`font-semibold text-sm ${
-                              productsOfInterest.includes(p.key) ? 'text-blue-800' : 'text-slate-800'
-                            }`}>{p.label}</span>
-                            {productsOfInterest.includes(p.key) && (
-                              <svg className="w-4 h-4 text-blue-600 ml-auto flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                          </div>
-                          <p className={`text-xs mt-1.5 leading-relaxed ${
-                            productsOfInterest.includes(p.key) ? 'text-blue-600' : 'text-slate-500'
-                          }`}>{p.desc}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <p className="text-xs text-amber-800"><strong>Feedback commitment:</strong> {"As part of onboarding, we'll send short surveys and schedule check-ins to make sure the platform is working for your team. Your input directly shapes the product."}</p>
+                </div>
               </div>
 
               {/* Additional Notes */}

@@ -3,12 +3,12 @@
 import Image from "next/image";
 
 const PRODUCTS = [
-  { label: 'Projects',    desc: 'Organise regulatory items into workstreams and track progress against compliance objectives.', icon: '\uD83D\uDCCB' },
-  { label: 'Blocklists',  desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time.', icon: '\uD83D\uDEAB' },
-  { label: 'Competitors', desc: 'Track competitor licences, enforcements, deals and products across jurisdictions.', icon: '\uD83C\uDFE2' },
-  { label: 'Lens',        desc: 'Drill down into the technical standards and regulatory trends impacting your business.', icon: '\uD83D\uDD0D' },
-  { label: 'Technical',   desc: 'Access and compare technical standards, testing requirements and certification frameworks.', icon: '\u2699\uFE0F' },
-  { label: 'Partners',    desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions.', icon: '\uD83E\uDD1D' },
+  { label: 'Projects\u2122',    desc: 'Organise regulatory items into workstreams and track progress against compliance objectives.' },
+  { label: 'Blocklists\u2122',  desc: 'Monitor blocked URLs and enforcement actions across jurisdictions in real time.' },
+  { label: 'Competitors\u2122', desc: 'Track competitor licences, enforcements, deals and products across jurisdictions.' },
+  { label: 'Lens\u2122',        desc: 'Drill down into the technical standards and regulatory trends impacting your business.' },
+  { label: 'Technical\u2122',   desc: 'Access and compare technical standards, testing requirements and certification frameworks.' },
+  { label: 'Partners\u2122',    desc: 'Connect with vetted legal, compliance and advisory partners across your key jurisdictions.' },
 ];
 
 const TIMELINE = [
@@ -41,7 +41,7 @@ const TIMELINE = [
     items: [
       'Check-in call to review usage, answer questions and gather feedback',
       'Product review opportunity for in-depth feedback on specific tools',
-      'Workspace optimisation based on your team\u2019s observed workflows',
+      'Workspace optimisation based on your team\'s observed workflows',
       'Full platform access confirmed \u2014 ongoing support continues',
     ],
   },
@@ -62,7 +62,7 @@ const FAQS = [
   },
   {
     q: 'How long do product surveys take?',
-    a: 'Surveys are short \u2014 typically 3\u20135 minutes. They help us understand what\u2019s working well and where we can improve.',
+    a: 'Surveys are short \u2014 typically 3\u20135 minutes. They help us understand what\'s working well and where we can improve.',
   },
   {
     q: 'Is our data secure?',
@@ -115,15 +115,12 @@ export default function OnboardingGuidePage() {
 
           {/* Products */}
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Platform Products</h2>
-            <p className="text-sm text-slate-500 mb-6">The tools available in your XHS workspace</p>
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">XHS\u2122 Platform Products</h2>
+            <p className="text-sm text-slate-500 mb-6">The tools available in your XHS\u2122 workspace</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {PRODUCTS.map(p => (
                 <div key={p.label} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <span className="text-xl">{p.icon}</span>
-                    <h3 className="font-semibold text-slate-900 text-sm">{p.label}</h3>
-                  </div>
+                  <h3 className="font-semibold text-slate-900 text-sm mb-2">{p.label}</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">{p.desc}</p>
                 </div>
               ))}
@@ -165,7 +162,7 @@ export default function OnboardingGuidePage() {
           <section className="bg-blue-50 rounded-2xl p-6 sm:p-8 border border-blue-200 mb-6">
             <h2 className="text-xl font-semibold text-blue-900 mb-4">What We Ask of You</h2>
             <p className="text-sm text-blue-800 leading-relaxed mb-5">
-              Getting the most out of XHS is a two-way process. Here{'\u2019'}s how your team can help us deliver the best experience:
+              Getting the most out of XHS\u2122 is a two-way process. Here{'\u2019'}s how your team can help us deliver the best experience:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white rounded-xl p-4 border border-blue-200">
