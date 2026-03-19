@@ -371,7 +371,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   <button
                     type="button"
                     onClick={() => {
-                      if (n < step) setStep(n);
+                      if (n < step) { setStep(n); window.scrollTo(0, 0); }
                     }}
                     className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
                       n < step
@@ -507,7 +507,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               <div className="flex justify-end pt-2">
                 <button
                   type="button"
-                  onClick={() => setStep(2)}
+                  onClick={() => { setStep(2); window.scrollTo(0, 0); }}
                   disabled={!canProceedStep1}
                   className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
@@ -563,28 +563,6 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     className="block w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-
-                {/* Selected chips */}
-                {selectedJurisdictions.length > 0 && (
-                  <div className="mb-4 flex flex-wrap gap-1.5">
-                    {selectedJurisdictions.map(j => (
-                      <span
-                        key={j}
-                        className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-xs text-blue-800 font-medium"
-                      >
-                        {j}
-                        <button type="button" onClick={() => toggleJurisdiction(j)} className="hover:text-blue-600 ml-0.5 text-blue-400">{'\u00D7'}</button>
-                      </span>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedJurisdictions([])}
-                      className="text-xs text-blue-500 hover:text-blue-700 px-2 py-1 font-medium"
-                    >
-                      Clear all
-                    </button>
-                  </div>
-                )}
 
                 {/* Region accordion */}
                 <div className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1">
@@ -753,19 +731,21 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     );
                   })}
                 </div>
+
+                <p className="text-xs text-slate-400 mt-3">{"You can update your jurisdiction preferences at any time after onboarding."}</p>
               </div>
 
               <div className="flex justify-between pt-2">
                 <button
                   type="button"
-                  onClick={() => setStep(1)}
+                  onClick={() => { setStep(1); window.scrollTo(0, 0); }}
                   className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
                   {"\u2190 Back"}
                 </button>
                 <button
                   type="button"
-                  onClick={() => setStep(3)}
+                  onClick={() => { setStep(3); window.scrollTo(0, 0); }}
                   disabled={!canProceedStep2}
                   className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
@@ -961,7 +941,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               <div className="flex justify-between pt-2">
                 <button
                   type="button"
-                  onClick={() => setStep(2)}
+                  onClick={() => { setStep(2); window.scrollTo(0, 0); }}
                   className="px-6 py-3 text-slate-500 hover:text-slate-800 font-medium transition-colors"
                 >
                   {"\u2190 Back"}
