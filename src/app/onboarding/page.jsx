@@ -118,9 +118,37 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   const [preferredTrainingDate, setPreferredTrainingDate] = useState('');
   const [wantOnboardingGuide, setWantOnboardingGuide] = useState(false);
   const [participateInReviews, setParticipateInReviews] = useState(false);
+  const [reviewProducts, setReviewProducts] = useState([]);
   const [participateInSurveys, setParticipateInSurveys] = useState(false);
   const [participateInInterviews, setParticipateInInterviews] = useState(false);
   const [additionalNotes, setAdditionalNotes] = useState('');
+
+  // Generate next 10 working days from today
+  const getNextWorkingDays = (count = 10) => {
+    const days = [];
+    const d = new Date();
+    d.setDate(d.getDate() + 1); // start from tomorrow
+    while (days.length < count) {
+      const day = d.getDay();
+      if (day !== 0 && day !== 6) {
+        days.push(new Date(d));
+      }
+      d.setDate(d.getDate() + 1);
+    }
+    return days;
+  };
+
+  const workingDays = getNextWorkingDays(10);
+
+  const formatDateShort = (date) => {
+    return date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  };
+
+  const toggleProduct = (key) => {
+    setReviewProducts(prev =>
+      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+    );
+  };
 
   const maxJurisdictions = orgConfig?.maxJurisdictions || 50;
   const maxSeats = orgConfig?.maxSeats || 50;
@@ -283,6 +311,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
           preferredTrainingDate,
           wantOnboardingGuide,
           participateInReviews,
+          reviewProducts,
           participateInSurveys,
           participateInInterviews,
           additionalNotes,
@@ -779,14 +808,38 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                       <p className="text-xs text-slate-500 mt-0.5">{"We'll walk your team through the platform features and best practices"}</p>
                       {scheduleTraining && (
                         <div className="mt-3">
-                          <label className="block text-xs font-medium text-slate-500 mb-1">Preferred date/time (optional)</label>
-                          <input
-                            type="text"
-                            value={preferredTrainingDate}
-                            onChange={e => setPreferredTrainingDate(e.target.value)}
-                            placeholder="e.g. Next Tuesday afternoon, or any weekday morning"
-                            className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                          />
+                          <label className="block text-xs font-medium text-slate-500 mb-1.5">Select a preferred date</label>
+                          <div className="grid grid-cols-5 gap-1.5">
+                            {workingDays.map(date => {
+                              const label = formatDateShort(date);
+                              const isSelected = preferredTrainingDate === label;
+                              return (
+                                <button
+                                  key={label}
+                                  type="button"
+                                  onClick={() => setPreferredTrainingDate(isSelected ? '' : label)}
+                                  className={`text-[11px] py-1.5 px-1 rounded-md border text-center transition-colors ${
+                                    isSelected
+                                      ? 'bg-blue-600 text-white border-blue-600 font-medium'
+                                      : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50'
+                                  }`}
+                                >
+                                  {label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setPreferredTrainingDate(preferredTrainingDate === 'Other' ? '' : 'Other')}
+                            className={`mt-1.5 w-full text-xs py-1.5 rounded-md border text-center transition-colors ${
+                              preferredTrainingDate === 'Other'
+                                ? 'bg-blue-600 text-white border-blue-600 font-medium'
+                                : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50'
+                            }`}
+                          >
+                            Other / flexible
+                          </button>
                         </div>
                       )}
                     </div>
@@ -820,22 +873,6 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   <div className="flex items-start gap-4">
                     <button
                       type="button"
-                      onClick={() => setParticipateInReviews(!participateInReviews)}
-                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
-                        participateInReviews ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
-                      }`}
-                    >
-                      {participateInReviews && <span className="text-xs">{'\u2713'}</span>}
-                    </button>
-                    <div>
-                      <p className="text-slate-800 font-medium text-sm">{"Participate in XHS\u2122 product reviews"}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">In-depth feedback sessions on specific products after your first few weeks</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <button
-                      type="button"
                       onClick={() => setParticipateInSurveys(!participateInSurveys)}
                       className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
                         participateInSurveys ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
@@ -862,6 +899,44 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     <div>
                       <p className="text-slate-800 font-medium text-sm">Open to user interviews</p>
                       <p className="text-xs text-slate-500 mt-0.5">Occasional 30-minute calls to discuss your experience and needs</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <button
+                      type="button"
+                      onClick={() => { setParticipateInReviews(!participateInReviews); if (participateInReviews) setReviewProducts([]); }}
+                      className={`mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center transition-colors border ${
+                        participateInReviews ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300'
+                      }`}
+                    >
+                      {participateInReviews && <span className="text-xs">{'\u2713'}</span>}
+                    </button>
+                    <div className="flex-1">
+                      <p className="text-slate-800 font-medium text-sm">{"Try XHS\u2122 products early to provide feedback for development"}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Get early access to specific products and help shape their development</p>
+                      {participateInReviews && (
+                        <div className="mt-3 grid grid-cols-2 gap-1.5">
+                          {PRODUCTS.map(p => {
+                            const isSelected = reviewProducts.includes(p.key);
+                            return (
+                              <button
+                                key={p.key}
+                                type="button"
+                                onClick={() => toggleProduct(p.key)}
+                                className={`text-left text-xs px-3 py-2 rounded-lg border transition-colors ${
+                                  isSelected
+                                    ? 'bg-blue-50 border-blue-300 text-blue-800 font-medium'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-blue-200 hover:bg-blue-50/50'
+                                }`}
+                              >
+                                <span className="mr-1.5">{isSelected ? '\u2611' : '\u2610'}</span>
+                                {p.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
