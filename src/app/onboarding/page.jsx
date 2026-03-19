@@ -7,30 +7,35 @@ import { useState } from "react";
    Jurisdiction Data - grouped by region
    ----------------------------------------------- */
 const JURISDICTION_GROUPS = {
-  'Northern Europe': [
-    'United Kingdom', 'Ireland', 'Denmark', 'Sweden', 'Finland', 'Norway',
-    'Iceland', 'Estonia', 'Latvia', 'Lithuania', 'Guernsey', 'Isle of Man',
-    'Jersey', 'Alderney', 'Gibraltar',
-  ],
-  'Western Europe': [
-    'France', 'Germany', 'Netherlands', 'Belgium', 'Luxembourg', 'Austria',
-    'Switzerland', 'Liechtenstein',
-  ],
-  'Southern Europe': [
-    'Spain', 'Portugal', 'Italy', 'Malta', 'Greece', 'Cyprus', 'Slovenia',
-    'Croatia', 'Albania', 'Montenegro', 'North Macedonia',
-    'Bosnia and Herzegovina',
-  ],
-  'Central & Eastern Europe': [
-    'Poland', 'Czech Republic', 'Slovakia', 'Hungary', 'Romania', 'Bulgaria',
-    'Serbia', 'Moldova', 'Ukraine', 'Belarus', 'Russia', 'Turkey',
-    'Georgia', 'Armenia', 'Azerbaijan', 'Kazakhstan',
-  ],
-  'European Union (Supranational)': [
-    'European Union',
-  ],
+  'Europe': {
+    _subgroups: {
+      'Northern Europe': [
+        'United Kingdom', 'Ireland', 'Denmark', 'Sweden', 'Finland', 'Norway',
+        'Iceland', 'Estonia', 'Latvia', 'Lithuania', 'Guernsey', 'Isle of Man',
+        'Jersey', 'Alderney', 'Gibraltar',
+      ],
+      'Western Europe': [
+        'France', 'Germany', 'Netherlands', 'Belgium', 'Luxembourg', 'Austria',
+        'Switzerland', 'Liechtenstein',
+      ],
+      'Southern Europe': [
+        'Spain', 'Portugal', 'Italy', 'Malta', 'Greece', 'Cyprus', 'Slovenia',
+        'Croatia', 'Albania', 'Montenegro', 'North Macedonia',
+        'Bosnia and Herzegovina',
+      ],
+      'Central & Eastern Europe': [
+        'Poland', 'Czech Republic', 'Slovakia', 'Hungary', 'Romania', 'Bulgaria',
+        'Serbia', 'Moldova', 'Ukraine', 'Belarus', 'Russia', 'Turkey',
+        'Georgia', 'Armenia', 'Azerbaijan', 'Kazakhstan',
+      ],
+      'European Union': [
+        'European Union',
+      ],
+    },
+  },
   'North America': [
     'United States', 'Canada', 'Mexico',
+    'Ontario', 'Quebec', 'British Columbia', 'Tobique First Nation', 'Kahnawake',
   ],
   'US States': [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
@@ -42,19 +47,15 @@ const JURISDICTION_GROUPS = {
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
     'Wisconsin', 'Wyoming', 'District of Columbia', 'Puerto Rico',
   ],
-  'Canadian Provinces': [
-    'Ontario', 'Quebec', 'British Columbia', 'Tobique First Nation', 'Kahnawake',
-  ],
-  'Central America & Caribbean': [
-    'Antigua and Barbuda', 'Anguilla', 'Aruba', 'Bahamas', 'Barbados', 'Belize', 'Bermuda',
-    'British Virgin Islands', 'Cayman Islands', 'Costa Rica', 'Cuba', 'Curacao', 'Dominica',
-    'Dominican Republic', 'El Salvador', 'Guatemala', 'Haiti', 'Honduras', 'Jamaica',
-    'Montserrat', 'Nicaragua', 'Panama', 'Saint Kitts', 'Saint Vincent and the Grenadines',
-    'Trinidad and Tobago', 'Turks & Caicos Islands', 'US Virgin Islands',
-  ],
-  'South America': [
-    'Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Ecuador', 'Guyana', 'Paraguay',
-    'Peru', 'Suriname', 'Uruguay', 'Venezuela',
+  'Latin America': [
+    'Antigua and Barbuda', 'Anguilla', 'Argentina', 'Aruba', 'Bahamas', 'Barbados',
+    'Belize', 'Bermuda', 'Bolivia', 'Brazil', 'British Virgin Islands', 'Cayman Islands',
+    'Chile', 'Colombia', 'Costa Rica', 'Cuba', 'Curacao', 'Dominica',
+    'Dominican Republic', 'Ecuador', 'El Salvador', 'Guatemala', 'Guyana', 'Haiti',
+    'Honduras', 'Jamaica', 'Montserrat', 'Nicaragua', 'Panama', 'Paraguay', 'Peru',
+    'Saint Kitts', 'Saint Vincent and the Grenadines', 'Suriname',
+    'Trinidad and Tobago', 'Turks & Caicos Islands', 'Uruguay', 'US Virgin Islands',
+    'Venezuela',
   ],
   'Middle East': [
     'United Arab Emirates', 'Abu Dhabi', 'Dubai', 'Saudi Arabia', 'Israel', 'Qatar', 'Bahrain',
@@ -74,8 +75,6 @@ const JURISDICTION_GROUPS = {
     'Bangladesh', 'Bhutan', 'Brunei', 'Cambodia', 'Kyrgyzstan', 'Laos', 'Macau', 'Maldives',
     'Mongolia', 'Myanmar', 'Nepal', 'North Korea', 'Pakistan', 'Sri Lanka', 'Tajikistan',
     'Timor-Leste', 'Turkmenistan', 'Uzbekistan', 'Afghanistan',
-  ],
-  'Pacific Islands': [
     'American Samoa', 'Fiji', 'Guam', 'Northern Marianas', 'Palau', 'Papua New Guinea',
     'Samoa', 'Solomon Islands', 'Vanuatu', 'The Republic of The Marshall Islands',
     'Federated States of Micronesia',
@@ -154,6 +153,13 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   };
 
   /* -- Jurisdiction handlers -- */
+  const getRegionJurisdictions = (region) => {
+    const val = JURISDICTION_GROUPS[region];
+    if (Array.isArray(val)) return val;
+    if (val?._subgroups) return Object.values(val._subgroups).flat();
+    return [];
+  };
+
   const toggleRegion = (region) => {
     setExpandedRegions(prev => ({ ...prev, [region]: !prev[region] }));
   };
@@ -167,30 +173,59 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
   };
 
   const selectAllInRegion = (region) => {
-    const regionJurisdictions = JURISDICTION_GROUPS[region];
+    const regionJurisdictions = getRegionJurisdictions(region);
     const notYetSelected = regionJurisdictions.filter(j => !selectedJurisdictions.includes(j));
     const canAdd = maxJurisdictions - selectedJurisdictions.length;
     const toAdd = notYetSelected.slice(0, canAdd);
     setSelectedJurisdictions([...selectedJurisdictions, ...toAdd]);
   };
 
+  const selectAllInSubgroup = (subJurisdictions) => {
+    const notYetSelected = subJurisdictions.filter(j => !selectedJurisdictions.includes(j));
+    const canAdd = maxJurisdictions - selectedJurisdictions.length;
+    const toAdd = notYetSelected.slice(0, canAdd);
+    setSelectedJurisdictions([...selectedJurisdictions, ...toAdd]);
+  };
+
   const deselectAllInRegion = (region) => {
-    const regionJurisdictions = JURISDICTION_GROUPS[region];
+    const regionJurisdictions = getRegionJurisdictions(region);
     setSelectedJurisdictions(selectedJurisdictions.filter(j => !regionJurisdictions.includes(j)));
   };
 
-  const isRegionFullySelected = (region) => {
-    return JURISDICTION_GROUPS[region].every(j => selectedJurisdictions.includes(j));
+  const deselectAllInSubgroup = (subJurisdictions) => {
+    setSelectedJurisdictions(selectedJurisdictions.filter(j => !subJurisdictions.includes(j)));
   };
 
-  const filteredGroups = jurisdictionSearch
-    ? Object.fromEntries(
-        Object.entries(JURISDICTION_GROUPS).map(([region, jurisdictions]) => [
-          region,
-          jurisdictions.filter(j => j.toLowerCase().includes(jurisdictionSearch.toLowerCase())),
-        ]).filter(([, jurisdictions]) => jurisdictions.length > 0)
-      )
-    : JURISDICTION_GROUPS;
+  const isRegionFullySelected = (region) => {
+    return getRegionJurisdictions(region).every(j => selectedJurisdictions.includes(j));
+  };
+
+  const isSubgroupFullySelected = (subJurisdictions) => {
+    return subJurisdictions.every(j => selectedJurisdictions.includes(j));
+  };
+
+  // Flatten for search filtering
+  const getFilteredRegions = () => {
+    if (!jurisdictionSearch) return JURISDICTION_GROUPS;
+    const q = jurisdictionSearch.toLowerCase();
+    const result = {};
+    for (const [region, val] of Object.entries(JURISDICTION_GROUPS)) {
+      if (Array.isArray(val)) {
+        const filtered = val.filter(j => j.toLowerCase().includes(q));
+        if (filtered.length > 0) result[region] = filtered;
+      } else if (val?._subgroups) {
+        const filteredSubs = {};
+        for (const [sub, jurisdictions] of Object.entries(val._subgroups)) {
+          const filtered = jurisdictions.filter(j => j.toLowerCase().includes(q));
+          if (filtered.length > 0) filteredSubs[sub] = filtered;
+        }
+        if (Object.keys(filteredSubs).length > 0) result[region] = { _subgroups: filteredSubs };
+      }
+    }
+    return result;
+  };
+
+  const filteredGroups = getFilteredRegions();
 
   /* -- Product toggle -- */
   const toggleProduct = (key) => {
@@ -579,9 +614,14 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
                 {/* Region accordion */}
                 <div className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1">
-                  {Object.entries(filteredGroups).map(([region, jurisdictions]) => {
+                  {Object.entries(filteredGroups).map(([region, val]) => {
                     const isExpanded = expandedRegions[region] || !!jurisdictionSearch;
-                    const selectedCount = jurisdictions.filter(j => selectedJurisdictions.includes(j)).length;
+                    const hasSubgroups = !Array.isArray(val) && val?._subgroups;
+                    const allJurisdictionsFlat = hasSubgroups
+                      ? Object.values(val._subgroups).flat()
+                      : val;
+                    const totalCount = allJurisdictionsFlat.length;
+                    const selectedCount = allJurisdictionsFlat.filter(j => selectedJurisdictions.includes(j)).length;
                     const allSelected = isRegionFullySelected(region) && !jurisdictionSearch;
 
                     return (
@@ -592,9 +632,11 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           className="w-full flex items-center justify-between p-3 hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <svg className={`w-3 h-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M6.293 4.293a1 1 0 011.414 0L14 10.586a1 1 0 01-1.414 1.414L6.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd" />
-                            </svg>
+                            <span className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold border transition-colors ${
+                              isExpanded ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-400'
+                            }`}>
+                              {isExpanded ? '\u2212' : '+'}
+                            </span>
                             <span className="text-sm font-medium text-slate-800">{region}</span>
                             {selectedCount > 0 && (
                               <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full">
@@ -603,7 +645,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                             )}
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-400">{jurisdictions.length}</span>
+                            <span className="text-xs text-slate-400">{totalCount}</span>
                             {!jurisdictionSearch && (
                               <button
                                 type="button"
@@ -623,10 +665,92 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           </div>
                         </button>
 
-                        {isExpanded && (
+                        {isExpanded && hasSubgroups && (
+                          <div className="px-3 pb-3 space-y-1.5">
+                            {Object.entries(val._subgroups).map(([sub, subJurisdictions]) => {
+                              const subExpanded = expandedRegions[sub] || !!jurisdictionSearch;
+                              const subSelectedCount = subJurisdictions.filter(j => selectedJurisdictions.includes(j)).length;
+                              const subAllSelected = isSubgroupFullySelected(subJurisdictions) && !jurisdictionSearch;
+
+                              return (
+                                <div key={sub} className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleRegion(sub)}
+                                    className="w-full flex items-center justify-between px-3 py-2 hover:bg-slate-50 transition-colors"
+                                  >
+                                    <div className="flex items-center gap-2.5">
+                                      <span className={`w-3.5 h-3.5 rounded flex items-center justify-center text-[9px] font-bold border transition-colors ${
+                                        subExpanded ? 'bg-blue-500 border-blue-500 text-white' : 'bg-white border-slate-300 text-slate-400'
+                                      }`}>
+                                        {subExpanded ? '\u2212' : '+'}
+                                      </span>
+                                      <span className="text-xs font-medium text-slate-700">{sub}</span>
+                                      {subSelectedCount > 0 && (
+                                        <span className="bg-blue-50 text-blue-600 text-[10px] font-medium px-1.5 py-0.5 rounded-full">
+                                          {subSelectedCount}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[10px] text-slate-400">{subJurisdictions.length}</span>
+                                      {!jurisdictionSearch && (
+                                        <button
+                                          type="button"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            subAllSelected ? deselectAllInSubgroup(subJurisdictions) : selectAllInSubgroup(subJurisdictions);
+                                          }}
+                                          className={`text-[10px] px-1.5 py-0.5 rounded font-medium transition-colors ${
+                                            subAllSelected
+                                              ? 'text-red-500 hover:text-red-700'
+                                              : 'text-blue-600 hover:text-blue-800'
+                                          }`}
+                                        >
+                                          {subAllSelected ? 'Deselect' : 'Select all'}
+                                        </button>
+                                      )}
+                                    </div>
+                                  </button>
+
+                                  {subExpanded && (
+                                    <div className="px-3 pb-2.5">
+                                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
+                                        {subJurisdictions.map(j => {
+                                          const isSelected = selectedJurisdictions.includes(j);
+                                          const isDisabled = !isSelected && selectedJurisdictions.length >= maxJurisdictions;
+                                          return (
+                                            <button
+                                              key={j}
+                                              type="button"
+                                              onClick={() => !isDisabled && toggleJurisdiction(j)}
+                                              disabled={isDisabled}
+                                              className={`text-left text-xs px-2.5 py-1.5 rounded-md transition-colors ${
+                                                isSelected
+                                                  ? 'bg-blue-100 text-blue-800 font-medium border border-blue-300'
+                                                  : isDisabled
+                                                  ? 'text-slate-300 cursor-not-allowed'
+                                                  : 'text-slate-600 hover:bg-slate-50 border border-transparent hover:border-slate-300'
+                                              }`}
+                                            >
+                                              <span className="mr-1.5">{isSelected ? '\u2611' : '\u2610'}</span>
+                                              {j}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {isExpanded && !hasSubgroups && (
                           <div className="px-3 pb-3">
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-1">
-                              {jurisdictions.map(j => {
+                              {val.map(j => {
                                 const isSelected = selectedJurisdictions.includes(j);
                                 const isDisabled = !isSelected && selectedJurisdictions.length >= maxJurisdictions;
                                 return (
