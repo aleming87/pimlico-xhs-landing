@@ -190,12 +190,13 @@ export async function POST(request) {
       // Send email notification
       if (process.env.RESEND_API_KEY) {
         try {
+          console.log('📧 RESEND_API_KEY found, attempting to send onboarding email...');
           const { Resend } = await import('resend');
           const resend = new Resend(process.env.RESEND_API_KEY);
           const recipientEmails = ['andrew@pimlicosolutions.com', 'contact@pimlicosolutions.com'];
 
           const teamList = submission.teamMembers
-            .map((m, i) => `  ${i + 1}. ${m.name} <${m.email}>${m.role ? ` — ${m.role}` : ''}`)
+            .map((m, i) => `  ${i + 1}. ${m.name} <${m.email}>${m.role ? ` - ${m.role}` : ''}`)
             .join('\n');
 
           const emailReport = `
@@ -220,7 +221,7 @@ ${submission.jurisdictions.map(j => `  • ${j}`).join('\n') || '  None selected
   • Participate in Surveys: ${submission.participateInSurveys ? 'Yes' : 'No'}
   • Participate in Interviews: ${submission.participateInInterviews ? 'Yes' : 'No'}
   • Try Products Early: ${submission.participateInReviews ? 'Yes' : 'No'}
-${submission.reviewProducts.length ? `  • Products of Interest: ${submission.reviewProducts.join(', ')}` : ''}
+${(submission.reviewProducts || []).length ? `  • Products of Interest: ${(submission.reviewProducts || []).join(', ')}` : ''}
 
 ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''}
 
@@ -228,20 +229,21 @@ ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''
 ====================================================
           `.trim();
 
-          await resend.emails.send({
+          const adminEmailResult = await resend.emails.send({
             from: 'Pimlico Onboarding <onboarding@resend.dev>',
             to: recipientEmails,
-            subject: `🚀 NEW ONBOARDING — ${submission.company} (${submission.teamMembers.length} users)`,
+            subject: `NEW ONBOARDING - ${submission.company} (${submission.teamMembers.length} users)`,
             text: emailReport,
           });
+          console.log('✅ Admin notification sent:', adminEmailResult);
 
           // Send confirmation to primary contact
           const primaryContact = submission.teamMembers[0];
           if (primaryContact?.email) {
-            await resend.emails.send({
+            const confirmResult = await resend.emails.send({
               from: 'Pimlico XHS <onboarding@resend.dev>',
               to: primaryContact.email,
-              subject: 'Welcome to Pimlico XHS™ — Onboarding Confirmed',
+              subject: 'Welcome to Pimlico XHS™ - Onboarding Confirmed',
               html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -275,6 +277,7 @@ ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''
 </td></tr></table>
 </body></html>`,
             });
+            console.log('✅ Confirmation email sent:', confirmResult);
           }
         } catch (emailError) {
           console.error('Onboarding email error:', emailError);
