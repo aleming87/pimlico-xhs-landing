@@ -100,16 +100,11 @@ function markdownToEmail(markdownContent, subject) {
           <div style="margin-bottom:24px;">
             <img src="https://pimlicosolutions.com/XHS_Logo_White.png" alt="Pimlico XHS™" width="160" style="max-width:160px;height:auto;display:inline-block;" />
           </div>
-          <!-- Badge -->
-          <div style="margin-bottom:16px;">
-            <span style="display:inline-block;background:rgba(255,255,255,0.12);color:#c7d2fe;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);">
-              📡 Product Update · ${date}
-            </span>
-          </div>
           <!-- Title -->
-          <h1 style="margin:0;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-0.3px;line-height:1.3;">
+          <h1 style="margin:0 0 10px;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-0.3px;line-height:1.3;">
             ${subject}
           </h1>
+          <p style="margin:0;color:#c7d2fe;font-size:14px;font-weight:500;">${date}</p>
         </td></tr>
       </table>
       <!-- Bottom fade line -->
