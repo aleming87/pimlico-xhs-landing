@@ -8,12 +8,17 @@ const BLOB_SCHEDULED_KEY = 'updates/scheduled.json';
 const BLOB_ORGS_KEY = 'updates/organisations.json';
 
 /* ── Blob helpers ── */
-async function readBlob(prefix, fallback) {
+async function readBlob(key, fallback) {
   try {
-    const { blobs } = await list({ prefix });
-    if (blobs.length === 0) return fallback;
-    const res = await fetch(blobs[0].url, { cache: 'no-store' });
-    return await res.json();
+    const { blobs } = await list({ prefix: key });
+    // Find exact match to avoid prefix collisions
+    const exact = blobs.find(b => b.pathname === key) || blobs[0];
+    if (!exact) return fallback;
+    const res = await fetch(exact.url, { cache: 'no-store' });
+    const data = await res.json();
+    // Ensure array fallback works correctly
+    if (Array.isArray(fallback) && !Array.isArray(data)) return fallback;
+    return data;
   } catch { return fallback; }
 }
 
@@ -223,6 +228,7 @@ export async function GET() {
 
 /* ═══════════════════ POST ═══════════════════ */
 export async function POST(request) {
+  try {
   const body = await request.json();
   const { action } = body;
 
@@ -252,8 +258,8 @@ export async function POST(request) {
   /* ── Subscriber management ── */
   if (action === 'add-subscribers') {
     const existing = await readBlob(BLOB_SUBSCRIBERS_KEY, []);
-    const existingEmails = existing.map(s => s.email.toLowerCase());
-    const incoming = body.subscribers || body.emails || [];
+    const existingEmails = existing.map(s => (s.email || '').toLowerCase());
+    const incoming = Array.isArray(body.subscribers || body.emails) ? (body.subscribers || body.emails) : [];
     const org = body.org;
     const added = [];
     for (const s of incoming) {
@@ -294,8 +300,8 @@ export async function POST(request) {
 
   if (action === 'import-from-onboarding') {
     const existing = await readBlob(BLOB_SUBSCRIBERS_KEY, []);
-    const onboardingSubs = await readBlob('onboarding/submissions', []);
-    const emails = existing.map(s => s.email.toLowerCase());
+    const onboardingSubs = await readBlob('onboarding/submissions.json', []);
+    const emails = existing.map(s => (s.email || '').toLowerCase());
     const added = [];
     for (const s of onboardingSubs) {
       const email = s.email || s.contactEmail;
@@ -446,4 +452,8 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
+  } catch (err) {
+    console.error('POST /api/updates error:', err);
+    return NextResponse.json({ success: false, error: err.message || 'Internal server error' }, { status: 500 });
+  }
 }

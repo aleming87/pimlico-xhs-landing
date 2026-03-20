@@ -788,6 +788,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
             organisations={organisations}
             setOrganisations={setOrganisations}
             subscribers={subs}
+            loadData={loadData}
           />
         )}
 
@@ -966,10 +967,14 @@ function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
 }
 
 /* ── Organisations Tab ── */
-function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
+function OrganisationsTab({ organisations, setOrganisations, subscribers, loadData }) {
   const [editing, setEditing] = useState(null); // org id or 'new'
   const [form, setForm] = useState({ name: '', logoUrl: '', jurisdictions: '' });
   const [saving, setSaving] = useState(false);
+  const [addingEmails, setAddingEmails] = useState(null); // org name currently adding subscribers to
+  const [newSubEmails, setNewSubEmails] = useState('');
+  const [addingSub, setAddingSub] = useState(false);
+  const [expandedOrg, setExpandedOrg] = useState(null); // org id to show subscriber list
 
   function startEdit(org) {
     setEditing(org?.id || 'new');
