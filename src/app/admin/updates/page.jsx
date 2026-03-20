@@ -75,6 +75,11 @@ export default function AdminUpdatesPage() {
   const [showFormatGuide, setShowFormatGuide] = useState(false);
   const [emailTheme, setEmailTheme] = useState('light'); // 'light' | 'dark'
 
+  // Test email state
+  const [testEmail, setTestEmail] = useState('');
+  const [sendingTest, setSendingTest] = useState(false);
+  const [testResult, setTestResult] = useState(null);
+
   // Add subscriber state
   const [newEmails, setNewEmails] = useState('');
   const [newOrg, setNewOrg] = useState('');
@@ -228,6 +233,26 @@ export default function AdminUpdatesPage() {
       setSendResult({ success: false, error: err.message });
     } finally {
       setSending(false);
+    }
+  }
+
+  /* ── Send test email ── */
+  async function handleSendTest() {
+    if (!testEmail.trim()) return;
+    setSendingTest(true);
+    setTestResult(null);
+    try {
+      const res = await fetch('/api/updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'send-test', testEmail: testEmail.trim(), template: templateType, theme: emailTheme }),
+      });
+      const data = await res.json();
+      setTestResult(data);
+    } catch (err) {
+      setTestResult({ success: false, error: err.message });
+    } finally {
+      setSendingTest(false);
     }
   }
 
@@ -654,6 +679,33 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                 )}
               </div>
             )}
+
+            {/* ── Test Email ── */}
+            <div className="bg-gray-800/40 rounded-xl border border-dashed border-gray-600/50 p-4">
+              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">🧪 Send Test Email</h4>
+              <p className="text-xs text-gray-500 mb-3">Send a sample email with mock regulatory data using the current theme ({emailTheme}) and template ({templateType}).</p>
+              <div className="flex items-center gap-3">
+                <input
+                  type="email"
+                  value={testEmail}
+                  onChange={e => setTestEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="flex-1 px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-violet-500"
+                />
+                <button
+                  onClick={handleSendTest}
+                  disabled={sendingTest || !testEmail.trim()}
+                  className="px-4 py-2.5 bg-teal-600/15 text-teal-300 border border-teal-500/30 rounded-lg text-sm font-medium hover:bg-teal-600/25 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                >
+                  {sendingTest ? '⏳ Sending...' : '🧪 Send Test'}
+                </button>
+              </div>
+              {testResult && (
+                <div className={`mt-3 p-3 rounded-lg text-sm ${testResult.success ? 'bg-green-500/10 text-green-300' : 'bg-red-500/10 text-red-300'}`}>
+                  {testResult.success ? `✅ ${testResult.message}` : `❌ ${testResult.error}`}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
