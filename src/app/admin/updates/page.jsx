@@ -314,7 +314,7 @@ export default function AdminUpdatesPage() {
             <StatCard icon="👥" label="Subscribers" value={subscribers.length} color="blue" />
             <StatCard icon="🏢" label="Organisations" value={orgList.length} color="purple" />
             <StatCard icon="📤" label="Updates Sent" value={history.length} color="green" />
-            <StatCard icon="⏰" label="Scheduled" value={scheduled.filter(s => s.status === 'pending').length} color="amber" />
+            <StatCard icon="⏰" label="Scheduled" value={scheduled.filter(s => !s.status || s.status === 'pending').length} color="amber" />
             <StatCard
               icon="📊"
               label="Total Emails"
@@ -800,7 +800,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                 <p className="text-gray-400 text-sm">Your sent updates will appear here</p>
               </div>
             ) : (
-              history.slice().reverse().map(h => (
+              history.map(h => (
                 <HistoryCard key={h.id} item={h} />
               ))
             )}
@@ -814,14 +814,14 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
               💡 Scheduled updates require a cron job calling <code className="bg-gray-800 px-1.5 py-0.5 rounded text-xs">POST /api/updates</code> with <code className="bg-gray-800 px-1.5 py-0.5 rounded text-xs">{`{"action": "send-scheduled"}`}</code> to be processed. Set up a Vercel Cron or external service to call this endpoint periodically.
             </div>
 
-            {scheduled.filter(s => s.status === 'pending').length === 0 ? (
+            {scheduled.filter(s => !s.status || s.status === 'pending').length === 0 ? (
               <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
                 <span className="text-4xl mb-4 block">⏰</span>
                 <h3 className="text-white font-semibold mb-2">No scheduled updates</h3>
                 <p className="text-gray-400 text-sm">Schedule updates from the Compose tab</p>
               </div>
             ) : (
-              scheduled.filter(s => s.status === 'pending').reverse().map(s => (
+              scheduled.filter(s => !s.status || s.status === 'pending').reverse().map(s => (
                 <div key={s.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-white font-semibold">{s.subject}</h3>
@@ -853,6 +853,8 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
 /* ── History Card ── */
 function HistoryCard({ item: h }) {
   const [expanded, setExpanded] = useState(false);
+  const sent = h.sent ?? h.results?.filter(r => r.success).length ?? h.recipientCount ?? 0;
+  const failed = h.failed ?? h.results?.filter(r => !r.success).length ?? 0;
 
   return (
     <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 overflow-hidden">
@@ -866,8 +868,8 @@ function HistoryCard({ item: h }) {
             <span className="text-xs text-gray-500">{new Date(h.sentAt).toLocaleString()}</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-400">
-            <span className="text-green-400">✅ {h.sent}</span>
-            {h.failed > 0 && <span className="text-red-400">❌ {h.failed}</span>}
+            <span className="text-green-400">✅ {sent}</span>
+            {failed > 0 && <span className="text-red-400">❌ {failed}</span>}
             <span className="text-xs text-gray-500">to {h.recipientCount} recipient{h.recipientCount !== 1 ? 's' : ''}</span>
             {h.scheduled && <span className="text-xs bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded-full">Scheduled</span>}
             <span className={`text-xs transition-transform ${expanded ? 'rotate-180' : ''}`}>▼</span>
@@ -878,7 +880,7 @@ function HistoryCard({ item: h }) {
       {expanded && (
         <div className="px-5 pb-5 border-t border-gray-700/40 pt-4">
           <div className="prose prose-invert prose-sm max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400">
-            <ReactMarkdown>{h.markdown}</ReactMarkdown>
+            {h.markdown ? <ReactMarkdown>{h.markdown}</ReactMarkdown> : <p className="text-gray-500 italic">Content not available</p>}
           </div>
         </div>
       )}

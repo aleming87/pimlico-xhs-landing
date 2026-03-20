@@ -294,17 +294,21 @@ export async function POST(request) {
 
   if (action === 'import-from-onboarding') {
     const existing = await readBlob(BLOB_SUBSCRIBERS_KEY, []);
+    const onboardingSubs = await readBlob('onboarding/submissions', []);
     const emails = existing.map(s => s.email.toLowerCase());
     const added = [];
-    for (const s of (body.subscribers || [])) {
-      if (!emails.includes(s.email.toLowerCase())) {
-        existing.push({ ...s, id: crypto.randomUUID(), addedAt: new Date().toISOString(), source: 'onboarding' });
-        emails.push(s.email.toLowerCase());
-        added.push(s.email);
+    for (const s of onboardingSubs) {
+      const email = s.email || s.contactEmail;
+      const name = s.name || s.contactName || '';
+      const org = s.company || s.organisation || '';
+      if (email && !emails.includes(email.toLowerCase())) {
+        existing.push({ email, name, organisation: org, id: crypto.randomUUID(), addedAt: new Date().toISOString(), source: 'onboarding' });
+        emails.push(email.toLowerCase());
+        added.push(email);
       }
     }
     await writeBlob(BLOB_SUBSCRIBERS_KEY, existing);
-    return NextResponse.json({ success: true, added, subscribers: existing });
+    return NextResponse.json({ success: true, added: added.length, total: existing.length, subscribers: existing });
   }
 
   /* ── Send email ── */
@@ -344,17 +348,22 @@ export async function POST(request) {
       }
     }
 
+    const sent = results.filter(r => r.success).length;
+    const failed = results.filter(r => !r.success).length;
     const history = await readBlob(BLOB_HISTORY_KEY, []);
     history.unshift({
       id: crypto.randomUUID(),
       subject,
+      markdown,
       template: template || 'standard',
       sentAt: new Date().toISOString(),
       recipientCount: targets.length,
+      sent,
+      failed,
       results,
     });
     await writeBlob(BLOB_HISTORY_KEY, history);
-    return NextResponse.json({ success: true, results });
+    return NextResponse.json({ success: true, sent, failed, results });
   }
 
   /* ── Schedule email ── */
@@ -375,7 +384,8 @@ export async function POST(request) {
 
   if (action === 'cancel-scheduled') {
     let scheduled = await readBlob(BLOB_SCHEDULED_KEY, []);
-    scheduled = scheduled.filter(s => s.id !== body.scheduledId);
+    const cancelId = body.scheduledId || body.id;
+    scheduled = scheduled.filter(s => s.id !== cancelId);
     await writeBlob(BLOB_SCHEDULED_KEY, scheduled);
     return NextResponse.json({ success: true, scheduled });
   }
@@ -413,14 +423,20 @@ export async function POST(request) {
       }
     }
 
+    const sentCount = results.filter(r => r.success).length;
+    const failedCount = results.filter(r => !r.success).length;
     const history = await readBlob(BLOB_HISTORY_KEY, []);
     history.unshift({
       id: crypto.randomUUID(),
       subject: item.subject,
+      markdown: item.markdown,
       template: item.template || 'standard',
       sentAt: new Date().toISOString(),
       recipientCount: targets.length,
+      sent: sentCount,
+      failed: failedCount,
       results,
+      scheduled: true,
     });
     await writeBlob(BLOB_HISTORY_KEY, history);
 
