@@ -86,10 +86,10 @@ export default function AdminUpdatesPage() {
       const res = await fetch('/api/updates');
       const data = await res.json();
       if (data.success) {
-        setSubscribers(data.subscribers || []);
-        setHistory(data.history || []);
-        setScheduled(data.scheduled || []);
-        setOrganisations(data.organisations || []);
+        setSubscribers(Array.isArray(data.subscribers) ? data.subscribers : []);
+        setHistory(Array.isArray(data.history) ? data.history : []);
+        setScheduled(Array.isArray(data.scheduled) ? data.scheduled : []);
+        setOrganisations(Array.isArray(data.organisations) ? data.organisations : []);
       }
     } catch (err) {
       console.error('Failed to load updates data:', err);
@@ -101,16 +101,17 @@ export default function AdminUpdatesPage() {
   useEffect(() => { loadData(); }, [loadData]);
 
   // Compute org groups
-  const orgList = [...new Set(subscribers.map(s => s.organisation || s.org || '').filter(Boolean))].sort();
+  const subs = Array.isArray(subscribers) ? subscribers : [];
+  const orgList = [...new Set(subs.map(s => s.organisation || s.org || '').filter(Boolean))].sort();
   const subscribersByOrg = {};
-  for (const s of subscribers) {
+  for (const s of subs) {
     const org = s.organisation || s.org || 'Ungrouped';
     if (!subscribersByOrg[org]) subscribersByOrg[org] = [];
     subscribersByOrg[org].push(s);
   }
   const filteredSubscribers = orgFilter === 'all'
-    ? subscribers
-    : subscribers.filter(s => (s.organisation || s.org || 'Ungrouped') === orgFilter);
+    ? subs
+    : subs.filter(s => (s.organisation || s.org || 'Ungrouped') === orgFilter);
 
   /* ── File upload ── */
   function handleFileUpload(e) {
@@ -205,7 +206,7 @@ export default function AdminUpdatesPage() {
   /* ── Send update ── */
   async function handleSend() {
     if (!subject.trim() || !markdown.trim()) return;
-    if (!confirm(`Send this update to ${selectedRecipients === 'all' ? subscribers.length : checkedEmails.size} recipient(s)?`)) return;
+    if (!confirm(`Send this update to ${selectedRecipients === 'all' ? subs.length : checkedEmails.size} recipient(s)?`)) return;
 
     setSending(true);
     setSendResult(null);
@@ -311,14 +312,14 @@ export default function AdminUpdatesPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
-            <StatCard icon="👥" label="Subscribers" value={subscribers.length} color="blue" />
+            <StatCard icon="👥" label="Subscribers" value={subs.length} color="blue" />
             <StatCard icon="🏢" label="Organisations" value={orgList.length} color="purple" />
-            <StatCard icon="📤" label="Updates Sent" value={history.length} color="green" />
-            <StatCard icon="⏰" label="Scheduled" value={scheduled.filter(s => !s.status || s.status === 'pending').length} color="amber" />
+            <StatCard icon="📤" label="Updates Sent" value={(Array.isArray(history) ? history : []).length} color="green" />
+            <StatCard icon="⏰" label="Scheduled" value={(Array.isArray(scheduled) ? scheduled : []).filter(s => !s.status || s.status === 'pending').length} color="amber" />
             <StatCard
               icon="📊"
               label="Total Emails"
-              value={history.reduce((sum, h) => sum + (h.sent || 0), 0)}
+              value={(Array.isArray(history) ? history : []).reduce((sum, h) => sum + (h.sent || 0), 0)}
               color="purple"
             />
           </div>
@@ -505,23 +506,23 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                       : 'bg-gray-700/50 text-gray-400 hover:text-white'
                   }`}
                 >
-                  All Subscribers ({subscribers.length})
+                  All Subscribers ({subs.length})
                 </button>
                 {orgList.map(org => (
                   <button
                     key={org}
                     onClick={() => {
                       setSelectedRecipients('selected');
-                      const orgEmails = subscribers.filter(s => (s.organisation || s.org) === org).map(s => s.email);
+                      const orgEmails = subs.filter(s => (s.organisation || s.org) === org).map(s => s.email);
                       setCheckedEmails(new Set(orgEmails));
                     }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      selectedRecipients === 'selected' && subscribers.filter(s => (s.organisation || s.org) === org).every(s => checkedEmails.has(s.email)) && subscribers.filter(s => (s.organisation || s.org) === org).length === checkedEmails.size
+                      selectedRecipients === 'selected' && subs.filter(s => (s.organisation || s.org) === org).every(s => checkedEmails.has(s.email)) && subs.filter(s => (s.organisation || s.org) === org).length === checkedEmails.size
                         ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
                         : 'bg-gray-700/50 text-gray-400 hover:text-white'
                     }`}
                   >
-                    🏢 {org} ({subscribers.filter(s => (s.organisation || s.org) === org).length})
+                    🏢 {org} ({subs.filter(s => (s.organisation || s.org) === org).length})
                   </button>
                 ))}
                 <button
@@ -538,7 +539,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
 
               {selectedRecipients === 'selected' && (
                 <div className="max-h-48 overflow-y-auto space-y-1.5 mt-3 pr-2">
-                  {subscribers.length === 0 ? (
+                  {subs.length === 0 ? (
                     <p className="text-gray-500 text-xs">No subscribers yet. Add some in the Subscribers tab.</p>
                   ) : (
                     Object.entries(subscribersByOrg).map(([org, subs]) => (
@@ -692,7 +693,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                       : 'bg-gray-800 text-gray-400 border border-gray-700 hover:text-white'
                   }`}
                 >
-                  All ({subscribers.length})
+                  All ({subs.length})
                 </button>
                 {Object.entries(subscribersByOrg).map(([org, subs]) => (
                   <button
@@ -714,12 +715,12 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-700/40 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-white">
-                  {orgFilter === 'all' ? `All Subscribers (${subscribers.length})` : `${orgFilter} (${filteredSubscribers.length})`}
+                  {orgFilter === 'all' ? `All Subscribers (${subs.length})` : `${orgFilter} (${filteredSubscribers.length})`}
                 </h3>
-                {subscribers.length > 0 && (
+                {subs.length > 0 && (
                   <button
                     onClick={() => {
-                      const list = orgFilter === 'all' ? subscribers : filteredSubscribers;
+                      const list = orgFilter === 'all' ? subs : filteredSubscribers;
                       const csv = 'Email,Name,Organisation,Added At,Source\n' + list.map(s =>
                         `"${s.email}","${s.name || ''}","${s.organisation || s.org || ''}","${s.addedAt || ''}","${s.source || 'manual'}"`
                       ).join('\n');
@@ -786,21 +787,21 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
           <OrganisationsTab
             organisations={organisations}
             setOrganisations={setOrganisations}
-            subscribers={subscribers}
+            subscribers={subs}
           />
         )}
 
         {/* ════ HISTORY TAB ════ */}
         {activeTab === 'history' && (
           <div className="space-y-4">
-            {history.length === 0 ? (
+            {(Array.isArray(history) ? history : []).length === 0 ? (
               <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
                 <span className="text-4xl mb-4 block">📜</span>
                 <h3 className="text-white font-semibold mb-2">No updates sent yet</h3>
                 <p className="text-gray-400 text-sm">Your sent updates will appear here</p>
               </div>
             ) : (
-              history.map(h => (
+              (Array.isArray(history) ? history : []).map(h => (
                 <HistoryCard key={h.id} item={h} />
               ))
             )}
@@ -814,14 +815,14 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
               💡 Scheduled updates require a cron job calling <code className="bg-gray-800 px-1.5 py-0.5 rounded text-xs">POST /api/updates</code> with <code className="bg-gray-800 px-1.5 py-0.5 rounded text-xs">{`{"action": "send-scheduled"}`}</code> to be processed. Set up a Vercel Cron or external service to call this endpoint periodically.
             </div>
 
-            {scheduled.filter(s => !s.status || s.status === 'pending').length === 0 ? (
+            {(Array.isArray(scheduled) ? scheduled : []).filter(s => !s.status || s.status === 'pending').length === 0 ? (
               <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
                 <span className="text-4xl mb-4 block">⏰</span>
                 <h3 className="text-white font-semibold mb-2">No scheduled updates</h3>
                 <p className="text-gray-400 text-sm">Schedule updates from the Compose tab</p>
               </div>
             ) : (
-              scheduled.filter(s => !s.status || s.status === 'pending').reverse().map(s => (
+              (Array.isArray(scheduled) ? scheduled : []).filter(s => !s.status || s.status === 'pending').reverse().map(s => (
                 <div key={s.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-white font-semibold">{s.subject}</h3>
@@ -996,7 +997,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
       });
       const data = await res.json();
       if (data.success) {
-        setOrganisations(data.organisations);
+        setOrganisations(Array.isArray(data.organisations) ? data.organisations : []);
         setEditing(null);
       }
     } catch (err) {
@@ -1015,7 +1016,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
         body: JSON.stringify({ action: 'delete-organisation', organisationId: id }),
       });
       const data = await res.json();
-      if (data.success) setOrganisations(data.organisations);
+      if (data.success) setOrganisations(Array.isArray(data.organisations) ? data.organisations : []);
     } catch (err) {
       console.error('Failed to delete organisation:', err);
     }
@@ -1099,7 +1100,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
       )}
 
       {/* Org List */}
-      {organisations.length === 0 && !editing ? (
+      {(Array.isArray(organisations) ? organisations : []).length === 0 && !editing ? (
         <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
           <span className="text-4xl mb-4 block">🏢</span>
           <h3 className="text-white font-semibold mb-2">No organisations configured</h3>
@@ -1107,8 +1108,8 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
         </div>
       ) : (
         <div className="space-y-3">
-          {organisations.map(org => {
-            const orgSubs = subscribers.filter(s => (s.organisation || s.org || '').toLowerCase() === (org.name || '').toLowerCase());
+          {(Array.isArray(organisations) ? organisations : []).map(org => {
+            const orgSubs = (Array.isArray(subscribers) ? subscribers : []).filter(s => (s.organisation || s.org || '').toLowerCase() === (org.name || '').toLowerCase());
             return (
               <div key={org.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
                 <div className="flex items-start justify-between">
@@ -1138,7 +1139,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
                     </button>
                   </div>
                 </div>
-                {org.jurisdictions?.length > 0 && (
+                {Array.isArray(org.jurisdictions) && org.jurisdictions.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {org.jurisdictions.map(j => (
                       <span key={j} className="text-xs bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/20">{j}</span>

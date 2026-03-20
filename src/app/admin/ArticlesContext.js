@@ -39,7 +39,8 @@ export function ArticlesProvider({ children }) {
 
     let customArticles = [];
     if (savedArticles) {
-      customArticles = JSON.parse(savedArticles).map(a => ({ ...a, isSample: false }));
+      const parsed = JSON.parse(savedArticles);
+      customArticles = (Array.isArray(parsed) ? parsed : []).map(a => ({ ...a, isSample: false }));
     }
 
     const customSlugs = customArticles.map(a => a.slug);
