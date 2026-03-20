@@ -1010,6 +1010,60 @@ function SubmissionCard({ submission: s }) {
               <p className="text-sm text-gray-400 bg-white/[0.03] rounded-lg p-3">{s.additionalNotes}</p>
             </div>
           )}
+
+          {/* Download buttons */}
+          <div className="flex gap-2 pt-2 border-t border-gray-700/40">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const blob = new Blob([JSON.stringify(s, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `onboarding-${s.company?.replace(/[^a-z0-9]/gi, '-').toLowerCase() || s.id}-${new Date(s.submittedAt).toISOString().slice(0, 10)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-blue-500/15 text-blue-300 rounded-lg hover:bg-blue-500/25 transition-colors"
+            >
+              📥 Download JSON
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                const flat = {
+                  Company: s.company,
+                  Organisation: s.orgSlug,
+                  'Team Members': (s.teamMembers || []).map(m => `${m.name} <${m.email}>${m.role ? ` (${m.role})` : ''}`).join('; '),
+                  'Team Size': s.teamMembers?.length || 0,
+                  Jurisdictions: (s.jurisdictions || []).join('; '),
+                  'Jurisdiction Count': s.jurisdictions?.length || 0,
+                  Verticals: (s.verticals || []).join('; '),
+                  Training: s.scheduleTraining ? `Yes${s.preferredTrainingDate ? ` (${s.preferredTrainingDate})` : ''}` : 'No',
+                  Guide: s.wantOnboardingGuide ? 'Yes' : 'No',
+                  Surveys: s.participateInSurveys ? 'Yes' : 'No',
+                  Interviews: s.participateInInterviews ? 'Yes' : 'No',
+                  'Try Products': s.participateInReviews ? 'Yes' : 'No',
+                  'Review Products': (s.reviewProducts || []).join('; '),
+                  Notes: s.additionalNotes || '',
+                  Submitted: s.submittedAt,
+                };
+                const headers = Object.keys(flat);
+                const values = headers.map(h => `"${String(flat[h]).replace(/"/g, '""')}"`);
+                const csv = [headers.join(','), values.join(',')].join('\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `onboarding-${s.company?.replace(/[^a-z0-9]/gi, '-').toLowerCase() || s.id}-${new Date(s.submittedAt).toISOString().slice(0, 10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-green-500/15 text-green-300 rounded-lg hover:bg-green-500/25 transition-colors"
+            >
+              📥 Download CSV
+            </button>
+          </div>
         </div>
       )}
     </div>

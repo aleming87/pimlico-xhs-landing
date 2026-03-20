@@ -19,6 +19,8 @@ const NAV_ITEMS = [
   { href: '/admin/surveys',    label: 'Surveys',     icon: '📋', group: 'feedback' },
   { type: 'divider', label: 'Clients' },
   { href: '/admin/onboarding', label: 'Onboarding',  icon: '🚀', group: 'clients' },
+  { type: 'divider', label: 'Comms' },
+  { href: '/admin/updates',    label: 'Email Updates', icon: '📧', group: 'comms' },
 ];
 
 function LoginScreen({ password, setPassword, passwordError, handleLogin }) {

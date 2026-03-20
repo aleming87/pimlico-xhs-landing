@@ -193,7 +193,10 @@ export async function POST(request) {
           console.log('📧 RESEND_API_KEY found, attempting to send onboarding email...');
           const { Resend } = await import('resend');
           const resend = new Resend(process.env.RESEND_API_KEY);
-          const recipientEmails = ['andrew@pimlicosolutions.com', 'contact@pimlicosolutions.com'];
+          const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
+          const recipientEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
+          const recipientEmails = [recipientEmail];
+          console.log(`📧 Sending from: ${senderEmail}, to: ${recipientEmails.join(', ')}`);
 
           const teamList = submission.teamMembers
             .map((m, i) => `  ${i + 1}. ${m.name} <${m.email}>${m.role ? ` - ${m.role}` : ''}`)
@@ -230,18 +233,18 @@ ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''
           `.trim();
 
           const adminEmailResult = await resend.emails.send({
-            from: 'Pimlico Onboarding <onboarding@resend.dev>',
+            from: `Pimlico Onboarding <${senderEmail}>`,
             to: recipientEmails,
             subject: `NEW ONBOARDING - ${submission.company} (${submission.teamMembers.length} users)`,
             text: emailReport,
           });
-          console.log('✅ Admin notification sent:', adminEmailResult);
+          console.log('✅ Admin notification sent:', JSON.stringify(adminEmailResult));
 
           // Send confirmation to primary contact
           const primaryContact = submission.teamMembers[0];
           if (primaryContact?.email) {
             const confirmResult = await resend.emails.send({
-              from: 'Pimlico XHS <onboarding@resend.dev>',
+              from: `Pimlico XHS <${senderEmail}>`,
               to: primaryContact.email,
               subject: 'Welcome to Pimlico XHS™ - Onboarding Confirmed',
               html: `
@@ -280,7 +283,9 @@ ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''
             console.log('✅ Confirmation email sent:', confirmResult);
           }
         } catch (emailError) {
-          console.error('Onboarding email error:', emailError);
+          console.error('❌ Onboarding email error:', emailError?.message || emailError);
+          console.error('💡 If using onboarding@resend.dev, emails can only be sent to the Resend account owner email.');
+          console.error('💡 To fix: verify your domain in Resend dashboard and set SENDER_EMAIL=noreply@yourdomain.com');
         }
       }
 
