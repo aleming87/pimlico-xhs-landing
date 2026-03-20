@@ -105,7 +105,7 @@ ${cobrandRow}
 
 /* ── Standard markdown email ── */
 function markdownToEmail(md, subject, { recipientName, orgConfig } = {}) {
-  const html = marked.parse(md);
+  const html = marked.parse(md || '');
   const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const hi = recipientName ? `<p style="color:#cbd5e1;font-size:15px;margin:0 0 18px;">Hi ${recipientName},</p>` : '';
 

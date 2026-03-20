@@ -838,7 +838,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                     </div>
                   </div>
                   <div className="text-sm text-gray-400 line-clamp-3">
-                    {s.markdown.slice(0, 200)}...
+                    {(s.markdown || '').slice(0, 200)}...
                   </div>
                 </div>
               ))
@@ -870,7 +870,7 @@ function HistoryCard({ item: h }) {
           <div className="flex items-center gap-4 text-sm text-gray-400">
             <span className="text-green-400">✅ {sent}</span>
             {failed > 0 && <span className="text-red-400">❌ {failed}</span>}
-            <span className="text-xs text-gray-500">to {h.recipientCount} recipient{h.recipientCount !== 1 ? 's' : ''}</span>
+            <span className="text-xs text-gray-500">to {h.recipientCount ?? 0} recipient{h.recipientCount !== 1 ? 's' : ''}</span>
             {h.scheduled && <span className="text-xs bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded-full">Scheduled</span>}
             <span className={`text-xs transition-transform ${expanded ? 'rotate-180' : ''}`}>▼</span>
           </div>
@@ -1108,7 +1108,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
       ) : (
         <div className="space-y-3">
           {organisations.map(org => {
-            const orgSubs = subscribers.filter(s => (s.organisation || s.org || '').toLowerCase() === org.name.toLowerCase());
+            const orgSubs = subscribers.filter(s => (s.organisation || s.org || '').toLowerCase() === (org.name || '').toLowerCase());
             return (
               <div key={org.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
                 <div className="flex items-start justify-between">
