@@ -32,9 +32,11 @@ async function writeBlob(key, data) {
 }
 
 const XHS_ICON = 'https://pimlico-xhs-landing.vercel.app/company/pimlico-icon.png';
+const XHS_LOGO_BLUE = 'https://www.pimlicosolutions.com/XHS%20Logo%20BLUE%20on%20WHITE.png';
+const PIMLICO_LOGO = 'https://www.pimlicosolutions.com/Pimlico_Logo.png';
 
-/* ── Shared email shell ── */
-function emailShell({ subject, preheader, headerHtml, bodyHtml, orgConfig }) {
+/* ── Dark email shell ── */
+function emailShellDark({ subject, preheader, headerHtml, bodyHtml, orgConfig }) {
   const clientLogo = orgConfig?.logoUrl;
   const cobrandRow = clientLogo
     ? `<tr><td style="padding:12px 40px 20px;text-align:center;background-color:#111827;">
@@ -108,18 +110,104 @@ ${cobrandRow}
 </body></html>`;
 }
 
+/* ── Light email shell (professional / website-inspired) ── */
+function emailShellLight({ subject, preheader, headerHtml, bodyHtml, orgConfig }) {
+  const clientLogo = orgConfig?.logoUrl;
+  const cobrandRow = clientLogo
+    ? `<tr><td style="padding:16px 40px 24px;text-align:center;background-color:#ffffff;">
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;border:1px solid #e5e7eb;border-radius:10px;padding:12px 20px;"><tr>
+          <td style="vertical-align:middle;"><img src="${clientLogo}" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:6px;object-fit:contain;display:block;" /></td>
+          <td style="vertical-align:middle;padding:0 10px;color:#d1d5db;font-size:14px;line-height:1;">+</td>
+          <td style="vertical-align:middle;"><img src="${XHS_ICON}" alt="XHS" width="28" height="28" style="width:28px;height:28px;border-radius:6px;object-fit:contain;display:block;" /></td>
+        </tr></table>
+      </td></tr>` : '';
+
+  return `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">
+<title>${subject}</title>
+<!--[if mso]><style>table,td{font-family:Arial,Helvetica,sans-serif!important;}</style><![endif]-->
+<style>
+@media only screen and (max-width:620px){.outer{width:100%!important;}.inner{padding:24px 20px!important;}.hdr{padding:32px 20px 24px!important;}.ftr{padding:20px!important;}h1{font-size:20px!important;}}
+.eb h1{color:#111827;font-size:20px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;}
+.eb h2{color:#1f2937;font-size:17px;font-weight:600;margin:18px 0 6px;}
+.eb h3{color:#374151;font-size:14px;font-weight:600;margin:14px 0 4px;text-transform:uppercase;letter-spacing:.4px;}
+.eb p{color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 14px;}
+.eb a{color:#2563eb;text-decoration:underline;text-underline-offset:2px;}
+.eb ul,.eb ol{color:#4b5563;font-size:15px;line-height:1.7;margin:0 0 14px;padding-left:18px;}
+.eb li{margin-bottom:4px;}
+.eb strong{color:#111827;font-weight:600;}
+.eb em{color:#4f46e5;}
+.eb blockquote{border-left:3px solid #2563eb;margin:12px 0;padding:8px 16px;background:#eff6ff;border-radius:0 6px 6px 0;}
+.eb blockquote p{color:#1e40af;margin:0;font-size:14px;}
+.eb code{background:#f3f4f6;color:#4f46e5;padding:1px 4px;border-radius:3px;font-size:13px;font-family:monospace;}
+.eb pre{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:12px;overflow-x:auto;margin:0 0 14px;}
+.eb pre code{background:none;padding:0;}
+.eb hr{border:none;border-top:1px solid #e5e7eb;margin:20px 0;}
+.eb img{max-width:100%;height:auto;border-radius:6px;}
+</style>
+</head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:#f3f4f6;color:#1f2937;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${preheader}&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" class="outer" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08),0 4px 24px rgba(0,0,0,.04);border:1px solid #e5e7eb;">
+<!-- Header -->
+<tr><td style="background:linear-gradient(135deg,#1e3a5f 0%,#1e40af 50%,#2563eb 100%);">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td class="hdr" style="padding:40px 40px 28px;text-align:center;">${headerHtml}</td></tr>
+</table>
+<div style="height:3px;background:linear-gradient(90deg,#60a5fa 0%,#a78bfa 35%,#f472b6 65%,#fbbf24 100%);"></div>
+</td></tr>
+<!-- Body -->
+<tr><td class="inner" style="padding:32px 40px 24px;background-color:#ffffff;">${bodyHtml}</td></tr>
+${cobrandRow}
+<!-- Footer -->
+<tr><td style="background-color:#f9fafb;border-top:1px solid #e5e7eb;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td class="ftr" style="padding:24px 40px;text-align:center;">
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 14px;">
+<tr>
+<td style="padding:0 5px;"><a href="https://www.linkedin.com/company/pimlico-solutions" style="display:inline-block;width:30px;height:30px;background:#e5e7eb;border-radius:8px;text-align:center;line-height:30px;text-decoration:none;font-size:12px;color:#6b7280;font-weight:600;">in</a></td>
+<td style="padding:0 5px;"><a href="https://x.com/PimlicoXHS" style="display:inline-block;width:30px;height:30px;background:#e5e7eb;border-radius:8px;text-align:center;line-height:30px;text-decoration:none;font-size:13px;color:#6b7280;font-weight:600;">X</a></td>
+<td style="padding:0 5px;"><a href="https://pimlicosolutions.com" style="display:inline-block;width:30px;height:30px;background:#e5e7eb;border-radius:8px;text-align:center;line-height:30px;text-decoration:none;font-size:12px;color:#6b7280;">\ud83c\udf10</a></td>
+</tr>
+</table>
+<p style="margin:0 0 2px;font-size:13px;color:#374151;font-weight:600;">Pimlico XHS\u2122</p>
+<p style="margin:0 0 8px;font-size:11px;color:#9ca3af;">AI-powered regulatory workspaces</p>
+<p style="margin:0;font-size:11px;color:#9ca3af;"><a href="https://pimlicosolutions.com" style="color:#2563eb;text-decoration:none;">pimlicosolutions.com</a></p>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`;
+}
+
+/* ── Theme dispatcher ── */
+function emailShell(opts) {
+  return opts.theme === 'light' ? emailShellLight(opts) : emailShellDark(opts);
+}
+
 /* ── Standard markdown email ── */
-function markdownToEmail(md, subject, { recipientName, orgConfig } = {}) {
+function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) {
   const html = marked.parse(md || '');
   const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-  const hi = recipientName ? `<p style="color:#cbd5e1;font-size:15px;margin:0 0 18px;">Hi ${recipientName},</p>` : '';
+  const isLight = theme === 'light';
+
+  const hi = recipientName
+    ? `<p style="color:${isLight ? '#374151' : '#cbd5e1'};font-size:15px;margin:0 0 18px;">Hi ${recipientName},</p>`
+    : '';
 
   const headerHtml = `
     <div style="margin-bottom:18px;"><img src="${XHS_ICON}" alt="XHS" width="44" height="44" style="width:44px;height:44px;border-radius:10px;display:inline-block;" /></div>
     <h1 style="margin:0 0 6px;color:#fff;font-size:24px;font-weight:700;letter-spacing:-.3px;line-height:1.3;">${subject}</h1>
-    <p style="margin:0;color:#94a3b8;font-size:13px;">${date}</p>`;
+    <p style="margin:0;color:${isLight ? '#bfdbfe' : '#94a3b8'};font-size:13px;">${date}</p>`;
 
-  return emailShell({ subject, preheader: `${subject} \u2014 ${date}`, headerHtml, bodyHtml: `${hi}<div class="eb" style="font-size:15px;color:#94a3b8;line-height:1.7;">${html}</div>`, orgConfig });
+  return emailShell({ subject, preheader: `${subject} \u2014 ${date}`, headerHtml, bodyHtml: `${hi}<div class="eb" style="font-size:15px;color:${isLight ? '#4b5563' : '#94a3b8'};line-height:1.7;">${html}</div>`, orgConfig, theme });
 }
 
 /* ── Parse Horizon Scan markdown ── */
@@ -152,9 +240,10 @@ function parseHorizonScan(markdown) {
 }
 
 /* ── Horizon Scan email ── */
-function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions } = {}) {
+function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme } = {}) {
   let sections = parseHorizonScan(md);
   const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const isLight = theme === 'light';
 
   if (jurisdictions?.length) {
     const jSet = new Set(jurisdictions.map(j => j.toLowerCase()));
@@ -164,30 +253,45 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions } = {}
   const total = sections.reduce((n, s) => n + s.updates.length, 0);
   const subject = `XHS Daily Horizon Scan \u2014 ${date}`;
   const hi = recipientName
-    ? `<p style="color:#cbd5e1;font-size:15px;margin:0 0 4px;">Hi ${recipientName},</p><p style="color:#64748b;font-size:13px;margin:0 0 22px;">Here are the latest regulatory developments across your tracked jurisdictions.</p>`
+    ? `<p style="color:${isLight ? '#374151' : '#cbd5e1'};font-size:15px;margin:0 0 4px;">Hi ${recipientName},</p><p style="color:${isLight ? '#6b7280' : '#64748b'};font-size:13px;margin:0 0 22px;">Here are the latest regulatory developments across your tracked jurisdictions.</p>`
     : '';
+
+  const cardBg = isLight ? '#f9fafb' : '#0f172a';
+  const cardBodyBg = isLight ? '#ffffff' : '#111827';
+  const cardBorder = isLight ? '#e5e7eb' : '#1e293b';
+  const headlineColor = isLight ? '#111827' : '#f1f5f9';
+  const descColor = isLight ? '#6b7280' : '#94a3b8';
+  const countryColor = isLight ? '#1f2937' : '#e2e8f0';
+  const countColor = isLight ? '#9ca3af' : '#475569';
+  const linkColor = isLight ? '#2563eb' : '#818cf8';
+  const pillBg = isLight ? '#f3f4f6' : '#1e293b';
+  const pillColor = isLight ? '#6b7280' : '#94a3b8';
+  const pillBorder = isLight ? '#e5e7eb' : '#334155';
+  const badgeBg = isLight ? 'rgba(37,99,235,.08)' : 'rgba(99,102,241,.1)';
+  const badgeBorder = isLight ? 'rgba(37,99,235,.15)' : 'rgba(99,102,241,.18)';
+  const badgeColor = isLight ? '#2563eb' : '#a5b4fc';
 
   const cards = sections.map(s => {
     const rows = s.updates.map((u, i) => {
       const pills = u.tags ? u.tags.split(/\s*\u00b7\s*/).map(t => t.trim()).filter(Boolean).map(t =>
-        `<span style="display:inline-block;background:#1e293b;color:#94a3b8;font-size:10px;padding:2px 7px;border-radius:8px;margin:1px 2px 1px 0;border:1px solid #334155;">${t}</span>`
+        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:2px 7px;border-radius:8px;margin:1px 2px 1px 0;border:1px solid ${pillBorder};">${t}</span>`
       ).join('') : '';
-      const sep = i > 0 ? '<tr><td style="padding:0;"><div style="border-top:1px solid #1e293b;margin:10px 0;"></div></td></tr>' : '';
+      const sep = i > 0 ? `<tr><td style="padding:0;"><div style="border-top:1px solid ${cardBorder};margin:10px 0;"></div></td></tr>` : '';
       return `${sep}<tr><td style="padding:0;">
-        <a href="${u.link || '#'}" style="color:#f1f5f9;font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;display:block;margin-bottom:3px;">${u.headline}</a>
-        <p style="color:#94a3b8;font-size:13px;line-height:1.5;margin:0 0 6px;">${u.desc}</p>
+        <a href="${u.link || '#'}" style="color:${headlineColor};font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;display:block;margin-bottom:3px;">${u.headline}</a>
+        <p style="color:${descColor};font-size:13px;line-height:1.5;margin:0 0 6px;">${u.desc}</p>
         ${pills ? `<div style="margin-bottom:4px;">${pills}</div>` : ''}
-        ${u.link ? `<a href="${u.link}" style="color:#818cf8;font-size:12px;font-weight:500;text-decoration:none;">Read full update \u2192</a>` : ''}
+        ${u.link ? `<a href="${u.link}" style="color:${linkColor};font-size:12px;font-weight:500;text-decoration:none;">Read full update \u2192</a>` : ''}
       </td></tr>`;
     }).join('');
 
-    return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid #1e293b;">
-      <tr><td style="padding:10px 14px;background:#0f172a;border-bottom:1px solid #1e293b;">
+    return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid ${cardBorder};">
+      <tr><td style="padding:10px 14px;background:${cardBg};border-bottom:1px solid ${cardBorder};">
         <span style="font-size:18px;vertical-align:middle;margin-right:6px;">${s.flag}</span>
-        <span style="color:#e2e8f0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;">${s.country}</span>
-        <span style="color:#475569;font-size:11px;margin-left:6px;vertical-align:middle;">${s.updates.length}</span>
+        <span style="color:${countryColor};font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;">${s.country}</span>
+        <span style="color:${countColor};font-size:11px;margin-left:6px;vertical-align:middle;">${s.updates.length}</span>
       </td></tr>
-      <tr><td style="padding:14px;background:#111827;">
+      <tr><td style="padding:14px;background:${cardBodyBg};">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table>
       </td></tr>
     </table>`;
@@ -196,20 +300,22 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions } = {}
   const headerHtml = `
     <div style="margin-bottom:18px;"><img src="${XHS_ICON}" alt="XHS" width="44" height="44" style="width:44px;height:44px;border-radius:10px;display:inline-block;" /></div>
     <h1 style="margin:0 0 4px;color:#fff;font-size:22px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">XHS Daily Horizon Scan</h1>
-    <p style="margin:0 0 14px;color:#94a3b8;font-size:13px;">${date}</p>
-    <div style="display:inline-block;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.18);border-radius:14px;padding:4px 12px;">
-      <span style="color:#a5b4fc;font-size:11px;font-weight:600;">${sections.length} Jurisdictions \u00b7 ${total} Updates</span>
+    <p style="margin:0 0 14px;color:${isLight ? '#bfdbfe' : '#94a3b8'};font-size:13px;">${date}</p>
+    <div style="display:inline-block;background:${badgeBg};border:1px solid ${badgeBorder};border-radius:14px;padding:4px 12px;">
+      <span style="color:${badgeColor};font-size:11px;font-weight:600;">${sections.length} Jurisdictions \u00b7 ${total} Updates</span>
     </div>`;
 
-  return emailShell({ subject, preheader: `${sections.length} jurisdictions \u00b7 ${total} regulatory updates \u2014 ${date}`, headerHtml, bodyHtml: `${hi}${cards}`, orgConfig });
+  return emailShell({ subject, preheader: `${sections.length} jurisdictions \u00b7 ${total} regulatory updates \u2014 ${date}`, headerHtml, bodyHtml: `${hi}${cards}`, orgConfig, theme });
 }
 
 /* ─── HELPERS ─── */
 async function sendEmail({ to, subject, html }) {
+  const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
+  const fromAddress = senderEmail.includes('<') ? senderEmail : `Pimlico XHS\u2122 <${senderEmail}>`;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: process.env.SENDER_EMAIL || 'onboarding@resend.dev', to, subject, html }),
+    body: JSON.stringify({ from: fromAddress, to, subject, html }),
   });
   if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || res.statusText); }
   return res.json();
@@ -319,7 +425,7 @@ export async function POST(request) {
 
   /* ── Send email ── */
   if (action === 'send') {
-    const { subject, markdown, template, recipients, recipientEmails } = body;
+    const { subject, markdown, template, recipients, recipientEmails, theme } = body;
     const allSubs = await readBlob(BLOB_SUBSCRIBERS_KEY, []);
     const orgs = await readBlob(BLOB_ORGS_KEY, []);
     let targets;
@@ -341,9 +447,9 @@ export async function POST(request) {
 
       let html;
       if (template === 'horizon-scan') {
-        html = horizonScanToEmail(markdown, { recipientName, orgConfig, jurisdictions: orgConfig.jurisdictions });
+        html = horizonScanToEmail(markdown, { recipientName, orgConfig, jurisdictions: orgConfig.jurisdictions, theme });
       } else {
-        html = markdownToEmail(markdown, subject, { recipientName, orgConfig });
+        html = markdownToEmail(markdown, subject, { recipientName, orgConfig, theme });
       }
 
       try {
@@ -362,6 +468,7 @@ export async function POST(request) {
       subject,
       markdown,
       template: template || 'standard',
+      theme: theme || 'dark',
       sentAt: new Date().toISOString(),
       recipientCount: targets.length,
       sent,
@@ -380,6 +487,7 @@ export async function POST(request) {
       subject: body.subject,
       markdown: body.markdown,
       template: body.template || 'standard',
+      theme: body.theme || 'dark',
       scheduledFor: body.scheduledFor,
       recipients: body.recipients || [],
       createdAt: new Date().toISOString(),
@@ -416,9 +524,9 @@ export async function POST(request) {
 
       let html;
       if (item.template === 'horizon-scan') {
-        html = horizonScanToEmail(item.markdown, { recipientName, orgConfig, jurisdictions: orgConfig.jurisdictions });
+        html = horizonScanToEmail(item.markdown, { recipientName, orgConfig, jurisdictions: orgConfig.jurisdictions, theme: item.theme });
       } else {
-        html = markdownToEmail(item.markdown, item.subject, { recipientName, orgConfig });
+        html = markdownToEmail(item.markdown, item.subject, { recipientName, orgConfig, theme: item.theme });
       }
 
       try {
@@ -437,6 +545,7 @@ export async function POST(request) {
       subject: item.subject,
       markdown: item.markdown,
       template: item.template || 'standard',
+      theme: item.theme || 'dark',
       sentAt: new Date().toISOString(),
       recipientCount: targets.length,
       sent: sentCount,

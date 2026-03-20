@@ -73,6 +73,7 @@ export default function AdminUpdatesPage() {
   // Template state
   const [templateType, setTemplateType] = useState('standard'); // 'standard' | 'horizon-scan'
   const [showFormatGuide, setShowFormatGuide] = useState(false);
+  const [emailTheme, setEmailTheme] = useState('light'); // 'light' | 'dark'
 
   // Add subscriber state
   const [newEmails, setNewEmails] = useState('');
@@ -218,7 +219,7 @@ export default function AdminUpdatesPage() {
       const res = await fetch('/api/updates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send', subject, markdown, recipientEmails, template: templateType }),
+        body: JSON.stringify({ action: 'send', subject, markdown, recipientEmails, template: templateType, theme: emailTheme }),
       });
       const data = await res.json();
       setSendResult(data);
@@ -239,7 +240,7 @@ export default function AdminUpdatesPage() {
       const res = await fetch('/api/updates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'schedule', subject, markdown, scheduledFor, template: templateType }),
+        body: JSON.stringify({ action: 'schedule', subject, markdown, scheduledFor, template: templateType, theme: emailTheme }),
       });
       const data = await res.json();
       if (data.success) {
@@ -350,7 +351,32 @@ export default function AdminUpdatesPage() {
           <div className="space-y-6">
             {/* Template Selector */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <label className="block text-xs font-medium text-gray-400 mb-2.5 uppercase tracking-wide">Email Template</label>
+              <div className="flex items-center justify-between mb-2.5">
+                <label className="block text-xs font-medium text-gray-400 uppercase tracking-wide">Email Template</label>
+                {/* Theme Toggle */}
+                <div className="flex items-center gap-1 bg-gray-900/60 rounded-lg p-0.5 border border-gray-700/50">
+                  <button
+                    onClick={() => setEmailTheme('light')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                      emailTheme === 'light'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-400 hover:text-gray-300'
+                    }`}
+                  >
+                    ☀️ Light
+                  </button>
+                  <button
+                    onClick={() => setEmailTheme('dark')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                      emailTheme === 'dark'
+                        ? 'bg-gray-700 text-white shadow-sm'
+                        : 'text-gray-400 hover:text-gray-300'
+                    }`}
+                  >
+                    🌙 Dark
+                  </button>
+                </div>
+              </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => { setTemplateType('standard'); }}
