@@ -971,10 +971,13 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
   const [editing, setEditing] = useState(null); // org id or 'new'
   const [form, setForm] = useState({ name: '', logoUrl: '', jurisdictions: '' });
   const [saving, setSaving] = useState(false);
-  const [addingEmails, setAddingEmails] = useState(null); // org name currently adding subscribers to
+  const [expandedOrg, setExpandedOrg] = useState(null); // org id to show members
+  const [addingToOrg, setAddingToOrg] = useState(null); // org name currently adding to
   const [newSubEmails, setNewSubEmails] = useState('');
   const [addingSub, setAddingSub] = useState(false);
-  const [expandedOrg, setExpandedOrg] = useState(null); // org id to show subscriber list
+
+  const allSubs = Array.isArray(subscribers) ? subscribers : [];
+  const orgs = Array.isArray(organisations) ? organisations : [];
 
   function startEdit(org) {
     setEditing(org?.id || 'new');
@@ -1027,12 +1030,69 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
     }
   }
 
+  async function handleAddSubsToOrg(orgName) {
+    if (!newSubEmails.trim()) return;
+    setAddingSub(true);
+    try {
+      const emails = newSubEmails
+        .split(/[,\n;]+/)
+        .map(e => e.trim())
+        .filter(Boolean)
+        .map(e => {
+          const match = e.match(/^(.+?)\s*<(.+?)>$/);
+          if (match) return { name: match[1].trim(), email: match[2].trim() };
+          return { email: e };
+        });
+      const res = await fetch('/api/updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add-subscribers', emails, org: orgName }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setNewSubEmails('');
+        setAddingToOrg(null);
+        loadData();
+      }
+    } catch (err) {
+      console.error('Failed to add subscribers:', err);
+    } finally {
+      setAddingSub(false);
+    }
+  }
+
+  async function handleRemoveSub(email) {
+    try {
+      await fetch('/api/updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'remove-subscriber', email }),
+      });
+      loadData();
+    } catch (err) {
+      console.error('Failed to remove subscriber:', err);
+    }
+  }
+
+  async function handleReassignSub(email, newOrgName) {
+    try {
+      await fetch('/api/updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update-subscriber', email, updates: { organisation: newOrgName } }),
+      });
+      loadData();
+    } catch (err) {
+      console.error('Failed to reassign subscriber:', err);
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-white">Organisations</h2>
-          <p className="text-sm text-gray-400 mt-0.5">Configure client logos and tracked jurisdictions for personalised emails</p>
+          <p className="text-sm text-gray-400 mt-0.5">Manage organisations, their subscribers, logos, and tracked jurisdictions</p>
         </div>
         <button
           onClick={() => startEdit(null)}
@@ -1105,7 +1165,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
       )}
 
       {/* Org List */}
-      {(Array.isArray(organisations) ? organisations : []).length === 0 && !editing ? (
+      {orgs.length === 0 && !editing ? (
         <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
           <span className="text-4xl mb-4 block">🏢</span>
           <h3 className="text-white font-semibold mb-2">No organisations configured</h3>
@@ -1113,42 +1173,137 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
         </div>
       ) : (
         <div className="space-y-3">
-          {(Array.isArray(organisations) ? organisations : []).map(org => {
-            const orgSubs = (Array.isArray(subscribers) ? subscribers : []).filter(s => (s.organisation || s.org || '').toLowerCase() === (org.name || '').toLowerCase());
+          {orgs.map(org => {
+            const orgSubs = allSubs.filter(s => (s.organisation || s.org || '').toLowerCase() === (org.name || '').toLowerCase());
+            const isExpanded = expandedOrg === org.id;
+            const isAdding = addingToOrg === org.name;
             return (
-              <div key={org.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-4">
-                    {org.logoUrl ? (
-                      <img src={org.logoUrl} alt={org.name} className="h-10 w-auto max-w-[100px] object-contain rounded" />
-                    ) : (
-                      <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center text-lg">🏢</div>
-                    )}
-                    <div>
-                      <h3 className="text-white font-semibold">{org.name}</h3>
-                      <p className="text-xs text-gray-500">{orgSubs.length} subscriber{orgSubs.length !== 1 ? 's' : ''}</p>
+              <div key={org.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 overflow-hidden">
+                {/* Org Header */}
+                <div className="p-5">
+                  <div className="flex items-start justify-between">
+                    <button
+                      onClick={() => setExpandedOrg(isExpanded ? null : org.id)}
+                      className="flex items-center gap-4 text-left group"
+                    >
+                      {org.logoUrl ? (
+                        <img src={org.logoUrl} alt={org.name} className="h-10 w-auto max-w-[100px] object-contain rounded" />
+                      ) : (
+                        <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center text-lg">🏢</div>
+                      )}
+                      <div>
+                        <h3 className="text-white font-semibold group-hover:text-violet-300 transition-colors">{org.name}</h3>
+                        <p className="text-xs text-gray-500">{orgSubs.length} subscriber{orgSubs.length !== 1 ? 's' : ''}</p>
+                      </div>
+                      <span className={`text-xs text-gray-500 transition-transform ml-2 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => { setAddingToOrg(isAdding ? null : org.name); setNewSubEmails(''); }}
+                        className={`text-xs px-2 py-1 rounded transition-colors ${isAdding ? 'bg-violet-600/20 text-violet-300' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                      >
+                        👤+ Add User
+                      </button>
+                      <button
+                        onClick={() => startEdit(org)}
+                        className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-white/5"
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(org.id)}
+                        className="text-xs text-red-400/60 hover:text-red-300 px-2 py-1 rounded hover:bg-red-500/10"
+                      >
+                        🗑️
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => startEdit(org)}
-                      className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-white/5"
-                    >
-                      ✏️ Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(org.id)}
-                      className="text-xs text-red-400/60 hover:text-red-300 px-2 py-1 rounded hover:bg-red-500/10"
-                    >
-                      🗑️ Delete
-                    </button>
-                  </div>
+
+                  {/* Jurisdictions */}
+                  {Array.isArray(org.jurisdictions) && org.jurisdictions.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {org.jurisdictions.map(j => (
+                        <span key={j} className="text-xs bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/20">{j}</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                {Array.isArray(org.jurisdictions) && org.jurisdictions.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {org.jurisdictions.map(j => (
-                      <span key={j} className="text-xs bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/20">{j}</span>
-                    ))}
+
+                {/* Add Subscriber Form (inline) */}
+                {isAdding && (
+                  <div className="px-5 pb-4 border-t border-gray-700/30 pt-4">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newSubEmails}
+                        onChange={e => setNewSubEmails(e.target.value)}
+                        placeholder="john@company.com, Jane Doe <jane@company.com>"
+                        autoFocus
+                        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddSubsToOrg(org.name); } }}
+                        className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-violet-500"
+                      />
+                      <button
+                        onClick={() => handleAddSubsToOrg(org.name)}
+                        disabled={addingSub || !newSubEmails.trim()}
+                        className="px-3 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-500 transition-colors disabled:opacity-40"
+                      >
+                        {addingSub ? '...' : '➕ Add'}
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1.5">Comma or newline separated. Use &quot;Name &lt;email&gt;&quot; format for named entries.</p>
+                  </div>
+                )}
+
+                {/* Subscriber List (expanded) */}
+                {isExpanded && (
+                  <div className="border-t border-gray-700/30">
+                    {orgSubs.length === 0 ? (
+                      <div className="px-5 py-6 text-center">
+                        <p className="text-gray-500 text-sm">No subscribers in this organisation yet.</p>
+                        <button
+                          onClick={() => { setAddingToOrg(org.name); setNewSubEmails(''); }}
+                          className="text-xs text-violet-400 hover:text-violet-300 mt-2"
+                        >
+                          + Add the first subscriber
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-gray-700/20">
+                        {orgSubs.map(s => (
+                          <div key={s.email} className="px-5 py-2.5 flex items-center justify-between group hover:bg-white/[0.02]">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className="w-7 h-7 rounded-full bg-gray-700 flex items-center justify-center text-xs text-gray-400 flex-shrink-0">
+                                {(s.name || s.email)[0].toUpperCase()}
+                              </div>
+                              <div className="min-w-0">
+                                <span className="text-white text-sm truncate block">{s.name || s.email}</span>
+                                {s.name && <span className="text-gray-500 text-xs truncate block">{s.email}</span>}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                              {orgs.length > 1 && (
+                                <select
+                                  value=""
+                                  onChange={e => { if (e.target.value) handleReassignSub(s.email, e.target.value); }}
+                                  className="bg-gray-700 border border-gray-600 rounded text-xs text-gray-300 px-1.5 py-1 focus:outline-none cursor-pointer"
+                                >
+                                  <option value="">Move to...</option>
+                                  {orgs.filter(o => o.name !== org.name).map(o => (
+                                    <option key={o.id} value={o.name}>{o.name}</option>
+                                  ))}
+                                </select>
+                              )}
+                              <button
+                                onClick={() => handleRemoveSub(s.email)}
+                                className="text-xs text-red-400/60 hover:text-red-300 px-1"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1156,6 +1311,58 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
           })}
         </div>
       )}
+
+      {/* Unassigned subscribers */}
+      {(() => {
+        const orgNames = new Set(orgs.map(o => (o.name || '').toLowerCase()));
+        const unassigned = allSubs.filter(s => {
+          const sOrg = (s.organisation || s.org || '').toLowerCase();
+          return !sOrg || !orgNames.has(sOrg);
+        });
+        if (unassigned.length === 0) return null;
+        return (
+          <div className="bg-gray-800/60 rounded-xl border border-amber-500/20 overflow-hidden">
+            <div className="px-5 py-3 bg-amber-500/5 border-b border-amber-500/20 flex items-center justify-between">
+              <span className="text-sm font-medium text-amber-300">⚠️ Unassigned Subscribers ({unassigned.length})</span>
+            </div>
+            <div className="divide-y divide-gray-700/20">
+              {unassigned.map(s => (
+                <div key={s.email} className="px-5 py-2.5 flex items-center justify-between group hover:bg-white/[0.02]">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-7 h-7 rounded-full bg-gray-700 flex items-center justify-center text-xs text-gray-400 flex-shrink-0">
+                      {(s.name || s.email)[0].toUpperCase()}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-white text-sm truncate block">{s.name || s.email}</span>
+                      {s.name && <span className="text-gray-500 text-xs truncate block">{s.email}</span>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {orgs.length > 0 && (
+                      <select
+                        value=""
+                        onChange={e => { if (e.target.value) handleReassignSub(s.email, e.target.value); }}
+                        className="bg-gray-700 border border-gray-600 rounded text-xs text-gray-300 px-1.5 py-1 focus:outline-none cursor-pointer"
+                      >
+                        <option value="">Assign to...</option>
+                        {orgs.map(o => (
+                          <option key={o.id} value={o.name}>{o.name}</option>
+                        ))}
+                      </select>
+                    )}
+                    <button
+                      onClick={() => handleRemoveSub(s.email)}
+                      className="text-xs text-red-400/60 hover:text-red-300 px-1"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
