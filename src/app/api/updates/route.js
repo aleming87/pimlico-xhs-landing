@@ -167,6 +167,184 @@ function markdownToEmail(markdownContent, subject) {
 </body></html>`;
 }
 
+/* ── Parse Horizon Scan markdown into structured sections ── */
+function parseHorizonScan(markdown) {
+  const sections = [];
+  // Split on ## headers (country sections)
+  const countryBlocks = markdown.split(/^##\s+/m).filter(s => s.trim());
+
+  for (const block of countryBlocks) {
+    const lines = block.split('\n');
+    const headerLine = lines[0].trim();
+
+    // Extract flag emoji (regional indicator pairs U+1F1E6–1F1FF)
+    const flagMatch = headerLine.match(/^([\u{1F1E6}-\u{1F1FF}]{2})\s*/u);
+    const flag = flagMatch ? flagMatch[1] : '';
+    const countryText = flag ? headerLine.slice(flagMatch[0].length).trim() : headerLine.trim();
+
+    const section = { flag, country: countryText, updates: [] };
+
+    // Split by ### headers to get individual updates
+    const updateBlocks = block.split(/^###\s+/m).slice(1);
+
+    for (const ub of updateBlocks) {
+      const uLines = ub.trim().split('\n');
+      const headline = uLines[0].trim();
+      let description = '';
+      let tags = '';
+      let link = '';
+
+      for (let i = 1; i < uLines.length; i++) {
+        const line = uLines[i].trim();
+        if (!line || line === '---') continue;
+        if (line.startsWith('**Tags:**')) {
+          tags = line.replace('**Tags:**', '').trim();
+        } else if (line.match(/^\[.+\]\(.+\)$/)) {
+          const lm = line.match(/\[.+?\]\((.+?)\)/);
+          if (lm) link = lm[1];
+        } else {
+          description += (description ? ' ' : '') + line;
+        }
+      }
+
+      section.updates.push({ headline, description, tags, link });
+    }
+
+    if (section.updates.length > 0) sections.push(section);
+  }
+
+  return sections;
+}
+
+/* ── Horizon Scan → branded HTML email ── */
+function horizonScanToEmail(markdownContent) {
+  const sections = parseHorizonScan(markdownContent);
+  const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const totalUpdates = sections.reduce((sum, s) => sum + s.updates.length, 0);
+  const subject = `XHS Daily Horizon Scan — ${date}`;
+
+  // Build country sections HTML
+  const sectionsHtml = sections.map(section => {
+    const updatesHtml = section.updates.map((upd, idx) => {
+      const tagPills = upd.tags
+        ? upd.tags.split(/\s*·\s*/).map(t => t.trim()).filter(Boolean)
+            .map(t => `<span style="display:inline-block;background:#1e293b;color:#94a3b8;font-size:11px;padding:3px 10px;border-radius:12px;margin:2px 4px 2px 0;border:1px solid #334155;">${t}</span>`)
+            .join('')
+        : '';
+      const separator = idx > 0
+        ? '<tr><td style="padding:0;"><div style="border-top:1px solid #1e293b;margin:14px 0;"></div></td></tr>'
+        : '';
+      return `${separator}
+        <tr><td style="padding:0;">
+          <a href="${upd.link || '#'}" style="color:#f1f5f9;font-size:15px;font-weight:600;text-decoration:none;line-height:1.4;display:block;margin-bottom:6px;">${upd.headline}</a>
+          <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0 0 10px;">${upd.description}</p>
+          ${tagPills ? `<div style="margin-bottom:10px;">${tagPills}</div>` : ''}
+          ${upd.link ? `<a href="${upd.link}" style="color:#818cf8;font-size:13px;font-weight:500;text-decoration:none;">Read more →</a>` : ''}
+        </td></tr>`;
+    }).join('');
+
+    return `
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;border-radius:12px;overflow:hidden;border:1px solid #1e293b;">
+        <!-- Country header -->
+        <tr><td style="padding:14px 20px;background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #334155;">
+          <span style="font-size:22px;vertical-align:middle;margin-right:10px;">${section.flag}</span>
+          <span style="color:#e2e8f0;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;vertical-align:middle;">${section.country}</span>
+          <span style="color:#64748b;font-size:12px;margin-left:10px;vertical-align:middle;">${section.updates.length} update${section.updates.length !== 1 ? 's' : ''}</span>
+        </td></tr>
+        <!-- Updates -->
+        <tr><td style="padding:18px 20px;background:#151d2e;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            ${updatesHtml}
+          </table>
+        </td></tr>
+      </table>`;
+  }).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
+  <title>${subject}</title>
+  <!--[if mso]><style>table,td{font-family:Arial,Helvetica,sans-serif!important;}</style><![endif]-->
+  <style>
+    @media only screen and (max-width: 620px) {
+      .outer { width: 100% !important; }
+      .inner { padding: 24px 16px !important; }
+      .header-inner { padding: 32px 16px 24px !important; }
+      .footer-inner { padding: 24px 16px !important; }
+      h1 { font-size: 20px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:#0b1120;color:#e2e8f0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+  ${sections.length} jurisdictions · ${totalUpdates} regulatory updates — ${date}
+  &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0b1120;">
+<tr><td align="center" style="padding:24px 16px;">
+
+  <table role="presentation" class="outer" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#151d2e;border-radius:16px;overflow:hidden;border:1px solid #1e293b;">
+
+    <!-- Header -->
+    <tr><td style="background:linear-gradient(135deg,#1e3a8a 0%,#312e81 50%,#1e3a8a 100%);">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td class="header-inner" style="padding:44px 40px 32px;text-align:center;">
+          <div style="margin-bottom:24px;">
+            <img src="https://pimlicosolutions.com/XHS_Logo_White.png" alt="Pimlico XHS" width="140" style="max-width:140px;height:auto;display:inline-block;" />
+          </div>
+          <h1 style="margin:0 0 8px;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-0.3px;line-height:1.2;">🌐 XHS Daily Horizon Scan</h1>
+          <p style="margin:0 0 20px;color:#c7d2fe;font-size:15px;font-weight:500;">${date}</p>
+          <div style="display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:6px 18px;">
+            <span style="color:#c7d2fe;font-size:12px;font-weight:600;letter-spacing:0.5px;">${sections.length} Jurisdictions · ${totalUpdates} Updates</span>
+          </div>
+        </td></tr>
+      </table>
+      <div style="height:3px;background:linear-gradient(90deg,transparent,#6366f1,#818cf8,#6366f1,transparent);"></div>
+    </td></tr>
+
+    <!-- Content -->
+    <tr><td class="inner" style="padding:32px 32px 16px;">
+      ${sectionsHtml}
+    </td></tr>
+
+    <!-- CTA -->
+    <tr><td style="padding:0 32px 28px;text-align:center;">
+      <div style="border-top:1px solid #1e293b;padding-top:24px;">
+        <a href="https://pimlicosolutions.com" style="display:inline-block;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#ffffff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:8px;text-decoration:none;">View Full Dashboard →</a>
+      </div>
+    </td></tr>
+
+    <!-- Footer -->
+    <tr><td style="background-color:#0b1120;border-top:1px solid #1e293b;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td class="footer-inner" style="padding:28px 40px;text-align:center;">
+          <div style="margin-bottom:16px;">
+            <a href="https://www.linkedin.com/company/pimlico-solutions" style="display:inline-block;width:32px;height:32px;background:#1e293b;border-radius:8px;text-align:center;line-height:32px;text-decoration:none;margin:0 4px;font-size:14px;">💼</a>
+            <a href="https://pimlicosolutions.com" style="display:inline-block;width:32px;height:32px;background:#1e293b;border-radius:8px;text-align:center;line-height:32px;text-decoration:none;margin:0 4px;font-size:14px;">🌐</a>
+          </div>
+          <p style="margin:0 0 6px;font-size:14px;color:#94a3b8;"><strong style="color:#e2e8f0;">Pimlico XHS™</strong></p>
+          <p style="margin:0 0 12px;font-size:12px;color:#64748b;">Transforming Regulatory Compliance</p>
+          <p style="margin:0;font-size:11px;color:#475569;">
+            <a href="https://pimlicosolutions.com" style="color:#6366f1;text-decoration:none;">pimlicosolutions.com</a>
+            &nbsp;·&nbsp;
+            <a href="mailto:andrew@pimlicosolutions.com" style="color:#6366f1;text-decoration:none;">andrew@pimlicosolutions.com</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+
+  </table>
+</td></tr>
+</table>
+</body></html>`;
+}
+
 /* ── GET: return subscribers, history, scheduled ── */
 export async function GET(request) {
   try {
@@ -328,7 +506,9 @@ export async function POST(request) {
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
       const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
-      const htmlContent = markdownToEmail(markdown, subject);
+      const htmlContent = body.template === 'horizon-scan'
+        ? horizonScanToEmail(markdown)
+        : markdownToEmail(markdown, subject);
 
       const results = { sent: 0, failed: 0, errors: [] };
 
@@ -384,6 +564,7 @@ export async function POST(request) {
         id: `sched_${Date.now()}`,
         subject,
         markdown,
+        template: body.template || 'standard',
         scheduledFor,
         createdAt: new Date().toISOString(),
         status: 'pending',
@@ -428,7 +609,9 @@ export async function POST(request) {
       const history = histData.history || [];
 
       for (const item of due) {
-        const htmlContent = markdownToEmail(item.markdown, item.subject);
+        const htmlContent = item.template === 'horizon-scan'
+          ? horizonScanToEmail(item.markdown)
+          : markdownToEmail(item.markdown, item.subject);
         let sent = 0, failed = 0;
 
         const batchSize = 10;

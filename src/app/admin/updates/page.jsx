@@ -2,6 +2,32 @@
 import { useState, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 
+const HORIZON_SCAN_PROMPT = `You are generating a daily regulatory horizon scan email for Pimlico XHS™, a regulatory change and compliance tracking platform.
+
+Using today's regulatory updates from the XHS™ dashboard, create a markdown document structured by country/jurisdiction. Each country section should contain one or more regulatory updates.
+
+FORMAT RULES:
+- Use ## for country headers with the correct flag emoji: ## 🇦🇷 Argentina
+- Use ### for each update headline
+- Follow the headline with a one-line description (1-2 sentences max)
+- Add a **Tags:** line with vertical, category, and type separated by · (middle dot)
+- Add a [Read more →](url) link to the source
+- Order countries alphabetically
+- Separate country sections with a blank line
+
+STRUCTURE:
+## [Flag] [Country Name]
+
+### [Headline of regulatory update]
+[One-line description of what happened and its significance]
+**Tags:** [Vertical] · [Category] · [Type/Stage]
+[Read more →](https://source-url)
+
+COMMON VERTICALS: Payments, Crypto, AI, Banking, Insurance, Securities, Consumer Protection, Data Privacy, AML/KYC
+COMMON TYPES: Publication, Consultation, Guideline, Implementation Measures, Register Update, Enforcement Action, Licence Requirement
+
+Generate the horizon scan for today, covering all jurisdictions with regulatory activity. Keep descriptions factual, concise, and compliance-focused.`;
+
 /* ── Stat Card ── */
 function StatCard({ icon, label, value, sub, color = 'blue' }) {
   const colors = {
@@ -42,6 +68,10 @@ export default function AdminUpdatesPage() {
   const [scheduleDate, setScheduleDate] = useState('');
   const [scheduleTime, setScheduleTime] = useState('09:00');
   const [scheduling, setScheduling] = useState(false);
+
+  // Template state
+  const [templateType, setTemplateType] = useState('standard'); // 'standard' | 'horizon-scan'
+  const [showFormatGuide, setShowFormatGuide] = useState(false);
 
   // Add subscriber state
   const [newEmails, setNewEmails] = useState('');
@@ -90,9 +120,11 @@ export default function AdminUpdatesPage() {
       if (typeof content === 'string') {
         setMarkdown(content);
         // Try to extract title from first heading
-        const titleMatch = content.match(/^#\s+(.+)$/m);
-        if (titleMatch && !subject) {
-          setSubject(titleMatch[1]);
+        if (templateType !== 'horizon-scan') {
+          const titleMatch = content.match(/^#\s+(.+)$/m);
+          if (titleMatch && !subject) {
+            setSubject(titleMatch[1]);
+          }
         }
       }
     };
@@ -183,7 +215,7 @@ export default function AdminUpdatesPage() {
       const res = await fetch('/api/updates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'send', subject, markdown, recipientEmails }),
+        body: JSON.stringify({ action: 'send', subject, markdown, recipientEmails, template: templateType }),
       });
       const data = await res.json();
       setSendResult(data);
@@ -204,7 +236,7 @@ export default function AdminUpdatesPage() {
       const res = await fetch('/api/updates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'schedule', subject, markdown, scheduledFor }),
+        body: JSON.stringify({ action: 'schedule', subject, markdown, scheduledFor, template: templateType }),
       });
       const data = await res.json();
       if (data.success) {
@@ -312,6 +344,96 @@ export default function AdminUpdatesPage() {
         {/* ════ COMPOSE TAB ════ */}
         {activeTab === 'compose' && (
           <div className="space-y-6">
+            {/* Template Selector */}
+            <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
+              <label className="block text-xs font-medium text-gray-400 mb-2.5 uppercase tracking-wide">Email Template</label>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setTemplateType('standard'); }}
+                  className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+                    templateType === 'standard'
+                      ? 'border-violet-500 bg-violet-500/10'
+                      : 'border-gray-700 bg-gray-800/40 hover:border-gray-600'
+                  }`}
+                >
+                  <span className="text-lg mb-1 block">✍️</span>
+                  <span className="text-sm font-semibold text-white block">Standard Update</span>
+                  <span className="text-xs text-gray-400">Free-form markdown email</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setTemplateType('horizon-scan');
+                    const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+                    setSubject(`XHS Daily Horizon Scan — ${today}`);
+                  }}
+                  className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+                    templateType === 'horizon-scan'
+                      ? 'border-indigo-500 bg-indigo-500/10'
+                      : 'border-gray-700 bg-gray-800/40 hover:border-gray-600'
+                  }`}
+                >
+                  <span className="text-lg mb-1 block">🌐</span>
+                  <span className="text-sm font-semibold text-white block">Daily Horizon Scan</span>
+                  <span className="text-xs text-gray-400">Structured by jurisdiction</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Horizon Scan Format Guide & AI Prompt */}
+            {templateType === 'horizon-scan' && (
+              <div className="bg-indigo-500/5 rounded-xl border border-indigo-500/20 overflow-hidden">
+                <button
+                  onClick={() => setShowFormatGuide(!showFormatGuide)}
+                  className="w-full px-5 py-3.5 flex items-center justify-between text-left hover:bg-indigo-500/5 transition-colors"
+                >
+                  <span className="text-sm font-medium text-indigo-300">📋 Markdown Format Guide & AI Prompt</span>
+                  <span className={`text-indigo-400 text-xs transition-transform ${showFormatGuide ? 'rotate-180' : ''}`}>▼</span>
+                </button>
+                {showFormatGuide && (
+                  <div className="px-5 pb-5 space-y-4">
+                    <div>
+                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Required Markdown Format</h4>
+                      <pre className="bg-gray-900 border border-gray-700 rounded-lg p-4 text-xs text-gray-300 overflow-x-auto whitespace-pre-wrap">{`## 🇦🇷 Argentina
+
+### BCRA publishes Comunicación A 8406 for recurring collections
+BCRA published Comunicación A 8406/2026 approving Cobro con Transferencia as the only immediate-transfer modality for recurring collections.
+**Tags:** Payments · Account To Account · Secondary Law
+[Read more →](https://source-link.com)
+
+## 🇧🇷 Brazil
+
+### ANPD issues age assurance guidance for ECA Digital
+The ANPD published preliminary guidance and an implementation timetable for reliable age-assurance mechanisms.
+**Tags:** AI · AI Governance · Digital Identity · Guideline
+[Read more →](https://source-link.com)
+
+## 🇹🇭 Thailand
+
+### SEC updates investor alert register with unlicensed digital asset pages
+Thailand's SEC updated its official Investor Alert register with five crypto entries for Facebook pages.
+**Tags:** Crypto · Registers Blocklists · Fraud Scams · Publication
+[Read more →](https://source-link.com)`}</pre>
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide">AI Prompt to Generate This</h4>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(HORIZON_SCAN_PROMPT);
+                            alert('Prompt copied to clipboard!');
+                          }}
+                          className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+                        >
+                          📋 Copy Prompt
+                        </button>
+                      </div>
+                      <pre className="bg-gray-900 border border-gray-700 rounded-lg p-4 text-xs text-gray-300 overflow-x-auto whitespace-pre-wrap">{HORIZON_SCAN_PROMPT}</pre>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Subject */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1.5">Subject Line</label>
