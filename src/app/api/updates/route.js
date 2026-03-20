@@ -35,37 +35,135 @@ async function writeBlob(key, data) {
 /* ── Markdown → branded HTML email ── */
 function markdownToEmail(markdownContent, subject) {
   const htmlBody = marked.parse(markdownContent);
+  const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
   return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:#0f172a;color:#e2e8f0;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;">
-<tr><td align="center" style="padding:20px;">
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#1e293b;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="supported-color-schemes" content="dark">
+  <title>${subject}</title>
+  <!--[if mso]><style>table,td{font-family:Arial,Helvetica,sans-serif!important;}</style><![endif]-->
+  <style>
+    @media only screen and (max-width: 620px) {
+      .outer { width: 100% !important; }
+      .inner { padding: 28px 20px !important; }
+      .header-inner { padding: 32px 20px 24px !important; }
+      .footer-inner { padding: 24px 20px !important; }
+      h1 { font-size: 22px !important; }
+    }
+    /* Markdown content styles */
+    .email-body h1 { color: #f1f5f9; font-size: 22px; font-weight: 700; margin: 32px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #334155; }
+    .email-body h2 { color: #e2e8f0; font-size: 18px; font-weight: 600; margin: 28px 0 10px; }
+    .email-body h3 { color: #cbd5e1; font-size: 15px; font-weight: 600; margin: 24px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .email-body p { color: #94a3b8; font-size: 15px; line-height: 1.7; margin: 0 0 16px; }
+    .email-body a { color: #60a5fa; text-decoration: underline; text-underline-offset: 2px; }
+    .email-body a:hover { color: #93bbfd; }
+    .email-body ul, .email-body ol { color: #94a3b8; font-size: 15px; line-height: 1.7; margin: 0 0 16px; padding-left: 20px; }
+    .email-body li { margin-bottom: 6px; }
+    .email-body li::marker { color: #6366f1; }
+    .email-body strong { color: #e2e8f0; font-weight: 600; }
+    .email-body em { color: #a5b4fc; font-style: italic; }
+    .email-body blockquote { border-left: 3px solid #6366f1; margin: 16px 0; padding: 12px 20px; background: rgba(99, 102, 241, 0.08); border-radius: 0 8px 8px 0; }
+    .email-body blockquote p { color: #a5b4fc; margin: 0; font-size: 14px; }
+    .email-body code { background: #1e293b; color: #a5b4fc; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; }
+    .email-body pre { background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 0 0 16px; }
+    .email-body pre code { background: none; padding: 0; font-size: 13px; line-height: 1.5; }
+    .email-body hr { border: none; border-top: 1px solid #334155; margin: 24px 0; }
+    .email-body img { max-width: 100%; height: auto; border-radius: 8px; margin: 8px 0; }
+    .email-body table { border-collapse: collapse; width: 100%; margin: 0 0 16px; }
+    .email-body table th { background: #1e293b; color: #e2e8f0; text-align: left; padding: 10px 12px; font-size: 13px; font-weight: 600; border-bottom: 2px solid #334155; }
+    .email-body table td { padding: 10px 12px; font-size: 14px; color: #94a3b8; border-bottom: 1px solid #1e293b; }
+  </style>
+</head>
+<body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:#0b1120;color:#e2e8f0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
-<!-- Header -->
-<tr><td style="background:linear-gradient(135deg,#2563eb 0%,#1e40af 100%);padding:40px;text-align:center;">
-  <div style="margin-bottom:20px;"><img src="https://pimlicosolutions.com/XHS_Logo_White.png" alt="Pimlico XHS" style="max-width:180px;height:auto;" /></div>
-  <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;">${subject}</h1>
-  <p style="margin:10px 0 0;color:#bfdbfe;font-size:14px;">Product Update from Pimlico XHS™</p>
+<!-- Preheader (hidden preview text) -->
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+  ${subject} — ${date}
+  &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0b1120;">
+<tr><td align="center" style="padding:24px 16px;">
+
+  <!-- Main Container -->
+  <table role="presentation" class="outer" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#151d2e;border-radius:16px;overflow:hidden;border:1px solid #1e293b;">
+
+    <!-- Header with gradient -->
+    <tr><td style="background:linear-gradient(135deg,#1e3a8a 0%,#312e81 50%,#1e3a8a 100%);position:relative;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td class="header-inner" style="padding:44px 40px 32px;text-align:center;">
+          <!-- Logo -->
+          <div style="margin-bottom:24px;">
+            <img src="https://pimlicosolutions.com/XHS_Logo_White.png" alt="Pimlico XHS™" width="160" style="max-width:160px;height:auto;display:inline-block;" />
+          </div>
+          <!-- Badge -->
+          <div style="margin-bottom:16px;">
+            <span style="display:inline-block;background:rgba(255,255,255,0.12);color:#c7d2fe;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);">
+              📡 Product Update · ${date}
+            </span>
+          </div>
+          <!-- Title -->
+          <h1 style="margin:0;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-0.3px;line-height:1.3;">
+            ${subject}
+          </h1>
+        </td></tr>
+      </table>
+      <!-- Bottom fade line -->
+      <div style="height:3px;background:linear-gradient(90deg,transparent,#6366f1,#818cf8,#6366f1,transparent);"></div>
+    </td></tr>
+
+    <!-- Content -->
+    <tr><td class="inner" style="padding:36px 40px 28px;">
+      <div class="email-body" style="font-size:15px;color:#94a3b8;line-height:1.7;">
+        ${htmlBody}
+      </div>
+    </td></tr>
+
+    <!-- CTA Divider -->
+    <tr><td style="padding:0 40px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="border-top:1px solid #1e293b;padding-top:28px;padding-bottom:4px;text-align:center;">
+          <a href="https://pimlicosolutions.com" style="display:inline-block;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#ffffff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:8px;text-decoration:none;letter-spacing:0.2px;">
+            Visit Pimlico XHS™ →
+          </a>
+        </td></tr>
+      </table>
+    </td></tr>
+
+    <!-- Footer -->
+    <tr><td style="background-color:#0b1120;border-top:1px solid #1e293b;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td class="footer-inner" style="padding:28px 40px;text-align:center;">
+
+          <!-- Social Links -->
+          <div style="margin-bottom:16px;">
+            <a href="https://www.linkedin.com/company/pimlico-solutions" style="display:inline-block;width:32px;height:32px;background:#1e293b;border-radius:8px;text-align:center;line-height:32px;text-decoration:none;margin:0 4px;font-size:14px;">💼</a>
+            <a href="https://pimlicosolutions.com" style="display:inline-block;width:32px;height:32px;background:#1e293b;border-radius:8px;text-align:center;line-height:32px;text-decoration:none;margin:0 4px;font-size:14px;">🌐</a>
+          </div>
+
+          <p style="margin:0 0 6px;font-size:14px;color:#94a3b8;">
+            <strong style="color:#e2e8f0;">Pimlico XHS™</strong>
+          </p>
+          <p style="margin:0 0 12px;font-size:12px;color:#64748b;">
+            Transforming Regulatory Compliance
+          </p>
+          <p style="margin:0;font-size:11px;color:#475569;">
+            <a href="https://pimlicosolutions.com" style="color:#6366f1;text-decoration:none;">pimlicosolutions.com</a>
+            &nbsp;·&nbsp;
+            <a href="mailto:andrew@pimlicosolutions.com" style="color:#6366f1;text-decoration:none;">andrew@pimlicosolutions.com</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+
+  </table>
+
 </td></tr>
-
-<!-- Content -->
-<tr><td style="padding:40px;">
-  <div style="font-size:16px;color:#cbd5e1;line-height:1.8;">
-    ${htmlBody}
-  </div>
-</td></tr>
-
-<!-- Footer -->
-<tr><td style="background-color:#0f172a;padding:30px;text-align:center;border-top:1px solid #334155;">
-  <p style="margin:0 0 10px;font-size:14px;color:#94a3b8;"><strong style="color:#f1f5f9;">Pimlico XHS™</strong><br>Transforming Regulatory Compliance</p>
-  <p style="margin:0;font-size:12px;color:#64748b;"><a href="https://pimlicosolutions.com" style="color:#3b82f6;text-decoration:none;">pimlicosolutions.com</a></p>
-</td></tr>
-
 </table>
-</td></tr></table>
 </body></html>`;
 }
 
