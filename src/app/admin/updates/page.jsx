@@ -53,6 +53,7 @@ export default function AdminUpdatesPage() {
   const [subscribers, setSubscribers] = useState([]);
   const [history, setHistory] = useState([]);
   const [scheduled, setScheduled] = useState([]);
+  const [organisations, setOrganisations] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Compose state
@@ -88,6 +89,7 @@ export default function AdminUpdatesPage() {
         setSubscribers(data.subscribers || []);
         setHistory(data.history || []);
         setScheduled(data.scheduled || []);
+        setOrganisations(data.organisations || []);
       }
     } catch (err) {
       console.error('Failed to load updates data:', err);
@@ -99,16 +101,16 @@ export default function AdminUpdatesPage() {
   useEffect(() => { loadData(); }, [loadData]);
 
   // Compute org groups
-  const orgList = [...new Set(subscribers.map(s => s.org || '').filter(Boolean))].sort();
+  const orgList = [...new Set(subscribers.map(s => s.organisation || s.org || '').filter(Boolean))].sort();
   const subscribersByOrg = {};
   for (const s of subscribers) {
-    const org = s.org || 'Ungrouped';
+    const org = s.organisation || s.org || 'Ungrouped';
     if (!subscribersByOrg[org]) subscribersByOrg[org] = [];
     subscribersByOrg[org].push(s);
   }
   const filteredSubscribers = orgFilter === 'all'
     ? subscribers
-    : subscribers.filter(s => (s.org || 'Ungrouped') === orgFilter);
+    : subscribers.filter(s => (s.organisation || s.org || 'Ungrouped') === orgFilter);
 
   /* ── File upload ── */
   function handleFileUpload(e) {
@@ -279,6 +281,7 @@ export default function AdminUpdatesPage() {
   const TABS = [
     { key: 'compose', label: 'Compose', icon: '✍️' },
     { key: 'subscribers', label: 'Subscribers', icon: '👥' },
+    { key: 'organisations', label: 'Organisations', icon: '🏢' },
     { key: 'history', label: 'History', icon: '📜' },
     { key: 'scheduled', label: 'Scheduled', icon: '⏰' },
   ];
@@ -509,16 +512,16 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                     key={org}
                     onClick={() => {
                       setSelectedRecipients('selected');
-                      const orgEmails = subscribers.filter(s => s.org === org).map(s => s.email);
+                      const orgEmails = subscribers.filter(s => (s.organisation || s.org) === org).map(s => s.email);
                       setCheckedEmails(new Set(orgEmails));
                     }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      selectedRecipients === 'selected' && subscribers.filter(s => s.org === org).every(s => checkedEmails.has(s.email)) && subscribers.filter(s => s.org === org).length === checkedEmails.size
+                      selectedRecipients === 'selected' && subscribers.filter(s => (s.organisation || s.org) === org).every(s => checkedEmails.has(s.email)) && subscribers.filter(s => (s.organisation || s.org) === org).length === checkedEmails.size
                         ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
                         : 'bg-gray-700/50 text-gray-400 hover:text-white'
                     }`}
                   >
-                    🏢 {org} ({subscribers.filter(s => s.org === org).length})
+                    🏢 {org} ({subscribers.filter(s => (s.organisation || s.org) === org).length})
                   </button>
                 ))}
                 <button
@@ -718,7 +721,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                     onClick={() => {
                       const list = orgFilter === 'all' ? subscribers : filteredSubscribers;
                       const csv = 'Email,Name,Organisation,Added At,Source\n' + list.map(s =>
-                        `"${s.email}","${s.name || ''}","${s.org || ''}","${s.addedAt || ''}","${s.source || 'manual'}"`
+                        `"${s.email}","${s.name || ''}","${s.organisation || s.org || ''}","${s.addedAt || ''}","${s.source || 'manual'}"`
                       ).join('\n');
                       const blob = new Blob([csv], { type: 'text/csv' });
                       const url = URL.createObjectURL(blob);
@@ -776,6 +779,15 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
               )}
             </div>
           </div>
+        )}
+
+        {/* ════ ORGANISATIONS TAB ════ */}
+        {activeTab === 'organisations' && (
+          <OrganisationsTab
+            organisations={organisations}
+            setOrganisations={setOrganisations}
+            subscribers={subscribers}
+          />
         )}
 
         {/* ════ HISTORY TAB ════ */}
@@ -877,17 +889,18 @@ function HistoryCard({ item: h }) {
 /* ── Subscriber Row ── */
 function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
   const [editing, setEditing] = useState(false);
-  const [editOrg, setEditOrg] = useState(s.org || '');
+  const [editOrg, setEditOrg] = useState(s.organisation || s.org || '');
+  const orgName = s.organisation || s.org || '';
 
   return (
     <div className="px-5 py-3 flex items-center justify-between hover:bg-white/[0.02] group">
       <div className="flex items-center gap-2 min-w-0">
         <span className="text-white text-sm truncate">{s.name || s.email}</span>
         {s.name && <span className="text-gray-500 text-xs truncate">{s.email}</span>}
-        {!editing && s.org && (
-          <span className="text-xs bg-indigo-500/15 text-indigo-300 px-2 py-0.5 rounded-full flex-shrink-0">{s.org}</span>
+        {!editing && orgName && (
+          <span className="text-xs bg-indigo-500/15 text-indigo-300 px-2 py-0.5 rounded-full flex-shrink-0">{orgName}</span>
         )}
-        {!editing && !s.org && (
+        {!editing && !orgName && (
           <button
             onClick={() => setEditing(true)}
             className="text-xs text-gray-600 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -906,7 +919,7 @@ function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
               autoFocus
               onKeyDown={e => {
                 if (e.key === 'Enter') {
-                  onUpdate(s.email, { org: editOrg.trim() });
+                  onUpdate(s.email, { organisation: editOrg.trim() });
                   setEditing(false);
                 }
                 if (e.key === 'Escape') setEditing(false);
@@ -917,7 +930,7 @@ function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
               {orgList.map(o => <option key={o} value={o} />)}
             </datalist>
             <button
-              onClick={() => { onUpdate(s.email, { org: editOrg.trim() }); setEditing(false); }}
+              onClick={() => { onUpdate(s.email, { organisation: editOrg.trim() }); setEditing(false); }}
               className="text-xs text-green-400 hover:text-green-300"
             >✓</button>
             <button
@@ -929,7 +942,7 @@ function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
         {s.source && <span className="text-xs text-gray-600 flex-shrink-0">({s.source})</span>}
       </div>
       <div className="flex items-center gap-3 flex-shrink-0">
-        {!editing && s.org && (
+        {!editing && orgName && (
           <button
             onClick={() => setEditing(true)}
             className="text-xs text-gray-600 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -945,6 +958,196 @@ function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
           ✕
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ── Organisations Tab ── */
+function OrganisationsTab({ organisations, setOrganisations, subscribers }) {
+  const [editing, setEditing] = useState(null); // org id or 'new'
+  const [form, setForm] = useState({ name: '', logoUrl: '', jurisdictions: '' });
+  const [saving, setSaving] = useState(false);
+
+  function startEdit(org) {
+    setEditing(org?.id || 'new');
+    setForm({
+      name: org?.name || '',
+      logoUrl: org?.logoUrl || '',
+      jurisdictions: (org?.jurisdictions || []).join(', '),
+    });
+  }
+
+  async function handleSave() {
+    if (!form.name.trim()) return;
+    setSaving(true);
+    try {
+      const organisation = {
+        ...(editing !== 'new' ? { id: editing } : {}),
+        name: form.name.trim(),
+        logoUrl: form.logoUrl.trim(),
+        jurisdictions: form.jurisdictions.split(',').map(j => j.trim()).filter(Boolean),
+      };
+      const res = await fetch('/api/updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'save-organisation', organisation }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrganisations(data.organisations);
+        setEditing(null);
+      }
+    } catch (err) {
+      console.error('Failed to save organisation:', err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!confirm('Delete this organisation? Subscribers will not be removed.')) return;
+    try {
+      const res = await fetch('/api/updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete-organisation', organisationId: id }),
+      });
+      const data = await res.json();
+      if (data.success) setOrganisations(data.organisations);
+    } catch (err) {
+      console.error('Failed to delete organisation:', err);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold text-white">Organisations</h2>
+          <p className="text-sm text-gray-400 mt-0.5">Configure client logos and tracked jurisdictions for personalised emails</p>
+        </div>
+        <button
+          onClick={() => startEdit(null)}
+          className="px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-500 transition-colors"
+        >
+          + Add Organisation
+        </button>
+      </div>
+
+      {/* Edit / Add Form */}
+      {editing && (
+        <div className="bg-gray-800/60 rounded-xl border border-violet-500/30 p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-white">{editing === 'new' ? 'New Organisation' : 'Edit Organisation'}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs text-gray-400 mb-1">Organisation Name *</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                placeholder="e.g. Mozzartbet"
+                className="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-violet-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-400 mb-1">Logo URL</label>
+              <input
+                type="url"
+                value={form.logoUrl}
+                onChange={e => setForm(f => ({ ...f, logoUrl: e.target.value }))}
+                placeholder="https://example.com/logo.png"
+                className="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-violet-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">PNG or JPG hosted publicly. Will appear in email header alongside XHS icon.</p>
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">Tracked Jurisdictions</label>
+            <input
+              type="text"
+              value={form.jurisdictions}
+              onChange={e => setForm(f => ({ ...f, jurisdictions: e.target.value }))}
+              placeholder="e.g. United Kingdom, Serbia, Nigeria, Kenya"
+              className="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-violet-500"
+            />
+            <p className="text-xs text-gray-500 mt-1">Comma-separated. Horizon Scan emails will filter to only these jurisdictions for this org&apos;s subscribers.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleSave}
+              disabled={saving || !form.name.trim()}
+              className="px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-500 transition-colors disabled:opacity-40"
+            >
+              {saving ? 'Saving...' : '💾 Save'}
+            </button>
+            <button
+              onClick={() => setEditing(null)}
+              className="px-4 py-2 bg-gray-700 text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+          {form.logoUrl && (
+            <div className="flex items-center gap-3 p-3 bg-gray-900/40 rounded-lg border border-gray-700/50">
+              <img src={form.logoUrl} alt="Logo preview" className="h-10 w-auto max-w-[120px] object-contain" onError={e => { e.target.style.display = 'none'; }} />
+              <span className="text-xs text-gray-400">Logo preview</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Org List */}
+      {organisations.length === 0 && !editing ? (
+        <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
+          <span className="text-4xl mb-4 block">🏢</span>
+          <h3 className="text-white font-semibold mb-2">No organisations configured</h3>
+          <p className="text-gray-400 text-sm">Add organisations to enable personalised emails with client logos and jurisdiction filtering</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {organisations.map(org => {
+            const orgSubs = subscribers.filter(s => (s.organisation || s.org || '').toLowerCase() === org.name.toLowerCase());
+            return (
+              <div key={org.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-4">
+                    {org.logoUrl ? (
+                      <img src={org.logoUrl} alt={org.name} className="h-10 w-auto max-w-[100px] object-contain rounded" />
+                    ) : (
+                      <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center text-lg">🏢</div>
+                    )}
+                    <div>
+                      <h3 className="text-white font-semibold">{org.name}</h3>
+                      <p className="text-xs text-gray-500">{orgSubs.length} subscriber{orgSubs.length !== 1 ? 's' : ''}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => startEdit(org)}
+                      className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-white/5"
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(org.id)}
+                      className="text-xs text-red-400/60 hover:text-red-300 px-2 py-1 rounded hover:bg-red-500/10"
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
+                </div>
+                {org.jurisdictions?.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {org.jurisdictions.map(j => (
+                      <span key={j} className="text-xs bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/20">{j}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
