@@ -117,7 +117,7 @@ export async function POST(request) {
 
     /* ─── Add Subscribers ─── */
     if (action === 'add-subscribers') {
-      const { emails } = body; // array of { email, name? }
+      const { emails, org } = body; // array of { email, name? }, optional org group
       if (!Array.isArray(emails) || emails.length === 0) {
         return NextResponse.json({ success: false, error: 'Emails array is required' }, { status: 400 });
       }
@@ -129,10 +129,16 @@ export async function POST(request) {
       for (const entry of emails) {
         const email = (typeof entry === 'string' ? entry : entry.email)?.trim().toLowerCase();
         if (!email) continue;
-        if (subscribers.find(s => s.email === email)) continue;
+        const existing = subscribers.find(s => s.email === email);
+        if (existing) {
+          // Update org if provided and subscriber exists
+          if (org && !existing.org) existing.org = org;
+          continue;
+        }
         subscribers.push({
           email,
           name: typeof entry === 'object' ? entry.name || '' : '',
+          org: org || (typeof entry === 'object' ? entry.org || '' : ''),
           addedAt: new Date().toISOString(),
         });
         added++;
@@ -153,6 +159,23 @@ export async function POST(request) {
       return NextResponse.json({ success: true, total: subscribers.length });
     }
 
+    /* ─── Update Subscriber (org, name) ─── */
+    if (action === 'update-subscriber') {
+      const { email, updates } = body;
+      if (!email) return NextResponse.json({ success: false, error: 'Email is required' }, { status: 400 });
+
+      const data = await readBlob('updates/subscribers', { subscribers: [] });
+      const subscribers = data.subscribers || [];
+      const sub = subscribers.find(s => s.email === email.trim().toLowerCase());
+      if (!sub) return NextResponse.json({ success: false, error: 'Subscriber not found' }, { status: 404 });
+
+      if (updates.org !== undefined) sub.org = updates.org;
+      if (updates.name !== undefined) sub.name = updates.name;
+
+      await writeBlob(BLOB_SUBSCRIBERS_KEY, { subscribers, updatedAt: new Date().toISOString() });
+      return NextResponse.json({ success: true });
+    }
+
     /* ─── Import Subscribers from Onboarding ─── */
     if (action === 'import-from-onboarding') {
       const onboardingData = await readBlob('onboarding/index', { submissions: [] });
@@ -162,7 +185,7 @@ export async function POST(request) {
       for (const sub of submissions) {
         for (const member of sub.teamMembers || []) {
           if (member.email) {
-            emails.push({ email: member.email, name: member.name || '' });
+            emails.push({ email: member.email, name: member.name || '', org: sub.company || sub.orgSlug || '' });
           }
         }
       }
@@ -174,7 +197,7 @@ export async function POST(request) {
       for (const entry of emails) {
         const email = entry.email.trim().toLowerCase();
         if (subscribers.find(s => s.email === email)) continue;
-        subscribers.push({ email, name: entry.name, addedAt: new Date().toISOString(), source: 'onboarding' });
+        subscribers.push({ email, name: entry.name, org: entry.org, addedAt: new Date().toISOString(), source: 'onboarding' });
         added++;
       }
 

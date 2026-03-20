@@ -45,8 +45,10 @@ export default function AdminUpdatesPage() {
 
   // Add subscriber state
   const [newEmails, setNewEmails] = useState('');
+  const [newOrg, setNewOrg] = useState('');
   const [adding, setAdding] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [orgFilter, setOrgFilter] = useState('all'); // 'all' | specific org name
 
   const loadData = useCallback(async () => {
     try {
@@ -65,6 +67,18 @@ export default function AdminUpdatesPage() {
   }, []);
 
   useEffect(() => { loadData(); }, [loadData]);
+
+  // Compute org groups
+  const orgList = [...new Set(subscribers.map(s => s.org || '').filter(Boolean))].sort();
+  const subscribersByOrg = {};
+  for (const s of subscribers) {
+    const org = s.org || 'Ungrouped';
+    if (!subscribersByOrg[org]) subscribersByOrg[org] = [];
+    subscribersByOrg[org].push(s);
+  }
+  const filteredSubscribers = orgFilter === 'all'
+    ? subscribers
+    : subscribers.filter(s => (s.org || 'Ungrouped') === orgFilter);
 
   /* ── File upload ── */
   function handleFileUpload(e) {
@@ -105,7 +119,7 @@ export default function AdminUpdatesPage() {
       const res = await fetch('/api/updates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'add-subscribers', emails }),
+        body: JSON.stringify({ action: 'add-subscribers', emails, org: newOrg.trim() || undefined }),
       });
       const data = await res.json();
       if (data.success) {
@@ -261,8 +275,9 @@ export default function AdminUpdatesPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
             <StatCard icon="👥" label="Subscribers" value={subscribers.length} color="blue" />
+            <StatCard icon="🏢" label="Organisations" value={orgList.length} color="purple" />
             <StatCard icon="📤" label="Updates Sent" value={history.length} color="green" />
             <StatCard icon="⏰" label="Scheduled" value={scheduled.filter(s => s.status === 'pending').length} color="amber" />
             <StatCard
@@ -356,9 +371,9 @@ export default function AdminUpdatesPage() {
             {/* Recipients */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
               <h3 className="text-sm font-medium text-gray-300 mb-3">Recipients</h3>
-              <div className="flex gap-3 mb-3">
+              <div className="flex gap-2 flex-wrap mb-3">
                 <button
-                  onClick={() => setSelectedRecipients('all')}
+                  onClick={() => { setSelectedRecipients('all'); setCheckedEmails(new Set()); }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     selectedRecipients === 'all'
                       ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
@@ -367,6 +382,23 @@ export default function AdminUpdatesPage() {
                 >
                   All Subscribers ({subscribers.length})
                 </button>
+                {orgList.map(org => (
+                  <button
+                    key={org}
+                    onClick={() => {
+                      setSelectedRecipients('selected');
+                      const orgEmails = subscribers.filter(s => s.org === org).map(s => s.email);
+                      setCheckedEmails(new Set(orgEmails));
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      selectedRecipients === 'selected' && subscribers.filter(s => s.org === org).every(s => checkedEmails.has(s.email)) && subscribers.filter(s => s.org === org).length === checkedEmails.size
+                        ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
+                        : 'bg-gray-700/50 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    🏢 {org} ({subscribers.filter(s => s.org === org).length})
+                  </button>
+                ))}
                 <button
                   onClick={() => setSelectedRecipients('selected')}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
@@ -375,7 +407,7 @@ export default function AdminUpdatesPage() {
                       : 'bg-gray-700/50 text-gray-400 hover:text-white'
                   }`}
                 >
-                  Select Recipients {checkedEmails.size > 0 && `(${checkedEmails.size})`}
+                  Custom {checkedEmails.size > 0 && `(${checkedEmails.size})`}
                 </button>
               </div>
 
@@ -384,17 +416,43 @@ export default function AdminUpdatesPage() {
                   {subscribers.length === 0 ? (
                     <p className="text-gray-500 text-xs">No subscribers yet. Add some in the Subscribers tab.</p>
                   ) : (
-                    subscribers.map(s => (
-                      <label key={s.email} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/[0.03] cursor-pointer text-sm">
-                        <input
-                          type="checkbox"
-                          checked={checkedEmails.has(s.email)}
-                          onChange={() => toggleEmail(s.email)}
-                          className="rounded border-gray-600 text-violet-500 focus:ring-violet-500 bg-gray-700"
-                        />
-                        <span className="text-white">{s.name || s.email}</span>
-                        {s.name && <span className="text-gray-500 text-xs">{s.email}</span>}
-                      </label>
+                    Object.entries(subscribersByOrg).map(([org, subs]) => (
+                      <div key={org}>
+                        <div className="flex items-center gap-2 mb-1 mt-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={subs.every(s => checkedEmails.has(s.email))}
+                              onChange={() => {
+                                const allChecked = subs.every(s => checkedEmails.has(s.email));
+                                setCheckedEmails(prev => {
+                                  const next = new Set(prev);
+                                  for (const s of subs) {
+                                    if (allChecked) next.delete(s.email);
+                                    else next.add(s.email);
+                                  }
+                                  return next;
+                                });
+                              }}
+                              className="rounded border-gray-600 text-violet-500 focus:ring-violet-500 bg-gray-700"
+                            />
+                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">{org}</span>
+                          </label>
+                          <span className="text-xs text-gray-600">({subs.length})</span>
+                        </div>
+                        {subs.map(s => (
+                          <label key={s.email} className="flex items-center gap-3 p-2 pl-6 rounded-lg hover:bg-white/[0.03] cursor-pointer text-sm">
+                            <input
+                              type="checkbox"
+                              checked={checkedEmails.has(s.email)}
+                              onChange={() => toggleEmail(s.email)}
+                              className="rounded border-gray-600 text-violet-500 focus:ring-violet-500 bg-gray-700"
+                            />
+                            <span className="text-white">{s.name || s.email}</span>
+                            {s.name && <span className="text-gray-500 text-xs">{s.email}</span>}
+                          </label>
+                        ))}
+                      </div>
                     ))
                   )}
                 </div>
@@ -454,6 +512,22 @@ export default function AdminUpdatesPage() {
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
               <h3 className="text-sm font-semibold text-white mb-3">Add Subscribers</h3>
               <form onSubmit={handleAddSubscribers} className="space-y-3">
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label className="block text-xs text-gray-400 mb-1">Organisation / Group</label>
+                    <input
+                      type="text"
+                      value={newOrg}
+                      onChange={e => setNewOrg(e.target.value)}
+                      placeholder="e.g. Mozzartbet, Internal, Partner"
+                      list="org-suggestions"
+                      className="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-violet-500"
+                    />
+                    <datalist id="org-suggestions">
+                      {orgList.map(o => <option key={o} value={o} />)}
+                    </datalist>
+                  </div>
+                </div>
                 <textarea
                   value={newEmails}
                   onChange={e => setNewEmails(e.target.value)}
@@ -481,23 +555,54 @@ export default function AdminUpdatesPage() {
               </form>
             </div>
 
-            {/* List */}
+            {/* Org filter */}
+            {orgList.length > 0 && (
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs text-gray-500 font-medium">Filter:</span>
+                <button
+                  onClick={() => setOrgFilter('all')}
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                    orgFilter === 'all'
+                      ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
+                      : 'bg-gray-800 text-gray-400 border border-gray-700 hover:text-white'
+                  }`}
+                >
+                  All ({subscribers.length})
+                </button>
+                {Object.entries(subscribersByOrg).map(([org, subs]) => (
+                  <button
+                    key={org}
+                    onClick={() => setOrgFilter(org)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      orgFilter === org
+                        ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
+                        : 'bg-gray-800 text-gray-400 border border-gray-700 hover:text-white'
+                    }`}
+                  >
+                    {org} ({subs.length})
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Grouped list */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-700/40 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-white">
-                  Subscriber List ({subscribers.length})
+                  {orgFilter === 'all' ? `All Subscribers (${subscribers.length})` : `${orgFilter} (${filteredSubscribers.length})`}
                 </h3>
                 {subscribers.length > 0 && (
                   <button
                     onClick={() => {
-                      const csv = 'Email,Name,Added At,Source\n' + subscribers.map(s =>
-                        `"${s.email}","${s.name || ''}","${s.addedAt || ''}","${s.source || 'manual'}"`
+                      const list = orgFilter === 'all' ? subscribers : filteredSubscribers;
+                      const csv = 'Email,Name,Organisation,Added At,Source\n' + list.map(s =>
+                        `"${s.email}","${s.name || ''}","${s.org || ''}","${s.addedAt || ''}","${s.source || 'manual'}"`
                       ).join('\n');
                       const blob = new Blob([csv], { type: 'text/csv' });
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement('a');
                       a.href = url;
-                      a.download = 'subscribers.csv';
+                      a.download = `subscribers${orgFilter !== 'all' ? '-' + orgFilter.replace(/[^a-z0-9]/gi, '-').toLowerCase() : ''}.csv`;
                       a.click();
                       URL.revokeObjectURL(url);
                     }}
@@ -508,33 +613,44 @@ export default function AdminUpdatesPage() {
                 )}
               </div>
 
-              {subscribers.length === 0 ? (
+              {filteredSubscribers.length === 0 ? (
                 <div className="p-12 text-center">
                   <span className="text-4xl mb-4 block">👥</span>
                   <h3 className="text-white font-semibold mb-2">No subscribers yet</h3>
                   <p className="text-gray-400 text-sm">Add emails above or import from onboarding data</p>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-700/30">
-                  {subscribers.map(s => (
-                    <div key={s.email} className="px-5 py-3 flex items-center justify-between hover:bg-white/[0.02]">
-                      <div>
-                        <span className="text-white text-sm">{s.name || s.email}</span>
-                        {s.name && <span className="text-gray-500 text-xs ml-2">{s.email}</span>}
-                        {s.source && <span className="text-xs text-gray-600 ml-2">({s.source})</span>}
+                orgFilter === 'all' && orgList.length > 0 ? (
+                  // Grouped view
+                  <div>
+                    {Object.entries(subscribersByOrg).map(([org, subs]) => (
+                      <div key={org}>
+                        <div className="px-5 py-2.5 bg-gray-900/40 border-b border-gray-700/30 flex items-center justify-between">
+                          <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">{org}</span>
+                          <span className="text-xs text-gray-500">{subs.length} subscriber{subs.length !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div className="divide-y divide-gray-700/20">
+                          {subs.map(s => (
+                            <SubscriberRow key={s.email} subscriber={s} onRemove={handleRemove} onUpdate={async (email, updates) => {
+                              await fetch('/api/updates', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update-subscriber', email, updates }) });
+                              loadData();
+                            }} orgList={orgList} />
+                          ))}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs text-gray-600">{s.addedAt ? new Date(s.addedAt).toLocaleDateString() : ''}</span>
-                        <button
-                          onClick={() => handleRemove(s.email)}
-                          className="text-xs text-red-400/60 hover:text-red-300 transition-colors"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  // Flat view
+                  <div className="divide-y divide-gray-700/30">
+                    {filteredSubscribers.map(s => (
+                      <SubscriberRow key={s.email} subscriber={s} onRemove={handleRemove} onUpdate={async (email, updates) => {
+                        await fetch('/api/updates', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update-subscriber', email, updates }) });
+                        loadData();
+                      }} orgList={orgList} />
+                    ))}
+                  </div>
+                )
               )}
             </div>
           </div>
@@ -632,6 +748,81 @@ function HistoryCard({ item: h }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── Subscriber Row ── */
+function SubscriberRow({ subscriber: s, onRemove, onUpdate, orgList }) {
+  const [editing, setEditing] = useState(false);
+  const [editOrg, setEditOrg] = useState(s.org || '');
+
+  return (
+    <div className="px-5 py-3 flex items-center justify-between hover:bg-white/[0.02] group">
+      <div className="flex items-center gap-2 min-w-0">
+        <span className="text-white text-sm truncate">{s.name || s.email}</span>
+        {s.name && <span className="text-gray-500 text-xs truncate">{s.email}</span>}
+        {!editing && s.org && (
+          <span className="text-xs bg-indigo-500/15 text-indigo-300 px-2 py-0.5 rounded-full flex-shrink-0">{s.org}</span>
+        )}
+        {!editing && !s.org && (
+          <button
+            onClick={() => setEditing(true)}
+            className="text-xs text-gray-600 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            + org
+          </button>
+        )}
+        {editing && (
+          <div className="flex items-center gap-1.5">
+            <input
+              type="text"
+              value={editOrg}
+              onChange={e => setEditOrg(e.target.value)}
+              placeholder="Organisation"
+              list="edit-org-suggestions"
+              autoFocus
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  onUpdate(s.email, { org: editOrg.trim() });
+                  setEditing(false);
+                }
+                if (e.key === 'Escape') setEditing(false);
+              }}
+              className="px-2 py-0.5 bg-gray-700 border border-gray-600 rounded text-xs text-white w-32 focus:outline-none focus:border-violet-500"
+            />
+            <datalist id="edit-org-suggestions">
+              {orgList.map(o => <option key={o} value={o} />)}
+            </datalist>
+            <button
+              onClick={() => { onUpdate(s.email, { org: editOrg.trim() }); setEditing(false); }}
+              className="text-xs text-green-400 hover:text-green-300"
+            >✓</button>
+            <button
+              onClick={() => setEditing(false)}
+              className="text-xs text-gray-500 hover:text-gray-300"
+            >✕</button>
+          </div>
+        )}
+        {s.source && <span className="text-xs text-gray-600 flex-shrink-0">({s.source})</span>}
+      </div>
+      <div className="flex items-center gap-3 flex-shrink-0">
+        {!editing && s.org && (
+          <button
+            onClick={() => setEditing(true)}
+            className="text-xs text-gray-600 hover:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            ✏️
+          </button>
+        )}
+        <span className="text-xs text-gray-600">{s.addedAt ? new Date(s.addedAt).toLocaleDateString() : ''}</span>
+        <button
+          onClick={() => onRemove(s.email)}
+          className="text-xs text-red-400/60 hover:text-red-300 transition-colors"
+        >
+          ✕
+        </button>
+      </div>
     </div>
   );
 }
