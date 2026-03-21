@@ -51,7 +51,7 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
   .inner{padding:20px 16px!important;}
   .hdr{padding:28px 16px 20px!important;}
   .hdr-title{font-size:20px!important;}
-  .hdr-logo{width:70px!important;}
+  .hdr-logo{width:80px!important;}
   .ftr{padding:16px!important;}
   .card-wrap{border-radius:6px!important;}
   .card-cell{padding:12px 14px!important;}
@@ -98,7 +98,7 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="80" style="width:80px;height:auto;display:block;" />
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;" />
 </td>
 <td style="vertical-align:middle;text-align:right;">
   <a class="cta-btn" href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:8px 18px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
@@ -143,7 +143,7 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
   .inner{padding:20px 16px!important;}
   .hdr{padding:28px 16px 20px!important;}
   .hdr-title{font-size:20px!important;}
-  .hdr-logo{width:70px!important;}
+  .hdr-logo{width:80px!important;}
   .ftr{padding:16px!important;}
   .card-wrap{border-radius:6px!important;}
   .card-cell{padding:12px 14px!important;}
@@ -190,7 +190,7 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="80" style="width:80px;height:auto;display:block;filter:brightness(0) invert(1);" />
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;filter:brightness(0) invert(1);" />
 </td>
 <td style="vertical-align:middle;text-align:right;">
   <a class="cta-btn" href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:8px 18px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
@@ -235,13 +235,13 @@ function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) 
   const title = subject.replace(/\s*\|.*$/, '');
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="vertical-align:middle;text-align:left;width:65%;">
+<td style="vertical-align:middle;text-align:left;width:60%;">
   <h1 class="hdr-title" style="margin:0 0 6px;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">${title}</h1>
   <p style="margin:0 0 ${orgName ? '4px' : '0'};color:rgba(255,255,255,.65);font-size:13px;font-weight:400;">${date}</p>
   ${orgName ? `<p style="margin:0;color:rgba(255,255,255,.45);font-size:11px;font-weight:500;letter-spacing:.3px;text-transform:uppercase;">Prepared for ${orgName}</p>` : ''}
 </td>
-<td style="vertical-align:middle;text-align:right;width:35%;padding-left:12px;">
-  <img class="hdr-logo" src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="110" style="width:110px;max-width:110px;height:auto;display:inline-block;" />
+<td style="vertical-align:middle;text-align:right;width:40%;padding-left:12px;">
+  <img class="hdr-logo" src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="130" style="width:130px;max-width:130px;height:auto;display:inline-block;" />
 </td>
 </tr>
 </table>`;
@@ -320,10 +320,9 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
     : '';
   const intro = `<p style="color:${introColor};font-size:14px;line-height:1.6;margin:0 0 24px;">Here are today's regulatory developments across your tracked jurisdictions.</p>`;
 
-  /* Update cards — flag header bar + contained tech-style cards */
+  /* Update cards — clean contained cards under jurisdiction headers */
   const flagBarBg = isLight ? '#f8fafc' : '#0f172a';
   const flagBarBorder = isLight ? '#e2e8f0' : '#1e293b';
-  const accentColor = isLight ? '#3b82f6' : '#6366f1';
   const cardBg = isLight ? '#ffffff' : '#141c2e';
   const cards = sections.map(s => {
     const updates = s.updates.map((u, i) => {
@@ -334,25 +333,19 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
       const isLast = i === s.updates.length - 1;
 
       return `<tr><td class="card-cell" style="padding:14px 16px;${!isLast ? `border-bottom:1px solid ${cardBorder};` : ''}">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-    <td style="width:3px;vertical-align:top;padding:0;"><div style="width:3px;height:100%;min-height:20px;background:${accentColor};border-radius:2px;"></div></td>
-    <td style="padding:0 0 0 12px;">
-      <p style="margin:0 0 3px;font-size:14px;font-weight:600;line-height:1.35;"><a href="${u.link || '#'}" style="color:${headlineColor};text-decoration:none;">${u.headline}</a></p>
-      ${u.authority ? `<p style="margin:0 0 6px;font-size:10px;color:${authorityColor};font-weight:600;text-transform:uppercase;letter-spacing:.5px;">${u.authority}</p>` : ''}
-      <p style="color:${descColor};font-size:13px;line-height:1.55;margin:0 0 ${pills || u.link ? '8px' : '0'};">${u.desc}</p>
-      ${pills ? `<div style="margin:0 0 ${u.link ? '6px' : '0'};">${pills}</div>` : ''}
-      ${u.link ? `<p style="margin:0;"><a href="${u.link}" style="color:${linkColor};font-size:11px;font-weight:600;text-decoration:none;letter-spacing:.2px;">VIEW DETAIL \u2192</a></p>` : ''}
-    </td>
-  </tr></table>
+  <p style="margin:0 0 3px;font-size:14px;font-weight:600;line-height:1.35;"><a href="${u.link || '#'}" style="color:${headlineColor};text-decoration:none;">${u.headline}</a></p>
+  ${u.authority ? `<p style="margin:0 0 6px;font-size:10px;color:${authorityColor};font-weight:600;text-transform:uppercase;letter-spacing:.5px;">${u.authority}</p>` : ''}
+  <p style="color:${descColor};font-size:13px;line-height:1.55;margin:0 0 ${pills || u.link ? '8px' : '0'};">${u.desc}</p>
+  ${pills ? `<div style="margin:0 0 ${u.link ? '6px' : '0'};">${pills}</div>` : ''}
+  ${u.link ? `<p style="margin:0;"><a href="${u.link}" style="color:${linkColor};font-size:11px;font-weight:500;text-decoration:none;">Read more \u2192</a></p>` : ''}
 </td></tr>`;
     }).join('');
 
     return `<!-- ${s.country} -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
   <tr><td class="flag-bar" style="padding:10px 16px;background:${flagBarBg};border:1px solid ${flagBarBorder};border-bottom:none;border-radius:8px 8px 0 0;">
-    <span style="font-size:16px;vertical-align:middle;margin-right:8px;">${s.flag}</span>
+    <span style="font-size:15px;vertical-align:middle;margin-right:8px;">${s.flag}</span>
     <span style="color:${countryColor};font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;vertical-align:middle;">${s.country}</span>
-    <span style="color:${authorityColor};font-size:11px;font-weight:400;vertical-align:middle;margin-left:6px;">&middot; ${s.updates.length} update${s.updates.length > 1 ? 's' : ''}</span>
   </td></tr>
   <tr><td>
     <table class="card-wrap" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${cardBorder};border-radius:0 0 8px 8px;overflow:hidden;background:${cardBg};">${updates}</table>
@@ -366,13 +359,13 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
   /* Two-column header */
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="vertical-align:middle;text-align:left;width:65%;">
+<td style="vertical-align:middle;text-align:left;width:60%;">
   <h1 class="hdr-title" style="margin:0 0 6px;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">Daily Horizon Scan</h1>
   <p style="margin:0 0 ${orgName ? '4px' : '0'};color:rgba(255,255,255,.65);font-size:13px;font-weight:400;">${date}</p>
   ${orgName ? `<p style="margin:0;color:rgba(255,255,255,.45);font-size:11px;font-weight:500;letter-spacing:.3px;text-transform:uppercase;">Prepared for ${orgName}</p>` : ''}
 </td>
-<td style="vertical-align:middle;text-align:right;width:35%;padding-left:12px;">
-  <img class="hdr-logo" src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="110" style="width:110px;max-width:110px;height:auto;display:inline-block;" />
+<td style="vertical-align:middle;text-align:right;width:40%;padding-left:12px;">
+  <img class="hdr-logo" src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="130" style="width:130px;max-width:130px;height:auto;display:inline-block;" />
 </td>
 </tr>
 </table>`;
@@ -559,8 +552,7 @@ ESMA published final technical standards and reporting templates for ICT-related
       html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     } else {
       testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-      const sampleMd = `Here are today's regulatory developments across your tracked jurisdictions.\n\n## Summary\n\n**FCA Safeguarding Rules Finalised** — The FCA has published PS26/3, finalising its enhanced safeguarding requirements for payment and e-money firms. Firms must implement statutory trust arrangements by Q3 2026.\n\n**MiCA Implementation Update** — The European Banking Authority released final RTS for CASP authorisation, providing clarity on the documentation and capital requirements for crypto service providers across the EU.\n\n**US AML Expansion** — FinCEN's proposed rule would extend AML/CFT obligations to SEC-registered investment advisers, representing a significant expansion of the regulatory perimeter.\n\n## Impact Assessment\n\nThese developments signal tighter regulatory oversight across payments, crypto, and financial services. Review your current compliance frameworks against these emerging requirements.`;
-      html = markdownToEmail(sampleMd, testSubject, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
+      html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     }
 
     try {
