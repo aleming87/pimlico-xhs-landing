@@ -162,7 +162,6 @@ export default function GamblingPage() {
             <a href="/gambling" className="text-sm/6 font-semibold text-emerald-600">Gambling</a>
             <a href="/insights" className="text-sm/6 font-semibold text-gray-900">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
-            <a href="/#team" className="text-sm/6 font-semibold text-gray-900">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 hover:scale-105">
@@ -201,7 +200,6 @@ export default function GamblingPage() {
                     <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Payments</a>
                     <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Gambling</a>
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-                    <a href="/#team" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Team</a>
                   </div>
                   <div className="py-6">
                     <a href="/contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Book a demo</a>

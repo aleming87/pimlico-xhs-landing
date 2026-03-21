@@ -183,7 +183,6 @@ export default function InsightsPage() {
             <a href="/gambling" className="text-sm/6 font-semibold text-gray-900">Gambling</a>
             <a href="/insights" className="text-sm/6 font-semibold text-blue-600">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
-            <a href="/#team" className="text-sm/6 font-semibold text-gray-900">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
@@ -223,7 +222,6 @@ export default function InsightsPage() {
                     <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gambling</a>
                     <a href="/insights" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50">Insights</a>
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Pricing</a>
-                    <a href="/#team" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Team</a>
                   </div>
                   <div className="py-6">
                     <a href="/contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Book a demo</a>
