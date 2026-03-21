@@ -88,24 +88,28 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
 <!-- Footer -->
 <tr><td style="background-color:#ffffff;border-top:1px solid #e5e7eb;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr><td class="ftr" style="padding:24px 40px 20px;">
+<tr><td class="ftr" style="padding:24px 40px 16px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="vertical-align:middle;text-align:left;width:60%;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="100" style="width:100px;height:auto;display:block;margin-bottom:10px;" />
-  <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;display:inline-block;" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="18" height="18" style="width:18px;height:18px;display:block;opacity:.7;" />
-  </a>
+<td style="vertical-align:middle;text-align:left;">
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="80" style="width:80px;height:auto;display:block;" />
 </td>
-<td style="vertical-align:middle;text-align:right;width:40%;">
-  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;padding:8px 20px;border-radius:6px;letter-spacing:.2px;">Open in XHS &rarr;</a>
+<td style="vertical-align:middle;text-align:right;">
+  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:7px 16px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
 </td>
 </tr>
 </table>
 </td></tr>
-<tr><td style="padding:0 40px 20px;">
-  <div style="border-top:1px solid #f3f4f6;padding-top:12px;">
-    <p style="margin:0;font-size:11px;color:#9ca3af;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
+<tr><td style="padding:0 40px 16px;">
+  <div style="border-top:1px solid #f3f4f6;padding-top:10px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td style="font-size:11px;color:#9ca3af;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd.</td>
+      <td style="text-align:right;vertical-align:middle;">
+        <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="13" height="13" style="width:13px;height:13px;display:inline-block;opacity:.35;" /></a>
+      </td>
+    </tr>
+    </table>
   </div>
 </td></tr>
 </table>
@@ -173,21 +177,25 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
 <tr><td class="ftr" style="padding:24px 40px 20px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="vertical-align:middle;text-align:left;width:60%;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="100" style="width:100px;height:auto;display:block;margin-bottom:10px;filter:brightness(0) invert(1);" />
-  <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;display:inline-block;" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="18" height="18" style="width:18px;height:18px;display:block;" />
-  </a>
+<td style="vertical-align:middle;text-align:left;">
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="80" style="width:80px;height:auto;display:block;filter:brightness(0) invert(1);" />
 </td>
-<td style="vertical-align:middle;text-align:right;width:40%;">
-  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;padding:8px 20px;border-radius:6px;letter-spacing:.2px;">Open in XHS &rarr;</a>
+<td style="vertical-align:middle;text-align:right;">
+  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:7px 16px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
 </td>
 </tr>
 </table>
 </td></tr>
-<tr><td style="padding:0 40px 20px;">
-  <div style="border-top:1px solid #1e293b;padding-top:12px;">
-    <p style="margin:0;font-size:11px;color:#475569;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
+<tr><td style="padding:0 40px 16px;">
+  <div style="border-top:1px solid #1e293b;padding-top:10px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td style="font-size:11px;color:#475569;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd.</td>
+      <td style="text-align:right;vertical-align:middle;">
+        <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="13" height="13" style="width:13px;height:13px;display:inline-block;opacity:.4;" /></a>
+      </td>
+    </tr>
+    </table>
   </div>
 </td></tr>
 </table>
@@ -212,15 +220,16 @@ function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) 
   const isLight = theme === 'light';
   const orgName = orgConfig?.name || '';
 
+  const title = subject.replace(/\s*\|.*$/, '');
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;width:70%;">
-  <h1 class="hdr-title" style="margin:0 0 6px;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">${subject}</h1>
+  <h1 class="hdr-title" style="margin:0 0 6px;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">${title}</h1>
   <p style="margin:0 0 ${orgName ? '4px' : '0'};color:rgba(255,255,255,.7);font-size:13px;font-weight:400;">${date}</p>
   ${orgName ? `<p style="margin:0;color:rgba(255,255,255,.5);font-size:12px;font-weight:500;">Prepared for: ${orgName}</p>` : ''}
 </td>
-<td style="vertical-align:top;text-align:right;width:30%;padding-left:16px;">
-  <img src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="120" style="width:120px;max-width:120px;height:auto;display:inline-block;" />
+<td style="vertical-align:middle;text-align:right;width:30%;padding-left:16px;">
+  <img src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="80" style="width:80px;max-width:80px;height:auto;display:inline-block;" />
 </td>
 </tr>
 </table>`;
@@ -299,35 +308,34 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
     : '';
   const intro = `<p style="color:${introColor};font-size:14px;line-height:1.6;margin:0 0 28px;">Here are the latest regulatory developments identified for ${orgName || 'your organisation'}.</p>`;
 
-  /* Update cards — boxed, premium, structured */
+  /* Update cards — discreet jurisdiction labels, contained boxed updates */
+  const containerBg = isLight ? '#f9fafb' : '#0f172a';
   const cards = sections.map(s => {
     const updates = s.updates.map((u, i) => {
       const pills = u.tags ? u.tags.split(/\s*\u00b7\s*/).map(t => t.trim()).filter(Boolean).map(t =>
-        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:3px 10px;border-radius:10px;margin:0 4px 4px 0;border:1px solid ${pillBorder};letter-spacing:.2px;font-weight:500;">${t}</span>`
+        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:3px 9px;border-radius:10px;margin:0 4px 4px 0;border:1px solid ${pillBorder};letter-spacing:.2px;font-weight:500;">${t}</span>`
       ).join('') : '';
 
-      const cardBg = isLight ? '#ffffff' : '#111827';
-      const sep = i > 0 ? `<tr><td style="padding:0;"><div style="border-top:1px solid ${cardBorder};margin:0;"></div></td></tr>` : '';
+      const isLast = i === s.updates.length - 1;
+      const borderBottom = !isLast ? `border-bottom:1px solid ${cardBorder};` : '';
 
-      return `${sep}<tr><td style="padding:16px 20px;">
-  <p style="margin:0 0 4px;"><a href="${u.link || '#'}" style="color:${headlineColor};font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;">${u.headline}</a></p>
-  ${u.authority ? `<p style="margin:0 0 8px;font-size:11px;color:${authorityColor};font-weight:500;text-transform:uppercase;letter-spacing:.3px;">${u.authority}</p>` : ''}
+      return `<tr><td style="padding:16px 20px;${borderBottom}">
+  <p style="margin:0 0 4px;font-size:14px;font-weight:600;line-height:1.4;"><a href="${u.link || '#'}" style="color:${headlineColor};text-decoration:none;">${u.headline}</a></p>
+  ${u.authority ? `<p style="margin:0 0 8px;font-size:10px;color:${authorityColor};font-weight:600;text-transform:uppercase;letter-spacing:.4px;">${u.authority}</p>` : ''}
   <p style="color:${descColor};font-size:13px;line-height:1.6;margin:0 0 ${pills || u.link ? '10px' : '0'};">${u.desc}</p>
   ${pills ? `<div style="margin:0 0 ${u.link ? '8px' : '0'};">${pills}</div>` : ''}
   ${u.link ? `<p style="margin:0;"><a href="${u.link}" style="color:${linkColor};font-size:12px;font-weight:500;text-decoration:none;">Read more \u2192</a></p>` : ''}
 </td></tr>`;
     }).join('');
 
-    const headerBg = isLight ? '#f1f5f9' : '#0f172a';
-
     return `<!-- ${s.country} -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid ${cardBorder};">
-  <tr><td style="padding:10px 20px;background:${headerBg};border-bottom:1px solid ${cardBorder};">
-    <span style="font-size:17px;vertical-align:middle;margin-right:6px;">${s.flag}</span>
-    <span style="color:${countryColor};font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;">${s.country}</span>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+  <tr><td style="padding:0 0 8px;">
+    <span style="font-size:15px;vertical-align:middle;margin-right:6px;">${s.flag}</span>
+    <span style="color:${countryColor};font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;">${s.country}</span>
   </td></tr>
-  <tr><td style="padding:0;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${updates}</table>
+  <tr><td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${cardBorder};border-radius:8px;overflow:hidden;background:${containerBg};">${updates}</table>
   </td></tr>
 </table>`;
   }).join('');
@@ -338,13 +346,13 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
   /* Two-column header — clean, no badge */
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
-<td style="vertical-align:middle;text-align:left;width:65%;">
+<td style="vertical-align:middle;text-align:left;width:70%;">
   <h1 class="hdr-title" style="margin:0 0 6px;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">Daily Horizon Scan</h1>
   <p style="margin:0 0 ${orgName ? '4px' : '0'};color:rgba(255,255,255,.7);font-size:13px;font-weight:400;">${date}</p>
   ${orgName ? `<p style="margin:0;color:rgba(255,255,255,.5);font-size:12px;font-weight:500;">Prepared for: ${orgName}</p>` : ''}
 </td>
-<td style="vertical-align:top;text-align:right;width:35%;padding-left:16px;">
-  <img src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="120" style="width:120px;max-width:120px;height:auto;display:inline-block;" />
+<td style="vertical-align:middle;text-align:right;width:30%;padding-left:16px;">
+  <img src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="80" style="width:80px;max-width:80px;height:auto;display:inline-block;" />
 </td>
 </tr>
 </table>`;
