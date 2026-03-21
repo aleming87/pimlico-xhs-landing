@@ -57,7 +57,8 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
   .card-cell{padding:12px 14px!important;}
   .flag-bar{padding:8px 14px!important;}
   .pill{font-size:9px!important;padding:2px 7px!important;}
-  .cta-btn{padding:8px 14px!important;font-size:11px!important;}
+  .cta-btn{padding:6px 10px!important;font-size:9px!important;}
+  .ftr-logo{width:60px!important;}
 }
 .eb h1{color:#111827;font-size:20px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;}
 .eb h2{color:#1f2937;font-size:17px;font-weight:600;margin:18px 0 6px;}
@@ -98,7 +99,7 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;" />
+  <img class="ftr-logo" src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;" />
 </td>
 <td style="vertical-align:middle;text-align:right;">
   <a class="cta-btn" href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:8px 18px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
@@ -149,7 +150,8 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
   .card-cell{padding:12px 14px!important;}
   .flag-bar{padding:8px 14px!important;}
   .pill{font-size:9px!important;padding:2px 7px!important;}
-  .cta-btn{padding:8px 14px!important;font-size:11px!important;}
+  .cta-btn{padding:6px 10px!important;font-size:9px!important;}
+  .ftr-logo{width:60px!important;}
 }
 .eb h1{color:#f1f5f9;font-size:20px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid #1e293b;}
 .eb h2{color:#e2e8f0;font-size:17px;font-weight:600;margin:18px 0 6px;}
@@ -190,7 +192,7 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;filter:brightness(0) invert(1);" />
+  <img class="ftr-logo" src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;filter:brightness(0) invert(1);" />
 </td>
 <td style="vertical-align:middle;text-align:right;">
   <a class="cta-btn" href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:8px 18px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
@@ -232,7 +234,7 @@ function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) 
   const isLight = theme === 'light';
   const orgName = orgConfig?.name || '';
 
-  const title = subject.replace(/\s*\|.*$/, '');
+  const title = subject.replace(/\s*[|\u2014].*$/, '');
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;width:60%;">
@@ -298,7 +300,7 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
   }
 
   const total = sections.reduce((n, s) => n + s.updates.length, 0);
-  const subject = `Daily Horizon Scan | ${date}`;
+  const subject = `XHS Daily Horizon Scan \u2014 ${date}`;
 
   /* Colour palette */
   const cardBorder = isLight ? '#e5e7eb' : '#1e293b';
@@ -497,6 +499,9 @@ export async function POST(request) {
     const testRecipientName = 'Andrew';
 
     let html, testSubject;
+    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    if (template === 'horizon-scan' || !template) {
     const sampleMarkdown = `## \ud83c\uddec\ud83c\udde7 United Kingdom
 
 ### FCA publishes PS26/3 on safeguarding requirements for payment firms
@@ -547,8 +552,18 @@ ESMA published final technical standards and reporting templates for ICT-related
 **Tags:** Payments \u00b7 Operational Resilience \u00b7 Technical Standards
 [Read more \u2192](https://www.esma.europa.eu)`;
 
-    testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+    testSubject = `XHS Daily Horizon Scan \u2014 ${date}`;
     html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
+    } else {
+      const samplesByType = {
+        'feature-update': { label: 'Feature Update', sample: `# Jurisdiction Alert Builder\n\nPimlico XHS\u2122 has launched the **Jurisdiction Alert Builder**, a new tool that lets you define custom monitoring rules for specific regulatory domains and geographies.\n\n## What's New\n\n### Custom Alert Rules\nCreate granular alert conditions based on jurisdiction, regulatory body, topic vertical, and document type. Alerts trigger in real time as new regulations are published.\n\n### Multi-Jurisdiction Grouping\nGroup alerts by client, portfolio, or internal team. Each group can have its own notification preferences and escalation rules.\n\n### Dashboard Integration\nAll alerts feed directly into your XHS\u2122 dashboard with full audit trail and compliance documentation support.\n\n## Getting Started\n\nThe Jurisdiction Alert Builder is available now in your XHS\u2122 dashboard under **Settings \u2192 Alerts**.` },
+        'content-update': { label: 'Content Update', sample: `# The Future of Regulatory Intelligence\n\nThe regulatory landscape in 2026 is evolving faster than ever. With MiCA implementation across the EU and the UK's post-Brexit regulatory framework maturing, compliance teams need sharper tools.\n\n## Key Trends\n\n### AI-Driven Compliance Monitoring\nRegulators are increasingly adopting machine-readable formats for rule publication, enabling real-time compliance tracking and automated gap analysis.\n\n### Cross-Border Convergence\nDespite political fragmentation, technical standards in payments, crypto, and data protection are converging across major jurisdictions.\n\n### Operational Resilience\nDORA in the EU and the UK's CTP regime are setting new baselines for operational resilience that will reshape vendor management across financial services.` },
+        'product-update': { label: 'Product Update', sample: `# Platform Update\n\nThe latest release of Pimlico XHS\u2122 includes performance improvements, new data sources, and enhanced reporting capabilities.\n\n## Changelog\n\n### New Data Sources\n- Added coverage for 12 new regulatory bodies across Southeast Asia\n- Real-time feed integration with ESMA's DORA reporting templates\n- Enhanced parsing for UK FCA policy statements\n\n### Performance\n- Dashboard load times reduced by 40% for large jurisdiction sets\n- Search indexing now updates within 60 seconds of publication\n\n### Bug Fixes\n- Fixed timezone display for scheduled alerts in non-GMT regions\n- Resolved CSV export encoding issue for special characters` },
+      };
+      const cfg = samplesByType[template] || { label: 'Update', sample: '# Update\n\nHere is the latest update from Pimlico XHS\u2122.\n\n## Key Points\n\n- Point one\n- Point two\n- Point three' };
+      testSubject = `XHS ${cfg.label} \u2014 ${date}`;
+      html = markdownToEmail(cfg.sample, testSubject, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
+    }
 
     try {
       await sendEmail({ to: testEmail, subject: `[TEST] ${testSubject}`, html });
