@@ -229,7 +229,7 @@ function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) 
 
   const bodyHtml = `${greeting}<div class="eb" style="font-size:15px;color:${isLight ? '#4b5563' : '#94a3b8'};line-height:1.7;">${html}</div>`;
 
-  return emailShell({ subject, preheader: `${subject} \u2014 ${date}`, headerHtml, bodyHtml, theme });
+  return emailShell({ subject, preheader: `${subject} | ${date}`, headerHtml, bodyHtml, theme });
 }
 
 /* ── Parse Horizon Scan markdown ── */
@@ -275,7 +275,7 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
   }
 
   const total = sections.reduce((n, s) => n + s.updates.length, 0);
-  const subject = `XHS Daily Horizon Scan \u2014 ${date}`;
+  const subject = `Daily Horizon Scan | ${date}`;
 
   /* Colour palette */
   const cardBorder = isLight ? '#e5e7eb' : '#1e293b';
@@ -342,7 +342,7 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
 </tr>
 </table>`;
 
-  return emailShell({ subject, preheader: `${total} regulatory updates across ${sections.length} jurisdictions \u2014 ${date}`, headerHtml, bodyHtml: `${greeting}${intro}${cards || fallback}`, theme });
+  return emailShell({ subject, preheader: `${total} regulatory updates across ${sections.length} jurisdictions | ${date}`, headerHtml, bodyHtml: `${greeting}${intro}${cards || fallback}`, theme });
 }
 
 /* ─── HELPERS ─── */
@@ -520,11 +520,11 @@ ESMA published final technical standards and reporting templates for ICT-related
 **Tags:** Payments \u00b7 Operational Resilience \u00b7 Technical Standards
 [Read more \u2192](https://www.esma.europa.eu)`;
 
-      testSubject = `XHS Daily Horizon Scan \u2014 ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
       html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     } else {
-      testSubject = 'Pimlico XHS \u2014 Weekly Regulatory Update';
-      const sampleMd = `We wanted to share some important regulatory developments this week that may affect your compliance operations.\n\n## Key Highlights\n\n**1. FCA Safeguarding Rules Finalised**\nThe FCA has published PS26/3, finalising its enhanced safeguarding requirements for payment and e-money firms. Firms must implement statutory trust arrangements by Q3 2026.\n\n**2. MiCA Implementation Update**\nThe European Banking Authority released final RTS for CASP authorisation, providing clarity on the documentation and capital requirements for crypto service providers across the EU.\n\n**3. US Anti-Money Laundering Expansion**\nFinCEN\u2019s proposed rule would extend AML/CFT obligations to SEC-registered investment advisers \u2014 a significant expansion of the regulatory perimeter.\n\n## What This Means for You\n\nThese developments signal a continuing trend toward tighter regulatory oversight across payments, crypto, and financial services. We recommend reviewing your current compliance frameworks against these emerging requirements.\n\n---\n\n*This update was prepared by the Pimlico XHS\u2122 regulatory intelligence team. For detailed analysis, log in to your [XHS Dashboard](https://pimlicosolutions.com).*`;
+      testSubject = 'Weekly Regulatory Update';
+      const sampleMd = `We wanted to share some important regulatory developments this week that may affect your compliance operations.\n\n## Key Highlights\n\n**1. FCA Safeguarding Rules Finalised**\nThe FCA has published PS26/3, finalising its enhanced safeguarding requirements for payment and e-money firms. Firms must implement statutory trust arrangements by Q3 2026.\n\n**2. MiCA Implementation Update**\nThe European Banking Authority released final RTS for CASP authorisation, providing clarity on the documentation and capital requirements for crypto service providers across the EU.\n\n**3. US Anti-Money Laundering Expansion**\nFinCEN's proposed rule would extend AML/CFT obligations to SEC-registered investment advisers, representing a significant expansion of the regulatory perimeter.\n\n## What This Means for You\n\nThese developments signal a continuing trend toward tighter regulatory oversight across payments, crypto, and financial services. We recommend reviewing your current compliance frameworks against these emerging requirements.\n\n---\n\n*Prepared by the Pimlico XHS regulatory intelligence team.*`;
       html = markdownToEmail(sampleMd, testSubject, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     }
 
