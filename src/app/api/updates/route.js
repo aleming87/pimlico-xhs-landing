@@ -88,24 +88,25 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
 <!-- Footer -->
 <tr><td style="background-color:#ffffff;border-top:1px solid #e5e7eb;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr><td class="ftr" style="padding:28px 40px;">
+<tr><td class="ftr" style="padding:24px 40px 20px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<!-- Logo + LinkedIn row -->
-<tr><td style="text-align:left;padding-bottom:20px;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="110" style="width:110px;height:auto;display:block;margin-bottom:12px;" />
+<tr>
+<td style="vertical-align:middle;text-align:left;width:60%;">
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="100" style="width:100px;height:auto;display:block;margin-bottom:10px;" />
   <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;display:inline-block;" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="20" height="20" style="width:20px;height:20px;display:block;" />
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="18" height="18" style="width:18px;height:18px;display:block;opacity:.7;" />
   </a>
-</td></tr>
-<!-- Go to XHS button -->
-<tr><td style="padding-bottom:20px;">
-  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:6px;">Go to XHS &rarr;</a>
-</td></tr>
-<!-- Copyright -->
-<tr><td style="border-top:1px solid #e5e7eb;padding-top:16px;">
-  <p style="margin:0;font-size:11px;color:#9ca3af;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
-</td></tr>
+</td>
+<td style="vertical-align:middle;text-align:right;width:40%;">
+  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;padding:8px 20px;border-radius:6px;letter-spacing:.2px;">Open in XHS &rarr;</a>
+</td>
+</tr>
 </table>
+</td></tr>
+<tr><td style="padding:0 40px 20px;">
+  <div style="border-top:1px solid #f3f4f6;padding-top:12px;">
+    <p style="margin:0;font-size:11px;color:#9ca3af;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
+  </div>
 </td></tr>
 </table>
 </td></tr>
@@ -169,24 +170,25 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
 <!-- Footer -->
 <tr><td style="background-color:#0f172a;border-top:1px solid #1e293b;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr><td class="ftr" style="padding:28px 40px;">
+<tr><td class="ftr" style="padding:24px 40px 20px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<!-- Logo + LinkedIn row -->
-<tr><td style="text-align:left;padding-bottom:20px;">
-  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="110" style="width:110px;height:auto;display:block;margin-bottom:12px;filter:brightness(0) invert(1);" />
+<tr>
+<td style="vertical-align:middle;text-align:left;width:60%;">
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="100" style="width:100px;height:auto;display:block;margin-bottom:10px;filter:brightness(0) invert(1);" />
   <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;display:inline-block;" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="20" height="20" style="width:20px;height:20px;display:block;" />
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="18" height="18" style="width:18px;height:18px;display:block;" />
   </a>
-</td></tr>
-<!-- Go to XHS button -->
-<tr><td style="padding-bottom:20px;">
-  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:6px;">Go to XHS &rarr;</a>
-</td></tr>
-<!-- Copyright -->
-<tr><td style="border-top:1px solid #1e293b;padding-top:16px;">
-  <p style="margin:0;font-size:11px;color:#475569;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
-</td></tr>
+</td>
+<td style="vertical-align:middle;text-align:right;width:40%;">
+  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;padding:8px 20px;border-radius:6px;letter-spacing:.2px;">Open in XHS &rarr;</a>
+</td>
+</tr>
 </table>
+</td></tr>
+<tr><td style="padding:0 40px 20px;">
+  <div style="border-top:1px solid #1e293b;padding-top:12px;">
+    <p style="margin:0;font-size:11px;color:#475569;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
+  </div>
 </td></tr>
 </table>
 </td></tr>
@@ -295,31 +297,36 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
   const greeting = recipientName
     ? `<p style="color:${greetingColor};font-size:15px;margin:0 0 6px;font-weight:600;">Hello ${recipientName},</p>`
     : '';
-  const intro = `<p style="color:${introColor};font-size:14px;line-height:1.6;margin:0 0 28px;">Here are the latest regulatory developments identified for ${orgName || 'your organisation'}. ${total} update${total !== 1 ? 's' : ''} across ${sections.length} jurisdiction${sections.length !== 1 ? 's' : ''}.</p>`;
+  const intro = `<p style="color:${introColor};font-size:14px;line-height:1.6;margin:0 0 28px;">Here are the latest regulatory developments identified for ${orgName || 'your organisation'}.</p>`;
 
-  /* Update cards — flat, editorial, clean */
+  /* Update cards — boxed, premium, structured */
   const cards = sections.map(s => {
     const updates = s.updates.map((u, i) => {
       const pills = u.tags ? u.tags.split(/\s*\u00b7\s*/).map(t => t.trim()).filter(Boolean).map(t =>
-        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:2px 8px;border-radius:3px;margin:0 4px 0 0;border:1px solid ${pillBorder};letter-spacing:.2px;font-weight:500;">${t}</span>`
+        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:3px 10px;border-radius:10px;margin:0 4px 4px 0;border:1px solid ${pillBorder};letter-spacing:.2px;font-weight:500;">${t}</span>`
       ).join('') : '';
 
-      return `<tr><td style="padding:${i > 0 ? '16px' : '0'} 0 0 0;${i > 0 ? `border-top:1px solid ${cardBorder};` : ''}">
-  <p style="margin:0 0 3px;"><a href="${u.link || '#'}" style="color:${headlineColor};font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;">${u.headline}</a></p>
-  ${u.authority ? `<p style="margin:0 0 6px;font-size:12px;color:${authorityColor};font-weight:500;">${u.authority}</p>` : ''}
-  <p style="color:${descColor};font-size:13px;line-height:1.6;margin:0 0 ${pills || u.link ? '8px' : '0'};">${u.desc}</p>
-  ${pills ? `<div style="margin:0 0 ${u.link ? '6px' : '0'};">${pills}</div>` : ''}
+      const cardBg = isLight ? '#ffffff' : '#111827';
+      const sep = i > 0 ? `<tr><td style="padding:0;"><div style="border-top:1px solid ${cardBorder};margin:0;"></div></td></tr>` : '';
+
+      return `${sep}<tr><td style="padding:16px 20px;">
+  <p style="margin:0 0 4px;"><a href="${u.link || '#'}" style="color:${headlineColor};font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;">${u.headline}</a></p>
+  ${u.authority ? `<p style="margin:0 0 8px;font-size:11px;color:${authorityColor};font-weight:500;text-transform:uppercase;letter-spacing:.3px;">${u.authority}</p>` : ''}
+  <p style="color:${descColor};font-size:13px;line-height:1.6;margin:0 0 ${pills || u.link ? '10px' : '0'};">${u.desc}</p>
+  ${pills ? `<div style="margin:0 0 ${u.link ? '8px' : '0'};">${pills}</div>` : ''}
   ${u.link ? `<p style="margin:0;"><a href="${u.link}" style="color:${linkColor};font-size:12px;font-weight:500;text-decoration:none;">Read more \u2192</a></p>` : ''}
 </td></tr>`;
     }).join('');
 
+    const headerBg = isLight ? '#f1f5f9' : '#0f172a';
+
     return `<!-- ${s.country} -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-  <tr><td style="padding:0 0 12px 0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid ${cardBorder};">
+  <tr><td style="padding:10px 20px;background:${headerBg};border-bottom:1px solid ${cardBorder};">
     <span style="font-size:17px;vertical-align:middle;margin-right:6px;">${s.flag}</span>
-    <span style="color:${countryColor};font-size:14px;font-weight:700;vertical-align:middle;">${s.country}</span>
+    <span style="color:${countryColor};font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle;">${s.country}</span>
   </td></tr>
-  <tr><td style="background:${bodyBg};border:1px solid ${cardBorder};border-radius:8px;padding:16px 20px;">
+  <tr><td style="padding:0;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${updates}</table>
   </td></tr>
 </table>`;
@@ -342,7 +349,7 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
 </tr>
 </table>`;
 
-  return emailShell({ subject, preheader: `${total} regulatory updates across ${sections.length} jurisdictions | ${date}`, headerHtml, bodyHtml: `${greeting}${intro}${cards || fallback}`, theme });
+  return emailShell({ subject, preheader: `Latest regulatory developments | ${date}`, headerHtml, bodyHtml: `${greeting}${intro}${cards || fallback}`, theme });
 }
 
 /* ─── HELPERS ─── */
@@ -524,7 +531,7 @@ ESMA published final technical standards and reporting templates for ICT-related
       html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     } else {
       testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-      const sampleMd = `Here are today's key regulatory developments across your tracked jurisdictions.\n\n## Key Highlights\n\n**1. FCA Safeguarding Rules Finalised**\nThe FCA has published PS26/3, finalising its enhanced safeguarding requirements for payment and e-money firms. Firms must implement statutory trust arrangements by Q3 2026.\n\n**2. MiCA Implementation Update**\nThe European Banking Authority released final RTS for CASP authorisation, providing clarity on the documentation and capital requirements for crypto service providers across the EU.\n\n**3. US Anti-Money Laundering Expansion**\nFinCEN's proposed rule would extend AML/CFT obligations to SEC-registered investment advisers, representing a significant expansion of the regulatory perimeter.\n\n## What This Means for You\n\nThese developments signal a continuing trend toward tighter regulatory oversight across payments, crypto, and financial services. We recommend reviewing your current compliance frameworks against these emerging requirements.\n\n---\n\n*Prepared by the Pimlico XHS regulatory intelligence team.*`;
+      const sampleMd = `Here are today's key regulatory developments across your tracked jurisdictions.\n\n## Key Highlights\n\n**1. FCA Safeguarding Rules Finalised**\nThe FCA has published PS26/3, finalising its enhanced safeguarding requirements for payment and e-money firms. Firms must implement statutory trust arrangements by Q3 2026.\n\n**2. MiCA Implementation Update**\nThe European Banking Authority released final RTS for CASP authorisation, providing clarity on the documentation and capital requirements for crypto service providers across the EU.\n\n**3. US Anti-Money Laundering Expansion**\nFinCEN's proposed rule would extend AML/CFT obligations to SEC-registered investment advisers, representing a significant expansion of the regulatory perimeter.\n\n## What This Means for You\n\nThese developments signal a continuing trend toward tighter regulatory oversight across payments, crypto, and financial services. We recommend reviewing your current compliance frameworks against these emerging requirements.`;
       html = markdownToEmail(sampleMd, testSubject, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     }
 
