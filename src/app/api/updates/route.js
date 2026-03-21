@@ -31,14 +31,13 @@ async function writeBlob(key, data) {
   await put(key, JSON.stringify(data, null, 2), { access: 'public', addRandomSuffix: false, contentType: 'application/json' });
 }
 
-const XHS_ICON = 'https://pimlico-xhs-landing.vercel.app/company/pimlico-icon.png';
 const XHS_LOGO_WHITE = 'https://www.pimlicosolutions.com/_next/image?url=%2FXHS_Logo_White.png&w=750&q=75';
-const PIMLICO_LOGO = 'https://www.pimlicosolutions.com/Pimlico_Logo.png';
 
 /* ──────────────────────────────────────────────
-   LIGHT EMAIL SHELL — Premium client-facing
+   LIGHT EMAIL SHELL
+   Footer modelled on pimlicosolutions.com
    ────────────────────────────────────────────── */
-function emailShellLight({ subject, preheader, headerHtml, bodyHtml, footerExtra }) {
+function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -86,20 +85,41 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml, footerExtra
 </td></tr>
 <!-- Body -->
 <tr><td class="inner" style="padding:32px 40px 28px;background-color:#ffffff;">${bodyHtml}</td></tr>
-<!-- Footer -->
-<tr><td style="background-color:#0f172a;border-top:3px solid #1e293b;">
+<!-- Footer — light, website-aligned -->
+<tr><td style="background-color:#f9fafb;border-top:1px solid #e5e7eb;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr><td class="ftr" style="padding:28px 40px;text-align:center;">
-${footerExtra || ''}
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
-<tr>
-<td style="padding:0 6px;"><a href="https://pimlicosolutions.com" style="display:inline-block;width:32px;height:32px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;text-align:center;line-height:32px;text-decoration:none;font-size:14px;color:#94a3b8;">&#127760;</a></td>
-<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/pimlico-solutions" style="display:inline-block;width:32px;height:32px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;text-align:center;line-height:32px;text-decoration:none;font-size:12px;color:#94a3b8;font-weight:700;">in</a></td>
-</tr>
+<tr><td class="ftr" style="padding:28px 40px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<!-- Brand row -->
+<tr><td style="text-align:center;padding-bottom:16px;">
+  <p style="margin:0 0 2px;font-size:14px;color:#111827;font-weight:600;">Pimlico XHS\u2122</p>
+  <p style="margin:0;font-size:12px;color:#6b7280;">AI-powered regulatory workspaces</p>
+</td></tr>
+<!-- Links row -->
+<tr><td style="text-align:center;padding-bottom:14px;">
+  <p style="margin:0;font-size:12px;line-height:1.8;">
+    <a href="https://pimlicosolutions.com" style="color:#4b5563;text-decoration:none;font-weight:500;">Website</a>
+    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://www.linkedin.com/company/wearepimlico/" style="color:#4b5563;text-decoration:none;font-weight:500;">LinkedIn</a>
+    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://x.com/PimlicoXHS" style="color:#4b5563;text-decoration:none;font-weight:500;">X</a>
+    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://wa.me/447961642867" style="color:#4b5563;text-decoration:none;font-weight:500;">WhatsApp</a>
+  </p>
+</td></tr>
+<!-- Legal row -->
+<tr><td style="text-align:center;padding-bottom:14px;">
+  <p style="margin:0;font-size:11px;line-height:1.8;">
+    <a href="https://pimlicosolutions.com/privacy" style="color:#9ca3af;text-decoration:none;">Privacy</a>
+    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://pimlicosolutions.com/terms-and-conditions" style="color:#9ca3af;text-decoration:none;">Terms</a>
+  </p>
+</td></tr>
+<!-- Copyright -->
+<tr><td style="text-align:center;">
+  <p style="margin:0;font-size:11px;color:#9ca3af;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
+</td></tr>
 </table>
-<p style="margin:0 0 3px;font-size:13px;color:#e2e8f0;font-weight:600;">Pimlico XHS\u2122</p>
-<p style="margin:0 0 10px;font-size:11px;color:#64748b;">AI-powered regulatory workspaces</p>
-<p style="margin:0;font-size:11px;"><a href="https://pimlicosolutions.com" style="color:#60a5fa;text-decoration:none;font-weight:500;">pimlicosolutions.com</a></p>
 </td></tr>
 </table>
 </td></tr>
@@ -110,9 +130,9 @@ ${footerExtra || ''}
 }
 
 /* ──────────────────────────────────────────────
-   DARK EMAIL SHELL — Premium dark theme
+   DARK EMAIL SHELL
    ────────────────────────────────────────────── */
-function emailShellDark({ subject, preheader, headerHtml, bodyHtml, footerExtra }) {
+function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -160,20 +180,41 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml, footerExtra 
 </td></tr>
 <!-- Body -->
 <tr><td class="inner" style="padding:32px 40px 28px;background-color:#111827;">${bodyHtml}</td></tr>
-<!-- Footer -->
-<tr><td style="background-color:#070b14;border-top:1px solid #1e293b;">
+<!-- Footer — clean, matches website structure -->
+<tr><td style="background-color:#0f172a;border-top:1px solid #1e293b;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr><td class="ftr" style="padding:28px 40px;text-align:center;">
-${footerExtra || ''}
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
-<tr>
-<td style="padding:0 6px;"><a href="https://pimlicosolutions.com" style="display:inline-block;width:32px;height:32px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;text-align:center;line-height:32px;text-decoration:none;font-size:14px;color:#94a3b8;">&#127760;</a></td>
-<td style="padding:0 6px;"><a href="https://www.linkedin.com/company/pimlico-solutions" style="display:inline-block;width:32px;height:32px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;text-align:center;line-height:32px;text-decoration:none;font-size:12px;color:#94a3b8;font-weight:700;">in</a></td>
-</tr>
+<tr><td class="ftr" style="padding:28px 40px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<!-- Brand row -->
+<tr><td style="text-align:center;padding-bottom:16px;">
+  <p style="margin:0 0 2px;font-size:14px;color:#e2e8f0;font-weight:600;">Pimlico XHS\u2122</p>
+  <p style="margin:0;font-size:12px;color:#64748b;">AI-powered regulatory workspaces</p>
+</td></tr>
+<!-- Links row -->
+<tr><td style="text-align:center;padding-bottom:14px;">
+  <p style="margin:0;font-size:12px;line-height:1.8;">
+    <a href="https://pimlicosolutions.com" style="color:#94a3b8;text-decoration:none;font-weight:500;">Website</a>
+    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://www.linkedin.com/company/wearepimlico/" style="color:#94a3b8;text-decoration:none;font-weight:500;">LinkedIn</a>
+    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://x.com/PimlicoXHS" style="color:#94a3b8;text-decoration:none;font-weight:500;">X</a>
+    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://wa.me/447961642867" style="color:#94a3b8;text-decoration:none;font-weight:500;">WhatsApp</a>
+  </p>
+</td></tr>
+<!-- Legal row -->
+<tr><td style="text-align:center;padding-bottom:14px;">
+  <p style="margin:0;font-size:11px;line-height:1.8;">
+    <a href="https://pimlicosolutions.com/privacy" style="color:#475569;text-decoration:none;">Privacy</a>
+    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
+    <a href="https://pimlicosolutions.com/terms-and-conditions" style="color:#475569;text-decoration:none;">Terms</a>
+  </p>
+</td></tr>
+<!-- Copyright -->
+<tr><td style="text-align:center;">
+  <p style="margin:0;font-size:11px;color:#475569;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
+</td></tr>
 </table>
-<p style="margin:0 0 3px;font-size:13px;color:#e2e8f0;font-weight:600;">Pimlico XHS\u2122</p>
-<p style="margin:0 0 10px;font-size:11px;color:#475569;">AI-powered regulatory workspaces</p>
-<p style="margin:0;font-size:11px;"><a href="https://pimlicosolutions.com" style="color:#818cf8;text-decoration:none;font-weight:500;">pimlicosolutions.com</a></p>
 </td></tr>
 </table>
 </td></tr>
@@ -197,7 +238,6 @@ function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) 
   const isLight = theme === 'light';
   const orgName = orgConfig?.name || '';
 
-  /* Two-column header: left = title/date/org, right = logo */
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;width:70%;">
@@ -217,17 +257,7 @@ function markdownToEmail(md, subject, { recipientName, orgConfig, theme } = {}) 
 
   const bodyHtml = `${greeting}<div class="eb" style="font-size:15px;color:${isLight ? '#4b5563' : '#94a3b8'};line-height:1.7;">${html}</div>`;
 
-  /* Co-brand footer row if org has a logo */
-  const footerExtra = orgConfig?.logoUrl
-    ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 18px;">
-<tr>
-  <td style="vertical-align:middle;"><img src="${orgConfig.logoUrl}" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:6px;object-fit:contain;display:block;" /></td>
-  <td style="vertical-align:middle;padding:0 8px;color:${isLight ? '#475569' : '#334155'};font-size:14px;line-height:1;">\u00d7</td>
-  <td style="vertical-align:middle;"><img src="${XHS_ICON}" alt="XHS" width="28" height="28" style="width:28px;height:28px;border-radius:6px;object-fit:contain;display:block;" /></td>
-</tr>
-</table>` : '';
-
-  return emailShell({ subject, preheader: `${subject} \u2014 ${date}`, headerHtml, bodyHtml, footerExtra, theme });
+  return emailShell({ subject, preheader: `${subject} \u2014 ${date}`, headerHtml, bodyHtml, theme });
 }
 
 /* ── Parse Horizon Scan markdown ── */
@@ -244,15 +274,16 @@ function parseHorizonScan(markdown) {
     for (const ub of block.split(/^###\s+/m).slice(1)) {
       const ul = ub.trim().split('\n');
       const headline = ul[0].trim();
-      let desc = '', tags = '', link = '';
+      let desc = '', tags = '', link = '', authority = '';
       for (let i = 1; i < ul.length; i++) {
         const l = ul[i].trim();
         if (!l || l === '---') continue;
         if (l.startsWith('**Tags:**')) tags = l.replace('**Tags:**', '').trim();
+        else if (l.startsWith('**Authority:**')) authority = l.replace('**Authority:**', '').trim();
         else if (l.match(/^\[.+\]\(.+\)$/)) { const m = l.match(/\[.+?\]\((.+?)\)/); if (m) link = m[1]; }
         else desc += (desc ? ' ' : '') + l;
       }
-      section.updates.push({ headline, desc, tags, link });
+      section.updates.push({ headline, desc, tags, link, authority });
     }
     if (section.updates.length) sections.push(section);
   }
@@ -275,65 +306,63 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
   const subject = `XHS Daily Horizon Scan \u2014 ${date}`;
 
   /* Colour palette */
-  const cardBg = isLight ? '#f8fafc' : '#0f172a';
-  const cardBodyBg = isLight ? '#ffffff' : '#111827';
-  const cardBorder = isLight ? '#e2e8f0' : '#1e293b';
-  const headlineColor = isLight ? '#0f172a' : '#f1f5f9';
-  const descColor = isLight ? '#64748b' : '#94a3b8';
-  const countryColor = isLight ? '#1e293b' : '#e2e8f0';
-  const countColor = isLight ? '#94a3b8' : '#475569';
+  const cardBorder = isLight ? '#e5e7eb' : '#1e293b';
+  const headlineColor = isLight ? '#111827' : '#f1f5f9';
+  const descColor = isLight ? '#4b5563' : '#94a3b8';
+  const authorityColor = isLight ? '#6b7280' : '#64748b';
+  const countryColor = isLight ? '#111827' : '#e2e8f0';
   const linkColor = isLight ? '#2563eb' : '#818cf8';
-  const pillBg = isLight ? '#eff6ff' : '#1e293b';
-  const pillColor = isLight ? '#3b82f6' : '#94a3b8';
-  const pillBorder = isLight ? '#bfdbfe' : '#334155';
-  const greetingColor = isLight ? '#1f2937' : '#e2e8f0';
-  const subGreetColor = isLight ? '#6b7280' : '#64748b';
-  const badgeBg = isLight ? 'rgba(37,99,235,.08)' : 'rgba(99,102,241,.1)';
-  const badgeBorder = isLight ? 'rgba(37,99,235,.15)' : 'rgba(99,102,241,.18)';
-  const badgeColor = isLight ? '#2563eb' : '#a5b4fc';
+  const pillBg = isLight ? '#f3f4f6' : '#1e293b';
+  const pillColor = isLight ? '#4b5563' : '#94a3b8';
+  const pillBorder = isLight ? '#e5e7eb' : '#334155';
+  const greetingColor = isLight ? '#111827' : '#e2e8f0';
+  const introColor = isLight ? '#4b5563' : '#94a3b8';
+  const bodyBg = isLight ? '#ffffff' : '#111827';
 
-  /* Greeting */
+  /* Greeting + intro */
   const greeting = recipientName
-    ? `<p style="color:${greetingColor};font-size:15px;margin:0 0 4px;font-weight:500;">Hello ${recipientName},</p><p style="color:${subGreetColor};font-size:13px;margin:0 0 22px;">Here are the latest regulatory developments across your tracked jurisdictions.</p>`
+    ? `<p style="color:${greetingColor};font-size:15px;margin:0 0 6px;font-weight:600;">Hello ${recipientName},</p>`
     : '';
+  const intro = `<p style="color:${introColor};font-size:14px;line-height:1.6;margin:0 0 28px;">Here are the latest regulatory developments identified for ${orgName || 'your organisation'}. ${total} update${total !== 1 ? 's' : ''} across ${sections.length} jurisdiction${sections.length !== 1 ? 's' : ''}.</p>`;
 
-  /* Update cards */
+  /* Update cards — flat, editorial, clean */
   const cards = sections.map(s => {
-    const rows = s.updates.map((u, i) => {
+    const updates = s.updates.map((u, i) => {
       const pills = u.tags ? u.tags.split(/\s*\u00b7\s*/).map(t => t.trim()).filter(Boolean).map(t =>
-        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:2px 8px;border-radius:10px;margin:2px 3px 2px 0;border:1px solid ${pillBorder};letter-spacing:.2px;">${t}</span>`
+        `<span style="display:inline-block;background:${pillBg};color:${pillColor};font-size:10px;padding:2px 8px;border-radius:3px;margin:0 4px 0 0;border:1px solid ${pillBorder};letter-spacing:.2px;font-weight:500;">${t}</span>`
       ).join('') : '';
-      const sep = i > 0 ? `<tr><td style="padding:0;"><div style="border-top:1px solid ${cardBorder};margin:12px 0;"></div></td></tr>` : '';
-      return `${sep}<tr><td style="padding:0;">
-        <a href="${u.link || '#'}" style="color:${headlineColor};font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;display:block;margin-bottom:4px;">${u.headline}</a>
-        <p style="color:${descColor};font-size:13px;line-height:1.55;margin:0 0 8px;">${u.desc}</p>
-        ${pills ? `<div style="margin-bottom:6px;">${pills}</div>` : ''}
-        ${u.link ? `<a href="${u.link}" style="color:${linkColor};font-size:12px;font-weight:500;text-decoration:none;">Read full update \u2192</a>` : ''}
-      </td></tr>`;
+
+      return `<tr><td style="padding:${i > 0 ? '16px' : '0'} 0 0 0;${i > 0 ? `border-top:1px solid ${cardBorder};` : ''}">
+  <p style="margin:0 0 3px;"><a href="${u.link || '#'}" style="color:${headlineColor};font-size:14px;font-weight:600;text-decoration:none;line-height:1.4;">${u.headline}</a></p>
+  ${u.authority ? `<p style="margin:0 0 6px;font-size:12px;color:${authorityColor};font-weight:500;">${u.authority}</p>` : ''}
+  <p style="color:${descColor};font-size:13px;line-height:1.6;margin:0 0 ${pills || u.link ? '8px' : '0'};">${u.desc}</p>
+  ${pills ? `<div style="margin:0 0 ${u.link ? '6px' : '0'};">${pills}</div>` : ''}
+  ${u.link ? `<p style="margin:0;"><a href="${u.link}" style="color:${linkColor};font-size:12px;font-weight:500;text-decoration:none;">Read more \u2192</a></p>` : ''}
+</td></tr>`;
     }).join('');
 
-    return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid ${cardBorder};">
-      <tr><td style="padding:10px 16px;background:${cardBg};border-bottom:1px solid ${cardBorder};">
-        <span style="font-size:18px;vertical-align:middle;margin-right:8px;">${s.flag}</span>
-        <span style="color:${countryColor};font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;vertical-align:middle;">${s.country}</span>
-        <span style="color:${countColor};font-size:11px;margin-left:8px;vertical-align:middle;font-weight:500;">${s.updates.length} update${s.updates.length !== 1 ? 's' : ''}</span>
-      </td></tr>
-      <tr><td style="padding:16px;background:${cardBodyBg};">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table>
-      </td></tr>
-    </table>`;
+    return `<!-- ${s.country} -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+  <tr><td style="padding:0 0 12px 0;">
+    <span style="font-size:17px;vertical-align:middle;margin-right:6px;">${s.flag}</span>
+    <span style="color:${countryColor};font-size:14px;font-weight:700;vertical-align:middle;">${s.country}</span>
+  </td></tr>
+  <tr><td style="background:${bodyBg};border:1px solid ${cardBorder};border-radius:8px;padding:16px 20px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${updates}</table>
+  </td></tr>
+</table>`;
   }).join('');
 
-  /* Two-column header */
+  /* Fallback if no content parsed */
+  const fallback = !cards ? `<p style="color:${introColor};font-size:14px;padding:20px;text-align:center;background:${pillBg};border-radius:8px;">No regulatory updates were found for the selected jurisdictions today.</p>` : '';
+
+  /* Two-column header — clean, no badge */
   const headerHtml = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;width:65%;">
   <h1 class="hdr-title" style="margin:0 0 6px;color:#ffffff;font-size:26px;font-weight:700;letter-spacing:-.3px;line-height:1.2;">Daily Horizon Scan</h1>
-  <p style="margin:0 0 ${orgName ? '4px' : '10px'};color:rgba(255,255,255,.7);font-size:13px;font-weight:400;">${date}</p>
-  ${orgName ? `<p style="margin:0 0 10px;color:rgba(255,255,255,.5);font-size:12px;font-weight:500;">Prepared for: ${orgName}</p>` : ''}
-  <div style="display:inline-block;background:${badgeBg};border:1px solid ${badgeBorder};border-radius:14px;padding:4px 14px;">
-    <span style="color:${badgeColor};font-size:11px;font-weight:600;">${sections.length} Jurisdictions \u00b7 ${total} Updates</span>
-  </div>
+  <p style="margin:0 0 ${orgName ? '4px' : '0'};color:rgba(255,255,255,.7);font-size:13px;font-weight:400;">${date}</p>
+  ${orgName ? `<p style="margin:0;color:rgba(255,255,255,.5);font-size:12px;font-weight:500;">Prepared for: ${orgName}</p>` : ''}
 </td>
 <td style="vertical-align:top;text-align:right;width:35%;padding-left:16px;">
   <img src="${XHS_LOGO_WHITE}" alt="Pimlico XHS" width="120" style="width:120px;max-width:120px;height:auto;display:inline-block;" />
@@ -341,17 +370,7 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
 </tr>
 </table>`;
 
-  /* Co-brand footer */
-  const footerExtra = orgConfig?.logoUrl
-    ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 18px;">
-<tr>
-  <td style="vertical-align:middle;"><img src="${orgConfig.logoUrl}" alt="" width="28" height="28" style="width:28px;height:28px;border-radius:6px;object-fit:contain;display:block;" /></td>
-  <td style="vertical-align:middle;padding:0 8px;color:#334155;font-size:14px;line-height:1;">\u00d7</td>
-  <td style="vertical-align:middle;"><img src="${XHS_ICON}" alt="XHS" width="28" height="28" style="width:28px;height:28px;border-radius:6px;object-fit:contain;display:block;" /></td>
-</tr>
-</table>` : '';
-
-  return emailShell({ subject, preheader: `${sections.length} jurisdictions \u00b7 ${total} regulatory updates \u2014 ${date}`, headerHtml, bodyHtml: `${greeting}${cards}`, footerExtra, theme });
+  return emailShell({ subject, preheader: `${total} regulatory updates across ${sections.length} jurisdictions \u2014 ${date}`, headerHtml, bodyHtml: `${greeting}${intro}${cards || fallback}`, theme });
 }
 
 /* ─── HELPERS ─── */
@@ -482,43 +501,50 @@ export async function POST(request) {
       const sampleMarkdown = `## \ud83c\uddec\ud83c\udde7 United Kingdom
 
 ### FCA publishes PS26/3 on safeguarding requirements for payment firms
-The FCA has finalised its safeguarding rules under PS26/3, requiring payment and e-money firms to hold client funds in statutory trust by Q3 2026.
+**Authority:** Financial Conduct Authority (FCA)
+The FCA has finalised its safeguarding rules under PS26/3, requiring payment and e-money firms to hold client funds in statutory trust by Q3 2026. Affected firms must review their current arrangements and prepare implementation plans.
 **Tags:** Payments \u00b7 Client Assets \u00b7 Publication
 [Read more \u2192](https://www.fca.org.uk)
 
 ### PRA updates expectations on operational resilience for critical third parties
-Following the CTPs oversight regime, PRA published CP5/26 proposing minimum resilience standards for designated critical third parties.
+**Authority:** Prudential Regulation Authority (PRA)
+Following the CTPs oversight regime, PRA published CP5/26 proposing minimum resilience standards for designated critical third parties providing services to the financial sector.
 **Tags:** Banking \u00b7 Operational Resilience \u00b7 Consultation
 [Read more \u2192](https://www.bankofengland.co.uk)
 
 ## \ud83c\udde8\ud83c\udde6 Canada
 
 ### Ontario Securities Commission proposes amendments to NI 31-103 for crypto dealer registration
-The OSC issued proposed amendments streamlining the registration process for crypto asset trading platforms under NI 31-103.
+**Authority:** Ontario Securities Commission (OSC)
+The OSC issued proposed amendments streamlining the registration process for crypto asset trading platforms under NI 31-103, with a 90-day comment period now open.
 **Tags:** Crypto \u00b7 Licensing & Authorisations \u00b7 Consultation
 [Read more \u2192](https://www.osc.ca)
 
 ## \ud83c\uddfa\ud83c\uddf8 United States
 
 ### FinCEN issues proposed rule extending AML requirements to investment advisers
-FinCEN has proposed a rule that would require SEC-registered investment advisers to implement AML/CFT programs and file SARs.
+**Authority:** Financial Crimes Enforcement Network (FinCEN)
+FinCEN has proposed a rule that would require SEC-registered investment advisers to implement AML/CFT programs and file suspicious activity reports, closing a longstanding gap.
 **Tags:** AML/KYC \u00b7 Securities \u00b7 Proposed Rule
 [Read more \u2192](https://www.fincen.gov)
 
 ### New York DFS updates BitLicense guidance on stablecoin reserves
-NYDFS has published updated guidance requiring BitLicense holders to maintain 1:1 reserves in approved government securities or deposits.
+**Authority:** New York Department of Financial Services (NYDFS)
+NYDFS has published updated guidance requiring BitLicense holders to maintain 1:1 reserves in approved government securities or insured deposits for all USD-backed stablecoins.
 **Tags:** Crypto \u00b7 Digital Assets \u00b7 Guideline
 [Read more \u2192](https://www.dfs.ny.gov)
 
 ## \ud83c\uddea\ud83c\uddfa European Union
 
 ### EBA publishes final RTS on MiCA authorisation requirements
-The European Banking Authority has released final Regulatory Technical Standards for crypto-asset service provider authorisation under MiCA.
+**Authority:** European Banking Authority (EBA)
+The EBA has released final Regulatory Technical Standards for crypto-asset service provider authorisation under MiCA, covering governance, capital, and safeguarding requirements.
 **Tags:** Crypto \u00b7 MiCA \u00b7 Implementation Measures
 [Read more \u2192](https://www.eba.europa.eu)
 
 ### ESMA issues guidance on DORA reporting templates for ICT incidents
-ESMA published final technical standards and reporting templates for ICT-related incident reporting under the Digital Operational Resilience Act.
+**Authority:** European Securities and Markets Authority (ESMA)
+ESMA published final technical standards and reporting templates for ICT-related incident reporting under the Digital Operational Resilience Act, effective January 2027.
 **Tags:** Payments \u00b7 Operational Resilience \u00b7 Technical Standards
 [Read more \u2192](https://www.esma.europa.eu)`;
 
