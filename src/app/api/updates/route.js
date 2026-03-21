@@ -497,8 +497,7 @@ export async function POST(request) {
     const testRecipientName = 'Andrew';
 
     let html, testSubject;
-    if (template === 'horizon-scan') {
-      const sampleMarkdown = `## \ud83c\uddec\ud83c\udde7 United Kingdom
+    const sampleMarkdown = `## \ud83c\uddec\ud83c\udde7 United Kingdom
 
 ### FCA publishes PS26/3 on safeguarding requirements for payment firms
 **Authority:** Financial Conduct Authority (FCA)
@@ -548,12 +547,8 @@ ESMA published final technical standards and reporting templates for ICT-related
 **Tags:** Payments \u00b7 Operational Resilience \u00b7 Technical Standards
 [Read more \u2192](https://www.esma.europa.eu)`;
 
-      testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-      html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
-    } else {
-      testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-      html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
-    }
+    testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+    html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
 
     try {
       await sendEmail({ to: testEmail, subject: `[TEST] ${testSubject}`, html });
