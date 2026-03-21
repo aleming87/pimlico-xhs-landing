@@ -523,7 +523,7 @@ ESMA published final technical standards and reporting templates for ICT-related
       testSubject = `Daily Horizon Scan | ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
       html = horizonScanToEmail(sampleMarkdown, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     } else {
-      testSubject = 'Weekly Regulatory Update';
+      testSubject = 'Daily Regulatory Update';
       const sampleMd = `We wanted to share some important regulatory developments this week that may affect your compliance operations.\n\n## Key Highlights\n\n**1. FCA Safeguarding Rules Finalised**\nThe FCA has published PS26/3, finalising its enhanced safeguarding requirements for payment and e-money firms. Firms must implement statutory trust arrangements by Q3 2026.\n\n**2. MiCA Implementation Update**\nThe European Banking Authority released final RTS for CASP authorisation, providing clarity on the documentation and capital requirements for crypto service providers across the EU.\n\n**3. US Anti-Money Laundering Expansion**\nFinCEN's proposed rule would extend AML/CFT obligations to SEC-registered investment advisers, representing a significant expansion of the regulatory perimeter.\n\n## What This Means for You\n\nThese developments signal a continuing trend toward tighter regulatory oversight across payments, crypto, and financial services. We recommend reviewing your current compliance frameworks against these emerging requirements.\n\n---\n\n*Prepared by the Pimlico XHS regulatory intelligence team.*`;
       html = markdownToEmail(sampleMd, testSubject, { recipientName: testRecipientName, orgConfig: testOrgConfig, theme });
     }
