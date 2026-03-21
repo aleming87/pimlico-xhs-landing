@@ -85,38 +85,24 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
 </td></tr>
 <!-- Body -->
 <tr><td class="inner" style="padding:32px 40px 28px;background-color:#ffffff;">${bodyHtml}</td></tr>
-<!-- Footer — light, website-aligned -->
-<tr><td style="background-color:#f9fafb;border-top:1px solid #e5e7eb;">
+<!-- Footer -->
+<tr><td style="background-color:#ffffff;border-top:1px solid #e5e7eb;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr><td class="ftr" style="padding:28px 40px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<!-- Brand row -->
-<tr><td style="text-align:center;padding-bottom:16px;">
-  <p style="margin:0 0 2px;font-size:14px;color:#111827;font-weight:600;">Pimlico XHS\u2122</p>
-  <p style="margin:0;font-size:12px;color:#6b7280;">AI-powered regulatory workspaces</p>
+<!-- Logo + LinkedIn row -->
+<tr><td style="text-align:left;padding-bottom:20px;">
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="110" style="width:110px;height:auto;display:block;margin-bottom:12px;" />
+  <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;display:inline-block;" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="20" height="20" style="width:20px;height:20px;display:block;" />
+  </a>
 </td></tr>
-<!-- Links row -->
-<tr><td style="text-align:center;padding-bottom:14px;">
-  <p style="margin:0;font-size:12px;line-height:1.8;">
-    <a href="https://pimlicosolutions.com" style="color:#4b5563;text-decoration:none;font-weight:500;">Website</a>
-    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://www.linkedin.com/company/wearepimlico/" style="color:#4b5563;text-decoration:none;font-weight:500;">LinkedIn</a>
-    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://x.com/PimlicoXHS" style="color:#4b5563;text-decoration:none;font-weight:500;">X</a>
-    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://wa.me/447961642867" style="color:#4b5563;text-decoration:none;font-weight:500;">WhatsApp</a>
-  </p>
-</td></tr>
-<!-- Legal row -->
-<tr><td style="text-align:center;padding-bottom:14px;">
-  <p style="margin:0;font-size:11px;line-height:1.8;">
-    <a href="https://pimlicosolutions.com/privacy" style="color:#9ca3af;text-decoration:none;">Privacy</a>
-    <span style="color:#d1d5db;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://pimlicosolutions.com/terms-and-conditions" style="color:#9ca3af;text-decoration:none;">Terms</a>
-  </p>
+<!-- Go to XHS button -->
+<tr><td style="padding-bottom:20px;">
+  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:6px;">Go to XHS &rarr;</a>
 </td></tr>
 <!-- Copyright -->
-<tr><td style="text-align:center;">
+<tr><td style="border-top:1px solid #e5e7eb;padding-top:16px;">
   <p style="margin:0;font-size:11px;color:#9ca3af;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
 </td></tr>
 </table>
@@ -180,38 +166,24 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
 </td></tr>
 <!-- Body -->
 <tr><td class="inner" style="padding:32px 40px 28px;background-color:#111827;">${bodyHtml}</td></tr>
-<!-- Footer — clean, matches website structure -->
+<!-- Footer -->
 <tr><td style="background-color:#0f172a;border-top:1px solid #1e293b;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr><td class="ftr" style="padding:28px 40px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<!-- Brand row -->
-<tr><td style="text-align:center;padding-bottom:16px;">
-  <p style="margin:0 0 2px;font-size:14px;color:#e2e8f0;font-weight:600;">Pimlico XHS\u2122</p>
-  <p style="margin:0;font-size:12px;color:#64748b;">AI-powered regulatory workspaces</p>
+<!-- Logo + LinkedIn row -->
+<tr><td style="text-align:left;padding-bottom:20px;">
+  <img src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="110" style="width:110px;height:auto;display:block;margin-bottom:12px;filter:brightness(0) invert(1);" />
+  <a href="https://www.linkedin.com/company/wearepimlico/" style="text-decoration:none;display:inline-block;" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="20" height="20" style="width:20px;height:20px;display:block;" />
+  </a>
 </td></tr>
-<!-- Links row -->
-<tr><td style="text-align:center;padding-bottom:14px;">
-  <p style="margin:0;font-size:12px;line-height:1.8;">
-    <a href="https://pimlicosolutions.com" style="color:#94a3b8;text-decoration:none;font-weight:500;">Website</a>
-    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://www.linkedin.com/company/wearepimlico/" style="color:#94a3b8;text-decoration:none;font-weight:500;">LinkedIn</a>
-    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://x.com/PimlicoXHS" style="color:#94a3b8;text-decoration:none;font-weight:500;">X</a>
-    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://wa.me/447961642867" style="color:#94a3b8;text-decoration:none;font-weight:500;">WhatsApp</a>
-  </p>
-</td></tr>
-<!-- Legal row -->
-<tr><td style="text-align:center;padding-bottom:14px;">
-  <p style="margin:0;font-size:11px;line-height:1.8;">
-    <a href="https://pimlicosolutions.com/privacy" style="color:#475569;text-decoration:none;">Privacy</a>
-    <span style="color:#334155;">&nbsp;&middot;&nbsp;</span>
-    <a href="https://pimlicosolutions.com/terms-and-conditions" style="color:#475569;text-decoration:none;">Terms</a>
-  </p>
+<!-- Go to XHS button -->
+<tr><td style="padding-bottom:20px;">
+  <a href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;padding:10px 24px;border-radius:6px;">Go to XHS &rarr;</a>
 </td></tr>
 <!-- Copyright -->
-<tr><td style="text-align:center;">
+<tr><td style="border-top:1px solid #1e293b;padding-top:16px;">
   <p style="margin:0;font-size:11px;color:#475569;">&copy; ${new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>
 </td></tr>
 </table>

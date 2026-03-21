@@ -212,7 +212,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-          <p className="text-sm/6 text-gray-600">&copy; 2025 Pimlico Solutions Ltd. All rights reserved.</p>
+          <p className="text-sm/6 text-gray-600">&copy; 2026 Pimlico Solutions Ltd. All rights reserved.</p>
         </div>
       </div>
     </footer>
