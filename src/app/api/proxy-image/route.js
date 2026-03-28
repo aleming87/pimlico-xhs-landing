@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 export async function GET(request) {
   const url = request.nextUrl.searchParams.get('url');
   if (!url) {

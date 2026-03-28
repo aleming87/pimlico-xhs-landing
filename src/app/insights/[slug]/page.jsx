@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { list } from '@vercel/blob';
 import ArticlePageClient from './ArticlePageClient';
 

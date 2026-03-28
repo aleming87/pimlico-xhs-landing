@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
