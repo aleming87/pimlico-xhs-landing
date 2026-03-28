@@ -1,5 +1,5 @@
-import '@/styles/tailwind.css'
-import { Analytics } from '@vercel/analytics/react'
+ import '@/styles/tailwind.css'
+// Vercel Analytics removed — using Cloudflare Analytics instead
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import { CookieConsent } from '@/components/CookieConsent'
 
@@ -71,7 +71,7 @@ export default function RootLayout({ children }) {
           {children}
         </CurrencyProvider>
         <CookieConsent />
-        <Analytics />
+        {/* Cloudflare Web Analytics loaded via dashboard */}
       </body>
     </html>
   )
