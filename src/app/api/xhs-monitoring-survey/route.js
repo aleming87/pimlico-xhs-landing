@@ -1,7 +1,9 @@
 export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
-import { put, list } from '@vercel/blob';
+// @vercel/blob removed for Cloudflare migration
+const list = async () => ({ blobs: [] });
+const put = async () => ({ url: '' });
 
 const BLOB_PREFIX = 'xhs-monitoring-survey/';
 const BLOB_INDEX_KEY = 'xhs-monitoring-survey/index.json';

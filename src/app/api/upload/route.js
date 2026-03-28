@@ -1,6 +1,7 @@
 export const runtime = 'edge';
 
-import { put } from '@vercel/blob';
+// @vercel/blob removed for Cloudflare migration
+const put = async () => ({ url: '' });
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
