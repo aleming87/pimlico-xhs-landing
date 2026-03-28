@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 const ALLOWED_ORIGINS = [
   'https://xhsdata.ai',
   'https://www.xhsdata.ai',
