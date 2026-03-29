@@ -18,22 +18,29 @@ const jurisdictions = [
 const generateViewCount = (dateStr, articleId) => {
   const now = new Date();
   const articleDate = new Date(dateStr);
-  
+
   if (isNaN(articleDate)) return 0;
-  
+
+  // Convert string ID to numeric hash for consistent pseudo-random generation
+  let idNum = 0;
+  const idStr = String(articleId || '');
+  for (let i = 0; i < idStr.length; i++) {
+    idNum = ((idNum << 5) - idNum) + idStr.charCodeAt(i);
+    idNum |= 0;
+  }
+  idNum = Math.abs(idNum);
+
   // Calculate days since publication
   const daysSincePublish = Math.max(0, Math.floor((now - articleDate) / (1000 * 60 * 60 * 24)));
-  
+
   // Base views increase with age (not linear - logarithmic growth with daily additions)
-  // Day 0: ~50-150 views, then grows with diminishing returns but still accumulating
   const baseViews = 50 + Math.floor(Math.log2(daysSincePublish + 1) * 80);
-  
+
   // Daily view accumulation (older articles have more accumulated views)
-  const dailyAccumulation = daysSincePublish * (15 + Math.floor(Math.random() * 10));
-  
+  const dailyAccumulation = daysSincePublish * (15 + Math.floor((idNum * 7) % 10));
+
   // Add pseudo-random variation based on article ID for consistency
-  // This ensures the same article always shows the same view count on a given day
-  const seed = articleId * 7919 + daysSincePublish * 31; // Prime number seeding
+  const seed = idNum * 7919 + daysSincePublish * 31;
   const variation = ((seed % 100) / 100) * 0.3 - 0.15; // ±15% variation
   
   // Calculate total with variation
@@ -186,7 +193,7 @@ export default function InsightsPage() {
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
-              Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
+              Start your trial <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -224,7 +231,7 @@ export default function InsightsPage() {
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Pricing</a>
                   </div>
                   <div className="py-6">
-                    <a href="/contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Book a demo</a>
+                    <a href="/contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Start your trial</a>
                   </div>
                 </div>
               </div>

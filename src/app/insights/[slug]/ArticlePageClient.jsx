@@ -22,22 +22,31 @@ function generateGiftToken(slug) {
 const generateViewCount = (dateStr, articleId) => {
   const now = new Date();
   const articleDate = new Date(dateStr);
-  
+
   if (isNaN(articleDate)) return 50;
-  
+
+  // Convert string ID to numeric hash for consistent pseudo-random generation
+  let idNum = 0;
+  const idStr = String(articleId || '');
+  for (let i = 0; i < idStr.length; i++) {
+    idNum = ((idNum << 5) - idNum) + idStr.charCodeAt(i);
+    idNum |= 0;
+  }
+  idNum = Math.abs(idNum);
+
   // Calculate days since publication
   const daysSincePublish = Math.max(0, Math.floor((now - articleDate) / (1000 * 60 * 60 * 24)));
-  
+
   // Base views increase with age (logarithmic growth with daily additions)
   const baseViews = 50 + Math.floor(Math.log2(daysSincePublish + 1) * 80);
-  
+
   // Daily view accumulation (older articles have more accumulated views)
-  const dailyAccumulation = daysSincePublish * (15 + Math.floor((articleId * 7) % 10));
-  
+  const dailyAccumulation = daysSincePublish * (15 + Math.floor((idNum * 7) % 10));
+
   // Add pseudo-random variation based on article ID for consistency
-  const seed = articleId * 7919 + daysSincePublish * 31;
+  const seed = idNum * 7919 + daysSincePublish * 31;
   const variation = ((seed % 100) / 100) * 0.3 - 0.15; // ±15% variation
-  
+
   return Math.floor((baseViews + dailyAccumulation) * (1 + variation));
 };
 
@@ -259,8 +268,8 @@ export default function ArticlePageClient() {
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
-              Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
+            <a href="/onboarding" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
+              Start your trial <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -498,7 +507,7 @@ export default function ArticlePageClient() {
                         href="/contact?trial=true&source=premium-article"
                         className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                       >
-                        Book a demo
+                        Start your trial
                         <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
@@ -569,7 +578,7 @@ export default function ArticlePageClient() {
                     href="/contact?trial=true"
                     className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
-                    Book a demo
+                    Start your trial
                     <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>

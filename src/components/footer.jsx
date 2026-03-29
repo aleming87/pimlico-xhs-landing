@@ -161,7 +161,7 @@ export function Footer() {
           <div className="space-y-8">
             <div className="flex items-center gap-4">
               <img src="/Pimlico_Logo.png" alt="Pimlico" className="h-8" />
-              <img src="/XHS Logo BLUE on WHITE.png" alt="XHS" className="h-8" />
+              <img src="/xhs-logo-blue.png" alt="XHS™" className="h-8" />
             </div>
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-1 xl:mt-0">
