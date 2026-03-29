@@ -158,11 +158,13 @@ export default function ArticlePageClient() {
         const response = await fetch(`/api/articles?slug=${params.slug}`);
         
         if (response.ok) {
-          const found = await response.json();
-          
+          const data = await response.json();
+          // API returns { article: {...} } for slug queries, or the article directly
+          const found = data.article || data;
+
           // Check if article should be visible (not draft, not scheduled in future)
           const now = new Date();
-          if (found.status === 'draft') {
+          if (!found || !found.title || found.status === 'draft') {
             setArticle(null);
           } else if (found.status === 'scheduled' && found.scheduledAt && new Date(found.scheduledAt) > now) {
             setArticle(null);
