@@ -2,8 +2,8 @@ export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
 
-const SUPABASE_URL = 'https://xldyvilhtvxmfgtyjusb.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhsZHl2aWxodHZ4bWZndHlqdXNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIzNzU3ODQsImV4cCI6MjA0Nzk1MTc4NH0.tBMCMf4KE9XD1bs3-cNlpSXsOjMfBXJBLl3E6nfJdwU';
+const SUPABASE_URL = 'https://sup.xhsdata.ai';
+const SUPABASE_ANON_KEY = 'sb_publishable_vd8k7yq856LAm9OgDLMw9w_wHIE4ptd';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
