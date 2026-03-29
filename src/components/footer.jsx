@@ -185,6 +185,9 @@ export function Footer() {
                 <li>
                   <a href="/terms-and-conditions" className="text-sm/6 text-gray-600 hover:text-gray-900">Terms and Conditions</a>
                 </li>
+                <li>
+                  <a href="/security" className="text-sm/6 text-gray-600 hover:text-gray-900">Security</a>
+                </li>
               </ul>
             </div>
           </div>
