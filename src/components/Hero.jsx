@@ -36,7 +36,6 @@ export default function Hero() {
             <a href="/gambling" className="text-sm/6 font-semibold text-white">Gambling</a>
             <a href="/insights" className="text-sm/6 font-semibold text-white">Insights</a>
             <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
-            <a href="#team" className="text-sm/6 font-semibold text-white">Team</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
@@ -117,13 +116,6 @@ export default function Hero() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       Pricing
-                    </a>
-                    <a 
-                      href="#team" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Team
                     </a>
                   </div>
                   <div className="py-6">
