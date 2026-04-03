@@ -164,8 +164,8 @@ export default function GamblingPage() {
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 hover:scale-105">
-              Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
+            <a href="/contact?trial=true" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 hover:scale-105">
+              Start free trial <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -202,7 +202,7 @@ export default function GamblingPage() {
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
                   </div>
                   <div className="py-6">
-                    <a href="/contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Book a demo</a>
+                    <a href="/contact?trial=true" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Start free trial</a>
                   </div>
                 </div>
               </div>
@@ -226,8 +226,11 @@ export default function GamblingPage() {
               <p className="mt-6 text-lg leading-8 text-gray-600">
                 Stay compliant across markets. Operate with confidence.
               </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6">
-                <a href="/contact" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 text-center transition-all hover:shadow-xl">Explore</a>
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
+                <a href="/contact?trial=true" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 text-center transition-all hover:shadow-xl">Start free trial</a>
+                <a href="/contact" className="text-base font-semibold text-gray-600 hover:text-gray-900 transition-colors">
+                  Book a demo <span aria-hidden="true">&rarr;</span>
+                </a>
               </div>
             </div>
           </div>
@@ -537,12 +540,12 @@ export default function GamblingPage() {
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
               Join leading gambling operators using XHS™ to stay ahead of regulatory changes across global markets.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a href="/contact" className="rounded-md bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
-                Book a demo
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
+              <a href="/contact?trial=true" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-all hover:shadow-xl">
+                Start free trial
               </a>
-              <a href="/pricing" className="text-sm font-semibold leading-6 text-white">
-                View pricing <span aria-hidden="true">→</span>
+              <a href="/contact" className="text-base font-semibold text-gray-300 hover:text-white transition-colors">
+                Book a demo <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
           </div>
