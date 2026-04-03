@@ -147,16 +147,21 @@ function CallToAction() {
   return (
     <div>
       <p className="max-w-sm text-sm/6 text-gray-600">
-        Join the best sellers in the business and start using Radiant to hit
-        your targets today.
+        See how teams use XHS\u2122 Copilot to stay ahead of regulatory change.
       </p>
-      <div className="mt-2">
+      <div className="mt-2 flex items-center gap-4">
         <Link
-          href="#"
-          className="inline-flex items-center gap-2 text-sm/6 font-medium text-pink-600"
+          href="/contact?trial=true"
+          className="inline-flex items-center gap-2 text-sm/6 font-medium text-blue-600"
         >
-          Get started
+          Start free trial
           <ArrowLongRightIcon className="size-5" />
+        </Link>
+        <Link
+          href="/contact"
+          className="text-sm/6 font-medium text-gray-500 hover:text-gray-700"
+        >
+          Book a demo
         </Link>
       </div>
     </div>
@@ -183,9 +188,9 @@ export function Testimonials() {
     <div className="overflow-hidden py-32">
       <Container>
         <div ref={setReferenceWindowRef}>
-          <Subheading>What everyone is saying</Subheading>
+          <Subheading>What our clients say</Subheading>
           <Heading as="h3" className="mt-2">
-            Trusted by professionals.
+            Trusted by compliance teams.
           </Heading>
         </div>
       </Container>
