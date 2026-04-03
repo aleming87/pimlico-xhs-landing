@@ -38,8 +38,8 @@ export default function Hero() {
             <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
-              Book a demo <span aria-hidden="true" className="ml-1">&rarr;</span>
+            <a href="/contact?trial=true" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
+              Start free trial <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -124,7 +124,7 @@ export default function Hero() {
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Book a demo
+                      Start free trial
                     </a>
                   </div>
                 </div>
@@ -147,11 +147,12 @@ export default function Hero() {
               <Image src="/XHS_Logo_White.png" alt="XHS" width={350} height={175} className="h-40 w-auto sm:h-44 lg:h-48" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-              AI-powered regulatory workspaces
+              Your AI compliance copilot.
             </h1>
-            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">Streamline <span className="text-blue-300">AI</span>{", "}<span className="text-blue-300">Payments</span>{", "}<span className="text-blue-300">Crypto</span>{" & "}<span className="text-blue-300">Gambling</span> compliance workflows.</p>
+            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">One intelligent workspace. 10,000+ regulatory sources. AI-powered tools to help your team monitor, research, and act on regulatory change across <span className="text-blue-300">AI</span>{", "}<span className="text-blue-300">Payments</span>{", "}<span className="text-blue-300">Crypto</span>{" & "}<span className="text-blue-300">Gambling</span>.</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
-              <a href="/contact" className="w-full sm:w-auto rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center transition-all hover:shadow-xl">Explore</a>
+              <a href="/contact?trial=true" className="w-full sm:w-auto rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center transition-all hover:shadow-xl">Start free trial</a>
+              <a href="/contact" className="text-base font-semibold text-gray-300 hover:text-white transition-colors">Book a demo <span aria-hidden="true">&rarr;</span></a>
             </div>
           </div>
         </div>
