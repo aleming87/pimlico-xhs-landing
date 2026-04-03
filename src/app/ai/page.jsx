@@ -198,7 +198,7 @@ export default function AIPage() {
               <p className="mt-6 text-lg leading-8 text-gray-600">
                 Stay ahead of regulations. Deploy with confidence.
               </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6">
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
                 <a href="/contact" className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-center transition-all hover:shadow-xl">Explore</a>
               </div>
             </div>
@@ -519,14 +519,17 @@ export default function AIPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Try <span className="text-blue-400">XHS™</span> Copilot Beta
+              Start your <span className="text-blue-400">14-day free trial</span>
             </h2>
             <p className="mt-6 text-lg text-gray-300">
-              Be first to experience AI regulatory intelligence workspaces
+              Transform how your team manages AI compliance with intelligent workspaces.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a href="/contact" className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                Try now
+              <a href="/contact?trial=true" className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                Start free trial
+              </a>
+              <a href="/contact" className="text-base font-semibold text-gray-300 hover:text-white transition-colors">
+                Book a demo <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
           </div>
