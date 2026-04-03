@@ -46,8 +46,8 @@ export default function Differentiators() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-20">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6 sm:text-4xl lg:text-5xl">
-            Turn noise into<br/>
-            <span className="text-blue-600">collaboration</span> for <span className="text-blue-600">growth</span>.
+            From regulatory change to<br/>
+            <span className="text-blue-600">team action</span> — in <span className="text-blue-600">minutes</span>.
           </h2>
         </div>
         
