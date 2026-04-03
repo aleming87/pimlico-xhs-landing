@@ -175,14 +175,20 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1">
             <div className="lg:pt-4">
               <div className="w-full mx-auto text-center">
-                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Sign up for a <span className="text-blue-400">14-day trial</span> today</h2>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">Start your <span className="text-blue-400">14-day free trial</span></h2>
                 <p className="mt-6 text-base text-gray-400 sm:text-lg/8">Transform how your team manages compliance with AI-powered workspaces built for regulated industries.</p>
-                <div className="mt-10 flex items-center justify-center">
+                <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
                   <a
-                    href="/contact"
+                    href="/contact?trial=true"
                     className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:shadow-xl"
                   >
-                    Get started
+                    Start free trial
+                  </a>
+                  <a
+                    href="/contact"
+                    className="text-base font-semibold text-gray-300 hover:text-white transition-colors"
+                  >
+                    Book a demo <span aria-hidden="true">&rarr;</span>
                   </a>
                 </div>
               </div>
@@ -249,7 +255,7 @@ export default function Page() {
               </div>
             </div>
             <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-              <p className="text-sm/6 text-gray-600">&copy; 2025 Pimlico Solutions Ltd. All rights reserved.</p>
+              <p className="text-sm/6 text-gray-600">&copy; 2026 Pimlico Solutions Ltd. All rights reserved.</p>
             </div>
           </div>
         </footer>
@@ -258,4 +264,4 @@ export default function Page() {
       <DatamapScripts />
     </>
   );
-}
+                    }
