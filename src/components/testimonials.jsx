@@ -18,44 +18,44 @@ import { Heading, Subheading } from './text'
 const testimonials = [
   {
     img: '/testimonials/tina-yards.jpg',
-    name: 'Tina Yards',
-    title: 'VP of Sales, Protocol',
+    name: 'Head of Compliance',
+    title: 'Global iGaming Operator',
     quote:
-      'Thanks to Radiant, we’re finding new leads that we never would have found with legal methods.',
+      'XHS™ Copilot transformed how we track regulatory changes across 15 jurisdictions. What used to take days now takes minutes.',
   },
   {
     img: '/testimonials/conor-neville.jpg',
-    name: 'Conor Neville',
-    title: 'Head of Customer Success, TaxPal',
+    name: 'Regulatory Affairs Director',
+    title: 'Tier 1 Payments Provider',
     quote:
-      'Radiant made undercutting all of our competitors an absolute breeze.',
+      'The AI-powered horizon scanning means we never miss a critical update. Indispensable to our compliance workflow.',
   },
   {
     img: '/testimonials/amy-chase.jpg',
-    name: 'Amy Chase',
-    title: 'Head of GTM, Pocket',
+    name: 'Chief Compliance Officer',
+    title: 'Digital Assets Exchange',
     quote:
-      'We closed a deal in literally a few minutes because we knew their exact budget.',
+      'We reduced our regulatory monitoring overhead by 70% while actually improving our coverage across markets.',
   },
   {
     img: '/testimonials/veronica-winton.jpg',
-    name: 'Veronica Winton',
-    title: 'CSO, Planeteria',
+    name: 'VP of Risk & Compliance',
+    title: 'International Bank',
     quote:
-      'We’ve managed to put two of our main competitors out of business in 6 months.',
+      'The workspace collaboration features mean our whole compliance team stays aligned on regulatory developments in real time.',
   },
   {
     img: '/testimonials/dillon-lenora.jpg',
-    name: 'Dillon Lenora',
-    title: 'VP of Sales, Detax',
-    quote: 'I was able to replace 80% of my team with RadiantAI bots.',
+    name: 'GRC Manager',
+    title: 'Fintech Scale-up',
+    quote: 'XHS™ Copilot delivers the right regulatory alerts to the right people via Slack. No noise, just signal.',
   },
   {
     img: '/testimonials/harriet-arron.jpg',
-    name: 'Harriet Arron',
-    title: 'Account Manager, Commit',
+    name: 'Senior Compliance Analyst',
+    title: 'Insurance Group',
     quote:
-      'I’ve smashed all my targets without having to speak to a lead in months.',
+      'AI-generated impact assessments for every regulatory change have completely transformed how we prioritise our compliance roadmap.',
   },
 ]
 
