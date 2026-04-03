@@ -143,8 +143,10 @@ export default function Hero() {
         </div>
         <div className="mx-auto max-w-4xl py-16 sm:py-24 lg:py-32">
           <div className="text-center">
-            <div className="mb-4 flex justify-center">
-              <Image src="/XHS_Logo_White.png" alt="XHS" width={350} height={175} className="h-40 w-auto sm:h-44 lg:h-48" />
+            <div className="mb-6 flex items-center justify-center gap-4 sm:gap-5">
+              <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={240} height={60} className="h-10 w-auto sm:h-12 lg:h-14" />
+              <div className="h-8 w-px bg-white/30 sm:h-10 lg:h-12" />
+              <Image src="/XHS_Logo_White.png" alt="XHS" width={200} height={80} className="h-10 w-auto sm:h-12 lg:h-14" />
             </div>
             <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
               Your AI compliance copilot.
