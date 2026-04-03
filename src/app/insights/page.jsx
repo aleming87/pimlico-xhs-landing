@@ -523,12 +523,18 @@ export default function InsightsPage() {
             <p className="mt-6 text-base text-gray-400 sm:text-lg/8">
               Transform how your team manages compliance with AI-powered workspaces built for regulated industries.
             </p>
-            <div className="mt-10 flex items-center justify-center">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
               <a
-                href="/contact"
+                href="/contact?trial=true"
                 className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:shadow-xl"
               >
-                Get started
+                Start free trial
+              </a>
+              <a
+                href="/contact"
+                className="text-base font-semibold text-gray-300 hover:text-white transition-colors"
+              >
+                Book a demo <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
           </div>
