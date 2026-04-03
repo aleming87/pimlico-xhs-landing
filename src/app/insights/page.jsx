@@ -192,8 +192,8 @@ export default function InsightsPage() {
             <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
-              Start your trial <span aria-hidden="true" className="ml-1">&rarr;</span>
+            <a href="/contact?trial=true" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
+              Start free trial <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -231,7 +231,7 @@ export default function InsightsPage() {
                     <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Pricing</a>
                   </div>
                   <div className="py-6">
-                    <a href="/contact" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Start your trial</a>
+                    <a href="/contact?trial=true" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Start free trial</a>
                   </div>
                 </div>
               </div>
@@ -518,7 +518,7 @@ export default function InsightsPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Sign up for a <span className="text-blue-400">14-day trial</span> today
+              Start your <span className="text-blue-400">14-day free trial</span>
             </h2>
             <p className="mt-6 text-base text-gray-400 sm:text-lg/8">
               Transform how your team manages compliance with AI-powered workspaces built for regulated industries.
