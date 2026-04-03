@@ -6,7 +6,7 @@ import MapSection from "@/components/MapSection";
 import { CookieConsent } from "@/components/CookieConsent";
 
 export const metadata = {
-  title: "Pimlico XHS™ - Regulatory AI workspaces",
+  title: "Pimlico XHSâ¢ - Regulatory AI workspaces",
   description: "AI-agentic monitoring, analysis & collaboration for regulated teams.",
 }
 
@@ -16,7 +16,7 @@ export default function Page() {
     "@type": "Organization",
     "name": "Pimlico XHS",
     "url": "https://pimlicosolutions.com",
-    "logo": "https://pimlicosolutions.com/XHS Logo BLUE on WHITE.png",
+    "logo": "https://pimlicosolutions.com/xhs-logo-blue.png",
     "description": "AI-native regulatory intelligence platform for compliance teams",
     "sameAs": [
       "https://www.linkedin.com/company/pimlico-solutions",
@@ -93,7 +93,7 @@ export default function Page() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div className="lg:ml-auto lg:pt-4 lg:pl-4">
               <div className="lg:max-w-lg">
-                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">XHS<sup className="text-3xl">™</sup> delivers <span className="text-blue-400">compliance success</span></p>
+                <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl md:text-6xl lg:text-7xl">XHS<sup className="text-3xl">â¢</sup> delivers <span className="text-blue-400">compliance success</span></p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-400 lg:max-w-none">
                   <div className="relative pl-9">
                     <dt className="inline font-semibold text-white">
@@ -204,7 +204,7 @@ export default function Page() {
               <div className="space-y-8">
                 <div className="flex items-center gap-4">
                   <img src="/Pimlico_Logo.png" alt="Pimlico" className="h-8" />
-                  <img src="/XHS Logo BLUE on WHITE.png" alt="XHS" className="h-8" />
+                  <img src="/xhs-logo-blue.png" alt="XHS" className="h-8" />
                 </div>
               </div>
               <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-1 xl:mt-0">
