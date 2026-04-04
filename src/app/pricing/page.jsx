@@ -129,7 +129,7 @@ export default function PricingPage() {
   const [quoteSubmitting, setQuoteSubmitting] = useState(false);
   const [quoteSent, setQuoteSent] = useState(false);
   const [selectedVerticals, setSelectedVerticals] = useState(["Gambling"]);
-  const [selectedRegions, setSelectedRegions] = useState(["global"]);
+  const [selectedRegions, setSelectedRegions] = useState(["europe"]);
   const [billing, setBilling] = useState("monthly");
 
   const toggleVertical = (v) => {
@@ -172,7 +172,10 @@ export default function PricingPage() {
               Transparent pricing. No surprises.
             </h1>
             <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mx-auto">
-              Configure your plan based on team size, verticals, and coverage. Start with a 14-day free trial.
+              Configure your plan based on team size, verticals, and coverage.
+            </p>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+              Start your 14-day free trial. No credit card required.
             </p>
           </div>
         </div>
@@ -258,7 +261,7 @@ export default function PricingPage() {
 
             {/* Price card */}
             <div className="lg:col-span-2">
-              <div className="sticky top-28 rounded-xl border border-[var(--color-border-default)]/40 bg-[var(--color-bg-surface)]/50 p-6">
+              <div className="lg:sticky lg:top-28 rounded-xl border border-[var(--color-border-default)]/40 bg-[var(--color-bg-surface)]/50 p-6">
                 {isEnterprise ? (
                   <>
                     <p className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">
@@ -436,13 +439,10 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { title: "Real-time monitoring", desc: "12,000+ regulatory sources tracked continuously. Changes detected, classified, and delivered as they happen." },
+              { title: "XHS\u2122 Copilot AI", desc: "500+ AI credits included. Source-grounded, cited answers powered by Claude, GPT, Gemini, Grok, and Perplexity. DeepL\u2122 translation across 30+ languages." },
               { title: "Jurisdiction reports", desc: "In-depth profiles for every monitored jurisdiction. Regulator directories, licensing requirements, and compliance obligations." },
-              { title: "XHS\u2122 Copilot AI", desc: "500+ AI credits included. Ask any regulatory question and get source-grounded, cited answers powered by Claude, GPT, Gemini, Grok, and Perplexity." },
-              { title: "Slack & Teams integration", desc: "Push regulatory updates directly into the channels where your team works. Real-time or daily digest." },
-              { title: "DeepL translation", desc: "Instant translation of regulatory documents across 30+ languages. Read any regulation in your preferred language." },
-              { title: "Watchlists & alerts", desc: "Custom monitoring feeds filtered by jurisdiction, topic, and regulatory stage. Email digests on your schedule." },
-              { title: "Workspace tools", desc: "Projects, Lens compliance analysis, blocklist management, competitor tracking, technical standards, and team collaboration." },
-              { title: "API access", desc: "Enterprise-grade APIs for integrating regulatory data directly into your existing compliance workflows and internal systems." },
+              { title: "Workspace tools", desc: "Projects, Lens\u2122 compliance analysis, Blocklists\u2122, Competitors\u2122, Technical Standards\u2122, and team collaboration." },
+              { title: "Integrations & alerts", desc: "Slack and Teams integration, email digests, watchlists, and API access. Regulatory updates delivered where your team works." },
               { title: "Unlimited users", desc: "No per-seat pricing on Team and Enterprise plans. Your entire compliance team gets access from day one." },
             ].map((f) => (
               <div key={f.title}>
