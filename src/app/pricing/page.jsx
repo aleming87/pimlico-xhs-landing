@@ -357,7 +357,7 @@ export default function PricingPage() {
                     </div>
 
                     <a
-                      href="https://xhsdata.ai/register"
+                      href={`https://xhsdata.ai/register?plan=${users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise"}&users=${users}&verticals=${encodeURIComponent(selectedVerticals.join(","))}&coverage=${encodeURIComponent(selectedRegions.join(","))}&billing=${billing}`}
                       className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90 mb-2"
                     >
                       Start free trial
