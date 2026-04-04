@@ -1,79 +1,76 @@
-import Image from "next/image";
+"use client";
+
+import { Reveal, StaggerGroup, StaggerItem } from "./motion";
 
 export default function Differentiators() {
   const items = [
-    { 
-      title: 'Monitor',
-      body: 'Regulatory AI agents deployed on 10,000+ regulator sources',
+    {
+      title: "Monitor",
+      body: "Deployed across 12,000+ regulatory sources. Real-time change detection across 250+ jurisdictions.",
       icon: (
-        <svg className="h-10 w-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      )
-    },
-    { 
-      title: 'Analyse',
-      body: 'LLM engines generate actionable insights for user-led projects',
-      icon: (
-        <svg className="h-10 w-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      )
-    },
-    { 
-      title: 'Collaborate',
-      body: 'Workspaces manage proprietary data for risk and compliance strategies',
-      icon: (
-        <svg className="h-10 w-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      )
-    },
-    { 
-      title: 'Integrate',
-      body: 'API access offers quick integration with work and GRC apps',
-      icon: (
-        <svg className="h-10 w-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
         </svg>
       ),
-      showLogos: true
+    },
+    {
+      title: "Analyse",
+      body: "Ask any regulatory question. Get source-grounded, cited answers from AI trained on your compliance context.",
+      icon: (
+        <svg className="h-9 w-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+      ),
+    },
+    {
+      title: "Collaborate",
+      body: "Workspaces for your team's proprietary compliance data. Projects, watchlists, and shared research tools.",
+      icon: (
+        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+        </svg>
+      ),
+    },
+    {
+      title: "Integrate",
+      body: "Enterprise APIs, Slack and Teams alerts, email digests. Compliance workflows that fit into yours.",
+      icon: (
+        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+        </svg>
+      ),
     },
   ];
 
   return (
-    <section id="differentiators" className="py-32 scroll-mt-24 bg-gray-50">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6 sm:text-4xl lg:text-5xl">
-            From regulatory change to<br/>
-            <span className="text-blue-600">team action</span> — in <span className="text-blue-600">minutes</span>.
+    <section id="differentiators" className="py-24 sm:py-32 scroll-mt-24">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <Reveal className="mb-16">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ HOW IT WORKS ]
+          </p>
+          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl leading-[1.1]">
+            From regulatory change{" "}<br className="hidden sm:block" />to team action.
           </h2>
-        </div>
-        
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ title, body, icon, showLogos }) => (
-            <div key={title} className="rounded-3xl border-2 border-slate-200 bg-white p-8 hover:shadow-lg hover:border-blue-200 transition-all duration-300">
-              <div className="mb-6">
-                {icon}
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
-              <p className="text-slate-600 text-base leading-relaxed mb-6">{body}</p>
-              
-              {showLogos && (
-                <div className="mt-6 pt-4 border-t border-gray-100">
-                  <Image 
-                    src="/Logo_Strip.png" 
-                    alt="Integration partners" 
-                    width={200} 
-                    height={40} 
-                    className="w-full h-auto"
-                  />
+        </Reveal>
+
+        <StaggerGroup className="grid gap-px sm:grid-cols-2 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden" stagger={0.12}>
+          {items.map(({ title, body, icon }) => (
+            <StaggerItem key={title}>
+              <div className="bg-[var(--color-bg-base)] p-6 sm:p-10 group h-full">
+                <div className="mb-5 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)] transition-colors">
+                  {icon}
                 </div>
-              )}
-            </div>
+                <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
+                  {title}
+                </h3>
+                <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed">
+                  {body}
+                </p>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       </div>
     </section>
   );

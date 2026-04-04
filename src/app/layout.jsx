@@ -2,6 +2,8 @@
 // Vercel Analytics removed — using Cloudflare Analytics instead
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import { CookieConsent } from '@/components/CookieConsent'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 
 export const metadata = {
   title: {
@@ -65,10 +67,16 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
           href="https://api.fontshare.com/css?f%5B%5D=switzer@400,500,600,700&amp;display=swap"
         />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        />
       </head>
-      <body className="text-gray-950 antialiased">
+      <body className="text-[var(--color-text-dark)] antialiased">
         <CurrencyProvider>
+          <SiteHeader />
           {children}
+          <SiteFooter />
         </CurrencyProvider>
         <CookieConsent />
         {/* Cloudflare Web Analytics loaded via dashboard */}

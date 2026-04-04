@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -374,21 +373,9 @@ export default function SurveyPage() {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen">
-      {/* Navigation */}
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-          <div className="flex lg:flex-1">
-            <a href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Pimlico XHS</span>
-              <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
-            </a>
-          </div>
-        </nav>
-      </header>
-
+    <div className="bg-[var(--color-bg-base)] min-h-screen">
       {/* Survey Form */}
-      <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
+      <div className="isolate px-6 pt-24 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
             <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">

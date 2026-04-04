@@ -10,26 +10,26 @@ export const metadata = {
 
 export default function TermsAndConditions() {
   return (
-    <div className="bg-white px-6 py-32 lg:px-8">
-      <div className="mx-auto max-w-4xl text-base leading-7 text-gray-700">
+    <div className="bg-[var(--color-bg-base)] px-6 pt-24 py-32 lg:px-8">
+      <div className="mx-auto max-w-4xl text-base leading-7 text-[var(--color-text-tertiary)]">
         <div className="mb-8">
-          <a href="/" className="text-sm text-blue-600 hover:text-blue-500">
+          <a href="/" className="text-sm text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)]/80">
             ← Back to home
           </a>
         </div>
         
-        <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+        <h1 className="mt-2 text-4xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-5xl">
           Terms and Conditions
         </h1>
         
-        <p className="mt-6 text-lg font-semibold text-gray-900">
+        <p className="mt-6 text-lg font-semibold text-[var(--color-text-primary)]">
           Effective date: December 1, 2025
         </p>
-        <p className="mt-2 text-base text-gray-600">
+        <p className="mt-2 text-base text-[var(--color-text-tertiary)]">
           Last updated: December 8, 2025
         </p>
 
-        <div className="mt-10 space-y-8 text-gray-700">
+        <div className="mt-10 space-y-8 text-[var(--color-text-tertiary)]">
           <p>
             These terms and conditions (the <strong>"Terms"</strong>) govern access to and use of the Pimlico XHS™ software-as-a-service platform, any related websites, APIs and interfaces, and any content, reports and deliverables made available through them (together, the <strong>"XHS™ Service"</strong>).
           </p>
@@ -46,11 +46,11 @@ export default function TermsAndConditions() {
             Any terms or conditions you send to us (including on a purchase order, in a vendor portal or via email) are expressly rejected and shall have no effect unless expressly agreed in writing and signed by Pimlico.
           </p>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 1 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">1. Definitions</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">1. Definitions</h2>
             <p className="mb-4">In these Terms:</p>
             <ul className="space-y-3 ml-6">
               <li><strong>"Affiliate"</strong> means any entity that directly or indirectly controls, is controlled by, or is under common control with a party, where "control" means ownership of more than 50% of the voting interests.</li>
@@ -78,23 +78,23 @@ export default function TermsAndConditions() {
             </ul>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 2 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">2. Scope of services</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">2. Scope of services</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.1 Nature of the XHS™ Copilot</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">2.1 Nature of the XHS™ Copilot</h3>
             <p>
               XHS™ is a subscription-based platform providing regulatory and market intelligence, workflow tools and analytical functionality. The precise modules, features, usage limits and Authorised User numbers purchased by Customer are set out in the applicable Order Form or Online Order and any accompanying service description.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.2 Access methods</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">2.2 Access methods</h3>
             <p>
               Customer may access the XHS™ Copilot via web interfaces, APIs, agents, integrations or other methods described in the Documentation.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.3 AI features in the XHS™ Service</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">2.3 AI features in the XHS™ Service</h3>
             <p>
               Customer acknowledges that the XHS™ Service (including any XHS™ Copilot features) uses artificial intelligence and related techniques to assist with searching, analysing and presenting information. While Pimlico aims to provide high-quality outputs, the XHS™ Service is intended as a decision-support tool and does not replace Customer's own judgement or the need for independent professional advice.
             </p>
@@ -102,14 +102,14 @@ export default function TermsAndConditions() {
               The Materials and outputs of the XHS™ Service are provided for general information only and do not constitute legal, financial, regulatory, tax or other professional advice. Customer remains responsible for assessing whether any output is appropriate for its purposes, and for verifying information that is important to its business before relying on it or acting on it.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.4 Support and service levels</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">2.4 Support and service levels</h3>
             <p>Unless expressly stated otherwise in an Order Form:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>Pimlico will provide reasonable remote support during normal business hours for issues relating to the XHS™ Copilot; and</li>
               <li>any uptime, response-time or service credit commitments will be as expressly set out in the Order Form or a separate service level agreement (if any). Any service credits specified in such documents shall be Customer's sole and exclusive remedy for service availability or performance issues.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">2.5 Beta programme and General Release</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">2.5 Beta programme and General Release</h3>
             <p>Where Customer is a Beta Customer:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>during the Beta Period, Pimlico will make the relevant XHS™ Copilot functionality available on a beta, pilot or early-access basis and may change, suspend or withdraw such functionality at any time;</li>
@@ -121,18 +121,18 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 3 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">3. Eligibility, authority and customer responsibilities</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">3. Eligibility, authority and customer responsibilities</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.1 Business use only</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.1 Business use only</h3>
             <p>
               Customer warrants that it is entering into these Terms in the course of its trade, business or profession and not as a consumer, and that it is acquiring the XHS™ Service solely for business and not for private or domestic use.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.2 Authority and internal approvals</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.2 Authority and internal approvals</h3>
             <p>Customer represents and warrants that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>the individual accepting these Terms or signing the relevant Order Form has full authority to bind Customer to the Contract;</li>
@@ -140,7 +140,7 @@ export default function TermsAndConditions() {
               <li>entering into and performing the Contract will not cause Customer to breach any other agreement or obligation to which it is subject.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.3 Customer information and contacts</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.3 Customer information and contacts</h3>
             <p className="mb-3">
               Customer warrants that all information it provides to Pimlico (including in any Order Form, Online Order, vendor set-up process or subsequent update) is true, accurate and complete, and will promptly update such information if it changes. This includes, without limitation:
             </p>
@@ -153,14 +153,14 @@ export default function TermsAndConditions() {
               Customer is responsible for ensuring that its nominated contacts have the necessary authority to give instructions to Pimlico in relation to the Services.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.4 Compliance with laws and internal policies</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.4 Compliance with laws and internal policies</h3>
             <p>Customer is responsible for:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>complying with all applicable laws, rules and regulations in connection with its access to and use of the XHS™ Service and Materials, including any sector-specific rules that apply to its business (for example, financial services, gambling, payments, data protection or competition laws); and</li>
               <li>determining how the XHS™ Service fits within its own internal policies, controls and governance frameworks (including, where relevant, model risk, operational resilience and outsourcing policies), and for configuring its use of the XHS™ Service accordingly.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.5 Responsibility for accounts and Authorised Users</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.5 Responsibility for accounts and Authorised Users</h3>
             <p>Customer is responsible for:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>all activities occurring under its accounts, whether by Authorised Users or otherwise, and whether such use is authorised by Customer or not;</li>
@@ -171,33 +171,33 @@ export default function TermsAndConditions() {
               Customer shall promptly notify Pimlico if it becomes aware of any unauthorised access to the XHS™ Service, misuse of credentials or other security incident relating to its accounts.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.6 Third-party users</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.6 Third-party users</h3>
             <p>
               If Customer permits contractors, advisers or other third parties to act as Authorised Users, Customer remains responsible for their acts and omissions as if they were Customer's own employees and shall ensure that any such third parties use the XHS™ Service only for Customer's internal business purposes and in accordance with these Terms.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 4 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">4. Orders, formation of Contract and priority</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">4. Orders, formation of Contract and priority</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.1 Orders</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.1 Orders</h3>
             <p>Services may be ordered:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>by signing an Order Form provided by Pimlico; or</li>
               <li>by completing an Online Order.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.2 Offer and acceptance</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.2 Offer and acceptance</h3>
             <ul className="list-disc ml-6 space-y-2">
               <li>Submission of a signed Order Form by Customer constitutes an offer to purchase the Services on these Terms (together with any terms in the Order Form that supplement, but do not conflict with, these Terms).</li>
               <li>Completion of an Online Order and payment of the relevant fees constitutes an offer to purchase the Services on these Terms and any plan-specific details presented at checkout.</li>
               <li>The Contract between Pimlico and Customer is formed when Pimlico issues written confirmation (including by email or through the XHS™ Service interface) or enables Customer's access to the XHS™ Service (whichever is earlier).</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.3 Priority of documents</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.3 Priority of documents</h3>
             <p>In case of conflict or inconsistency, the following order of precedence applies:</p>
             <ol className="list-decimal ml-6 mt-3 space-y-2">
               <li>the Order Form (including any specific service descriptions or SLAs therein);</li>
@@ -207,24 +207,24 @@ export default function TermsAndConditions() {
               <li>any other document.</li>
             </ol>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.4 Visitors</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.4 Visitors</h3>
             <p>
               Where Customer or its personnel access any public portion of the Website without an Order Form or Online Order, a Contract is formed when they first access or use those sites, and these Terms apply (mutatis mutandis) to that use.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 5 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">5. Access, accounts and security</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">5. Access, accounts and security</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.1 Account creation</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.1 Account creation</h3>
             <p>
               Once the Contract is formed, Pimlico will issue login credentials for the agreed number and type of Authorised Users or provide access keys for API-based use of the XHS™ Service.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.2 Customer responsibilities</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.2 Customer responsibilities</h3>
             <p>Customer shall:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>ensure that each username and password is used only by a single individual Authorised User;</li>
@@ -233,24 +233,24 @@ export default function TermsAndConditions() {
               <li>maintain appropriate security, backup and virus-protection measures in relation to its own systems and devices.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.3 Unauthorised access</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.3 Unauthorised access</h3>
             <p>
               Pimlico is not liable for any loss or damage arising from unauthorised access to the XHS™ Service resulting from Customer's or its Authorised Users' failure to safeguard credentials.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.4 Connectivity and equipment</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.4 Connectivity and equipment</h3>
             <p>
               Customer is solely responsible for procuring and maintaining network connections, hardware, software, browsers and other equipment necessary for accessing the Services. Pimlico is not responsible for any failure to access the Services caused by Customer's systems, connectivity or third-party providers.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 6 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">6. Licence grants and use restrictions</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">6. Licence grants and use restrictions</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">6.1 Licence to use the XHS™ Service and Materials</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">6.1 Licence to use the XHS™ Service and Materials</h3>
             <p>
               Subject to timely payment of all applicable fees and compliance with the Contract, Pimlico grants to Customer, for the Subscription Term, a non-exclusive, non-transferable, non-sublicensable, limited licence to:
             </p>
@@ -262,7 +262,7 @@ export default function TermsAndConditions() {
               Unless expressly stated in the Order Form, Customer's licence is limited to internal business use and does not permit resale, onward provision as a service, or redistribution of Materials to third parties.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">6.2 Permitted internal use of Materials</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">6.2 Permitted internal use of Materials</h3>
             <p>Each Authorised User may, for Customer's internal business purposes:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>display Materials on screen;</li>
@@ -273,7 +273,7 @@ export default function TermsAndConditions() {
               provided that Customer maintains all notices of Pimlico's and third parties' rights and complies with the restrictions in clause 6.3.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">6.3 Restrictions</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">6.3 Restrictions</h3>
             <p className="mb-3">
               Customer shall not (and shall ensure that Authorised Users do not), except to the extent expressly permitted by law and not capable of exclusion by agreement:
             </p>
@@ -294,13 +294,13 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 7 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">7. Customer obligations and Customer Data</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">7. Customer obligations and Customer Data</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">7.1 Customer obligations</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">7.1 Customer obligations</h3>
             <p>Customer shall:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>use the XHS™ Service and Materials only in accordance with these Terms, the Documentation and applicable laws;</li>
@@ -310,12 +310,12 @@ export default function TermsAndConditions() {
               <li>ensure that it has obtained all necessary rights, licences and consents (including from data subjects) to upload, process and use Customer Data in connection with the Services.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">7.2 Ownership of Customer Data</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">7.2 Ownership of Customer Data</h3>
             <p>
               As between the parties, Customer retains all rights, title and interest (including IPR) in and to Customer Data. Pimlico acquires no rights to Customer Data except as expressly granted in these Terms.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">7.3 Licence to Customer Data</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">7.3 Licence to Customer Data</h3>
             <p>Customer grants Pimlico a non-exclusive, worldwide, royalty-free licence to host, copy, process, transmit and otherwise use Customer Data:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>to provide, support and maintain the XHS™ Service and related Services;</li>
@@ -323,24 +323,24 @@ export default function TermsAndConditions() {
               <li>as otherwise documented in the Contract or instructed by Customer.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">7.4 Aggregated and anonymised data</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">7.4 Aggregated and anonymised data</h3>
             <p>
               Pimlico may collect and use (during and after the Subscription Term) aggregated and anonymised data derived from Customer's use of the Services, provided that such data does not identify Customer or any individual. Pimlico may use such data to operate, analyse, improve and develop the XHS™ Service and its business, and may publish high-level statistical information that does not identify Customer.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">7.5 Responsibility for Customer Data</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">7.5 Responsibility for Customer Data</h3>
             <p>
               Customer is solely responsible for the accuracy, quality, legality and appropriateness of Customer Data and for how it uses the outputs of the XHS™ Service. Pimlico has no obligation to monitor Customer Data but may remove or disable access to Customer Data that it reasonably believes to be unlawful, in breach of these Terms or otherwise likely to give rise to liability.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 8 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">8. Fees, billing and payment</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">8. Fees, billing and payment</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.1 Fees</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.1 Fees</h3>
             <p>Fees for the Services are set out in the Order Form, Online Order or applicable plan description and, unless stated otherwise, are:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>exclusive of VAT and any other applicable taxes, which shall be added at the appropriate rate; and</li>
@@ -350,7 +350,7 @@ export default function TermsAndConditions() {
               Where Customer exceeds any agreed usage parameters or AI Credit Allowance, Pimlico may charge additional fees at the overage rates set out in the Order Form or otherwise notified to Customer.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.2 Subscription commitment and auto-renewal</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.2 Subscription commitment and auto-renewal</h3>
             <p>Unless the Order Form states otherwise:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>each Subscription Term is twelve (12) months, or such other period expressly stated in the Order Form;</li>
@@ -358,7 +358,7 @@ export default function TermsAndConditions() {
               <li>at the end of each Subscription Term, the subscription will automatically renew for a further Subscription Term of the same length (twelve months or the alternative period stated in the Order Form), unless either party gives notice in accordance with clause 9.1.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.3 Payment method and timing (card, monthly)</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.3 Payment method and timing (card, monthly)</h3>
             <p>Unless the Order Form expressly states different billing terms:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>fees for each Subscription Term are payable in equal monthly instalments in advance, calculated by dividing the total subscription or base fees for the Subscription Term by the number of months in that term;</li>
@@ -367,7 +367,7 @@ export default function TermsAndConditions() {
               <li>by providing card details, the Customer represents that it is authorised to use the relevant card and authorises Pimlico and its third-party payment processors to charge all amounts due under the Contract on a recurring basis using that card (or any replacement card the Customer later provides).</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.4 AI Credit charging model</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.4 AI Credit charging model</h3>
             <p>AI Credits are used to measure Customer's usage of AI-powered functionality within the XHS™ Copilot. Unless the Order Form states otherwise:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>an AI Credit Allowance for a given period (for example, per month) will be set out in the Order Form or applicable plan description;</li>
@@ -384,14 +384,14 @@ export default function TermsAndConditions() {
               From the earlier of (a) the end of the Beta Period or (b) the applicable General Release date notified by Pimlico, AI Credit Usage Fees and overage charges will become payable in accordance with the Order Form and this clause 8.4.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.5 Changes during the Subscription Term</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.5 Changes during the Subscription Term</h3>
             <p>If the Customer upgrades its plan, adds modules or increases the number of Authorised Users or other billable units during a Subscription Term, Pimlico may:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>increase the monthly instalments for the remainder of that Subscription Term to reflect the new scope; and</li>
               <li>where applicable, charge a pro-rated amount for the period from the date of the change to the next billing date.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.6 Card failures and alternative payment</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.6 Card failures and alternative payment</h3>
             <p>The Customer must ensure that its payment card details remain valid and that sufficient funds are available. If a card payment fails:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>Pimlico may notify the Customer and request updated payment details;</li>
@@ -402,36 +402,36 @@ export default function TermsAndConditions() {
               Pimlico may, at its discretion, agree to accept payment by invoice and bank transfer for some or all fees, in which case the due date for such invoice(s) shall be as stated on the invoice and interest may accrue under clause 8.7.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.7 Late payment and interest</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.7 Late payment and interest</h3>
             <p>Without prejudice to Pimlico's other rights:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>Pimlico may charge interest on any overdue amount that is not collected by card on the due date at the rate of 5% per annum above the Bank of England base rate, accruing daily from the due date until payment is received in full; and</li>
               <li>Pimlico may suspend access to the Services under clause 8.6 and/or clause 9.5 where undisputed amounts remain unpaid.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.8 Taxes</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.8 Taxes</h3>
             <p>
               The Customer is responsible for all applicable taxes arising out of the Contract, other than Pimlico's own corporation tax. If any withholding or deduction is required by law, the Customer shall increase the amount it pays such that Pimlico receives the full amount it would have received had no withholding or deduction been required.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.9 Price changes and renewals</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.9 Price changes and renewals</h3>
             <p>
               Pimlico may adjust pricing, including subscription or base fees, AI Credit Allowances and AI Credit Usage Fees, for any renewal Subscription Term by notifying the Customer in writing at least 60 days prior to the end of the then-current Subscription Term. If the Customer does not wish to renew at the updated price, it may choose not to renew in accordance with clause 9.1.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">8.10 Non-payment and refunds</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">8.10 Non-payment and refunds</h3>
             <p>
               Pimlico reserves the right to deny or suspend access to any Services for which fees and applicable taxes have not been received in cleared funds. Except as expressly stated in these Terms or the Order Form, all fees are non-cancellable and non-refundable, irrespective of actual usage.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 9 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">9. Term, renewal and termination</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">9. Term, renewal and termination</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.1 Subscription Term and non-renewal</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">9.1 Subscription Term and non-renewal</h3>
             <p>
               The Subscription Term is as stated in the Order Form or Online Order. If no period is stated, the Subscription Term is twelve (12) months from the date the Customer signs the relevant Order Form or completes the Online Order (as applicable).
             </p>
@@ -439,24 +439,24 @@ export default function TermsAndConditions() {
               At the end of each Subscription Term, the subscription will automatically renew for a further Subscription Term of the same length, unless either party gives the other at least 30 days' written notice of non-renewal before the end of the then-current Subscription Term.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.2 Termination for convenience (where allowed)</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">9.2 Termination for convenience (where allowed)</h3>
             <p>
               Where expressly stated in the Order Form or applicable plan, Customer may terminate a month-to-month or other flexible plan by giving Pimlico at least 30 days' written notice, effective at the end of the then-current billing period. Pre-paid annual or multi-year subscriptions are otherwise non-cancellable except as provided in clauses 9.4 or 10.6.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.3 Termination for breach or insolvency</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">9.3 Termination for breach or insolvency</h3>
             <p>Either party may terminate the Contract by written notice if the other party:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>commits a material breach of the Contract and fails to remedy it within 30 days of receiving written notice describing the breach; or</li>
               <li>becomes insolvent, enters into administration or liquidation (other than for a bona fide solvent restructuring), or suffers any analogous event under the laws of its jurisdiction.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.4 Termination by Customer for materially detrimental changes</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">9.4 Termination by Customer for materially detrimental changes</h3>
             <p>
               If Pimlico makes a change to the Services or these Terms that materially and adversely affects Customer's permitted use of the Services, Customer may terminate the Contract by giving written notice before the change takes effect. If Customer terminates under this clause 9.4, Pimlico will refund a pro-rata portion of any pre-paid fees for the unused remainder of the Subscription Term. This is Customer's sole and exclusive remedy for such changes.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.5 Termination or suspension for misuse</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">9.5 Termination or suspension for misuse</h3>
             <p>Pimlico may suspend or terminate access to the Services immediately on written notice if it reasonably believes that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>the Services are being misused, used fraudulently or unlawfully;</li>
@@ -464,7 +464,7 @@ export default function TermsAndConditions() {
               <li>there is any other material breach of these Terms that justifies immediate suspension to protect the Services, other customers or third parties.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">9.6 Effect of termination</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">9.6 Effect of termination</h3>
             <p>On expiry or termination of the Contract for any reason:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>all rights to access and use the Services and Materials (other than Materials already lawfully downloaded and retained for internal records) shall cease;</li>
@@ -474,13 +474,13 @@ export default function TermsAndConditions() {
             </ul>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 10 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">10. Intellectual property</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">10. Intellectual property</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">10.1 Pimlico IPR</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">10.1 Pimlico IPR</h3>
             <p>Pimlico and its licensors own all right, title and interest (including IPR) in and to:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>the XHS™ Service, Documentation and underlying software;</li>
@@ -491,22 +491,22 @@ export default function TermsAndConditions() {
               in each case excluding Customer Data. No ownership rights are transferred to Customer under these Terms; only the limited licences set out herein are granted.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">10.2 Customer IPR</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">10.2 Customer IPR</h3>
             <p>
               Customer retains ownership of all IPR in Customer Data and any items supplied by Customer to Pimlico. Customer grants Pimlico the licences described in clause 7.3.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">10.3 Use of Pimlico marks</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">10.3 Use of Pimlico marks</h3>
             <p>
               Customer shall not use any Pimlico trade marks, logos or branding except as expressly permitted in writing by Pimlico.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">10.4 Feedback</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">10.4 Feedback</h3>
             <p>
               If Customer or its Authorised Users provide feedback, ideas or suggestions regarding the XHS™ Service or any other Services (Feedback), Pimlico may use such Feedback without restriction and without obligation to Customer. Customer assigns (or shall procure assignment of) all rights in Feedback to Pimlico to the fullest extent permitted by law.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">10.5 IPR indemnity</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">10.5 IPR indemnity</h3>
             <p>
               Pimlico shall defend Customer against any claim by a third party that Customer's authorised use of the XHS™ Service or standard Materials in accordance with these Terms infringes that third party's IPR in the United Kingdom, and shall pay any damages, costs and expenses finally awarded against Customer by a court of competent jurisdiction or agreed in settlement, provided that Customer:
             </p>
@@ -516,7 +516,7 @@ export default function TermsAndConditions() {
               <li>provides all reasonable co-operation at Pimlico's expense.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">10.6 IPR indemnity exceptions and remedies</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">10.6 IPR indemnity exceptions and remedies</h3>
             <p>Pimlico shall have no liability under clause 10.5 to the extent the claim arises from:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>Customer Data;</li>
@@ -535,18 +535,18 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 11 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">11. Confidentiality</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">11. Confidentiality</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.1 Confidential Information</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">11.1 Confidential Information</h3>
             <p>
               "Confidential Information" means all information disclosed by or on behalf of one party (Disclosing Party) to the other party (Receiving Party) in connection with the Contract that is either marked or identified as confidential or that would reasonably be understood to be confidential given the nature of the information and circumstances of disclosure. Pimlico's Confidential Information includes the Services, Materials, Documentation, pricing and any non-public technical or business information. Customer's Confidential Information includes Customer Data that is not publicly available.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.2 Obligations</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">11.2 Obligations</h3>
             <p>The Receiving Party shall:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>use the Disclosing Party's Confidential Information only for the purposes of performing or receiving the Services under the Contract;</li>
@@ -554,7 +554,7 @@ export default function TermsAndConditions() {
               <li>protect the Confidential Information using at least the same degree of care it uses to protect its own similar information, and in any event not less than reasonable care.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.3 Exceptions</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">11.3 Exceptions</h3>
             <p>The obligations in clause 11.2 do not apply to information that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>is or becomes public through no fault of the Receiving Party;</li>
@@ -563,39 +563,39 @@ export default function TermsAndConditions() {
               <li>is independently developed by the Receiving Party without use of or reference to the Disclosing Party's Confidential Information.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.4 Required disclosure</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">11.4 Required disclosure</h3>
             <p>
               The Receiving Party may disclose Confidential Information if required by law, court order or regulatory authority, provided it (where lawful to do so) gives the Disclosing Party reasonable advance notice and co-operates (at the Disclosing Party's expense) in any effort to resist or limit such disclosure.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">11.5 Equitable relief</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">11.5 Equitable relief</h3>
             <p>
               Unauthorised disclosure or use of Confidential Information may cause irreparable harm. Without prejudice to any other rights or remedies, the Disclosing Party is entitled to seek injunctive or other equitable relief for any breach of this clause 11.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 12 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">12. Data protection, privacy and security</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">12. Data protection, privacy and security</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.1 Roles</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">12.1 Roles</h3>
             <p>
               The parties acknowledge that, in providing the XHS™ Service, Pimlico may process personal data on behalf of Customer. Where Pimlico acts as a processor and Customer as controller (as defined in the UK General Data Protection Regulation and the Data Protection Act 2018), the parties shall comply with their respective obligations under applicable data protection laws, and Pimlico shall process personal data only on Customer's documented instructions (unless required otherwise by applicable law).
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.2 Data Processing Addendum</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">12.2 Data Processing Addendum</h3>
             <p>
               Where Pimlico processes personal data as a processor on behalf of Customer, the parties agree that the Data Processing Addendum in Schedule 2 (Data Processing Addendum) applies and forms part of the Contract. In the event of any conflict between these Terms and the Data Processing Addendum in relation to the processing of personal data, the Data Processing Addendum shall prevail.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.3 Privacy Policy</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">12.3 Privacy Policy</h3>
             <p>
               Any personal data provided to Pimlico (including contact details for Authorised Users and Customer representatives) will be handled in accordance with Pimlico's Privacy Policy as updated from time to time and accessible via the XHS™ website. The Privacy Policy describes, among other things, how Pimlico collects and uses personal data as an independent controller for its own business purposes (for example, billing, account management and product improvement).
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.4 Information security</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">12.4 Information security</h3>
             <p className="mb-4">
               Pimlico will implement and maintain appropriate technical and organisational measures to protect Customer Data against unauthorised or unlawful processing and against accidental loss, destruction or damage, having regard to the nature of the Services, the information to be protected and the state of technological development.
             </p>
@@ -608,7 +608,7 @@ export default function TermsAndConditions() {
               Customer remains responsible for securing its own networks, devices and systems used to access the XHS™ Service, and for configuring the XHS™ Service and managing Authorised Users and permissions in accordance with its own security, governance and access-control policies.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.5 Use of Customer Data for AI, logging and analytics</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">12.5 Use of Customer Data for AI, logging and analytics</h3>
             <p className="mb-3">Pimlico may use Customer Data:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
               <li>to provide, operate, support and improve the XHS™ Service for Customer (including troubleshooting, monitoring, capacity planning and performance optimisation); and</li>
@@ -625,7 +625,7 @@ export default function TermsAndConditions() {
               The XHS™ Service may record logs, prompts and interaction data for security, audit, troubleshooting and product improvement purposes. Pimlico will retain such data for no longer than is necessary for those purposes, subject to any longer retention required by law.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">12.6 Security incidents and personal data breaches</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">12.6 Security incidents and personal data breaches</h3>
             <p className="mb-3">
               If Pimlico becomes aware of a personal data breach affecting Customer Data (as defined in applicable data protection laws), Pimlico shall:
             </p>
@@ -638,30 +638,30 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 13 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">13. Warranties and disclaimers</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">13. Warranties and disclaimers</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.1 Mutual warranties</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">13.1 Mutual warranties</h3>
             <p>Each party warrants that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>it has full power and authority to enter into and perform the Contract; and</li>
               <li>entering into and performing the Contract will not cause it to breach any other agreement or legal obligation.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.2 Service warranty</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">13.2 Service warranty</h3>
             <p>
               Pimlico will provide the Services with reasonable skill and care and in material accordance with the Documentation.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.3 Beta or trial features</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">13.3 Beta or trial features</h3>
             <p>
               From time to time, Pimlico may make preview, beta or trial features or modules of the XHS™ Copilot (including AI-powered functionality measured in AI Credits) available. Such features are provided "as is" without warranty, may be changed, suspended or withdrawn at any time and are not subject to any service level or support commitments. For Beta Customers, the Beta Period and any waiver of AI Credit Usage Fees are as described in clauses 1 and 8.4. All other Terms continue to apply in full during any beta, pilot or early-access use.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.4 Exclusions</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">13.4 Exclusions</h3>
             <p>Except as expressly stated in these Terms, and to the fullest extent permitted by law:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>the Services and Materials are provided "as is";</li>
@@ -670,7 +670,7 @@ export default function TermsAndConditions() {
               <li>all warranties, terms and conditions implied by statute, common law or otherwise (including implied warranties of satisfactory quality, fitness for a particular purpose and non-infringement) are excluded.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.5 Customer warranties</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">13.5 Customer warranties</h3>
             <p>Customer warrants that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>it has and will maintain all rights, licences and consents necessary to provide Customer Data and to use the Services;</li>
@@ -678,7 +678,7 @@ export default function TermsAndConditions() {
               <li>it will use reasonable professional standards in relying on and applying outputs from the XHS™ Service, and will not treat any Materials as a substitute for independent professional advice.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">13.6 AI-specific disclaimers</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">13.6 AI-specific disclaimers</h3>
             <p>Customer acknowledges and agrees that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>the XHS™ Service uses artificial intelligence and machine learning models, which by their nature may generate outputs that are incorrect, incomplete, biased, offensive or otherwise unsuitable;</li>
@@ -691,13 +691,13 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 14 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">14. Indemnities</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">14. Indemnities</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">14.1 Customer indemnity</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">14.1 Customer indemnity</h3>
             <p>
               Customer shall indemnify and keep indemnified Pimlico from and against all losses, damages, costs (including reasonable legal fees) and expenses arising out of any third-party claim relating to:
             </p>
@@ -707,7 +707,7 @@ export default function TermsAndConditions() {
               <li>any combination of the Services with third-party products or services not supplied or authorised by Pimlico that gives rise to the claim.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">14.2 Procedure</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">14.2 Procedure</h3>
             <p>Pimlico shall:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>promptly notify Customer of any claim for which it seeks indemnity;</li>
@@ -716,13 +716,13 @@ export default function TermsAndConditions() {
             </ul>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 15 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">15. Limitation of liability</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">15. Limitation of liability</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">15.1 Non-excludable liability</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">15.1 Non-excludable liability</h3>
             <p>Nothing in these Terms limits or excludes either party's liability for:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>death or personal injury caused by negligence;</li>
@@ -730,7 +730,7 @@ export default function TermsAndConditions() {
               <li>any other liability that cannot be excluded or limited under applicable law.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">15.2 Excluded types of loss</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">15.2 Excluded types of loss</h3>
             <p>
               Subject to clause 15.1, neither party shall be liable to the other (whether in contract, tort, negligence, misrepresentation, restitution or otherwise) for:
             </p>
@@ -743,103 +743,103 @@ export default function TermsAndConditions() {
             </ul>
             <p className="mt-3">in each case arising out of or in connection with the Contract, even if foreseeable.</p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">15.3 Overall cap</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">15.3 Overall cap</h3>
             <p>
               Subject to clauses 15.1 and 15.2, Pimlico's total aggregate liability to Customer arising out of or in connection with the Contract (whether in contract, tort, negligence, misrepresentation, restitution or otherwise) in any 12-month period shall be limited to the total fees paid by Customer to Pimlico under the Contract in that 12-month period.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">15.4 Customer responsibility</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">15.4 Customer responsibility</h3>
             <p>Customer acknowledges that:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>it is solely responsible for how it interprets and applies the Materials and outputs of the XHS™ Service; and</li>
               <li>it must not rely on the XHS™ Service as the sole basis for regulatory, legal or strategic decision-making.</li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">15.5 Service levels</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">15.5 Service levels</h3>
             <p>
               Customer's sole and exclusive remedy (and Pimlico's entire liability) in respect of any failure to meet the service levels or availability targets described in Schedule 1 (Service Level Agreement) is the award of any applicable service credits in accordance with that Schedule, in each case subject to the exclusions and procedures set out therein and to the overall limitations in this clause 15.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 16 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">16. Service changes, maintenance and updates</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">16. Service changes, maintenance and updates</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">16.1 Service changes</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">16.1 Service changes</h3>
             <p>
               Pimlico may improve, update or modify the XHS™ Service from time to time (including adding, removing or changing features or content), provided that such changes do not materially reduce the overall functionality of the Services purchased by Customer during the then-current Subscription Term. Where Pimlico intends to make a change that would materially reduce such functionality, it will give Customer reasonable prior notice and Customer may exercise its rights under clause 9.4.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">16.2 Changes to these Terms</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">16.2 Changes to these Terms</h3>
             <p>
               Pimlico may amend these Terms from time to time. For existing Customers, material changes will normally take effect from the start of the next renewal Subscription Term, unless a change is required earlier by law, regulation or a regulator. Pimlico will notify Customer of any material change in a reasonable manner (for example by email or via the XHS™ Service interface).
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">16.3 Planned maintenance</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">16.3 Planned maintenance</h3>
             <p>
               Pimlico may carry out scheduled maintenance which may cause temporary unavailability. Pimlico will use reasonable efforts to schedule such maintenance outside normal business hours and to give advance notice via the XHS™ Service or email.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">16.4 Emergency maintenance</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">16.4 Emergency maintenance</h3>
             <p>
               Pimlico may carry out emergency maintenance without prior notice where necessary to address urgent security or stability issues, and will use reasonable efforts to minimise disruption.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 17 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">17. Force majeure</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">17. Force majeure</h2>
             <p>
               Neither party shall be liable for any delay or failure in performing its obligations (other than payment obligations) to the extent such delay or failure is caused by events beyond its reasonable control, including but not limited to acts of God, natural disasters, epidemics or pandemics, war, terrorism, civil commotion, strikes or other industrial disputes, failure of utilities or telecommunications, or governmental restrictions. The affected party shall use reasonable endeavours to mitigate the effects of such events.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Section 18 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">18. Compliance, notices and general</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">18. Compliance, notices and general</h2>
             
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.1 Anti-bribery, sanctions and export</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.1 Anti-bribery, sanctions and export</h3>
             <p>
               Customer shall comply with all applicable anti-bribery, anti-corruption, sanctions and export control laws, including the UK Bribery Act 2010 and any applicable local laws. Customer shall not use the XHS™ Service in any country or territory, or for the benefit of any individual or entity, in breach of such laws or applicable sanctions.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.2 Assignment</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.2 Assignment</h3>
             <p>
               Customer may not assign, transfer or sub-contract any of its rights or obligations under the Contract without Pimlico's prior written consent (not to be unreasonably withheld). Pimlico may assign or transfer its rights and obligations under the Contract to an Affiliate or in connection with a merger, acquisition or sale of substantially all of its assets relating to the Services.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.3 Third-party rights</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.3 Third-party rights</h3>
             <p>
               The Contract is not intended to confer any rights on any third party, and no person other than the parties shall have any rights under the Contracts (Rights of Third Parties) Act 1999 to enforce any of its terms.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.4 Relationship of the parties</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.4 Relationship of the parties</h3>
             <p>
               Nothing in the Contract is intended to or shall operate to create a partnership, joint venture, agency or employment relationship between the parties. Neither party has authority to bind the other in any way.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.5 Entire agreement</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.5 Entire agreement</h3>
             <p>
               The Contract constitutes the entire agreement between the parties regarding its subject matter and supersedes all prior agreements, arrangements and understandings. Each party acknowledges that in entering into the Contract it does not rely on any statement, representation or warranty not set out in the Contract.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.6 Severance</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.6 Severance</h3>
             <p>
               If any provision of the Contract is held to be invalid, illegal or unenforceable, it shall be deemed modified to the minimum extent necessary to make it valid, legal and enforceable. If such modification is not possible, the relevant provision shall be deemed deleted. Any such modification or deletion shall not affect the validity of the remaining provisions.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.7 Waiver</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.7 Waiver</h3>
             <p>
               A failure or delay by either party to exercise any right or remedy under the Contract shall not constitute a waiver of that or any other right or remedy. A waiver of any right or remedy shall be effective only if in writing and signed by the waiving party.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.8 Notices and contact details</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.8 Notices and contact details</h3>
             <p>Formal notices under the Contract must be in writing and sent:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2">
               <li>by hand or pre-paid recorded delivery post to the registered office or principal place of business of the recipient; or</li>
@@ -852,22 +852,22 @@ export default function TermsAndConditions() {
               If you have any questions about these Terms, you may contact Pimlico at <strong>contact@pimlicosolutions.com</strong>.
             </p>
 
-            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">18.9 Governing law and jurisdiction</h3>
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">18.9 Governing law and jurisdiction</h3>
             <p>
               The Contract and any dispute or claim arising out of or in connection with it (including non-contractual disputes or claims) shall be governed by and construed in accordance with the laws of England and Wales, and the parties submit to the exclusive jurisdiction of the courts of England and Wales.
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Schedule 1 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">Schedule 1 – Service Level Agreement</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">Schedule 1 – Service Level Agreement</h2>
             <p className="mb-6">
               This Schedule 1 (the <strong>"Service Level Agreement"</strong> or <strong>"SLA"</strong>) forms part of the Contract between Pimlico and Customer and sets out the service levels and support commitments that apply to the production XHS™ Service, subject to Customer's payment of all applicable fees in accordance with the Contract.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Scope and relationship with the Terms</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">1. Scope and relationship with the Terms</h3>
             
             <p className="mb-3">
               <strong>1.1</strong> This SLA applies only to the production instance of the XHS™ Service used by Customer under a paid Subscription Term. It does not apply to:
@@ -893,7 +893,7 @@ export default function TermsAndConditions() {
               <strong>1.4</strong> Customer's sole and exclusive remedy (and Pimlico's entire liability) in respect of any failure to meet the availability or service levels set out in this SLA is the award of service credits, in accordance with this Schedule and subject to the Contract.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Definitions (SLA)</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">2. Definitions (SLA)</h3>
             <p className="mb-4">For the purposes of this Schedule:</p>
             <ul className="space-y-3 ml-6 mb-6">
               <li><strong>"Business Day"</strong> means Monday to Friday, excluding public holidays in England.</li>
@@ -912,9 +912,9 @@ export default function TermsAndConditions() {
               <li><strong>"Excluded Events"</strong> has the meaning given in clause 3.3.</li>
             </ul>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">3. Availability commitment</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">3. Availability commitment</h3>
             
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.1 Availability target</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.1 Availability target</h4>
             <p className="mb-3">
               Pimlico will use commercially reasonable efforts to ensure that Service Availability for the production XHS™ Service is at least <strong>99.5%</strong> in each Service Month (the <strong>"Availability Commitment"</strong>).
             </p>
@@ -922,7 +922,7 @@ export default function TermsAndConditions() {
               Service Availability is measured using Pimlico's monitoring systems and, where applicable, third-party monitoring tools designated by Pimlico. Customer agrees that these measurements will be the authoritative source for determining Service Availability and any associated service credits.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.2 Planned Maintenance</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.2 Planned Maintenance</h4>
             <p className="mb-3">Pimlico may perform Planned Maintenance from time to time. Where reasonably practicable, Pimlico will:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
               <li>schedule Planned Maintenance outside Business Hours; and</li>
@@ -932,7 +932,7 @@ export default function TermsAndConditions() {
               Periods of Planned Maintenance are excluded from Downtime and do not reduce Service Availability for the purposes of this SLA.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">3.3 Excluded Events</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">3.3 Excluded Events</h4>
             <p className="mb-3">The following are <strong>"Excluded Events"</strong> and are not counted as Downtime and do not reduce Service Availability:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
               <li>any failure or degradation of the XHS™ Service caused by Customer's or any third party's networks, infrastructure, hardware, software, VPNs, security controls, browser configuration or internet connectivity;</li>
@@ -945,9 +945,9 @@ export default function TermsAndConditions() {
               <li>issues arising from Customer's configuration, integrations or changes to its own systems that affect access to or performance of the XHS™ Service.</li>
             </ul>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">4. Service credits</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">4. Service credits</h3>
             
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.1 Eligibility and calculation</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.1 Eligibility and calculation</h4>
             <p className="mb-3">
               If, in a given Service Month, Service Availability for the production XHS™ Service falls below the Availability Commitment, Customer may be eligible for a service credit calculated as a percentage of the Monthly Service Fee for that Service Month, as set out below:
             </p>
@@ -983,7 +983,7 @@ export default function TermsAndConditions() {
               The maximum total service credit for any Service Month is <strong>25% of the Monthly Service Fee</strong> for that Service Month.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.2 Application of service credits</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.2 Application of service credits</h4>
             <p className="mb-3">Service credits:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
               <li>will be applied as a credit against future invoices or card charges for the XHS™ Service;</li>
@@ -995,7 +995,7 @@ export default function TermsAndConditions() {
               If the Contract ends before service credits have been fully used, any remaining credits shall be forfeited.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">4.3 Requesting service credits</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">4.3 Requesting service credits</h4>
             <p className="mb-3">To be eligible for a service credit, Customer must submit a written request to Pimlico:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
               <li>by email to <strong>contact@pimlicosolutions.com</strong>; and</li>
@@ -1014,9 +1014,9 @@ export default function TermsAndConditions() {
               If Customer does not submit a request within the timeframe set out above, Customer waives any right to claim a service credit for the relevant Service Month.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">5. Support</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">5. Support</h3>
             
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.1 Support scope and hours</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.1 Support scope and hours</h4>
             <p className="mb-3">Pimlico will provide support for the production XHS™ Service to Customer's designated contacts:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
               <li>during Business Hours; and</li>
@@ -1026,7 +1026,7 @@ export default function TermsAndConditions() {
               Support is provided only to Customer's nominated contacts, not to Customer's end users or clients.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.2 Issue categories</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.2 Issue categories</h4>
             <p className="mb-3">Pimlico will categorise support issues it receives, acting reasonably, as follows:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-6">
               <li><strong>Priority 1 – Critical:</strong> the production XHS™ Service is unavailable for all Authorised Users, or a critical function is materially inoperable with no reasonable workaround.</li>
@@ -1034,7 +1034,7 @@ export default function TermsAndConditions() {
               <li><strong>Priority 3 – Standard:</strong> all other issues, including minor defects, cosmetic issues, how-to questions and feature requests.</li>
             </ul>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.3 Target response times</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.3 Target response times</h4>
             <p className="mb-3">
               During Business Hours, Pimlico will use commercially reasonable efforts to provide an initial response (acknowledgement and assignment, not necessarily a fix) within the following target times:
             </p>
@@ -1047,7 +1047,7 @@ export default function TermsAndConditions() {
               Pimlico will keep Customer reasonably informed of progress in resolving issues, but makes no guarantee as to resolution times.
             </p>
 
-            <h4 className="text-xl font-semibold text-gray-900 mt-6 mb-3">5.4 Support exclusions</h4>
+            <h4 className="text-xl font-semibold text-[var(--color-text-primary)] mt-6 mb-3">5.4 Support exclusions</h4>
             <p className="mb-3">Support under this SLA does not include:</p>
             <ul className="list-disc ml-6 mt-3 space-y-2 mb-4">
               <li>on-site services, implementation, configuration, custom development or training (unless separately agreed and charged);</li>
@@ -1059,7 +1059,7 @@ export default function TermsAndConditions() {
               Pimlico may, at its discretion, agree to provide additional support or professional services outside this SLA, which may be subject to additional fees.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">6. Miscellaneous (SLA)</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">6. Miscellaneous (SLA)</h3>
             <p className="mb-4">
               <strong>6.1</strong> Pimlico may update this SLA from time to time to reflect changes in the XHS™ Service, provided that any such changes will not materially reduce the overall level of service available to Customer during the then-current Subscription Term. Any updated SLA will apply from the start of the next renewal Subscription Term unless a change is required earlier by law or regulation.
             </p>
@@ -1068,17 +1068,17 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           {/* Schedule 2 */}
           <section>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-6">Schedule 2 – Data Processing Addendum</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-primary)] mb-6">Schedule 2 – Data Processing Addendum</h2>
             
             <p className="mb-6">
               This Data Processing Addendum (the <strong>"DPA"</strong>) forms part of, and is incorporated into, the Contract between Pimlico and Customer. Capitalised terms used but not defined in this DPA have the meaning given to them in the Terms.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">1. Scope and roles</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">1. Scope and roles</h3>
             
             <p className="mb-3">
               <strong>1.1</strong> This DPA applies to the extent Pimlico processes Personal Data on behalf of Customer in the course of providing the XHS™ Service and related Services under the Contract.
@@ -1096,7 +1096,7 @@ export default function TermsAndConditions() {
               <strong>1.3</strong> The subject-matter, duration, nature and purpose of the processing, the types of Personal Data and categories of data subjects are described in Annex 1 (Processing Details).
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">2. Definitions (DPA)</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">2. Definitions (DPA)</h3>
             
             <p className="mb-4">In this DPA:</p>
             <ul className="space-y-3 ml-6 mb-6">
@@ -1107,7 +1107,7 @@ export default function TermsAndConditions() {
               <li><strong>"UK GDPR"</strong> means the General Data Protection Regulation as it forms part of the law of England and Wales, Scotland and Northern Ireland by virtue of section 3 of the European Union (Withdrawal) Act 2018.</li>
             </ul>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">3. Customer instructions</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">3. Customer instructions</h3>
             
             <p className="mb-3">
               <strong>3.1</strong> Pimlico shall process Personal Data only:
@@ -1130,7 +1130,7 @@ export default function TermsAndConditions() {
               <strong>3.3</strong> If Pimlico considers that an instruction from Customer infringes Data Protection Laws, Pimlico shall inform Customer without undue delay. Pimlico shall be entitled to suspend the relevant processing until Customer has modified or confirmed the instruction in a manner that does not infringe Data Protection Laws.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">4. Customer responsibilities</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">4. Customer responsibilities</h3>
             
             <p className="mb-3">
               <strong>4.1</strong> Customer is responsible for:
@@ -1146,13 +1146,13 @@ export default function TermsAndConditions() {
               <strong>4.2</strong> Customer shall not instruct Pimlico to process any special categories of data or criminal offence data (as defined in Data Protection Laws) unless expressly agreed in writing.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">5. Confidentiality</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">5. Confidentiality</h3>
             
             <p className="mb-6">
               <strong>5.1</strong> Pimlico shall ensure that any person authorised to process Personal Data on its behalf is subject to a duty of confidentiality (whether contractual or statutory) in respect of that processing.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">6. Security</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">6. Security</h3>
             
             <p className="mb-3">
               <strong>6.1</strong> Pimlico shall implement and maintain appropriate technical and organisational measures to protect Personal Data against accidental or unlawful destruction, loss, alteration, unauthorised disclosure of, or access to, Personal Data, having regard to:
@@ -1167,7 +1167,7 @@ export default function TermsAndConditions() {
               <strong>6.2</strong> Pimlico's current technical and organisational measures are described at a high level in the Security Overview or similar documentation made available by Pimlico on request or via the XHS™ website, as updated from time to time. Updates to such documentation will not materially reduce the overall level of protection for Personal Data during the then-current Subscription Term.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">7. Sub-processors</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">7. Sub-processors</h3>
             
             <p className="mb-3">
               <strong>7.1</strong> Customer authorises Pimlico to appoint Sub-processors to process Personal Data on its behalf, provided that Pimlico:
@@ -1185,7 +1185,7 @@ export default function TermsAndConditions() {
               <strong>7.3</strong> Where required by applicable Data Protection Laws, Pimlico shall provide Customer with advance notice of any intended changes concerning the addition or replacement of Sub-processors that process Personal Data. Customer may object to such changes on reasonable data protection grounds by notifying Pimlico in writing within ten (10) Business Days of receiving the notice. If Customer reasonably objects and the parties are unable to agree on an alternative solution within a reasonable period, either party may terminate the affected Services on written notice, without penalty, and Pimlico shall refund any pre-paid fees for the unused portion of the Subscription Term for those Services.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">8. International transfers</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">8. International transfers</h3>
             
             <p className="mb-4">
               <strong>8.1</strong> Pimlico may transfer Personal Data to, and process Personal Data in, countries outside the United Kingdom and/or European Economic Area, provided that such transfers comply with Data Protection Laws.
@@ -1204,7 +1204,7 @@ export default function TermsAndConditions() {
               <strong>8.3</strong> On request, Pimlico shall provide Customer with reasonable information about the data transfer mechanism relied on for such transfers to the extent not already described in the Security Overview, Privacy Policy or other documentation.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">9. Assistance with data subject rights</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">9. Assistance with data subject rights</h3>
             
             <p className="mb-3">
               <strong>9.1</strong> Taking into account the nature of the processing and the information available to Pimlico, Pimlico shall provide reasonable assistance to Customer, at Customer's cost, to enable Customer to respond to:
@@ -1223,7 +1223,7 @@ export default function TermsAndConditions() {
               <li>as required by applicable law.</li>
             </ul>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">10. Assistance with compliance and DPIAs</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">10. Assistance with compliance and DPIAs</h3>
             
             <p className="mb-3">
               <strong>10.1</strong> Taking into account the nature of the processing and the information available to Pimlico, Pimlico shall provide reasonable assistance to Customer, at Customer's cost, in relation to:
@@ -1234,7 +1234,7 @@ export default function TermsAndConditions() {
               <li>consultations with supervisory authorities relating to processing of Personal Data under the Contract.</li>
             </ul>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">11. Personal Data Breach notification</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">11. Personal Data Breach notification</h3>
             
             <p className="mb-4">
               <strong>11.1</strong> Pimlico shall notify Customer without undue delay after becoming aware of a Personal Data Breach affecting Personal Data processed on behalf of Customer.
@@ -1254,7 +1254,7 @@ export default function TermsAndConditions() {
               <strong>11.3</strong> Pimlico may provide this information in phases as it becomes available. Customer is responsible for determining whether any notifications to supervisory authorities or data subjects are required under Data Protection Laws and for making any such notifications.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">12. Audits and information</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">12. Audits and information</h3>
             
             <p className="mb-3">
               <strong>12.1</strong> Pimlico shall make available to Customer, on request, such information as is reasonably necessary to demonstrate Pimlico's compliance with its obligations as a processor under Article 28 of the UK GDPR (and any equivalent provisions of other applicable Data Protection Laws), which may include:
@@ -1273,7 +1273,7 @@ export default function TermsAndConditions() {
               <li>Customer shall bear all costs of any such audit, unless the audit reveals a material breach of this DPA by Pimlico, in which case Pimlico shall bear its own costs of remediation.</li>
             </ul>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">13. Return and deletion of Personal Data</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">13. Return and deletion of Personal Data</h3>
             
             <p className="mb-3">
               <strong>13.1</strong> On expiry or termination of the Contract for any reason, Pimlico shall, at Customer's choice and subject to clause 9.6 of the Terms:
@@ -1290,7 +1290,7 @@ export default function TermsAndConditions() {
               <strong>13.2</strong> Pimlico may retain copies of Personal Data in backup systems for a limited period after deletion from its primary systems. Such data will remain subject to the obligations in this DPA until deleted.
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">14. Duration</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">14. Duration</h3>
             
             <p className="mb-4">
               <strong>14.1</strong> This DPA shall remain in force for as long as Pimlico processes Personal Data on behalf of Customer under the Contract.
@@ -1300,7 +1300,7 @@ export default function TermsAndConditions() {
               <strong>14.2</strong> Termination or expiry of the Contract shall automatically terminate this DPA, without prejudice to any rights or obligations that by their nature should survive (including, without limitation, clauses relating to confidentiality, liability, audit, and return and deletion of Personal Data).
             </p>
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">15. Miscellaneous</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">15. Miscellaneous</h3>
             
             <p className="mb-4">
               <strong>15.1</strong> This DPA is without prejudice to any additional obligations of the parties under Data Protection Laws.
@@ -1316,7 +1316,7 @@ export default function TermsAndConditions() {
 
             <hr className="my-8 border-gray-300" />
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Annex 1 – Processing details</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">Annex 1 – Processing details</h3>
             
             <p className="mb-3"><strong>Subject-matter of the processing</strong></p>
             <p className="mb-6 ml-6">
@@ -1360,7 +1360,7 @@ export default function TermsAndConditions() {
 
             <hr className="my-8 border-gray-300" />
 
-            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Annex 2 – Technical and organisational measures (summary)</h3>
+            <h3 className="text-2xl font-semibold text-[var(--color-text-primary)] mt-8 mb-4">Annex 2 – Technical and organisational measures (summary)</h3>
             
             <p className="mb-4">
               Pimlico will implement and maintain technical and organisational measures appropriate to the risk, which may include:
@@ -1379,7 +1379,7 @@ export default function TermsAndConditions() {
             </p>
           </section>
 
-          <hr className="my-12 border-gray-200" />
+          <hr className="my-12 border-[var(--color-border-default)]" />
 
           <div className="mt-16 text-center text-sm text-gray-500">
             <p>© {new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.</p>

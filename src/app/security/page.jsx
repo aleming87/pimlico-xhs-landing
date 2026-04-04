@@ -1,6 +1,5 @@
 "use client";
 
-import { Footer } from '@/components/footer';
 import Link from 'next/link';
 
 const securityFeatures = [
@@ -80,77 +79,74 @@ const securityFeatures = [
 
 export default function SecurityPage() {
   return (
-    <>
-      <div className="bg-white">
-        {/* Header */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-24 px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Security & Privacy</p>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Enterprise-grade security for regulatory compliance
-            </h1>
-            <p className="mt-6 text-lg text-slate-300 max-w-2xl mx-auto">
-              XHS™ Copilot is built from the ground up with security at its core. Your regulatory data
-              is protected with the same rigour you apply to your compliance programmes.
-            </p>
-          </div>
-        </div>
-
-        {/* Security features */}
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {securityFeatures.map((section) => (
-              <div key={section.title} className="border border-gray-200 rounded-2xl p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{section.title}</h3>
-                <ul className="space-y-2">
-                  {section.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                      <svg className="h-4 w-4 text-green-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Certifications & Standards */}
-          <div className="mt-16 border-t border-gray-200 pt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Standards & Certifications</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-gray-50 rounded-xl">
-                <p className="text-2xl font-bold text-gray-900">GDPR</p>
-                <p className="text-sm text-gray-500 mt-2">EU General Data Protection Regulation compliant</p>
-              </div>
-              <div className="text-center p-6 bg-gray-50 rounded-xl">
-                <p className="text-2xl font-bold text-gray-900">SOC 2</p>
-                <p className="text-sm text-gray-500 mt-2">SOC 2 Type II aligned infrastructure (Supabase)</p>
-              </div>
-              <div className="text-center p-6 bg-gray-50 rounded-xl">
-                <p className="text-2xl font-bold text-gray-900">PCI DSS</p>
-                <p className="text-sm text-gray-500 mt-2">PCI DSS compliant payment processing (Stripe)</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact */}
-          <div className="mt-16 bg-slate-900 text-white rounded-2xl p-8 text-center">
-            <h3 className="text-xl font-semibold">Security questions?</h3>
-            <p className="text-slate-300 mt-2 text-sm">
-              For security enquiries, vulnerability reports, or data protection requests, contact us directly.
-            </p>
-            <a
-              href="mailto:andrew@pimlicosolutions.com"
-              className="inline-block mt-4 px-6 py-2.5 bg-white text-slate-900 font-semibold rounded-lg hover:bg-gray-100 transition"
-            >
-              Contact Security Team
-            </a>
-          </div>
+    <div className="bg-[var(--color-bg-base)]">
+      {/* Header */}
+      <div className="bg-[var(--color-bg-base)] text-white pt-24 py-24 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-sm font-semibold text-[var(--color-accent-secondary)] uppercase tracking-wider mb-4">Security & Privacy</p>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[var(--color-text-primary)]">
+            Enterprise-grade security for regulatory compliance
+          </h1>
+          <p className="mt-6 text-lg text-[var(--color-text-tertiary)] max-w-2xl mx-auto">
+            XHS™ Copilot is built from the ground up with security at its core. Your regulatory data
+            is protected with the same rigour you apply to your compliance programmes.
+          </p>
         </div>
       </div>
-      <Footer />
-    </>
+
+      {/* Security features */}
+      <div className="max-w-4xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {securityFeatures.map((section) => (
+            <div key={section.title} className="border border-[var(--color-border-default)] rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">{section.title}</h3>
+              <ul className="space-y-2">
+                {section.items.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-[var(--color-text-tertiary)]">
+                    <svg className="h-4 w-4 text-green-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Certifications & Standards */}
+        <div className="mt-16 border-t border-[var(--color-border-default)] pt-12">
+          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-6">Standards & Certifications</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
+              <p className="text-2xl font-bold text-[var(--color-text-primary)]">GDPR</p>
+              <p className="text-sm text-[var(--color-text-tertiary)] mt-2">EU General Data Protection Regulation compliant</p>
+            </div>
+            <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
+              <p className="text-2xl font-bold text-[var(--color-text-primary)]">SOC 2</p>
+              <p className="text-sm text-[var(--color-text-tertiary)] mt-2">SOC 2 Type II aligned infrastructure (Supabase)</p>
+            </div>
+            <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
+              <p className="text-2xl font-bold text-[var(--color-text-primary)]">PCI DSS</p>
+              <p className="text-sm text-[var(--color-text-tertiary)] mt-2">PCI DSS compliant payment processing (Stripe)</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact */}
+        <div className="mt-16 bg-[var(--color-bg-surface)] text-white rounded-2xl p-8 text-center border border-[var(--color-border-default)]">
+          <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">Security questions?</h3>
+          <p className="text-[var(--color-text-tertiary)] mt-2 text-sm">
+            For security enquiries, vulnerability reports, or data protection requests, contact us directly.
+          </p>
+          <a
+            href="mailto:andrew@pimlicosolutions.com"
+            className="inline-block mt-4 px-6 py-2.5 bg-[var(--color-cta-primary)] text-white font-semibold rounded-lg hover:bg-[var(--color-cta-primary)]/90 transition"
+          >
+            Contact Security Team
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }

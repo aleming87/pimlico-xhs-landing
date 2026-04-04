@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Footer } from '@/components/footer';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
@@ -152,8 +151,8 @@ export default function ArticlePageClient() {
   const giftParam = searchParams.get('gift');
   const hasGiftAccess = !!(params.slug && giftParam && giftParam === generateGiftToken(params.slug));
 
-  // Combined: should we bypass the premium paywall?
-  const hasFullAccess = isAdmin || hasGiftAccess;
+  // All articles are now fully accessible — premium paywall disabled
+  const hasFullAccess = true;
 
   useEffect(() => {
     // Set current URL for sharing
@@ -210,10 +209,10 @@ export default function ArticlePageClient() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="bg-white min-h-screen flex items-center justify-center">
+      <div className="bg-[var(--color-bg-base)] min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-gray-500">Loading article...</p>
+          <p className="text-[var(--color-text-muted)]">Loading article...</p>
         </div>
       </div>
     );
@@ -221,10 +220,10 @@ export default function ArticlePageClient() {
 
   if (!article) {
     return (
-      <div className="bg-white min-h-screen flex items-center justify-center">
+      <div className="bg-[var(--color-bg-base)] min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Article not found</h1>
-          <Link href="/insights" className="mt-4 inline-block text-blue-600 hover:text-blue-500">
+          <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">Article not found</h1>
+          <Link href="/insights" className="mt-4 inline-block text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)]">
             ← Back to Insights
           </Link>
         </div>
@@ -238,49 +237,13 @@ export default function ArticlePageClient() {
   const shareUrl = currentUrl;
 
   return (
-    <div className="bg-white min-h-screen">
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-          <div className="flex lg:flex-1">
-            <a href="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Pimlico XHS™</span>
-              <Image src="/Pimlico_Logo.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
-            </a>
-          </div>
-          <div className="flex lg:hidden">
-            <button 
-              type="button" 
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="size-6">
-                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <div className="hidden lg:flex lg:gap-x-12">
-            <a href="/" className="text-sm/6 font-semibold text-gray-900">Home</a>
-            <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
-            <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
-            <a href="/gambling" className="text-sm/6 font-semibold text-gray-900">Gambling</a>
-            <a href="/insights" className="text-sm/6 font-semibold text-blue-600">Insights</a>
-            <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
-          </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/onboarding" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
-              Start your trial <span aria-hidden="true" className="ml-1">&rarr;</span>
-            </a>
-          </div>
-        </nav>
-      </header>
-
+    <div className="bg-[var(--color-bg-base)] min-h-screen">
       {/* Article Content */}
       <article className="pt-24 pb-16">
         <div className="mx-auto max-w-3xl px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="mb-8">
-            <Link href="/insights" className="text-blue-600 hover:text-blue-500 text-sm">
+            <Link href="/insights" className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] text-sm">
               ← Back to Insights
             </Link>
           </nav>
@@ -295,7 +258,7 @@ export default function ArticlePageClient() {
             )}
             
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3 text-sm text-gray-500 flex-wrap">
+              <div className="flex items-center gap-3 text-sm text-[var(--color-text-muted)] flex-wrap">
                 <span className="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-medium">{article.category}</span>
                 {article.isPremium && (
                   <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-2.5 py-1 rounded-md font-medium">
@@ -325,7 +288,7 @@ export default function ArticlePageClient() {
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
                   title="Share on LinkedIn"
                 >
                   <svg className="w-4 h-4" fill="#0A66C2" viewBox="0 0 24 24">
@@ -338,7 +301,7 @@ export default function ArticlePageClient() {
                   href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
                   title="Share on X"
                 >
                   <svg className="w-4 h-4" fill="#000000" viewBox="0 0 24 24">
@@ -351,7 +314,7 @@ export default function ArticlePageClient() {
                   href={`https://wa.me/?text=${encodeURIComponent(`${shareTitle}\n\n${article.excerpt || ''}\n\n${shareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
                   title="Share on WhatsApp"
                 >
                   <svg className="w-4 h-4" fill="#25D366" viewBox="0 0 24 24">
@@ -364,7 +327,7 @@ export default function ArticlePageClient() {
                   href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
                   title="Share on Telegram"
                 >
                   <svg className="w-4 h-4" fill="#26A5E4" viewBox="0 0 24 24">
@@ -377,7 +340,7 @@ export default function ArticlePageClient() {
                   href={`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
                   title="Share via Gmail"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#EA4335">
@@ -387,17 +350,17 @@ export default function ArticlePageClient() {
               </div>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)] mb-4">
               {article.title}
             </h1>
-            <p className="text-xl text-gray-600">{article.excerpt}</p>
+            <p className="text-xl text-[var(--color-text-tertiary)]">{article.excerpt}</p>
             
             <div className="mt-6 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center bg-white p-1">
+              <div className="w-11 h-11 rounded-full border-2 border-[var(--color-border-default)] flex items-center justify-center bg-[var(--color-bg-base)] p-1">
                 <Image src="/Pimlico_Logo.png" alt="Pimlico" width={32} height={32} className="h-7 w-7 object-contain" />
               </div>
               <div>
-                <p className="text-gray-900 font-medium">XHS™ Team</p>
+                <p className="text-[var(--color-text-primary)] font-medium">XHS™ Team</p>
               </div>
             </div>
           </header>
@@ -439,20 +402,20 @@ export default function ArticlePageClient() {
                     ) : (
                       <ReactMarkdown
                         components={{
-                          h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">{children}</h2>,
-                          h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-3">{children}</h3>,
-                          p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
-                          ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">{children}</ul>,
-                          ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2">{children}</ol>,
-                          li: ({children}) => <li className="text-gray-600">{children}</li>,
-                          strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
-                          a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 pointer-events-none">{children}</a>,
-                          blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500">{children}</blockquote>,
-                          code: ({children}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
-                          hr: () => <hr className="border-gray-200 my-8" />,
+                          h2: ({children}) => <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
+                          h3: ({children}) => <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
+                          p: ({children}) => <p className="text-[var(--color-text-tertiary)] mb-4 leading-relaxed text-justify">{children}</p>,
+                          ul: ({children}) => <ul className="list-disc list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ul>,
+                          ol: ({children}) => <ol className="list-decimal list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ol>,
+                          li: ({children}) => <li className="text-[var(--color-text-tertiary)]">{children}</li>,
+                          strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-semibold">{children}</strong>,
+                          a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] pointer-events-none">{children}</a>,
+                          blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-[var(--color-text-muted)]">{children}</blockquote>,
+                          code: ({children}) => <code className="bg-[var(--color-bg-elevated)] px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
+                          hr: () => <hr className="border-[var(--color-border-default)] my-8" />,
                           table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
-                          th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left">{children}</th>,
-                          td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
+                          th: ({children}) => <th className="border border-[var(--color-border-default)] px-4 py-2 bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] text-left">{children}</th>,
+                          td: ({children}) => <td className="border border-[var(--color-border-default)] px-4 py-2 text-[var(--color-text-tertiary)]">{children}</td>,
                         }}
                       >
                         {article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100)))}
@@ -505,7 +468,7 @@ export default function ArticlePageClient() {
                       
                       <Link
                         href="/contact?trial=true&source=premium-article"
-                        className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                        className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                       >
                         Start your trial
                         <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -518,26 +481,26 @@ export default function ArticlePageClient() {
               </>
                         ) : article.contentType === 'html' ? (
               <div 
-                className="article-content [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-gray-900 [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-gray-900 [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-gray-900 [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-gray-600 [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-gray-600 [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-gray-600 [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-gray-600 [&>strong]:text-gray-900 [&>strong]:font-semibold [&_a]:text-blue-600 [&_a:hover]:text-blue-500 [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-500 [&>hr]:border-gray-200 [&>hr]:my-8"
+                className="article-content [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-[var(--color-text-primary)] [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-[var(--color-text-primary)] [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-[var(--color-text-primary)] [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-[var(--color-text-tertiary)] [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-[var(--color-text-tertiary)] [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-[var(--color-text-tertiary)] [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-[var(--color-text-tertiary)] [&>strong]:text-[var(--color-text-primary)] [&>strong]:font-semibold [&_a]:text-[var(--color-accent-secondary)] [&_a:hover]:text-[var(--color-accent-secondary)] [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-[var(--color-text-muted)] [&>hr]:border-[var(--color-border-default)] [&>hr]:my-8"
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />
             ) : (
               <ReactMarkdown
                 components={{
-                  h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-10 mb-4">{children}</h2>,
-                  h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-3">{children}</h3>,
-                  p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
-                  ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2">{children}</ul>,
-                  ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2">{children}</ol>,
-                  li: ({children}) => <li className="text-gray-600">{children}</li>,
-                  strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
-                  a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500">{children}</a>,
-                  blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500">{children}</blockquote>,
-                  code: ({children}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
-                  hr: () => <hr className="border-gray-200 my-8" />,
+                  h2: ({children}) => <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
+                  h3: ({children}) => <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
+                  p: ({children}) => <p className="text-[var(--color-text-tertiary)] mb-4 leading-relaxed text-justify">{children}</p>,
+                  ul: ({children}) => <ul className="list-disc list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ul>,
+                  ol: ({children}) => <ol className="list-decimal list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ol>,
+                  li: ({children}) => <li className="text-[var(--color-text-tertiary)]">{children}</li>,
+                  strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-semibold">{children}</strong>,
+                  a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)]">{children}</a>,
+                  blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-[var(--color-text-muted)]">{children}</blockquote>,
+                  code: ({children}) => <code className="bg-[var(--color-bg-elevated)] px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
+                  hr: () => <hr className="border-[var(--color-border-default)] my-8" />,
                   table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
-                  th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left">{children}</th>,
-                  td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
+                  th: ({children}) => <th className="border border-[var(--color-border-default)] px-4 py-2 bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] text-left">{children}</th>,
+                  td: ({children}) => <td className="border border-[var(--color-border-default)] px-4 py-2 text-[var(--color-text-tertiary)]">{children}</td>,
                 }}
               >
                 {article.content}
@@ -549,11 +512,11 @@ export default function ArticlePageClient() {
           {(!article.isPremium || hasFullAccess) && article.tags && article.tags.length > 0 && (
             <div className="mt-8 pt-6 border-t border-gray-100">
               <div className="flex items-center flex-wrap gap-2">
-                <span className="text-sm font-medium text-gray-500 mr-1">Tags:</span>
+                <span className="text-sm font-medium text-[var(--color-text-muted)] mr-1">Tags:</span>
                 {article.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:bg-gray-200 transition-colors"
                   >
                     #{tag.replace(/^#/, '')}
                   </span>
@@ -576,7 +539,7 @@ export default function ArticlePageClient() {
                   </p>
                   <Link
                     href="/contact?trial=true"
-                    className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-blue-600 bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
                     Start your trial
                     <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -593,7 +556,7 @@ export default function ArticlePageClient() {
             <div className="mt-8">
               <Link 
                 href="/insights" 
-                className="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium"
+                className="inline-flex items-center text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] font-medium"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -605,7 +568,6 @@ export default function ArticlePageClient() {
         </div>
       </article>
 
-      <Footer />
     </div>
   );
 }

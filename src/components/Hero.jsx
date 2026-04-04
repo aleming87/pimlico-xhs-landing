@@ -1,165 +1,140 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
+
+const ease = [0.25, 0.1, 0.25, 1];
+const WORDS = ["Tracked.", "Sourced.", "Verified.", "Analyzed.", "Delivered."];
+const TYPE_SPEED = 90;
+const DELETE_SPEED = 55;
+const PAUSE_AFTER_TYPE = 2500;
+const PAUSE_AFTER_DELETE = 400;
 
 export default function Hero() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [displayText, setDisplayText] = useState("");
+  const [wordIndex, setWordIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+  const [visible, setVisible] = useState(true);
+  const [cycles, setCycles] = useState(0);
+  const [done, setDone] = useState(false);
+
+  const TOTAL_CYCLES = 2;
+
+  useEffect(() => {
+    if (done) return;
+
+    const word = WORDS[wordIndex];
+
+    if (charIndex < word.length) {
+      const t = setTimeout(() => {
+        setDisplayText(word.slice(0, charIndex + 1));
+        setCharIndex(charIndex + 1);
+      }, TYPE_SPEED);
+      return () => clearTimeout(t);
+    }
+
+    // Done typing — check if this is the final landing
+    const isLastWord = wordIndex === WORDS.length - 1 && cycles >= TOTAL_CYCLES;
+    if (isLastWord) {
+      setShowCursor(false);
+      setDone(true);
+      return;
+    }
+
+    // Hide cursor, hold, then fade out and move to next
+    setShowCursor(false);
+    const t = setTimeout(() => {
+      setVisible(false);
+      setTimeout(() => {
+        const nextIndex = (wordIndex + 1) % WORDS.length;
+        if (nextIndex === 0) setCycles((c) => c + 1);
+        setWordIndex(nextIndex);
+        setCharIndex(0);
+        setDisplayText("");
+        setShowCursor(true);
+        setVisible(true);
+      }, 350);
+    }, PAUSE_AFTER_TYPE);
+    return () => clearTimeout(t);
+  }, [charIndex, wordIndex, done, cycles]);
 
   return (
-    <div className="bg-gray-900">
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-          <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Pimlico XHS</span>
-              <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
-            </a>
-          </div>
-          <div className="flex lg:hidden">
-            <button 
-              type="button" 
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-200"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true" className="size-6">
-                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-          <div className="hidden lg:flex lg:gap-x-12">
-            <a href="#differentiators" className="text-sm/6 font-semibold text-white">How it works</a>
-            <a href="#use-cases" className="text-sm/6 font-semibold text-white">Use cases</a>
-            <a href="/ai" className="text-sm/6 font-semibold text-white">AI</a>
-            <a href="/payments" className="text-sm/6 font-semibold text-white">Payments</a>
-            <a href="/gambling" className="text-sm/6 font-semibold text-white">Gambling</a>
-            <a href="/insights" className="text-sm/6 font-semibold text-white">Insights</a>
-            <a href="/pricing" className="text-sm/6 font-semibold text-white">Pricing</a>
-          </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact?trial=true" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:scale-105">
-              Start free trial <span aria-hidden="true" className="ml-1">&rarr;</span>
-            </a>
-          </div>
-        </nav>
-        
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden">
-            <div className="fixed inset-0 z-50"></div>
-            <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-              <div className="flex items-center justify-between">
-                <a href="#" className="-m-1.5 p-1.5">
-                  <span className="sr-only">Pimlico XHS</span>
-                  <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-8 w-auto" />
-                </a>
-                <button
-                  type="button"
-                  className="-m-2.5 rounded-md p-2.5 text-gray-200"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="sr-only">Close menu</span>
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="mt-6 flow-root">
-                <div className="-my-6 divide-y divide-gray-500/10">
-                  <div className="space-y-2 py-6">
-                    <a 
-                      href="#differentiators" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      How it works
-                    </a>
-                    <a 
-                      href="#use-cases" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Use cases
-                    </a>
-                    <a 
-                      href="/ai" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      AI
-                    </a>
-                    <a 
-                      href="/payments" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Payments
-                    </a>
-                    <a 
-                      href="/gambling" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Gambling
-                    </a>
-                    <a 
-                      href="/insights" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Insights
-                    </a>
-                    <a 
-                      href="/pricing" 
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Pricing
-                    </a>
-                  </div>
-                  <div className="py-6">
-                    <a
-                      href="/contact"
-                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-gray-800"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Start free trial
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </header>
+    <div className="bg-[var(--color-bg-base)]">
+      <div className="relative isolate px-6 pt-24 lg:px-8">
+        {/* Atmospheric light — concentrated blue glow from upper right (xAI pattern) */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2, ease }}
+            className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.6)_0%,rgba(15,35,75,0.3)_35%,transparent_70%)]"
+          />
+        </div>
 
-      <div className="relative isolate px-6 pt-14 lg:px-8">
-        <div aria-hidden="true" className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-          <div 
-            style={{clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"}} 
-            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#0B1B3B] to-[#1E3A8A] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-          ></div>
-        </div>
-        <div className="mx-auto max-w-4xl py-16 sm:py-24 lg:py-32">
-          <div className="text-center">
-            <div className="mb-6 flex items-center justify-center">
-              <Image src="/dual-logo.png" alt="Pimlico | XHS" width={500} height={120} className="h-16 w-auto sm:h-20 lg:h-24" />
-            </div>
-            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
-              Your AI compliance copilot.
-            </h1>
-            <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">One intelligent workspace for <span className="text-blue-300">AI</span>, <span className="text-blue-300">Payments</span>, <span className="text-blue-300">Crypto</span> & <span className="text-blue-300">Gambling</span>.</p>
-            <div className="mt-10 flex items-center justify-center">
-              <a href="/contact?trial=true" className="rounded-lg bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all hover:shadow-xl">Start free trial</a>
-            </div>
+        <div className="mx-auto max-w-7xl py-16 sm:py-32 lg:py-40 px-6 lg:px-8">
+          <div className="max-w-3xl">
+            {/* Monospace announcement pill */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease }}
+              className="mb-10"
+            >
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-[var(--color-border-subtle)]/40 bg-[var(--color-bg-surface)]/50 px-4 py-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent-secondary)] animate-pulse" />
+                <span className="text-xs font-mono font-medium tracking-wide text-[var(--color-text-tertiary)]">
+                  NOW MONITORING 250+ JURISDICTIONS
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Headline — staggered word reveal */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease }}
+              className="font-display text-4xl font-medium tracking-tight text-[var(--color-text-primary)] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]"
+            >
+              Every regulatory change.<br />
+              <span className={`text-[var(--color-text-primary)] transition-opacity duration-300 ${visible ? "opacity-100" : "opacity-0"}`}>
+                {displayText}
+                {showCursor && <span className="inline-block w-[3px] h-[0.85em] bg-[var(--color-text-primary)] ml-1 align-baseline animate-pulse" />}
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7, ease }}
+              className="mt-8 text-sm text-[var(--color-text-tertiary)] sm:text-lg leading-relaxed"
+            >
+              Compliance workspaces for Gambling, Payments, Crypto and AI teams.<br />
+              Track regulatory change across 250+ jurisdictions.
+            </motion.p>
+
+            {/* Dual CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.0, ease }}
+              className="mt-12 flex flex-col sm:flex-row items-start gap-4"
+            >
+              <Link
+                href="https://xhsdata.ai/register"
+                className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90"
+              >
+                Start free trial
+              </Link>
+              <Link
+                href="/contact"
+                className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+              >
+                Book a demo
+              </Link>
+            </motion.div>
           </div>
-        </div>
-        <div aria-hidden="true" className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-          <div 
-            style={{clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"}} 
-            className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#0B1B3B] to-[#1E3A8A] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-          ></div>
         </div>
       </div>
     </div>
