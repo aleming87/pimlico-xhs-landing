@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation";
 
 const USER_BANDS = [
   { key: "1_3", min: 1, max: 3, included: 3, baseAnnual: 7950, seatMonthly: 31 },
-  { key: "4_10", min: 4, max: 10, included: 10, baseAnnual: 18630, seatMonthly: 25 },
-  { key: "11_25", min: 11, max: 25, included: 15, baseAnnual: 36020, seatMonthly: 22 },
-  { key: "26_100", min: 26, max: 100, included: 50, baseAnnual: 62100, seatMonthly: 15 },
-  { key: "101_plus", min: 101, max: 150, included: 100, baseAnnual: 105570, seatMonthly: 13 },
+  { key: "4_10", min: 4, max: 10, included: 10, baseAnnual: 12500, seatMonthly: 22 },
+  { key: "11_25", min: 11, max: 25, included: 15, baseAnnual: 24000, seatMonthly: 18 },
+  { key: "26_100", min: 26, max: 100, included: 50, baseAnnual: 48000, seatMonthly: 13 },
+  { key: "101_plus", min: 101, max: 150, included: 100, baseAnnual: 105570, seatMonthly: 11 },
 ];
 
 const COVERAGE = [
@@ -26,6 +26,7 @@ const COVERAGE = [
 const VERTICALS = ["Gambling", "Payments & Crypto", "Artificial Intelligence"];
 const ADDITIONAL_VERTICAL_WEIGHTS = [0.22, 0.15, 0.1];
 const ANNUAL_DISCOUNT = 0.05;
+const BUNDLE_DISCOUNT = 0.12; // 12% off when all 3 verticals + global
 
 function calculatePrice(users, verticals, regions, billing) {
   // Find user band and interpolate smoothly between bands
@@ -67,6 +68,12 @@ function calculatePrice(users, verticals, regions, billing) {
   // Additional seats beyond included
   const extraSeats = Math.max(0, users - band.included);
   annual += extraSeats * band.seatMonthly * 12;
+
+  // Bundle discount — 12% off when all 3 verticals + global
+  const isBundle = verticals.length >= 3 && regions.includes("global");
+  if (isBundle) {
+    annual *= (1 - BUNDLE_DISCOUNT);
+  }
 
   // Annual discount
   if (billing === "annual") {
@@ -131,6 +138,7 @@ export default function PricingPage() {
   const [selectedVerticals, setSelectedVerticals] = useState(["Gambling"]);
   const [selectedRegions, setSelectedRegions] = useState(["europe"]);
   const [billing, setBilling] = useState("monthly");
+  const isBundle = selectedVerticals.length >= 3 && selectedRegions.includes("global");
 
   const toggleVertical = (v) => {
     setSelectedVerticals((prev) =>
@@ -439,7 +447,7 @@ export default function PricingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               { title: "Real-time monitoring", desc: "12,000+ regulatory sources tracked continuously. Changes detected, classified, and delivered as they happen." },
-              { title: "XHS\u2122 Copilot AI", desc: "500+ AI credits included. Source-grounded, cited answers powered by Claude, GPT, Gemini, Grok, and Perplexity. DeepL\u2122 translation across 30+ languages." },
+              { title: "XHS\u2122 Copilot AI", desc: "500+ AI credits included. Source-grounded, cited answers powered by cutting-edge AI models. DeepL\u2122 translation across 30+ languages." },
               { title: "Jurisdiction reports", desc: "In-depth profiles for every monitored jurisdiction. Regulator directories, licensing requirements, and compliance obligations." },
               { title: "Workspace tools", desc: "Projects, Lens\u2122 compliance analysis, Blocklists\u2122, Competitors\u2122, Technical Standards\u2122, and team collaboration." },
               { title: "Integrations & alerts", desc: "Slack and Teams integration, email digests, watchlists, and API access. Regulatory updates delivered where your team works." },
