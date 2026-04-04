@@ -181,9 +181,9 @@ export default function PricingPage() {
       {/* Configurator */}
       <section className="pb-20 sm:pb-28">
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-8 sm:gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
             {/* Controls */}
-            <div className="sm:col-span-3 space-y-8">
+            <div className="lg:col-span-3 space-y-8">
               {/* Users */}
               <div>
                 <label className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-3 block">
