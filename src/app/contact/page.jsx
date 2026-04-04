@@ -30,11 +30,21 @@ function ContactPageInner() {
     "gmx.com", "live.com", "msn.com", "inbox.com", "tutanota.com",
   ];
 
+  const blockedDomains = [
+    "vixio.com", "gambling-compliance.com", "gamblingcompliance.com",
+    "regology.com", "ascendtech.com", "corlytics.com", "cube.global",
+    "suade.org", "regtech.global", "icomplyis.com",
+  ];
+
   const validateBusinessEmail = (email) => {
     const domain = email.split("@")[1]?.toLowerCase();
     if (!domain) return false;
     if (freeEmailProviders.includes(domain)) {
       setEmailError("Please use your business email address");
+      return false;
+    }
+    if (blockedDomains.includes(domain)) {
+      setEmailError("We are unable to process your request at this time.");
       return false;
     }
     setEmailError("");
@@ -48,10 +58,7 @@ function ContactPageInner() {
     const formData = new FormData(e.target);
     const email = formData.get("email");
 
-    if (email && email.toLowerCase().endsWith("@vixio.com")) {
-      setIsSubmitting(false);
-      return;
-    }
+    // Blocked domains handled by validateBusinessEmail above
 
     if (!validateBusinessEmail(email)) {
       setIsSubmitting(false);
