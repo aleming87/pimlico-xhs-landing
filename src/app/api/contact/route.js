@@ -70,12 +70,12 @@ Submitted: ${new Date().toISOString()}
           
           <!-- Header with Logo -->
           <tr>
-            <td class="header" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 40px 40px 30px; text-align: center;">
+            <td class="header" style="background: linear-gradient(135deg, #020617 0%, #0f172a 54%, #1e293b 100%); padding: 40px 40px 30px; text-align: center;">
               <div style="margin-bottom: 20px;">
-                <img src="https://pimlicosolutions.com/XHS_Logo_White.png" alt="Pimlico XHS" style="max-width: 180px; height: auto;" />
+                <img src="https://pimlicosolutions.com/dual-logo.png" alt="Pimlico | XHS" style="max-width: 200px; height: auto;" />
               </div>
-              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Thank You for Getting in Touch</h1>
-              <p style="margin: 10px 0 0; color: #bfdbfe; font-size: 16px;">We'll be in contact soon</p>
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 500; letter-spacing: -0.3px;">Thank you for getting in touch.</h1>
+              <p style="margin: 10px 0 0; color: #94a3b8; font-size: 14px;">We'll be in contact shortly.</p>
             </td>
           </tr>
           
