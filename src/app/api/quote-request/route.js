@@ -1,6 +1,7 @@
 export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
+import { renderEmail, renderAdminNotification, escapeHtml } from '@/lib/emailTemplate';
 
 export async function POST(request) {
   try {
@@ -12,29 +13,7 @@ export async function POST(request) {
     const monthlyStr = monthlyPrice ? monthlyPrice.toLocaleString() : '0';
     const annualStr = annualPrice ? annualPrice.toLocaleString() : '0';
 
-    const quoteDetails = [
-      'Quote Request from Pricing Configurator',
-      '',
-      'Contact:',
-      '  Name: ' + name,
-      '  Email: ' + email,
-      '  Company: ' + (company || 'Not provided'),
-      '',
-      'Configuration:',
-      '  Plan: ' + plan,
-      '  Users: ' + users,
-      '  Verticals: ' + verticalsList,
-      '  Coverage: ' + coverageList,
-      '  Billing: ' + billing,
-      '',
-      'Pricing:',
-      '  Monthly: \u00a3' + monthlyStr + '/mo',
-      '  Annual: \u00a3' + annualStr + '/year',
-      '',
-      'Submitted: ' + new Date().toISOString(),
-    ].join('\n');
-
-    console.log('Quote Request:', quoteDetails);
+    console.log('Quote Request:', { name, email, company, users, verticals, coverage, billing, monthlyPrice, annualPrice, plan });
 
     if (process.env.RESEND_API_KEY) {
       const { Resend } = await import('resend');
@@ -42,54 +21,61 @@ export async function POST(request) {
       const recipientEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
 
       try {
+        // Admin notification
+        const adminHtml = renderAdminNotification({
+          title: 'New quote request',
+          subtitle: `${escapeHtml(name)} · ${escapeHtml(company || 'Unknown')}`,
+          fields: [
+            { label: 'Contact', value: `${escapeHtml(name)}<br><a href="mailto:${escapeHtml(email)}" style="color:#cbd5e1;text-decoration:none;">${escapeHtml(email)}</a>` },
+            { label: 'Company', value: escapeHtml(company || 'Not provided') },
+            { label: 'Plan', value: escapeHtml(plan || '—') },
+            { label: 'Users', value: String(users) },
+            { label: 'Verticals', value: escapeHtml(verticalsList) },
+            { label: 'Coverage', value: escapeHtml(coverageList) },
+            { label: 'Billing', value: escapeHtml(billing) },
+            { label: 'Monthly', value: `&pound;${monthlyStr}/mo` },
+            { label: 'Annual', value: `&pound;${annualStr}/year` },
+            { label: 'Submitted', value: new Date().toISOString() },
+          ],
+        });
+
         await resend.emails.send({
           from: 'Pimlico XHS <onboarding@resend.dev>',
           to: recipientEmail,
-          subject: 'QUOTE REQUEST - ' + name + ' from ' + (company || 'Unknown') + ' (' + users + ' users, \u00a3' + monthlyStr + '/mo)',
-          text: quoteDetails,
+          subject: `QUOTE REQUEST · ${name} · ${company || 'Unknown'} · £${monthlyStr}/mo`,
+          html: adminHtml,
         });
 
-        const confirmText = [
-          'Hi ' + name + ',',
-          '',
-          'Thank you for your interest in XHS Copilot.',
-          '',
-          'Here is a summary of your configuration:',
-          '- Plan: ' + plan,
-          '- Users: ' + users,
-          '- Verticals: ' + verticalsList,
-          '- Coverage: ' + coverageList,
-          '- Estimated price: \u00a3' + monthlyStr + '/month (\u00a3' + annualStr + '/year)',
-          '',
-          'A member of our team will be in touch shortly to discuss your requirements.',
-          'In the meantime, you can start a 14-day free trial at https://xhsdata.ai/register',
-          '',
-          'Best regards,',
-          'The Pimlico Team',
-          'pimlicosolutions.com',
-        ].join('\n');
+        // User confirmation
+        const summaryHtml = `
+          <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 8px 0 4px; border: 1px solid #1e293b; border-radius: 8px; background-color: #0b1220;">
+            <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">PLAN</span><br><span style="color: #cbd5e1; font-size: 14px;">${escapeHtml(plan || '—')}</span></td></tr>
+            <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">TEAM</span><br><span style="color: #cbd5e1; font-size: 14px;">${users} user${users === 1 ? '' : 's'}</span></td></tr>
+            <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">VERTICALS</span><br><span style="color: #cbd5e1; font-size: 14px;">${escapeHtml(verticalsList)}</span></td></tr>
+            <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">COVERAGE</span><br><span style="color: #cbd5e1; font-size: 14px;">${escapeHtml(coverageList)}</span></td></tr>
+            <tr><td style="padding: 14px 18px;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">ESTIMATED PRICE</span><br><span style="color: #ffffff; font-size: 18px; font-weight: 500;">&pound;${monthlyStr}/month</span> <span style="color: #94a3b8; font-size: 13px;">&nbsp;·&nbsp; &pound;${annualStr}/year</span></td></tr>
+          </table>
+        `;
+
+        const userHtml = renderEmail({
+          preheader: `Your XHS Copilot quote · £${monthlyStr}/mo`,
+          eyebrow: 'QUOTE',
+          heading: 'Your XHS\u2122 Copilot quote.',
+          intro: `Hi ${escapeHtml(name)}, thanks for configuring a quote on pimlicosolutions.com. Here's the summary based on your selection.`,
+          body: summaryHtml,
+          ctaLabel: 'Start your 14-day trial',
+          ctaHref: 'https://xhsdata.ai/register',
+          footerNote: 'A member of our team will be in touch shortly to walk you through the configuration and answer any questions. Reply to this email if you need anything in the meantime.',
+        });
 
         await resend.emails.send({
           from: 'Pimlico XHS <onboarding@resend.dev>',
           to: email,
-          subject: 'Your XHS Copilot quote',
-          text: confirmText,
+          subject: 'Your XHS\u2122 Copilot quote',
+          html: userHtml,
         });
       } catch (emailErr) {
         console.error('Email send error:', emailErr);
-      }
-    }
-
-    if (process.env.SLACK_WEBHOOK_URL) {
-      try {
-        const slackText = 'New Quote Request\n*' + name + '* from *' + (company || 'Unknown') + '*\n' + email + '\n\n*Config:* ' + users + ' users, ' + verticalsList + ', ' + coverageList + ', ' + billing + '\n*Price:* \u00a3' + monthlyStr + '/mo (\u00a3' + annualStr + '/yr)';
-        await fetch(process.env.SLACK_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: slackText }),
-        });
-      } catch (slackErr) {
-        console.error('Slack notification error:', slackErr);
       }
     }
 
