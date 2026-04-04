@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // ── Pricing model (mirrored from platform commercialPricingModel.ts) ──
 
@@ -124,6 +125,9 @@ function FAQ({ q, a }) {
 
 export default function PricingPage() {
   const [users, setUsers] = useState(3);
+  const [showQuoteForm, setShowQuoteForm] = useState(false);
+  const [quoteSubmitting, setQuoteSubmitting] = useState(false);
+  const [quoteSent, setQuoteSent] = useState(false);
   const [selectedVerticals, setSelectedVerticals] = useState(["Gambling"]);
   const [selectedRegions, setSelectedRegions] = useState(["global"]);
   const [billing, setBilling] = useState("monthly");
@@ -354,12 +358,64 @@ export default function PricingPage() {
                     >
                       Book a demo
                     </Link>
-                    <Link
-                      href="/contact"
-                      className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
-                    >
-                      Contact sales
-                    </Link>
+                    {!showQuoteForm && !quoteSent && (
+                      <button
+                        onClick={() => setShowQuoteForm(true)}
+                        className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
+                      >
+                        Request this quote
+                      </button>
+                    )}
+
+                    {showQuoteForm && !quoteSent && (
+                      <form
+                        className="mt-4 space-y-2"
+                        onSubmit={async (e) => {
+                          e.preventDefault();
+                          setQuoteSubmitting(true);
+                          const fd = new FormData(e.target);
+                          try {
+                            await fetch("/api/quote-request", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                name: fd.get("name"),
+                                email: fd.get("email"),
+                                company: fd.get("company"),
+                                users,
+                                verticals: selectedVerticals,
+                                coverage: selectedRegions,
+                                billing,
+                                monthlyPrice: price.monthly,
+                                annualPrice: price.annual,
+                                plan: users <= 3 ? "Professional" : users <= 25 ? "Team" : "Enterprise",
+                              }),
+                            });
+                            setQuoteSent(true);
+                          } catch (err) {
+                            console.error(err);
+                          }
+                          setQuoteSubmitting(false);
+                        }}
+                      >
+                        <input name="name" required placeholder="Your name" className="w-full rounded-md px-3 py-2 text-xs text-white placeholder:text-[var(--color-text-muted)] border border-[var(--color-border-default)]/40" style={{ backgroundColor: "#0f172a" }} />
+                        <input name="email" type="email" required placeholder="Work email" className="w-full rounded-md px-3 py-2 text-xs text-white placeholder:text-[var(--color-text-muted)] border border-[var(--color-border-default)]/40" style={{ backgroundColor: "#0f172a" }} />
+                        <input name="company" placeholder="Company (optional)" className="w-full rounded-md px-3 py-2 text-xs text-white placeholder:text-[var(--color-text-muted)] border border-[var(--color-border-default)]/40" style={{ backgroundColor: "#0f172a" }} />
+                        <button
+                          type="submit"
+                          disabled={quoteSubmitting}
+                          className="w-full rounded-md bg-[var(--color-text-primary)] px-3 py-2 text-xs font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90 disabled:opacity-50"
+                        >
+                          {quoteSubmitting ? "Sending..." : "Send me this quote"}
+                        </button>
+                      </form>
+                    )}
+
+                    {quoteSent && (
+                      <p className="mt-3 text-xs text-center text-[var(--color-text-tertiary)]">
+                        Quote sent. We'll be in touch shortly.
+                      </p>
+                    )}
                   </>
                 )}
               </div>
