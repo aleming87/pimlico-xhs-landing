@@ -177,9 +177,9 @@ export default function PricingPage() {
       {/* Configurator */}
       <section className="pb-20 sm:pb-28">
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-10">
             {/* Controls */}
-            <div className="lg:col-span-3 space-y-8">
+            <div className="col-span-2 lg:col-span-3 space-y-8">
               {/* Users */}
               <div>
                 <label className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-3 block">
@@ -250,20 +250,6 @@ export default function PricingPage() {
                 </div>
               </div>
 
-              {/* AI Provider logos */}
-              <div>
-                <label className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-3 block">
-                  Powered by
-                </label>
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-[var(--color-text-muted)]">
-                  <span>Anthropic</span>
-                  <span>OpenAI</span>
-                  <span>Google</span>
-                  <span>xAI</span>
-                  <span>Perplexity</span>
-                  <span>DeepL</span>
-                </div>
-              </div>
             </div>
 
             {/* Price card */}
