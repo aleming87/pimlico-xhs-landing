@@ -117,24 +117,24 @@ function ContactPageInner() {
                   ? "Talk to our sales team."
                   : defaultInterest === "partnership"
                     ? "Explore a partnership."
-                    : "Book a demo or get in touch."}
+                    : "Book a demo. See the platform."}
             </h1>
             <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed mb-10">
               {isTrial
-                ? "Full access to the XHS\u2122 Copilot platform. No credit card required. Your team can be onboarded within minutes."
+                ? "Full access to the XHS\u2122 Copilot platform. No credit card. Your team can be onboarded in minutes."
                 : defaultInterest === "pricing"
-                  ? "Custom pricing, procurement, and enterprise packages. Our sales team will walk through your requirements and put a proposal together."
+                  ? "Custom pricing, procurement, and enterprise packages. We\u2019ll scope your requirements and put together a proposal."
                   : defaultInterest === "partnership"
-                    ? "Integration partners, implementation partners, and channel relationships. Tell us what you have in mind and we\u2019ll be in touch."
-                    : "See how XHS\u2122 Copilot can work for your compliance team. We\u2019ll walk you through the platform and answer any questions."}
+                    ? "Integration, implementation, and channel relationships. Tell us what you have in mind."
+                    : "We\u2019ll walk you through XHS\u2122 Copilot in your jurisdictions and answer every question your team has."}
             </p>
 
             {/* Value props */}
             <div className="space-y-5">
               {[
                 { label: "250+ jurisdictions", desc: "Gambling, Payments, Crypto, and AI regulation monitored continuously." },
-                { label: "Unlimited users", desc: "No per-seat pricing. Your entire compliance team gets access." },
-                { label: "Slack & Teams", desc: "Regulatory updates delivered directly into your existing workflow." },
+                { label: "Team economics", desc: "Scaling seat pricing across plans. Your full compliance team, day one." },
+                { label: "Slack & Teams", desc: "Regulatory updates delivered where your team already works." },
                 { label: "14-day trial", desc: "Full platform access. Cancel any time. No commitment." },
               ].map((item) => (
                 <div key={item.label} className="flex gap-3">
@@ -206,8 +206,8 @@ function ContactPageInner() {
                     <option value="trial">Starting a free trial</option>
                     <option value="demo">Booking a demo</option>
                     <option value="pricing">Pricing information</option>
-                    <option value="partnership">Partnership enquiry</option>
-                    <option value="other">General enquiry</option>
+                    <option value="partnership">Partnership inquiry</option>
+                    <option value="other">General inquiry</option>
                   </select>
                 </div>
                 <div className="sm:col-span-2">

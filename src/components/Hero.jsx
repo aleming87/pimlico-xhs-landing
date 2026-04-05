@@ -111,7 +111,7 @@ export default function Hero() {
               className="mt-8 text-sm text-[var(--color-text-tertiary)] sm:text-lg leading-relaxed"
             >
               Compliance workspaces for Gambling, Payments, Crypto and AI teams.<br />
-              Track regulatory change across 250+ jurisdictions.
+              Sourced, analyzed, and delivered across 250+ jurisdictions.
             </motion.p>
 
             {/* Dual CTA */}

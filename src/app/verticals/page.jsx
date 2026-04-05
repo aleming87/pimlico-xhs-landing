@@ -208,10 +208,10 @@ export default function VerticalsPage() {
       <div className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
           <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl">
-            Start your free trial
+            See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14 days. Full access. No credit card required.
+            14-day trial. Full access. No card.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

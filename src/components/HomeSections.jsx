@@ -23,9 +23,9 @@ export function TrustedBy() {
 
 export function Sectors() {
   const sectors = [
-    { title: "Gambling", desc: "Licensing regimes, responsible gambling requirements, advertising standards, and AML controls across global gaming markets.", href: "/verticals#gambling", image: "/sector-gambling.jpg" },
-    { title: "Payments & Crypto", desc: "PSD3, MiCA, PSR, and cross-border licensing. AML obligations, operational resilience, and supervisory expectations.", href: "/verticals#payments", image: "/sector-payments.jpg" },
-    { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, and the fast-moving governance landscape. From high-risk classification to conformity assessment.", href: "/verticals#ai", image: "/sector-ai.jpg" },
+    { title: "Gambling", desc: "Licensing, responsible gaming, advertising, and AML across global markets.", href: "/gambling", image: "/sector-gambling.jpg" },
+    { title: "Payments & Crypto", desc: "PSD3, MiCA, PSR, cross-border licensing, and operational resilience.", href: "/payments", image: "/sector-payments.jpg" },
+    { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, risk classification, and conformity assessment.", href: "/ai", image: "/sector-ai.jpg" },
   ];
 
   return (
@@ -96,12 +96,12 @@ export function Coverage() {
           <Reveal delay={0.15}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
               {[
-                { region: "Europe", highlight: "UK, EU, Malta, Gibraltar, Switzerland" },
-                { region: "North America", highlight: "US federal + 50 states, Canada, Mexico" },
-                { region: "Asia-Pacific", highlight: "Singapore, Japan, Australia, Hong Kong" },
-                { region: "Middle East & Africa", highlight: "UAE, Saudi Arabia, South Africa, Nigeria" },
-                { region: "Americas", highlight: "Brazil, Colombia, Argentina, Chile" },
-                { region: "Supranational", highlight: "EU institutions, FATF, Basel, IOSCO" },
+                { region: "Europe", highlight: "UK, EU27, Switzerland, Norway, Channel Islands" },
+                { region: "North America", highlight: "US federal, 50 states, Canada, Mexico" },
+                { region: "Asia-Pacific", highlight: "Singapore, Japan, Australia, Hong Kong, South Korea" },
+                { region: "Latin America", highlight: "Brazil, Mexico, Colombia, Argentina, Chile" },
+                { region: "Middle East & Africa", highlight: "UAE, Saudi Arabia, South Africa, Nigeria, Kenya" },
+                { region: "Supranational", highlight: "EU institutions, FATF, Basel, IOSCO, OECD" },
               ].map((item) => (
                 <div key={item.region}>
                   <p className="text-sm font-medium text-[var(--color-text-primary)]">{item.region}</p>
@@ -126,14 +126,14 @@ export function Security() {
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl leading-[1.1]">
-              Enterprise-grade security.
+              Built for regulated teams.
             </h2>
             <div>
               <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed">
-                SAML SSO, audit logs, data lifecycle management, and encryption at rest and in transit.
+                EU data residency, SAML SSO, audit logs, row-level isolation, and encryption at rest and in transit. Your data is never used to train AI models.
               </p>
               <a href="/security" className="inline-flex items-center mt-5 text-sm font-mono text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
-                More about security &rarr;
+                Full security brief &rarr;
               </a>
             </div>
           </div>
@@ -141,10 +141,10 @@ export function Security() {
         <Reveal delay={0.1}>
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-x-16 justify-items-center">
             {[
-              { label: "SOC 2 aligned", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
-              { label: "ISO 27001 aligned", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" },
+              { label: "SOC 2 Type II infra", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
               { label: "GDPR compliant", icon: "M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-              { label: "256-bit encryption", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" },
+              { label: "AES-256 at rest", icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" },
+              { label: "EU data residency", icon: "M3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 010 18m0-18a15 15 0 000 18M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
             ].map((badge) => (
               <div key={badge.label} className="text-center">
                 <svg className="mx-auto h-12 w-12 text-[var(--color-text-muted)]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={0.8}>
@@ -161,58 +161,25 @@ export function Security() {
 }
 
 export function Testimonials() {
-  const quotes = [
-    {
-      quote: "It felt like we could solve all of our regulatory monitoring challenges with one platform. The Slack integration alone solved our biggest pain point \u2014 getting the right updates to the right stakeholders without anyone having to log into yet another tool.",
-      name: "Head of Compliance",
-      company: "Global Stablecoin & Payments Infrastructure",
-    },
-    {
-      quote: "We found enforcement data and court decisions that our existing provider simply didn\u2019t have. Jurisdictions they don\u2019t even cover. That changed the conversation internally about what we actually need from a compliance tool.",
-      name: "Licensing & Certification",
-      company: "European Betting Operator",
-    },
-    {
-      quote: "The reports had great feedback across the region. Teams in multiple countries came back saying this is exactly what they needed. Clear, concise, and for the first time a unified view across markets.",
-      name: "Market Intelligence, EMEA",
-      company: "Global Technology Corporation",
-    },
-    {
-      quote: "As an EMI expanding across the EU, we need to track changes across every market where we hold a license. XHS\u2122 gives us the same core monitoring at a fraction of the cost, with integrations that fit how our team actually works.",
-      name: "Head of Legal & Compliance",
-      company: "European Electronic Money Institution",
-    },
-  ];
-
   return (
-    <div className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 mb-14">
+    <div className="border-t border-[var(--color-border-default)]/20 py-24 sm:py-32 overflow-hidden">
+      <div className="mx-auto max-w-4xl px-6 lg:px-8">
         <Reveal>
-          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ WHAT TEAMS SAY ]
+          <p className="text-center text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-10">
+            [ FROM THE TEAMS WE WORK WITH ]
           </p>
-          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl leading-[1.1]">
-            Trusted by regulated teams.
-          </h2>
+          <blockquote className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-[var(--color-text-primary)] leading-[1.25] text-center">
+            &ldquo;We found enforcement data and court decisions our previous provider didn&rsquo;t have. Jurisdictions they didn&rsquo;t even cover. It changed the conversation internally about what we actually need from a compliance tool.&rdquo;
+          </blockquote>
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <div className="h-px w-10 bg-[var(--color-border-default)]/40" />
+            <div className="text-center">
+              <p className="text-sm font-medium text-[var(--color-text-primary)]">Licensing &amp; Certification</p>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">European Betting Operator</p>
+            </div>
+            <div className="h-px w-10 bg-[var(--color-border-default)]/40" />
+          </div>
         </Reveal>
-      </div>
-
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <StaggerGroup className="grid gap-5 sm:grid-cols-2" stagger={0.1}>
-          {quotes.map((t) => (
-            <StaggerItem key={t.company}>
-              <div className="rounded-xl border border-[var(--color-border-default)]/30 bg-[var(--color-bg-surface)]/50 p-7 h-full flex flex-col">
-                <blockquote className="text-sm text-[var(--color-text-secondary)] leading-relaxed flex-1">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <div className="mt-5 pt-4 border-t border-[var(--color-border-default)]/20">
-                  <p className="text-sm font-medium text-[var(--color-text-primary)]">{t.name}</p>
-                  <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{t.company}</p>
-                </div>
-              </div>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
       </div>
     </div>
   );
@@ -229,10 +196,10 @@ export function FinalCTA() {
       <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
         <Reveal>
           <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
-            Start your free trial
+            See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14 days. Full access. No credit card required.
+            14-day trial. Full access. No card.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">

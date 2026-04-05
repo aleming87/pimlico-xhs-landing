@@ -3,16 +3,15 @@ import Link from "next/link";
 
 const FOOTER_LINKS = {
   Product: [
-    { label: "Gambling", href: "/verticals#gambling" },
-    { label: "Payments & Crypto", href: "/verticals#payments" },
-    { label: "Artificial Intelligence", href: "/verticals#ai" },
+    { label: "Gambling", href: "/gambling" },
+    { label: "Payments & Crypto", href: "/payments" },
+    { label: "Artificial Intelligence", href: "/ai" },
     { label: "Pricing", href: "/pricing" },
   ],
   Resources: [
     { label: "Insights", href: "/insights" },
     { label: "Security", href: "/security" },
-    { label: "Book a demo", href: "/contact" },
-    { label: "Contact", href: "mailto:contact@pimlicosolutions.com" },
+    { label: "Contact", href: "/contact" },
   ],
   Legal: [
     { label: "Privacy", href: "/privacy" },
@@ -109,7 +108,7 @@ export default function SiteFooter() {
 
         <div className="mt-16 border-t border-[var(--color-border-default)]/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--color-text-muted)]">
-            &copy; {new Date().getFullYear()} Pimlico Solutions Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} Pimlico Solutions Limited. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <div className="flex gap-x-4">

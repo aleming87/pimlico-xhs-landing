@@ -6,7 +6,7 @@ export default function Differentiators() {
   const items = [
     {
       title: "Monitor",
-      body: "Deployed across 12,000+ regulatory sources. Real-time change detection across 250+ jurisdictions.",
+      body: "12,000+ sources watched continuously. Real-time change detection across 250+ jurisdictions.",
       icon: (
         <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
@@ -15,7 +15,7 @@ export default function Differentiators() {
     },
     {
       title: "Analyze",
-      body: "Ask any regulatory question. Get source-grounded, cited answers from AI trained on your compliance context.",
+      body: "Ask Lens\u2122 any regulatory question. Citation-backed answers grounded in primary sources — never on your private data.",
       icon: (
         <svg className="h-9 w-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -33,7 +33,7 @@ export default function Differentiators() {
     },
     {
       title: "Integrate",
-      body: "Enterprise APIs, Slack and Teams alerts, email digests. Compliance workflows that fit into yours.",
+      body: "Enterprise APIs, Slack and Teams alerts, email digests. Delivered where your team already works.",
       icon: (
         <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />

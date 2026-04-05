@@ -8,8 +8,8 @@ const SCREENS = [
     id: "dashboard",
     label: "Dashboard",
     image: "/Product-1---Dashboard.png",
-    headline: "Your regulatory command center",
-    desc: "Every development that matters to your jurisdictions, surfaced automatically. Watchlist activity, breaking regulatory changes, and AI-curated insights — updated continuously.",
+    headline: "One surface for the regulatory day.",
+    desc: "Every development that matters to your jurisdictions, surfaced automatically. Watchlist activity, breaking changes, and Lens\u2122 insights — continuously updated.",
   },
   {
     id: "regulations",
