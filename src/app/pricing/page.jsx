@@ -165,7 +165,7 @@ export default function PricingPage() {
     [users, selectedVerticals, selectedRegions, billing]
   );
 
-  const isEnterprise = users > 100;
+  const isEnterprise = users > 25;
 
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
@@ -213,17 +213,19 @@ export default function PricingPage() {
                   <input
                     type="range"
                     min={1}
-                    max={150}
+                    max={26}
                     value={users}
                     onChange={(e) => setUsers(parseInt(e.target.value))}
                     className="flex-1 h-1.5 bg-[var(--color-bg-elevated)] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--color-text-primary)] [&::-webkit-slider-thumb]:cursor-pointer"
                   />
-                  <div className="rounded-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-default)]/40 px-4 py-2 min-w-[4rem] text-center">
-                    <span className="font-mono text-lg tabular-nums text-[var(--color-text-primary)]">{users}</span>
+                  <div className="rounded-lg bg-[var(--color-bg-surface)] border border-[var(--color-border-default)]/40 px-4 py-2 min-w-[4.5rem] text-center">
+                    <span className="font-mono text-lg tabular-nums text-[var(--color-text-primary)]">
+                      {users > 25 ? "25+" : users}
+                    </span>
                   </div>
                 </div>
                 <p className="mt-2 text-xs text-[var(--color-text-muted)]">
-                  {users <= 3 ? "Professional" : users <= 10 ? "Team" : users <= 25 ? "Team" : users <= 100 ? "Enterprise" : "Enterprise (custom)"} plan
+                  {users <= 3 ? "Professional" : users <= 10 ? "Team" : users <= 25 ? "Team (large)" : "Enterprise — custom pricing"}
                 </p>
               </div>
 
@@ -278,24 +280,71 @@ export default function PricingPage() {
 
             {/* Price card */}
             <div className="lg:col-span-2">
-              <div className="lg:sticky lg:top-28 rounded-xl border border-[var(--color-border-default)]/40 bg-[var(--color-bg-surface)]/50 p-6">
+              <div className="lg:sticky lg:top-28 rounded-xl border border-[var(--color-border-default)]/40 bg-[var(--color-bg-surface)]/50 p-6 lg:min-h-[560px] flex flex-col">
                 {isEnterprise ? (
                   <>
-                    <p className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">
+                    <p className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-3">
                       Enterprise
                     </p>
-                    <p className="text-3xl font-medium text-[var(--color-text-primary)] mb-3">
-                      Custom pricing
+                    <p className="text-3xl font-medium text-[var(--color-text-primary)] mb-3 leading-tight">
+                      Let&apos;s build your package.
                     </p>
-                    <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed mb-6">
-                      Dedicated account management, custom integrations, and SLA guarantees.
+                    <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed mb-5">
+                      For teams of 25+, we put together a tailored proposal based on your headcount, jurisdictions, compliance scope, and procurement requirements. Pricing typically starts in the £3,000–£8,000 per month range depending on coverage.
                     </p>
-                    <Link
-                      href="/contact"
-                      className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
-                    >
-                      Contact sales
-                    </Link>
+
+                    <div className="mb-5 rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-base)]/40 p-4">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.14em] text-[var(--color-text-muted)] mb-3">
+                        What you get
+                      </p>
+                      <ul className="space-y-2 text-xs text-[var(--color-text-secondary)]">
+                        {[
+                          "Unlimited users and workspaces",
+                          "Custom AI credit allocations",
+                          "Dedicated account manager",
+                          "SLA + data residency options",
+                          "Procurement, invoicing, security review",
+                          "Onboarding + team training sessions",
+                          "Priority support on Slack or Teams",
+                          "Early access to new modules",
+                        ].map((item) => (
+                          <li key={item} className="flex items-start gap-2">
+                            <span className="mt-1.5 h-1 w-1 rounded-full bg-[var(--color-text-tertiary)] shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="mb-5 text-xs text-[var(--color-text-tertiary)]">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.14em] text-[var(--color-text-muted)] mb-2">
+                        Typical enterprise customers
+                      </p>
+                      <p className="leading-relaxed">
+                        Global gambling operators, licensed PSPs and EMIs, crypto exchanges expanding across jurisdictions, and law firms with regulated-sector portfolios.
+                      </p>
+                    </div>
+
+                    <div className="mt-auto space-y-2">
+                      <Link
+                        href="/contact?interest=pricing"
+                        className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
+                      >
+                        Contact sales
+                      </Link>
+                      <Link
+                        href="/contact?interest=demo"
+                        className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40"
+                      >
+                        Book a demo first
+                      </Link>
+                      <a
+                        href="https://xhsdata.ai/register?plan=enterprise"
+                        className="block w-full text-center text-xs font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors py-1"
+                      >
+                        Start a trial first &rarr;
+                      </a>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -366,32 +415,34 @@ export default function PricingPage() {
                       </div>
                     </div>
 
-                    <a
-                      href={`https://xhsdata.ai/register?plan=${users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise"}&users=${users}&verticals=${encodeURIComponent(selectedVerticals.join(","))}&coverage=${encodeURIComponent(selectedRegions.join(","))}&billing=${billing}`}
-                      className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90 mb-2"
-                    >
-                      Start free trial
-                    </a>
-                    <Link
-                      href="/contact?interest=pricing"
-                      className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40 mb-2"
-                    >
-                      Contact sales
-                    </Link>
-                    <Link
-                      href="/contact?interest=demo"
-                      className="block w-full rounded-lg px-6 py-2 text-center text-xs font-medium text-[var(--color-text-muted)] transition-all hover:text-[var(--color-text-primary)] mb-1"
-                    >
-                      Book a demo
-                    </Link>
-                    {!showQuoteForm && !quoteSent && (
-                      <button
-                        onClick={() => setShowQuoteForm(true)}
-                        className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
+                    <div className="mt-auto space-y-2">
+                      <a
+                        href={`https://xhsdata.ai/register?plan=${users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise"}&users=${users}&verticals=${encodeURIComponent(selectedVerticals.join(","))}&coverage=${encodeURIComponent(selectedRegions.join(","))}&billing=${billing}`}
+                        className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
                       >
-                        Email me this configuration
-                      </button>
-                    )}
+                        Start free trial
+                      </a>
+                      <Link
+                        href="/contact?interest=pricing"
+                        className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40"
+                      >
+                        Contact sales
+                      </Link>
+                      <Link
+                        href="/contact?interest=demo"
+                        className="block w-full text-center text-xs font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors py-1"
+                      >
+                        Book a demo
+                      </Link>
+                      {!showQuoteForm && !quoteSent && (
+                        <button
+                          onClick={() => setShowQuoteForm(true)}
+                          className="block w-full text-center text-[11px] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors"
+                        >
+                          Email me this configuration
+                        </button>
+                      )}
+                    </div>
 
                     {showQuoteForm && !quoteSent && (
                       <form
