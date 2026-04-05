@@ -15,6 +15,20 @@ export const metadata = {
   },
 }
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pimlicosolutions.com" },
+    { "@type": "ListItem", "position": 2, "name": "Verticals", "item": "https://pimlicosolutions.com/verticals" },
+  ],
+};
+
 export default function VerticalsLayout({ children }) {
-  return children
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {children}
+    </>
+  )
 }
