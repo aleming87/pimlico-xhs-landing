@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Reveal, StaggerGroup, StaggerItem } from "./motion";
 
 export function TrustedBy() {
@@ -160,26 +162,110 @@ export function Security() {
   );
 }
 
+const TESTIMONIALS = [
+  {
+    sector: "Gambling",
+    quote: "We found enforcement data and court decisions our previous provider didn\u2019t have. Jurisdictions they didn\u2019t even cover. It changed the conversation internally about what we actually need from a compliance tool.",
+    name: "Licensing & Certification",
+    company: "European Betting Operator",
+  },
+  {
+    sector: "Payments & Crypto",
+    quote: "The Slack integration alone solved our biggest pain point \u2014 getting the right updates to the right stakeholders without anyone having to log into yet another tool. It felt like we could solve our regulatory monitoring challenges with one platform.",
+    name: "Head of Compliance",
+    company: "Global Stablecoin & Payments Infrastructure",
+  },
+  {
+    sector: "Technology",
+    quote: "Jurisdiction reports gave us one unified view of AI governance obligations across every market we operate in. Lens\u2122 surfaces what actually matters for each jurisdiction, and we\u2019ve replaced a patchwork of country-specific tracking with a single structured feed.",
+    name: "Market Intelligence, EMEA",
+    company: "Global Technology Corporation",
+  },
+];
+
+const CYCLE_MS = 7000;
+const ease = [0.25, 0.1, 0.25, 1];
+
 export function Testimonials() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setActive((i) => (i + 1) % TESTIMONIALS.length);
+    }, CYCLE_MS);
+    return () => clearInterval(timer);
+  }, [paused]);
+
+  const current = TESTIMONIALS[active];
+
   return (
-    <div className="border-t border-[var(--color-border-default)]/20 py-24 sm:py-32 overflow-hidden">
+    <div
+      className="border-t border-[var(--color-border-default)]/20 py-24 sm:py-32 overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="mx-auto max-w-4xl px-6 lg:px-8">
         <Reveal>
           <p className="text-center text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-10">
             [ FROM THE TEAMS WE WORK WITH ]
           </p>
-          <blockquote className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-[var(--color-text-primary)] leading-[1.25] text-center">
-            &ldquo;We found enforcement data and court decisions our previous provider didn&rsquo;t have. Jurisdictions they didn&rsquo;t even cover. It changed the conversation internally about what we actually need from a compliance tool.&rdquo;
-          </blockquote>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <div className="h-px w-10 bg-[var(--color-border-default)]/40" />
-            <div className="text-center">
-              <p className="text-sm font-medium text-[var(--color-text-primary)]">Licensing &amp; Certification</p>
-              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">European Betting Operator</p>
-            </div>
-            <div className="h-px w-10 bg-[var(--color-border-default)]/40" />
-          </div>
         </Reveal>
+
+        <div className="min-h-[22rem] sm:min-h-[20rem] flex flex-col items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5, ease }}
+              className="w-full"
+            >
+              <blockquote className="font-display text-2xl sm:text-3xl lg:text-4xl font-medium text-[var(--color-text-primary)] leading-[1.25] text-center">
+                &ldquo;{current.quote}&rdquo;
+              </blockquote>
+              <div className="mt-10 flex items-center justify-center gap-4">
+                <div className="h-px w-10 bg-[var(--color-border-default)]/40" />
+                <div className="text-center">
+                  <p className="text-sm font-medium text-[var(--color-text-primary)]">{current.name}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] mt-0.5">{current.company}</p>
+                </div>
+                <div className="h-px w-10 bg-[var(--color-border-default)]/40" />
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Sector indicators */}
+        <div className="mt-10 flex items-center justify-center gap-8">
+          {TESTIMONIALS.map((t, i) => (
+            <button
+              key={t.sector}
+              onClick={() => setActive(i)}
+              className="group flex flex-col items-center gap-2"
+              aria-label={`Show ${t.sector} testimonial`}
+            >
+              <span
+                className={`text-[10px] font-mono uppercase tracking-[0.15em] transition-colors ${
+                  i === active
+                    ? "text-[var(--color-text-primary)]"
+                    : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)]"
+                }`}
+              >
+                {t.sector}
+              </span>
+              <span
+                className={`block h-px transition-all ${
+                  i === active
+                    ? "w-10 bg-[var(--color-text-primary)]"
+                    : "w-6 bg-[var(--color-border-default)]/40 group-hover:w-8 group-hover:bg-[var(--color-text-muted)]"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

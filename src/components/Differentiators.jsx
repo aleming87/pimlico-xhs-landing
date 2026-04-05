@@ -6,7 +6,7 @@ export default function Differentiators() {
   const items = [
     {
       title: "Monitor",
-      body: "12,000+ sources watched continuously. Real-time change detection across 275+ jurisdictions.",
+      body: "12,000+ sources watched continuously. Real-time change detection at global scale.",
       icon: (
         <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
