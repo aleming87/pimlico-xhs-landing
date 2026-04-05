@@ -24,6 +24,11 @@ function ContactPageInner() {
     return null;
   }
 
+  // Pre-fill interest from URL (e.g. /contact?interest=pricing from pricing page)
+  const interestParam = searchParams.get("interest");
+  const validInterests = ["trial", "demo", "pricing", "partnership", "other"];
+  const defaultInterest = validInterests.includes(interestParam) ? interestParam : "";
+
   const freeEmailProviders = [
     "gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com",
     "icloud.com", "mail.com", "protonmail.com", "zoho.com", "yandex.com",
@@ -106,12 +111,22 @@ function ContactPageInner() {
               {isTrial ? "[ START FREE TRIAL ]" : "[ GET IN TOUCH ]"}
             </p>
             <h1 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl leading-[1.1] mb-6">
-              {isTrial ? "Start your 14-day free trial." : "Book a demo or get in touch."}
+              {isTrial
+                ? "Start your 14-day free trial."
+                : defaultInterest === "pricing"
+                  ? "Talk to our sales team."
+                  : defaultInterest === "partnership"
+                    ? "Explore a partnership."
+                    : "Book a demo or get in touch."}
             </h1>
             <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed mb-10">
               {isTrial
                 ? "Full access to the XHS\u2122 Copilot platform. No credit card required. Your team can be onboarded within minutes."
-                : "See how XHS\u2122 Copilot can work for your compliance team. We\u2019ll walk you through the platform and answer any questions."}
+                : defaultInterest === "pricing"
+                  ? "Custom pricing, procurement, and enterprise packages. Our sales team will walk through your requirements and put a proposal together."
+                  : defaultInterest === "partnership"
+                    ? "Integration partners, implementation partners, and channel relationships. Tell us what you have in mind and we\u2019ll be in touch."
+                    : "See how XHS\u2122 Copilot can work for your compliance team. We\u2019ll walk you through the platform and answer any questions."}
             </p>
 
             {/* Value props */}
@@ -186,7 +201,7 @@ function ContactPageInner() {
                   <label htmlFor="interest" className="block text-xs font-medium text-[var(--color-text-tertiary)] mb-2">
                     I'm interested in
                   </label>
-                  <select id="interest" name="interest" className={inputClass + " appearance-none"} defaultValue={isTrial ? "trial" : ""}>
+                  <select id="interest" name="interest" className={inputClass + " appearance-none"} defaultValue={defaultInterest}>
                     <option value="" disabled>Select an option</option>
                     <option value="trial">Starting a free trial</option>
                     <option value="demo">Booking a demo</option>
@@ -231,7 +246,7 @@ function ContactPageInner() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-8 w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-8 w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Sending..." : isTrial ? "Start free trial" : "Book a demo"}
               </button>

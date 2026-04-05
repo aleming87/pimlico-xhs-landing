@@ -176,7 +176,7 @@ export default function PricingPage() {
             <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
               [ PRICING ]
             </p>
-            <h1 className="text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
               Transparent pricing. No surprises.
             </h1>
             <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mx-auto">
@@ -184,6 +184,15 @@ export default function PricingPage() {
             </p>
             <p className="mt-3 text-sm text-[var(--color-text-muted)]">
               Start your 14-day free trial. No credit card required.
+            </p>
+            <p className="mt-6 text-sm text-[var(--color-text-tertiary)]">
+              Need something custom?{" "}
+              <Link
+                href="/contact?interest=pricing"
+                className="text-[var(--color-text-primary)] underline decoration-[var(--color-border-default)] underline-offset-4 hover:decoration-[var(--color-text-primary)] transition-colors"
+              >
+                Contact sales
+              </Link>
             </p>
           </div>
         </div>
@@ -275,7 +284,7 @@ export default function PricingPage() {
                     <p className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">
                       Enterprise
                     </p>
-                    <p className="text-3xl font-semibold text-[var(--color-text-primary)] mb-3">
+                    <p className="text-3xl font-medium text-[var(--color-text-primary)] mb-3">
                       Custom pricing
                     </p>
                     <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed mb-6">
@@ -283,7 +292,7 @@ export default function PricingPage() {
                     </p>
                     <Link
                       href="/contact"
-                      className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90"
+                      className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
                     >
                       Contact sales
                     </Link>
@@ -310,7 +319,7 @@ export default function PricingPage() {
                     {billing === "monthly" ? (
                       <>
                         <div className="flex items-baseline gap-1 mb-1">
-                          <span className="text-3xl font-semibold tabular-nums text-[var(--color-text-primary)] font-mono">
+                          <span className="text-3xl font-medium tabular-nums text-[var(--color-text-primary)] font-mono">
                             £{price.monthly.toLocaleString()}
                           </span>
                           <span className="text-xs text-[var(--color-text-muted)]">/mo</span>
@@ -322,7 +331,7 @@ export default function PricingPage() {
                     ) : (
                       <>
                         <div className="flex items-baseline gap-1 mb-1">
-                          <span className="text-3xl font-semibold tabular-nums text-[var(--color-text-primary)] font-mono">
+                          <span className="text-3xl font-medium tabular-nums text-[var(--color-text-primary)] font-mono">
                             £{price.annual.toLocaleString()}
                           </span>
                           <span className="text-xs text-[var(--color-text-muted)]">/year</span>
@@ -359,13 +368,19 @@ export default function PricingPage() {
 
                     <a
                       href={`https://xhsdata.ai/register?plan=${users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise"}&users=${users}&verticals=${encodeURIComponent(selectedVerticals.join(","))}&coverage=${encodeURIComponent(selectedRegions.join(","))}&billing=${billing}`}
-                      className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90 mb-2"
+                      className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90 mb-2"
                     >
                       Start free trial
                     </a>
                     <Link
-                      href="/contact"
-                      className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-xs font-medium text-[var(--color-text-muted)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] mb-2"
+                      href="/contact?interest=pricing"
+                      className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40 mb-2"
+                    >
+                      Contact sales
+                    </Link>
+                    <Link
+                      href="/contact?interest=demo"
+                      className="block w-full rounded-lg px-6 py-2 text-center text-xs font-medium text-[var(--color-text-muted)] transition-all hover:text-[var(--color-text-primary)] mb-1"
                     >
                       Book a demo
                     </Link>
@@ -374,7 +389,7 @@ export default function PricingPage() {
                         onClick={() => setShowQuoteForm(true)}
                         className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
                       >
-                        Request this quote
+                        Email me this configuration
                       </button>
                     )}
 
@@ -415,7 +430,7 @@ export default function PricingPage() {
                         <button
                           type="submit"
                           disabled={quoteSubmitting}
-                          className="w-full rounded-md bg-[var(--color-text-primary)] px-3 py-2 text-xs font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90 disabled:opacity-50"
+                          className="w-full rounded-md bg-[var(--color-text-primary)] px-3 py-2 text-xs font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90 disabled:opacity-50"
                         >
                           {quoteSubmitting ? "Sending..." : "Send me this quote"}
                         </button>
@@ -441,7 +456,7 @@ export default function PricingPage() {
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
             [ INCLUDED IN EVERY PLAN ]
           </p>
-          <h2 className="text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl mb-12">
+          <h2 className="text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-12">
             Everything you need to stay ahead.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -454,7 +469,7 @@ export default function PricingPage() {
               { title: "Unlimited users", desc: "No per-seat pricing on Team and Enterprise plans. Your entire compliance team gets access from day one." },
             ].map((f) => (
               <div key={f.title}>
-                <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-1">{f.title}</h3>
+                <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-1">{f.title}</h3>
                 <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed">{f.desc}</p>
               </div>
             ))}
@@ -468,7 +483,7 @@ export default function PricingPage() {
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
             [ FAQ ]
           </p>
-          <h2 className="text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl mb-10">
+          <h2 className="text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-10">
             Common questions
           </h2>
           <div>
@@ -482,17 +497,20 @@ export default function PricingPage() {
       {/* CTA */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl">
+          <h2 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl">
             Start your free trial
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
             14 days. Full access. No credit card required.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">
               Start free trial
             </a>
-            <Link href="/contact" className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]">
+            <Link href="/contact?interest=pricing" className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40">
+              Contact sales
+            </Link>
+            <Link href="/contact?interest=demo" className="rounded-lg px-6 py-3 text-sm font-medium text-[var(--color-text-muted)] transition-all hover:text-[var(--color-text-primary)]">
               Book a demo
             </Link>
           </div>

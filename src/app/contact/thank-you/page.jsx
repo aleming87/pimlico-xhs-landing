@@ -59,7 +59,7 @@ export default function ThankYouPage() {
         {!callBooked ? (
           <div className="rounded-xl border border-[var(--color-border-default)]/30 bg-[var(--color-bg-surface)]/50 overflow-hidden">
             <div className="px-6 py-5 border-b border-[var(--color-border-default)]/20">
-              <h2 className="text-base font-semibold text-white">Book a call</h2>
+              <h2 className="text-base font-medium text-white">Book a call</h2>
               <p className="text-xs text-[var(--color-text-muted)] mt-1">Schedule a 30-minute walkthrough with our team.</p>
             </div>
             <div
@@ -74,7 +74,7 @@ export default function ThankYouPage() {
             <svg className="mx-auto h-10 w-10 text-white mb-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h2 className="text-lg font-semibold text-white mb-2">Call booked.</h2>
+            <h2 className="text-lg font-medium text-white mb-2">Call booked.</h2>
             <p className="text-sm text-[var(--color-text-tertiary)]">Check your email for confirmation details and calendar invite.</p>
           </div>
         )}
@@ -83,7 +83,7 @@ export default function ThankYouPage() {
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href="https://xhsdata.ai/register"
-            className="rounded-lg bg-white px-6 py-2.5 text-sm font-semibold text-[#020617] transition-all hover:opacity-90"
+            className="rounded-lg bg-white px-6 py-2.5 text-sm font-medium text-[#020617] transition-all hover:opacity-90"
           >
             Start free trial
           </a>

@@ -48,7 +48,7 @@ export async function POST(request) {
 
         // User confirmation
         const summaryHtml = `
-          <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 8px 0 4px; border: 1px solid #1e293b; border-radius: 8px; background-color: #0b1220;">
+          <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin: 8px 0 4px; border: 1px solid #1e293b; border-radius: 8px; background-color: #020617;">
             <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">PLAN</span><br><span style="color: #cbd5e1; font-size: 14px;">${escapeHtml(plan || '—')}</span></td></tr>
             <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">TEAM</span><br><span style="color: #cbd5e1; font-size: 14px;">${users} user${users === 1 ? '' : 's'}</span></td></tr>
             <tr><td style="padding: 14px 18px; border-bottom: 1px solid #1e293b;"><span style="font-family: 'Courier New', Courier, monospace; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.14em;">VERTICALS</span><br><span style="color: #cbd5e1; font-size: 14px;">${escapeHtml(verticalsList)}</span></td></tr>
