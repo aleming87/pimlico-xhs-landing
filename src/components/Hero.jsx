@@ -124,7 +124,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.7, ease }}
               className="mt-8 text-sm text-[var(--color-text-tertiary)] sm:text-lg leading-relaxed"
             >
-              Compliance workspaces for Gambling, Payments, Crypto and AI teams.<br />
+              Compliance workspaces for Gambling, Payments, Crypto and <span className="whitespace-nowrap">AI teams</span>.<br />
               Sourced, analyzed, and delivered at global scale.
             </motion.p>
 

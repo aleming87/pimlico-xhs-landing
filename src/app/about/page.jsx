@@ -3,7 +3,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata = {
   title: "About",
-  description: "Pimlico Solutions builds XHS™ Copilot — a regulatory intelligence platform for Gambling, Payments, Crypto and AI compliance teams. Based in London, operating globally.",
+  description: "Pimlico Solutions builds XHS™ Copilot — a regulatory intelligence platform for Gambling, Payments, Crypto and AI compliance teams. London-based, operating globally across 275+ jurisdictions.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About | XHS™ Copilot",
@@ -20,21 +20,27 @@ export const metadata = {
 
 const PRINCIPLES = [
   {
-    title: "Primary sources, verified.",
-    desc: "Every regulatory change is traced back to an official source — regulator bulletin, legislative text, enforcement order. We do not paraphrase and call it news.",
+    number: "01",
+    title: "Primary sources, always.",
+    desc: "Every regulatory change is traced back to the official record — regulator bulletins, legislative texts, enforcement orders. No paraphrasing, no telephone game.",
   },
   {
+    number: "02",
     title: "Analysis over aggregation.",
-    desc: "Regulatory feeds are a commodity. Context is not. Jurisdiction reports, Lens™ AI analysis, and expert-curated frameworks are what make the difference on a Monday morning.",
+    desc: "Feeds are commoditized. Context is not. Jurisdiction reports, Lens™ AI, and expert-curated frameworks are what make the difference on a Monday morning.",
   },
   {
+    number: "03",
     title: "Built for regulated teams.",
-    desc: "EU data residency, SOC 2 Type II infrastructure, row-level isolation. Your data is never used to train AI models. Security is not a checkbox — it is how the platform is built.",
+    desc: "EU data residency, SOC 2 Type II infrastructure, row-level isolation. Security is not a checkbox — it is how the platform is built from day one.",
   },
-  {
-    title: "Calm, exact, grounded.",
-    desc: "We do not chase trends, write clickbait, or invent acronyms. The regulatory environment is complex enough. The tool you use to navigate it should not add to the noise.",
-  },
+];
+
+const STATS = [
+  { value: "275+", label: "Jurisdictions" },
+  { value: "12,000+", label: "Sources" },
+  { value: "4", label: "Verticals" },
+  { value: "Daily", label: "Change detection" },
 ];
 
 export default function AboutPage() {
@@ -47,20 +53,53 @@ export default function AboutPage() {
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
         <div className="relative mx-auto max-w-4xl px-6 lg:px-8 py-20 sm:py-28">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-5">
-            [ ABOUT PIMLICO SOLUTIONS ]
+            [ ABOUT ]
           </p>
-          <h1 className="font-display text-4xl font-medium tracking-tight text-[var(--color-text-primary)] sm:text-5xl lg:text-6xl leading-[1.05] mb-8">
-            Regulatory intelligence, built right.
+          <h1 className="font-display text-4xl font-medium tracking-tight text-[var(--color-text-primary)] sm:text-5xl lg:text-6xl leading-[1.05] mb-8 max-w-3xl">
+            Regulation is moving faster than the tools built to track it.
           </h1>
-          <div className="space-y-6 text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-3xl">
+          <p className="text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-2xl">
+            Pimlico Solutions builds XHS&trade; Copilot &mdash; the regulatory intelligence platform for Gambling, Payments, Crypto and <span className="whitespace-nowrap">AI teams</span> operating across 275+ jurisdictions.
+          </p>
+        </div>
+      </section>
+
+      {/* Stats band */}
+      <section className="border-y border-[var(--color-border-default)]/20 py-14 sm:py-16">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-10">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="text-center sm:text-left">
+                <p className="font-mono text-3xl sm:text-4xl font-medium tabular-nums text-[var(--color-text-primary)]">
+                  {stat.value}
+                </p>
+                <p className="mt-2 text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)]">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why we exist */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ WHY WE BUILD IT ]
+          </p>
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl lg:text-4xl leading-[1.15] mb-10">
+            Compliance teams deserve a system built for the scale of the work.
+          </h2>
+          <div className="space-y-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
             <p>
-              Pimlico Solutions builds XHS™ Copilot — a regulatory intelligence platform for Gambling, Payments, Crypto and AI compliance teams operating across 275+ jurisdictions.
+              Gambling, Payments, Crypto and AI are the four sectors where regulation is expanding fastest and the consequences of getting it wrong are most severe. Teams operating across them are expected to track hundreds of jurisdictions, read thousands of sources, and translate raw regulatory change into decisions their business can act on.
             </p>
             <p>
-              We exist because regulatory change is accelerating, and the tools compliance teams have had to work with have not kept up. Most &ldquo;regtech&rdquo; is a newsletter wrapped in a login page. That is not enough when every market you operate in has its own framework, every quarter brings new obligations, and your team is expected to stay ahead of all of it.
+              We built XHS&trade; Copilot because we believe that work deserves a serious tool &mdash; primary-source monitoring, expert-curated jurisdiction reports, and Lens&trade; AI that operates on your own policies and context. One workspace your team actually uses, not another tab you avoid opening.
             </p>
-            <p>
-              We built XHS™ Copilot as the system we wished existed: primary-source monitoring across 12,000+ sources, expert-curated jurisdiction reports, and Lens™ AI for citation-backed analysis — tied together in one workspace your team actually uses.
+            <p className="text-[var(--color-text-secondary)]">
+              Every regulatory change. Analyzed.
             </p>
           </div>
         </div>
@@ -70,15 +109,18 @@ export default function AboutPage() {
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ HOW WE BUILD ]
+            [ HOW WE BUILD IT ]
           </p>
-          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
-            Four principles we do not break.
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12 max-w-2xl">
+            Three principles we do not break.
           </h2>
-          <div className="grid gap-px sm:grid-cols-2 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+          <div className="grid gap-px sm:grid-cols-3 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
             {PRINCIPLES.map((p) => (
-              <div key={p.title} className="bg-[var(--color-bg-base)] p-8">
-                <h3 className="text-base font-medium text-[var(--color-text-primary)] mb-2">
+              <div key={p.title} className="bg-[var(--color-bg-base)] p-8 sm:p-10">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+                  {p.number}
+                </p>
+                <h3 className="font-display text-lg font-medium text-[var(--color-text-primary)] mb-3 leading-snug">
                   {p.title}
                 </h3>
                 <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed">
@@ -90,52 +132,72 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Company */}
+      {/* Company facts */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ COMPANY ]
-          </p>
-          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-8">
-            The details.
-          </h2>
-          <dl className="grid gap-x-12 gap-y-6 sm:grid-cols-2 text-sm">
-            <div>
-              <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Legal entity</dt>
-              <dd className="text-[var(--color-text-secondary)]">Pimlico Solutions Limited</dd>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+            <div className="md:col-span-1">
+              <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+                [ COMPANY ]
+              </p>
+              <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1]">
+                The details.
+              </h2>
             </div>
-            <div>
-              <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Headquartered</dt>
-              <dd className="text-[var(--color-text-secondary)]">London, United Kingdom</dd>
-            </div>
-            <div>
-              <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Product</dt>
-              <dd className="text-[var(--color-text-secondary)]">XHS™ Copilot</dd>
-            </div>
-            <div>
-              <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Coverage</dt>
-              <dd className="text-[var(--color-text-secondary)]">275+ jurisdictions, 12,000+ sources</dd>
-            </div>
-            <div>
-              <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Data residency</dt>
-              <dd className="text-[var(--color-text-secondary)]">UK and EU</dd>
-            </div>
-            <div>
-              <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Contact</dt>
-              <dd>
-                <Link href="/contact" className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
-                  Talk to us &rarr;
-                </Link>
-              </dd>
-            </div>
-          </dl>
+            <dl className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 text-sm">
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Legal entity</dt>
+                <dd className="text-[var(--color-text-secondary)]">Pimlico Solutions Limited</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Headquartered</dt>
+                <dd className="text-[var(--color-text-secondary)]">London, United Kingdom</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Product</dt>
+                <dd className="text-[var(--color-text-secondary)]">XHS&trade; Copilot</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Coverage</dt>
+                <dd className="text-[var(--color-text-secondary)]">275+ jurisdictions &middot; 12,000+ sources</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Data residency</dt>
+                <dd className="text-[var(--color-text-secondary)]">UK and EU regions</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Security</dt>
+                <dd className="text-[var(--color-text-secondary)]">SOC 2 Type II, GDPR, AES-256</dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Press &amp; partnerships</dt>
+                <dd>
+                  <a href="mailto:contact@pimlicosolutions.com" className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+                    contact@pimlicosolutions.com
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Sales</dt>
+                <dd>
+                  <Link href="/contact" className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+                    Talk to us &rarr;
+                  </Link>
+                </dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
+      <section className="relative border-t border-[var(--color-border-default)]/20 py-24 sm:py-32 overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <img src="/cta-bg.jpg" alt="" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-[var(--color-bg-base)]/80" />
+        </div>
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl">
+          <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
             See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
