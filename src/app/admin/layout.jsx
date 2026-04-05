@@ -29,7 +29,7 @@ function LoginScreen({ password, setPassword, passwordError, handleLogin }) {
       <div className="bg-gray-800 rounded-2xl p-8 w-full max-w-md border border-gray-700">
         <div className="text-center mb-6">
           <div className="w-16 h-16 bg-indigo-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4"><span className="text-3xl">🔐</span></div>
-          <h1 className="text-2xl font-bold text-white">Admin Console</h1>
+          <h1 className="text-2xl font-medium text-white">Admin Console</h1>
           <p className="text-gray-400 text-sm mt-1">Pimlico XHS™ Content Workflow</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -39,7 +39,7 @@ function LoginScreen({ password, setPassword, passwordError, handleLogin }) {
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
           />
           {passwordError && <p className="text-red-400 text-sm">{passwordError}</p>}
-          <button type="submit" className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 transition-colors">
+          <button type="submit" className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 transition-colors">
             Sign In
           </button>
         </form>
@@ -67,7 +67,7 @@ export default function AdminLayout({ children }) {
               <Link href="/admin" className="flex items-center gap-2">
                 <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={90} height={24} className="h-6 w-auto" />
               </Link>
-              <p className="text-[9px] text-gray-500 mt-1.5 font-semibold tracking-[0.15em] uppercase">Content Workflow</p>
+              <p className="text-[9px] text-gray-500 mt-1.5 font-medium tracking-[0.15em] uppercase">Content Workflow</p>
             </div>
 
             {/* Nav */}
@@ -77,7 +77,7 @@ export default function AdminLayout({ children }) {
                 if (item.type === 'divider') {
                   return (
                     <div key={item.label} className={`${i > 0 ? 'mt-5' : ''} mb-2 px-3`}>
-                      <span className="text-[9px] font-bold text-gray-500/80 tracking-[0.15em] uppercase">{item.label}</span>
+                      <span className="text-[9px] font-medium text-gray-500/80 tracking-[0.15em] uppercase">{item.label}</span>
                     </div>
                   );
                 }
@@ -104,7 +104,7 @@ export default function AdminLayout({ children }) {
                       {isActive && <div className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-indigo-500" />}
                       {/* Step number for pipeline items */}
                       {isPipeline ? (
-                        <span className={`w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold flex-shrink-0 transition-colors ${
+                        <span className={`w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-medium flex-shrink-0 transition-colors ${
                           isActive
                             ? 'bg-indigo-500/30 text-indigo-300'
                             : 'bg-gray-700/50 text-gray-500 group-hover:bg-gray-700 group-hover:text-gray-300'

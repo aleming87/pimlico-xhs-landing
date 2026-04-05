@@ -78,7 +78,7 @@ export async function POST(request) {
     const body = await request.json();
     const { action } = body;
 
-    /* ─── Create Organisation ─── */
+    /* ─── Create Organization ─── */
     if (action === 'create-org') {
       const { name, slug, maxSeats, maxJurisdictions, verticals, notes } = body;
       if (!name || !slug) {
@@ -95,7 +95,7 @@ export async function POST(request) {
       const orgs = data.orgs || [];
 
       if (orgs.find(o => o.slug === slug)) {
-        return NextResponse.json({ success: false, error: 'Organisation with this slug already exists' }, { status: 409 });
+        return NextResponse.json({ success: false, error: 'Organization with this slug already exists' }, { status: 409 });
       }
 
       const newOrg = {
@@ -118,7 +118,7 @@ export async function POST(request) {
       return NextResponse.json({ success: true, org: newOrg });
     }
 
-    /* ─── Delete Organisation ─── */
+    /* ─── Delete Organization ─── */
     if (action === 'delete-org') {
       const { slug } = body;
       if (!slug) {
@@ -128,21 +128,21 @@ export async function POST(request) {
       const orgs = data.orgs || [];
       const idx = orgs.findIndex(o => o.slug === slug);
       if (idx === -1) {
-        return NextResponse.json({ success: false, error: 'Organisation not found' }, { status: 404 });
+        return NextResponse.json({ success: false, error: 'Organization not found' }, { status: 404 });
       }
       orgs.splice(idx, 1);
       await writeBlob(BLOB_ORGS_KEY, { orgs, updatedAt: new Date().toISOString() });
       return NextResponse.json({ success: true });
     }
 
-    /* ─── Update Organisation ─── */
+    /* ─── Update Organization ─── */
     if (action === 'update-org') {
       const { slug, updates } = body;
       const data = await readBlob('onboarding/orgs', { orgs: [] });
       const orgs = data.orgs || [];
       const idx = orgs.findIndex(o => o.slug === slug);
       if (idx === -1) {
-        return NextResponse.json({ success: false, error: 'Organisation not found' }, { status: 404 });
+        return NextResponse.json({ success: false, error: 'Organization not found' }, { status: 404 });
       }
       orgs[idx] = { ...orgs[idx], ...updates, slug: orgs[idx].slug }; // prevent slug change
       await writeBlob(BLOB_ORGS_KEY, { orgs, updatedAt: new Date().toISOString() });

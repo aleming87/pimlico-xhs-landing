@@ -84,7 +84,7 @@ export default function ContactWidget() {
             <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 max-w-[calc(100vw-3rem)] border border-gray-200">
               {/* Header */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">Get in touch</h3>
+                <h3 className="text-lg font-medium text-gray-900">Get in touch</h3>
                 <p className="text-sm text-gray-600 mt-1">Choose how you'd like to connect</p>
               </div>
 
@@ -100,7 +100,7 @@ export default function ContactWidget() {
                       {option.icon}
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
                         {option.name}
                       </div>
                       <div className="text-sm text-gray-600">

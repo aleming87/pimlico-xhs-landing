@@ -1071,7 +1071,7 @@ export default function DraftingPage() {
     <div className={`p-6 max-w-6xl mx-auto space-y-6 ${pageShellClass}`}>
       {/* Success Toast */}
       {showSuccess && (
-        <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-semibold animate-pulse">
+        <div className="fixed top-4 right-4 z-50 bg-green-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-medium animate-pulse">
           ✓ {successMsg}
         </div>
       )}
@@ -1090,7 +1090,7 @@ export default function DraftingPage() {
           />
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className={`text-2xl font-semibold ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>Drafts</h1>
+              <h1 className={`text-2xl font-medium ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>Drafts</h1>
               <button
                 type="button"
                 onClick={() => setShowDrafts(prev => !prev)}
@@ -1142,7 +1142,7 @@ export default function DraftingPage() {
       {showDrafts && savedDrafts.length > 0 && (
         <div className={`border rounded-xl p-4 ${sectionClass}`}>
           <div className="flex items-center justify-between mb-3">
-            <h3 className={`text-sm font-semibold flex items-center gap-2 ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>📂 Your Saved Drafts</h3>
+            <h3 className={`text-sm font-medium flex items-center gap-2 ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>📂 Your Saved Drafts</h3>
             <button onClick={() => setShowDrafts(false)} className={`text-xs ${mutedButtonClass}`}>✕ Close</button>
           </div>
           <div className="space-y-2">
@@ -1152,7 +1152,7 @@ export default function DraftingPage() {
                   <div className="flex items-center gap-2">
                     <p className={`text-sm font-medium truncate ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>{draft.title}</p>
                     {editingArticle?.id === draft.id && (
-                      <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[9px] font-bold rounded">EDITING</span>
+                      <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[9px] font-medium rounded">EDITING</span>
                     )}
                   </div>
                   <div className="flex items-center gap-3 mt-1">
@@ -1164,7 +1164,7 @@ export default function DraftingPage() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button onClick={() => loadDraft(draft)}
-                    className={`${secondaryButtonClass} px-3 py-1.5 text-xs font-semibold`}>
+                    className={`${secondaryButtonClass} px-3 py-1.5 text-xs font-medium`}>
                     ✏️ Edit
                   </button>
                   <button onClick={() => {
@@ -1325,12 +1325,12 @@ export default function DraftingPage() {
               {/* Preview Header */}
               <div className="border-b border-gray-200 pb-5 mb-6">
                 <div className="flex items-center gap-2 mb-3">
-                  {meta.category && <span className="px-2.5 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-semibold rounded-full">{meta.category}</span>}
-                  {selectedSeries && <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-semibold rounded-full">{activeSeries.label}</span>}
+                  {meta.category && <span className="px-2.5 py-0.5 bg-indigo-100 text-indigo-700 text-[11px] font-medium rounded-full">{meta.category}</span>}
+                  {selectedSeries && <span className="px-2.5 py-0.5 bg-slate-100 text-slate-700 text-[11px] font-medium rounded-full">{activeSeries.label}</span>}
                   {meta.featured && <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] rounded-full">★ Featured</span>}
                   {isPremium && <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] rounded-full">⭐ Premium</span>}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 leading-tight">{meta.title || 'Untitled Article'}</h1>
+                <h1 className="text-2xl font-medium text-gray-900 leading-tight">{meta.title || 'Untitled Article'}</h1>
                 {meta.excerpt && <p className="text-gray-500 mt-2 text-sm italic border-l-3 border-indigo-400 pl-3">{meta.excerpt}</p>}
                 <div className="flex items-center gap-3 mt-3 text-xs text-gray-400">
                   <span>{meta.author}</span>
@@ -1362,7 +1362,7 @@ export default function DraftingPage() {
               {/* Formatting Toolbar */}
               <div className="flex items-center gap-0.5 px-2 py-1.5 bg-gray-100 border border-gray-300 rounded-t-lg border-b-0 flex-wrap">
                 {[
-                  { label: 'B', cmd: 'bold', title: 'Bold (Ctrl+B)', style: 'font-bold' },
+                  { label: 'B', cmd: 'bold', title: 'Bold (Ctrl+B)', style: 'font-medium' },
                   { label: 'I', cmd: 'italic', title: 'Italic (Ctrl+I)', style: 'italic' },
                   { label: 'H2', cmd: 'formatBlock', arg: 'h2', title: 'Heading 2' },
                   { label: 'H3', cmd: 'formatBlock', arg: 'h3', title: 'Heading 3' },
@@ -1370,7 +1370,7 @@ export default function DraftingPage() {
                 ].map(btn => (
                   <button key={btn.label} type="button" title={btn.title}
                     onClick={() => { document.execCommand(btn.cmd, false, btn.arg || null); editorRef.current && setHtmlContent(editorRef.current.innerHTML); }}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded hover:bg-gray-200 text-gray-700 ${btn.style || ''}`}>
+                    className={`px-2.5 py-1 text-xs font-medium rounded hover:bg-gray-200 text-gray-700 ${btn.style || ''}`}>
                     {btn.label}
                   </button>
                 ))}
@@ -1425,7 +1425,7 @@ export default function DraftingPage() {
             className="w-full px-4 py-3 flex items-center justify-between text-left"
           >
             <div>
-              <span className={`text-sm font-semibold ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>📣 Engagements drawer</span>
+              <span className={`text-sm font-medium ${isLightTheme ? 'text-gray-900' : 'text-white'}`}>📣 Engagements drawer</span>
               <p className={`text-[11px] mt-0.5 ${helperTextClass}`}>Newsletter line, LinkedIn teaser, cover image prompt, and internal notes.</p>
             </div>
             <span className={`text-sm ${labelClass}`}>{showEngagements ? '−' : '+'}</span>
@@ -1493,7 +1493,7 @@ export default function DraftingPage() {
             💾 Save Draft
           </button>
           <button onClick={handlePublish}
-            className="px-6 py-2.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-500 transition-colors font-semibold">
+            className="px-6 py-2.5 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-500 transition-colors font-medium">
             {editingArticle ? '✓ Update' : scheduleEnabled ? '📅 Schedule' : '🚀 Publish'}
           </button>
           <label className={`flex items-center gap-2 text-xs ml-2 ${labelClass}`}>

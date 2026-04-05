@@ -17,7 +17,7 @@ export default function Privacy() {
           </a>
         </div>
 
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-medium tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
           Privacy Policy
         </h1>
 
@@ -27,7 +27,7 @@ export default function Privacy() {
 
         <div className="mt-10 max-w-2xl space-y-8">
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">1. Introduction</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">1. Introduction</h2>
             <p className="mt-4">
               Pimlico Solutions Ltd ("we", "our", or "us") is committed to protecting and respecting your privacy.
               This policy sets out the basis on which any personal data we collect from you, or that you provide to us,
@@ -40,7 +40,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">2. Information We Collect</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">2. Information We Collect</h2>
             <p className="mt-4">We may collect and process the following data about you:</p>
             <ul className="mt-4 list-disc list-inside space-y-2">
               <li>Information you give us by filling in forms on our website or by corresponding with us</li>
@@ -51,7 +51,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">3. How We Use Your Information</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">3. How We Use Your Information</h2>
             <p className="mt-4">We use information held about you in the following ways:</p>
             <ul className="mt-4 list-disc list-inside space-y-2">
               <li>To provide you with information, products, or services that you request from us</li>
@@ -62,7 +62,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">4. Legal Basis for Processing</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">4. Legal Basis for Processing</h2>
             <p className="mt-4">
               We will only process your personal data where we have a legal basis to do so. The legal basis will depend
               on the purposes for which we have collected and use your personal data. In almost every case the legal basis
@@ -76,7 +76,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">5. Data Security</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">5. Data Security</h2>
             <p className="mt-4">
               We have put in place appropriate security measures to prevent your personal data from being accidentally lost,
               used, or accessed in an unauthorised way. We limit access to your personal data to those employees, agents,
@@ -85,7 +85,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">6. Data Retention</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">6. Data Retention</h2>
             <p className="mt-4">
               We will only retain your personal data for as long as necessary to fulfil the purposes we collected it for,
               including for the purposes of satisfying any legal, accounting, or reporting requirements.
@@ -93,7 +93,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">7. Your Rights</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">7. Your Rights</h2>
             <p className="mt-4">Under certain circumstances, you have rights under data protection laws in relation to your personal data:</p>
             <ul className="mt-4 list-disc list-inside space-y-2">
               <li>Right to request access to your personal data</li>
@@ -107,7 +107,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">8. Cookies</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">8. Cookies</h2>
             <p className="mt-4">
               Our website may use cookies to distinguish you from other users of our website. This helps us to provide you
               with a good experience when you browse our website and also allows us to improve our site.
@@ -115,7 +115,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">9. Changes to Privacy Policy</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">9. Changes to Privacy Policy</h2>
             <p className="mt-4">
               We reserve the right to update this privacy policy at any time. Any changes we may make to our privacy policy
               in the future will be posted on this page and, where appropriate, notified to you by email.
@@ -123,7 +123,7 @@ export default function Privacy() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--color-text-primary)]">10. Contact</h2>
+            <h2 className="text-2xl font-medium tracking-tight text-[var(--color-text-primary)]">10. Contact</h2>
             <p className="mt-4">
               Questions, comments, and requests regarding this privacy policy are welcomed and should be addressed to:
             </p>

@@ -449,7 +449,7 @@ export default function AdminPage() {
           <div className="bg-gray-800 rounded-2xl p-8 shadow-xl">
             <div className="text-center mb-8">
               <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={120} height={32} className="h-8 w-auto mx-auto mb-4" />
-              <h1 className="text-2xl font-bold text-white">Admin Console</h1>
+              <h1 className="text-2xl font-medium text-white">Admin Console</h1>
               <p className="text-gray-400 mt-2">Enter password to continue</p>
             </div>
             <form onSubmit={handleLogin}>
@@ -468,7 +468,7 @@ export default function AdminPage() {
               </div>
               <button
                 type="submit"
-                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors"
+                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 transition-colors"
               >
                 Login
               </button>
@@ -2073,7 +2073,7 @@ export default function AdminPage() {
             <div className="flex items-center gap-4">
               <Image src="/Pimlico_Logo_Inverted.png" alt="Pimlico" width={100} height={27} className="h-7 w-auto" />
               <span className="text-gray-400">|</span>
-              <span className="text-white font-semibold">Admin Console</span>
+              <span className="text-white font-medium">Admin Console</span>
             </div>
             <div className="flex items-center gap-4">
               <Link href="/" className="text-gray-400 hover:text-white text-sm">
@@ -2154,7 +2154,7 @@ export default function AdminPage() {
         {activeTab === 'articles' && (
           <div>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-white">Published Articles</h2>
+              <h2 className="text-xl font-medium text-white">Published Articles</h2>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => {
@@ -2483,7 +2483,7 @@ export default function AdminPage() {
         {activeTab === 'publish' && (
           <div className="max-w-4xl">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="text-xl font-medium text-white">
                 {editingArticle ? 'Edit Article' : 'Publish New Article'}
               </h2>
               {editingArticle && (
@@ -2671,7 +2671,7 @@ export default function AdminPage() {
                               {/* Highlight matching text */}
                               {suggestion.split(new RegExp(`(${tagInput})`, 'gi')).map((part, i) => 
                                 part.toLowerCase() === tagInput.toLowerCase() ? 
-                                  <span key={i} className="text-indigo-400 font-semibold">{part}</span> : 
+                                  <span key={i} className="text-indigo-400 font-medium">{part}</span> : 
                                   part
                               )}
                             </span>
@@ -2751,7 +2751,7 @@ export default function AdminPage() {
                   <div className="ml-7 space-y-4">
                     <div>
                       <label className="block text-sm text-amber-300/80 mb-2">
-                        Content shown before paywall: <span className="font-bold text-amber-300">{premiumCutoff}%</span>
+                        Content shown before paywall: <span className="font-medium text-amber-300">{premiumCutoff}%</span>
                       </label>
                       <input
                         type="range"
@@ -2951,16 +2951,16 @@ export default function AdminPage() {
                       {/* Headings */}
                       <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
                         <button type="button" onClick={formatH1Visual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 1">
-                          <span className="text-xs font-bold">H1</span>
+                          <span className="text-xs font-medium">H1</span>
                         </button>
                         <button type="button" onClick={formatH2Visual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 2">
-                          <span className="text-xs font-bold">H2</span>
+                          <span className="text-xs font-medium">H2</span>
                         </button>
                         <button type="button" onClick={formatH3Visual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 3">
-                          <span className="text-xs font-bold">H3</span>
+                          <span className="text-xs font-medium">H3</span>
                         </button>
                         <button type="button" onClick={formatParagraphVisual} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Paragraph">
-                          <span className="text-xs font-bold">P</span>
+                          <span className="text-xs font-medium">P</span>
                         </button>
                       </div>
                       
@@ -3105,13 +3105,13 @@ export default function AdminPage() {
                       {/* Headings */}
                       <div className="flex items-center border-r border-gray-600 pr-2 mr-1">
                         <button type="button" onClick={formatH1} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 1">
-                          <span className="text-xs font-bold">H1</span>
+                          <span className="text-xs font-medium">H1</span>
                         </button>
                         <button type="button" onClick={formatH2} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 2">
-                          <span className="text-xs font-bold">H2</span>
+                          <span className="text-xs font-medium">H2</span>
                         </button>
                         <button type="button" onClick={formatH3} className="p-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors" title="Heading 3">
-                          <span className="text-xs font-bold">H3</span>
+                          <span className="text-xs font-medium">H3</span>
                         </button>
                       </div>
                       
@@ -3244,7 +3244,7 @@ export default function AdminPage() {
                 </button>
                 <button
                   onClick={handlePublish}
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors font-semibold flex items-center gap-2"
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors font-medium flex items-center gap-2"
                 >
                   {editingArticle?.status === 'draft' ? (
                     <>
@@ -3314,7 +3314,7 @@ export default function AdminPage() {
                 {/* Article Selection — collapsible */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, article: !p.article}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>📄</span> Article {marketingArticle ? <span className="text-xs text-indigo-400 font-normal ml-1 truncate max-w-[140px] inline-block align-bottom">— {marketingArticle.title}</span> : null}</h3>
+                    <h3 className="font-medium flex items-center gap-2 text-sm"><span>📄</span> Article {marketingArticle ? <span className="text-xs text-indigo-400 font-normal ml-1 truncate max-w-[140px] inline-block align-bottom">— {marketingArticle.title}</span> : null}</h3>
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.article ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.article && (
@@ -3358,7 +3358,7 @@ export default function AdminPage() {
                 {/* Template, Theme, Layout — inline compact row */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, template: !p.template}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>📐</span> Template & Style <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[marketingTemplate].label} · {marketingTheme} · {marketingLayout}</span></h3>
+                    <h3 className="font-medium flex items-center gap-2 text-sm"><span>📐</span> Template & Style <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[marketingTemplate].label} · {marketingTheme} · {marketingLayout}</span></h3>
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.template ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.template && (
@@ -3396,7 +3396,7 @@ export default function AdminPage() {
                 {/* Text Content — collapsible */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, text: !p.text}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>✏️</span> Text Content</h3>
+                    <h3 className="font-medium flex items-center gap-2 text-sm"><span>✏️</span> Text Content</h3>
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.text ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.text && (
@@ -3414,7 +3414,7 @@ export default function AdminPage() {
                 {/* Font Settings — collapsible */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, font: !p.font}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🔤</span> Font Settings <span className="text-xs text-gray-400 font-normal">— {FONT_OPTIONS[marketingFont]?.label}, {marketingFontWeight}, {marketingFontSize}%</span></h3>
+                    <h3 className="font-medium flex items-center gap-2 text-sm"><span>🔤</span> Font Settings <span className="text-xs text-gray-400 font-normal">— {FONT_OPTIONS[marketingFont]?.label}, {marketingFontWeight}, {marketingFontSize}%</span></h3>
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.font ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.font && (
@@ -3442,7 +3442,7 @@ export default function AdminPage() {
                 {/* Element Controls — collapsible */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, elements: !p.elements}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm">
+                    <h3 className="font-medium flex items-center gap-2 text-sm">
                       <span>🎛️</span> Elements
                       <span className="text-xs text-gray-400 font-normal">— {Object.values(marketingElements).filter(e => e.visible !== false).length}/{Object.keys(marketingElements).length} on</span>
                     </h3>
@@ -3453,15 +3453,15 @@ export default function AdminPage() {
                       {/* Quick mode toggles */}
                       <div className="flex gap-1.5 pt-2">
                         <button type="button" onClick={() => setMarketingElements({...DEFAULT_ELEMENTS})}
-                          className="flex-1 py-1.5 text-[10px] font-semibold bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-lg hover:bg-indigo-600/50 transition-colors">
+                          className="flex-1 py-1.5 text-[10px] font-medium bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-lg hover:bg-indigo-600/50 transition-colors">
                           ✦ All On
                         </button>
                         <button type="button" onClick={() => setMarketingElements({...MINIMAL_ELEMENTS})}
-                          className="flex-1 py-1.5 text-[10px] font-semibold bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-600/40 transition-colors">
+                          className="flex-1 py-1.5 text-[10px] font-medium bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-600/40 transition-colors">
                           ◐ Minimal
                         </button>
                         <button type="button" onClick={() => setMarketingElements({...BLANK_ELEMENTS})}
-                          className="flex-1 py-1.5 text-[10px] font-semibold bg-gray-600/30 text-gray-300 border border-gray-500/30 rounded-lg hover:bg-gray-600/50 transition-colors">
+                          className="flex-1 py-1.5 text-[10px] font-medium bg-gray-600/30 text-gray-300 border border-gray-500/30 rounded-lg hover:bg-gray-600/50 transition-colors">
                           ○ Blank
                         </button>
                       </div>
@@ -3486,7 +3486,7 @@ export default function AdminPage() {
                             <button
                               type="button"
                               onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], visible: !isVisible}}))}
-                              className={`flex items-center gap-2 text-[11px] font-semibold transition-colors ${isVisible ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
+                              className={`flex items-center gap-2 text-[11px] font-medium transition-colors ${isVisible ? 'text-white' : 'text-gray-500 hover:text-gray-300'}`}
                             >
                               <span className={`w-2 h-2 rounded-full ${isVisible ? 'bg-green-400' : 'bg-gray-600'}`} />
                               {item.label}
@@ -3501,7 +3501,7 @@ export default function AdminPage() {
                                 type="button"
                                 title={isVisible ? 'Remove from canvas' : 'Add to canvas'}
                                 onClick={() => setMarketingElements(prev => ({...prev, [item.key]: {...prev[item.key], visible: !isVisible}}))}
-                                className={`px-1.5 py-0.5 text-[9px] font-bold rounded transition-colors ${
+                                className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors ${
                                   isVisible
                                     ? 'text-red-400 hover:bg-red-500/20 hover:text-red-300'
                                     : 'text-green-400 bg-green-500/10 hover:bg-green-500/20 hover:text-green-300'
@@ -3557,7 +3557,7 @@ export default function AdminPage() {
                 {/* Presets — save/load settings */}
                 <div className="bg-gray-800 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => setMktgPanelOpen(p => ({...p, presets: !p.presets}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-                    <h3 className="font-semibold flex items-center gap-2 text-sm"><span>💾</span> Presets {Object.keys(marketingPresets).length > 0 && <span className="text-xs text-gray-400 font-normal">— {Object.keys(marketingPresets).length} saved</span>}</h3>
+                    <h3 className="font-medium flex items-center gap-2 text-sm"><span>💾</span> Presets {Object.keys(marketingPresets).length > 0 && <span className="text-xs text-gray-400 font-normal">— {Object.keys(marketingPresets).length} saved</span>}</h3>
                     <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${mktgPanelOpen.presets ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                   </button>
                   {mktgPanelOpen.presets && (
@@ -3620,7 +3620,7 @@ export default function AdminPage() {
                   type="button"
                   onClick={generateMarketingAsset}
                   disabled={!marketingArticle || marketingLoading}
-                  className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                 >
                   {marketingLoading ? (
                     <>
@@ -3637,7 +3637,7 @@ export default function AdminPage() {
               <div className="lg:col-span-2 space-y-4">
                 <div className="bg-gray-800 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-white font-semibold flex items-center gap-2">
+                    <h3 className="text-white font-medium flex items-center gap-2">
                       <span>👁️</span> Preview
                       {marketingArticle && (
                         <span className="text-gray-400 text-sm font-normal">
@@ -3700,7 +3700,7 @@ export default function AdminPage() {
             {marketingArticle && (
               <div className="bg-gray-800 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-semibold flex items-center gap-2">
+                  <h3 className="text-white font-medium flex items-center gap-2">
                     <span>📝</span> Post Text for {MARKETING_TEMPLATES[marketingTemplate].label}
                   </h3>
                   <div className="flex items-center gap-2">
@@ -3747,7 +3747,7 @@ export default function AdminPage() {
             <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-lg font-semibold text-gray-900">Article Preview</h3>
+                  <h3 className="text-lg font-medium text-gray-900">Article Preview</h3>
                   <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded">Preview Mode</span>
                 </div>
                 <button
@@ -3767,7 +3767,7 @@ export default function AdminPage() {
                   </div>
                 )}
                 {articleMeta.title && (
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">{articleMeta.title}</h1>
+                  <h1 className="text-3xl font-medium text-gray-900 mb-4">{articleMeta.title}</h1>
                 )}
                 {articleMeta.excerpt && (
                   <p className="text-xl text-gray-600 mb-6">{articleMeta.excerpt}</p>
@@ -3782,21 +3782,21 @@ export default function AdminPage() {
                 <div className="prose prose-lg max-w-none">
                   {editorMode === 'visual' ? (
                     <div 
-                      className="article-content [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-gray-900 [&>h1]:mt-8 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-gray-900 [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-gray-900 [&>h3]:mt-6 [&>h3]:mb-3 [&>p]:text-gray-600 [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-gray-600 [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-gray-600 [&>ol]:mb-4 [&>ol]:space-y-2 [&_strong]:text-gray-900 [&_strong]:font-semibold [&_a]:text-blue-600 [&_a:hover]:text-blue-500 [&_a]:underline [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-500 [&>blockquote]:my-4 [&>hr]:border-gray-200 [&>hr]:my-8"
+                      className="article-content [&>h1]:text-3xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-8 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-medium [&>h2]:text-gray-900 [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:text-gray-900 [&>h3]:mt-6 [&>h3]:mb-3 [&>p]:text-gray-600 [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-gray-600 [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-gray-600 [&>ol]:mb-4 [&>ol]:space-y-2 [&_strong]:text-gray-900 [&_strong]:font-medium [&_a]:text-blue-600 [&_a:hover]:text-blue-500 [&_a]:underline [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-500 [&>blockquote]:my-4 [&>hr]:border-gray-200 [&>hr]:my-8"
                       dangerouslySetInnerHTML={{ __html: htmlContent }}
                     />
                   ) : (
                     <ReactMarkdown
                       components={{
-                        h1: ({children}) => <h1 className="text-3xl font-bold text-gray-900 mt-8 mb-4">{children}</h1>,
-                        h2: ({children}) => <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">{children}</h2>,
-                        h3: ({children}) => <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">{children}</h3>,
-                        h4: ({children}) => <h4 className="text-lg font-semibold text-gray-900 mt-4 mb-2">{children}</h4>,
+                        h1: ({children}) => <h1 className="text-3xl font-medium text-gray-900 mt-8 mb-4">{children}</h1>,
+                        h2: ({children}) => <h2 className="text-2xl font-medium text-gray-900 mt-8 mb-4">{children}</h2>,
+                        h3: ({children}) => <h3 className="text-xl font-medium text-gray-900 mt-6 mb-3">{children}</h3>,
+                        h4: ({children}) => <h4 className="text-lg font-medium text-gray-900 mt-4 mb-2">{children}</h4>,
                         p: ({children}) => <p className="text-gray-600 mb-4 leading-relaxed text-justify">{children}</p>,
                         ul: ({children}) => <ul className="list-disc list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ul>,
                         ol: ({children}) => <ol className="list-decimal list-inside text-gray-600 mb-4 space-y-2 ml-4">{children}</ol>,
                         li: ({children}) => <li className="text-gray-600">{children}</li>,
-                        strong: ({children}) => <strong className="text-gray-900 font-semibold">{children}</strong>,
+                        strong: ({children}) => <strong className="text-gray-900 font-medium">{children}</strong>,
                         em: ({children}) => <em className="italic">{children}</em>,
                         a: ({href, children}) => <a href={href} className="text-blue-600 hover:text-blue-500 underline">{children}</a>,
                         blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-500 my-4">{children}</blockquote>,
@@ -3809,7 +3809,7 @@ export default function AdminPage() {
                         thead: ({children}) => <thead className="bg-gray-50">{children}</thead>,
                         tbody: ({children}) => <tbody>{children}</tbody>,
                         tr: ({children}) => <tr className="border-b border-gray-200">{children}</tr>,
-                        th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left font-semibold">{children}</th>,
+                        th: ({children}) => <th className="border border-gray-200 px-4 py-2 bg-gray-50 text-gray-900 text-left font-medium">{children}</th>,
                         td: ({children}) => <td className="border border-gray-200 px-4 py-2 text-gray-600">{children}</td>,
                         img: ({src, alt}) => <img src={src} alt={alt} className="max-w-full h-auto rounded-lg my-4" />,
                       }}
@@ -3823,7 +3823,7 @@ export default function AdminPage() {
                 <p className="text-sm text-gray-500">Press <kbd className="px-1.5 py-0.5 bg-gray-200 rounded text-gray-700 font-mono text-xs">Esc</kbd> or click outside to close</p>
                 <button
                   onClick={() => setShowPreview(false)}
-                  className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors font-semibold"
+                  className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors font-medium"
                 >
                   ← Back to Editor
                 </button>

@@ -19,12 +19,12 @@ const VERTICALS = [
       { value: "Daily", label: "Updates" },
     ],
     categories: [
-      { name: "Licensing & Authorisation", desc: "Application requirements, licence conditions, renewal processes, and jurisdictional eligibility across all monitored markets." },
+      { name: "Licensing & Authorisation", desc: "Application requirements, license conditions, renewal processes, and jurisdictional eligibility across all monitored markets." },
       { name: "Responsible Gambling", desc: "Player protection measures, self-exclusion schemes, affordability checks, and safer gambling obligations." },
       { name: "AML & Financial Crime", desc: "Anti-money laundering controls, source of funds requirements, suspicious activity reporting, and sanctions screening." },
       { name: "Advertising & Marketing", desc: "Promotional restrictions, social media guidelines, influencer rules, and age-gating requirements." },
       { name: "Technical Standards", desc: "RNG certification, game fairness testing, platform security, and data protection requirements." },
-      { name: "Enforcement & Sanctions", desc: "Regulatory actions, fines, licence revocations, and compliance orders tracked in real time." },
+      { name: "Enforcement & Sanctions", desc: "Regulatory actions, fines, license revocations, and compliance orders tracked in real time." },
     ],
     jurisdictions: ["UK", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark", "Finland", "Spain", "Italy", "France", "Greece", "Romania", "Bulgaria", "Croatia", "US (50 states)", "Canada", "Australia", "Philippines", "Macau", "Brazil", "Colombia", "South Africa", "Nigeria", "Kenya"],
   },
@@ -66,7 +66,7 @@ const VERTICALS = [
       { name: "Data Protection", desc: "Privacy regulations governing AI training data, model outputs, and personal data processing requirements." },
       { name: "Consumer Protection & Conduct", desc: "Disclosure requirements, fairness standards, bias auditing, and conduct rules for AI-powered products." },
       { name: "National Security & Export Controls", desc: "Restrictions on AI technology transfers, export controls, and chip regulations affecting AI development." },
-      { name: "Compute & Infrastructure", desc: "Requirements for AI computing resources, hardware restrictions, and data centre regulations." },
+      { name: "Compute & Infrastructure", desc: "Requirements for AI computing resources, hardware restrictions, and data center regulations." },
     ],
     jurisdictions: ["EU", "UK", "US", "China", "Canada", "Singapore", "Japan", "South Korea", "Australia", "India", "Brazil", "Israel", "UAE", "Saudi Arabia"],
   },
@@ -154,13 +154,13 @@ export default function VerticalsPage() {
               <div className="flex items-center gap-4">
                 <Link
                   href="https://xhsdata.ai/register"
-                  className="rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90"
+                  className="rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
                 >
                   Start free trial
                 </Link>
                 <Link
                   href="/contact"
-                  className="rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+                  className="rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
                 >
                   Book a demo
                 </Link>
@@ -190,7 +190,7 @@ export default function VerticalsPage() {
               <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-3 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
                 {vertical.categories.map((cat) => (
                   <div key={cat.name} className="bg-[var(--color-bg-base)] p-6 sm:p-8">
-                    <h3 className="text-base font-semibold text-[var(--color-text-primary)] mb-2">
+                    <h3 className="text-base font-medium text-[var(--color-text-primary)] mb-2">
                       {cat.name}
                     </h3>
                     <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed">
@@ -216,13 +216,13 @@ export default function VerticalsPage() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="https://xhsdata.ai/register"
-              className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90"
+              className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
             >
               Start free trial
             </Link>
             <Link
               href="/contact"
-              className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+              className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
             >
               Book a demo
             </Link>

@@ -74,7 +74,7 @@ function MobileMenu({ open, onClose }) {
             </a>
             <a
               href="https://xhsdata.ai/register"
-              className="block rounded-lg bg-[var(--color-text-primary)] px-4 py-3 text-center text-base font-semibold text-[var(--color-bg-base)] hover:opacity-90 transition-all"
+              className="block rounded-lg bg-[var(--color-text-primary)] px-4 py-3 text-center text-base font-medium text-[var(--color-bg-base)] hover:opacity-90 transition-all"
               onClick={onClose}
             >
               Start free trial
@@ -148,7 +148,7 @@ export default function SiteHeader() {
             </a>
             <a
               href="https://xhsdata.ai/register"
-              className="rounded-lg border border-[var(--color-text-primary)]/20 px-5 py-2 text-sm font-semibold text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-primary)]/40 hover:bg-[var(--color-bg-elevated)]/50"
+              className="rounded-lg border border-[var(--color-text-primary)]/20 px-5 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-primary)]/40 hover:bg-[var(--color-bg-elevated)]/50"
             >
               Start free trial
             </a>

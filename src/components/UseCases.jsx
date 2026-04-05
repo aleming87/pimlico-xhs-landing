@@ -17,7 +17,7 @@ function Card({ title, items, href }) {
       </ul>
       {href && (
         <div className="mt-4 pt-4 border-t border-slate-200">
-          <a href={href} className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+          <a href={href} className="text-sm font-medium text-blue-600 hover:text-blue-700">
             Learn more →
           </a>
         </div>
@@ -30,7 +30,7 @@ export default function UseCases() {
   return (
     <section id="use-cases" className="py-24 scroll-mt-24">
       <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-4xl font-semibold tracking-tight">Use cases</h2>
+        <h2 className="text-4xl font-medium tracking-tight">Use cases</h2>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <Card
             title="AI"

@@ -14,7 +14,7 @@ export default function Differentiators() {
       ),
     },
     {
-      title: "Analyse",
+      title: "Analyze",
       body: "Ask any regulatory question. Get source-grounded, cited answers from AI trained on your compliance context.",
       icon: (
         <svg className="h-9 w-9" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
@@ -61,7 +61,7 @@ export default function Differentiators() {
                 <div className="mb-5 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)] transition-colors">
                   {icon}
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
+                <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-2">
                   {title}
                 </h3>
                 <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed">

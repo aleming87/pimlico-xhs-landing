@@ -109,7 +109,7 @@ const FAQS = [
   },
   {
     q: "Is enterprise pricing available?",
-    a: "Yes. For teams of 25+ users or organisations needing custom integrations, dedicated support, or SLAs, contact us for tailored pricing.",
+    a: "Yes. For teams of 25+ users or organizations needing custom integrations, dedicated support, or SLAs, contact us for tailored pricing.",
   },
 ];
 
@@ -177,15 +177,12 @@ export default function PricingPage() {
               [ PRICING ]
             </p>
             <h1 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
-              Transparent pricing. No surprises.
+              Pricing built around your scope.
             </h1>
-            <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mx-auto">
-              Configure your plan based on team size, verticals, and coverage.
+            <p className="mt-5 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mx-auto">
+              Team size, verticals, coverage. 14-day trial, no credit card.
             </p>
-            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
-              Start your 14-day free trial. No credit card required.
-            </p>
-            <p className="mt-6 text-sm text-[var(--color-text-tertiary)]">
+            <p className="mt-5 text-sm text-[var(--color-text-tertiary)]">
               Need something custom?{" "}
               <Link
                 href="/contact?interest=pricing"
@@ -280,49 +277,39 @@ export default function PricingPage() {
 
             {/* Price card */}
             <div className="lg:col-span-2">
-              <div className="lg:sticky lg:top-28 rounded-xl border border-[var(--color-border-default)]/40 bg-[var(--color-bg-surface)]/50 p-6 lg:min-h-[560px] flex flex-col">
+              <div className="lg:sticky lg:top-28 rounded-xl border border-[var(--color-border-default)]/40 bg-[var(--color-bg-surface)]/50 p-6 flex flex-col">
                 {isEnterprise ? (
                   <>
-                    <p className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-3">
-                      Enterprise
+                    <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-[var(--color-text-muted)] mb-3">
+                      [ ENTERPRISE ]
                     </p>
-                    <p className="text-3xl font-medium text-[var(--color-text-primary)] mb-3 leading-tight">
-                      Let&apos;s build your package.
-                    </p>
-                    <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed mb-5">
-                      For teams of 25+, we put together a tailored proposal based on your headcount, jurisdictions, compliance scope, and procurement requirements. Pricing typically starts in the £3,000–£8,000 per month range depending on coverage.
+                    <div className="mb-2 flex items-baseline gap-2">
+                      <span className="text-3xl font-medium tabular-nums text-[var(--color-text-primary)] font-mono">
+                        £3k&ndash;8k
+                      </span>
+                      <span className="text-xs text-[var(--color-text-muted)]">/mo typical</span>
+                    </div>
+                    <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed mb-4">
+                      Custom pricing for teams of 25+. Tailored to your headcount, coverage, and procurement process.
                     </p>
 
-                    <div className="mb-5 rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-base)]/40 p-4">
+                    <div className="mb-4 rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-base)]/40 p-4">
                       <p className="text-[10px] font-mono uppercase tracking-[0.14em] text-[var(--color-text-muted)] mb-3">
-                        What you get
+                        What&rsquo;s included
                       </p>
                       <ul className="space-y-2 text-xs text-[var(--color-text-secondary)]">
                         {[
-                          "Unlimited users and workspaces",
-                          "Custom AI credit allocations",
-                          "Dedicated account manager",
-                          "SLA + data residency options",
-                          "Procurement, invoicing, security review",
-                          "Onboarding + team training sessions",
-                          "Priority support on Slack or Teams",
-                          "Early access to new modules",
+                          { label: "People", desc: "Unlimited users, workspaces, and team training." },
+                          { label: "Product", desc: "Custom AI credits, priority support, early access." },
+                          { label: "Procurement", desc: "SLA, data residency, invoicing, security review." },
+                          { label: "Partnership", desc: "Dedicated account manager and onboarding." },
                         ].map((item) => (
-                          <li key={item} className="flex items-start gap-2">
-                            <span className="mt-1.5 h-1 w-1 rounded-full bg-[var(--color-text-tertiary)] shrink-0" />
-                            <span>{item}</span>
+                          <li key={item.label} className="flex gap-3">
+                            <span className="text-[var(--color-text-primary)] shrink-0 w-20">{item.label}</span>
+                            <span className="text-[var(--color-text-tertiary)]">{item.desc}</span>
                           </li>
                         ))}
                       </ul>
-                    </div>
-
-                    <div className="mb-5 text-xs text-[var(--color-text-tertiary)]">
-                      <p className="text-[10px] font-mono uppercase tracking-[0.14em] text-[var(--color-text-muted)] mb-2">
-                        Typical enterprise customers
-                      </p>
-                      <p className="leading-relaxed">
-                        Global gambling operators, licensed PSPs and EMIs, crypto exchanges expanding across jurisdictions, and law firms with regulated-sector portfolios.
-                      </p>
                     </div>
 
                     <div className="mt-auto space-y-2">
@@ -331,12 +318,6 @@ export default function PricingPage() {
                         className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
                       >
                         Contact sales
-                      </Link>
-                      <Link
-                        href="/contact?interest=demo"
-                        className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40"
-                      >
-                        Book a demo first
                       </Link>
                       <a
                         href="https://xhsdata.ai/register?plan=enterprise"
@@ -428,18 +409,12 @@ export default function PricingPage() {
                       >
                         Contact sales
                       </Link>
-                      <Link
-                        href="/contact?interest=demo"
-                        className="block w-full text-center text-xs font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors py-1"
-                      >
-                        Book a demo
-                      </Link>
                       {!showQuoteForm && !quoteSent && (
                         <button
                           onClick={() => setShowQuoteForm(true)}
-                          className="block w-full text-center text-[11px] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors"
+                          className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
                         >
-                          Email me this configuration
+                          Email this quote to me &rarr;
                         </button>
                       )}
                     </div>

@@ -10,7 +10,7 @@ export const metadata = {
     template: '%s - Pimlico XHS™',
     default: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
   },
-  description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI, Payments, and Gambling regulations across 180+ jurisdictions in real-time.',
+  description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyze, and collaborate on AI, Payments, and Gambling regulations across 180+ jurisdictions in real-time.',
   keywords: ['regulatory compliance', 'AI compliance', 'payments regulation', 'gambling compliance', 'EU AI Act', 'PSD3', 'MiCA', 'PSR', 'UKGC', 'gambling regulation', 'regulatory monitoring', 'compliance software', 'regulatory intelligence', 'regtech', 'compliance automation', 'regulatory technology', 'AI Act compliance', 'payments compliance', 'gaming compliance'],
   authors: [{ name: 'Pimlico XHS™', url: 'https://pimlicosolutions.com' }],
   creator: 'Pimlico XHS™',
@@ -23,7 +23,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
-    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on AI, Payments, and Gambling regulations across 180+ jurisdictions.',
+    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyze, and collaborate on AI, Payments, and Gambling regulations across 180+ jurisdictions.',
     url: 'https://pimlicosolutions.com',
     siteName: 'Pimlico XHS™',
     images: [
@@ -40,7 +40,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
-    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyse, and collaborate on regulations across 180+ jurisdictions.',
+    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyze, and collaborate on regulations across 180+ jurisdictions.',
     images: ['/XHS%20Logo%20BLUE%20on%20WHITE.png'],
     creator: '@pimlicoxhs',
   },

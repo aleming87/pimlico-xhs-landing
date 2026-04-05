@@ -123,13 +123,13 @@ export default function Hero() {
             >
               <Link
                 href="https://xhsdata.ai/register"
-                className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90"
+                className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
               >
                 Start free trial
               </Link>
               <Link
                 href="/contact"
-                className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
+                className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
               >
                 Book a demo
               </Link>

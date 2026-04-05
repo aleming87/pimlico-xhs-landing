@@ -188,7 +188,7 @@ STYLE RULES:
     <div className="p-6 max-w-[1400px] mx-auto">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">✍️ Copy Creation</h1>
+          <h1 className="text-xl font-medium text-white flex items-center gap-2">✍️ Copy Creation</h1>
           <p className="text-sm text-gray-400 mt-0.5">Craft platform-specific social & email copy for your articles</p>
         </div>
         <div className="flex items-center gap-2">
@@ -205,7 +205,7 @@ STYLE RULES:
       {showPrompt && (
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3 mb-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Generate multi-platform copy</h3>
+            <h3 className="text-sm font-medium text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Generate multi-platform copy</h3>
             <button onClick={() => {
                 const articleInfo = selectedArticle ? `\n\nARTICLE:\nTitle: ${selectedArticle.title}\nExcerpt: ${selectedArticle.excerpt || 'N/A'}\nCategory: ${selectedArticle.category || 'N/A'}\nSlug: ${selectedArticle.slug || 'N/A'}` : '';
                 navigator.clipboard.writeText(LLM_PROMPT + articleInfo);
@@ -217,7 +217,7 @@ STYLE RULES:
           <pre className="bg-gray-900 rounded-lg p-4 text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed max-h-[350px] overflow-y-auto border border-gray-700/50">{LLM_PROMPT}</pre>
           {selectedArticle && (
             <div className="bg-gray-800/50 rounded-lg p-3 text-xs text-gray-400 border border-gray-700/30">
-              <span className="text-amber-300/80 font-semibold">Selected article included in copy:</span> {selectedArticle.title} ({selectedArticle.category})
+              <span className="text-amber-300/80 font-medium">Selected article included in copy:</span> {selectedArticle.title} ({selectedArticle.category})
             </div>
           )}
           <p className="text-[11px] text-amber-400/60">Paste into your LLM. If an article is selected, "Copy Prompt + Article" includes the article details automatically.</p>
@@ -228,7 +228,7 @@ STYLE RULES:
         {/* Left: Article Selector */}
         <div className="lg:col-span-3 space-y-3">
           <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-            <h3 className="text-sm font-semibold text-white mb-2">Select Article</h3>
+            <h3 className="text-sm font-medium text-white mb-2">Select Article</h3>
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search articles..." className="w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-xs placeholder-gray-500 focus:outline-none focus:border-indigo-500 mb-2" />
             <div className="space-y-1 max-h-[400px] overflow-y-auto">
               {filteredArticles.map(a => (
@@ -251,7 +251,7 @@ STYLE RULES:
           {selectedArticle?.image && (
             <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-white">🖼️ Article Image</h3>
+                <h3 className="text-sm font-medium text-white">🖼️ Article Image</h3>
                 <button type="button" onClick={() => setShowImagePreview(!showImagePreview)} className="text-[10px] text-gray-500 hover:text-gray-300">
                   {showImagePreview ? 'Hide' : 'Show'}
                 </button>
@@ -279,7 +279,7 @@ STYLE RULES:
           {/* Pipeline Items */}
           {copyItemsInPipeline.length > 0 && (
             <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-              <h3 className="text-sm font-semibold text-white mb-2">📋 In Pipeline</h3>
+              <h3 className="text-sm font-medium text-white mb-2">📋 In Pipeline</h3>
               <div className="space-y-1 max-h-40 overflow-y-auto">
                 {copyItemsInPipeline.map(item => (
                   <div key={item.id} className="px-2 py-1.5 bg-gray-700/50 rounded-lg text-[11px] text-gray-300 truncate">
@@ -336,7 +336,7 @@ STYLE RULES:
                 </button>
                 <div className="flex-1" />
                 <button type="button" onClick={saveToPipeline} disabled={!currentCopy}
-                  className="px-5 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 disabled:opacity-40 flex items-center gap-1">
+                  className="px-5 py-2 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 disabled:opacity-40 flex items-center gap-1">
                   💾 Save to Pipeline
                 </button>
               </div>
@@ -358,7 +358,7 @@ STYLE RULES:
 
               {/* Quick preview of all platforms */}
               <div className="bg-gray-800/60 rounded-xl p-3 border border-gray-700/30">
-                <h4 className="text-[11px] font-semibold text-gray-400 mb-2">All Platform Copies</h4>
+                <h4 className="text-[11px] font-medium text-gray-400 mb-2">All Platform Copies</h4>
                 <div className="grid grid-cols-5 gap-2">
                   {Object.entries(PLATFORMS).map(([key, plat]) => {
                     const txt = copies[getCopyKey(selectedArticle.id, key)] || '';
@@ -375,7 +375,7 @@ STYLE RULES:
           ) : (
             <div className="flex flex-col items-center justify-center h-96 bg-gray-800/50 rounded-xl border border-gray-700/30">
               <span className="text-5xl mb-4">✍️</span>
-              <h3 className="text-lg font-semibold text-white mb-1">Select an Article</h3>
+              <h3 className="text-lg font-medium text-white mb-1">Select an Article</h3>
               <p className="text-sm text-gray-400">Choose an article from the left to start writing copy</p>
             </div>
           )}
@@ -384,7 +384,7 @@ STYLE RULES:
         {/* Right: Templates */}
         <div className="lg:col-span-3 space-y-3">
           <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-            <h3 className="text-sm font-semibold text-white mb-3">📝 Templates</h3>
+            <h3 className="text-sm font-medium text-white mb-3">📝 Templates</h3>
             <div className="space-y-1.5">
               {Object.entries(COPY_TEMPLATES).map(([key, tmpl]) => (
                 <button key={key} type="button" onClick={() => applyTemplate(key)} disabled={!selectedArticle}
@@ -398,7 +398,7 @@ STYLE RULES:
           {/* Custom Saved Templates */}
           {Object.keys(customTemplates).length > 0 && (
             <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-              <h3 className="text-sm font-semibold text-white mb-2">✨ Your Templates</h3>
+              <h3 className="text-sm font-medium text-white mb-2">✨ Your Templates</h3>
               <div className="space-y-1.5">
                 {Object.entries(customTemplates).map(([name, tmpl]) => (
                   <div key={name} className={`flex items-center gap-1.5 rounded-lg transition-colors ${activeTemplate === `custom:${name}` ? 'bg-indigo-600/20 border border-indigo-500/30' : 'hover:bg-gray-700/50'}`}>
@@ -419,7 +419,7 @@ STYLE RULES:
           {history.length > 0 && (
             <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-white">📜 History</h3>
+                <h3 className="text-sm font-medium text-white">📜 History</h3>
                 <button type="button" onClick={() => setHistory([])} className="text-[10px] text-red-400 hover:text-red-300">Clear</button>
               </div>
               <div className="space-y-1.5 max-h-60 overflow-y-auto">
@@ -441,7 +441,7 @@ STYLE RULES:
 
           {/* Tips */}
           <div className="bg-gray-800/60 rounded-xl p-3 border border-gray-700/30">
-            <h3 className="text-sm font-semibold text-gray-400 mb-2">💡 Tips</h3>
+            <h3 className="text-sm font-medium text-gray-400 mb-2">💡 Tips</h3>
             <ul className="space-y-1.5 text-[11px] text-gray-500">
               <li>• LinkedIn: Professional tone, 1-3 paragraphs</li>
               <li>• Twitter: Under 280 chars, punchy hook</li>

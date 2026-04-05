@@ -55,14 +55,14 @@ export default function OrgOnboardingPage() {
           <div className="w-16 h-16 bg-red-50 border border-red-200 rounded-full flex items-center justify-center mx-auto mb-6">
             <span className="text-3xl">🔍</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-4">Onboarding Link Not Found</h1>
+          <h1 className="text-2xl font-medium text-slate-900 mb-4">Onboarding Link Not Found</h1>
           <p className="text-slate-500 mb-6">
             The onboarding link <span className="text-slate-900 font-mono">/onboarding/{slug}</span> doesn&apos;t exist or hasn&apos;t been set up yet.
           </p>
           <p className="text-slate-400 text-sm mb-8">
             If you believe this is an error, please contact your account manager.
           </p>
-          <a href="/onboarding" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+          <a href="/onboarding" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">
             Use General Onboarding Form
           </a>
         </div>
@@ -77,7 +77,7 @@ export default function OrgOnboardingPage() {
           <div className="w-16 h-16 bg-amber-50 border border-amber-200 rounded-full flex items-center justify-center mx-auto mb-6">
             <span className="text-3xl">⏸️</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-4">Onboarding Paused</h1>
+          <h1 className="text-2xl font-medium text-slate-900 mb-4">Onboarding Paused</h1>
           <p className="text-slate-500 mb-8">
             This onboarding link is currently inactive. Please contact your account manager for assistance.
           </p>
@@ -93,7 +93,7 @@ export default function OrgOnboardingPage() {
     return (
       <div className="bg-slate-50 min-h-screen flex items-center justify-center px-6">
         <div className="text-center max-w-md">
-          <h1 className="text-2xl font-bold text-slate-900 mb-4">Something went wrong</h1>
+          <h1 className="text-2xl font-medium text-slate-900 mb-4">Something went wrong</h1>
           <p className="text-slate-500 mb-6">Unable to load the onboarding form. Please try again later.</p>
           <a href="/" className="text-blue-600 hover:text-blue-700">← Back to Pimlico</a>
         </div>

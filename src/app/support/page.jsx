@@ -77,7 +77,7 @@ export default function SupportPage() {
         <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
           [ SUPPORT ]
         </p>
-        <h1 className="text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl mb-4">
+        <h1 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl mb-4">
           Troubleshooting & support
         </h1>
         <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed mb-12">

@@ -55,7 +55,7 @@ export default function InsightsPage() {
         <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
           [ NEWS & INSIGHTS ]
         </p>
-        <h1 className="text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl mb-4">
+        <h1 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl mb-4">
           News & Insights
         </h1>
         <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mb-10">
@@ -121,7 +121,7 @@ export default function InsightsPage() {
                       <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-[var(--color-text-muted)]/30 text-5xl font-bold font-mono">XHS{"\u2122"}</span>
+                        <span className="text-[var(--color-text-muted)]/30 text-5xl font-medium font-mono">XHS{"\u2122"}</span>
                       </div>
                     )}
                   </div>
@@ -131,7 +131,7 @@ export default function InsightsPage() {
                       <span>{article.date}</span>
                       <span className="text-[var(--color-text-muted)]">{article.readTime}</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-secondary)] transition-colors leading-snug">
+                    <h3 className="text-lg font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-secondary)] transition-colors leading-snug">
                       {article.title}
                     </h3>
                     {article.excerpt && (
@@ -171,7 +171,7 @@ export default function InsightsPage() {
                         <img src={article.image} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-[var(--color-text-muted)]/20 text-3xl font-bold font-mono">XHS{"\u2122"}</span>
+                          <span className="text-[var(--color-text-muted)]/20 text-3xl font-medium font-mono">XHS{"\u2122"}</span>
                         </div>
                       )}
                     </div>
@@ -180,7 +180,7 @@ export default function InsightsPage() {
                         <span className="bg-[var(--color-bg-elevated)] text-[var(--color-text-tertiary)] px-2 py-0.5 rounded font-medium">{article.category}</span>
                         <span>{article.readTime}</span>
                       </div>
-                      <h3 className="text-base font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-secondary)] transition-colors line-clamp-2 leading-snug">
+                      <h3 className="text-base font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-accent-secondary)] transition-colors line-clamp-2 leading-snug">
                         {article.title}
                       </h3>
                       {article.excerpt && (
@@ -203,17 +203,17 @@ export default function InsightsPage() {
       {/* CTA */}
       <div className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl">
+          <h2 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl">
             Start your free trial
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
             14 days. Full access. No credit card required.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90">
+            <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">
               Start free trial
             </a>
-            <Link href="/contact" className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]">
+            <Link href="/contact" className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]">
               Book a demo
             </Link>
           </div>

@@ -8,7 +8,7 @@ const SCREENS = [
     id: "dashboard",
     label: "Dashboard",
     image: "/Product-1---Dashboard.png",
-    headline: "Your regulatory command centre",
+    headline: "Your regulatory command center",
     desc: "Every development that matters to your jurisdictions, surfaced automatically. Watchlist activity, breaking regulatory changes, and AI-curated insights — updated continuously.",
   },
   {
@@ -178,7 +178,7 @@ export default function ProductShowcase() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
             >
-              <p className="text-base font-semibold text-[var(--color-text-primary)] mb-1">
+              <p className="text-base font-medium text-[var(--color-text-primary)] mb-1">
                 {screen.headline}
               </p>
               <p className="text-sm text-[var(--color-text-tertiary)] max-w-2xl leading-relaxed">

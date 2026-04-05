@@ -62,7 +62,7 @@ export default function PromoModal() {
           </button>
           
           <div className="flex flex-col items-center gap-2 text-center w-24">
-            <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            <div className="text-2xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
               Save 50%
             </div>
             <div className="text-[11px] text-gray-300 leading-tight">
@@ -122,7 +122,7 @@ export default function PromoModal() {
 
           {/* Main message */}
           <div className="text-center mb-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+            <h2 className="text-3xl md:text-4xl font-medium text-white leading-tight">
               Save up to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">50%</span>
             </h2>
             <p className="text-xl text-gray-300 mt-1">
@@ -186,7 +186,7 @@ export default function PromoModal() {
           <a
             href="/contact"
             onClick={handleClose}
-            className="block w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-4 text-center text-base font-semibold text-white shadow-xl hover:from-blue-700 hover:to-blue-800 transition-all hover:shadow-2xl hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="block w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-4 text-center text-base font-medium text-white shadow-xl hover:from-blue-700 hover:to-blue-800 transition-all hover:shadow-2xl hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Book a demo
           </a>

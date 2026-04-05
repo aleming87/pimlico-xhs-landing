@@ -60,7 +60,7 @@ export default function SiteFooter() {
           <div className="mt-5 flex items-center gap-4">
             <Link
               href="https://xhsdata.ai/register"
-              className="rounded-lg bg-[var(--color-text-primary)] px-5 py-2 text-xs font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90"
+              className="rounded-lg bg-[var(--color-text-primary)] px-5 py-2 text-xs font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
             >
               Start free trial
             </Link>

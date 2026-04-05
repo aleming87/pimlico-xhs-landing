@@ -4,14 +4,13 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-8 sm:pt-24 lg:px-8 lg:pt-32">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
-            <div className="flex items-center gap-4">
-              <img src="/Pimlico_Logo.png" alt="Pimlico" className="h-8" />
-              <img src="/xhs-logo-blue.png" alt="XHS\u2122" className="h-8" />
+            <div className="flex items-center">
+              <img src="/dual-logo.png" alt="Pimlico | XHS" className="h-10 w-auto" />
             </div>
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-1 xl:mt-0">
             <div>
-              <h3 className="text-sm/6 font-semibold text-gray-900">Company</h3>
+              <h3 className="text-sm/6 font-medium text-gray-900">Company</h3>
               <ul role="list" className="mt-6 space-y-4">
                 <li>
                   <a href="https://www.linkedin.com/company/wearepimlico/" target="_blank" rel="noopener noreferrer" className="text-sm/6 text-gray-600 hover:text-gray-900">About</a>
@@ -22,7 +21,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm/6 font-semibold text-gray-900">Legal</h3>
+              <h3 className="text-sm/6 font-medium text-gray-900">Legal</h3>
               <ul role="list" className="mt-6 space-y-4">
                 <li>
                   <a href="/privacy" className="text-sm/6 text-gray-600 hover:text-gray-900">Privacy</a>

@@ -31,7 +31,7 @@ export function AnimatedImpactScore() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-400">Impact Score</span>
-          <span className="text-sm font-semibold text-red-400">High</span>
+          <span className="text-sm font-medium text-red-400">High</span>
         </div>
         <div className="space-y-3">
           <div className="flex items-center gap-3">
@@ -44,7 +44,7 @@ export function AnimatedImpactScore() {
             <span className="text-xs text-gray-400 w-10 text-right tabular-nums">{score}%</span>
           </div>
           <div className="text-xs text-gray-300">
-            <div className="font-semibold text-white mb-1">Key Obligations:</div>
+            <div className="font-medium text-white mb-1">Key Obligations:</div>
             <div className="space-y-1 pl-3">
               <div>• Model documentation required</div>
               <div>• Risk assessment mandatory</div>
@@ -54,7 +54,7 @@ export function AnimatedImpactScore() {
         </div>
         <div className="pt-2 border-t border-gray-600/50">
           <div className="text-xs text-gray-400">Compliance Deadline</div>
-          <div className="text-sm font-semibold text-yellow-400 mt-1">Aug 2, 2026</div>
+          <div className="text-sm font-medium text-yellow-400 mt-1">Aug 2, 2026</div>
         </div>
       </div>
     </div>
@@ -106,10 +106,10 @@ export function AnimatedCollaborate() {
     <div className="space-y-3">
       <div className="flex items-center gap-3">
         <div className="flex -space-x-2">
-          <div className="h-8 w-8 rounded-full bg-blue-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">JD</div>
-          <div className="h-8 w-8 rounded-full bg-green-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">SK</div>
-          <div className="h-8 w-8 rounded-full bg-purple-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-white">AM</div>
-          <div className="h-8 w-8 rounded-full bg-gray-600 ring-2 ring-gray-800 flex items-center justify-center text-xs font-semibold text-gray-300">+5</div>
+          <div className="h-8 w-8 rounded-full bg-blue-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-medium text-white">JD</div>
+          <div className="h-8 w-8 rounded-full bg-green-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-medium text-white">SK</div>
+          <div className="h-8 w-8 rounded-full bg-purple-500 ring-2 ring-gray-800 flex items-center justify-center text-xs font-medium text-white">AM</div>
+          <div className="h-8 w-8 rounded-full bg-gray-600 ring-2 ring-gray-800 flex items-center justify-center text-xs font-medium text-gray-300">+5</div>
         </div>
         <span className="text-xs text-gray-400">8 team members</span>
       </div>
@@ -124,11 +124,11 @@ export function AnimatedCollaborate() {
             }}
           >
             <div className="flex items-start gap-2">
-              <div className={`h-6 w-6 rounded-full ${colorClasses[activity.color]} flex-shrink-0 flex items-center justify-center text-xs font-semibold text-white`}>
+              <div className={`h-6 w-6 rounded-full ${colorClasses[activity.color]} flex-shrink-0 flex items-center justify-center text-xs font-medium text-white`}>
                 {activity.initials}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-semibold text-white">{activity.name} {activity.action}</div>
+                <div className="text-xs font-medium text-white">{activity.name} {activity.action}</div>
                 <div className="text-xs text-gray-400 mt-0.5">{activity.detail}</div>
               </div>
             </div>

@@ -337,17 +337,17 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Welcome Aboard!</h1>
+          <h1 className="text-3xl font-medium text-slate-900 mb-4">Welcome Aboard!</h1>
           <p className="text-slate-600 text-lg mb-2">Your onboarding form has been submitted successfully.</p>
           <p className="text-slate-500 mb-8">
             {"We'll review your team details and jurisdiction selections, then reach out with next steps"}
             {scheduleTraining ? ' and schedule your training call' : ''}.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+            <a href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">
               Back to Pimlico
             </a>
-            <a href="/onboarding/guide" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl border border-blue-200 hover:bg-blue-50 transition-colors">
+            <a href="/onboarding/guide" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-600 font-medium rounded-xl border border-blue-200 hover:bg-blue-50 transition-colors">
               View Onboarding Guide
             </a>
           </div>
@@ -383,7 +383,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
         <div className="mx-auto max-w-3xl">
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-3">
+            <h1 className="text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl mb-3">
               {orgConfig ? `${orgConfig.name} \u2014 Onboarding` : 'XHS\u2122 Platform Onboarding'}
             </h1>
             <p className="text-base text-slate-500">
@@ -402,7 +402,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                     onClick={() => {
                       if (n < step) { setStep(n); window.scrollTo(0, 0); }
                     }}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
                       n < step
                         ? 'bg-blue-600 text-white cursor-pointer hover:bg-blue-700'
                         : n === step
@@ -428,9 +428,9 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             <div className="space-y-6 animate-fade-in">
               {/* Company */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-5">Company Information</h2>
+                <h2 className="text-xl font-medium text-slate-900 mb-5">Company Information</h2>
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700">
+                  <label className="block text-sm font-medium text-slate-700">
                     Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -457,7 +457,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
                 <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 className="text-xl font-semibold text-slate-900">Team Members</h2>
+                    <h2 className="text-xl font-medium text-slate-900">Team Members</h2>
                     <p className="text-sm text-slate-500 mt-1">
                       Add the people who will use the platform ({teamMembers.length}/{maxSeats} seats)
                     </p>
@@ -538,7 +538,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   type="button"
                   onClick={() => { setStep(2); window.scrollTo(0, 0); }}
                   disabled={!canProceedStep1}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  className="px-8 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
                   {"Continue \u2192"}
                 </button>
@@ -551,8 +551,8 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             <div className="space-y-6 animate-fade-in">
               {/* Verticals */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">Verticals</h2>
-                <p className="text-sm text-slate-500 mb-4">Your organisation has been configured for the following regulatory verticals</p>
+                <h2 className="text-xl font-medium text-slate-900 mb-2">Verticals</h2>
+                <p className="text-sm text-slate-500 mb-4">Your organization has been configured for the following regulatory verticals</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {availableVerticals.map(v => (
                     <div
@@ -568,7 +568,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
               {/* Jurisdictions */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
                 <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-xl font-semibold text-slate-900">Jurisdictions</h2>
+                  <h2 className="text-xl font-medium text-slate-900">Jurisdictions</h2>
                   <span className={`text-sm font-medium px-3 py-1 rounded-full ${
                     selectedJurisdictions.length >= maxJurisdictions
                       ? 'bg-amber-100 text-amber-700'
@@ -613,7 +613,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                           className="w-full flex items-center justify-between p-3 hover:bg-slate-100 transition-colors"
                         >
                           <div className="flex items-center gap-3">
-                            <span className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-bold border transition-colors ${
+                            <span className={`w-4 h-4 rounded flex items-center justify-center text-[10px] font-medium border transition-colors ${
                               isExpanded ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-300 text-slate-400'
                             }`}>
                               {isExpanded ? '\u2212' : '+'}
@@ -661,7 +661,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                                     className="w-full flex items-center justify-between px-3 py-2 hover:bg-slate-50 transition-colors"
                                   >
                                     <div className="flex items-center gap-2.5">
-                                      <span className={`w-3.5 h-3.5 rounded flex items-center justify-center text-[9px] font-bold border transition-colors ${
+                                      <span className={`w-3.5 h-3.5 rounded flex items-center justify-center text-[9px] font-medium border transition-colors ${
                                         subExpanded ? 'bg-blue-500 border-blue-500 text-white' : 'bg-white border-slate-300 text-slate-400'
                                       }`}>
                                         {subExpanded ? '\u2212' : '+'}
@@ -776,7 +776,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   type="button"
                   onClick={() => { setStep(3); window.scrollTo(0, 0); }}
                   disabled={!canProceedStep2}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  className="px-8 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
                   {"Continue \u2192"}
                 </button>
@@ -789,7 +789,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
             <div className="space-y-6 animate-fade-in">
               {/* Training */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-5">Training & Support</h2>
+                <h2 className="text-xl font-medium text-slate-900 mb-5">Training & Support</h2>
 
                 <div className="space-y-5">
                   {/* Video call training */}
@@ -866,7 +866,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
               {/* Feedback & Engagement */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-2">Feedback & Engagement</h2>
+                <h2 className="text-xl font-medium text-slate-900 mb-2">Feedback & Engagement</h2>
                 <p className="text-sm text-slate-500 mb-5">{"We'll check in regularly during onboarding. Let us know how you'd like to contribute beyond that."}</p>
 
                 <div className="space-y-5">
@@ -944,21 +944,21 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
               {/* Horizontal Onboarding Timeline */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-lg font-semibold text-slate-900 mb-1">Your Onboarding Journey</h2>
+                <h2 className="text-lg font-medium text-slate-900 mb-1">Your Onboarding Journey</h2>
                 <p className="text-xs text-slate-500 mb-5">{"What to expect over the first 3 weeks"}</p>
 
                 <div className="flex items-start gap-0">
                   {[
                     { week: 'W1', title: 'Setup & Access', desc: 'Account activation, team invites, configuration' },
                     { week: 'W2', title: 'Explore & Configure', desc: 'Start using tools, initial survey, dedicated support' },
-                    { week: 'W3', title: 'Review & Optimise', desc: 'Check-in call, feedback review, workspace tuning' },
+                    { week: 'W3', title: 'Review & Optimize', desc: 'Check-in call, feedback review, workspace tuning' },
                   ].map((step, i) => (
                     <div key={step.week} className="flex-1 flex flex-col items-center text-center relative">
                       {i < 2 && <div className="absolute top-4 left-[calc(50%+16px)] right-0 h-px bg-blue-200 z-0" />}
-                      <div className={`relative z-10 w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-bold ${
+                      <div className={`relative z-10 w-8 h-8 rounded-full text-white flex items-center justify-center text-xs font-medium ${
                         i === 0 ? 'bg-blue-600' : i === 1 ? 'bg-blue-500' : 'bg-blue-400'
                       }`}>{step.week}</div>
-                      <p className="text-xs font-semibold text-slate-800 mt-2">{step.title}</p>
+                      <p className="text-xs font-medium text-slate-800 mt-2">{step.title}</p>
                       <p className="text-[11px] text-slate-500 mt-0.5 px-2 leading-snug">{step.desc}</p>
                     </div>
                   ))}
@@ -971,7 +971,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
               {/* Additional Notes */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900 mb-4">Additional Notes</h2>
+                <h2 className="text-xl font-medium text-slate-900 mb-4">Additional Notes</h2>
                 <textarea
                   value={additionalNotes}
                   onChange={e => setAdditionalNotes(e.target.value)}
@@ -983,7 +983,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
 
               {/* Summary panel */}
               <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
-                <h3 className="text-base font-semibold text-blue-900 mb-4">Submission Summary</h3>
+                <h3 className="text-base font-medium text-blue-900 mb-4">Submission Summary</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-blue-600 text-xs font-medium">Company</span>
@@ -1025,7 +1025,7 @@ export function OnboardingForm({ orgSlug = 'general', orgConfig = null }) {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm flex items-center gap-2"
+                  className="px-8 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm flex items-center gap-2"
                 >
                   {isSubmitting ? (
                     <>

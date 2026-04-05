@@ -73,7 +73,7 @@ export default function GamblingPage() {
     {
       id: 1,
       name: 'United Kingdom',
-      regulations: ['Gambling Act 2005', 'UKGC Licence Conditions and Codes of Practice', 'Remote Gambling Regulations', 'Advertising Standards', 'Social Responsibility Code']
+      regulations: ['Gambling Act 2005', 'UKGC License Conditions and Codes of Practice', 'Remote Gambling Regulations', 'Advertising Standards', 'Social Responsibility Code']
     },
     {
       id: 2,
@@ -155,16 +155,16 @@ export default function GamblingPage() {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
-            <a href="/" className="text-sm/6 font-semibold text-gray-900">Home</a>
-            <a href="/#differentiators" className="text-sm/6 font-semibold text-gray-900">How it works</a>
-            <a href="/ai" className="text-sm/6 font-semibold text-gray-900">AI</a>
-            <a href="/payments" className="text-sm/6 font-semibold text-gray-900">Payments</a>
-            <a href="/gambling" className="text-sm/6 font-semibold text-emerald-600">Gambling</a>
-            <a href="/insights" className="text-sm/6 font-semibold text-gray-900">Insights</a>
-            <a href="/pricing" className="text-sm/6 font-semibold text-gray-900">Pricing</a>
+            <a href="/" className="text-sm/6 font-medium text-gray-900">Home</a>
+            <a href="/#differentiators" className="text-sm/6 font-medium text-gray-900">How it works</a>
+            <a href="/ai" className="text-sm/6 font-medium text-gray-900">AI</a>
+            <a href="/payments" className="text-sm/6 font-medium text-gray-900">Payments</a>
+            <a href="/gambling" className="text-sm/6 font-medium text-emerald-600">Gambling</a>
+            <a href="/insights" className="text-sm/6 font-medium text-gray-900">Insights</a>
+            <a href="/pricing" className="text-sm/6 font-medium text-gray-900">Pricing</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/contact?trial=true" className="inline-flex items-center rounded-md px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 hover:scale-105">
+            <a href="/contact?trial=true" className="inline-flex items-center rounded-md px-5 py-2.5 font-medium text-sm bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 hover:scale-105">
               Start free trial <span aria-hidden="true" className="ml-1">&rarr;</span>
             </a>
           </div>
@@ -194,15 +194,15 @@ export default function GamblingPage() {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
-                    <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Home</a>
-                    <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>How it works</a>
-                    <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>AI</a>
-                    <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Payments</a>
-                    <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Gambling</a>
-                    <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
+                    <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Home</a>
+                    <a href="/#differentiators" className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>How it works</a>
+                    <a href="/ai" className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>AI</a>
+                    <a href="/payments" className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Payments</a>
+                    <a href="/gambling" className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-blue-600 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Gambling</a>
+                    <a href="/pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
                   </div>
                   <div className="py-6">
-                    <a href="/contact?trial=true" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Start free trial</a>
+                    <a href="/contact?trial=true" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50" onClick={() => setMobileMenuOpen(false)}>Start free trial</a>
                   </div>
                 </div>
               </div>
@@ -220,15 +220,15 @@ export default function GamblingPage() {
         <div className="py-32 sm:py-48 lg:py-56">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 className="text-4xl font-medium tracking-tight text-gray-900 sm:text-6xl">
                 Navigate <span className="text-emerald-600">Gambling</span> Regulations with XHS<sup className="text-2xl">™</sup>
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">
                 Stay compliant across markets. Operate with confidence.
               </p>
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
-                <a href="/contact?trial=true" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 text-center transition-all hover:shadow-xl">Start free trial</a>
-                <a href="/contact" className="text-base font-semibold text-gray-600 hover:text-gray-900 transition-colors">
+                <a href="/contact?trial=true" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-medium text-white shadow-lg hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 text-center transition-all hover:shadow-xl">Start free trial</a>
+                <a href="/contact" className="text-base font-medium text-gray-600 hover:text-gray-900 transition-colors">
                   Book a demo <span aria-hidden="true">&rarr;</span>
                 </a>
               </div>
@@ -241,26 +241,26 @@ export default function GamblingPage() {
       <div className="bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-medium tracking-tight text-gray-900 sm:text-4xl">
               Navigate complex <span className="text-emerald-600">compliance</span> across <span className="text-emerald-600">global markets</span>
             </h2>
           </div>
           <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Gambling regulations tracked</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+              <dd className="order-first text-5xl font-medium tracking-tight text-gray-900 sm:text-7xl">
                 <AnimatedNumber start={0} end={400} />+
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Markets monitored</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+              <dd className="order-first text-5xl font-medium tracking-tight text-gray-900 sm:text-7xl">
                 <AnimatedNumber start={0} end={60} />+
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
               <dt className="text-base/7 text-gray-600">Regulatory categories covered</dt>
-              <dd className="order-first text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+              <dd className="order-first text-5xl font-medium tracking-tight text-gray-900 sm:text-7xl">
                 <AnimatedNumber start={0} end={8} />
               </dd>
             </div>
@@ -279,7 +279,7 @@ export default function GamblingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                   </svg>
                 </div>
-                <h3 className="text-3xl font-bold text-white">Gambling Regulation Categories</h3>
+                <h3 className="text-3xl font-medium text-white">Gambling Regulation Categories</h3>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -291,7 +291,7 @@ export default function GamblingPage() {
                     onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
                   >
                     <div className="flex items-start justify-between">
-                      <h4 className="text-lg font-semibold text-white mb-2">{category.name}</h4>
+                      <h4 className="text-lg font-medium text-white mb-2">{category.name}</h4>
                       <svg 
                         className={`h-5 w-5 text-gray-400 transition-transform duration-300 ${expandedCategory === category.id ? 'rotate-180' : ''}`}
                         fill="none" 
@@ -318,7 +318,7 @@ export default function GamblingPage() {
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-medium tracking-tight text-gray-900 sm:text-4xl">
               Comprehensive <span className="text-emerald-600">jurisdictional coverage</span>
             </h2>
             <p className="mt-4 text-lg text-gray-600">
@@ -334,7 +334,7 @@ export default function GamblingPage() {
                 onClick={() => setExpandedJurisdiction(expandedJurisdiction === jurisdiction.id ? null : jurisdiction.id)}
               >
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-bold text-gray-900">{jurisdiction.name}</h3>
+                  <h3 className="text-lg font-medium text-gray-900">{jurisdiction.name}</h3>
                   <svg 
                     className={`h-5 w-5 text-gray-400 transition-transform duration-300 flex-shrink-0 ${expandedJurisdiction === jurisdiction.id ? 'rotate-180' : ''}`}
                     fill="none" 
@@ -363,8 +363,8 @@ export default function GamblingPage() {
       {/* Bento Grid - Product Breakdown */}
       <div className="bg-gray-900 py-24 sm:py-32">
         <div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-          <h2 className="text-center text-base/7 font-semibold text-emerald-400">Everything you need</h2>
-          <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
+          <h2 className="text-center text-base/7 font-medium text-emerald-400">Everything you need</h2>
+          <p className="mx-auto mt-2 max-w-lg text-center text-4xl font-medium tracking-tight text-balance text-white sm:text-5xl">
             End-to-end gambling compliance workflows
           </p>
           <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
@@ -391,12 +391,12 @@ export default function GamblingPage() {
               <div className="pointer-events-none absolute inset-px rounded-lg shadow-sm ring-1 ring-black/5 lg:rounded-l-[2rem]"></div>
             </div>
 
-            {/* Analyse - Top right */}
+            {/* Analyze - Top right */}
             <div className="relative max-lg:row-start-1">
               <div className="absolute inset-px rounded-lg bg-gray-800 max-lg:rounded-t-[2rem]"></div>
               <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
                 <div className="px-8 pt-8 pb-4 sm:px-10 sm:pt-10 sm:pb-6">
-                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Analyse</p>
+                  <p className="mt-2 text-lg font-medium tracking-tight text-white max-lg:text-center">Analyze</p>
                   <p className="mt-2 max-w-lg text-sm/6 text-gray-400 max-lg:text-center">
                     AI-powered insights identify regulatory impacts and compliance obligations
                   </p>
@@ -449,7 +449,7 @@ export default function GamblingPage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-medium tracking-tight text-gray-900 sm:text-4xl">
               Built for gambling <span className="text-emerald-600">compliance teams</span>
             </h2>
           </div>
@@ -461,7 +461,7 @@ export default function GamblingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">License Compliance</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">License Compliance</h3>
               <p className="text-gray-600">
                 Track license requirements, renewal deadlines, and regulatory obligations across all markets you operate in.
               </p>
@@ -473,7 +473,7 @@ export default function GamblingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Player Protection</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Player Protection</h3>
               <p className="text-gray-600">
                 Stay ahead of responsible gambling requirements, self-exclusion mandates, and player protection regulations.
               </p>
@@ -485,7 +485,7 @@ export default function GamblingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Marketing Compliance</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Marketing Compliance</h3>
               <p className="text-gray-600">
                 Navigate advertising restrictions, affiliate regulations, and promotional content requirements across markets.
               </p>
@@ -497,7 +497,7 @@ export default function GamblingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">AML/CFT</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">AML/CFT</h3>
               <p className="text-gray-600">
                 Monitor evolving anti-money laundering requirements, customer due diligence standards, and financial crime prevention.
               </p>
@@ -509,7 +509,7 @@ export default function GamblingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Technical Standards</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Technical Standards</h3>
               <p className="text-gray-600">
                 Track technical compliance requirements, testing protocols, and certification standards for online gaming platforms.
               </p>
@@ -521,7 +521,7 @@ export default function GamblingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tax & Reporting</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Tax & Reporting</h3>
               <p className="text-gray-600">
                 Stay current on gaming tax obligations, duty structures, and financial reporting requirements across jurisdictions.
               </p>
@@ -534,17 +534,17 @@ export default function GamblingPage() {
       <div className="bg-gray-900">
         <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-medium tracking-tight text-white sm:text-4xl">
               Ready to streamline your gambling compliance?
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
               Join leading gambling operators using XHS™ to stay ahead of regulatory changes across global markets.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
-              <a href="/contact?trial=true" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-all hover:shadow-xl">
+              <a href="/contact?trial=true" className="rounded-lg bg-emerald-600 px-8 py-3.5 text-base font-medium text-white shadow-lg hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-all hover:shadow-xl">
                 Start free trial
               </a>
-              <a href="/contact" className="text-base font-semibold text-gray-300 hover:text-white transition-colors">
+              <a href="/contact" className="text-base font-medium text-gray-300 hover:text-white transition-colors">
                 Book a demo <span aria-hidden="true">&rarr;</span>
               </a>
             </div>

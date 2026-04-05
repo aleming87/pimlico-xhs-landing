@@ -9,7 +9,7 @@ import { marked } from 'marked';
 const BLOB_SUBSCRIBERS_KEY = 'updates/subscribers.json';
 const BLOB_HISTORY_KEY = 'updates/history.json';
 const BLOB_SCHEDULED_KEY = 'updates/scheduled.json';
-const BLOB_ORGS_KEY = 'updates/organisations.json';
+const BLOB_ORGS_KEY = 'updates/organizations.json';
 
 /* ── Blob helpers ── */
 async function readBlob(key, fallback) {
@@ -394,13 +394,13 @@ async function sendEmail({ to, subject, html }) {
 
 /* ═══════════════════ GET ═══════════════════ */
 export async function GET() {
-  const [subscribers, history, scheduled, organisations] = await Promise.all([
+  const [subscribers, history, scheduled, organizations] = await Promise.all([
     readBlob(BLOB_SUBSCRIBERS_KEY, []),
     readBlob(BLOB_HISTORY_KEY, []),
     readBlob(BLOB_SCHEDULED_KEY, []),
     readBlob(BLOB_ORGS_KEY, []),
   ]);
-  return NextResponse.json({ success: true, subscribers, history, scheduled, organisations });
+  return NextResponse.json({ success: true, subscribers, history, scheduled, organizations });
 }
 
 /* ═══════════════════ POST ═══════════════════ */
@@ -409,27 +409,27 @@ export async function POST(request) {
   const body = await request.json();
   const { action } = body;
 
-  /* ── Organisation CRUD ── */
-  if (action === 'save-organisation') {
-    const { organisation } = body; // { id?, name, logoUrl, jurisdictions[] }
+  /* ── Organization CRUD ── */
+  if (action === 'save-organization') {
+    const { organization } = body; // { id?, name, logoUrl, jurisdictions[] }
     const orgs = await readBlob(BLOB_ORGS_KEY, []);
-    if (organisation.id) {
-      const idx = orgs.findIndex(o => o.id === organisation.id);
-      if (idx >= 0) orgs[idx] = { ...orgs[idx], ...organisation };
-      else orgs.push({ ...organisation, id: crypto.randomUUID() });
+    if (organization.id) {
+      const idx = orgs.findIndex(o => o.id === organization.id);
+      if (idx >= 0) orgs[idx] = { ...orgs[idx], ...organization };
+      else orgs.push({ ...organization, id: crypto.randomUUID() });
     } else {
-      orgs.push({ ...organisation, id: crypto.randomUUID() });
+      orgs.push({ ...organization, id: crypto.randomUUID() });
     }
     await writeBlob(BLOB_ORGS_KEY, orgs);
-    return NextResponse.json({ success: true, organisations: orgs });
+    return NextResponse.json({ success: true, organizations: orgs });
   }
 
-  if (action === 'delete-organisation') {
+  if (action === 'delete-organization') {
     const { organisationId } = body;
     let orgs = await readBlob(BLOB_ORGS_KEY, []);
     orgs = orgs.filter(o => o.id !== organisationId);
     await writeBlob(BLOB_ORGS_KEY, orgs);
-    return NextResponse.json({ success: true, organisations: orgs });
+    return NextResponse.json({ success: true, organizations: orgs });
   }
 
   /* ── Subscriber management ── */
@@ -442,7 +442,7 @@ export async function POST(request) {
     for (const s of incoming) {
       const entry = typeof s === 'string' ? { email: s } : s;
       if (!existingEmails.includes(entry.email.toLowerCase())) {
-        existing.push({ ...entry, organisation: org || entry.organisation || '', id: crypto.randomUUID(), addedAt: new Date().toISOString() });
+        existing.push({ ...entry, organization: org || entry.organization || '', id: crypto.randomUUID(), addedAt: new Date().toISOString() });
         existingEmails.push(entry.email.toLowerCase());
         added.push(entry.email);
       }
@@ -467,8 +467,8 @@ export async function POST(request) {
     const updates = body.subscriber || body.updates || {};
     const idx = subs.findIndex(s => id ? s.id === id : s.email === email);
     if (idx >= 0) {
-      // Map 'org' to 'organisation' for consistency
-      if (updates.org !== undefined) { updates.organisation = updates.org; delete updates.org; }
+      // Map 'org' to 'organization' for consistency
+      if (updates.org !== undefined) { updates.organization = updates.org; delete updates.org; }
       subs[idx] = { ...subs[idx], ...updates };
     }
     await writeBlob(BLOB_SUBSCRIBERS_KEY, subs);
@@ -483,9 +483,9 @@ export async function POST(request) {
     for (const s of onboardingSubs) {
       const email = s.email || s.contactEmail;
       const name = s.name || s.contactName || '';
-      const org = s.company || s.organisation || '';
+      const org = s.company || s.organization || '';
       if (email && !emails.includes(email.toLowerCase())) {
-        existing.push({ email, name, organisation: org, id: crypto.randomUUID(), addedAt: new Date().toISOString(), source: 'onboarding' });
+        existing.push({ email, name, organization: org, id: crypto.randomUUID(), addedAt: new Date().toISOString(), source: 'onboarding' });
         emails.push(email.toLowerCase());
         added.push(email);
       }
@@ -594,8 +594,8 @@ ESMA published final technical standards and reporting templates for ICT-related
 
     const results = [];
     for (const sub of targets) {
-      const orgConfig = sub.organisation
-        ? orgs.find(o => o.name?.toLowerCase() === sub.organisation.toLowerCase()) || {}
+      const orgConfig = sub.organization
+        ? orgs.find(o => o.name?.toLowerCase() === sub.organization.toLowerCase()) || {}
         : {};
       const recipientName = sub.name?.split(' ')[0] || '';
 
@@ -671,8 +671,8 @@ ESMA published final technical standards and reporting templates for ICT-related
 
     const results = [];
     for (const sub of targets) {
-      const orgConfig = sub.organisation
-        ? orgs.find(o => o.name?.toLowerCase() === sub.organisation.toLowerCase()) || {}
+      const orgConfig = sub.organization
+        ? orgs.find(o => o.name?.toLowerCase() === sub.organization.toLowerCase()) || {}
         : {};
       const recipientName = sub.name?.split(' ')[0] || '';
 

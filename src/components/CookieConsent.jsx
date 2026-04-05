@@ -44,7 +44,7 @@ export function CookieConsent() {
           <div className="p-6 md:p-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
                   Cookie Notice
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed">

@@ -2,7 +2,7 @@ export default function ICP() {
   return (
     <section id="icp" className="py-24 scroll-mt-24">
       <div className="mx-auto max-w-7xl px-6">
-        <h2 className="text-4xl font-semibold tracking-tight">Ideal Customer Profile (ICP)</h2>
+        <h2 className="text-4xl font-medium tracking-tight">Ideal Customer Profile (ICP)</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border border-slate-200 p-6">
             <h3 className="font-medium">Who we serve</h3>

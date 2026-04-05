@@ -148,7 +148,7 @@ export default function XHSMonitoringSurveyPage() {
   const aiFeatureOptions = [
     'AI-generated regulatory summaries',
     'Natural language search across regulations',
-    'Personalised regulatory change alerts',
+    'Personalized regulatory change alerts',
     'AI compliance gap analysis',
     'Automated impact assessments',
     'AI-drafted compliance responses',
@@ -209,7 +209,7 @@ export default function XHSMonitoringSurveyPage() {
     const ratingLabels = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
     return (
       <div className="mb-6">
-        <label className="block text-sm font-semibold text-white mb-3">
+        <label className="block text-sm font-medium text-white mb-3">
           {label} {required && <span className="text-red-400">*</span>}
         </label>
         <div className="flex items-center gap-2">
@@ -371,7 +371,7 @@ export default function XHSMonitoringSurveyPage() {
       <div className="isolate px-6 py-24 sm:py-32 lg:px-8 mt-10">
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
-            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
+            <h1 className="text-4xl font-medium tracking-tight text-white sm:text-5xl mb-4">
               XHS™ Copilot Feedback
             </h1>
             <p className="text-lg text-gray-300 mb-2">
@@ -387,12 +387,12 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 1: CONTACT INFORMATION */}
             <div data-section="0" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-6">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">1</span>
-                <h2 className="text-2xl font-semibold text-white">About You</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">1</span>
+                <h2 className="text-2xl font-medium text-white">About You</h2>
               </div>
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="first-name" className="block text-sm font-semibold text-white">
+                  <label htmlFor="first-name" className="block text-sm font-medium text-white">
                     First name <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -408,7 +408,7 @@ export default function XHSMonitoringSurveyPage() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="last-name" className="block text-sm font-semibold text-white">
+                  <label htmlFor="last-name" className="block text-sm font-medium text-white">
                     Last name <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -424,7 +424,7 @@ export default function XHSMonitoringSurveyPage() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="company" className="block text-sm font-semibold text-white">
+                  <label htmlFor="company" className="block text-sm font-medium text-white">
                     Company <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -440,7 +440,7 @@ export default function XHSMonitoringSurveyPage() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="email" className="block text-sm font-semibold text-white">
+                  <label htmlFor="email" className="block text-sm font-medium text-white">
                     Business Email <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -461,7 +461,7 @@ export default function XHSMonitoringSurveyPage() {
 
                 {/* Usage frequency — warm-up question */}
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-semibold text-white mb-3">
+                  <label className="block text-sm font-medium text-white mb-3">
                     How often do you use XHS™? <span className="text-red-400">*</span>
                   </label>
                   <div className="flex flex-wrap gap-3">
@@ -487,8 +487,8 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 2: PLATFORM RATINGS */}
             <div data-section="1" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">2</span>
-                <h2 className="text-2xl font-semibold text-white">Platform Ratings</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">2</span>
+                <h2 className="text-2xl font-medium text-white">Platform Ratings</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Rate the following aspects of XHS™ monitoring on a scale of 1–5</p>
 
@@ -527,13 +527,13 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 3: COVERAGE & SOURCES */}
             <div data-section="2" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">3</span>
-                <h2 className="text-2xl font-semibold text-white">Coverage & Sources</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">3</span>
+                <h2 className="text-2xl font-medium text-white">Coverage & Sources</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Help us understand if we're covering the right ground</p>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Beyond XHS™, what other sources do you use to keep on top of regulatory change? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -566,7 +566,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="coverage-missed-items" className="block text-sm font-semibold text-white mb-2">
+                <label htmlFor="coverage-missed-items" className="block text-sm font-medium text-white mb-2">
                   Are there any jurisdictions, topics, or regulatory areas you feel are missing from XHS™?
                 </label>
                 <textarea
@@ -579,7 +579,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="missed-updates" className="block text-sm font-semibold text-white mb-2">
+                <label htmlFor="missed-updates" className="block text-sm font-medium text-white mb-2">
                   Have we missed any specific updates? Tell us what, when, and where.
                 </label>
                 <textarea
@@ -595,13 +595,13 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 4: SLACK INTEGRATION */}
             <div data-section="3" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">4</span>
-                <h2 className="text-2xl font-semibold text-white">Slack Integration</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">4</span>
+                <h2 className="text-2xl font-medium text-white">Slack Integration</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">XHS™ currently offers a Slack integration for regulatory alerts - tell us how it's working</p>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Have you used the XHS™ Slack integration? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4">
@@ -635,7 +635,7 @@ export default function XHSMonitoringSurveyPage() {
                   />
 
                   <div className="mb-6">
-                    <label htmlFor="integration-feedback" className="block text-sm font-semibold text-white mb-2">
+                    <label htmlFor="integration-feedback" className="block text-sm font-medium text-white mb-2">
                       Any specific feedback on the Slack integration?
                     </label>
                     <textarea
@@ -651,7 +651,7 @@ export default function XHSMonitoringSurveyPage() {
 
               {/* Desired integrations — always visible */}
               <div className="mb-2">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Which other integrations would you find valuable? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -676,13 +676,13 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 5: SUPPORT */}
             <div data-section="4" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">5</span>
-                <h2 className="text-2xl font-semibold text-white">Support</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">5</span>
+                <h2 className="text-2xl font-medium text-white">Support</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Tell us about your experience with XHS™ support</p>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Which support channels have you used? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -724,7 +724,7 @@ export default function XHSMonitoringSurveyPage() {
                   />
 
                   <div>
-                    <label htmlFor="support-feedback" className="block text-sm font-semibold text-white mb-2">
+                    <label htmlFor="support-feedback" className="block text-sm font-medium text-white mb-2">
                       Any feedback on your support experience?
                     </label>
                     <textarea
@@ -742,13 +742,13 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 6: COUNTRY REPORTS */}
             <div data-section="5" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">6</span>
-                <h2 className="text-2xl font-semibold text-white">Country Reports</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">6</span>
+                <h2 className="text-2xl font-medium text-white">Country Reports</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Share your thoughts on the XHS™ country reports</p>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Have you used the country reports? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4">
@@ -782,7 +782,7 @@ export default function XHSMonitoringSurveyPage() {
                   />
 
                   <div className="mb-6">
-                    <label htmlFor="country-reports-feedback" className="block text-sm font-semibold text-white mb-2">
+                    <label htmlFor="country-reports-feedback" className="block text-sm font-medium text-white mb-2">
                       What do you think of the country reports? What would you change?
                     </label>
                     <textarea
@@ -795,7 +795,7 @@ export default function XHSMonitoringSurveyPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="most-useful-country-reports" className="block text-sm font-semibold text-white mb-2">
+                    <label htmlFor="most-useful-country-reports" className="block text-sm font-medium text-white mb-2">
                       Which country reports have been most useful to you?
                     </label>
                     <input
@@ -813,13 +813,13 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 7: NEWS COVERAGE */}
             <div data-section="6" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">7</span>
-                <h2 className="text-2xl font-semibold text-white">News Coverage</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">7</span>
+                <h2 className="text-2xl font-medium text-white">News Coverage</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">We're exploring adding integrated news coverage to XHS™</p>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Would you find integrated regulatory news coverage beneficial? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4 flex-wrap">
@@ -842,7 +842,7 @@ export default function XHSMonitoringSurveyPage() {
               {(newsCoverageBeneficial === 'Very beneficial' || newsCoverageBeneficial === 'Somewhat beneficial') && (
                 <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
                   <div className="mb-6">
-                    <label className="block text-sm font-semibold text-white mb-3">
+                    <label className="block text-sm font-medium text-white mb-3">
                       What type of news coverage would be most valuable?
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -864,7 +864,7 @@ export default function XHSMonitoringSurveyPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="news-coverage-comments" className="block text-sm font-semibold text-white mb-2">
+                    <label htmlFor="news-coverage-comments" className="block text-sm font-medium text-white mb-2">
                       Any other thoughts on what news coverage should look like?
                     </label>
                     <textarea
@@ -882,14 +882,14 @@ export default function XHSMonitoringSurveyPage() {
             {/* SECTION 8: AI, FEATURES & IMPROVEMENTS */}
             <div data-section="7" className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">8</span>
-                <h2 className="text-2xl font-semibold text-white">AI, Features & Improvements</h2>
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">8</span>
+                <h2 className="text-2xl font-medium text-white">AI, Features & Improvements</h2>
               </div>
               <p className="text-sm text-gray-400 mb-6 ml-11">Help us shape the future of XHS™</p>
 
               {/* AI sub-section */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Which AI tools do you currently use for compliance-related work? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -922,7 +922,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   How much do you trust AI-generated output for compliance decisions?
                 </label>
                 <div className="flex flex-wrap gap-3">
@@ -944,8 +944,8 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
-                  Would you be interested in personalised AI features within XHS™?
+                <label className="block text-sm font-medium text-white mb-3">
+                  Would you be interested in personalized AI features within XHS™?
                 </label>
                 <div className="flex gap-4 flex-wrap">
                   {['Very interested', 'Somewhat interested', 'Not interested', 'Need to know more'].map((option) => (
@@ -966,7 +966,7 @@ export default function XHSMonitoringSurveyPage() {
 
               {(aiFeatureInterest === 'Very interested' || aiFeatureInterest === 'Somewhat interested') && (
                 <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
-                  <label className="block text-sm font-semibold text-white mb-3">
+                  <label className="block text-sm font-medium text-white mb-3">
                     Which AI capabilities would be most valuable to you? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -990,11 +990,11 @@ export default function XHSMonitoringSurveyPage() {
 
               {/* Platform improvements divider */}
               <div className="border-t border-white/10 pt-6 mb-6">
-                <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Platform improvements</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Platform improvements</p>
               </div>
 
               <div className="mb-6">
-                <label htmlFor="most-valuable-feature" className="block text-sm font-semibold text-white mb-2">
+                <label htmlFor="most-valuable-feature" className="block text-sm font-medium text-white mb-2">
                   What’s the single most valuable feature of XHS™ for you?
                 </label>
                 <input
@@ -1007,7 +1007,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="what-would-change" className="block text-sm font-semibold text-white mb-2">
+                <label htmlFor="what-would-change" className="block text-sm font-medium text-white mb-2">
                   If you could change one thing about the platform, what would it be?
                 </label>
                 <textarea
@@ -1020,7 +1020,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Which features would you most like to see added? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -1042,7 +1042,7 @@ export default function XHSMonitoringSurveyPage() {
               </div>
 
               <div className="mb-6">
-                <label htmlFor="additional-comments" className="block text-sm font-semibold text-white mb-2">
+                <label htmlFor="additional-comments" className="block text-sm font-medium text-white mb-2">
                   Any other feedback, ideas, or suggestions?
                 </label>
                 <textarea
@@ -1056,7 +1056,7 @@ export default function XHSMonitoringSurveyPage() {
 
               {/* Beta / Early Access Interest */}
               <div className="border-t border-white/10 pt-6 mb-6">
-                <label className="block text-sm font-semibold text-white mb-3">
+                <label className="block text-sm font-medium text-white mb-3">
                   Would you be interested in being contacted to try new features before they launch?
                 </label>
                 <div className="flex gap-4">
@@ -1078,7 +1078,7 @@ export default function XHSMonitoringSurveyPage() {
 
               {(betaInterest === 'Yes' || betaInterest === 'Maybe') && (
                 <div className="bg-white/5 rounded-xl p-4 border border-white/5 mb-6">
-                  <label className="block text-sm font-semibold text-white mb-3">
+                  <label className="block text-sm font-medium text-white mb-3">
                     How would you prefer to be contacted? <span className="text-gray-400 font-normal text-xs">(Select all that apply)</span>
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -1102,7 +1102,7 @@ export default function XHSMonitoringSurveyPage() {
 
               {/* NPS — placed at end of final section for natural closure */}
               <div className="border-t border-white/10 pt-6">
-                <label className="block text-sm font-semibold text-white mb-4">
+                <label className="block text-sm font-medium text-white mb-4">
                   How likely are you to recommend XHS™ to a colleague? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2 mb-2">
@@ -1111,7 +1111,7 @@ export default function XHSMonitoringSurveyPage() {
                       key={score}
                       type="button"
                       onClick={() => setNpsScore(score)}
-                      className={`w-12 h-12 rounded-lg font-semibold text-sm transition-all flex items-center justify-center ${
+                      className={`w-12 h-12 rounded-lg font-medium text-sm transition-all flex items-center justify-center ${
                         npsScore === score
                           ? score <= 6
                             ? 'bg-red-600 text-white'
@@ -1171,7 +1171,7 @@ export default function XHSMonitoringSurveyPage() {
               <button
                 type="submit"
                 disabled={isSubmitting || !isFormValid}
-                className="flex-1 rounded-md bg-blue-600 px-3.5 py-3 text-center text-base font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 rounded-md bg-blue-600 px-3.5 py-3 text-center text-base font-medium text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
               </button>

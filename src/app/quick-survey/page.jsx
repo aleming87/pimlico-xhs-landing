@@ -397,7 +397,7 @@ export default function QuickSurveyPage() {
       <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
-            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl mb-4">
+            <h1 className="text-4xl font-medium tracking-tight text-white sm:text-5xl mb-4">
               Quick Survey
             </h1>
             <p className="text-lg text-gray-300">
@@ -408,11 +408,11 @@ export default function QuickSurveyPage() {
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* CONTACT INFORMATION SECTION */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-6">Contact Information</h2>
+              <h2 className="text-2xl font-medium text-white mb-6">Contact Information</h2>
               
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="first-name" className="block text-sm font-semibold text-white">
+                  <label htmlFor="first-name" className="block text-sm font-medium text-white">
                     First name <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -428,7 +428,7 @@ export default function QuickSurveyPage() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="last-name" className="block text-sm font-semibold text-white">
+                  <label htmlFor="last-name" className="block text-sm font-medium text-white">
                     Last name <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -444,7 +444,7 @@ export default function QuickSurveyPage() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="company" className="block text-sm font-semibold text-white">
+                  <label htmlFor="company" className="block text-sm font-medium text-white">
                     Company <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -460,7 +460,7 @@ export default function QuickSurveyPage() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="email" className="block text-sm font-semibold text-white">
+                  <label htmlFor="email" className="block text-sm font-medium text-white">
                     Business Email <span className="text-red-400">*</span>
                   </label>
                   <div className="mt-2.5">
@@ -479,7 +479,7 @@ export default function QuickSurveyPage() {
                   </div>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor="message" className="block text-sm font-semibold text-white">
+                  <label htmlFor="message" className="block text-sm font-medium text-white">
                     Message (Optional)
                   </label>
                   <div className="mt-2.5">
@@ -496,11 +496,11 @@ export default function QuickSurveyPage() {
 
             {/* SURVEY SECTION */}
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-semibold text-white mb-6">Your Regulatory Compliance Needs</h2>
+              <h2 className="text-2xl font-medium text-white mb-6">Your Regulatory Compliance Needs</h2>
               
               {/* Primary Focus Areas */}
               <div className="mb-6">
-                <label className="block text-lg font-semibold text-white mb-2">
+                <label className="block text-lg font-medium text-white mb-2">
                   Primary focus areas <span className="text-red-400">*</span>
                 </label>
                 <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
@@ -525,7 +525,7 @@ export default function QuickSurveyPage() {
               {/* AI Regulatory Topics */}
               {selectedFocusAreas.includes('AI') && (
                 <div className="mb-6 bg-white/5 rounded-xl p-4 border border-white/5">
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-medium text-white mb-2">
                     Top 3 regulatory topics in AI <span className="text-red-400">*</span>
                   </h3>
                   <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for AI</p>
@@ -589,7 +589,7 @@ export default function QuickSurveyPage() {
               {/* Payments Regulatory Topics */}
               {selectedFocusAreas.includes('Payments') && (
                 <div className="mb-6 bg-white/5 rounded-xl p-4 border border-white/5">
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-medium text-white mb-2">
                     Top 3 regulatory topics in Payments <span className="text-red-400">*</span>
                   </h3>
                   <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for Payments</p>
@@ -653,7 +653,7 @@ export default function QuickSurveyPage() {
               {/* Gambling Regulatory Topics */}
               {selectedFocusAreas.includes('Gambling') && (
                 <div className="mb-6 bg-white/5 rounded-xl p-4 border border-white/5">
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-medium text-white mb-2">
                     Top 3 regulatory topics in Gambling <span className="text-red-400">*</span>
                   </h3>
                   <p className="text-sm text-gray-400 mb-4">Rank your top 3 priorities for Gambling</p>
@@ -716,7 +716,7 @@ export default function QuickSurveyPage() {
 
               {/* Top 5 Jurisdictions */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className="text-lg font-medium text-white mb-2">
                   Top 5 jurisdictions you're monitoring <span className="text-red-400">*</span>
                 </h3>
                 <p className="text-sm text-gray-400 mb-4">Type to search and select up to 5 jurisdictions</p>
@@ -778,7 +778,7 @@ export default function QuickSurveyPage() {
 
               {/* Compliance Challenges */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className="text-lg font-medium text-white mb-2">
                   Current compliance challenges
                 </h3>
                 <p className="text-sm text-gray-400 mb-4">Select all that apply</p>
@@ -802,7 +802,7 @@ export default function QuickSurveyPage() {
 
               {/* Timeline */}
               <div className="mb-6">
-                <label htmlFor="timeline" className="block text-lg font-semibold text-white mb-4">
+                <label htmlFor="timeline" className="block text-lg font-medium text-white mb-4">
                   What brings you here today? <span className="text-red-400">*</span>
                 </label>
                 <select
@@ -822,7 +822,7 @@ export default function QuickSurveyPage() {
 
               {/* Using Competitors */}
               <div className="mb-6">
-                <label className="block text-lg font-semibold text-white mb-4">
+                <label className="block text-lg font-medium text-white mb-4">
                   Are you using other regulatory monitoring vendors? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4 mb-4">
@@ -914,7 +914,7 @@ export default function QuickSurveyPage() {
 
               {/* Shared Workspace */}
               <div className="mb-6">
-                <label className="block text-lg font-semibold text-white mb-4">
+                <label className="block text-lg font-medium text-white mb-4">
                   Does your team collaborate in a shared regulatory workspace? <span className="text-red-400">*</span>
                 </label>
                 <div className="flex gap-4">
@@ -935,7 +935,7 @@ export default function QuickSurveyPage() {
 
               {/* Productivity Apps */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className="text-lg font-medium text-white mb-2">
                   What productivity and communication apps do you or your team use?
                 </h3>
                 <p className="text-sm text-gray-400 mb-4">Type to search and select</p>
@@ -1032,7 +1032,7 @@ export default function QuickSurveyPage() {
               <button
                 type="submit"
                 disabled={isSubmitting || selectedJurisdictions.length === 0 || selectedFocusAreas.length === 0 || !validFields.email}
-                className="flex-1 rounded-md bg-blue-600 px-3.5 py-3 text-center text-base font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex-1 rounded-md bg-blue-600 px-3.5 py-3 text-center text-base font-medium text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>

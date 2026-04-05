@@ -33,7 +33,7 @@ export default function ConfirmedPage() {
                 "A 30-minute walkthrough of the XHS\u2122 Copilot platform tailored to your compliance needs.",
                 "Discussion of your jurisdictions, verticals, and team requirements.",
                 "Live demonstration of monitoring, research, and workspace tools.",
-                "Pricing and onboarding options for your organisation.",
+                "Pricing and onboarding options for your organization.",
               ].map((item, i) => (
                 <div key={i} className="flex gap-3">
                   <span className="text-xs font-mono text-[var(--color-text-muted)] mt-0.5 shrink-0">{String(i + 1).padStart(2, "0")}</span>

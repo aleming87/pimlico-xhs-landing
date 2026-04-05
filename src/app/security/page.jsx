@@ -14,7 +14,7 @@ const securityFeatures = [
   {
     title: 'Access Control',
     items: [
-      'Organisation-level data isolation with Row Level Security (RLS)',
+      'Organization-level data isolation with Row Level Security (RLS)',
       'Role-based access control (Owner, Admin, Member, Viewer)',
       'Multi-factor authentication (MFA) with brute-force protection',
       'Session management with automatic expiry',
@@ -41,7 +41,7 @@ const securityFeatures = [
   {
     title: 'Data Retention & Deletion',
     items: [
-      'Configurable data retention policies per organisation (default: 365 days)',
+      'Configurable data retention policies per organization (default: 365 days)',
       'Automated retention enforcement with daily compliance checks',
       'Right to deletion: complete data purge available on request',
       'GDPR-compliant data subject access and portability',
@@ -83,8 +83,8 @@ export default function SecurityPage() {
       {/* Header */}
       <div className="bg-[var(--color-bg-base)] text-white pt-24 py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm font-semibold text-[var(--color-accent-secondary)] uppercase tracking-wider mb-4">Security & Privacy</p>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[var(--color-text-primary)]">
+          <p className="text-sm font-medium text-[var(--color-accent-secondary)] uppercase tracking-wider mb-4">Security & Privacy</p>
+          <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-[var(--color-text-primary)]">
             Enterprise-grade security for regulatory compliance
           </h1>
           <p className="mt-6 text-lg text-[var(--color-text-tertiary)] max-w-2xl mx-auto">
@@ -99,7 +99,7 @@ export default function SecurityPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {securityFeatures.map((section) => (
             <div key={section.title} className="border border-[var(--color-border-default)] rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-4">{section.title}</h3>
+              <h3 className="text-lg font-medium text-[var(--color-text-primary)] mb-4">{section.title}</h3>
               <ul className="space-y-2">
                 {section.items.map((item, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-[var(--color-text-tertiary)]">
@@ -116,18 +116,18 @@ export default function SecurityPage() {
 
         {/* Certifications & Standards */}
         <div className="mt-16 border-t border-[var(--color-border-default)] pt-12">
-          <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-6">Standards & Certifications</h2>
+          <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mb-6">Standards & Certifications</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
-              <p className="text-2xl font-bold text-[var(--color-text-primary)]">GDPR</p>
+              <p className="text-2xl font-medium text-[var(--color-text-primary)]">GDPR</p>
               <p className="text-sm text-[var(--color-text-tertiary)] mt-2">EU General Data Protection Regulation compliant</p>
             </div>
             <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
-              <p className="text-2xl font-bold text-[var(--color-text-primary)]">SOC 2</p>
+              <p className="text-2xl font-medium text-[var(--color-text-primary)]">SOC 2</p>
               <p className="text-sm text-[var(--color-text-tertiary)] mt-2">SOC 2 Type II aligned infrastructure (Supabase)</p>
             </div>
             <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
-              <p className="text-2xl font-bold text-[var(--color-text-primary)]">PCI DSS</p>
+              <p className="text-2xl font-medium text-[var(--color-text-primary)]">PCI DSS</p>
               <p className="text-sm text-[var(--color-text-tertiary)] mt-2">PCI DSS compliant payment processing (Stripe)</p>
             </div>
           </div>
@@ -135,13 +135,13 @@ export default function SecurityPage() {
 
         {/* Contact */}
         <div className="mt-16 bg-[var(--color-bg-surface)] text-white rounded-2xl p-8 text-center border border-[var(--color-border-default)]">
-          <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">Security questions?</h3>
+          <h3 className="text-xl font-medium text-[var(--color-text-primary)]">Security questions?</h3>
           <p className="text-[var(--color-text-tertiary)] mt-2 text-sm">
             For security enquiries, vulnerability reports, or data protection requests, contact us directly.
           </p>
           <a
             href="mailto:andrew@pimlicosolutions.com"
-            className="inline-block mt-4 px-6 py-2.5 bg-[var(--color-cta-primary)] text-white font-semibold rounded-lg hover:bg-[var(--color-cta-primary)]/90 transition"
+            className="inline-block mt-4 px-6 py-2.5 bg-[var(--color-cta-primary)] text-white font-medium rounded-lg hover:bg-[var(--color-cta-primary)]/90 transition"
           >
             Contact Security Team
           </a>

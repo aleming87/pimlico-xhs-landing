@@ -185,7 +185,7 @@ export default function PublishingPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">🚀 Publishing Hub</h1>
+          <h1 className="text-xl font-medium text-white flex items-center gap-2">🚀 Publishing Hub</h1>
           <p className="text-sm text-gray-400 mt-0.5">Compose, preview & grab-and-go — like Buffer, built for Pimlico</p>
         </div>
         <div className="flex items-center gap-2">
@@ -205,7 +205,7 @@ export default function PublishingPage() {
           <div key={s.label} className={`${s.bg} rounded-xl p-3 border border-gray-700/50`}>
             <div className="flex items-center justify-between">
               <span className="text-lg">{s.icon}</span>
-              <span className="text-xl font-bold text-white">{s.value}</span>
+              <span className="text-xl font-medium text-white">{s.value}</span>
             </div>
             <span className="text-[11px] text-gray-400">{s.label}</span>
           </div>
@@ -233,7 +233,7 @@ export default function PublishingPage() {
           {/* Left: Article Selector */}
           <div className="lg:col-span-3 space-y-3">
             <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-              <h3 className="text-sm font-semibold text-white mb-2">📰 Select Article</h3>
+              <h3 className="text-sm font-medium text-white mb-2">📰 Select Article</h3>
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search articles..."
                 className="w-full px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-white text-xs placeholder-gray-500 focus:outline-none focus:border-indigo-500 mb-2" />
               <div className="space-y-1 max-h-[350px] overflow-y-auto">
@@ -250,7 +250,7 @@ export default function PublishingPage() {
             {/* Import from Copy Stage */}
             {copyItems.length > 0 && (
               <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-                <h3 className="text-sm font-semibold text-white mb-2">📥 Import from Copy</h3>
+                <h3 className="text-sm font-medium text-white mb-2">📥 Import from Copy</h3>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {copyItems.map(item => (
                     <button key={item.id} type="button" onClick={() => {
@@ -268,7 +268,7 @@ export default function PublishingPage() {
 
             {/* LinkedIn Post Formats */}
             <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
-              <h3 className="text-sm font-semibold text-white mb-2">📋 Quick Formats</h3>
+              <h3 className="text-sm font-medium text-white mb-2">📋 Quick Formats</h3>
               <p className="text-[10px] text-gray-500 mb-2">Auto-generate LinkedIn-ready post formats</p>
               <div className="space-y-1">
                 {Object.entries(LINKEDIN_POST_FORMATS).map(([key, fmt]) => (
@@ -312,7 +312,7 @@ export default function PublishingPage() {
             {/* Image Attachment */}
             <div className="bg-gray-800/60 rounded-xl p-3 border border-gray-700/30">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-[11px] font-semibold text-gray-400">🖼️ Image Attachment</h4>
+                <h4 className="text-[11px] font-medium text-gray-400">🖼️ Image Attachment</h4>
                 {postImage && <button type="button" onClick={() => setPostImage('')} className="text-[10px] text-red-400 hover:text-red-300">Remove</button>}
               </div>
               {postImage ? (
@@ -368,14 +368,14 @@ export default function PublishingPage() {
               </button>
               <div className="flex-1" />
               <button type="button" onClick={() => savePost('ready')} disabled={!postText}
-                className="px-5 py-2 bg-amber-600 text-white text-xs font-semibold rounded-lg hover:bg-amber-500 disabled:opacity-40 flex items-center gap-1 transition-colors">
+                className="px-5 py-2 bg-amber-600 text-white text-xs font-medium rounded-lg hover:bg-amber-500 disabled:opacity-40 flex items-center gap-1 transition-colors">
                 🟡 Mark Ready
               </button>
               <button type="button" onClick={() => {
                 savePost('published');
                 copyToClipboard(postText, 'publish-copy');
               }} disabled={!postText}
-                className="px-5 py-2 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-500 disabled:opacity-40 flex items-center gap-1 transition-colors">
+                className="px-5 py-2 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-500 disabled:opacity-40 flex items-center gap-1 transition-colors">
                 ✅ Publish & Copy
               </button>
             </div>
@@ -384,7 +384,7 @@ export default function PublishingPage() {
           {/* Right: Live Preview */}
           <div className="lg:col-span-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-white">👁️ Live Preview</h3>
+              <h3 className="text-sm font-medium text-white">👁️ Live Preview</h3>
               <button type="button" onClick={() => setShowPreview(!showPreview)} className="text-[10px] text-gray-500 hover:text-gray-300">
                 {showPreview ? 'Collapse' : 'Expand'}
               </button>
@@ -396,9 +396,9 @@ export default function PublishingPage() {
                 {activePlatform === 'linkedin' && (
                   <div className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-lg">
                     <div className="px-4 pt-3 pb-2 flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-lg font-bold shadow-sm">P</div>
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-lg font-medium shadow-sm">P</div>
                       <div>
-                        <div className="text-[13px] font-semibold text-gray-900">Pimlico XHS™</div>
+                        <div className="text-[13px] font-medium text-gray-900">Pimlico XHS™</div>
                         <div className="text-[11px] text-gray-500">Cross-border Regulatory Compliance • 1,200 followers</div>
                         <div className="text-[10px] text-gray-400">Just now • 🌐</div>
                       </div>
@@ -431,10 +431,10 @@ export default function PublishingPage() {
                 {activePlatform === 'twitter' && (
                   <div className="bg-black rounded-xl overflow-hidden border border-gray-700 shadow-lg p-4">
                     <div className="flex gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">P</div>
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white text-sm font-medium flex-shrink-0">P</div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1">
-                          <span className="text-[13px] font-bold text-white">Pimlico XHS™</span>
+                          <span className="text-[13px] font-medium text-white">Pimlico XHS™</span>
                           <span className="text-[11px] text-gray-500">@PimlicoXHS · now</span>
                         </div>
                         <p className="text-[14px] text-white whitespace-pre-wrap leading-[1.3] mt-1">
@@ -458,7 +458,7 @@ export default function PublishingPage() {
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-2xl">{PLATFORMS[activePlatform]?.icon}</span>
                       <div>
-                        <div className="text-sm font-semibold text-white">Pimlico XHS™</div>
+                        <div className="text-sm font-medium text-white">Pimlico XHS™</div>
                         <div className="text-[10px] text-gray-500">{PLATFORMS[activePlatform]?.label} Preview</div>
                       </div>
                     </div>
@@ -476,7 +476,7 @@ export default function PublishingPage() {
 
             {/* Platform Tips */}
             <div className="bg-gray-800/60 rounded-xl p-3 border border-gray-700/30">
-              <h4 className="text-[11px] font-semibold text-gray-400 mb-2">💡 {PLATFORMS[activePlatform]?.label} Tips</h4>
+              <h4 className="text-[11px] font-medium text-gray-400 mb-2">💡 {PLATFORMS[activePlatform]?.label} Tips</h4>
               <ul className="space-y-1">
                 {PLATFORMS[activePlatform]?.tips?.map((tip, i) => (
                   <li key={i} className="text-[11px] text-gray-500 flex items-start gap-1.5">
@@ -493,7 +493,7 @@ export default function PublishingPage() {
       {view === 'queue' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white">📋 Post Queue — Grab & Go</h3>
+            <h3 className="text-sm font-medium text-white">📋 Post Queue — Grab & Go</h3>
             <p className="text-[11px] text-gray-500">Click &quot;Copy &amp; Go&quot; to copy the full post, then paste directly into LinkedIn / X / Instagram</p>
           </div>
 
@@ -502,7 +502,7 @@ export default function PublishingPage() {
               <span className="text-4xl mb-3">📭</span>
               <p className="text-sm text-gray-400">No posts in queue</p>
               <p className="text-xs text-gray-500 mt-1">Use the Composer to create posts</p>
-              <button type="button" onClick={() => setView('composer')} className="mt-3 px-4 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500">Go to Composer</button>
+              <button type="button" onClick={() => setView('composer')} className="mt-3 px-4 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500">Go to Composer</button>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -535,7 +535,7 @@ export default function PublishingPage() {
                   </div>
                   <div className="px-4 py-2.5 border-t border-gray-700/50 flex items-center gap-2 bg-gray-800/60">
                     <button type="button" onClick={() => copyGrabAndGo(post)}
-                      className="flex-1 py-2 bg-green-600/90 text-white text-xs font-semibold rounded-lg hover:bg-green-500 transition-colors flex items-center justify-center gap-1.5">
+                      className="flex-1 py-2 bg-green-600/90 text-white text-xs font-medium rounded-lg hover:bg-green-500 transition-colors flex items-center justify-center gap-1.5">
                       {copiedId === `grab-${post.id}` ? '✓ Copied! Go paste it →' : '📋 Copy & Go'}
                     </button>
                     <button type="button" onClick={() => editPost(post)}
@@ -555,7 +555,7 @@ export default function PublishingPage() {
             <div className="flex items-center gap-3 mb-3">
               <span className="text-2xl">💼</span>
               <div>
-                <h3 className="text-sm font-semibold text-white">Quick LinkedIn Publish Guide</h3>
+                <h3 className="text-sm font-medium text-white">Quick LinkedIn Publish Guide</h3>
                 <p className="text-[11px] text-gray-400">Fastest way to get your posts live</p>
               </div>
             </div>
@@ -567,7 +567,7 @@ export default function PublishingPage() {
                 { step: '4', label: 'Post!', desc: 'Review, then hit Post' },
               ].map(s => (
                 <div key={s.step} className="flex items-start gap-2">
-                  <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[11px] font-bold text-blue-300 flex-shrink-0">{s.step}</div>
+                  <div className="w-6 h-6 rounded-full bg-blue-600/30 flex items-center justify-center text-[11px] font-medium text-blue-300 flex-shrink-0">{s.step}</div>
                   <div>
                     <div className="text-[11px] font-medium text-white">{s.label}</div>
                     <div className="text-[10px] text-gray-500">{s.desc}</div>
@@ -577,7 +577,7 @@ export default function PublishingPage() {
             </div>
             <div className="mt-3 flex gap-2">
               <a href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer"
-                className="px-4 py-2 bg-blue-600/80 text-white text-xs font-semibold rounded-lg hover:bg-blue-500 flex items-center gap-1.5 transition-colors">
+                className="px-4 py-2 bg-blue-600/80 text-white text-xs font-medium rounded-lg hover:bg-blue-500 flex items-center gap-1.5 transition-colors">
                 💼 Open LinkedIn →
               </a>
               <a href="https://twitter.com/compose/tweet" target="_blank" rel="noopener noreferrer"
@@ -597,14 +597,14 @@ export default function PublishingPage() {
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
               <button type="button" onClick={() => { if (calMonth===0){setCalMonth(11);setCalYear(y=>y-1);}else setCalMonth(m=>m-1); setSelectedCalDay(null); }} className="text-gray-400 hover:text-white text-sm px-3 py-1 rounded-lg hover:bg-gray-700/50 transition-colors">← Prev</button>
               <div className="text-center">
-                <h3 className="text-sm font-semibold text-white">{new Date(calYear, calMonth).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</h3>
+                <h3 className="text-sm font-medium text-white">{new Date(calYear, calMonth).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</h3>
                 <button type="button" onClick={() => { setCalMonth(new Date().getMonth()); setCalYear(new Date().getFullYear()); setSelectedCalDay(today); }} className="text-[10px] text-indigo-400 hover:text-indigo-300 mt-0.5">Go to today</button>
               </div>
               <button type="button" onClick={() => { if (calMonth===11){setCalMonth(0);setCalYear(y=>y+1);}else setCalMonth(m=>m+1); setSelectedCalDay(null); }} className="text-gray-400 hover:text-white text-sm px-3 py-1 rounded-lg hover:bg-gray-700/50 transition-colors">Next →</button>
             </div>
             <div className="grid grid-cols-7">
               {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => (
-                <div key={d} className="px-2 py-2 text-center text-[10px] font-semibold text-gray-500 border-b border-gray-700">{d}</div>
+                <div key={d} className="px-2 py-2 text-center text-[10px] font-medium text-gray-500 border-b border-gray-700">{d}</div>
               ))}
               {calendarData.map((day, i) => {
                 const isToday = day?.date === today;
@@ -669,7 +669,7 @@ export default function PublishingPage() {
               <>
                 <div className="bg-gray-800 rounded-xl border border-gray-700/50 p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-semibold text-white">
+                    <h3 className="text-sm font-medium text-white">
                       📅 {new Date(selectedCalDay + 'T00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
                     </h3>
                     <button type="button" onClick={() => setSelectedCalDay(null)} className="text-gray-500 hover:text-white text-xs">✕</button>
@@ -678,7 +678,7 @@ export default function PublishingPage() {
                   {/* Articles published this day */}
                   {selectedDayData.articles.length > 0 && (
                     <div className="mb-4">
-                      <h4 className="text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider">📰 Articles Published</h4>
+                      <h4 className="text-[11px] font-medium text-gray-400 mb-2 uppercase tracking-wider">📰 Articles Published</h4>
                       <div className="space-y-2">
                         {selectedDayData.articles.map(a => {
                           const cc = CATEGORY_COLORS_MAP[a.category];
@@ -706,7 +706,7 @@ export default function PublishingPage() {
                   {/* Social posts this day */}
                   {selectedDayData.posts.length > 0 && (
                     <div>
-                      <h4 className="text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-wider">📢 Social Posts</h4>
+                      <h4 className="text-[11px] font-medium text-gray-400 mb-2 uppercase tracking-wider">📢 Social Posts</h4>
                       <div className="space-y-2">
                         {selectedDayData.posts.map(p => (
                           <div key={p.id} className="bg-gray-700/30 rounded-lg p-3">
@@ -744,7 +744,7 @@ export default function PublishingPage() {
                       <p className="text-sm text-gray-400">Nothing scheduled</p>
                       <p className="text-[10px] text-gray-500 mt-1">Use the Composer to create posts for this date</p>
                       <button type="button" onClick={() => { setScheduledDate(selectedCalDay); setView('composer'); }}
-                        className="mt-3 px-4 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors">
+                        className="mt-3 px-4 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 transition-colors">
                         + Schedule for this day
                       </button>
                     </div>
@@ -753,22 +753,22 @@ export default function PublishingPage() {
 
                 {/* Month Summary */}
                 <div className="bg-gray-800 rounded-xl border border-gray-700/50 p-4">
-                  <h4 className="text-[11px] font-semibold text-gray-400 mb-2">📊 This Month</h4>
+                  <h4 className="text-[11px] font-medium text-gray-400 mb-2">📊 This Month</h4>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-gray-700/30 rounded-lg p-2 text-center">
-                      <span className="text-lg font-bold text-white">{calendarData.filter(d => d?.articles?.length).length}</span>
+                      <span className="text-lg font-medium text-white">{calendarData.filter(d => d?.articles?.length).length}</span>
                       <p className="text-[9px] text-gray-500">Articles published</p>
                     </div>
                     <div className="bg-gray-700/30 rounded-lg p-2 text-center">
-                      <span className="text-lg font-bold text-white">{calendarData.reduce((s, d) => s + (d?.posts?.length || 0), 0)}</span>
+                      <span className="text-lg font-medium text-white">{calendarData.reduce((s, d) => s + (d?.posts?.length || 0), 0)}</span>
                       <p className="text-[9px] text-gray-500">Social posts</p>
                     </div>
                     <div className="bg-gray-700/30 rounded-lg p-2 text-center">
-                      <span className="text-lg font-bold text-green-400">{calendarData.reduce((s, d) => s + (d?.posts?.filter(p => p.status === 'published').length || 0), 0)}</span>
+                      <span className="text-lg font-medium text-green-400">{calendarData.reduce((s, d) => s + (d?.posts?.filter(p => p.status === 'published').length || 0), 0)}</span>
                       <p className="text-[9px] text-gray-500">Posts published</p>
                     </div>
                     <div className="bg-gray-700/30 rounded-lg p-2 text-center">
-                      <span className="text-lg font-bold text-blue-400">{calendarData.reduce((s, d) => s + (d?.posts?.filter(p => p.status === 'scheduled').length || 0), 0)}</span>
+                      <span className="text-lg font-medium text-blue-400">{calendarData.reduce((s, d) => s + (d?.posts?.filter(p => p.status === 'scheduled').length || 0), 0)}</span>
                       <p className="text-[9px] text-gray-500">Posts scheduled</p>
                     </div>
                   </div>
@@ -793,23 +793,23 @@ export default function PublishingPage() {
             ) : (
               /* No day selected — show month overview */
               <div className="bg-gray-800 rounded-xl border border-gray-700/50 p-4">
-                <h3 className="text-sm font-semibold text-white mb-3">📅 Calendar Guide</h3>
+                <h3 className="text-sm font-medium text-white mb-3">📅 Calendar Guide</h3>
                 <div className="space-y-3">
                   <p className="text-xs text-gray-400">Click any day to see detailed articles and social posts.</p>
                   <div className="bg-gray-700/30 rounded-lg p-3">
-                    <h4 className="text-[11px] font-semibold text-white mb-2">This month at a glance</h4>
+                    <h4 className="text-[11px] font-medium text-white mb-2">This month at a glance</h4>
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] text-gray-400">📰 Articles published</span>
-                        <span className="text-xs font-bold text-white">{calendarData.filter(d => d?.articles?.length).length}</span>
+                        <span className="text-xs font-medium text-white">{calendarData.filter(d => d?.articles?.length).length}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] text-gray-400">📢 Social posts</span>
-                        <span className="text-xs font-bold text-white">{calendarData.reduce((s, d) => s + (d?.posts?.length || 0), 0)}</span>
+                        <span className="text-xs font-medium text-white">{calendarData.reduce((s, d) => s + (d?.posts?.length || 0), 0)}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] text-gray-400">📅 Days with activity</span>
-                        <span className="text-xs font-bold text-white">{calendarData.filter(d => d && ((d.articles?.length || 0) + (d.posts?.length || 0)) > 0).length}</span>
+                        <span className="text-xs font-medium text-white">{calendarData.filter(d => d && ((d.articles?.length || 0) + (d.posts?.length || 0)) > 0).length}</span>
                       </div>
                     </div>
                   </div>
@@ -828,7 +828,7 @@ export default function PublishingPage() {
       {view === 'published' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white">✅ Published Posts</h3>
+            <h3 className="text-sm font-medium text-white">✅ Published Posts</h3>
             <span className="text-[11px] text-gray-500">{stats.published} total</span>
           </div>
           {posts.filter(p => p.status === 'published').length === 0 ? (

@@ -38,7 +38,7 @@ function StatCard({ icon, label, value, sub, color = 'blue' }) {
         <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${colors[color]}`}>{icon}</span>
         <span className="text-xs text-gray-400 font-medium">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
+      <p className="text-2xl font-medium text-white">{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
     </div>
   );
@@ -70,7 +70,7 @@ function RatingBadge({ value, max = 5 }) {
   if (!value) return <span className="text-gray-600 text-xs">-</span>;
   const v = Number(value);
   const color = v >= 4 ? 'text-green-400' : v >= 3 ? 'text-yellow-400' : 'text-red-400';
-  return <span className={`text-sm font-semibold ${color}`}>{stars(v)}</span>;
+  return <span className={`text-sm font-medium ${color}`}>{stars(v)}</span>;
 }
 
 /* ─── Section Ratings Inline ──────────────────────────────────── */
@@ -81,7 +81,7 @@ function SectionRatingsInline({ section, label }) {
   return (
     <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{label}</h4>
+        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider">{label}</h4>
         {sAvg && <span className="text-xs text-yellow-400 font-medium">{sAvg}/5 avg</span>}
       </div>
       <div className="space-y-1">
@@ -246,7 +246,7 @@ export default function SurveyDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">📋 Survey Results</h1>
+          <h1 className="text-2xl font-medium text-white flex items-center gap-2">📋 Survey Results</h1>
           <p className="text-sm text-gray-400 mt-1">
             {trialResponses.length} trial completion{trialResponses.length !== 1 ? 's' : ''}
             {copilotResponses.length > 0 && ` · ${copilotResponses.length} copilot feedback`}
@@ -306,12 +306,12 @@ export default function SurveyDashboard() {
 
           {/* Section averages */}
           <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-            <h3 className="text-sm font-semibold text-white mb-3">Section Averages</h3>
+            <h3 className="text-sm font-medium text-white mb-3">Section Averages</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {Object.entries(trialAnalytics.sectionAverages).map(([label, val]) => (
                 <div key={label} className="bg-gray-900/50 rounded-lg p-3 text-center">
                   <p className="text-xs text-gray-400 mb-1">{label}</p>
-                  <p className={`text-xl font-bold ${val >= 4 ? 'text-green-400' : val >= 3 ? 'text-yellow-400' : val ? 'text-red-400' : 'text-gray-600'}`}>
+                  <p className={`text-xl font-medium ${val >= 4 ? 'text-green-400' : val >= 3 ? 'text-yellow-400' : val ? 'text-red-400' : 'text-gray-600'}`}>
                     {val ? `${val}/5` : 'N/A'}
                   </p>
                 </div>
@@ -322,15 +322,15 @@ export default function SurveyDashboard() {
           {/* Charts row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Would Recommend</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Would Recommend</h3>
               <HBar items={trialAnalytics.recommendCounts} color="#3b82f6" />
             </div>
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Met Expectations</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Met Expectations</h3>
               <HBar items={trialAnalytics.expectationsCounts} color="#8b5cf6" />
             </div>
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Trial Duration</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Trial Duration</h3>
               <HBar items={trialAnalytics.trialDurations} color="#14b8a6" />
             </div>
           </div>
@@ -338,19 +338,19 @@ export default function SurveyDashboard() {
           {/* Onboarding row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Sign-up Ease</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Sign-up Ease</h3>
               <HBar items={trialAnalytics.signUpEase} color="#22c55e" />
             </div>
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Access Issues</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Access Issues</h3>
               <HBar items={trialAnalytics.accessIssues} color="#ef4444" />
             </div>
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Video Would Help</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Video Would Help</h3>
               <HBar items={trialAnalytics.videoHelp} color="#f59e0b" />
             </div>
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Used Onboarding Guide</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Used Onboarding Guide</h3>
               <HBar items={trialAnalytics.usedGuide} color="#6366f1" />
             </div>
           </div>
@@ -358,7 +358,7 @@ export default function SurveyDashboard() {
           {/* Upcoming features interest */}
           {trialAnalytics.upcomingAvg.length > 0 && (
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Upcoming Features Interest (avg)</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Upcoming Features Interest (avg)</h3>
               <div className="space-y-2">
                 {trialAnalytics.upcomingAvg.map(({ label, count }) => (
                   <div key={label}>
@@ -393,7 +393,7 @@ export default function SurveyDashboard() {
                   className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-gray-700/20 transition-colors"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">
+                    <p className="text-sm font-medium text-white truncate">
                       {r.name || 'Anonymous'}
                       {r.company && <span className="text-gray-500 font-normal ml-2">{r.company}</span>}
                     </p>
@@ -404,7 +404,7 @@ export default function SurveyDashboard() {
                   <div className="flex items-center gap-4 shrink-0">
                     <div className="text-center">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider">Overall</p>
-                      <p className={`text-lg font-bold ${ratingColor}`}>{ratingVal || '-'}/5</p>
+                      <p className={`text-lg font-medium ${ratingColor}`}>{ratingVal || '-'}/5</p>
                     </div>
                     <div className="text-center">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider">Recommend</p>
@@ -434,7 +434,7 @@ export default function SurveyDashboard() {
                     {/* Onboarding */}
                     {r.onboarding && (
                       <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">🎓 Onboarding</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">🎓 Onboarding</h4>
                         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
                           <div><span className="text-gray-500 block">Rating</span><RatingBadge value={r.onboarding.rating} /></div>
                           <div><span className="text-gray-500 block">Sign-up</span><span className="text-gray-300">{r.onboarding.signUpEase || '-'}</span></div>
@@ -456,7 +456,7 @@ export default function SurveyDashboard() {
                     {/* Upcoming Features */}
                     {r.upcomingFeatureInterest && Object.keys(r.upcomingFeatureInterest).length > 0 && (
                       <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">🚀 Upcoming Features Interest</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">🚀 Upcoming Features Interest</h4>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                           {Object.entries(r.upcomingFeatureInterest).map(([label, val]) => (
                             <div key={label}>
@@ -473,7 +473,7 @@ export default function SurveyDashboard() {
                     {/* Open-ended */}
                     {(r.mostValuable || r.missingFeatures || r.additionalFeedback) && (
                       <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">💬 Open Feedback</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">💬 Open Feedback</h4>
                         <div className="space-y-2 text-xs">
                           {r.mostValuable && <div><span className="text-gray-500">Most valuable: </span><span className="text-gray-300">{r.mostValuable}</span></div>}
                           {r.missingFeatures && <div><span className="text-gray-500">Missing features: </span><span className="text-gray-300">{r.missingFeatures}</span></div>}
@@ -504,7 +504,7 @@ export default function SurveyDashboard() {
                   className="w-full px-5 py-4 flex items-center gap-4 text-left hover:bg-gray-700/20 transition-colors"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">
+                    <p className="text-sm font-medium text-white truncate">
                       {r.firstName} {r.lastName}
                       {r.company && <span className="text-gray-500 font-normal ml-2">{r.company}</span>}
                     </p>
@@ -513,11 +513,11 @@ export default function SurveyDashboard() {
                   <div className="flex items-center gap-4 shrink-0">
                     <div className="text-center">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider">Satisfaction</p>
-                      <p className={`text-lg font-bold ${satColor}`}>{satisfaction}/5</p>
+                      <p className={`text-lg font-medium ${satColor}`}>{satisfaction}/5</p>
                     </div>
                     <div className="text-center">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider">NPS</p>
-                      <p className="text-lg font-bold text-white">{r.npsScore || '-'}/10</p>
+                      <p className="text-lg font-medium text-white">{r.npsScore || '-'}/10</p>
                     </div>
                     <div className="text-center min-w-[80px]">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider">Date</p>
@@ -533,7 +533,7 @@ export default function SurveyDashboard() {
                   <div className="px-5 pb-5 border-t border-gray-700/50 pt-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                       <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">⭐ Ratings</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">⭐ Ratings</h4>
                         <div className="space-y-1">
                           {[
                             ['Overall', r.overallSatisfaction],
@@ -550,7 +550,7 @@ export default function SurveyDashboard() {
                         </div>
                       </div>
                       <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">🤖 AI & Tools</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">🤖 AI & Tools</h4>
                         <div className="space-y-1 text-xs">
                           <div><span className="text-gray-500">AI Tools: </span><span className="text-gray-300">{Array.isArray(r.aiToolsUsed) ? r.aiToolsUsed.join(', ') : r.aiToolsUsed || 'N/A'}</span></div>
                           <div><span className="text-gray-500">Trust: </span><span className="text-gray-300">{r.aiTrustLevel || 'N/A'}</span></div>
@@ -558,7 +558,7 @@ export default function SurveyDashboard() {
                         </div>
                       </div>
                       <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700/30">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">💬 Feedback</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">💬 Feedback</h4>
                         <div className="space-y-1 text-xs">
                           <div><span className="text-gray-500">Most Valuable: </span><span className="text-gray-300">{r.mostValuableFeature || 'N/A'}</span></div>
                           <div><span className="text-gray-500">Would Change: </span><span className="text-gray-300">{r.whatWouldChange || 'N/A'}</span></div>

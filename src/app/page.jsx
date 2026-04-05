@@ -16,7 +16,7 @@ export default function Page() {
     "@type": "Organization",
     "name": "Pimlico XHS",
     "url": "https://pimlicosolutions.com",
-    "logo": "https://pimlicosolutions.com/xhs-logo-blue.png",
+    "logo": "https://pimlicosolutions.com/dual-logo.png",
     "description": "AI compliance workspaces for regulated teams",
     "sameAs": [
       "https://www.linkedin.com/company/pimlico-solutions",
@@ -41,7 +41,7 @@ export default function Page() {
         "billingDuration": "P1M"
       }
     },
-    "description": "AI compliance workspaces for regulated teams. Monitor, analyse, and collaborate on AI, Payments, and Gambling regulations across 250+ jurisdictions.",
+    "description": "AI compliance workspaces for regulated teams. Monitor, analyze, and collaborate on AI, Payments, and Gambling regulations across 250+ jurisdictions.",
     "operatingSystem": "Web",
     "featureList": "Regulatory monitoring, AI compliance, Payments compliance, Real-time updates, Team collaboration"
   };

@@ -32,7 +32,7 @@ function StatCard({ icon, label, value, sub, color = 'blue' }) {
         <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${colors[color]}`}>{icon}</span>
         <span className="text-xs text-gray-400 font-medium">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
+      <p className="text-2xl font-medium text-white">{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
     </div>
   );
@@ -257,7 +257,7 @@ export default function AdminOnboardingPage() {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white mb-1">Onboarding Management</h1>
+        <h1 className="text-2xl font-medium text-white mb-1">Onboarding Management</h1>
         <p className="text-gray-400 text-sm">Create organisations, manage onboarding links, and review submissions</p>
       </div>
 
@@ -298,7 +298,7 @@ export default function AdminOnboardingPage() {
           {/* Recent Submissions */}
           <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white">Recent Submissions</h2>
+              <h2 className="text-lg font-medium text-white">Recent Submissions</h2>
               <div className="flex gap-2">
                 <button
                   onClick={() => downloadCSV(submissions, 'onboarding-submissions.csv')}
@@ -359,7 +359,7 @@ export default function AdminOnboardingPage() {
 
           {/* Active Org Links */}
           <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Active Onboarding Links</h2>
+            <h2 className="text-lg font-medium text-white mb-4">Active Onboarding Links</h2>
             {orgs.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-gray-500 mb-3">No organisations created yet</p>
@@ -406,7 +406,7 @@ export default function AdminOnboardingPage() {
       {activeTab === 'orgs' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">All Organisations</h2>
+            <h2 className="text-lg font-medium text-white">All Organisations</h2>
             <button
               onClick={() => setActiveTab('create')}
               className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-500 transition-colors"
@@ -418,7 +418,7 @@ export default function AdminOnboardingPage() {
           {orgs.length === 0 ? (
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
               <span className="text-4xl mb-4 block">🏢</span>
-              <h3 className="text-white font-semibold mb-2">No organisations yet</h3>
+              <h3 className="text-white font-medium mb-2">No organisations yet</h3>
               <p className="text-gray-400 text-sm mb-4">Create your first organisation to generate a custom onboarding link</p>
               <button
                 onClick={() => setActiveTab('create')}
@@ -438,7 +438,7 @@ export default function AdminOnboardingPage() {
                   <div key={org.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="text-white font-semibold text-lg">{org.name}</h3>
+                        <h3 className="text-white font-medium text-lg">{org.name}</h3>
                         <p className="text-blue-400 text-sm font-mono">pimlicosolutions.com/onboarding/{org.slug}</p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -478,23 +478,23 @@ export default function AdminOnboardingPage() {
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-4">
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <span className="text-xs text-gray-400">Max Seats</span>
-                        <p className="text-white font-bold">{org.maxSeats}</p>
+                        <p className="text-white font-medium">{org.maxSeats}</p>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <span className="text-xs text-gray-400">Max Jurisdictions</span>
-                        <p className="text-white font-bold">{org.maxJurisdictions}</p>
+                        <p className="text-white font-medium">{org.maxJurisdictions}</p>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <span className="text-xs text-gray-400">Submissions</span>
-                        <p className="text-white font-bold">{orgSubs.length}</p>
+                        <p className="text-white font-medium">{orgSubs.length}</p>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <span className="text-xs text-gray-400">Users Onboarded</span>
-                        <p className="text-white font-bold">{orgUsers}</p>
+                        <p className="text-white font-medium">{orgUsers}</p>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <span className="text-xs text-gray-400">Jurisdictions Used</span>
-                        <p className="text-white font-bold">{orgJurisdictions.length}</p>
+                        <p className="text-white font-medium">{orgJurisdictions.length}</p>
                       </div>
                     </div>
 
@@ -555,7 +555,7 @@ export default function AdminOnboardingPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-white">Submissions</h2>
+              <h2 className="text-lg font-medium text-white">Submissions</h2>
               <select
                 value={selectedOrg || ''}
                 onChange={e => setSelectedOrg(e.target.value || null)}
@@ -588,7 +588,7 @@ export default function AdminOnboardingPage() {
           {filteredSubmissions.length === 0 ? (
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
               <span className="text-4xl mb-4 block">📋</span>
-              <h3 className="text-white font-semibold mb-2">No submissions yet</h3>
+              <h3 className="text-white font-medium mb-2">No submissions yet</h3>
               <p className="text-gray-400 text-sm">Submissions will appear here once users complete their onboarding forms</p>
             </div>
           ) : (
@@ -605,7 +605,7 @@ export default function AdminOnboardingPage() {
       {activeTab === 'create' && (
         <div className="max-w-2xl">
           <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-6">
-            <h2 className="text-lg font-semibold text-white mb-6">Create Organisation</h2>
+            <h2 className="text-lg font-medium text-white mb-6">Create Organisation</h2>
 
             <form onSubmit={handleCreateOrg} className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -757,7 +757,7 @@ export default function AdminOnboardingPage() {
               <button
                 type="submit"
                 disabled={creating || !newOrg.name.trim() || !newOrg.slug.trim()}
-                className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+                className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 disabled:opacity-40 transition-colors"
               >
                 {creating ? 'Creating...' : 'Create Organisation'}
               </button>
@@ -770,7 +770,7 @@ export default function AdminOnboardingPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-gray-900 rounded-2xl border border-gray-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-white">Edit Organisation</h2>
+              <h2 className="text-lg font-medium text-white">Edit Organisation</h2>
               <button onClick={() => setEditOrg(null)} className="text-gray-400 hover:text-white text-xl">&times;</button>
             </div>
 
@@ -904,7 +904,7 @@ export default function AdminOnboardingPage() {
               <button
                 onClick={handleSaveEdit}
                 disabled={editSaving || !editOrg.name.trim()}
-                className="flex-1 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+                className="flex-1 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 disabled:opacity-40 transition-colors"
               >
                 {editSaving ? 'Saving...' : 'Save Changes'}
               </button>
@@ -928,7 +928,7 @@ function SubmissionCard({ submission: s }) {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-white font-semibold">{s.company}</h3>
+            <h3 className="text-white font-medium">{s.company}</h3>
             <span className="text-xs text-gray-500 font-mono">{s.orgSlug}</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-400">

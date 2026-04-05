@@ -164,7 +164,7 @@ Additional Comments: ${data.additionalComments || 'N/A'}
 
 AI Tools Used: ${data.aiToolsUsed && data.aiToolsUsed.length > 0 ? data.aiToolsUsed.join(', ') : 'N/A'}
 AI Trust Level: ${data.aiTrustLevel || 'N/A'}
-Interest in Personalised AI Features: ${data.aiFeatureInterest || 'N/A'}
+Interest in Personalized AI Features: ${data.aiFeatureInterest || 'N/A'}
 Desired AI Capabilities: ${data.desiredAiFeatures && data.desiredAiFeatures.length > 0 ? data.desiredAiFeatures.join(', ') : 'N/A'}
 
 ---------------------------------------------------
@@ -350,7 +350,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
               <table width="100%" cellpadding="8" cellspacing="0">
                 <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">AI Tools Used:</td><td style="color: #1e293b; font-size: 14px;">${data.aiToolsUsed && data.aiToolsUsed.length > 0 ? data.aiToolsUsed.join(', ') : 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">AI Trust Level:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.aiTrustLevel || 'N/A'}</td></tr>
-                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Interest in Personalised AI:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.aiFeatureInterest || 'N/A'}</td></tr>
+                <tr><td style="color: #64748b; font-size: 14px; font-weight: 600;">Interest in Personalized AI:</td><td style="color: #1e293b; font-size: 14px; font-weight: 700;">${data.aiFeatureInterest || 'N/A'}</td></tr>
                 <tr style="background-color: #f8fafc;"><td style="color: #64748b; font-size: 14px; font-weight: 600;">Desired AI Capabilities:</td><td style="color: #1e293b; font-size: 14px;">${data.desiredAiFeatures && data.desiredAiFeatures.length > 0 ? data.desiredAiFeatures.join(', ') : 'N/A'}</td></tr>
               </table>
             </td>

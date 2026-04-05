@@ -812,7 +812,7 @@ export default function CollateralPage() {
     <div className="p-6 max-w-[1400px] mx-auto">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">🎨 Collateral</h1>
+          <h1 className="text-xl font-medium text-white flex items-center gap-2">🎨 Collateral</h1>
           <p className="text-sm text-gray-400 mt-0.5">Marketing images and social assets</p>
         </div>
       </div>
@@ -823,7 +823,7 @@ export default function CollateralPage() {
           {/* Article Selection */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, article: !p.article}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>📄</span> Article {article && <span className="text-xs text-indigo-400 font-normal truncate max-w-[140px]">— {article.title}</span>}</h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>📄</span> Article {article && <span className="text-xs text-indigo-400 font-normal truncate max-w-[140px]">— {article.title}</span>}</h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.article?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
             </button>
             {panelOpen.article && (
@@ -842,7 +842,7 @@ export default function CollateralPage() {
           {/* Template & Style */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, template: !p.template}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>📐</span> Template & Style <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[template].label} · {theme} · {layout}</span></h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>📐</span> Template & Style <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[template].label} · {theme} · {layout}</span></h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.template?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
             </button>
             {panelOpen.template && (
@@ -884,7 +884,7 @@ export default function CollateralPage() {
           {/* Text Content */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, text: !p.text}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>✏️</span> Text Content</h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>✏️</span> Text Content</h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.text?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
             </button>
             {panelOpen.text && (
@@ -899,7 +899,7 @@ export default function CollateralPage() {
           {/* Font Settings */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, font: !p.font}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🔤</span> Font <span className="text-xs text-gray-400 font-normal">— {FONT_OPTIONS[font].label}, {fontWeight}, {fontSize}%</span></h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>🔤</span> Font <span className="text-xs text-gray-400 font-normal">— {FONT_OPTIONS[font].label}, {fontWeight}, {fontSize}%</span></h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.font?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
             </button>
             {panelOpen.font && (
@@ -916,15 +916,15 @@ export default function CollateralPage() {
           {/* Element Controls */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, elements: !p.elements}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🎛️</span> Elements <span className="text-xs text-gray-400 font-normal">— {Object.values(elements).filter(e=>e.visible!==false).length}/{Object.keys(elements).length} on</span></h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>🎛️</span> Elements <span className="text-xs text-gray-400 font-normal">— {Object.values(elements).filter(e=>e.visible!==false).length}/{Object.keys(elements).length} on</span></h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.elements?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
             </button>
             {panelOpen.elements && (
               <div className="px-4 pb-4 space-y-2 border-t border-gray-700">
                 <div className="flex gap-1.5 pt-2">
-                  <button type="button" onClick={() => setElements({...DEFAULT_ELEMENTS})} className="flex-1 py-1.5 text-[10px] font-semibold bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-lg hover:bg-indigo-600/50">✦ All On</button>
-                  <button type="button" onClick={() => setElements({...MINIMAL_ELEMENTS})} className="flex-1 py-1.5 text-[10px] font-semibold bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-600/40">◐ Minimal</button>
-                  <button type="button" onClick={() => setElements({...BLANK_ELEMENTS})} className="flex-1 py-1.5 text-[10px] font-semibold bg-gray-600/30 text-gray-300 border border-gray-500/30 rounded-lg hover:bg-gray-600/50">○ Blank</button>
+                  <button type="button" onClick={() => setElements({...DEFAULT_ELEMENTS})} className="flex-1 py-1.5 text-[10px] font-medium bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-lg hover:bg-indigo-600/50">✦ All On</button>
+                  <button type="button" onClick={() => setElements({...MINIMAL_ELEMENTS})} className="flex-1 py-1.5 text-[10px] font-medium bg-blue-600/20 text-blue-300 border border-blue-500/30 rounded-lg hover:bg-blue-600/40">◐ Minimal</button>
+                  <button type="button" onClick={() => setElements({...BLANK_ELEMENTS})} className="flex-1 py-1.5 text-[10px] font-medium bg-gray-600/30 text-gray-300 border border-gray-500/30 rounded-lg hover:bg-gray-600/50">○ Blank</button>
                 </div>
                 {[
                   {key:'image',label:'🖼️ Image',hasScale:true,hasOpacity:true},
@@ -943,7 +943,7 @@ export default function CollateralPage() {
                     <div key={item.key} className={`rounded-lg transition-all ${isVis ? 'bg-gray-700/40 border border-gray-600/50' : 'bg-gray-800/50 border border-gray-700/30'}`}>
                       <div className="flex items-center justify-between px-2.5 py-1.5">
                         <button type="button" onClick={() => setElements(p => ({...p,[item.key]:{...p[item.key],visible:!isVis}}))}
-                          className={`flex items-center gap-2 text-[11px] font-semibold ${isVis?'text-white':'text-gray-500 hover:text-gray-300'}`}>
+                          className={`flex items-center gap-2 text-[11px] font-medium ${isVis?'text-white':'text-gray-500 hover:text-gray-300'}`}>
                           <span className={`w-2 h-2 rounded-full ${isVis?'bg-green-400':'bg-gray-600'}`}/>{item.label}
                         </button>
                         <div className="flex items-center gap-1">
@@ -953,7 +953,7 @@ export default function CollateralPage() {
                             </button>
                           ) : null}
                           <button type="button" onClick={() => setElements(p => ({...p,[item.key]:{...p[item.key],visible:!isVis}}))}
-                            className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${isVis?'text-red-400 hover:bg-red-500/20':'text-green-400 bg-green-500/10 hover:bg-green-500/20'}`}>
+                            className={`px-1.5 py-0.5 text-[9px] font-medium rounded ${isVis?'text-red-400 hover:bg-red-500/20':'text-green-400 bg-green-500/10 hover:bg-green-500/20'}`}>
                             {isVis ? '✕' : '+ ADD'}
                           </button>
                         </div>
@@ -976,7 +976,7 @@ export default function CollateralPage() {
           {/* Presets — save/load settings */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, presets: !p.presets}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>💾</span> Presets {Object.keys(allPresets).length > 0 && <span className="text-xs text-gray-400 font-normal">— {Object.keys(BUILT_IN_PRESETS).length} built-in{Object.keys(userPresets).length > 0 ? `, ${Object.keys(userPresets).length} saved` : ''}</span>}</h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>💾</span> Presets {Object.keys(allPresets).length > 0 && <span className="text-xs text-gray-400 font-normal">— {Object.keys(BUILT_IN_PRESETS).length} built-in{Object.keys(userPresets).length > 0 ? `, ${Object.keys(userPresets).length} saved` : ''}</span>}</h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.presets ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {panelOpen.presets && (
@@ -1003,7 +1003,7 @@ export default function CollateralPage() {
 
                 {/* Built-in presets */}
                 <div>
-                  <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1.5">Built-in Presets</div>
+                  <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider mb-1.5">Built-in Presets</div>
                   <div className="space-y-1 max-h-44 overflow-y-auto">
                     {Object.entries(BUILT_IN_PRESETS).map(([name, preset]) => (
                       <div key={name} className="flex items-center gap-2 bg-gray-700/30 rounded-lg px-3 py-2 border border-gray-700/50 hover:border-gray-600/50 transition-colors">
@@ -1026,7 +1026,7 @@ export default function CollateralPage() {
                 {/* User-saved presets */}
                 {Object.keys(userPresets).length > 0 && (
                   <div>
-                    <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider mb-1.5">Your Presets</div>
+                    <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider mb-1.5">Your Presets</div>
                     <div className="space-y-1 max-h-36 overflow-y-auto">
                       {Object.entries(userPresets).map(([name, preset]) => (
                         <div key={name} className="flex items-center gap-2 bg-gray-700/50 rounded-lg px-3 py-2">
@@ -1064,14 +1064,14 @@ export default function CollateralPage() {
 
           {/* Generate */}
           <button type="button" onClick={generateAsset} disabled={!article||loading}
-            className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-500 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+            className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-500 disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
             {loading ? <><span className="animate-spin">⏳</span> Generating...</> : '🎨 Generate Asset'}
           </button>
 
           {/* Flag Emoji Overlays */}
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <button type="button" onClick={() => setPanelOpen(p => ({...p, flags: !p.flags}))} className="w-full px-4 py-3 flex items-center justify-between text-white">
-              <h3 className="font-semibold flex items-center gap-2 text-sm"><span>🏳️</span> Flag Overlays {flagOverlays.length > 0 && <span className="text-xs text-gray-400 font-normal">— {flagOverlays.length} placed</span>}</h3>
+              <h3 className="font-medium flex items-center gap-2 text-sm"><span>🏳️</span> Flag Overlays {flagOverlays.length > 0 && <span className="text-xs text-gray-400 font-normal">— {flagOverlays.length} placed</span>}</h3>
               <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${panelOpen.flags?'rotate-180':''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
             </button>
             {panelOpen.flags && (
@@ -1086,7 +1086,7 @@ export default function CollateralPage() {
                 </div>
                 {flagOverlays.length > 0 && (
                   <div className="space-y-1.5">
-                    <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Placed Flags</div>
+                    <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Placed Flags</div>
                     {flagOverlays.map(f => (
                       <div key={f.id} className="flex items-center gap-2 bg-gray-700/40 rounded-lg px-3 py-2 border border-gray-700/50">
                         <span className="text-lg">{f.emoji}</span>
@@ -1109,14 +1109,14 @@ export default function CollateralPage() {
         {/* Right: Canvas Preview */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+            <h2 className="text-sm font-medium text-white flex items-center gap-2">
               🔴 Preview <span className="text-xs text-gray-400 font-normal">— {MARKETING_TEMPLATES[template].label} ({MARKETING_TEMPLATES[template].width}×{MARKETING_TEMPLATES[template].height})</span>
             </h2>
             <div className="flex items-center gap-2">
               <button type="button" onClick={undo} disabled={historyIndex <= 0} className="px-2.5 py-1.5 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Undo (Ctrl+Z)">↩ Undo</button>
               <button type="button" onClick={redo} disabled={historyIndex >= elementsHistory.length - 1} className="px-2.5 py-1.5 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed" title="Redo (Ctrl+Y)">↪ Redo</button>
               <button type="button" onClick={() => setElements({...DEFAULT_ELEMENTS})} className="px-3 py-1.5 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600">↺ Reset</button>
-              <button type="button" onClick={downloadAsset} className="px-4 py-1.5 bg-green-600 text-white text-xs font-semibold rounded-lg hover:bg-green-500 flex items-center gap-1">⬇ Download PNG</button>
+              <button type="button" onClick={downloadAsset} className="px-4 py-1.5 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-500 flex items-center gap-1">⬇ Download PNG</button>
             </div>
           </div>
           <div className="bg-gray-800 rounded-xl p-3 border border-gray-700/50">
@@ -1128,7 +1128,7 @@ export default function CollateralPage() {
           {/* Post Text */}
           <div className="mt-4 bg-gray-800 rounded-xl p-4 border border-gray-700/50">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-white">📝 Post Text</h3>
+              <h3 className="text-sm font-medium text-white">📝 Post Text</h3>
               <button type="button" onClick={generatePostText} className="px-3 py-1 bg-indigo-600/80 text-white text-[10px] font-medium rounded-lg hover:bg-indigo-500">Generate</button>
             </div>
             <textarea value={postText} onChange={e => setPostText(e.target.value)} rows={5} placeholder="Generate or write post text..."

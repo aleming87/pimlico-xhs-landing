@@ -12,7 +12,7 @@ import { useState } from "react";
 const UI_RATINGS = [
   { key: 'ui_easeOfUse', label: 'Overall Ease of Use', desc: 'How intuitive was the platform to pick up?' },
   { key: 'ui_navigation', label: 'Navigation', desc: 'Finding your way around and locating what you need' },
-  { key: 'ui_design', label: 'Visual Design & Layout', desc: 'Look, feel, and organisation of the interface' },
+  { key: 'ui_design', label: 'Visual Design & Layout', desc: 'Look, feel, and organization of the interface' },
   { key: 'ui_search', label: 'Search & Filtering', desc: 'Narrowing down content by jurisdiction, topic, etc.' },
   { key: 'ui_statusSystem', label: 'Status System', desc: 'Understanding regulatory lifecycle stages at a glance' },
   { key: 'ui_mobile', label: 'Mobile / Responsive Experience', desc: 'Using the platform on smaller screens' },
@@ -21,7 +21,7 @@ const UI_RATINGS = [
 const REG_RATINGS = [
   { key: 'reg_coverage', label: 'Regulatory Coverage', desc: 'Breadth of jurisdictions and topics tracked' },
   { key: 'reg_updateSpeed', label: 'Speed of Updates', desc: 'How quickly new regulatory developments appeared' },
-  { key: 'reg_feedOrg', label: 'Feed Organisation', desc: 'How well the feed was structured and prioritised' },
+  { key: 'reg_feedOrg', label: 'Feed Organization', desc: 'How well the feed was structured and prioritised' },
   { key: 'reg_clarity', label: 'Clarity of Information', desc: 'How clearly regulatory changes were explained' },
   { key: 'reg_alerts', label: 'Alerts & Notifications', desc: 'Staying informed about relevant changes' },
 ];
@@ -268,7 +268,7 @@ export default function OffboardingPage() {
     <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
       <div className="px-5 pt-5 pb-3 flex items-center gap-2">
         <span className="text-lg">{icon}</span>
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <h3 className="text-lg font-medium text-white">{title}</h3>
       </div>
 
       <div className="px-5 pb-1">
@@ -334,7 +334,7 @@ export default function OffboardingPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-4">Thank you for your feedback</h1>
+            <h1 className="text-3xl font-medium text-white mb-4">Thank you for your feedback</h1>
             <p className="text-gray-400 text-lg mb-8">
               Your insights help us make Pimlico XHS™ better for everyone. We genuinely appreciate you taking the time.
             </p>
@@ -368,7 +368,7 @@ export default function OffboardingPage() {
         <div className="mx-auto max-w-2xl">
           {/* Header */}
           <div className="text-center mb-10 pt-12">
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-3">
+            <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-white mb-3">
               XHS™ Trial Completion
             </h1>
             <p className="text-base text-gray-400">
@@ -398,7 +398,7 @@ export default function OffboardingPage() {
           {step === 1 && (
             <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">About you</h2>
+                <h2 className="text-xl font-medium text-white mb-4">About you</h2>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-1">Name <span className="text-red-400">*</span></label>
@@ -438,7 +438,7 @@ export default function OffboardingPage() {
 
               {/* Onboarding Experience - compact quick-fire section */}
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-1">Onboarding experience</h2>
+                <h2 className="text-xl font-medium text-white mb-1">Onboarding experience</h2>
                 <p className="text-xs text-gray-500 mb-4">A few quick questions about getting started</p>
 
                 <div className="space-y-4">
@@ -582,7 +582,7 @@ export default function OffboardingPage() {
               <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
                 <div className="px-5 pt-5 pb-3 flex items-center gap-2">
                   <span className="text-lg">📋</span>
-                  <h3 className="text-lg font-semibold text-white">Watchlist</h3>
+                  <h3 className="text-lg font-medium text-white">Watchlist</h3>
                 </div>
                 <div className="px-5 pb-4">
                   <div className="flex items-center justify-between px-4 py-3 bg-white/[0.03] rounded-lg">
@@ -621,8 +621,8 @@ export default function OffboardingPage() {
             <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
                 <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-xl font-semibold text-white">Coming Soon</h2>
-                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full">Preview</span>
+                  <h2 className="text-xl font-medium text-white">Coming Soon</h2>
+                  <span className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full">Preview</span>
                 </div>
                 <p className="text-sm text-gray-400 mb-6">We&apos;re building new capabilities. How interested are you in each?</p>
 
@@ -631,7 +631,7 @@ export default function OffboardingPage() {
                     <div key={feature.key} className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-white mb-0.5">{feature.label}</p>
+                          <p className="text-sm font-medium text-white mb-0.5">{feature.label}</p>
                           <p className="text-xs text-gray-500 leading-relaxed">{feature.desc}</p>
                         </div>
                         <div className="flex gap-1.5 flex-shrink-0">
@@ -643,7 +643,7 @@ export default function OffboardingPage() {
                             { val: 5, label: 'Must-have' },
                           ].map(({ val, label }) => (
                             <button key={val} type="button" onClick={() => setUpcoming(feature.key, val)} title={label}
-                              className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
+                              className={`w-9 h-9 rounded-lg text-xs font-medium transition-all ${
                                 upcomingInterest[feature.key] === val
                                   ? val >= 3 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25' : 'bg-gray-600 text-white'
                                   : 'bg-white/10 text-gray-500 hover:bg-white/20 hover:text-gray-300'
@@ -663,7 +663,7 @@ export default function OffboardingPage() {
 
               {/* Keep in touch */}
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h3 className="text-base font-semibold text-white mb-2">Stay in the loop?</h3>
+                <h3 className="text-base font-medium text-white mb-2">Stay in the loop?</h3>
                 <p className="text-sm text-gray-400 mb-4">Would you like us to keep you updated as these features launch?</p>
                 <div className="grid grid-cols-3 gap-2">
                   {['Yes please', 'Maybe later', 'No thanks'].map(opt => (
@@ -683,7 +683,7 @@ export default function OffboardingPage() {
           {step === 5 && (
             <div className="space-y-6">
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Overall experience</h2>
+                <h2 className="text-xl font-medium text-white mb-4">Overall experience</h2>
 
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-300 mb-2">How would you rate your overall experience?</label>
@@ -716,7 +716,7 @@ export default function OffboardingPage() {
               </div>
 
               <div className="bg-white/5 rounded-2xl p-5 sm:p-6 border border-white/10">
-                <h3 className="text-base font-semibold text-white mb-4">Final thoughts</h3>
+                <h3 className="text-base font-medium text-white mb-4">Final thoughts</h3>
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Which feature did you find most valuable?</label>
@@ -750,12 +750,12 @@ export default function OffboardingPage() {
 
             {step < TOTAL_STEPS ? (
               <button type="button" onClick={() => setStep(step + 1)} disabled={!canProceed()}
-                className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
                   canProceed() ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-500/25' : 'bg-gray-700 text-gray-500 cursor-not-allowed'
                 }`}>Continue →</button>
             ) : (
               <button type="button" onClick={handleSubmit} disabled={isSubmitting}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed">
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all shadow-lg shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed">
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">

@@ -222,7 +222,7 @@ export default function ArticlePageClient() {
     return (
       <div className="bg-[var(--color-bg-base)] min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">Article not found</h1>
+          <h1 className="text-2xl font-medium text-[var(--color-text-primary)]">Article not found</h1>
           <Link href="/insights" className="mt-4 inline-block text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)]">
             ← Back to Insights
           </Link>
@@ -350,7 +350,7 @@ export default function ArticlePageClient() {
               </div>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)] mb-4">
+            <h1 className="text-3xl sm:text-4xl font-medium text-[var(--color-text-primary)] mb-4">
               {article.title}
             </h1>
             <p className="text-xl text-[var(--color-text-tertiary)]">{article.excerpt}</p>
@@ -402,13 +402,13 @@ export default function ArticlePageClient() {
                     ) : (
                       <ReactMarkdown
                         components={{
-                          h2: ({children}) => <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
-                          h3: ({children}) => <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
+                          h2: ({children}) => <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
+                          h3: ({children}) => <h3 className="text-xl font-medium text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
                           p: ({children}) => <p className="text-[var(--color-text-tertiary)] mb-4 leading-relaxed text-justify">{children}</p>,
                           ul: ({children}) => <ul className="list-disc list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ul>,
                           ol: ({children}) => <ol className="list-decimal list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ol>,
                           li: ({children}) => <li className="text-[var(--color-text-tertiary)]">{children}</li>,
-                          strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-semibold">{children}</strong>,
+                          strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-medium">{children}</strong>,
                           a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] pointer-events-none">{children}</a>,
                           blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-[var(--color-text-muted)]">{children}</blockquote>,
                           code: ({children}) => <code className="bg-[var(--color-bg-elevated)] px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
@@ -432,12 +432,12 @@ export default function ArticlePageClient() {
                   <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 py-16 px-8 sm:py-20 sm:px-12">
                     <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
                     <div className="relative text-center">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+                      <h3 className="text-2xl sm:text-3xl font-medium text-white mb-6">
                         Unlock Full Access with XHS™
                       </h3>
                       
                       <p className="text-blue-100 text-lg sm:text-xl mb-8 max-w-2xl mx-auto">
-                        Monitor. Analyse. Collaborate. Integrate.
+                        Monitor. Analyze. Collaborate. Integrate.
                       </p>
                       
                       {/* Features in a row */}
@@ -462,13 +462,13 @@ export default function ArticlePageClient() {
                         </div>
                       </div>
                       
-                      <p className="text-white text-lg font-semibold mb-8">
+                      <p className="text-white text-lg font-medium mb-8">
                         Try free for 14 days
                       </p>
                       
                       <Link
                         href="/contact?trial=true&source=premium-article"
-                        className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                        className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                       >
                         Start your trial
                         <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -481,19 +481,19 @@ export default function ArticlePageClient() {
               </>
                         ) : article.contentType === 'html' ? (
               <div 
-                className="article-content [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-[var(--color-text-primary)] [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-[var(--color-text-primary)] [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-[var(--color-text-primary)] [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-[var(--color-text-tertiary)] [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-[var(--color-text-tertiary)] [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-[var(--color-text-tertiary)] [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-[var(--color-text-tertiary)] [&>strong]:text-[var(--color-text-primary)] [&>strong]:font-semibold [&_a]:text-[var(--color-accent-secondary)] [&_a:hover]:text-[var(--color-accent-secondary)] [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-[var(--color-text-muted)] [&>hr]:border-[var(--color-border-default)] [&>hr]:my-8"
+                className="article-content [&>h1]:text-3xl [&>h1]:font-medium [&>h1]:text-[var(--color-text-primary)] [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-medium [&>h2]:text-[var(--color-text-primary)] [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:text-[var(--color-text-primary)] [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-[var(--color-text-tertiary)] [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-[var(--color-text-tertiary)] [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-[var(--color-text-tertiary)] [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-[var(--color-text-tertiary)] [&>strong]:text-[var(--color-text-primary)] [&>strong]:font-medium [&_a]:text-[var(--color-accent-secondary)] [&_a:hover]:text-[var(--color-accent-secondary)] [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-[var(--color-text-muted)] [&>hr]:border-[var(--color-border-default)] [&>hr]:my-8"
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />
             ) : (
               <ReactMarkdown
                 components={{
-                  h2: ({children}) => <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
-                  h3: ({children}) => <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
+                  h2: ({children}) => <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
+                  h3: ({children}) => <h3 className="text-xl font-medium text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
                   p: ({children}) => <p className="text-[var(--color-text-tertiary)] mb-4 leading-relaxed text-justify">{children}</p>,
                   ul: ({children}) => <ul className="list-disc list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ul>,
                   ol: ({children}) => <ol className="list-decimal list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ol>,
                   li: ({children}) => <li className="text-[var(--color-text-tertiary)]">{children}</li>,
-                  strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-semibold">{children}</strong>,
+                  strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-medium">{children}</strong>,
                   a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)]">{children}</a>,
                   blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-[var(--color-text-muted)]">{children}</blockquote>,
                   code: ({children}) => <code className="bg-[var(--color-bg-elevated)] px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
@@ -531,15 +531,15 @@ export default function ArticlePageClient() {
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 sm:p-10">
                 <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
                 <div className="relative">
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+                  <h3 className="text-xl sm:text-2xl font-medium text-white mb-3">
                     Tracking regulatory change in {extractCountryFromArticle(article)}?
                   </h3>
                   <p className="text-blue-100 text-base sm:text-lg mb-6 max-w-2xl">
-                    Get real-time alerts and in-depth analysis with a <span className="text-white font-semibold">14-day free trial</span>.
+                    Get real-time alerts and in-depth analysis with a <span className="text-white font-medium">14-day free trial</span>.
                   </p>
                   <Link
                     href="/contact?trial=true"
-                    className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
                     Start your trial
                     <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

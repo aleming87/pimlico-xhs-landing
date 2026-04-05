@@ -5,7 +5,7 @@ export default function UpdatesError({ error, reset }) {
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6">
       <div className="bg-gray-800/80 rounded-2xl border border-red-500/30 p-8 max-w-lg w-full text-center">
         <span className="text-4xl mb-4 block">⚠️</span>
-        <h2 className="text-xl font-bold text-white mb-2">Something went wrong</h2>
+        <h2 className="text-xl font-medium text-white mb-2">Something went wrong</h2>
         <p className="text-gray-400 text-sm mb-4">
           {error?.message || 'An unexpected error occurred in the Email Updates page.'}
         </p>

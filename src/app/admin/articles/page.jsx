@@ -113,7 +113,7 @@ function ArticleEditor({ article, onSave, onCancel }) {
       <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-3xl shadow-2xl mx-4">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700/50">
-          <h2 className="text-lg font-semibold text-white">Edit Article</h2>
+          <h2 className="text-lg font-medium text-white">Edit Article</h2>
           <button onClick={onCancel} className="text-gray-400 hover:text-white transition-colors">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
@@ -262,7 +262,7 @@ function ArticleEditor({ article, onSave, onCancel }) {
           <div className="flex items-center gap-2">
             {uploading && <span className="text-xs text-amber-400 animate-pulse">Uploading image...</span>}
             <button onClick={handleSave} disabled={uploading}
-              className="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors">
+              className="px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors">
               Save Changes
             </button>
           </div>
@@ -432,7 +432,7 @@ export default function ArticlesPage() {
     <div className="p-6 max-w-[1200px] mx-auto space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">📁 Articles</h1>
+          <h1 className="text-xl font-medium text-white flex items-center gap-2">📁 Articles</h1>
           <p className="text-sm text-gray-400 mt-0.5">{articles.length} total articles</p>
         </div>
         <div className="flex items-center gap-2">
@@ -446,7 +446,7 @@ export default function ArticlesPage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
             Export
           </button>
-          <Link href="/admin/drafting" className="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-500 transition-colors">
+          <Link href="/admin/drafting" className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-500 transition-colors">
             + New Article
           </Link>
         </div>

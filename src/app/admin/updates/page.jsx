@@ -47,7 +47,7 @@ function StatCard({ icon, label, value, sub, color = 'blue' }) {
         <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${colors[color]}`}>{icon}</span>
         <span className="text-xs text-gray-400 font-medium">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
+      <p className="text-2xl font-medium text-white">{value}</p>
       {sub && <p className="text-xs text-gray-500 mt-0.5">{sub}</p>}
     </div>
   );
@@ -336,7 +336,7 @@ export default function AdminUpdatesPage() {
       <div className="sticky top-0 z-20 bg-gray-900/95 backdrop-blur-md border-b border-gray-800/60">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="mb-4">
-            <h1 className="text-xl font-bold text-white">Email Communications</h1>
+            <h1 className="text-xl font-medium text-white">Email Communications</h1>
           </div>
 
           {/* Tabs */}
@@ -363,7 +363,7 @@ export default function AdminUpdatesPage() {
         {/* ════ COMPOSE TAB ════ */}
         {activeTab === 'compose' && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-white">Compose</h2>
+            <h2 className="text-lg font-medium text-white">Compose</h2>
 
             {/* Communication Type */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-4">
@@ -441,7 +441,7 @@ export default function AdminUpdatesPage() {
                 {showFormatGuide && (
                   <div className="px-5 pb-5 space-y-4">
                     <div>
-                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Required Markdown Format</h4>
+                      <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">Required Markdown Format</h4>
                       <pre className="bg-gray-900 border border-gray-700 rounded-lg p-4 text-xs text-gray-300 overflow-x-auto whitespace-pre-wrap">{`## 🇦🇷 Argentina
 
 ### BCRA publishes Comunicación A 8406 for recurring collections
@@ -465,7 +465,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                     </div>
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide">AI Prompt to Generate This</h4>
+                        <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wide">AI Prompt to Generate This</h4>
                         <button
                           onClick={() => {
                             navigator.clipboard.writeText(HORIZON_SCAN_PROMPT);
@@ -607,7 +607,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                               }}
                               className="rounded border-gray-600 text-violet-500 focus:ring-violet-500 bg-gray-700"
                             />
-                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">{org}</span>
+                            <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">{org}</span>
                           </label>
                           <span className="text-xs text-gray-600">({subs.length})</span>
                         </div>
@@ -635,7 +635,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
               <button
                 onClick={handleSend}
                 disabled={sending || !subject.trim() || !markdown.trim() || (selectedRecipients === 'selected' && checkedEmails.size === 0)}
-                className="px-6 py-3 bg-violet-600 text-white font-semibold rounded-xl hover:bg-violet-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-violet-600 text-white font-medium rounded-xl hover:bg-violet-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {sending ? '⏳ Sending...' : `📤 Send Now`}
               </button>
@@ -676,7 +676,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
 
             {/* ── Test Email ── */}
             <div className="bg-gray-800/40 rounded-xl border border-dashed border-gray-600/50 p-4">
-              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">🧪 Send Test Email</h4>
+              <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">🧪 Send Test Email</h4>
               <p className="text-xs text-gray-500 mb-3">Send a sample email with mock regulatory data using the current theme ({emailTheme}) and template ({templateType}).</p>
               <div className="flex items-center gap-3">
                 <input
@@ -708,7 +708,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
           <div className="space-y-6">
             {/* Add new */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
-              <h3 className="text-sm font-semibold text-white mb-3">Add Subscribers</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Add Subscribers</h3>
               <form onSubmit={handleAddSubscribers} className="space-y-3">
                 <div className="flex gap-3">
                   <div className="flex-1">
@@ -786,7 +786,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
             {/* Grouped list */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-700/40 flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-medium text-white">
                   {orgFilter === 'all' ? `All Subscribers (${subs.length})` : `${orgFilter} (${filteredSubscribers.length})`}
                 </h3>
                 {subs.length > 0 && (
@@ -814,7 +814,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
               {filteredSubscribers.length === 0 ? (
                 <div className="p-12 text-center">
                   <span className="text-4xl mb-4 block">👥</span>
-                  <h3 className="text-white font-semibold mb-2">No subscribers yet</h3>
+                  <h3 className="text-white font-medium mb-2">No subscribers yet</h3>
                   <p className="text-gray-400 text-sm">Add emails above or import from onboarding data</p>
                 </div>
               ) : (
@@ -824,7 +824,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
                     {Object.entries(subscribersByOrg).map(([org, subs]) => (
                       <div key={org}>
                         <div className="px-5 py-2.5 bg-gray-900/40 border-b border-gray-700/30 flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-400 tracking-wide uppercase">{org}</span>
+                          <span className="text-xs font-medium text-gray-400 tracking-wide uppercase">{org}</span>
                           <span className="text-xs text-gray-500">{subs.length} subscriber{subs.length !== 1 ? 's' : ''}</span>
                         </div>
                         <div className="divide-y divide-gray-700/20">
@@ -870,7 +870,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
             {(Array.isArray(history) ? history : []).length === 0 ? (
               <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
                 <span className="text-4xl mb-4 block">📜</span>
-                <h3 className="text-white font-semibold mb-2">No updates sent yet</h3>
+                <h3 className="text-white font-medium mb-2">No updates sent yet</h3>
                 <p className="text-gray-400 text-sm">Your sent updates will appear here</p>
               </div>
             ) : (
@@ -891,14 +891,14 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
             {(Array.isArray(scheduled) ? scheduled : []).filter(s => !s.status || s.status === 'pending').length === 0 ? (
               <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
                 <span className="text-4xl mb-4 block">⏰</span>
-                <h3 className="text-white font-semibold mb-2">No scheduled updates</h3>
+                <h3 className="text-white font-medium mb-2">No scheduled updates</h3>
                 <p className="text-gray-400 text-sm">Schedule updates from the Compose tab</p>
               </div>
             ) : (
               (Array.isArray(scheduled) ? scheduled : []).filter(s => !s.status || s.status === 'pending').reverse().map(s => (
                 <div key={s.id} className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-white font-semibold">{s.subject}</h3>
+                    <h3 className="text-white font-medium">{s.subject}</h3>
                     <div className="flex items-center gap-3">
                       <span className="text-xs bg-amber-500/15 text-amber-300 px-2.5 py-1 rounded-full">
                         ⏰ {new Date(s.scheduledFor).toLocaleString()}
@@ -923,7 +923,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
         {/* ════ DATA TAB ════ */}
         {activeTab === 'data' && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-white">Data & Operations</h2>
+            <h2 className="text-lg font-medium text-white">Data & Operations</h2>
 
             {/* System Metrics */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -941,7 +941,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
 
             {/* Markdown Source Inspector */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
-              <h3 className="text-sm font-semibold text-white mb-1">Markdown Source Inspector</h3>
+              <h3 className="text-sm font-medium text-white mb-1">Markdown Source Inspector</h3>
               <p className="text-xs text-gray-400 mb-3">Paste or upload markdown to inspect its structure before composing an email.</p>
               <div className="flex items-center gap-3 mb-3">
                 <label className="flex items-center gap-2 px-3 py-2 bg-violet-600/15 text-violet-300 border border-violet-500/30 rounded-lg cursor-pointer hover:bg-violet-600/25 transition-colors text-xs font-medium">
@@ -971,7 +971,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
               />
               {dataMarkdown && (
                 <div className="mt-3 space-y-2">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide">Parsed Structure</h4>
+                  <h4 className="text-xs font-medium text-gray-400 uppercase tracking-wide">Parsed Structure</h4>
                   <div className="bg-gray-900 rounded-lg border border-gray-700 p-4 text-xs text-gray-300 max-h-64 overflow-y-auto">
                     {(() => {
                       const countries = dataMarkdown.match(/^##\s+.+$/gm);
@@ -999,7 +999,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
             {/* AI Prompt Reference */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-white">AI Prompt Reference</h3>
+                <h3 className="text-sm font-medium text-white">AI Prompt Reference</h3>
                 <button
                   onClick={() => { navigator.clipboard.writeText(HORIZON_SCAN_PROMPT); alert('Prompt copied to clipboard!'); }}
                   className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
@@ -1012,7 +1012,7 @@ Thailand's SEC updated its official Investor Alert register with five crypto ent
 
             {/* Export Tools */}
             <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-5">
-              <h3 className="text-sm font-semibold text-white mb-3">Export Tools</h3>
+              <h3 className="text-sm font-medium text-white mb-3">Export Tools</h3>
               <div className="flex gap-3">
                 <button
                   onClick={() => {
@@ -1063,7 +1063,7 @@ function HistoryCard({ item: h }) {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-white font-semibold">{h.subject}</h3>
+            <h3 className="text-white font-medium">{h.subject}</h3>
             <span className="text-xs text-gray-500">{new Date(h.sentAt).toLocaleString()}</span>
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-400">
@@ -1288,7 +1288,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-white">Organisations</h2>
+          <h2 className="text-lg font-medium text-white">Organisations</h2>
           <p className="text-sm text-gray-400 mt-0.5">Manage organisations, their subscribers, logos, and tracked jurisdictions</p>
         </div>
         <button
@@ -1302,7 +1302,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
       {/* Edit / Add Form */}
       {editing && (
         <div className="bg-gray-800/60 rounded-xl border border-violet-500/30 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-white">{editing === 'new' ? 'New Organisation' : 'Edit Organisation'}</h3>
+          <h3 className="text-sm font-medium text-white">{editing === 'new' ? 'New Organisation' : 'Edit Organisation'}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs text-gray-400 mb-1">Organisation Name *</label>
@@ -1365,7 +1365,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
       {orgs.length === 0 && !editing ? (
         <div className="bg-gray-800/60 rounded-xl border border-gray-700/50 p-12 text-center">
           <span className="text-4xl mb-4 block">🏢</span>
-          <h3 className="text-white font-semibold mb-2">No organisations configured</h3>
+          <h3 className="text-white font-medium mb-2">No organisations configured</h3>
           <p className="text-gray-400 text-sm">Add organisations to enable personalised emails with client logos and jurisdiction filtering</p>
         </div>
       ) : (
@@ -1389,7 +1389,7 @@ function OrganisationsTab({ organisations, setOrganisations, subscribers, loadDa
                         <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center text-lg">🏢</div>
                       )}
                       <div>
-                        <h3 className="text-white font-semibold group-hover:text-violet-300 transition-colors">{org.name}</h3>
+                        <h3 className="text-white font-medium group-hover:text-violet-300 transition-colors">{org.name}</h3>
                         <p className="text-xs text-gray-500">{orgSubs.length} subscriber{orgSubs.length !== 1 ? 's' : ''}</p>
                       </div>
                       <span className={`text-xs text-gray-500 transition-transform ml-2 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>

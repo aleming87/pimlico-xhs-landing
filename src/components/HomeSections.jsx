@@ -54,7 +54,7 @@ export function Sectors() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)] via-[var(--color-bg-base)]/40 to-transparent" />
-                  <h3 className="absolute bottom-4 left-5 text-lg font-semibold text-[var(--color-text-primary)]">
+                  <h3 className="absolute bottom-4 left-5 text-lg font-medium text-[var(--color-text-primary)]">
                     {sector.title}
                   </h3>
                 </div>
@@ -178,7 +178,7 @@ export function Testimonials() {
       company: "Global Technology Corporation",
     },
     {
-      quote: "As an EMI expanding across the EU, we need to track changes across every market where we hold a licence. XHS\u2122 gives us the same core monitoring at a fraction of the cost, with integrations that fit how our team actually works.",
+      quote: "As an EMI expanding across the EU, we need to track changes across every market where we hold a license. XHS\u2122 gives us the same core monitoring at a fraction of the cost, with integrations that fit how our team actually works.",
       name: "Head of Legal & Compliance",
       company: "European Electronic Money Institution",
     },
@@ -235,10 +235,10 @@ export function FinalCTA() {
             14 days. Full access. No credit card required.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-semibold text-[var(--color-bg-base)] transition-all hover:opacity-90">
+            <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">
               Start free trial
             </a>
-            <a href="/contact" className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-semibold text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]">
+            <a href="/contact" className="rounded-lg border border-[var(--color-border-subtle)] px-8 py-3 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]">
               Book a demo
             </a>
           </div>

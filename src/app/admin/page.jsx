@@ -239,7 +239,7 @@ function IdeasWidget() {
           <div className="w-16 h-16 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-3">
             <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
           </div>
-          <p className="text-indigo-300 text-sm font-semibold">Drop .md files here</p>
+          <p className="text-indigo-300 text-sm font-medium">Drop .md files here</p>
           <p className="text-indigo-400/60 text-xs mt-1">Multiple files supported</p>
         </div>
       )}
@@ -250,13 +250,13 @@ function IdeasWidget() {
             <span className="text-lg">💡</span>
           </div>
           <div>
-            <h2 className="text-base font-semibold text-white">Article Ideas</h2>
+            <h2 className="text-base font-medium text-white">Article Ideas</h2>
             <p className="text-[11px] text-gray-500">{allIdeas.length} idea{allIdeas.length !== 1 ? 's' : ''} · {formatWords(totalWords)} words total</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {importMsg && <span className="text-xs text-green-400 animate-pulse">{importMsg}</span>}
-          <label className="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors cursor-pointer shadow-lg shadow-indigo-500/20">
+          <label className="px-4 py-2 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 transition-colors cursor-pointer shadow-lg shadow-indigo-500/20">
             Upload .md
             <input ref={fileRef} type="file" accept=".md,.markdown,.txt" multiple onChange={handleUpload} className="hidden" />
           </label>
@@ -276,7 +276,7 @@ function IdeasWidget() {
         ].map(s => (
           <div key={s.label} className="bg-gray-800/30 px-4 py-3 text-center">
             <span className="text-xs">{s.icon}</span>
-            <p className="text-lg font-bold text-white mt-0.5">{s.value}</p>
+            <p className="text-lg font-medium text-white mt-0.5">{s.value}</p>
             <p className="text-[10px] text-gray-500">{s.label}</p>
           </div>
         ))}
@@ -334,7 +334,7 @@ function IdeasWidget() {
                 {/* Main content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-semibold text-white truncate">{idea.title}</h3>
+                    <h3 className="text-sm font-medium text-white truncate">{idea.title}</h3>
                     <span className={`px-1.5 py-0.5 text-[9px] font-medium rounded-full ${isUpload ? 'bg-indigo-500/15 text-indigo-400' : 'bg-purple-500/15 text-purple-400'}`}>
                       {isUpload ? 'Uploaded' : 'Pipeline'}
                     </span>
@@ -370,7 +370,7 @@ function IdeasWidget() {
                 {/* Actions */}
                 <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-1">
                   <button onClick={(e) => { e.stopPropagation(); sendToDrafting(idea); }} title="Send to Drafting"
-                    className="px-3 py-1.5 text-[11px] font-semibold text-indigo-300 bg-indigo-500/15 rounded-lg hover:bg-indigo-500/25 transition-colors whitespace-nowrap">
+                    className="px-3 py-1.5 text-[11px] font-medium text-indigo-300 bg-indigo-500/15 rounded-lg hover:bg-indigo-500/25 transition-colors whitespace-nowrap">
                     Draft →
                   </button>
                   {isUpload && (
@@ -387,7 +387,7 @@ function IdeasWidget() {
                 <div className="px-6 pb-4 pt-0">
                   <div className="ml-14 bg-gray-900/60 border border-gray-700/40 rounded-lg p-4 max-h-[300px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Content Preview</span>
+                      <span className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">Content Preview</span>
                       <div className="flex items-center gap-3 text-[10px] text-gray-500">
                         {idea.wordCount > 0 && <span>{idea.wordCount.toLocaleString()} words</span>}
                         {idea.wordCount > 0 && <span>~{Math.ceil(idea.wordCount / 250)} min read</span>}
@@ -413,7 +413,7 @@ function IdeasWidget() {
               <>
                 <p className="text-gray-400 text-sm font-medium">No article ideas yet</p>
                 <p className="text-gray-500 text-xs mt-1 max-w-sm mx-auto">Upload or drag & drop markdown files to build your ideas repository. Each file will be parsed for title, tags, and content preview.</p>
-                <button onClick={() => fileRef.current?.click()} className="mt-4 px-5 py-2.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20">
+                <button onClick={() => fileRef.current?.click()} className="mt-4 px-5 py-2.5 bg-indigo-600 text-white text-xs font-medium rounded-lg hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-500/20">
                   Upload your first .md file →
                 </button>
                 <p className="text-gray-600 text-[10px] mt-2">or drag & drop files anywhere on this panel</p>
@@ -465,7 +465,7 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <h1 className="text-2xl font-medium text-white">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">{new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -485,7 +485,7 @@ export default function DashboardPage() {
           <div key={kpi.label} className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4">
             <div className="flex items-center justify-between mb-1">
               <span className="text-base">{kpi.icon}</span>
-              <span className="text-2xl font-bold text-white">{kpi.value}</span>
+              <span className="text-2xl font-medium text-white">{kpi.value}</span>
             </div>
             <p className="text-xs text-gray-500">{kpi.label}</p>
           </div>
@@ -494,7 +494,7 @@ export default function DashboardPage() {
 
       {/* Pipeline Flow */}
       <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-5">
-        <h2 className="text-sm font-semibold text-white mb-4">Pipeline</h2>
+        <h2 className="text-sm font-medium text-white mb-4">Pipeline</h2>
         <div className="flex items-center gap-2">
           {STAGES.map((stage, i) => {
             const count = stats.byStage[stage.key] || 0;
@@ -504,7 +504,7 @@ export default function DashboardPage() {
                 <Link href={STAGE_HREFS[stage.key] || '/admin'} className="flex-1 bg-gray-700/30 border border-gray-700/40 rounded-lg p-3 text-center hover:bg-gray-700/50 transition-all">
                   <div className="text-lg mb-1">{stage.icon}</div>
                   <div className="text-xs text-gray-400 font-medium">{stage.label}</div>
-                  <div className="text-lg font-bold text-white mt-1">{count}</div>
+                  <div className="text-lg font-medium text-white mt-1">{count}</div>
                   <div className="w-full bg-gray-600/30 rounded-full h-1 mt-2">
                     <div className="bg-indigo-500 h-1 rounded-full transition-all" style={{ width: `${pct}%` }} />
                   </div>
@@ -528,7 +528,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-7">
           {/* Category Breakdown */}
           <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-5">
-            <h2 className="text-sm font-semibold text-white mb-4">Category Breakdown</h2>
+            <h2 className="text-sm font-medium text-white mb-4">Category Breakdown</h2>
             <div className="flex items-center gap-4">
               <DonutChart segments={catSegments} size={100} />
               <div className="flex-1 space-y-2.5">
@@ -555,7 +555,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-5">
           {/* Quick Actions */}
           <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4 h-full">
-            <h2 className="text-sm font-semibold text-white mb-3">Quick Actions</h2>
+            <h2 className="text-sm font-medium text-white mb-3">Quick Actions</h2>
             <div className="space-y-1.5">
               <Link href="/admin/drafting" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 bg-gray-700/40 rounded-lg hover:bg-gray-700/60 transition-colors">✏️ Start a draft</Link>
               <Link href="/admin/collateral" className="w-full flex items-center gap-2 px-3 py-2 text-xs text-gray-300 bg-gray-700/40 rounded-lg hover:bg-gray-700/60 transition-colors">🎨 Create collateral</Link>

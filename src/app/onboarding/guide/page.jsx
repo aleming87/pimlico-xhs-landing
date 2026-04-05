@@ -15,7 +15,7 @@ const TIMELINE = [
   {
     week: 'Week 1',
     title: 'Setup & Access',
-    colour: 'bg-blue-600',
+    color: 'bg-blue-600',
     items: [
       'Your team receives account activation emails and login credentials',
       'Jurisdiction and vertical configuration is applied to your workspace',
@@ -26,7 +26,7 @@ const TIMELINE = [
   {
     week: 'Week 2',
     title: 'Explore & Configure',
-    colour: 'bg-blue-500',
+    color: 'bg-blue-500',
     items: [
       'Your team begins using Projects, Blocklists and monitoring tools',
       'Short product survey sent to gather early impressions',
@@ -36,8 +36,8 @@ const TIMELINE = [
   },
   {
     week: 'Week 3',
-    title: 'Review & Optimise',
-    colour: 'bg-blue-400',
+    title: 'Review & Optimize',
+    color: 'bg-blue-400',
     items: [
       'Check-in call to review usage, answer questions and gather feedback',
       'Product review opportunity for in-depth feedback on specific tools',
@@ -50,7 +50,7 @@ const TIMELINE = [
 const FAQS = [
   {
     q: 'How many people can use the platform?',
-    a: 'The number of seats is configured per organisation. Your admin will know your seat limit \u2014 additional seats can be added at any time.',
+    a: 'The number of seats is configured per organization. Your admin will know your seat limit \u2014 additional seats can be added at any time.',
   },
   {
     q: 'Can we add more jurisdictions later?',
@@ -94,7 +94,7 @@ export default function OnboardingGuidePage() {
         <div className="mx-auto max-w-3xl">
           {/* Hero */}
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-4">
+            <h1 className="text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl mb-4">
               Onboarding Guide
             </h1>
             <p className="text-lg text-slate-500 max-w-xl mx-auto">
@@ -104,23 +104,23 @@ export default function OnboardingGuidePage() {
 
           {/* What is XHS */}
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">What is Pimlico XHS{'\u2122'}?</h2>
+            <h2 className="text-xl font-medium text-slate-900 mb-4">What is Pimlico XHS{'\u2122'}?</h2>
             <p className="text-sm text-slate-600 leading-relaxed mb-4">
               Pimlico XHS{'\u2122'} is a regulatory intelligence platform that helps compliance, legal, and public affairs teams monitor, track, and act on regulatory changes across multiple jurisdictions. From real-time blocklist monitoring to competitor analysis and technical standards tracking, XHS gives your team the tools to stay ahead.
             </p>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Your workspace is configured with the jurisdictions and verticals most relevant to your organisation, so you only see what matters.
+              Your workspace is configured with the jurisdictions and verticals most relevant to your organization, so you only see what matters.
             </p>
           </section>
 
           {/* Products */}
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">XHS\u2122 Platform Products</h2>
+            <h2 className="text-xl font-medium text-slate-900 mb-2">XHS\u2122 Platform Products</h2>
             <p className="text-sm text-slate-500 mb-6">The tools available in your XHS\u2122 workspace</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {PRODUCTS.map(p => (
                 <div key={p.label} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                  <h3 className="font-semibold text-slate-900 text-sm mb-2">{p.label}</h3>
+                  <h3 className="font-medium text-slate-900 text-sm mb-2">{p.label}</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">{p.desc}</p>
                 </div>
               ))}
@@ -129,7 +129,7 @@ export default function OnboardingGuidePage() {
 
           {/* Timeline */}
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Onboarding Timeline</h2>
+            <h2 className="text-xl font-medium text-slate-900 mb-2">Onboarding Timeline</h2>
             <p className="text-sm text-slate-500 mb-6">{"What to expect in your first three weeks"}</p>
 
             <div className="relative">
@@ -138,11 +138,11 @@ export default function OnboardingGuidePage() {
               <div className="space-y-6">
                 {TIMELINE.map(t => (
                   <div key={t.week} className="flex gap-4">
-                    <div className={`relative z-10 w-9 h-9 rounded-full ${t.colour} text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 leading-none`}>
+                    <div className={`relative z-10 w-9 h-9 rounded-full ${t.color} text-white flex items-center justify-center text-[10px] font-medium flex-shrink-0 leading-none`}>
                       {t.week.replace('Week ', 'W')}
                     </div>
                     <div className="flex-1 bg-slate-50 rounded-xl p-4 border border-slate-200">
-                      <h3 className="text-sm font-semibold text-slate-900">{t.week} {'\u2014'} {t.title}</h3>
+                      <h3 className="text-sm font-medium text-slate-900">{t.week} {'\u2014'} {t.title}</h3>
                       <ul className="mt-2 space-y-1.5">
                         {t.items.map((item, i) => (
                           <li key={i} className="flex items-start gap-2 text-xs text-slate-600">
@@ -160,7 +160,7 @@ export default function OnboardingGuidePage() {
 
           {/* What we ask of you */}
           <section className="bg-blue-50 rounded-2xl p-6 sm:p-8 border border-blue-200 mb-6">
-            <h2 className="text-xl font-semibold text-blue-900 mb-4">What We Ask of You</h2>
+            <h2 className="text-xl font-medium text-blue-900 mb-4">What We Ask of You</h2>
             <p className="text-sm text-blue-800 leading-relaxed mb-5">
               Getting the most out of XHS\u2122 is a two-way process. Here{'\u2019'}s how your team can help us deliver the best experience:
             </p>
@@ -168,28 +168,28 @@ export default function OnboardingGuidePage() {
               <div className="bg-white rounded-xl p-4 border border-blue-200">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-sm">{'\uD83D\uDCCA'}</span>
-                  <h3 className="text-sm font-semibold text-slate-900">Product Surveys</h3>
+                  <h3 className="text-sm font-medium text-slate-900">Product Surveys</h3>
                 </div>
                 <p className="text-xs text-slate-600">Short 3{'\u2013'}5 minute surveys sent at key milestones to track satisfaction and identify areas for improvement.</p>
               </div>
               <div className="bg-white rounded-xl p-4 border border-blue-200">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-sm">{'\uD83D\uDD0D'}</span>
-                  <h3 className="text-sm font-semibold text-slate-900">Product Reviews</h3>
+                  <h3 className="text-sm font-medium text-slate-900">Product Reviews</h3>
                 </div>
                 <p className="text-xs text-slate-600">Deeper feedback sessions on specific products after a few weeks of usage. Your insights directly shape product development.</p>
               </div>
               <div className="bg-white rounded-xl p-4 border border-blue-200">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-sm">{'\uD83D\uDDE3\uFE0F'}</span>
-                  <h3 className="text-sm font-semibold text-slate-900">Check-in Calls</h3>
+                  <h3 className="text-sm font-medium text-slate-900">Check-in Calls</h3>
                 </div>
                 <p className="text-xs text-slate-600">Brief calls at the end of weeks 2{'\u2013'}3 to discuss your experience and ensure everything is configured correctly.</p>
               </div>
               <div className="bg-white rounded-xl p-4 border border-blue-200">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center text-sm">{'\uD83D\uDE80'}</span>
-                  <h3 className="text-sm font-semibold text-slate-900">Early Access</h3>
+                  <h3 className="text-sm font-medium text-slate-900">Early Access</h3>
                 </div>
                 <p className="text-xs text-slate-600">Opportunity to try new features before general release. Opt in during onboarding to be among the first to test.</p>
               </div>
@@ -198,11 +198,11 @@ export default function OnboardingGuidePage() {
 
           {/* FAQs */}
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-            <h2 className="text-xl font-semibold text-slate-900 mb-6">Frequently Asked Questions</h2>
+            <h2 className="text-xl font-medium text-slate-900 mb-6">Frequently Asked Questions</h2>
             <div className="space-y-4">
               {FAQS.map((faq, i) => (
                 <div key={i} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-1.5">{faq.q}</h3>
+                  <h3 className="text-sm font-medium text-slate-900 mb-1.5">{faq.q}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">{faq.a}</p>
                 </div>
               ))}
@@ -211,18 +211,18 @@ export default function OnboardingGuidePage() {
 
           {/* Contact */}
           <section className="bg-slate-900 rounded-2xl p-6 sm:p-8 text-center mb-6">
-            <h2 className="text-xl font-semibold text-white mb-2">Need Help?</h2>
+            <h2 className="text-xl font-medium text-white mb-2">Need Help?</h2>
             <p className="text-sm text-slate-400 mb-5">{"Our team is here to support you throughout onboarding and beyond."}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="mailto:support@pimlicosolutions.com"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors"
               >
                 Email Support
               </a>
               <a
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/10 text-white text-sm font-semibold rounded-xl hover:bg-white/20 transition-colors border border-white/20"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white/10 text-white text-sm font-medium rounded-xl hover:bg-white/20 transition-colors border border-white/20"
               >
                 Contact Us
               </a>

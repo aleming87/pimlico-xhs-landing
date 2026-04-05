@@ -110,7 +110,7 @@ export default function MapSection() {
         <div className="grid grid-cols-3 gap-3">
           <button 
             onClick={handlePaymentsClick}
-            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-semibold transition-all duration-200 border border-gray-600 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20"
+            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-medium transition-all duration-200 border border-gray-600 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/20"
           >
             <div className="flex items-center justify-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-blue-400 group-hover:bg-white"></span>
@@ -119,7 +119,7 @@ export default function MapSection() {
           </button>
           <button 
             onClick={handleGamblingClick}
-            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-emerald-600 hover:to-emerald-700 text-white text-sm font-semibold transition-all duration-200 border border-gray-600 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20"
+            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-emerald-600 hover:to-emerald-700 text-white text-sm font-medium transition-all duration-200 border border-gray-600 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/20"
           >
             <div className="flex items-center justify-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:bg-white"></span>
@@ -128,7 +128,7 @@ export default function MapSection() {
           </button>
           <button 
             onClick={handleAIClick}
-            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-semibold transition-all duration-200 border border-gray-600 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20"
+            className="group px-4 py-3 rounded-lg bg-gradient-to-r from-gray-700 to-gray-750 hover:from-purple-600 hover:to-purple-700 text-white text-sm font-medium transition-all duration-200 border border-gray-600 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20"
           >
             <div className="flex items-center justify-center space-x-2">
               <span className="w-2 h-2 rounded-full bg-purple-400 group-hover:bg-white"></span>

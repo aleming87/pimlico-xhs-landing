@@ -324,7 +324,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">💡 Ideas</h1>
+          <h1 className="text-xl font-medium text-white flex items-center gap-2">💡 Ideas</h1>
           <p className="text-sm text-gray-400 mt-0.5">Capture regulatory intelligence ideas and topics to develop</p>
         </div>
         <div className="flex items-center gap-2">
@@ -346,7 +346,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
             <input type="file" accept=".md,.markdown,.txt" onChange={handleMdAutoFill} className="hidden" />
           </label>
           <button onClick={() => { resetForm(); setShowAdd(true); }}
-            className="px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-500 transition-colors flex items-center gap-2">
+            className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-500 transition-colors flex items-center gap-2">
             + New Idea
           </button>
         </div>
@@ -356,7 +356,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
       {showPrompt && (
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Copy this into ChatGPT / Claude / Copilot</h3>
+            <h3 className="text-sm font-medium text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Copy this into ChatGPT / Claude / Copilot</h3>
             <button onClick={() => { navigator.clipboard.writeText(LLM_PROMPT); }}
               className="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-lg hover:bg-amber-500/30 transition-colors">
               📋 Copy Prompt
@@ -370,7 +370,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
       {/* Add/Edit Form */}
       {showAdd && (
         <div className="bg-gray-800 rounded-xl border border-purple-500/30 p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-purple-300">{editingId ? '✏️ Edit Idea' : '💡 New Idea'}</h3>
+          <h3 className="text-sm font-medium text-purple-300">{editingId ? '✏️ Edit Idea' : '💡 New Idea'}</h3>
           <input
             type="text" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
             placeholder="Idea title — e.g. 'EU AI Act enforcement trends Q1 2026'"
@@ -389,7 +389,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
             <div className="flex gap-2">
               {PRIORITIES.map(p => (
                 <button key={p.key} type="button" onClick={() => setForm(prev => ({ ...prev, priority: p.key }))}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                     form.priority === p.key ? p.color : 'text-gray-500 bg-gray-700/50 border-gray-600 hover:text-gray-300'
                   }`}>
                   {p.label}
@@ -421,7 +421,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
           <div className="flex items-center gap-2 justify-end">
             <button onClick={resetForm} className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">Cancel</button>
             <button onClick={handleSave} disabled={!form.title.trim()}
-              className="px-5 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-500 disabled:opacity-40 transition-colors">
+              className="px-5 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-500 disabled:opacity-40 transition-colors">
               {editingId ? 'Update' : 'Save Idea'}
             </button>
           </div>
@@ -465,19 +465,19 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
                       <select
                         value={idea.priority || 'medium'}
                         onChange={e => updateItem(idea.id, { priority: e.target.value })}
-                        className={`px-2 py-0.5 text-[10px] font-semibold rounded-full border appearance-none cursor-pointer focus:outline-none ${pri?.color || 'text-gray-400 bg-gray-700 border-gray-600'}`}
+                        className={`px-2 py-0.5 text-[10px] font-medium rounded-full border appearance-none cursor-pointer focus:outline-none ${pri?.color || 'text-gray-400 bg-gray-700 border-gray-600'}`}
                         style={{ paddingRight: '18px', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 4px center' }}
                       >
                         {PRIORITIES.map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                       </select>
                       {/* Status badge */}
-                      {status === 'accepted' && <span className="px-2 py-0.5 text-[10px] font-semibold text-emerald-300 bg-emerald-500/20 rounded-full border border-emerald-500/30">✓ Accepted</span>}
-                      {status === 'rejected' && <span className="px-2 py-0.5 text-[10px] font-semibold text-red-300 bg-red-500/20 rounded-full border border-red-500/30">✗ Rejected</span>}
+                      {status === 'accepted' && <span className="px-2 py-0.5 text-[10px] font-medium text-emerald-300 bg-emerald-500/20 rounded-full border border-emerald-500/30">✓ Accepted</span>}
+                      {status === 'rejected' && <span className="px-2 py-0.5 text-[10px] font-medium text-red-300 bg-red-500/20 rounded-full border border-red-500/30">✗ Rejected</span>}
                       {idea.tags.map(t => (
                         <span key={t} className="px-2 py-0.5 text-[10px] text-purple-300/70 bg-purple-500/10 rounded-full">{t}</span>
                       ))}
                     </div>
-                    <h3 className={`text-sm font-semibold ${status === 'rejected' ? 'text-gray-500 line-through' : 'text-white'}`}>{idea.title}</h3>
+                    <h3 className={`text-sm font-medium ${status === 'rejected' ? 'text-gray-500 line-through' : 'text-white'}`}>{idea.title}</h3>
                     {idea.description && <p className="text-xs text-gray-400 mt-1 line-clamp-2">{idea.description}</p>}
                     {idea.notes && <p className="text-[11px] text-gray-500 mt-1 italic">📎 {idea.notes}</p>}
                     <p className="text-[10px] text-gray-600 mt-2">{new Date(idea.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
@@ -528,7 +528,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
           <p className="text-gray-400 text-sm font-medium">No ideas yet</p>
           <p className="text-gray-500 text-xs mt-1 max-w-md mx-auto">Capture ideas about regulatory developments, market trends, enforcement actions, or opinion pieces to develop into content.</p>
           <button onClick={() => { resetForm(); setShowAdd(true); }}
-            className="mt-4 px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-500 transition-colors">
+            className="mt-4 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-500 transition-colors">
             + Capture First Idea
           </button>
         </div>
