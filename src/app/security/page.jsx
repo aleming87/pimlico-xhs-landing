@@ -32,7 +32,7 @@ const securityFeatures = [
   {
     title: 'Data Residency',
     items: [
-      'Primary data storage in the European Union (London, UK)',
+      'Primary data storage in UK and EU regions',
       'Supabase infrastructure with SOC 2 Type II certification',
       'Cloudflare edge network for global performance with EU data processing',
       'No data transferred outside the EU unless explicitly configured',
@@ -59,8 +59,8 @@ const securityFeatures = [
   {
     title: 'Application Security',
     items: [
-      'Input validation and sanitisation on all user inputs',
-      'Cross-Site Scripting (XSS) protection with content sanitisation',
+      'Input validation and sanitization on all user inputs',
+      'Cross-Site Scripting (XSS) protection with content sanitization',
       'API rate limiting and brute-force protection',
       'JWT-based authentication on all sensitive endpoints',
       'Webhook signature verification (Stripe, third-party integrations)',
@@ -83,13 +83,12 @@ export default function SecurityPage() {
       {/* Header */}
       <div className="bg-[var(--color-bg-base)] text-white pt-24 py-24 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm font-medium text-[var(--color-accent-secondary)] uppercase tracking-wider mb-4">Security & Privacy</p>
-          <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-[var(--color-text-primary)]">
-            Enterprise-grade security for regulatory compliance
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">[ SECURITY &amp; PRIVACY ]</p>
+          <h1 className="font-display text-4xl md:text-5xl font-medium tracking-tight text-[var(--color-text-primary)] leading-[1.1]">
+            Built for regulated teams.
           </h1>
           <p className="mt-6 text-lg text-[var(--color-text-tertiary)] max-w-2xl mx-auto">
-            XHS™ Copilot is built from the ground up with security at its core. Your regulatory data
-            is protected with the same rigour you apply to your compliance programmes.
+            Your regulatory data is protected with the same rigor you apply to your compliance programs. EU data residency, row-level isolation, and encryption at rest and in transit.
           </p>
         </div>
       </div>
@@ -124,7 +123,7 @@ export default function SecurityPage() {
             </div>
             <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
               <p className="text-2xl font-medium text-[var(--color-text-primary)]">SOC 2</p>
-              <p className="text-sm text-[var(--color-text-tertiary)] mt-2">SOC 2 Type II aligned infrastructure (Supabase)</p>
+              <p className="text-sm text-[var(--color-text-tertiary)] mt-2">SOC 2 Type II infrastructure via Supabase</p>
             </div>
             <div className="text-center p-6 bg-[var(--color-bg-surface)] rounded-xl">
               <p className="text-2xl font-medium text-[var(--color-text-primary)]">PCI DSS</p>
@@ -134,16 +133,16 @@ export default function SecurityPage() {
         </div>
 
         {/* Contact */}
-        <div className="mt-16 bg-[var(--color-bg-surface)] text-white rounded-2xl p-8 text-center border border-[var(--color-border-default)]">
+        <div className="mt-16 rounded-xl p-8 text-center border border-[var(--color-border-default)]/30 bg-[var(--color-bg-surface)]/40">
           <h3 className="text-xl font-medium text-[var(--color-text-primary)]">Security questions?</h3>
-          <p className="text-[var(--color-text-tertiary)] mt-2 text-sm">
-            For security enquiries, vulnerability reports, or data protection requests, contact us directly.
+          <p className="text-sm text-[var(--color-text-tertiary)] mt-2">
+            For security inquiries, vulnerability reports, or data protection requests, contact us directly.
           </p>
           <a
-            href="mailto:andrew@pimlicosolutions.com"
-            className="inline-block mt-4 px-6 py-2.5 bg-[var(--color-cta-primary)] text-white font-medium rounded-lg hover:bg-[var(--color-cta-primary)]/90 transition"
+            href="mailto:security@pimlicosolutions.com"
+            className="inline-block mt-5 rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
           >
-            Contact Security Team
+            Contact security team
           </a>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { TrustedBy, Sectors, Coverage, Security, Testimonials, FinalCTA } from "
 
 export const metadata = {
   title: "XHS\u2122 Copilot \u2014 Every regulatory change. Analyzed.",
-  description: "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 250+ jurisdictions sourced, analyzed, and delivered daily.",
+  description: "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
 }
 
 export default function Page() {
@@ -42,7 +42,7 @@ export default function Page() {
         "billingDuration": "P1M"
       }
     },
-    "description": "AI compliance workspaces for regulated teams. Monitor, analyze, and collaborate on Gambling, Payments, Crypto, and AI regulations across 250+ jurisdictions.",
+    "description": "AI compliance workspaces for regulated teams. Monitor, analyze, and collaborate on Gambling, Payments, Crypto, and AI regulations across 275+ jurisdictions.",
     "operatingSystem": "Web",
     "featureList": "Regulatory monitoring, Jurisdiction reports, Lens AI analysis, Slack and Teams integration, Team collaboration, Real-time change detection"
   };

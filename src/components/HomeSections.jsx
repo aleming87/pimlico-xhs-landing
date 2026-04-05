@@ -86,7 +86,7 @@ export function Coverage() {
               [ COVERAGE ]
             </p>
             <h2 className="font-display text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl leading-[1.1]">
-              250+ jurisdictions.{" "}<br className="hidden sm:block" />12,000+ sources.
+              275+ jurisdictions.{" "}<br className="hidden sm:block" />12,000+ sources.
             </h2>
             <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-md">
               Regulatory bodies, central banks, gaming authorities, and financial supervisors monitored continuously. Including all 50 US states and Canadian provinces.
@@ -96,12 +96,12 @@ export function Coverage() {
           <Reveal delay={0.15}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
               {[
-                { region: "Europe", highlight: "UK, EU27, Switzerland, Norway, Channel Islands" },
-                { region: "North America", highlight: "US federal, 50 states, Canada, Mexico" },
-                { region: "Asia-Pacific", highlight: "Singapore, Japan, Australia, Hong Kong, South Korea" },
-                { region: "Latin America", highlight: "Brazil, Mexico, Colombia, Argentina, Chile" },
-                { region: "Middle East & Africa", highlight: "UAE, Saudi Arabia, South Africa, Nigeria, Kenya" },
-                { region: "Supranational", highlight: "EU institutions, FATF, Basel, IOSCO, OECD" },
+                { region: "Europe", highlight: "UK, EU27, Gibraltar, Malta, Isle of Man, Switzerland, Channel Islands" },
+                { region: "North America", highlight: "US federal, 50 states + DC, Canada + provinces, Mexico" },
+                { region: "Latin America & Caribbean", highlight: "Brazil, Mexico, Cayman, Curaçao, Bahamas, Bermuda, BVI, Jamaica" },
+                { region: "Asia-Pacific", highlight: "Singapore, Hong Kong, Japan, Australia, Macau, Philippines, South Korea" },
+                { region: "Middle East & Africa", highlight: "UAE, Dubai, Saudi Arabia, Qatar, South Africa, Nigeria, Kenya" },
+                { region: "Supranational", highlight: "EU institutions, FATF, Basel, IOSCO, OECD, FSB, BIS" },
               ].map((item) => (
                 <div key={item.region}>
                   <p className="text-sm font-medium text-[var(--color-text-primary)]">{item.region}</p>

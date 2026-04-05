@@ -16,7 +16,7 @@ const SCREENS = [
     label: "Regulations",
     image: "/Product-2---Database-Regulations.png",
     headline: "The complete regulatory record",
-    desc: "Filter by jurisdiction, sector, topic, status, and regulatory stage. 250+ jurisdictions, source-verified, timestamped, and structured for compliance teams.",
+    desc: "Filter by jurisdiction, sector, topic, status, and regulatory stage. 275+ jurisdictions, source-verified, timestamped, and structured for compliance teams.",
   },
   {
     id: "insights",

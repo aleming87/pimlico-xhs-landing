@@ -132,7 +132,7 @@ function ContactPageInner() {
             {/* Value props */}
             <div className="space-y-5">
               {[
-                { label: "250+ jurisdictions", desc: "Gambling, Payments, Crypto, and AI regulation monitored continuously." },
+                { label: "275+ jurisdictions", desc: "Gambling, Payments, Crypto, and AI regulation monitored continuously." },
                 { label: "Team economics", desc: "Scaling seat pricing across plans. Your full compliance team, day one." },
                 { label: "Slack & Teams", desc: "Regulatory updates delivered where your team already works." },
                 { label: "14-day trial", desc: "Full platform access. Cancel any time. No commitment." },

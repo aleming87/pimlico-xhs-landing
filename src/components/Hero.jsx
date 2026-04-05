@@ -85,7 +85,7 @@ export default function Hero() {
               <div className="inline-flex items-center gap-2.5 rounded-full border border-[var(--color-border-subtle)]/40 bg-[var(--color-bg-surface)]/50 px-4 py-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent-secondary)] animate-pulse" />
                 <span className="text-xs font-mono font-medium tracking-wide text-[var(--color-text-tertiary)]">
-                  NOW MONITORING 250+ JURISDICTIONS
+                  NOW MONITORING 275+ JURISDICTIONS
                 </span>
               </div>
             </motion.div>
@@ -111,7 +111,7 @@ export default function Hero() {
               className="mt-8 text-sm text-[var(--color-text-tertiary)] sm:text-lg leading-relaxed"
             >
               Compliance workspaces for Gambling, Payments, Crypto and AI teams.<br />
-              Sourced, analyzed, and delivered across 250+ jurisdictions.
+              Sourced, analyzed, and delivered across 275+ jurisdictions.
             </motion.p>
 
             {/* Dual CTA */}

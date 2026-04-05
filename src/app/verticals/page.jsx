@@ -14,7 +14,7 @@ const VERTICALS = [
     headline: "Gambling compliance across global gaming markets.",
     desc: "Licensing regimes, responsible gambling requirements, advertising standards, and AML controls. From the UKGC and MGA to emerging US state-by-state frameworks and Latin American markets.",
     stats: [
-      { value: "250+", label: "Jurisdictions" },
+      { value: "275+", label: "Jurisdictions" },
       { value: "12,000+", label: "Sources" },
       { value: "Daily", label: "Updates" },
     ],
@@ -35,12 +35,12 @@ const VERTICALS = [
     headline: "Payments and crypto regulation. End to end.",
     desc: "From PSD3 and MiCA in Europe to state-level money transmission in the US, and emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience, and supervisory expectations.",
     stats: [
-      { value: "250+", label: "Jurisdictions" },
+      { value: "275+", label: "Jurisdictions" },
       { value: "12,000+", label: "Sources" },
       { value: "Daily", label: "Updates" },
     ],
     categories: [
-      { name: "Payment Services & EMI", desc: "Licensing and authorisation for payment institutions and EMIs. PSD3, PSR, open banking, and state-level money transmission." },
+      { name: "Payment Services & EMI", desc: "Licensing and authorization for payment institutions and EMIs. PSD3, PSR, open banking, and state-level money transmission." },
       { name: "Crypto & Digital Assets", desc: "Exchange licensing, stablecoin regulation, custody rules, and token classification. MiCA, MAS frameworks, and US state requirements." },
       { name: "AML & Financial Crime", desc: "Travel rule, transaction monitoring, customer due diligence, beneficial ownership, and sanctions screening across jurisdictions." },
       { name: "Operational Resilience", desc: "ICT risk management, incident reporting, business continuity, and outsourcing requirements. DORA, FCA, and MAS frameworks." },
@@ -56,7 +56,7 @@ const VERTICALS = [
     headline: "AI regulation is moving fast. Stay ahead.",
     desc: "EU AI Act, national frameworks, and emerging governance requirements. High-risk classification, conformity assessment, transparency obligations, and algorithmic accountability.",
     stats: [
-      { value: "250+", label: "Jurisdictions" },
+      { value: "275+", label: "Jurisdictions" },
       { value: "12,000+", label: "Sources" },
       { value: "Daily", label: "Updates" },
     ],
