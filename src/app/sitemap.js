@@ -1,54 +1,60 @@
+/**
+ * Dynamic sitemap for pimlicosolutions.com
+ *
+ * Static pages are enumerated explicitly. Insights articles are pulled
+ * from the local JSON so every published article appears in search.
+ */
+
+import fs from 'fs'
+import path from 'path'
+
+const BASE = 'https://pimlicosolutions.com'
+
+function readArticles() {
+  try {
+    const file = path.join(process.cwd(), 'src', 'data', 'sample-articles.js')
+    if (!fs.existsSync(file)) return []
+    const raw = fs.readFileSync(file, 'utf8')
+    const matches = [...raw.matchAll(/slug:\s*['"`]([^'"`]+)['"`]/g)]
+    return matches.map((m) => m[1])
+  } catch {
+    return []
+  }
+}
+
 export default function sitemap() {
-  const baseUrl = 'https://pimlicosolutions.com';
-  
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
+  const now = new Date()
+
+  const staticRoutes = [
+    { path: '/', priority: 1.0, changeFrequency: 'weekly' },
+    { path: '/pricing', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/contact', priority: 0.9, changeFrequency: 'monthly' },
+    { path: '/gambling', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/payments', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/ai', priority: 0.9, changeFrequency: 'weekly' },
+    { path: '/verticals', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/insights', priority: 0.8, changeFrequency: 'daily' },
+    { path: '/security', priority: 0.6, changeFrequency: 'monthly' },
+    { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
+    { path: '/terms-and-conditions', priority: 0.3, changeFrequency: 'yearly' },
+  ]
+
+  const entries = staticRoutes.map((r) => ({
+    url: `${BASE}${r.path}`,
+    lastModified: now,
+    changeFrequency: r.changeFrequency,
+    priority: r.priority,
+  }))
+
+  const articles = readArticles()
+  for (const slug of articles) {
+    entries.push({
+      url: `${BASE}/insights/${slug}`,
+      lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/company`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/ai`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/payments`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/gambling`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-  ];
+      priority: 0.6,
+    })
+  }
+
+  return entries
 }

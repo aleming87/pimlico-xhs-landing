@@ -34,13 +34,13 @@ export async function generateMetadata({ params }) {
 
   if (!article) {
     return {
-      title: 'Article Not Found - Pimlico XHS™',
+      title: 'Article Not Found - XHS™ Copilot',
       description: 'The requested article could not be found.',
       openGraph: {
-        title: 'Article Not Found - Pimlico XHS™',
+        title: 'Article Not Found - XHS™ Copilot',
         description: 'The requested article could not be found.',
         url: `${baseUrl}/insights/${slug}`,
-        siteName: 'Pimlico XHS™',
+        siteName: 'XHS™ Copilot',
         type: 'website',
       },
     };
@@ -61,21 +61,21 @@ export async function generateMetadata({ params }) {
     }
   }
 
-  const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from Pimlico XHS™';
+  const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from XHS™ Copilot';
 
   const metadata = {
-    title: `${article.title} - Pimlico XHS™`,
+    title: `${article.title} - XHS™ Copilot`,
     description: description,
-    authors: [{ name: 'Pimlico XHS™ Team' }],
+    authors: [{ name: 'XHS™ Copilot Team' }],
     openGraph: {
       title: article.title,
       description: description,
       url: `${baseUrl}/insights/${slug}`,
-      siteName: 'Pimlico XHS™',
+      siteName: 'XHS™ Copilot',
       type: 'article',
       publishedTime: article.date,
       modifiedTime: article.date,
-      authors: ['Pimlico XHS™ Team'],
+      authors: ['XHS™ Copilot Team'],
       locale: 'en_US',
     },
     twitter: {
@@ -111,6 +111,47 @@ export async function generateMetadata({ params }) {
   return metadata;
 }
 
-export default function ArticlePage() {
-  return <ArticlePageClient />;
+export default async function ArticlePage({ params }) {
+  const { slug } = await params;
+  const article = await getArticleBySlug(slug);
+  const baseUrl = 'https://www.pimlicosolutions.com';
+
+  const articleSchema = article
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": article.title,
+        "description": article.excerpt || '',
+        "image": article.ogImage || article.image || `${baseUrl}/cta-bg.jpg`,
+        "datePublished": article.date,
+        "dateModified": article.date,
+        "author": { "@type": "Organization", "name": "Pimlico Solutions", "url": baseUrl },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Pimlico Solutions",
+          "logo": { "@type": "ImageObject", "url": `${baseUrl}/dual-logo.png` },
+        },
+        "mainEntityOfPage": `${baseUrl}/insights/${slug}`,
+      }
+    : null;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
+      { "@type": "ListItem", "position": 2, "name": "Insights", "item": `${baseUrl}/insights` },
+      ...(article ? [{ "@type": "ListItem", "position": 3, "name": article.title, "item": `${baseUrl}/insights/${slug}` }] : []),
+    ],
+  };
+
+  return (
+    <>
+      {articleSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <ArticlePageClient />
+    </>
+  );
 }

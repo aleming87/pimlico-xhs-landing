@@ -1,48 +1,87 @@
- import '@/styles/tailwind.css'
-// Vercel Analytics removed — using Cloudflare Analytics instead
+import '@/styles/tailwind.css'
+import { Playfair_Display, JetBrains_Mono } from 'next/font/google'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import { CookieConsent } from '@/components/CookieConsent'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-display',
+})
+
+const jetbrains = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-mono',
+})
+
+const SITE_URL = 'https://pimlicosolutions.com'
+const DEFAULT_TITLE = 'XHS™ Copilot — Every regulatory change. Analyzed.'
+const DEFAULT_DESCRIPTION = 'Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.'
+
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    template: '%s - Pimlico XHS™',
-    default: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
+    template: '%s | XHS™ Copilot',
+    default: DEFAULT_TITLE,
   },
-  description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyze, and collaborate on AI, Payments, and Gambling regulations across 180+ jurisdictions in real-time.',
-  keywords: ['regulatory compliance', 'AI compliance', 'payments regulation', 'gambling compliance', 'EU AI Act', 'PSD3', 'MiCA', 'PSR', 'UKGC', 'gambling regulation', 'regulatory monitoring', 'compliance software', 'regulatory intelligence', 'regtech', 'compliance automation', 'regulatory technology', 'AI Act compliance', 'payments compliance', 'gaming compliance'],
-  authors: [{ name: 'Pimlico XHS™', url: 'https://pimlicosolutions.com' }],
-  creator: 'Pimlico XHS™',
-  publisher: 'Pimlico XHS™',
-  metadataBase: new URL('https://pimlicosolutions.com'),
+  description: DEFAULT_DESCRIPTION,
+  applicationName: 'XHS™ Copilot',
+  authors: [{ name: 'Pimlico Solutions', url: SITE_URL }],
+  creator: 'Pimlico Solutions',
+  publisher: 'Pimlico Solutions',
+  keywords: [
+    'regulatory compliance',
+    'compliance software',
+    'regulatory intelligence',
+    'regtech',
+    'gambling compliance',
+    'payments compliance',
+    'crypto compliance',
+    'AI compliance',
+    'EU AI Act',
+    'MiCA',
+    'PSD3',
+    'UKGC',
+    'MGA',
+    'regulatory monitoring',
+    'compliance automation',
+  ],
+  alternates: {
+    canonical: SITE_URL,
+  },
   icons: {
-    icon: '/Pimlico_SI_Brandmark%20-%20II.png',
-    shortcut: '/Pimlico_SI_Brandmark%20-%20II.png',
-    apple: '/Pimlico_SI_Brandmark%20-%20II.png',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.png',
   },
   openGraph: {
-    title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
-    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyze, and collaborate on AI, Payments, and Gambling regulations across 180+ jurisdictions.',
-    url: 'https://pimlicosolutions.com',
-    siteName: 'Pimlico XHS™',
+    type: 'website',
+    locale: 'en_US',
+    url: SITE_URL,
+    siteName: 'XHS™ Copilot',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     images: [
       {
-        url: '/XHS%20Logo%20BLUE%20on%20WHITE.png',
+        url: '/cta-bg.jpg',
         width: 1200,
         height: 630,
-        alt: 'Pimlico XHS - Regulatory AI Workspaces',
+        alt: 'XHS™ Copilot — Every regulatory change. Analyzed.',
       },
     ],
-    locale: 'en_US',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Pimlico XHS™ - AI-Powered Regulatory Compliance Workspaces',
-    description: 'AI-native regulatory intelligence platform for compliance teams. Monitor, analyze, and collaborate on regulations across 180+ jurisdictions.',
-    images: ['/XHS%20Logo%20BLUE%20on%20WHITE.png'],
+    site: '@pimlicoxhs',
     creator: '@pimlicoxhs',
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: ['/cta-bg.jpg'],
   },
   robots: {
     index: true,
@@ -58,18 +97,19 @@ export const metadata = {
   manifest: '/site.webmanifest',
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#020617',
+}
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${playfair.variable} ${jetbrains.variable}`}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
           rel="stylesheet"
           href="https://api.fontshare.com/css?f%5B%5D=switzer@400,500,600,700&amp;display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap"
         />
       </head>
       <body className="text-[var(--color-text-dark)] antialiased">
@@ -79,9 +119,7 @@ export default function RootLayout({ children }) {
           <SiteFooter />
         </CurrencyProvider>
         <CookieConsent />
-        {/* Cloudflare Web Analytics loaded via dashboard */}
       </body>
     </html>
   )
 }
-// trigger rebuild

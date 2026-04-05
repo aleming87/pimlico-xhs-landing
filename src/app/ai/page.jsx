@@ -1,8 +1,20 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "AI Compliance — XHS™ Copilot",
-  description: "EU AI Act, national frameworks, risk classification, and conformity assessment. Regulatory monitoring for AI governance teams.",
+  title: "AI Compliance",
+  description: "EU AI Act, national frameworks, risk classification, and conformity assessment. Regulatory monitoring for AI governance teams across 275+ jurisdictions.",
+  alternates: { canonical: "/ai" },
+  openGraph: {
+    title: "AI Compliance | XHS™ Copilot",
+    description: "EU AI Act, risk classification, and governance frameworks. AI regulation, sourced and analyzed daily.",
+    url: "https://pimlicosolutions.com/ai",
+    images: ["/vertical-ai-hero.jpg"],
+  },
+  twitter: {
+    title: "AI Compliance | XHS™ Copilot",
+    description: "EU AI Act, risk classification, and governance frameworks. AI regulation, sourced and analyzed daily.",
+    images: ["/vertical-ai-hero.jpg"],
+  },
 };
 
 const CATEGORIES = [
@@ -19,9 +31,30 @@ const JURISDICTIONS = [
   "South Korea", "Australia", "India", "Brazil", "Israel", "UAE", "Saudi Arabia",
 ];
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pimlicosolutions.com" },
+    { "@type": "ListItem", "position": 2, "name": "Artificial Intelligence", "item": "https://pimlicosolutions.com/ai" },
+  ],
+};
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "XHS\u2122 Copilot for AI",
+  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+  "description": "AI regulatory monitoring across 45+ jurisdictions. EU AI Act, national frameworks, risk classification, conformity assessment, and governance.",
+  "areaServed": "Worldwide",
+  "serviceType": "Regulatory Compliance Software",
+};
+
 export default function AIPage() {
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 sm:py-28">

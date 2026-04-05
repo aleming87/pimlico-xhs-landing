@@ -1,8 +1,20 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Gambling Compliance — XHS™ Copilot",
-  description: "Licensing, responsible gaming, advertising, and AML across global gambling markets. Real-time regulatory monitoring for gaming compliance teams.",
+  title: "Gambling Compliance",
+  description: "Licensing, responsible gaming, advertising, and AML across global gambling markets. From UKGC and MGA to US state frameworks and emerging Latin American markets.",
+  alternates: { canonical: "/gambling" },
+  openGraph: {
+    title: "Gambling Compliance | XHS™ Copilot",
+    description: "Licensing, responsible gaming, advertising, and AML across global gambling markets.",
+    url: "https://pimlicosolutions.com/gambling",
+    images: ["/vertical-gambling-hero.jpg"],
+  },
+  twitter: {
+    title: "Gambling Compliance | XHS™ Copilot",
+    description: "Licensing, responsible gaming, advertising, and AML across global gambling markets.",
+    images: ["/vertical-gambling-hero.jpg"],
+  },
 };
 
 const CATEGORIES = [
@@ -20,9 +32,30 @@ const JURISDICTIONS = [
   "Colombia", "South Africa", "Nigeria",
 ];
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pimlicosolutions.com" },
+    { "@type": "ListItem", "position": 2, "name": "Gambling", "item": "https://pimlicosolutions.com/gambling" },
+  ],
+};
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "XHS\u2122 Copilot for Gambling",
+  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+  "description": "Gambling regulatory monitoring across 60+ licensed gaming jurisdictions. Licensing, responsible gaming, advertising, and AML.",
+  "areaServed": "Worldwide",
+  "serviceType": "Regulatory Compliance Software",
+};
+
 export default function GamblingPage() {
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />

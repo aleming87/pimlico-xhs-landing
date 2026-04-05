@@ -1,8 +1,20 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Payments & Crypto Compliance — XHS™ Copilot",
+  title: "Payments & Crypto Compliance",
   description: "PSD3, MiCA, PSR, and cross-border licensing. AML, operational resilience, and supervisory expectations across payments and crypto markets.",
+  alternates: { canonical: "/payments" },
+  openGraph: {
+    title: "Payments & Crypto Compliance | XHS™ Copilot",
+    description: "PSD3, MiCA, PSR, and cross-border licensing. Payments and crypto regulation, end to end.",
+    url: "https://pimlicosolutions.com/payments",
+    images: ["/vertical-payments-hero.jpg"],
+  },
+  twitter: {
+    title: "Payments & Crypto Compliance | XHS™ Copilot",
+    description: "PSD3, MiCA, PSR, and cross-border licensing. Payments and crypto regulation, end to end.",
+    images: ["/vertical-payments-hero.jpg"],
+  },
 };
 
 const CATEGORIES = [
@@ -19,9 +31,30 @@ const JURISDICTIONS = [
   "UAE", "Bahrain", "Australia", "Canada", "Brazil", "Mexico", "India", "South Korea",
 ];
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pimlicosolutions.com" },
+    { "@type": "ListItem", "position": 2, "name": "Payments & Crypto", "item": "https://pimlicosolutions.com/payments" },
+  ],
+};
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "XHS\u2122 Copilot for Payments & Crypto",
+  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+  "description": "Payments and crypto regulatory monitoring across 85+ jurisdictions. PSD3, MiCA, PSR, cross-border licensing, AML, and operational resilience.",
+  "areaServed": "Worldwide",
+  "serviceType": "Regulatory Compliance Software",
+};
+
 export default function PaymentsPage() {
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 sm:py-28">
