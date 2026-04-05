@@ -88,28 +88,28 @@ function calculatePrice(users, verticals, regions, billing) {
 
 const FAQS = [
   {
-    q: "What's included in the free trial?",
-    a: "Full platform access for 14 days. Up to 10 jurisdictions, all features, no credit card required.",
+    q: "What's in the trial?",
+    a: "Full access for 14 days. Up to 10 jurisdictions, every feature, no credit card.",
   },
   {
-    q: "Can I change my plan later?",
-    a: "Yes. You can upgrade, downgrade, or adjust your coverage at any time. Changes take effect on your next billing cycle.",
+    q: "Can I change plan later?",
+    a: "Yes. Upgrade, downgrade, or adjust coverage any time. Changes apply next cycle.",
   },
   {
     q: "How does per-user pricing work?",
-    a: "Each plan includes a base number of users. Additional seats are available at a per-user monthly rate that decreases as your team grows.",
+    a: "Each plan includes a base seat count. Extra seats scale down in price as your team grows.",
   },
   {
-    q: "Do you offer annual billing?",
-    a: "Yes. Annual billing saves 5% compared to monthly. You can switch between monthly and annual at any time.",
+    q: "Annual billing?",
+    a: "Yes. 5% off monthly. Switch any time.",
   },
   {
-    q: "What's the difference between coverage regions?",
-    a: "You can select specific regions (Europe, Americas, Asia-Pacific, Middle East, Africa) or choose global coverage. Pricing adjusts based on the breadth of your coverage.",
+    q: "What are the coverage regions?",
+    a: "Europe, Americas, Asia-Pacific, Middle East, Africa, or global. Price scales with breadth.",
   },
   {
-    q: "Is enterprise pricing available?",
-    a: "Yes. For teams of 25+ users or organizations needing custom integrations, dedicated support, or SLAs, contact us for tailored pricing.",
+    q: "Enterprise pricing?",
+    a: "For 25+ seats or custom procurement — SLAs, data residency, integrations. Contact sales.",
   },
 ];
 
@@ -222,7 +222,7 @@ export default function PricingPage() {
                   </div>
                 </div>
                 <p className="mt-2 text-xs text-[var(--color-text-muted)]">
-                  {users <= 3 ? "Professional" : users <= 10 ? "Team" : users <= 25 ? "Team (large)" : "Enterprise — custom pricing"}
+                  {users <= 3 ? "Professional" : users <= 10 ? "Team" : users <= 25 ? "Team Plus" : "Enterprise — custom"}
                 </p>
               </div>
 
@@ -290,7 +290,7 @@ export default function PricingPage() {
                       <span className="text-xs text-[var(--color-text-muted)]">/mo typical</span>
                     </div>
                     <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed mb-4">
-                      Custom pricing for teams of 25+. Tailored to your headcount, coverage, and procurement process.
+                      Custom pricing for 25+ seats. Shaped to your headcount, coverage, and procurement.
                     </p>
 
                     <div className="mb-4 rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-base)]/40 p-4">
@@ -389,7 +389,7 @@ export default function PricingPage() {
                         </span>
                       </div>
                       <div className="flex justify-between py-2">
-                        <span className="text-xs text-[var(--color-text-tertiary)]">AI credits/mo</span>
+                        <span className="text-xs text-[var(--color-text-tertiary)]">Lens&trade; credits/mo</span>
                         <span className="text-xs font-mono text-[var(--color-text-secondary)]">
                           {users <= 3 ? "500" : users <= 10 ? "500" : users <= 25 ? "1,000" : "2,500"}
                         </span>
@@ -465,7 +465,7 @@ export default function PricingPage() {
 
                     {quoteSent && (
                       <p className="mt-3 text-xs text-center text-[var(--color-text-tertiary)]">
-                        Quote sent. We'll be in touch shortly.
+                        Quote sent. Check your inbox.
                       </p>
                     )}
                   </>
@@ -480,19 +480,19 @@ export default function PricingPage() {
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ INCLUDED IN EVERY PLAN ]
+            [ IN EVERY PLAN ]
           </p>
           <h2 className="text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-12">
-            Everything you need to stay ahead.
+            The full platform. No tiers on features.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { title: "Real-time monitoring", desc: "12,000+ regulatory sources tracked continuously. Changes detected, classified, and delivered as they happen." },
-              { title: "XHS\u2122 Copilot AI", desc: "500+ AI credits included. Source-grounded, cited answers powered by cutting-edge AI models. DeepL\u2122 translation across 30+ languages." },
-              { title: "Jurisdiction reports", desc: "In-depth profiles for every monitored jurisdiction. Regulator directories, licensing requirements, and compliance obligations." },
-              { title: "Workspace tools", desc: "Projects, Lens\u2122 compliance analysis, Blocklists\u2122, Competitors\u2122, Technical Standards\u2122, and team collaboration." },
-              { title: "Integrations & alerts", desc: "Slack and Teams integration, email digests, watchlists, and API access. Regulatory updates delivered where your team works." },
-              { title: "Unlimited users", desc: "No per-seat pricing on Team and Enterprise plans. Your entire compliance team gets access from day one." },
+              { title: "Real-time monitoring", desc: "12,000+ sources tracked continuously. Changes detected and classified as they happen." },
+              { title: "Jurisdiction reports", desc: "Expert-curated legal analysis, licensing frameworks, enforcement history, and regulator directories." },
+              { title: "Lens\u2122 AI", desc: "500+ credits included. Citation-backed answers, gap analysis, DeepL\u2122 translation across 30+ languages." },
+              { title: "Workspace tools", desc: "Projects, Blocklists\u2122, Competitors\u2122, Technical Standards\u2122, and team collaboration." },
+              { title: "Integrations & alerts", desc: "Slack, Teams, email digests, watchlists, API. Delivered where your team already works." },
+              { title: "Team access", desc: "Scaling seat economics across plans. Your full compliance team, day one." },
             ].map((f) => (
               <div key={f.title}>
                 <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-1">{f.title}</h3>
@@ -510,7 +510,7 @@ export default function PricingPage() {
             [ FAQ ]
           </p>
           <h2 className="text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-10">
-            Common questions
+            Questions, answered.
           </h2>
           <div>
             {FAQS.map((faq) => (
@@ -524,10 +524,10 @@ export default function PricingPage() {
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl">
-            Start your free trial
+            See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14 days. Full access. No credit card required.
+            14-day trial. Full access. No card.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">
