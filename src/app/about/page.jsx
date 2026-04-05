@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata = {
   title: "About",
@@ -46,8 +45,6 @@ const STATS = [
 export default function AboutPage() {
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
-
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata = {
   title: "Gambling Compliance",
@@ -47,7 +46,7 @@ const productSchema = {
   "@type": "Service",
   "name": "XHS\u2122 Copilot for Gambling",
   "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
-  "description": "Gambling regulatory monitoring across 60+ licensed gaming jurisdictions. Licensing, responsible gaming, advertising, and AML.",
+  "description": "Gambling regulatory monitoring across licensed gaming jurisdictions worldwide. Licensing, responsible gaming, advertising, and AML.",
   "areaServed": "Worldwide",
   "serviceType": "Regulatory Compliance Software",
 };
@@ -57,7 +56,6 @@ export default function GamblingPage() {
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Gambling" }]} />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
@@ -72,11 +70,11 @@ export default function GamblingPage() {
             From the UKGC and MGA to US state-by-state frameworks and emerging Latin American markets. Licensing, responsible gaming, advertising, and AML — sourced and analyzed daily.
           </p>
 
-          {/* Static stats — Harvey pattern */}
+          {/* Static stats — using platform-wide verified numbers */}
           <div className="flex gap-10 sm:gap-16 mb-12">
             {[
-              { value: "60+", label: "Gaming jurisdictions" },
-              { value: "400+", label: "Regulations tracked" },
+              { value: "275+", label: "Jurisdictions" },
+              { value: "12,000+", label: "Sources" },
               { value: "Daily", label: "Change detection" },
             ].map((stat) => (
               <div key={stat.label}>

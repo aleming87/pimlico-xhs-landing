@@ -75,10 +75,10 @@ export default function ProductShowcase() {
     [active]
   );
 
-  // Autoplay disabled by default — users click tabs to explore. This keeps the
-  // page calmer since Testimonials also rotates.
-  // Re-enable by setting AUTO_CYCLE_ENABLED = true.
-  const AUTO_CYCLE_ENABLED = false;
+  // Autoplay on — rotates through product screens. Respects prefers-reduced-motion
+  // and pauses on hover. Testimonials rotates on a different cadence (7s vs 3.5s)
+  // so both can run without feeling frenetic.
+  const AUTO_CYCLE_ENABLED = true;
 
   useEffect(() => {
     if (!AUTO_CYCLE_ENABLED || paused || !isInView || reducedMotion) return;

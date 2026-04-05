@@ -30,44 +30,11 @@ export default function NotFound() {
             Back to home
           </Link>
           <Link
-            href="/pricing"
+            href="/contact"
             className="rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-all hover:border-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
           >
-            See pricing
+            Contact sales
           </Link>
-          <Link
-            href="/contact"
-            className="rounded-lg px-6 py-2.5 text-sm font-medium text-[var(--color-text-muted)] transition-all hover:text-[var(--color-text-primary)]"
-          >
-            Contact sales &rarr;
-          </Link>
-        </div>
-
-        <div className="mt-16 pt-10 border-t border-[var(--color-border-default)]/20">
-          <p className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-4">
-            [ COMMON DESTINATIONS ]
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-            <Link href="/gambling" className="text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors">
-              Gambling
-            </Link>
-            <span className="text-[var(--color-border-default)]">&middot;</span>
-            <Link href="/payments" className="text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors">
-              Payments &amp; Crypto
-            </Link>
-            <span className="text-[var(--color-border-default)]">&middot;</span>
-            <Link href="/ai" className="text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors">
-              AI
-            </Link>
-            <span className="text-[var(--color-border-default)]">&middot;</span>
-            <Link href="/insights" className="text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors">
-              Insights
-            </Link>
-            <span className="text-[var(--color-border-default)]">&middot;</span>
-            <Link href="/security" className="text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition-colors">
-              Security
-            </Link>
-          </div>
         </div>
       </div>
     </main>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata = {
   title: "Payments & Crypto Compliance",
@@ -46,7 +45,7 @@ const productSchema = {
   "@type": "Service",
   "name": "XHS\u2122 Copilot for Payments & Crypto",
   "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
-  "description": "Payments and crypto regulatory monitoring across 85+ jurisdictions. PSD3, MiCA, PSR, cross-border licensing, AML, and operational resilience.",
+  "description": "Payments and crypto regulatory monitoring across licensed markets worldwide. PSD3, MiCA, PSR, cross-border licensing, AML, and operational resilience.",
   "areaServed": "Worldwide",
   "serviceType": "Regulatory Compliance Software",
 };
@@ -56,7 +55,6 @@ export default function PaymentsPage() {
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Payments & Crypto" }]} />
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 sm:py-28">
@@ -72,8 +70,8 @@ export default function PaymentsPage() {
 
           <div className="flex gap-10 sm:gap-16 mb-12">
             {[
-              { value: "85+", label: "Payment jurisdictions" },
-              { value: "600+", label: "Regulations tracked" },
+              { value: "275+", label: "Jurisdictions" },
+              { value: "12,000+", label: "Sources" },
               { value: "Daily", label: "Change detection" },
             ].map((stat) => (
               <div key={stat.label}>
