@@ -34,6 +34,7 @@ export default function sitemap() {
     { path: '/ai', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/verticals', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/insights', priority: 0.8, changeFrequency: 'daily' },
+    { path: '/about', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/security', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
     { path: '/terms-and-conditions', priority: 0.3, changeFrequency: 'yearly' },

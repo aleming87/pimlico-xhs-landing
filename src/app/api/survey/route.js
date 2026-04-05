@@ -486,7 +486,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
                 <tr>
                   <td align="center" style="padding-bottom: 20px;">
                     <!-- Social Media Icons -->
-                    <a href="https://www.pimlicosolutions.com" style="display: inline-block; margin: 0 8px; text-decoration: none;">
+                    <a href="https://pimlicosolutions.com" style="display: inline-block; margin: 0 8px; text-decoration: none;">
                       <img src="https://img.icons8.com/material-outlined/20/94a3b8/domain.png" alt="Website" width="20" height="20" style="display: block; opacity: 0.7;" />
                     </a>
                     <a href="https://www.linkedin.com/company/wearepimlico" style="display: inline-block; margin: 0 8px; text-decoration: none;">

@@ -13,7 +13,7 @@ const categoryImages = {
 // Helper to fetch articles (migrated from Vercel Blob to API-based)
 async function getArticleBySlug(slug) {
   try {
-    const response = await fetch(`https://www.pimlicosolutions.com/api/articles?slug=${slug}`, {
+    const response = await fetch(`https://pimlicosolutions.com/api/articles?slug=${slug}`, {
       cache: 'no-store',
     });
     if (!response.ok) return null;
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
 
-  const baseUrl = 'https://www.pimlicosolutions.com';
+  const baseUrl = 'https://pimlicosolutions.com';
 
   if (!article) {
     return {
@@ -114,7 +114,7 @@ export async function generateMetadata({ params }) {
 export default async function ArticlePage({ params }) {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  const baseUrl = 'https://www.pimlicosolutions.com';
+  const baseUrl = 'https://pimlicosolutions.com';
 
   const articleSchema = article
     ? {

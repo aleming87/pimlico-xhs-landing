@@ -1,14 +1,14 @@
 {
-  "name": "Pimlico XHS",
-  "short_name": "XHS",
-  "description": "AI-Powered Regulatory Compliance Workspaces",
+  "name": "XHS™ Copilot",
+  "short_name": "XHS Copilot",
+  "description": "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1f2937",
-  "theme_color": "#2563eb",
+  "background_color": "#020617",
+  "theme_color": "#020617",
   "icons": [
     {
-      "src": "/Pimlico_SI_Brandmark - II.png",
+      "src": "/favicon.png",
       "sizes": "512x512",
       "type": "image/png"
     }

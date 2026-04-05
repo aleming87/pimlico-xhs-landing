@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata = {
   title: "Payments & Crypto Compliance",
@@ -55,6 +56,7 @@ export default function PaymentsPage() {
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Payments & Crypto" }]} />
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 sm:py-28">
@@ -149,7 +151,7 @@ export default function PaymentsPage() {
             See it in your markets.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14-day trial. Full access. No card.
+            14-day trial. Full access. No credit card.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

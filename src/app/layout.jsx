@@ -69,8 +69,8 @@ export const metadata = {
     images: [
       {
         url: '/cta-bg.jpg',
-        width: 1200,
-        height: 630,
+        width: 1920,
+        height: 1278,
         alt: 'XHS™ Copilot — Every regulatory change. Analyzed.',
       },
     ],

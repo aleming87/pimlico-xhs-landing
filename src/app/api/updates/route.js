@@ -35,7 +35,7 @@ async function writeBlob(key, data) {
   await put(key, JSON.stringify(data, null, 2), { access: 'public', addRandomSuffix: false, contentType: 'application/json' });
 }
 
-const XHS_LOGO_WHITE = 'https://www.pimlicosolutions.com/_next/image?url=%2FXHS_Logo_White.png&w=750&q=75';
+const XHS_LOGO_WHITE = 'https://pimlicosolutions.com/_next/image?url=%2FXHS_Logo_White.png&w=750&q=75';
 
 /* ──────────────────────────────────────────────
    LIGHT EMAIL SHELL
@@ -103,7 +103,7 @@ function emailShellLight({ subject, preheader, headerHtml, bodyHtml }) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;">
-  <img class="ftr-logo" src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;" />
+  <img class="ftr-logo" src="https://pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;" />
 </td>
 <td style="vertical-align:middle;text-align:right;">
   <a class="cta-btn" href="https://pimlicosolutions.com" style="display:inline-block;background-color:#1e3a8a;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:8px 18px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>
@@ -196,7 +196,7 @@ function emailShellDark({ subject, preheader, headerHtml, bodyHtml }) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td style="vertical-align:middle;text-align:left;">
-  <img class="ftr-logo" src="https://www.pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;filter:brightness(0) invert(1);" />
+  <img class="ftr-logo" src="https://pimlicosolutions.com/Pimlico_Logo.png" alt="Pimlico" width="90" style="width:90px;height:auto;display:block;filter:brightness(0) invert(1);" />
 </td>
 <td style="vertical-align:middle;text-align:right;">
   <a class="cta-btn" href="https://pimlicosolutions.com" style="display:inline-block;background-color:#3b82f6;color:#ffffff;font-size:11px;font-weight:600;text-decoration:none;padding:8px 18px;border-radius:5px;letter-spacing:.2px;">Open in XHS &rarr;</a>

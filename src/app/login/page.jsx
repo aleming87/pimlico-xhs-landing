@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Log in - XHS\u2122 Copilot",
-  description: "Log in to your XHS\u2122 Copilot account.",
+  title: "Sign in",
+  description: "Sign in to your XHS\u2122 Copilot regulatory workspace.",
+  robots: { index: false, follow: false },
 };
 
 export default function LoginPage() {

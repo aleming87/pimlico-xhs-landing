@@ -54,8 +54,18 @@ const ease = [0.25, 0.1, 0.25, 1];
 export default function ProductShowcase() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = (e) => setReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const goTo = useCallback(
     (idx) => {
@@ -65,13 +75,18 @@ export default function ProductShowcase() {
     [active]
   );
 
+  // Autoplay disabled by default — users click tabs to explore. This keeps the
+  // page calmer since Testimonials also rotates.
+  // Re-enable by setting AUTO_CYCLE_ENABLED = true.
+  const AUTO_CYCLE_ENABLED = false;
+
   useEffect(() => {
-    if (paused || !isInView) return;
+    if (!AUTO_CYCLE_ENABLED || paused || !isInView || reducedMotion) return;
     const timer = setInterval(() => {
       setActive((prev) => (prev + 1) % SCREENS.length);
     }, AUTO_CYCLE_MS);
     return () => clearInterval(timer);
-  }, [paused, isInView]);
+  }, [paused, isInView, reducedMotion]);
 
   const screen = SCREENS[active];
 

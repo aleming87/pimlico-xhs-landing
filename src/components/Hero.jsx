@@ -12,18 +12,32 @@ const PAUSE_AFTER_TYPE = 2500;
 const PAUSE_AFTER_DELETE = 400;
 
 export default function Hero() {
-  const [displayText, setDisplayText] = useState("");
+  // Seed with "Analyzed." so SSR HTML matches <title> and Google sees a complete h1.
+  // After hydration the typewriter effect resets and runs through the full WORDS list.
+  const [displayText, setDisplayText] = useState("Analyzed.");
   const [wordIndex, setWordIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
+  const [showCursor, setShowCursor] = useState(false);
   const [visible, setVisible] = useState(true);
   const [cycles, setCycles] = useState(0);
   const [done, setDone] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const TOTAL_CYCLES = 2;
 
+  // Kick off the typewriter after hydration + a short delay, so the static
+  // "Analyzed." fallback is visible first and matches the <title>.
   useEffect(() => {
-    if (done) return;
+    const t = setTimeout(() => {
+      setDisplayText("");
+      setShowCursor(true);
+      setStarted(true);
+    }, 900);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!started || done) return;
 
     const word = WORDS[wordIndex];
 
@@ -58,7 +72,7 @@ export default function Hero() {
       }, 350);
     }, PAUSE_AFTER_TYPE);
     return () => clearTimeout(t);
-  }, [charIndex, wordIndex, done, cycles]);
+  }, [charIndex, wordIndex, done, cycles, started]);
 
   return (
     <div className="bg-[var(--color-bg-base)]">

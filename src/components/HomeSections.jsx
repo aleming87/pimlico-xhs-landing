@@ -189,14 +189,24 @@ const ease = [0.25, 0.1, 0.25, 1];
 export function Testimonials() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (paused) return;
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = (e) => setReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    if (paused || reducedMotion) return;
     const timer = setInterval(() => {
       setActive((i) => (i + 1) % TESTIMONIALS.length);
     }, CYCLE_MS);
     return () => clearInterval(timer);
-  }, [paused]);
+  }, [paused, reducedMotion]);
 
   const current = TESTIMONIALS[active];
 
@@ -213,7 +223,12 @@ export function Testimonials() {
           </p>
         </Reveal>
 
-        <div className="min-h-[22rem] sm:min-h-[20rem] flex flex-col items-center justify-center">
+        <div
+          className="min-h-[22rem] sm:min-h-[20rem] flex flex-col items-center justify-center"
+          role="region"
+          aria-live="polite"
+          aria-label="Customer testimonial"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -285,7 +300,7 @@ export function FinalCTA() {
             See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14-day trial. Full access. No card.
+            14-day trial. Full access. No credit card.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="https://xhsdata.ai/register" className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">

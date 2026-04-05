@@ -11,6 +11,7 @@ const FOOTER_LINKS = {
   Resources: [
     { label: "Insights", href: "/insights" },
     { label: "Security", href: "/security" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
   Legal: [
