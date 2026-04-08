@@ -63,7 +63,7 @@ export function AnimatedImpactScore() {
 
 // Animated Collaborate Component with Scrolling Names
 const newActivitiesList = [
-  { name: 'Alex', initials: 'AM', color: 'purple', action: 'updated status', detail: 'PSD3 implementation timeline adjusted' },
+  { name: 'Alex', initials: 'AM', color: 'purple', action: 'updated status', detail: 'DORA compliance timeline adjusted' },
   { name: 'Maria', initials: 'MR', color: 'pink', action: 'added comment', detail: 'MiCA requirements need clarification' },
   { name: 'David', initials: 'DL', color: 'yellow', action: 'shared document', detail: 'Q4 compliance checklist ready for review' },
 ];

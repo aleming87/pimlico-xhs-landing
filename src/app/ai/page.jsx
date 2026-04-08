@@ -27,8 +27,8 @@ const CATEGORIES = [
 ];
 
 const JURISDICTIONS = [
-  "EU", "UK", "US federal", "US states", "China", "Canada", "Singapore", "Japan",
-  "South Korea", "Australia", "India", "Brazil", "Israel", "UAE", "Saudi Arabia",
+  "European Union", "United Kingdom", "United States", "Canada", "Singapore", "Japan",
+  "South Korea", "Australia", "Brazil",
 ];
 
 const breadcrumbSchema = {

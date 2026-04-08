@@ -13,6 +13,7 @@ export default function robots() {
           '/quick-survey',
           '/xhs-monitoring-survey',
           '/contact/thank-you',
+          '/showcase',
         ],
       },
     ],

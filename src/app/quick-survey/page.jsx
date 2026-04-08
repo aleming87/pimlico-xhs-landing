@@ -163,7 +163,7 @@ export default function QuickSurveyPage() {
       'Interchange Fee Regulation', 'MiCA Compliance', 
       'Open Banking & API Standards', 'Payment Innovation Frameworks', 
       'Payment Institution Licensing', 'Payment Security Standards', 
-      'PSD3 & Payment Services Regulation', 'Stablecoin Requirements', 
+      'PSD2 & Payment Services Regulation', 'Stablecoin Requirements',
       'Strong Customer Authentication (SCA)'
     ],
     Gambling: [

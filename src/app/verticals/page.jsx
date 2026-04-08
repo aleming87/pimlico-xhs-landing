@@ -26,28 +26,28 @@ const VERTICALS = [
       { name: "Technical Standards", desc: "RNG certification, game fairness testing, platform security, and data protection requirements." },
       { name: "Enforcement & Sanctions", desc: "Regulatory actions, fines, license revocations, and compliance orders tracked in real time." },
     ],
-    jurisdictions: ["UK", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark", "Finland", "Spain", "Italy", "France", "Greece", "Romania", "Bulgaria", "Croatia", "US (50 states)", "Canada", "Australia", "Philippines", "Macau", "Brazil", "Colombia", "South Africa", "Nigeria", "Kenya"],
+    jurisdictions: ["United Kingdom", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark", "Finland", "Spain", "Italy", "France", "Greece", "Romania", "United States", "Ontario", "Australia", "Brazil", "Philippines"],
   },
   {
     id: "payments",
     label: "Payments & Crypto",
     image: "/vertical-payments-hero.jpg",
     headline: "Payments and crypto regulation. End to end.",
-    desc: "From PSD3 and MiCA in Europe to state-level money transmission in the US, and emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience, and supervisory expectations.",
+    desc: "PSD2, MiCA, and DORA in Europe, state-level money transmission in the US, and emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience, and supervisory expectations.",
     stats: [
       { value: "275+", label: "Jurisdictions" },
       { value: "12,000+", label: "Sources" },
       { value: "Daily", label: "Updates" },
     ],
     categories: [
-      { name: "Payment Services & EMI", desc: "Licensing and authorization for payment institutions and EMIs. PSD3, PSR, open banking, and state-level money transmission." },
+      { name: "Payment Services & EMI", desc: "Licensing and authorisation for payment institutions and e-money issuers. PSD2, EMD2, open banking, and state-level money transmission." },
       { name: "Crypto & Digital Assets", desc: "Exchange licensing, stablecoin regulation, custody rules, and token classification. MiCA, MAS frameworks, and US state requirements." },
       { name: "AML & Financial Crime", desc: "Travel rule, transaction monitoring, customer due diligence, beneficial ownership, and sanctions screening across jurisdictions." },
       { name: "Operational Resilience", desc: "ICT risk management, incident reporting, business continuity, and outsourcing requirements. DORA, FCA, and MAS frameworks." },
       { name: "Consumer Protection", desc: "Disclosure requirements, complaint handling, safeguarding obligations, and conduct of business rules." },
       { name: "Cross-Border Payments", desc: "Passporting, third-country equivalence, correspondent banking requirements, and cross-border payment flow regulations." },
     ],
-    jurisdictions: ["EU", "UK", "US", "Singapore", "Hong Kong", "Japan", "Switzerland", "UAE", "Bahrain", "Australia", "Canada", "Brazil", "India", "South Korea", "Turkey", "South Africa", "Nigeria"],
+    jurisdictions: ["European Union", "United Kingdom", "United States", "Singapore", "Hong Kong", "Switzerland", "United Arab Emirates", "Australia", "Canada", "Japan", "South Korea", "Brazil"],
   },
   {
     id: "ai",
@@ -68,7 +68,7 @@ const VERTICALS = [
       { name: "National Security & Export Controls", desc: "Restrictions on AI technology transfers, export controls, and chip regulations affecting AI development." },
       { name: "Compute & Infrastructure", desc: "Requirements for AI computing resources, hardware restrictions, and data center regulations." },
     ],
-    jurisdictions: ["EU", "UK", "US", "China", "Canada", "Singapore", "Japan", "South Korea", "Australia", "India", "Brazil", "Israel", "UAE", "Saudi Arabia"],
+    jurisdictions: ["European Union", "United Kingdom", "United States", "Canada", "Singapore", "Japan", "South Korea", "Australia", "Brazil"],
   },
 ];
 

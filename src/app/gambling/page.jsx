@@ -27,9 +27,9 @@ const CATEGORIES = [
 ];
 
 const JURISDICTIONS = [
-  "UK", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark",
-  "Spain", "Italy", "France", "Romania", "US (50 states)", "Ontario", "Australia", "Brazil",
-  "Colombia", "South Africa", "Nigeria",
+  "United Kingdom", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark",
+  "Finland", "Spain", "Italy", "France", "Greece", "Romania", "United States", "Ontario",
+  "Australia", "Brazil", "Philippines",
 ];
 
 const breadcrumbSchema = {

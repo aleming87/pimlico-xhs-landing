@@ -49,7 +49,7 @@ export default function DeploySection() {
     },
     'payments-consumer': {
       title: 'Consumer Protection & Conduct',
-      description: 'Monitor consumer protection regulations including PSD2/PSD3 requirements, strong customer authentication, payment service user rights, dispute resolution mechanisms, transparency requirements, and unfair practice prohibitions.',
+      description: 'Monitor consumer protection regulations including PSD2 requirements, strong customer authentication, payment service user rights, dispute resolution mechanisms, transparency requirements, and unfair practice prohibitions.',
     },
     // Gambling Categories
     'gambling-licensing': {

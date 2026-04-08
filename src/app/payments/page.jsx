@@ -2,23 +2,23 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Payments & Crypto Compliance",
-  description: "PSD3, MiCA, PSR, and cross-border licensing. AML, operational resilience, and supervisory expectations across payments and crypto markets.",
+  description: "PSD2, MiCA, EMD2, and cross-border licensing. AML, operational resilience, and supervisory expectations across payments and crypto markets.",
   alternates: { canonical: "/payments" },
   openGraph: {
     title: "Payments & Crypto Compliance | XHS™ Copilot",
-    description: "PSD3, MiCA, PSR, and cross-border licensing. Payments and crypto regulation, end to end.",
+    description: "PSD2, MiCA, EMD2, and cross-border licensing. Payments and crypto regulation, end to end.",
     url: "https://pimlicosolutions.com/payments",
     images: ["/vertical-payments-hero.jpg"],
   },
   twitter: {
     title: "Payments & Crypto Compliance | XHS™ Copilot",
-    description: "PSD3, MiCA, PSR, and cross-border licensing. Payments and crypto regulation, end to end.",
+    description: "PSD2, MiCA, EMD2, and cross-border licensing. Payments and crypto regulation, end to end.",
     images: ["/vertical-payments-hero.jpg"],
   },
 };
 
 const CATEGORIES = [
-  { name: "Payment Services & EMI", desc: "Licensing and authorization for payment institutions and EMIs. PSD3, PSR, open banking, and US state money transmission." },
+  { name: "Payment Services & EMI", desc: "Licensing and authorisation for payment institutions and e-money issuers. PSD2, EMD2, open banking, and US state money transmission." },
   { name: "Crypto & Digital Assets", desc: "Exchange licensing, stablecoin regulation, custody rules, and token classification. MiCA, MAS, and state-level requirements." },
   { name: "AML & Financial Crime", desc: "Travel rule, transaction monitoring, CDD, beneficial ownership, and sanctions screening across jurisdictions." },
   { name: "Operational Resilience", desc: "ICT risk management, incident reporting, business continuity, and outsourcing. DORA, FCA, and MAS frameworks." },
@@ -27,8 +27,8 @@ const CATEGORIES = [
 ];
 
 const JURISDICTIONS = [
-  "EU27", "UK", "US federal", "US states", "Singapore", "Hong Kong", "Japan", "Switzerland",
-  "UAE", "Bahrain", "Australia", "Canada", "Brazil", "Mexico", "India", "South Korea",
+  "European Union", "United Kingdom", "United States", "Singapore", "Hong Kong", "Switzerland",
+  "United Arab Emirates", "Australia", "Canada", "Japan", "South Korea", "Brazil",
 ];
 
 const breadcrumbSchema = {
@@ -45,7 +45,7 @@ const productSchema = {
   "@type": "Service",
   "name": "XHS\u2122 Copilot for Payments & Crypto",
   "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
-  "description": "Payments and crypto regulatory monitoring across licensed markets worldwide. PSD3, MiCA, PSR, cross-border licensing, AML, and operational resilience.",
+  "description": "Payments and crypto regulatory monitoring across licensed markets worldwide. PSD2, MiCA, EMD2, cross-border licensing, AML, and operational resilience.",
   "areaServed": "Worldwide",
   "serviceType": "Regulatory Compliance Software",
 };
@@ -65,7 +65,7 @@ export default function PaymentsPage() {
             Payments and crypto regulation. End to end.
           </h1>
           <p className="text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-2xl mb-10">
-            PSD3 and MiCA in Europe, state money transmission in the US, emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience — sourced and analyzed daily.
+            PSD2, MiCA, and DORA in Europe, state money transmission in the US, emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience — sourced and analysed daily.
           </p>
 
           <div className="flex gap-10 sm:gap-16 mb-12">

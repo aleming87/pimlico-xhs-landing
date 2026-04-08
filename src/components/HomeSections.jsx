@@ -26,7 +26,7 @@ export function TrustedBy() {
 export function Sectors() {
   const sectors = [
     { title: "Gambling", desc: "Licensing, responsible gaming, advertising, and AML across global markets.", href: "/gambling", image: "/sector-gambling.jpg" },
-    { title: "Payments & Crypto", desc: "PSD3, MiCA, PSR, cross-border licensing, and operational resilience.", href: "/payments", image: "/sector-payments.jpg" },
+    { title: "Payments & Crypto", desc: "PSD2, MiCA, DORA, cross-border licensing, and operational resilience.", href: "/payments", image: "/sector-payments.jpg" },
     { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, risk classification, and conformity assessment.", href: "/ai", image: "/sector-ai.jpg" },
   ];
 
@@ -98,12 +98,12 @@ export function Coverage() {
           <Reveal delay={0.15}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
               {[
-                { region: "Europe", highlight: "UK, EU27, Gibraltar, Malta, Isle of Man, Switzerland, Channel Islands" },
-                { region: "North America", highlight: "US federal, 50 states + DC, Canada + provinces, Mexico" },
-                { region: "Latin America & Caribbean", highlight: "Brazil, Mexico, Cayman, Curaçao, Bahamas, Bermuda, BVI, Jamaica" },
-                { region: "Asia-Pacific", highlight: "Singapore, Hong Kong, Japan, Australia, Macau, Philippines, South Korea" },
-                { region: "Middle East & Africa", highlight: "UAE, Dubai, Saudi Arabia, Qatar, South Africa, Nigeria, Kenya" },
-                { region: "Supranational", highlight: "EU institutions, FATF, Basel, IOSCO, OECD, FSB, BIS" },
+                { region: "Europe", highlight: "UK, EU, Gibraltar, Malta, Isle of Man, Switzerland, Netherlands, Germany, Sweden, Finland" },
+                { region: "North America", highlight: "US federal + states, Canada + provinces" },
+                { region: "Latin America & Caribbean", highlight: "Brazil, Colombia, Cura\u00e7ao, Cayman Islands" },
+                { region: "Asia-Pacific", highlight: "Singapore, Hong Kong, Japan, Australia, Philippines, South Korea" },
+                { region: "Middle East & Africa", highlight: "UAE, Saudi Arabia, Qatar, Bahrain, South Africa" },
+                { region: "Supranational", highlight: "EU institutions, FATF, Basel Committee, IOSCO, FSB" },
               ].map((item) => (
                 <div key={item.region}>
                   <p className="text-sm font-medium text-[var(--color-text-primary)]">{item.region}</p>
