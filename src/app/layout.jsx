@@ -125,19 +125,75 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Pimlico Solutions",
-              "alternateName": "XHS",
+              "legalName": "Pimlico Solutions Ltd",
+              "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot"],
               "url": "https://pimlicosolutions.com",
               "logo": "https://pimlicosolutions.com/Pimlico_SI_Brandmark.png",
-              "description": "AI-powered regulatory compliance workspaces for Gambling, Payments, Crypto and AI teams.",
+              "image": "https://pimlicosolutions.com/cta-bg.jpg",
+              "description": "Pimlico Solutions is a regulatory technology company that builds XHS™ Copilot — an AI-powered compliance workspace for teams in gambling, payments, crypto, and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering real-time regulatory intelligence, AI-generated jurisdiction reports, and collaborative compliance tools.",
               "foundingDate": "2024",
+              "foundingLocation": {
+                "@type": "Place",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "London",
+                  "addressCountry": "GB"
+                }
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "71-75 Shelton Street, Covent Garden",
+                "addressLocality": "London",
+                "postalCode": "WC2H 9JQ",
+                "addressCountry": "GB"
+              },
+              "areaServed": "Worldwide",
+              "industry": "Regulatory Technology",
+              "numberOfEmployees": {
+                "@type": "QuantitativeValue",
+                "minValue": 2,
+                "maxValue": 10
+              },
+              "knowsAbout": [
+                "Regulatory compliance",
+                "Gambling regulation",
+                "Payments regulation",
+                "Cryptocurrency regulation",
+                "AI regulation",
+                "EU AI Act",
+                "MiCA",
+                "PSD2",
+                "DORA",
+                "UKGC compliance",
+                "MGA compliance",
+                "Regulatory intelligence",
+                "Compliance automation"
+              ],
               "sameAs": [
                 "https://www.linkedin.com/company/pimlicoxhs",
-                "https://twitter.com/pimlicoxhs"
+                "https://twitter.com/pimlicoxhs",
+                "https://find-and-update.company-information.service.gov.uk/company/15725938"
               ],
               "contactPoint": {
                 "@type": "ContactPoint",
                 "contactType": "sales",
-                "url": "https://pimlicosolutions.com/contact"
+                "url": "https://pimlicosolutions.com/contact",
+                "availableLanguage": "English"
+              },
+              "brand": {
+                "@type": "Brand",
+                "name": "XHS™ Copilot",
+                "description": "AI-powered regulatory compliance workspace",
+                "url": "https://pimlicosolutions.com"
+              },
+              "makesOffer": {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "SoftwareApplication",
+                  "name": "XHS™ Copilot",
+                  "applicationCategory": "BusinessApplication",
+                  "operatingSystem": "Web"
+                }
               }
             }),
           }}
@@ -149,12 +205,13 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "XHS™ Copilot",
-              "alternateName": "Pimlico XHS",
+              "alternateName": ["Pimlico XHS", "Pimlico Solutions", "XHS Copilot"],
               "url": "https://pimlicosolutions.com",
               "description": "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
               "publisher": {
                 "@type": "Organization",
-                "name": "Pimlico Solutions"
+                "name": "Pimlico Solutions",
+                "url": "https://pimlicosolutions.com"
               }
             }),
           }}

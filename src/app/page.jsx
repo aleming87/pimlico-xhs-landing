@@ -11,48 +11,45 @@ export const metadata = {
 }
 
 export default function Page() {
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Pimlico Solutions",
-    "alternateName": "XHS\u2122 Copilot",
-    "url": "https://pimlicosolutions.com",
-    "logo": "https://pimlicosolutions.com/dual-logo.png",
-    "description": "AI compliance workspaces for regulated teams. Every regulatory change. Analyzed.",
-    "sameAs": [
-      "https://www.linkedin.com/company/pimlico-solutions",
-      "https://twitter.com/pimlicoxhs"
-    ]
-  };
-
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "XHS\u2122 Copilot",
+    "name": "XHS™ Copilot",
+    "alternateName": ["XHS Copilot", "Pimlico XHS"],
     "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "Regulatory Compliance Software",
+    "creator": {
+      "@type": "Organization",
+      "name": "Pimlico Solutions",
+      "url": "https://pimlicosolutions.com"
+    },
     "offers": {
       "@type": "AggregateOffer",
       "lowPrice": "660",
       "highPrice": "8800",
       "priceCurrency": "GBP",
-      "priceSpecification": {
-        "@type": "UnitPriceSpecification",
-        "price": "660",
-        "priceCurrency": "GBP",
-        "billingDuration": "P1M"
-      }
+      "offerCount": "4"
     },
-    "description": "AI compliance workspaces for regulated teams. Monitor, analyze, and collaborate on Gambling, Payments, Crypto, and AI regulations across 275+ jurisdictions.",
+    "description": "XHS™ Copilot is a regulatory intelligence platform that monitors 275+ jurisdictions across gambling, payments, crypto, and AI regulation. It delivers AI-generated jurisdiction reports, real-time regulatory change detection, and collaborative compliance workspaces for legal and compliance teams.",
     "operatingSystem": "Web",
-    "featureList": "Regulatory monitoring, Jurisdiction reports, Lens AI analysis, Slack and Teams integration, Team collaboration, Real-time change detection"
+    "screenshot": "https://pimlicosolutions.com/cta-bg.jpg",
+    "featureList": [
+      "Real-time regulatory monitoring across 275+ jurisdictions",
+      "AI-generated jurisdiction reports and analysis",
+      "Gambling, payments, crypto, and AI compliance coverage",
+      "Collaborative team workspaces with project tracking",
+      "Regulatory change alerts and notifications",
+      "Watchlists and custom research tools",
+      "Slack and Microsoft Teams integration"
+    ],
+    "audience": {
+      "@type": "BusinessAudience",
+      "audienceType": "Compliance teams, legal teams, regulatory affairs professionals"
+    }
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
