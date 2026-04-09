@@ -1,16 +1,16 @@
 export const metadata = {
-  title: 'Insights',
-  description: 'Regulatory briefings, sector analysis, and implementation notes from the Pimlico research team. Gambling, Payments, Crypto, and AI compliance intelligence.',
+  title: 'Regulatory Insights — Compliance Briefings & Analysis',
+  description: 'Regulatory briefings, sector analysis, and implementation notes from the Pimlico research team. Gambling, payments, crypto, and AI compliance intelligence.',
   alternates: { canonical: '/insights' },
   openGraph: {
-    title: 'Insights | XHS™ Copilot',
-    description: 'Regulatory briefings and sector analysis from the Pimlico research team.',
+    title: 'Regulatory Insights — Compliance Briefings & Analysis',
+    description: 'Regulatory briefings and compliance analysis from the Pimlico research team covering gambling, payments, crypto, and AI.',
     url: 'https://pimlicosolutions.com/insights',
     images: ['/cta-bg.jpg'],
   },
   twitter: {
-    title: 'Insights | XHS™ Copilot',
-    description: 'Regulatory briefings and sector analysis from the Pimlico research team.',
+    title: 'Regulatory Insights — Compliance Briefings & Analysis',
+    description: 'Regulatory briefings and compliance analysis from the Pimlico research team covering gambling, payments, crypto, and AI.',
     images: ['/cta-bg.jpg'],
   },
 }

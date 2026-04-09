@@ -1,16 +1,16 @@
 export const metadata = {
-  title: 'Contact',
+  title: 'Contact Pimlico Solutions — Book a Demo',
   description: 'Talk to the XHS™ Copilot team. Book a demo, start a free trial, or get answers to pricing, procurement, and partnership questions.',
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: 'Contact | XHS™ Copilot',
-    description: 'Book a demo. See the platform in your jurisdictions.',
+    title: 'Contact Pimlico Solutions — Book a Demo',
+    description: 'Talk to the XHS™ Copilot team. Book a demo, start a free trial, or get answers on pricing and partnerships.',
     url: 'https://pimlicosolutions.com/contact',
     images: ['/cta-bg.jpg'],
   },
   twitter: {
-    title: 'Contact | XHS™ Copilot',
-    description: 'Book a demo. See the platform in your jurisdictions.',
+    title: 'Contact Pimlico Solutions — Book a Demo',
+    description: 'Talk to the XHS™ Copilot team. Book a demo, start a free trial, or get answers on pricing and partnerships.',
     images: ['/cta-bg.jpg'],
   },
 }

@@ -1,16 +1,16 @@
 export const metadata = {
-  title: 'Security & Privacy',
-  description: 'SOC 2 Type II infrastructure, EU data residency, AES-256 encryption, row-level isolation, and GDPR-compliant processing. Built for regulated teams.',
+  title: 'Enterprise Security — SOC 2 Type II & GDPR Compliant',
+  description: 'SOC 2 Type II infrastructure, EU data residency, AES-256 encryption, row-level isolation, and GDPR-compliant processing. Built for regulated compliance teams.',
   alternates: { canonical: '/security' },
   openGraph: {
-    title: 'Security & Privacy | XHS™ Copilot',
-    description: 'Built for regulated teams. EU data residency, SOC 2 Type II infrastructure, GDPR compliant.',
+    title: 'Enterprise Security — SOC 2 Type II & GDPR Compliant',
+    description: 'EU data residency, SOC 2 Type II infrastructure, AES-256 encryption, and GDPR-compliant processing for regulated teams.',
     url: 'https://pimlicosolutions.com/security',
     images: ['/cta-bg.jpg'],
   },
   twitter: {
-    title: 'Security & Privacy | XHS™ Copilot',
-    description: 'Built for regulated teams. EU data residency, SOC 2 Type II infrastructure, GDPR compliant.',
+    title: 'Enterprise Security — SOC 2 Type II & GDPR Compliant',
+    description: 'EU data residency, SOC 2 Type II infrastructure, AES-256 encryption, and GDPR-compliant processing for regulated teams.',
     images: ['/cta-bg.jpg'],
   },
 }

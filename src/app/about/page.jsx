@@ -1,18 +1,18 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About",
-  description: "Pimlico Solutions builds XHS™ Copilot — a regulatory intelligence platform for Gambling, Payments, Crypto and AI compliance teams. London-based, operating globally across 275+ jurisdictions.",
+  title: "About Pimlico Solutions — Regulatory Intelligence Company",
+  description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions across gambling, payments, crypto, and AI regulation.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About | XHS™ Copilot",
-    description: "Pimlico Solutions builds XHS™ Copilot — regulatory intelligence for Gambling, Payments, Crypto and AI compliance teams.",
+    title: "About Pimlico Solutions — Regulatory Intelligence Company",
+    description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions.",
     url: "https://pimlicosolutions.com/about",
     images: ["/cta-bg.jpg"],
   },
   twitter: {
-    title: "About | XHS™ Copilot",
-    description: "Pimlico Solutions builds XHS™ Copilot — regulatory intelligence for Gambling, Payments, Crypto and AI compliance teams.",
+    title: "About Pimlico Solutions — Regulatory Intelligence Company",
+    description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions.",
     images: ["/cta-bg.jpg"],
   },
 };
@@ -42,9 +42,60 @@ const STATS = [
   { value: "Daily", label: "Change detection" },
 ];
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Pimlico Solutions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pimlico Solutions is a London-based regulatory technology company that builds XHS™ Copilot — an AI-powered compliance workspace. The platform monitors regulatory changes across 275+ jurisdictions for teams in gambling, payments, crypto, and AI regulation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is XHS Copilot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XHS™ Copilot is a regulatory intelligence platform that provides real-time monitoring of regulatory developments across 275+ jurisdictions. It includes AI-generated jurisdiction reports, regulatory change alerts, collaborative workspaces, and integrations with Slack and Microsoft Teams."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What industries does Pimlico Solutions cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pimlico Solutions covers four regulated verticals: gambling and gaming, payments and financial services, cryptocurrency and digital assets, and artificial intelligence. Each vertical has purpose-built regulatory coverage including jurisdiction-specific frameworks and licensing requirements."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many jurisdictions does XHS Copilot monitor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XHS™ Copilot monitors regulatory changes across more than 275 jurisdictions worldwide, drawing from over 12,000 primary sources including regulator bulletins, legislative texts, and enforcement orders. Changes are detected and analyzed daily."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where is Pimlico Solutions based?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pimlico Solutions Ltd is headquartered in London, United Kingdom, with a registered office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. The company operates globally, serving compliance teams across multiple jurisdictions."
+      }
+    }
+  ]
+};
+
 export default function AboutPage() {
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />

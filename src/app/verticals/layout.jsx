@@ -1,16 +1,16 @@
 export const metadata = {
-  title: 'Verticals',
-  description: 'Purpose-built regulatory coverage for Gambling, Payments & Crypto, and Artificial Intelligence. 275+ jurisdictions, sourced and analyzed daily.',
+  title: 'Gambling, Payments, Crypto & AI Compliance Coverage',
+  description: 'Purpose-built regulatory intelligence for gambling, payments and crypto, and AI compliance teams. 275+ jurisdictions monitored, sourced and analyzed daily.',
   alternates: { canonical: '/verticals' },
   openGraph: {
-    title: 'Verticals | XHS™ Copilot',
-    description: 'Purpose-built regulatory coverage for Gambling, Payments & Crypto, and AI.',
+    title: 'Gambling, Payments, Crypto & AI Compliance Coverage',
+    description: 'Purpose-built regulatory intelligence for gambling, payments, crypto, and AI. 275+ jurisdictions monitored daily.',
     url: 'https://pimlicosolutions.com/verticals',
     images: ['/cta-bg.jpg'],
   },
   twitter: {
-    title: 'Verticals | XHS™ Copilot',
-    description: 'Purpose-built regulatory coverage for Gambling, Payments & Crypto, and AI.',
+    title: 'Gambling, Payments, Crypto & AI Compliance Coverage',
+    description: 'Purpose-built regulatory intelligence for gambling, payments, crypto, and AI. 275+ jurisdictions monitored daily.',
     images: ['/cta-bg.jpg'],
   },
 }
