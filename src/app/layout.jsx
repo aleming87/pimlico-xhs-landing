@@ -1,7 +1,7 @@
 import '@/styles/tailwind.css'
 import { Playfair_Display, JetBrains_Mono } from 'next/font/google'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
-import { CookieConsent } from '@/components/CookieConsent'
+import { LazyConsent } from '@/components/LazyConsent'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 
@@ -56,9 +56,13 @@ export const metadata = {
     canonical: SITE_URL,
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
     shortcut: '/favicon.ico',
-    apple: '/favicon.png',
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     type: 'website',
@@ -114,12 +118,53 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="text-[var(--color-text-dark)] antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Pimlico Solutions",
+              "alternateName": "XHS",
+              "url": "https://pimlicosolutions.com",
+              "logo": "https://pimlicosolutions.com/Pimlico_SI_Brandmark.png",
+              "description": "AI-powered regulatory compliance workspaces for Gambling, Payments, Crypto and AI teams.",
+              "foundingDate": "2024",
+              "sameAs": [
+                "https://www.linkedin.com/company/pimlicoxhs",
+                "https://twitter.com/pimlicoxhs"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://pimlicosolutions.com/contact"
+              }
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "XHS™ Copilot",
+              "alternateName": "Pimlico XHS",
+              "url": "https://pimlicosolutions.com",
+              "description": "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Pimlico Solutions"
+              }
+            }),
+          }}
+        />
         <CurrencyProvider>
           <SiteHeader />
           {children}
           <SiteFooter />
         </CurrencyProvider>
-        <CookieConsent />
+        <LazyConsent />
       </body>
     </html>
   )
