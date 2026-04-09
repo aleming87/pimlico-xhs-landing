@@ -27,14 +27,32 @@ const CATEGORIES = [
 ];
 
 const REGULATORS = [
-  { jurisdiction: "European Union", abbr: "EU AI Act", name: "European AI Office" },
+  // Row 1 — Primary legislative bodies
+  { jurisdiction: "European Union", abbr: "EU AI Office", name: "European AI Office" },
   { jurisdiction: "United Kingdom", abbr: "DSIT", name: "Department for Science, Innovation and Technology" },
   { jurisdiction: "United States", abbr: "NIST", name: "National Institute of Standards and Technology" },
   { jurisdiction: "Canada", abbr: "ISED", name: "Innovation, Science and Economic Development" },
+  // Row 2 — Asia-Pacific & standards
   { jurisdiction: "Singapore", abbr: "IMDA", name: "Infocomm Media Development Authority" },
   { jurisdiction: "Japan", abbr: "METI", name: "Ministry of Economy, Trade and Industry" },
   { jurisdiction: "South Korea", abbr: "MSIT", name: "Ministry of Science and ICT" },
   { jurisdiction: "Australia", abbr: "DISR", name: "Department of Industry, Science and Resources" },
+  // Row 3 — Enforcement & cross-cutting
+  { jurisdiction: "United Kingdom", abbr: "ICO", name: "Information Commissioner's Office" },
+  { jurisdiction: "United States", abbr: "FTC", name: "Federal Trade Commission" },
+  { jurisdiction: "France", abbr: "CNIL", name: "Commission Nationale de l'Informatique et des Libertés" },
+  { jurisdiction: "Brazil", abbr: "ANPD", name: "Autoridade Nacional de Proteção de Dados" },
+];
+
+const FRAMEWORKS = [
+  { name: "High-Risk System Registration", desc: "Mandatory registration of AI systems classified as high-risk under the EU AI Act, with conformity assessment and CE marking." },
+  { name: "Algorithmic Impact Assessment", desc: "Pre-deployment impact analysis required across Canada (AIDA), EU member states, and emerging US state frameworks." },
+  { name: "Data Protection Impact Assessment", desc: "GDPR Article 35 DPIA obligations for AI systems processing personal data, intersecting with AI-specific rules." },
+  { name: "AI Sandbox Admission", desc: "Regulatory sandbox programmes for testing AI systems under supervised conditions before full deployment." },
+  { name: "Model Risk Management Filing", desc: "Documentation and governance requirements for AI model validation, monitoring, and risk management." },
+  { name: "Transparency Declaration", desc: "Disclosure obligations for AI-generated content, chatbot interactions, and automated decision-making." },
+  { name: "Sector-Specific Authorisation", desc: "Additional requirements when AI is deployed in financial services, healthcare, employment, or public administration." },
+  { name: "Export Control Compliance", desc: "Restrictions on AI technology transfers, compute thresholds, and chip export regulations." },
 ];
 
 const breadcrumbSchema = {
@@ -140,6 +158,29 @@ export default function AIPage() {
                 <p className="font-mono text-lg font-medium text-[var(--color-text-primary)] mb-1">{reg.abbr}</p>
                 <p className="text-sm text-[var(--color-text-secondary)] leading-snug">{reg.name}</p>
                 <p className="text-xs text-[var(--color-text-muted)] mt-1.5">{reg.jurisdiction}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--color-text-muted)] mt-6">
+            Plus national data protection authorities, sector regulators, and standards bodies across every jurisdiction with enacted or proposed AI legislation.
+          </p>
+        </div>
+      </section>
+
+      {/* Compliance Requirements */}
+      <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ COMPLIANCE REQUIREMENTS ]
+          </p>
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
+            Obligations we monitor.
+          </h2>
+          <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+            {FRAMEWORKS.map((fw) => (
+              <div key={fw.name} className="bg-[var(--color-bg-base)] p-5 sm:p-6">
+                <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-2">{fw.name}</h3>
+                <p className="text-xs text-[var(--color-text-tertiary)] leading-relaxed">{fw.desc}</p>
               </div>
             ))}
           </div>

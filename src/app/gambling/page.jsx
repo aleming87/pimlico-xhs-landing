@@ -27,14 +27,32 @@ const CATEGORIES = [
 ];
 
 const REGULATORS = [
+  // Row 1 — Tier 1 established
   { jurisdiction: "United Kingdom", abbr: "UKGC", name: "UK Gambling Commission" },
   { jurisdiction: "Malta", abbr: "MGA", name: "Malta Gaming Authority" },
   { jurisdiction: "Gibraltar", abbr: "GRA", name: "Gibraltar Regulatory Authority" },
   { jurisdiction: "Isle of Man", abbr: "GSC", name: "Gambling Supervision Commission" },
+  // Row 2 — European established
   { jurisdiction: "Sweden", abbr: "SGA", name: "Swedish Gambling Authority" },
   { jurisdiction: "Netherlands", abbr: "KSA", name: "Kansspelautoriteit" },
-  { jurisdiction: "Spain", abbr: "DGOJ", name: "Dirección General de Ordenación del Juego" },
   { jurisdiction: "Denmark", abbr: "DGA", name: "Danish Gambling Authority" },
+  { jurisdiction: "Germany", abbr: "GGL", name: "Gemeinsame Glücksspielbehörde der Länder" },
+  // Row 3 — Niche & challenging
+  { jurisdiction: "Curaçao", abbr: "GCB", name: "Curaçao Gaming Control Board" },
+  { jurisdiction: "Anjouan", abbr: "AGLB", name: "Anjouan Gaming Licence Board" },
+  { jurisdiction: "Philippines", abbr: "PAGCOR", name: "Philippine Amusement and Gaming Corporation" },
+  { jurisdiction: "Romania", abbr: "ONJN", name: "Oficiul Național pentru Jocuri de Noroc" },
+];
+
+const FRAMEWORKS = [
+  { name: "Remote Operating Licence", desc: "B2C authorisation to offer online gambling services to consumers in a regulated market." },
+  { name: "B2B / Supplier Licence", desc: "Authorisation for platform providers, game studios, and software suppliers serving licensed operators." },
+  { name: "Personal Management Licence", desc: "Individual licensing for directors, compliance officers, and key personnel at licensed operators." },
+  { name: "Responsible Gambling Certificate", desc: "Self-exclusion scheme enrollment, affordability checks, and player protection programme compliance." },
+  { name: "AML Programme Registration", desc: "Mandatory anti-money laundering controls, suspicious activity reporting, and sanctions screening." },
+  { name: "Technical Compliance Certificate", desc: "RNG testing, game fairness audits, server certification, and platform security assessment." },
+  { name: "Advertising Pre-clearance", desc: "Marketing material approval, affiliate programme registration, and promotional code compliance." },
+  { name: "Sports Betting Permit", desc: "Specialist authorisation for fixed-odds, exchange, pool, and in-play betting operations." },
 ];
 
 const breadcrumbSchema = {
@@ -142,6 +160,29 @@ export default function GamblingPage() {
                 <p className="font-mono text-lg font-medium text-[var(--color-text-primary)] mb-1">{reg.abbr}</p>
                 <p className="text-sm text-[var(--color-text-secondary)] leading-snug">{reg.name}</p>
                 <p className="text-xs text-[var(--color-text-muted)] mt-1.5">{reg.jurisdiction}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--color-text-muted)] mt-6">
+            Plus 50+ additional gaming authorities, state-level regulators, and tribal gaming commissions tracked daily across every licensed market.
+          </p>
+        </div>
+      </section>
+
+      {/* Licensing Requirements */}
+      <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ LICENSING REQUIREMENTS ]
+          </p>
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
+            Obligations we monitor.
+          </h2>
+          <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+            {FRAMEWORKS.map((fw) => (
+              <div key={fw.name} className="bg-[var(--color-bg-base)] p-5 sm:p-6">
+                <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-2">{fw.name}</h3>
+                <p className="text-xs text-[var(--color-text-tertiary)] leading-relaxed">{fw.desc}</p>
               </div>
             ))}
           </div>

@@ -27,14 +27,32 @@ const CATEGORIES = [
 ];
 
 const REGULATORS = [
+  // Row 1 — Tier 1 established
   { jurisdiction: "European Union", abbr: "EBA", name: "European Banking Authority" },
   { jurisdiction: "United Kingdom", abbr: "FCA", name: "Financial Conduct Authority" },
   { jurisdiction: "United States", abbr: "FinCEN", name: "Financial Crimes Enforcement Network" },
   { jurisdiction: "Singapore", abbr: "MAS", name: "Monetary Authority of Singapore" },
+  // Row 2 — Established global
   { jurisdiction: "Switzerland", abbr: "FINMA", name: "Swiss Financial Market Supervisory Authority" },
   { jurisdiction: "Hong Kong", abbr: "HKMA", name: "Hong Kong Monetary Authority" },
   { jurisdiction: "Japan", abbr: "JFSA", name: "Japan Financial Services Agency" },
+  { jurisdiction: "Canada", abbr: "FINTRAC", name: "Financial Transactions and Reports Analysis Centre" },
+  // Row 3 — Niche & emerging
   { jurisdiction: "United Arab Emirates", abbr: "VARA", name: "Virtual Assets Regulatory Authority" },
+  { jurisdiction: "Germany", abbr: "BaFin", name: "Bundesanstalt für Finanzdienstleistungsaufsicht" },
+  { jurisdiction: "Brazil", abbr: "BCB", name: "Banco Central do Brasil" },
+  { jurisdiction: "Lithuania", abbr: "LB", name: "Bank of Lithuania" },
+];
+
+const FRAMEWORKS = [
+  { name: "Payment Institution Authorisation", desc: "Licence to provide payment services, execute transactions, and manage client funds under PSD2 and national equivalents." },
+  { name: "E-Money Institution Licence", desc: "Authorisation to issue electronic money, manage float, and provide redemption under EMD2 and local frameworks." },
+  { name: "VASP / CASP Registration", desc: "Virtual asset and crypto-asset service provider registration under MiCA, FinCEN, and national regimes." },
+  { name: "Money Transmitter Licence", desc: "US state-by-state licensing for money transmission, with individual application and bonding requirements." },
+  { name: "Agent Registration", desc: "Authorisation of third-party agents acting on behalf of licensed payment institutions and EMIs." },
+  { name: "Safeguarding Compliance", desc: "Client fund segregation, asset protection, and safeguarding audit requirements across jurisdictions." },
+  { name: "Passporting Notification", desc: "Cross-border service notifications under PSD2 freedom-of-services and freedom-of-establishment provisions." },
+  { name: "Operational Resilience Filing", desc: "ICT risk management, incident reporting, and business continuity under DORA and FCA requirements." },
 ];
 
 const breadcrumbSchema = {
@@ -140,6 +158,29 @@ export default function PaymentsPage() {
                 <p className="font-mono text-lg font-medium text-[var(--color-text-primary)] mb-1">{reg.abbr}</p>
                 <p className="text-sm text-[var(--color-text-secondary)] leading-snug">{reg.name}</p>
                 <p className="text-xs text-[var(--color-text-muted)] mt-1.5">{reg.jurisdiction}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--color-text-muted)] mt-6">
+            Plus 40+ additional financial regulators, central banks, and state-level licensing authorities tracked daily across every payments and crypto market.
+          </p>
+        </div>
+      </section>
+
+      {/* Licensing Requirements */}
+      <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ LICENSING REQUIREMENTS ]
+          </p>
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
+            Obligations we monitor.
+          </h2>
+          <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+            {FRAMEWORKS.map((fw) => (
+              <div key={fw.name} className="bg-[var(--color-bg-base)] p-5 sm:p-6">
+                <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-2">{fw.name}</h3>
+                <p className="text-xs text-[var(--color-text-tertiary)] leading-relaxed">{fw.desc}</p>
               </div>
             ))}
           </div>
