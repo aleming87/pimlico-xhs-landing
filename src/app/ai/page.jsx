@@ -1,4 +1,5 @@
 import Link from "next/link";
+import JurisdictionRibbon from "@/components/JurisdictionRibbon";
 
 export const metadata = {
   title: "AI Compliance",
@@ -29,6 +30,26 @@ const CATEGORIES = [
 const JURISDICTIONS = [
   "European Union", "United Kingdom", "United States", "Canada", "Singapore", "Japan",
   "South Korea", "Australia", "Brazil",
+];
+
+const RIBBON_MAJOR = [
+  { name: "European Union", tag: "AI Act" },
+  { name: "United Kingdom", tag: "DSIT / ICO" },
+  { name: "United States", tag: "NIST / EO" },
+  { name: "Canada", tag: "AIDA" },
+  { name: "Singapore", tag: "IMDA" },
+  { name: "Japan", tag: "METI" },
+  { name: "South Korea", tag: "MSIT" },
+];
+
+const RIBBON_COMPLEX = [
+  { name: "European Union", tag: "High-risk classification" },
+  { name: "United States", tag: "State-by-state" },
+  { name: "Australia", tag: "DIA" },
+  { name: "Brazil", tag: "ANPD" },
+  { name: "United Kingdom", tag: "Sector codes" },
+  { name: "Canada", tag: "C-27" },
+  { name: "European Union", tag: "Conformity assessment" },
 ];
 
 const breadcrumbSchema = {
@@ -99,6 +120,8 @@ export default function AIPage() {
           </div>
         </div>
       </section>
+
+      <JurisdictionRibbon major={RIBBON_MAJOR} complex={RIBBON_COMPLEX} />
 
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import JurisdictionRibbon from "@/components/JurisdictionRibbon";
 
 export const metadata = {
   title: "Payments & Crypto Compliance",
@@ -29,6 +30,28 @@ const CATEGORIES = [
 const JURISDICTIONS = [
   "European Union", "United Kingdom", "United States", "Singapore", "Hong Kong", "Switzerland",
   "United Arab Emirates", "Australia", "Canada", "Japan", "South Korea", "Brazil",
+];
+
+const RIBBON_MAJOR = [
+  { name: "European Union", tag: "EBA / ECB" },
+  { name: "United Kingdom", tag: "FCA / PSR" },
+  { name: "United States", tag: "FinCEN" },
+  { name: "Singapore", tag: "MAS" },
+  { name: "Switzerland", tag: "FINMA" },
+  { name: "Japan", tag: "FSA" },
+  { name: "Hong Kong", tag: "HKMA" },
+  { name: "Canada", tag: "FINTRAC" },
+];
+
+const RIBBON_COMPLEX = [
+  { name: "United Arab Emirates", tag: "VARA / DFSA" },
+  { name: "South Korea", tag: "FSC" },
+  { name: "Brazil", tag: "BCB" },
+  { name: "Australia", tag: "ASIC" },
+  { name: "European Union", tag: "MiCA" },
+  { name: "European Union", tag: "DORA" },
+  { name: "United States", tag: "State MTL" },
+  { name: "United Kingdom", tag: "EMD2" },
 ];
 
 const breadcrumbSchema = {
@@ -99,6 +122,8 @@ export default function PaymentsPage() {
           </div>
         </div>
       </section>
+
+      <JurisdictionRibbon major={RIBBON_MAJOR} complex={RIBBON_COMPLEX} />
 
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">

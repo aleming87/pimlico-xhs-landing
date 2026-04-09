@@ -1,4 +1,5 @@
 import Link from "next/link";
+import JurisdictionRibbon from "@/components/JurisdictionRibbon";
 
 export const metadata = {
   title: "Gambling Compliance",
@@ -30,6 +31,31 @@ const JURISDICTIONS = [
   "United Kingdom", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark",
   "Finland", "Spain", "Italy", "France", "Greece", "Romania", "United States", "Ontario",
   "Australia", "Brazil", "Philippines",
+];
+
+const RIBBON_MAJOR = [
+  { name: "United Kingdom", tag: "UKGC" },
+  { name: "Malta", tag: "MGA" },
+  { name: "Gibraltar", tag: "GRA" },
+  { name: "Isle of Man", tag: "GSC" },
+  { name: "Sweden", tag: "SGA" },
+  { name: "Denmark", tag: "DGA" },
+  { name: "Netherlands", tag: "KSA" },
+  { name: "Spain", tag: "DGOJ" },
+  { name: "Italy", tag: "ADM" },
+  { name: "France", tag: "ANJ" },
+];
+
+const RIBBON_COMPLEX = [
+  { name: "United States", tag: "State-by-state" },
+  { name: "Germany", tag: "GGL" },
+  { name: "Brazil", tag: "SIGAP" },
+  { name: "Australia", tag: "ACMA" },
+  { name: "Philippines", tag: "PAGCOR" },
+  { name: "Romania", tag: "ONJN" },
+  { name: "Greece", tag: "EEEP" },
+  { name: "Finland", tag: "Poliisi" },
+  { name: "Ontario", tag: "iGO / AGCO" },
 ];
 
 const breadcrumbSchema = {
@@ -102,6 +128,8 @@ export default function GamblingPage() {
           </div>
         </div>
       </section>
+
+      <JurisdictionRibbon major={RIBBON_MAJOR} complex={RIBBON_COMPLEX} />
 
       {/* Categories */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
