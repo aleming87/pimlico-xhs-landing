@@ -56,7 +56,7 @@ const VERTICALS = [
     id: "payments",
     label: "Payments & Crypto",
     image: "/vertical-payments-hero.jpg",
-    headline: "Payments and crypto regulation. End to end.",
+    headline: "Manage payments and crypto licensing end to end.",
     desc: "PSD2, MiCA, and DORA in Europe, state-level money transmission in the US, and emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience, and supervisory expectations.",
     stats: [
       { value: "275+", label: "Jurisdictions" },
@@ -101,7 +101,7 @@ const VERTICALS = [
     id: "ai",
     label: "Artificial Intelligence",
     image: "/vertical-ai-hero.jpg",
-    headline: "AI regulation is moving fast. Stay ahead.",
+    headline: "Stay ahead of fast-moving AI regulation.",
     desc: "EU AI Act, national frameworks, and emerging governance requirements. High-risk classification, conformity assessment, transparency obligations, and algorithmic accountability.",
     stats: [
       { value: "275+", label: "Jurisdictions" },
@@ -172,9 +172,9 @@ export default function VerticalsPage() {
             <img
               src={vertical.image}
               alt=""
-              className="w-full h-full object-cover opacity-15"
+              className="w-full h-full object-cover opacity-10"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-base)]/60 via-[var(--color-bg-base)]/80 to-[var(--color-bg-base)]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-base)]/70 via-[var(--color-bg-base)]/85 to-[var(--color-bg-base)]" />
           </motion.div>
         </AnimatePresence>
 
