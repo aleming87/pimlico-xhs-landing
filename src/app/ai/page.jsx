@@ -80,7 +80,8 @@ export default function AIPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <section className="relative overflow-hidden">
-        <div className="absolute top-[-20%] right-[-5%] w-[55%] h-[110%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(25,50,100,0.5)_0%,rgba(15,35,75,0.25)_35%,transparent_70%)]" />
+        <img src="/vertical-ai-hero.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-base)]/60 via-[var(--color-bg-base)]/40 to-[var(--color-bg-base)]" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 sm:py-28">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-5">
             [ ARTIFICIAL INTELLIGENCE ]
