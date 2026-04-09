@@ -3,9 +3,9 @@ import Link from "next/link";
 
 const FOOTER_LINKS = {
   Product: [
-    { label: "Gambling", href: "/gambling" },
-    { label: "Payments & Crypto", href: "/payments" },
-    { label: "Artificial Intelligence", href: "/ai" },
+    { label: "Gambling", href: "/verticals#gambling" },
+    { label: "Payments & Crypto", href: "/verticals#payments" },
+    { label: "Artificial Intelligence", href: "/verticals#ai" },
     { label: "Pricing", href: "/pricing" },
   ],
   Resources: [

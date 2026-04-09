@@ -25,9 +25,9 @@ export function TrustedBy() {
 
 export function Sectors() {
   const sectors = [
-    { title: "Gambling", desc: "Licensing, responsible gaming, advertising, and AML across global markets.", href: "/gambling", image: "/sector-gambling.jpg" },
-    { title: "Payments & Crypto", desc: "PSD2, MiCA, DORA, cross-border licensing, and operational resilience.", href: "/payments", image: "/sector-payments.jpg" },
-    { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, risk classification, and conformity assessment.", href: "/ai", image: "/sector-ai.jpg" },
+    { title: "Gambling", desc: "Licensing, responsible gaming, advertising, and AML across global markets.", href: "/verticals#gambling", image: "/sector-gambling.jpg" },
+    { title: "Payments & Crypto", desc: "PSD2, MiCA, DORA, cross-border licensing, and operational resilience.", href: "/verticals#payments", image: "/sector-payments.jpg" },
+    { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, risk classification, and conformity assessment.", href: "/verticals#ai", image: "/sector-ai.jpg" },
   ];
 
   return (

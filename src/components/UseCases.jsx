@@ -34,7 +34,7 @@ export default function UseCases() {
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           <Card
             title="AI"
-            href="/ai"
+            href="/verticals#ai"
             items={[
               { name: "AI Legislation & Governance", href: "/ai#category-1" },
               { name: "Compute & Infrastructure", href: "/ai#category-2" },
@@ -46,7 +46,7 @@ export default function UseCases() {
           />
           <Card
             title="Payments"
-            href="/payments"
+            href="/verticals#payments"
             items={[
               { name: "Licensing & Authorisations", href: "/payments#category-1" },
               { name: "Crypto & Digital Assets", href: "/payments#category-3" },

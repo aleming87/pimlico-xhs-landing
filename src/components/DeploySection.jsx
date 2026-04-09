@@ -129,7 +129,7 @@ export default function DeploySection() {
             
             <div className="mt-8 text-center">
               <a 
-                href="/ai" 
+                href="/verticals#ai" 
                 className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
               >
                 Learn more
@@ -181,7 +181,7 @@ export default function DeploySection() {
             
             <div className="mt-8 text-center">
               <a 
-                href="/payments" 
+                href="/verticals#payments" 
                 className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
               >
                 Learn more
@@ -233,7 +233,7 @@ export default function DeploySection() {
             
             <div className="mt-8 text-center">
               <a 
-                href="/gambling" 
+                href="/verticals#gambling" 
                 className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200"
               >
                 Learn more

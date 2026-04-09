@@ -10,7 +10,22 @@ const nextConfig = {
       {
         source: '/terms',
         destination: '/terms-and-conditions',
-        permanent: true, // 301 redirect
+        permanent: true,
+      },
+      {
+        source: '/gambling',
+        destination: '/verticals#gambling',
+        permanent: true,
+      },
+      {
+        source: '/payments',
+        destination: '/verticals#payments',
+        permanent: true,
+      },
+      {
+        source: '/ai',
+        destination: '/verticals#ai',
+        permanent: true,
       },
     ]
   },
