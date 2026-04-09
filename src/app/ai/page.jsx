@@ -194,7 +194,7 @@ export default function AIPage() {
             See it in your frameworks.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14-day trial. Full access. No credit card.
+            14-day trial. Full access.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
