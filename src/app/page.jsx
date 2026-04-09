@@ -6,8 +6,8 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { TrustedBy, Sectors, Coverage, Security, Testimonials, FinalCTA } from "@/components/HomeSections";
 
 export const metadata = {
-  title: "XHS\u2122 Copilot \u2014 Every regulatory change. Analyzed.",
-  description: "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
+  title: "XHS™ Copilot — Every regulatory change. Analyzed.",
+  description: "Pimlico Solutions builds XHS™ Copilot — AI-powered compliance workspaces for gambling, payments, crypto, and AI teams. 275+ jurisdictions monitored daily.",
 }
 
 export default function Page() {
