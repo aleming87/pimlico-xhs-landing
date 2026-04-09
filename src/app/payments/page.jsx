@@ -1,5 +1,4 @@
 import Link from "next/link";
-import JurisdictionRibbon from "@/components/JurisdictionRibbon";
 
 export const metadata = {
   title: "Payments & Crypto Compliance",
@@ -27,31 +26,15 @@ const CATEGORIES = [
   { name: "Cross-Border Flows", desc: "Passporting, third-country equivalence, correspondent banking, and cross-border payment regulations." },
 ];
 
-const JURISDICTIONS = [
-  "European Union", "United Kingdom", "United States", "Singapore", "Hong Kong", "Switzerland",
-  "United Arab Emirates", "Australia", "Canada", "Japan", "South Korea", "Brazil",
-];
-
-const RIBBON_MAJOR = [
-  { name: "European Union", tag: "EBA / ECB" },
-  { name: "United Kingdom", tag: "FCA / PSR" },
-  { name: "United States", tag: "FinCEN" },
-  { name: "Singapore", tag: "MAS" },
-  { name: "Switzerland", tag: "FINMA" },
-  { name: "Japan", tag: "FSA" },
-  { name: "Hong Kong", tag: "HKMA" },
-  { name: "Canada", tag: "FINTRAC" },
-];
-
-const RIBBON_COMPLEX = [
-  { name: "United Arab Emirates", tag: "VARA / DFSA" },
-  { name: "South Korea", tag: "FSC" },
-  { name: "Brazil", tag: "BCB" },
-  { name: "Australia", tag: "ASIC" },
-  { name: "European Union", tag: "MiCA" },
-  { name: "European Union", tag: "DORA" },
-  { name: "United States", tag: "State MTL" },
-  { name: "United Kingdom", tag: "EMD2" },
+const REGULATORS = [
+  { jurisdiction: "European Union", abbr: "EBA", name: "European Banking Authority" },
+  { jurisdiction: "United Kingdom", abbr: "FCA", name: "Financial Conduct Authority" },
+  { jurisdiction: "United States", abbr: "FinCEN", name: "Financial Crimes Enforcement Network" },
+  { jurisdiction: "Singapore", abbr: "MAS", name: "Monetary Authority of Singapore" },
+  { jurisdiction: "Switzerland", abbr: "FINMA", name: "Swiss Financial Market Supervisory Authority" },
+  { jurisdiction: "Hong Kong", abbr: "HKMA", name: "Hong Kong Monetary Authority" },
+  { jurisdiction: "Japan", abbr: "JFSA", name: "Japan Financial Services Agency" },
+  { jurisdiction: "United Arab Emirates", abbr: "VARA", name: "Virtual Assets Regulatory Authority" },
 ];
 
 const breadcrumbSchema = {
@@ -123,8 +106,6 @@ export default function PaymentsPage() {
         </div>
       </section>
 
-      <JurisdictionRibbon major={RIBBON_MAJOR} complex={RIBBON_COMPLEX} />
-
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
@@ -144,25 +125,22 @@ export default function PaymentsPage() {
         </div>
       </section>
 
+      {/* Key Regulators */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ JURISDICTIONS ]
+            [ KEY REGULATORS ]
           </p>
-          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-3">
-            Licensed markets, monitored daily.
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
+            Authorities we track.
           </h2>
-          <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mb-10">
-            A selection of the payment and crypto jurisdictions actively tracked. Full coverage extends across every licensing regime and emerging framework.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {JURISDICTIONS.map((j) => (
-              <span
-                key={j}
-                className="rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-surface)]/40 px-3 py-1.5 text-xs text-[var(--color-text-secondary)]"
-              >
-                {j}
-              </span>
+          <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+            {REGULATORS.map((reg) => (
+              <div key={reg.abbr} className="bg-[var(--color-bg-base)] p-5 sm:p-6">
+                <p className="font-mono text-lg font-medium text-[var(--color-text-primary)] mb-1">{reg.abbr}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-snug">{reg.name}</p>
+                <p className="text-xs text-[var(--color-text-muted)] mt-1.5">{reg.jurisdiction}</p>
+              </div>
             ))}
           </div>
         </div>

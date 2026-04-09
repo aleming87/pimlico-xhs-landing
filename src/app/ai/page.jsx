@@ -1,5 +1,4 @@
 import Link from "next/link";
-import JurisdictionRibbon from "@/components/JurisdictionRibbon";
 
 export const metadata = {
   title: "AI Compliance",
@@ -27,29 +26,15 @@ const CATEGORIES = [
   { name: "Sector Overlays", desc: "Financial services, healthcare, employment, and public sector AI rules — how horizontal AI law meets vertical supervision." },
 ];
 
-const JURISDICTIONS = [
-  "European Union", "United Kingdom", "United States", "Canada", "Singapore", "Japan",
-  "South Korea", "Australia", "Brazil",
-];
-
-const RIBBON_MAJOR = [
-  { name: "European Union", tag: "AI Act" },
-  { name: "United Kingdom", tag: "DSIT / ICO" },
-  { name: "United States", tag: "NIST / EO" },
-  { name: "Canada", tag: "AIDA" },
-  { name: "Singapore", tag: "IMDA" },
-  { name: "Japan", tag: "METI" },
-  { name: "South Korea", tag: "MSIT" },
-];
-
-const RIBBON_COMPLEX = [
-  { name: "European Union", tag: "High-risk classification" },
-  { name: "United States", tag: "State-by-state" },
-  { name: "Australia", tag: "DIA" },
-  { name: "Brazil", tag: "ANPD" },
-  { name: "United Kingdom", tag: "Sector codes" },
-  { name: "Canada", tag: "C-27" },
-  { name: "European Union", tag: "Conformity assessment" },
+const REGULATORS = [
+  { jurisdiction: "European Union", abbr: "EU AI Act", name: "European AI Office" },
+  { jurisdiction: "United Kingdom", abbr: "DSIT", name: "Department for Science, Innovation and Technology" },
+  { jurisdiction: "United States", abbr: "NIST", name: "National Institute of Standards and Technology" },
+  { jurisdiction: "Canada", abbr: "ISED", name: "Innovation, Science and Economic Development" },
+  { jurisdiction: "Singapore", abbr: "IMDA", name: "Infocomm Media Development Authority" },
+  { jurisdiction: "Japan", abbr: "METI", name: "Ministry of Economy, Trade and Industry" },
+  { jurisdiction: "South Korea", abbr: "MSIT", name: "Ministry of Science and ICT" },
+  { jurisdiction: "Australia", abbr: "DISR", name: "Department of Industry, Science and Resources" },
 ];
 
 const breadcrumbSchema = {
@@ -121,8 +106,6 @@ export default function AIPage() {
         </div>
       </section>
 
-      <JurisdictionRibbon major={RIBBON_MAJOR} complex={RIBBON_COMPLEX} />
-
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
@@ -142,25 +125,22 @@ export default function AIPage() {
         </div>
       </section>
 
+      {/* Key Regulators */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ JURISDICTIONS ]
+            [ KEY REGULATORS ]
           </p>
-          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-3">
-            Frameworks tracked, daily.
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
+            Authorities we track.
           </h2>
-          <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mb-10">
-            A selection of the jurisdictions actively tracked for AI legislation and governance. Coverage extends across every enacted, proposed, and consultative framework.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {JURISDICTIONS.map((j) => (
-              <span
-                key={j}
-                className="rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-surface)]/40 px-3 py-1.5 text-xs text-[var(--color-text-secondary)]"
-              >
-                {j}
-              </span>
+          <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+            {REGULATORS.map((reg) => (
+              <div key={reg.abbr} className="bg-[var(--color-bg-base)] p-5 sm:p-6">
+                <p className="font-mono text-lg font-medium text-[var(--color-text-primary)] mb-1">{reg.abbr}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-snug">{reg.name}</p>
+                <p className="text-xs text-[var(--color-text-muted)] mt-1.5">{reg.jurisdiction}</p>
+              </div>
             ))}
           </div>
         </div>

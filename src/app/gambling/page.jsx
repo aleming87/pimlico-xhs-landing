@@ -1,5 +1,4 @@
 import Link from "next/link";
-import JurisdictionRibbon from "@/components/JurisdictionRibbon";
 
 export const metadata = {
   title: "Gambling Compliance",
@@ -27,35 +26,15 @@ const CATEGORIES = [
   { name: "Enforcement & Sanctions", desc: "Regulatory actions, fines, license revocations, and compliance orders in real time." },
 ];
 
-const JURISDICTIONS = [
-  "United Kingdom", "Malta", "Gibraltar", "Isle of Man", "Netherlands", "Germany", "Sweden", "Denmark",
-  "Finland", "Spain", "Italy", "France", "Greece", "Romania", "United States", "Ontario",
-  "Australia", "Brazil", "Philippines",
-];
-
-const RIBBON_MAJOR = [
-  { name: "United Kingdom", tag: "UKGC" },
-  { name: "Malta", tag: "MGA" },
-  { name: "Gibraltar", tag: "GRA" },
-  { name: "Isle of Man", tag: "GSC" },
-  { name: "Sweden", tag: "SGA" },
-  { name: "Denmark", tag: "DGA" },
-  { name: "Netherlands", tag: "KSA" },
-  { name: "Spain", tag: "DGOJ" },
-  { name: "Italy", tag: "ADM" },
-  { name: "France", tag: "ANJ" },
-];
-
-const RIBBON_COMPLEX = [
-  { name: "United States", tag: "State-by-state" },
-  { name: "Germany", tag: "GGL" },
-  { name: "Brazil", tag: "SIGAP" },
-  { name: "Australia", tag: "ACMA" },
-  { name: "Philippines", tag: "PAGCOR" },
-  { name: "Romania", tag: "ONJN" },
-  { name: "Greece", tag: "EEEP" },
-  { name: "Finland", tag: "Poliisi" },
-  { name: "Ontario", tag: "iGO / AGCO" },
+const REGULATORS = [
+  { jurisdiction: "United Kingdom", abbr: "UKGC", name: "UK Gambling Commission" },
+  { jurisdiction: "Malta", abbr: "MGA", name: "Malta Gaming Authority" },
+  { jurisdiction: "Gibraltar", abbr: "GRA", name: "Gibraltar Regulatory Authority" },
+  { jurisdiction: "Isle of Man", abbr: "GSC", name: "Gambling Supervision Commission" },
+  { jurisdiction: "Sweden", abbr: "SGA", name: "Swedish Gambling Authority" },
+  { jurisdiction: "Netherlands", abbr: "KSA", name: "Kansspelautoriteit" },
+  { jurisdiction: "Spain", abbr: "DGOJ", name: "Dirección General de Ordenación del Juego" },
+  { jurisdiction: "Denmark", abbr: "DGA", name: "Danish Gambling Authority" },
 ];
 
 const breadcrumbSchema = {
@@ -96,7 +75,6 @@ export default function GamblingPage() {
             From the UKGC and MGA to US state-by-state frameworks and emerging Latin American markets. Licensing, responsible gaming, advertising, and AML — sourced and analyzed daily.
           </p>
 
-          {/* Static stats — using platform-wide verified numbers */}
           <div className="flex gap-10 sm:gap-16 mb-12">
             {[
               { value: "275+", label: "Jurisdictions" },
@@ -129,8 +107,6 @@ export default function GamblingPage() {
         </div>
       </section>
 
-      <JurisdictionRibbon major={RIBBON_MAJOR} complex={RIBBON_COMPLEX} />
-
       {/* Categories */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -151,26 +127,22 @@ export default function GamblingPage() {
         </div>
       </section>
 
-      {/* Jurisdictions */}
+      {/* Key Regulators */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
-            [ JURISDICTIONS ]
+            [ KEY REGULATORS ]
           </p>
-          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-3">
-            Licensed markets, monitored daily.
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
+            Authorities we track.
           </h2>
-          <p className="text-sm text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mb-10">
-            A selection of the gaming jurisdictions actively tracked. Full coverage extends across every licensed market and emerging framework.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {JURISDICTIONS.map((j) => (
-              <span
-                key={j}
-                className="rounded-lg border border-[var(--color-border-default)]/30 bg-[var(--color-bg-surface)]/40 px-3 py-1.5 text-xs text-[var(--color-text-secondary)]"
-              >
-                {j}
-              </span>
+          <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-[var(--color-border-default)]/20 rounded-xl overflow-hidden">
+            {REGULATORS.map((reg) => (
+              <div key={reg.abbr} className="bg-[var(--color-bg-base)] p-5 sm:p-6">
+                <p className="font-mono text-lg font-medium text-[var(--color-text-primary)] mb-1">{reg.abbr}</p>
+                <p className="text-sm text-[var(--color-text-secondary)] leading-snug">{reg.name}</p>
+                <p className="text-xs text-[var(--color-text-muted)] mt-1.5">{reg.jurisdiction}</p>
+              </div>
             ))}
           </div>
         </div>
