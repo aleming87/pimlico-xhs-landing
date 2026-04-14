@@ -1,16 +1,16 @@
 export const metadata = {
-  title: 'Compliance Software Pricing — Plans for Every Team Size',
-  description: 'Transparent pricing for XHS™ Copilot. Choose your verticals, jurisdictions, and team size. 14-day free trial. Custom enterprise plans available.',
+  title: 'Pricing',
+  description: 'Transparent pricing for XHS™ Copilot. Pick your verticals, jurisdictions and team size — get an instant quote. 14-day free trial. Custom enterprise plans available.',
   alternates: { canonical: '/pricing' },
   openGraph: {
-    title: 'Compliance Software Pricing — Plans for Every Team Size',
-    description: 'Transparent pricing for XHS™ Copilot. Choose your verticals, jurisdictions, and team size. 14-day free trial.',
+    title: 'Pricing — XHS™ Copilot',
+    description: 'Transparent pricing: pick your verticals, jurisdictions and team size. Instant quote. 14-day free trial.',
     url: 'https://pimlicosolutions.com/pricing',
     images: ['/cta-bg.jpg'],
   },
   twitter: {
-    title: 'Compliance Software Pricing — Plans for Every Team Size',
-    description: 'Transparent pricing for XHS™ Copilot. Choose your verticals, jurisdictions, and team size. 14-day free trial.',
+    title: 'Pricing — XHS™ Copilot',
+    description: 'Transparent pricing: pick your verticals, jurisdictions and team size. Instant quote. 14-day free trial.',
     images: ['/cta-bg.jpg'],
   },
 }

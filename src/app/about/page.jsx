@@ -1,18 +1,18 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About Pimlico Solutions — Regulatory Intelligence Company",
-  description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions across gambling, payments, crypto, and AI regulation.",
+  title: "About",
+  description: "Pimlico Solutions is the London-based regtech company behind XHS™ Copilot — AI-powered regulatory intelligence covering 275+ jurisdictions across gambling, payments, crypto and AI.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Pimlico Solutions — Regulatory Intelligence Company",
-    description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions.",
+    title: "About — XHS™ Copilot",
+    description: "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     url: "https://pimlicosolutions.com/about",
     images: ["/cta-bg.jpg"],
   },
   twitter: {
-    title: "About Pimlico Solutions — Regulatory Intelligence Company",
-    description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions.",
+    title: "About — XHS™ Copilot",
+    description: "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     images: ["/cta-bg.jpg"],
   },
 };
