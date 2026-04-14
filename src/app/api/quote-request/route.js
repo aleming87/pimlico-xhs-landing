@@ -2,6 +2,7 @@ export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
 import { renderEmail, renderAdminNotification, escapeHtml } from '@/lib/emailTemplate';
+import { trackedLink } from '@/lib/trackedLink';
 
 export async function POST(request) {
   try {
@@ -64,7 +65,11 @@ export async function POST(request) {
           intro: `Hi ${escapeHtml(name)}, thanks for configuring a quote on pimlicosolutions.com. Here's the summary based on your selection.`,
           body: summaryHtml,
           ctaLabel: 'Start your 14-day trial',
-          ctaHref: 'https://xhsdata.ai/register',
+          ctaHref: trackedLink('https://xhsdata.ai/register', {
+            campaign: 'quote_confirmation',
+            content: 'cta_button',
+            term: plan || undefined,
+          }),
           footerNote: 'A member of our team will be in touch shortly to walk you through the configuration and answer any questions. Reply to this email if you need anything in the meantime.',
         });
 

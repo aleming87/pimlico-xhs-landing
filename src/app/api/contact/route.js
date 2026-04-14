@@ -2,6 +2,7 @@ export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
 import { renderEmail, renderAdminNotification, escapeHtml } from '@/lib/emailTemplate';
+import { trackedLink } from '@/lib/trackedLink';
 
 export async function POST(request) {
   try {
@@ -53,7 +54,10 @@ export async function POST(request) {
             <p style="margin: 0; color: #94a3b8; font-size: 14px;">Every regulatory change. Tracked. Sourced. Verified. Delivered.</p>
           `,
           ctaLabel: 'Start your 14-day trial',
-          ctaHref: 'https://xhsdata.ai/register',
+          ctaHref: trackedLink('https://xhsdata.ai/register', {
+            campaign: 'contact_confirmation',
+            content: 'cta_button',
+          }),
           footerNote: 'Reply directly to this email if you need anything. We read every message.',
         });
 

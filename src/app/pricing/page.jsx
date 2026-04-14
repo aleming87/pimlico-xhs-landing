@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { trackEvent } from "@/lib/analytics";
 
 // ── Pricing model (mirrored from platform commercialPricingModel.ts) ──
 
@@ -139,6 +140,24 @@ export default function PricingPage() {
   const [selectedRegions, setSelectedRegions] = useState(["europe"]);
   const [billing, setBilling] = useState("monthly");
   const isBundle = selectedVerticals.length >= 3 && selectedRegions.includes("global");
+
+  // Debounced configure_quote event so we can see what users
+  // actually choose (verticals, regions, team size) without
+  // firing on every keystroke.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      trackEvent("configure_quote", {
+        users,
+        verticals: selectedVerticals.join(","),
+        verticals_count: selectedVerticals.length,
+        regions: selectedRegions.join(","),
+        regions_count: selectedRegions.length,
+        billing,
+        is_bundle: isBundle,
+      });
+    }, 800);
+    return () => clearTimeout(t);
+  }, [users, selectedVerticals, selectedRegions, billing, isBundle]);
 
   const toggleVertical = (v) => {
     setSelectedVerticals((prev) =>

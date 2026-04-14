@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 
 const categories = ["All", "AI Regulation", "Payments", "Crypto", "Gambling"];
 
@@ -19,6 +20,18 @@ export default function InsightsPage() {
     const q = params.get("q");
     if (q) setSearchQuery(q);
   }, []);
+
+  // Debounced view_search_results event for GA4 (standard event name).
+  useEffect(() => {
+    if (!searchQuery.trim()) return;
+    const t = setTimeout(() => {
+      trackEvent("view_search_results", {
+        search_term: searchQuery.trim(),
+        category_filter: selectedCategory,
+      });
+    }, 600);
+    return () => clearTimeout(t);
+  }, [searchQuery, selectedCategory]);
 
   useEffect(() => {
     const loadArticles = async () => {

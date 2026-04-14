@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { trackEvent, trackOutbound } from "@/lib/analytics";
 
 export default function ContactPage() {
   return (
@@ -20,7 +21,10 @@ function ContactPageInner() {
   // Trial requests go straight to xhsdata.ai/register
   const isTrial = searchParams.get("trial") === "true";
   if (typeof window !== "undefined" && isTrial) {
-    window.location.href = "https://xhsdata.ai/register";
+    trackOutbound("begin_trial", "https://xhsdata.ai/register", {
+      source_section: "contact_trial_redirect",
+    });
+    window.location.href = "https://xhsdata.ai/register?utm_source=site&utm_medium=internal&utm_campaign=contact_trial_redirect";
     return null;
   }
 
@@ -91,9 +95,20 @@ function ContactPageInner() {
         body: JSON.stringify(data),
       });
       if (!response.ok) throw new Error("Failed to submit");
+      // GA4 standard conversion event
+      trackEvent("generate_lead", {
+        form_id: "contact",
+        interest: data.interest || "general",
+        marketing_consent: data.marketingConsent,
+        company_domain: (data.email || "").split("@")[1] || "",
+        currency: "GBP",
+        // value is left blank on purpose — set per-interest values in
+        // GA4 Admin -> Events -> Modify event if you want to score leads
+      });
       router.push("/contact/thank-you");
     } catch (error) {
       console.error("Form submission error:", error);
+      trackEvent("form_submission_error", { form_id: "contact" });
       setIsSubmitting(false);
     }
   };
