@@ -381,7 +381,7 @@ function horizonScanToEmail(md, { recipientName, orgConfig, jurisdictions, theme
 
 /* ─── HELPERS ─── */
 async function sendEmail({ to, subject, html }) {
-  const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
+  const senderEmail = process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com';
   const fromAddress = senderEmail.includes('<') ? senderEmail : `Pimlico XHS\u2122 <${senderEmail}>`;
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',

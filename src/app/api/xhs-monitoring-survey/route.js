@@ -202,7 +202,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
       try {
         // Send to team
         const teamEmailResult = await resend.emails.send({
-          from: 'Pimlico XHS™ Copilot Survey <onboarding@resend.dev>',
+          from: `Pimlico XHS™ Copilot Survey <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: recipientEmails,
           subject: `📊 XHS™ COPILOT FEEDBACK - ${data.firstName} ${data.lastName} from ${data.company} | NPS: ${data.npsScore}/10`,
           html: `
@@ -388,7 +388,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
 
         // Send confirmation to user
         const userEmailResult = await resend.emails.send({
-          from: 'Pimlico XHS™ <onboarding@resend.dev>',
+          from: `Pimlico XHS™ <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: data.email,
           subject: 'Thank you for your feedback - Pimlico XHS™',
           html: `

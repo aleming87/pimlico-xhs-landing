@@ -109,7 +109,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
       // Send combined report to your team
       try {
         const leadEmail = await resend.emails.send({
-          from: 'Pimlico XHS Lead Intelligence <onboarding@resend.dev>',
+          from: `Pimlico XHS Lead Intelligence <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: recipientEmail,
           subject: `🎯 NEW LEAD - ${contactData.firstName || 'Unknown'} ${contactData.lastName || ''} from ${contactData.company || 'Unknown Company'} | ${data.focusAreas.join('+')}`,
           html: `
@@ -290,7 +290,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(i => `• ${i}`).
         
         try {
           const userEmail = await resend.emails.send({
-            from: 'Pimlico XHS <onboarding@resend.dev>',
+            from: `Pimlico XHS <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
             to: contactData.email,
             subject: 'Welcome to Pimlico XHS™ - Your Regulatory AI Workspace Partner',
             html: `
