@@ -187,8 +187,8 @@ export default function RootLayout({ children }) {
                 "Compliance automation"
               ],
               "sameAs": [
-                "https://www.linkedin.com/company/pimlicoxhs",
-                "https://twitter.com/pimlicoxhs",
+                "https://www.linkedin.com/company/wearepimlico/",
+                "https://x.com/PimlicoXHS",
                 "https://find-and-update.company-information.service.gov.uk/company/15725938"
               ],
               "contactPoint": [
@@ -295,9 +295,16 @@ export default function RootLayout({ children }) {
             }),
           }}
         />
+        {/* Skip-to-content for keyboard + screen-reader users (WCAG 2.4.1) */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-[var(--color-text-primary)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--color-bg-base)] focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
         <CurrencyProvider>
           <SiteHeader />
-          {children}
+          <div id="main-content">{children}</div>
           <SiteFooter />
         </CurrencyProvider>
         <LazyConsent />
