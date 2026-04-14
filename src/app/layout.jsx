@@ -145,8 +145,19 @@ export default function RootLayout({ children }) {
               "legalName": "Pimlico Solutions Ltd",
               "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot"],
               "url": "https://pimlicosolutions.com",
-              "logo": "https://pimlicosolutions.com/Pimlico_SI_Brandmark.png",
-              "image": "https://pimlicosolutions.com/cta-bg.jpg",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://pimlicosolutions.com/Pimlico_SI_Brandmark.png",
+                "width": 249,
+                "height": 187,
+                "caption": "Pimlico Solutions"
+              },
+              "image": {
+                "@type": "ImageObject",
+                "url": "https://pimlicosolutions.com/cta-bg.jpg",
+                "width": 1920,
+                "height": 1278
+              },
               "description": "Pimlico Solutions is a regulatory technology company that builds XHS™ Copilot — an AI-powered compliance workspace for teams in gambling, payments, crypto, and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering real-time regulatory intelligence, AI-generated jurisdiction reports, and collaborative compliance tools.",
               "foundingDate": "2024",
               "foundingLocation": {
@@ -287,10 +298,19 @@ export default function RootLayout({ children }) {
               "alternateName": ["Pimlico XHS", "Pimlico Solutions", "XHS Copilot"],
               "url": "https://pimlicosolutions.com",
               "description": "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
+              "inLanguage": "en",
               "publisher": {
                 "@type": "Organization",
                 "name": "Pimlico Solutions",
                 "url": "https://pimlicosolutions.com"
+              },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://pimlicosolutions.com/insights?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
               }
             }),
           }}

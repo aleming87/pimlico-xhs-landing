@@ -11,6 +11,15 @@ export default function InsightsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Seed search from ?q= so Google's sitelinks searchbox (SearchAction
+  // in WebSite schema) and external search-result deep links work.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    if (q) setSearchQuery(q);
+  }, []);
+
   useEffect(() => {
     const loadArticles = async () => {
       try {
