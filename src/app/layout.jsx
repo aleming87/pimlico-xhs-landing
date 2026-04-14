@@ -2,6 +2,7 @@ import '@/styles/tailwind.css'
 import { Playfair_Display, JetBrains_Mono } from 'next/font/google'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import { LazyConsent } from '@/components/LazyConsent'
+import Analytics from '@/components/Analytics'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 
@@ -300,6 +301,7 @@ export default function RootLayout({ children }) {
           <SiteFooter />
         </CurrencyProvider>
         <LazyConsent />
+        <Analytics />
       </body>
     </html>
   )
