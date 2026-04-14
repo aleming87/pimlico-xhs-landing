@@ -57,12 +57,15 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
       { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
     shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
     type: 'website',
@@ -100,6 +103,14 @@ export const metadata = {
     },
   },
   manifest: '/site.webmanifest',
+  verification: {
+    // Populate these with the verification tokens from Google/Bing/Yandex consoles.
+    // Leave the env vars unset locally — values only render in production.
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || undefined,
+    other: process.env.NEXT_PUBLIC_BING_VERIFICATION
+      ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION }
+      : undefined,
+  },
 }
 
 export const viewport = {
@@ -112,6 +123,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${playfair.variable} ${jetbrains.variable}`}>
       <head>
+        {/* Preconnect + DNS prefetch for render-critical origins */}
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.fontshare.com" />
+        <link rel="dns-prefetch" href="https://cdn.fontshare.com" />
         <link
           rel="stylesheet"
           href="https://api.fontshare.com/css?f%5B%5D=switzer@400,500,600,700&amp;display=swap"
@@ -174,12 +190,24 @@ export default function RootLayout({ children }) {
                 "https://twitter.com/pimlicoxhs",
                 "https://find-and-update.company-information.service.gov.uk/company/15725938"
               ],
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "contactType": "sales",
-                "url": "https://pimlicosolutions.com/contact",
-                "availableLanguage": "English"
-              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "contactType": "sales",
+                  "email": "contact@pimlicosolutions.com",
+                  "url": "https://pimlicosolutions.com/contact",
+                  "areaServed": "Worldwide",
+                  "availableLanguage": "English"
+                },
+                {
+                  "@type": "ContactPoint",
+                  "contactType": "customer support",
+                  "email": "contact@pimlicosolutions.com",
+                  "url": "https://pimlicosolutions.com/contact",
+                  "areaServed": "Worldwide",
+                  "availableLanguage": "English"
+                }
+              ],
               "brand": {
                 "@type": "Brand",
                 "name": "XHS™ Copilot",
@@ -195,6 +223,56 @@ export default function RootLayout({ children }) {
                   "operatingSystem": "Web"
                 }
               }
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Service",
+                  "@id": "https://pimlicosolutions.com/verticals#gambling",
+                  "name": "Gambling Compliance Monitoring",
+                  "serviceType": "Regulatory Compliance Software",
+                  "url": "https://pimlicosolutions.com/verticals#gambling",
+                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "areaServed": "Worldwide",
+                  "description": "Continuous monitoring of UKGC, MGA, and 150+ gambling authorities. Licensing, AML, player protection, advertising and responsible-gambling obligations tracked daily."
+                },
+                {
+                  "@type": "Service",
+                  "@id": "https://pimlicosolutions.com/verticals#payments",
+                  "name": "Payments Compliance Monitoring",
+                  "serviceType": "Regulatory Compliance Software",
+                  "url": "https://pimlicosolutions.com/verticals#payments",
+                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "areaServed": "Worldwide",
+                  "description": "PSD2, PSD3, DORA, EMI and payments licensing regulation monitored across 100+ jurisdictions with AI-generated change reports."
+                },
+                {
+                  "@type": "Service",
+                  "@id": "https://pimlicosolutions.com/verticals#crypto",
+                  "name": "Crypto Compliance Monitoring",
+                  "serviceType": "Regulatory Compliance Software",
+                  "url": "https://pimlicosolutions.com/verticals#crypto",
+                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "areaServed": "Worldwide",
+                  "description": "MiCA, Travel Rule, VASP licensing and stablecoin regulation tracked for compliance teams across 80+ jurisdictions."
+                },
+                {
+                  "@type": "Service",
+                  "@id": "https://pimlicosolutions.com/verticals#ai",
+                  "name": "AI Regulation Compliance Monitoring",
+                  "serviceType": "Regulatory Compliance Software",
+                  "url": "https://pimlicosolutions.com/verticals#ai",
+                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "areaServed": "Worldwide",
+                  "description": "EU AI Act, NIST AI RMF, state-level AI legislation and sectoral AI rules continuously monitored for risk teams."
+                }
+              ]
             }),
           }}
         />

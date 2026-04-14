@@ -34,7 +34,8 @@ export default function sitemap() {
     { path: '/about', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/security', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
-    { path: '/terms-and-conditions', priority: 0.3, changeFrequency: 'yearly' },
+    // /terms-and-conditions is intentionally omitted — the page sets
+    // robots: noindex, so listing it in the sitemap would be contradictory.
   ]
 
   const entries = staticRoutes.map((r) => ({
