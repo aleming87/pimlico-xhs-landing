@@ -10,6 +10,7 @@ import fs from 'fs'
 import path from 'path'
 import { listRegulators } from '@/data/regulators'
 import { listFrameworks } from '@/data/frameworks'
+import { listGlossaryTerms } from '@/data/glossary'
 
 const BASE = 'https://pimlicosolutions.com'
 
@@ -36,6 +37,7 @@ export default function sitemap() {
     { path: '/insights', priority: 0.8, changeFrequency: 'daily' },
     { path: '/regulators', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/frameworks', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/glossary', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/about', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/security', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
@@ -77,6 +79,16 @@ export default function sitemap() {
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.7,
+    })
+  }
+
+  // Glossary term pages — every entry in src/data/glossary.js
+  for (const t of listGlossaryTerms()) {
+    entries.push({
+      url: `${BASE}/glossary/${t.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.5,
     })
   }
 
