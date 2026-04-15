@@ -9,6 +9,7 @@
 import fs from 'fs'
 import path from 'path'
 import { listRegulators } from '@/data/regulators'
+import { listFrameworks } from '@/data/frameworks'
 
 const BASE = 'https://pimlicosolutions.com'
 
@@ -34,6 +35,7 @@ export default function sitemap() {
     { path: '/verticals', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/insights', priority: 0.8, changeFrequency: 'daily' },
     { path: '/regulators', priority: 0.8, changeFrequency: 'weekly' },
+    { path: '/frameworks', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/about', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/security', priority: 0.6, changeFrequency: 'monthly' },
     { path: '/privacy', priority: 0.3, changeFrequency: 'yearly' },
@@ -62,6 +64,16 @@ export default function sitemap() {
   for (const r of listRegulators()) {
     entries.push({
       url: `${BASE}/regulators/${r.slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    })
+  }
+
+  // Framework landing pages — every entry in src/data/frameworks.js
+  for (const f of listFrameworks()) {
+    entries.push({
+      url: `${BASE}/frameworks/${f.slug}`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.7,
