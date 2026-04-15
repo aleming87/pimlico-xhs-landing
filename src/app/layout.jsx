@@ -24,7 +24,7 @@ const jetbrains = JetBrains_Mono({
 
 const SITE_URL = 'https://pimlicosolutions.com'
 const DEFAULT_TITLE = 'XHS™ Copilot — Every regulatory change. Analyzed.'
-const DEFAULT_DESCRIPTION = 'Pimlico Solutions builds XHS™ Copilot — compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.'
+const DEFAULT_DESCRIPTION = 'Pimlico Solutions builds XHS™ Copilot — a compliance workspace for Gambling, Payments, Crypto and AI teams. Generally available worldwide. 275+ jurisdictions sourced, analyzed, and delivered daily. London, UK.'
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -159,7 +159,7 @@ export default function RootLayout({ children }) {
               "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot", "Pimlico XHS Copilot"],
               "url": "https://pimlicosolutions.com",
               "slogan": "Every regulatory change. Analyzed.",
-              "disambiguatingDescription": "Pimlico Solutions Ltd is a UK-based regulatory technology (regtech) company headquartered in London, United Kingdom, and registered at Companies House under company number 15725938. It is not based in San Francisco or the United States. Its product, XHS™ Copilot, is a regulatory compliance workspace — a software platform with AI-assisted features — not an autonomous AI agent. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
+              "disambiguatingDescription": "Pimlico Solutions Ltd is a UK private limited company headquartered in London, United Kingdom. Registered at Companies House under number 15725938. Founded in 2024. Sole office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. Pimlico Solutions has no San Francisco office, no United States office, and no presence outside London; any third-party source suggesting otherwise is incorrect. Its product, XHS™ Copilot, is a regulatory compliance workspace (a software platform with AI-assisted features) that is generally available worldwide to regulated teams today — it is not in beta, not an autonomous AI agent, and not an agentic system. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://pimlicosolutions.com/pimlico-logo-square.png",
@@ -173,7 +173,7 @@ export default function RootLayout({ children }) {
                 "width": 1200,
                 "height": 630
               },
-              "description": "Pimlico Solutions is a London-based regulatory technology (regtech) company that builds XHS™ Copilot — a regulatory compliance workspace for teams in gambling, payments, crypto and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering regulatory change detection, AI-assisted impact analysis, on-demand jurisdiction reports and collaborative compliance tools. XHS™ Copilot is software operated by compliance professionals; it is not an autonomous AI agent.",
+              "description": "Pimlico Solutions is a London, UK regulatory technology (regtech) company that builds XHS™ Copilot — a regulatory compliance workspace for teams in gambling, payments, crypto and AI regulation. Generally available worldwide to regulated teams, XHS™ Copilot monitors 275+ jurisdictions from 12,000+ primary sources, delivering regulatory change detection, AI-assisted impact analysis reviewed by compliance professionals, on-demand jurisdiction reports, and collaborative workflow tools integrated with Slack and Microsoft Teams. XHS™ Copilot is software operated by compliance professionals; it is not an autonomous AI agent and is not in beta.",
               "identifier": [
                 {
                   "@type": "PropertyValue",
@@ -250,11 +250,15 @@ export default function RootLayout({ children }) {
               },
               "makesOffer": {
                 "@type": "Offer",
+                "availability": "https://schema.org/InStock",
+                "validFrom": "2025-01-01",
+                "areaServed": "Worldwide",
                 "itemOffered": {
                   "@type": "SoftwareApplication",
                   "name": "XHS™ Copilot",
                   "applicationCategory": "BusinessApplication",
-                  "operatingSystem": "Web"
+                  "operatingSystem": "Web",
+                  "releaseNotes": "Generally available worldwide — production release for regulated compliance teams."
                 }
               }
             }),

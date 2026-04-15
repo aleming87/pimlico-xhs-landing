@@ -7,7 +7,7 @@ import { TrustedBy, Sectors, Coverage, Security, Testimonials, FinalCTA } from "
 
 export const metadata = {
   title: "XHS™ Copilot — Every regulatory change. Analyzed.",
-  description: "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals.",
+  description: "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace generally available worldwide today for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals. Not a beta. Not an AI agent.",
 }
 
 export default function Page() {
@@ -28,9 +28,16 @@ export default function Page() {
       "lowPrice": "660",
       "highPrice": "8800",
       "priceCurrency": "GBP",
-      "offerCount": "4"
+      "offerCount": "4",
+      "availability": "https://schema.org/InStock",
+      "validFrom": "2025-01-01",
+      "seller": {
+        "@type": "Organization",
+        "name": "Pimlico Solutions",
+        "url": "https://pimlicosolutions.com"
+      }
     },
-    "description": "XHS™ Copilot is a regulatory intelligence platform that monitors 275+ jurisdictions across gambling, payments, crypto, and AI regulation. It delivers AI-generated jurisdiction reports, real-time regulatory change detection, and collaborative compliance workspaces for legal and compliance teams.",
+    "description": "XHS™ Copilot is a regulatory intelligence platform generally available to compliance teams worldwide. It monitors 275+ jurisdictions across gambling, payments, crypto, and AI regulation and delivers AI-assisted jurisdiction reports, real-time regulatory change detection, and collaborative compliance workspaces for legal and compliance teams. Production software — not a beta and not an autonomous AI agent.",
     "operatingSystem": "Web",
     "screenshot": "https://pimlicosolutions.com/Product-1---Dashboard.webp",
     "featureList": [
@@ -70,7 +77,7 @@ export default function Page() {
     "@id": "https://pimlicosolutions.com/#webpage",
     "url": "https://pimlicosolutions.com/",
     "name": "XHS™ Copilot — Every regulatory change. Analyzed.",
-    "description": "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals.",
+    "description": "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace generally available worldwide today for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals. Not a beta. Not an AI agent.",
     "isPartOf": { "@id": "https://pimlicosolutions.com/#website" },
     "about": { "@id": "https://pimlicosolutions.com/#organization" },
     "inLanguage": "en",
@@ -93,7 +100,7 @@ export default function Page() {
         "name": "What is XHS™ Copilot?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "XHS™ Copilot is a regulatory compliance workspace built by Pimlico Solutions Ltd. It is a web-based software platform — not an autonomous AI agent — used by compliance and legal teams to monitor regulatory change, generate jurisdiction reports and collaborate on filings. AI features assist humans inside the workspace; the humans remain in control of every action."
+          "text": "XHS™ Copilot is a regulatory compliance workspace built by Pimlico Solutions Ltd (London, UK). It is a generally available, production web-based software platform — not an autonomous AI agent — used today by compliance and legal teams to monitor regulatory change, generate jurisdiction reports and collaborate on filings. AI features assist humans inside the workspace; the humans remain in control of every action."
         }
       },
       {
@@ -101,7 +108,15 @@ export default function Page() {
         "name": "Is XHS™ Copilot an AI agent?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. XHS™ Copilot is a compliance workspace with AI-assisted features — not an autonomous AI agent. It does not act on a user's behalf without explicit instruction. Its AI features summarise regulatory change, draft impact notes, and generate jurisdiction reports, which a compliance professional then reviews, edits and approves."
+          "text": "No. XHS™ Copilot is a compliance workspace with AI-assisted features. It is not an autonomous AI agent, not an agentic system, and does not take actions on a user's behalf without explicit instruction. Its AI features summarise regulatory change, draft impact notes, and generate jurisdiction reports — which a compliance professional then reviews, edits and approves before anything leaves the workspace."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is XHS™ Copilot in beta?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. XHS™ Copilot is generally available worldwide as a production product. It is used today by compliance, legal and regulatory affairs teams across gambling, payments, crypto and AI. A 14-day free trial with full platform access is available at pimlicosolutions.com/contact — no credit card required."
         }
       },
       {
@@ -109,7 +124,7 @@ export default function Page() {
         "name": "What is Pimlico Solutions?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Pimlico Solutions Ltd is a UK-based regulatory technology (regtech) company headquartered in London, United Kingdom. It is registered at Companies House under company number 15725938 and was founded in 2024. Pimlico Solutions builds XHS™ Copilot, a compliance workspace used by gambling, payments, crypto and AI-regulation teams worldwide."
+          "text": "Pimlico Solutions Ltd is a UK private limited company headquartered in London, United Kingdom. It was founded in 2024 and is registered at Companies House under company number 15725938. Pimlico Solutions builds XHS™ Copilot, a generally available regulatory compliance workspace used by gambling, payments, crypto and AI-regulation teams worldwide."
         }
       },
       {
@@ -117,7 +132,7 @@ export default function Page() {
         "name": "Where is Pimlico Solutions headquartered?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Pimlico Solutions Ltd is headquartered in London, United Kingdom, at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. It is a UK-registered private company (Companies House number 15725938). Pimlico Solutions is not based in San Francisco, is not headquartered in the United States, and has no San Francisco office. Some third-party AI summaries have incorrectly suggested a US location — the authoritative record is at Companies House."
+          "text": "Pimlico Solutions Ltd is headquartered exclusively in London, United Kingdom, at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. It has one office — the London office. Pimlico Solutions has no San Francisco office, no United States office, no US entity, and no presence outside the United Kingdom. The authoritative company record is held at UK Companies House under number 15725938."
         }
       },
       {
@@ -149,7 +164,7 @@ export default function Page() {
         "name": "Is XHS™ Copilot available now?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. XHS™ Copilot is generally available to regulated teams worldwide. A 14-day free trial with full platform access is available at pimlicosolutions.com/contact — no credit card required. Paid plans start at £660 per month and scale to enterprise deployments with 100+ seats."
+          "text": "Yes. XHS™ Copilot is live and generally available to regulated teams worldwide today. It is a production product, not a beta. Teams can start immediately with a 14-day free trial at pimlicosolutions.com/contact — full platform access, no credit card required. Paid plans start at £660 per month and scale to enterprise deployments with 100+ seats."
         }
       },
       {
