@@ -67,6 +67,22 @@ const faqSchema = {
         "@type": "Answer",
         "text": "No. Customer-uploaded documents, watchlists, and workspace content are never used to train any shared model. AI analysis runs on isolated inference endpoints with no cross-tenant data leakage."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XHS™ Copilot act autonomously?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. XHS™ Copilot is a compliance workspace with AI-assisted features, not an autonomous AI agent. It does not take actions on a user's behalf without explicit instruction. AI features — summarisation, impact notes, jurisdiction reports — are drafts that a compliance professional reviews, edits and approves before they are used."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I audit what XHS™ Copilot does with our data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. XHS™ Copilot keeps an immutable audit log of every user action, document upload, AI inference and data export. Audit logs are customer-accessible in the workspace and can be exported to a SIEM. Enterprise customers can configure retention and region-specific storage."
+      }
     }
   ]
 };

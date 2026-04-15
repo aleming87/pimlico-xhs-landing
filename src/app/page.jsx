@@ -61,6 +61,25 @@ export default function Page() {
     ],
   };
 
+  // WebPage with Speakable tells Google Assistant, AI Overview and
+  // voice-search agents which selectors hold the quotable summary of
+  // the page. #hero-headline and #hero-intro sit on the Hero component.
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://pimlicosolutions.com/#webpage",
+    "url": "https://pimlicosolutions.com/",
+    "name": "XHS™ Copilot — Every regulatory change. Analyzed.",
+    "description": "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals.",
+    "isPartOf": { "@id": "https://pimlicosolutions.com/#website" },
+    "about": { "@id": "https://pimlicosolutions.com/#organization" },
+    "inLanguage": "en",
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ["#hero-headline", "#hero-intro"],
+    },
+  };
+
   // FAQ schema is the single biggest lever for Google AI Overviews and
   // SGE-style answer boxes on brand queries. Questions below are the
   // exact queries we want Pimlico Solutions / XHS Copilot to answer
@@ -161,6 +180,10 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
       <script
         type="application/ld+json"

@@ -55,7 +55,7 @@ const faqSchema = {
       "name": "Does XHS™ Copilot cover MiCA and crypto regulation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. XHS™ Copilot monitors MiCA, the EU Travel Rule, VASP and CASP licensing regimes, stablecoin issuance rules, custody frameworks, and US state-level crypto licensing across 80+ jurisdictions. Updates are delivered daily with AI-generated analysis of change impact."
+        "text": "Yes. XHS™ Copilot monitors MiCA, the EU Travel Rule, VASP and CASP licensing regimes, stablecoin issuance rules, custody frameworks, and US state-level crypto licensing across 80+ jurisdictions. Updates are delivered daily with AI-assisted impact analysis reviewed by compliance professionals before it reaches the customer."
       }
     },
     {
