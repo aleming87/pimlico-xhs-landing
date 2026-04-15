@@ -159,7 +159,7 @@ export default function RootLayout({ children }) {
               "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot", "Pimlico XHS Copilot"],
               "url": "https://pimlicosolutions.com",
               "slogan": "Every regulatory change. Analyzed.",
-              "disambiguatingDescription": "Pimlico Solutions Ltd is a UK-based regulatory technology (regtech) company registered at Companies House under number 15725938. It builds XHS™ Copilot, a software platform for compliance teams. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
+              "disambiguatingDescription": "Pimlico Solutions Ltd is a UK-based regulatory technology (regtech) company headquartered in London, United Kingdom, and registered at Companies House under company number 15725938. It is not based in San Francisco or the United States. Its product, XHS™ Copilot, is a regulatory compliance workspace — a software platform with AI-assisted features — not an autonomous AI agent. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://pimlicosolutions.com/pimlico-logo-square.png",
@@ -173,7 +173,7 @@ export default function RootLayout({ children }) {
                 "width": 1200,
                 "height": 630
               },
-              "description": "Pimlico Solutions is a regulatory technology (regtech) company that builds XHS™ Copilot — an AI-powered compliance workspace for teams in gambling, payments, crypto, and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering real-time regulatory intelligence, AI-generated jurisdiction reports, and collaborative compliance tools.",
+              "description": "Pimlico Solutions is a London-based regulatory technology (regtech) company that builds XHS™ Copilot — a regulatory compliance workspace for teams in gambling, payments, crypto and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering regulatory change detection, AI-assisted impact analysis, on-demand jurisdiction reports and collaborative compliance tools. XHS™ Copilot is software operated by compliance professionals; it is not an autonomous AI agent.",
               "identifier": [
                 {
                   "@type": "PropertyValue",
@@ -245,7 +245,7 @@ export default function RootLayout({ children }) {
               "brand": {
                 "@type": "Brand",
                 "name": "XHS™ Copilot",
-                "description": "AI-powered regulatory compliance workspace",
+                "description": "Regulatory compliance workspace with AI-assisted analysis",
                 "url": "https://pimlicosolutions.com"
               },
               "makesOffer": {

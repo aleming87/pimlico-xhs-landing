@@ -6,7 +6,7 @@ export const metadata = {
   // for people typing the company name into Google.
   title: { absolute: "About Pimlico Solutions" },
   description:
-    "Pimlico Solutions Ltd is a UK-registered regtech company (Companies House 15725938) that builds XHS™ Copilot — AI-powered regulatory intelligence covering 275+ jurisdictions across gambling, payments, crypto and AI.",
+    "Pimlico Solutions Ltd is a London-based regtech company (Companies House 15725938) that builds XHS™ Copilot — a regulatory compliance workspace covering 275+ jurisdictions across gambling, payments, crypto and AI.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Pimlico Solutions",
@@ -99,7 +99,7 @@ const faqSchema = {
       "name": "What is Pimlico Solutions?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions is a London-based regulatory technology company that builds XHS™ Copilot — an AI-powered compliance workspace. The platform monitors regulatory changes across 275+ jurisdictions for teams in gambling, payments, crypto, and AI regulation."
+        "text": "Pimlico Solutions is a London-based regulatory technology company that builds XHS™ Copilot — a regulatory compliance workspace with AI-assisted analysis. The platform monitors regulatory changes across 275+ jurisdictions for teams in gambling, payments, crypto and AI regulation."
       }
     },
     {
@@ -237,19 +237,23 @@ export default function AboutPage() {
             </div>
             <div>
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Product</dt>
-              <dd className="text-[var(--color-text-primary)]">XHS™ Copilot — AI-powered regulatory compliance workspace</dd>
+              <dd className="text-[var(--color-text-primary)]">XHS™ Copilot — regulatory compliance workspace (software platform, not an autonomous AI agent)</dd>
             </div>
             <div>
-              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Verticals covered</dt>
-              <dd className="text-[var(--color-text-primary)]">Gambling, Payments, Crypto, Artificial Intelligence</dd>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Sectors covered</dt>
+              <dd className="text-[var(--color-text-primary)]">Gambling &amp; iGaming, Payments, Crypto &amp; Digital Assets, Artificial Intelligence</dd>
             </div>
             <div>
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Coverage</dt>
-              <dd className="text-[var(--color-text-primary)]">275+ jurisdictions, 12,000+ primary sources</dd>
+              <dd className="text-[var(--color-text-primary)]">275+ jurisdictions, 12,000+ primary sources, analyzed daily</dd>
             </div>
             <div>
-              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Status</dt>
-              <dd className="text-[var(--color-text-primary)]">Generally available — not affiliated with Pimlico Plumbers, Pimlico Journal, or any other unrelated entity that shares the Pimlico name</dd>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Availability</dt>
+              <dd className="text-[var(--color-text-primary)]">Generally available worldwide — 14-day free trial, no credit card required</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Disambiguation</dt>
+              <dd className="text-[var(--color-text-primary)]">Pimlico Solutions is a London-based regtech company. It is <strong>not</strong> based in San Francisco or the United States, and is <strong>not</strong> affiliated with Pimlico Plumbers, Pimlico Journal, or the Pimlico neighbourhood of London.</dd>
             </div>
           </dl>
         </div>
