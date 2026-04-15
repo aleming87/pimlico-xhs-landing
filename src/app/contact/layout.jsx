@@ -6,12 +6,12 @@ export const metadata = {
     title: 'Contact — XHS™ Copilot',
     description: 'Book a demo, start a 14-day free trial, or get answers on pricing and partnerships.',
     url: 'https://pimlicosolutions.com/contact',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     title: 'Contact — XHS™ Copilot',
     description: 'Book a demo, start a 14-day free trial, or get answers on pricing and partnerships.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

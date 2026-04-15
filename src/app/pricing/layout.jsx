@@ -6,12 +6,12 @@ export const metadata = {
     title: 'Pricing — XHS™ Copilot',
     description: 'Transparent pricing: pick your verticals, jurisdictions and team size. Instant quote. 14-day free trial.',
     url: 'https://pimlicosolutions.com/pricing',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     title: 'Pricing — XHS™ Copilot',
     description: 'Transparent pricing: pick your verticals, jurisdictions and team size. Instant quote. 14-day free trial.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

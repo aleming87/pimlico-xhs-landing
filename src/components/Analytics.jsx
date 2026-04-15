@@ -1,23 +1,33 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 import Script from 'next/script'
 
 /**
  * Consent-gated Google Analytics 4 loader.
  *
- * Only renders the GA tag when BOTH of the following are true:
+ * Loads the gtag tag only when BOTH of the following are true:
  *   1. `NEXT_PUBLIC_GA_ID` is set at build time (e.g. `G-XXXXXXXXXX`)
- *   2. The visitor has clicked "Accept" in the cookie banner
- *      (localStorage key `cookieConsent` === 'accepted')
+ *   2. The visitor has accepted cookies
+ *      (localStorage.cookieConsent === 'accepted')
  *
- * We re-check on `storage` events so consent changes in another tab
- * propagate without a full reload.
+ * Consent state is event-driven: `<CookieConsent />` dispatches
+ * `consent:updated` whenever the banner is interacted with. We also
+ * listen for cross-tab `storage` events so consent toggled in another
+ * tab propagates immediately.
+ *
+ * App Router client-side navigations do not trigger an automatic
+ * `page_view` (gtag only ships it on the first load). We fire one
+ * manually whenever the pathname or the tracked query params change.
  */
 export default function Analytics() {
   const gaId = process.env.NEXT_PUBLIC_GA_ID
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [consented, setConsented] = useState(false)
 
+  // --- consent state, event-driven ---------------------------------
   useEffect(() => {
     if (!gaId) return
 
@@ -30,15 +40,30 @@ export default function Analytics() {
     }
 
     read()
-    // Fire when the consent banner updates localStorage in this tab
-    // (the banner doesn't dispatch events today, so we poll briefly).
-    const id = setInterval(read, 1500)
-    window.addEventListener('storage', read)
+    const onConsent = () => read()
+    window.addEventListener('consent:updated', onConsent)
+    window.addEventListener('storage', onConsent)
     return () => {
-      clearInterval(id)
-      window.removeEventListener('storage', read)
+      window.removeEventListener('consent:updated', onConsent)
+      window.removeEventListener('storage', onConsent)
     }
   }, [gaId])
+
+  // --- SPA page_view on route change ------------------------------
+  useEffect(() => {
+    if (!gaId || !consented) return
+    if (typeof window === 'undefined') return
+    if (typeof window.gtag !== 'function') return
+    const qs = searchParams?.toString()
+    const page_path = qs ? `${pathname}?${qs}` : pathname
+    const page_location = `${window.location.origin}${page_path}`
+    window.gtag('event', 'page_view', {
+      page_path,
+      page_location,
+      page_title: document.title,
+      send_to: gaId,
+    })
+  }, [gaId, consented, pathname, searchParams])
 
   if (!gaId || !consented) return null
 
@@ -53,7 +78,12 @@ export default function Analytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}', { anonymize_ip: true });
+          // We fire page_view manually from the App Router effect so
+          // disable the default automatic one to avoid double-counting.
+          gtag('config', '${gaId}', {
+            anonymize_ip: true,
+            send_page_view: false
+          });
         `}
       </Script>
     </>

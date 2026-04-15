@@ -6,12 +6,12 @@ export const metadata = {
     title: 'Verticals — XHS™ Copilot',
     description: 'Regulatory intelligence for gambling, payments, crypto and AI compliance teams. 275+ jurisdictions, analyzed daily.',
     url: 'https://pimlicosolutions.com/verticals',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     title: 'Verticals — XHS™ Copilot',
     description: 'Regulatory intelligence for gambling, payments, crypto and AI compliance teams. 275+ jurisdictions, analyzed daily.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

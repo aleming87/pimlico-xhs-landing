@@ -11,7 +11,7 @@ export const metadata = {
     description:
       'Every regulator XHS™ Copilot tracks across gambling, payments, crypto and AI compliance.',
     url: 'https://pimlicosolutions.com/regulators',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
@@ -19,7 +19,7 @@ export const metadata = {
     title: 'Regulators — XHS™ Copilot',
     description:
       'Every regulator XHS™ Copilot tracks across gambling, payments, crypto and AI compliance.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

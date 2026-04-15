@@ -10,14 +10,14 @@ export const metadata = {
     title: 'Frameworks — XHS™ Copilot',
     description: 'MiCA, PSD2, DORA, EU AI Act and more — tracked end-to-end by XHS™ Copilot.',
     url: 'https://pimlicosolutions.com/frameworks',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@pimlicoxhs',
     title: 'Frameworks — XHS™ Copilot',
     description: 'MiCA, PSD2, DORA, EU AI Act and more — tracked end-to-end by XHS™ Copilot.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

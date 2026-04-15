@@ -8,14 +8,14 @@ export const metadata = {
     url: 'https://pimlicosolutions.com/terms-and-conditions',
     siteName: 'XHS™ Copilot',
     type: 'website',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@pimlicoxhs',
     title: 'Terms and Conditions — Pimlico Solutions',
     description: 'Terms of service for using XHS™ Copilot and the Pimlico Solutions platform.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   robots: {
     index: false,

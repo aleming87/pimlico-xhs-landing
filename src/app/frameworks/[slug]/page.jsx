@@ -25,14 +25,14 @@ export async function generateMetadata({ params }) {
       url: `https://pimlicosolutions.com/frameworks/${f.slug}`,
       siteName: 'XHS™ Copilot',
       type: 'article',
-      images: ['/cta-bg.jpg'],
+      images: ['/og-default.jpg'],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@pimlicoxhs',
       title: `${f.abbr} — XHS™ Copilot`,
       description,
-      images: ['/cta-bg.jpg'],
+      images: ['/og-default.jpg'],
     },
   }
 }

@@ -1,4 +1,5 @@
 import '@/styles/tailwind.css'
+import { Suspense } from 'react'
 import { Playfair_Display, JetBrains_Mono } from 'next/font/google'
 import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import { LazyConsent } from '@/components/LazyConsent'
@@ -23,7 +24,7 @@ const jetbrains = JetBrains_Mono({
 
 const SITE_URL = 'https://pimlicosolutions.com'
 const DEFAULT_TITLE = 'XHS™ Copilot — Every regulatory change. Analyzed.'
-const DEFAULT_DESCRIPTION = 'Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.'
+const DEFAULT_DESCRIPTION = 'Pimlico Solutions builds XHS™ Copilot — compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.'
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -73,15 +74,20 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: SITE_URL,
-    siteName: 'XHS™ Copilot',
+    // siteName appears as the Facebook/LinkedIn attribution strap and
+    // Google's SERP site-title. We use the parent company so corporate
+    // queries ("Pimlico Solutions") surface a consistent brand, while
+    // the product (XHS™ Copilot) continues to lead in the title line.
+    siteName: 'Pimlico Solutions',
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [
       {
-        url: '/cta-bg.jpg',
-        width: 1920,
-        height: 1278,
+        url: '/og-default.jpg',
+        width: 1200,
+        height: 630,
         alt: 'XHS™ Copilot — Every regulatory change. Analyzed.',
+        type: 'image/jpeg',
       },
     ],
   },
@@ -91,7 +97,12 @@ export const metadata = {
     creator: '@pimlicoxhs',
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
-    images: ['/cta-bg.jpg'],
+    images: [
+      {
+        url: '/og-default.jpg',
+        alt: 'XHS™ Copilot — Every regulatory change. Analyzed.',
+      },
+    ],
   },
   robots: {
     index: true,
@@ -158,9 +169,9 @@ export default function RootLayout({ children }) {
               },
               "image": {
                 "@type": "ImageObject",
-                "url": "https://pimlicosolutions.com/cta-bg.jpg",
-                "width": 1920,
-                "height": 1278
+                "url": "https://pimlicosolutions.com/og-default.jpg",
+                "width": 1200,
+                "height": 630
               },
               "description": "Pimlico Solutions is a regulatory technology (regtech) company that builds XHS™ Copilot — an AI-powered compliance workspace for teams in gambling, payments, crypto, and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering real-time regulatory intelligence, AI-generated jurisdiction reports, and collaborative compliance tools.",
               "identifier": [
@@ -340,7 +351,9 @@ export default function RootLayout({ children }) {
           <SiteFooter />
         </CurrencyProvider>
         <LazyConsent />
-        <Analytics />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
         <ConversionTracker />
       </body>
     </html>

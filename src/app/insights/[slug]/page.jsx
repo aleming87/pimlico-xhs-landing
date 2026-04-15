@@ -122,7 +122,7 @@ export default async function ArticlePage({ params }) {
         "@type": "NewsArticle",
         "headline": article.title,
         "description": article.excerpt || '',
-        "image": [article.ogImage || article.image || `${baseUrl}/cta-bg.jpg`],
+        "image": [article.ogImage || article.image || `${baseUrl}/og-default.jpg`],
         "datePublished": article.date,
         "dateModified": article.date,
         "inLanguage": "en",

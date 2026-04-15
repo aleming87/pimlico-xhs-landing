@@ -6,12 +6,12 @@ export const metadata = {
     title: 'Insights — XHS™ Copilot',
     description: 'Regulatory briefings and compliance analysis covering gambling, payments, crypto and AI.',
     url: 'https://pimlicosolutions.com/insights',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     title: 'Insights — XHS™ Copilot',
     description: 'Regulatory briefings and compliance analysis covering gambling, payments, crypto and AI.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

@@ -8,14 +8,14 @@ export const metadata = {
     url: 'https://pimlicosolutions.com/privacy',
     siteName: 'XHS™ Copilot',
     type: 'website',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@pimlicoxhs',
     title: 'Privacy Policy — Pimlico Solutions',
     description: 'How Pimlico Solutions Ltd collects, uses, and protects your personal data under UK GDPR.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   robots: {
     index: true,

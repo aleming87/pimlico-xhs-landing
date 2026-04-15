@@ -1,19 +1,25 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About",
-  description: "Pimlico Solutions is the London-based regtech company behind XHS™ Copilot — AI-powered regulatory intelligence covering 275+ jurisdictions across gambling, payments, crypto and AI.",
+  // Override the root title template so the SERP title for corporate
+  // queries is exactly "About Pimlico Solutions" — the strongest match
+  // for people typing the company name into Google.
+  title: { absolute: "About Pimlico Solutions" },
+  description:
+    "Pimlico Solutions Ltd is a UK-registered regtech company (Companies House 15725938) that builds XHS™ Copilot — AI-powered regulatory intelligence covering 275+ jurisdictions across gambling, payments, crypto and AI.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About — XHS™ Copilot",
-    description: "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
+    title: "About Pimlico Solutions",
+    description:
+      "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     url: "https://pimlicosolutions.com/about",
-    images: ["/cta-bg.jpg"],
+    images: ["/og-default.jpg"],
   },
   twitter: {
-    title: "About — XHS™ Copilot",
-    description: "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
-    images: ["/cta-bg.jpg"],
+    title: "About Pimlico Solutions",
+    description:
+      "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
+    images: ["/og-default.jpg"],
   },
 };
 
@@ -360,7 +366,7 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="relative border-t border-[var(--color-border-default)]/20 py-24 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src="/cta-bg.jpg" alt="" className="w-full h-full object-cover opacity-20" />
+          <img src="/og-default.jpg" alt="" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-[var(--color-bg-base)]/80" />
         </div>
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">

@@ -6,12 +6,12 @@ export const metadata = {
     title: 'Security — XHS™ Copilot',
     description: 'SOC 2 Type II, EU data residency, AES-256 encryption, GDPR-compliant processing. Built for regulated teams.',
     url: 'https://pimlicosolutions.com/security',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
   twitter: {
     title: 'Security — XHS™ Copilot',
     description: 'SOC 2 Type II, EU data residency, AES-256 encryption, GDPR-compliant processing. Built for regulated teams.',
-    images: ['/cta-bg.jpg'],
+    images: ['/og-default.jpg'],
   },
 }
 

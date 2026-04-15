@@ -32,7 +32,7 @@ export default function Page() {
     },
     "description": "XHS™ Copilot is a regulatory intelligence platform that monitors 275+ jurisdictions across gambling, payments, crypto, and AI regulation. It delivers AI-generated jurisdiction reports, real-time regulatory change detection, and collaborative compliance workspaces for legal and compliance teams.",
     "operatingSystem": "Web",
-    "screenshot": "https://pimlicosolutions.com/cta-bg.jpg",
+    "screenshot": "https://pimlicosolutions.com/Product-1---Dashboard.webp",
     "featureList": [
       "Real-time regulatory monitoring across 275+ jurisdictions",
       "AI-generated jurisdiction reports and analysis",
