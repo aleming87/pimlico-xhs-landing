@@ -24,16 +24,16 @@ export async function generateMetadata({ params }) {
       title: `${r.abbr} compliance — XHS™ Copilot`,
       description,
       url: `https://pimlicosolutions.com/regulators/${r.slug}`,
-      siteName: 'XHS™ Copilot',
+      siteName: 'Pimlico Solutions',
       type: 'article',
-      images: ['/og-default.jpg'],
+      images: ['/og-regulators.jpg'],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@pimlicoxhs',
       title: `${r.abbr} compliance — XHS™ Copilot`,
       description,
-      images: ['/og-default.jpg'],
+      images: ['/og-regulators.jpg'],
     },
   }
 }

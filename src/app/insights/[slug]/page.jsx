@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
         title: 'Article Not Found - XHS™ Copilot',
         description: 'The requested article could not be found.',
         url: `${baseUrl}/insights/${slug}`,
-        siteName: 'XHS™ Copilot',
+        siteName: 'Pimlico Solutions',
         type: 'website',
       },
     };
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }) {
       title: article.title,
       description: description,
       url: `${baseUrl}/insights/${slug}`,
-      siteName: 'XHS™ Copilot',
+      siteName: 'Pimlico Solutions',
       type: 'article',
       publishedTime: article.date,
       modifiedTime: article.date,
@@ -139,9 +139,9 @@ export default async function ArticlePage({ params }) {
           "url": baseUrl,
           "logo": {
             "@type": "ImageObject",
-            "url": `${baseUrl}/Pimlico_SI_Brandmark.png`,
-            "width": 249,
-            "height": 187,
+            "url": `${baseUrl}/pimlico-logo-square.png`,
+            "width": 1200,
+            "height": 1200,
           },
         },
         "mainEntityOfPage": {

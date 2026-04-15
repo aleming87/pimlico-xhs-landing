@@ -162,9 +162,9 @@ export default function RootLayout({ children }) {
               "disambiguatingDescription": "Pimlico Solutions Ltd is a UK-based regulatory technology (regtech) company registered at Companies House under number 15725938. It builds XHS™ Copilot, a software platform for compliance teams. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://pimlicosolutions.com/Pimlico_SI_Brandmark.png",
-                "width": 249,
-                "height": 187,
+                "url": "https://pimlicosolutions.com/pimlico-logo-square.png",
+                "width": 1200,
+                "height": 1200,
                 "caption": "Pimlico Solutions"
               },
               "image": {

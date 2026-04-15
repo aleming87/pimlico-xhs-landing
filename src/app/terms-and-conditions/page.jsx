@@ -6,7 +6,7 @@ export const metadata = {
     title: 'Terms and Conditions — Pimlico Solutions',
     description: 'Terms of service for using XHS™ Copilot and the Pimlico Solutions platform.',
     url: 'https://pimlicosolutions.com/terms-and-conditions',
-    siteName: 'XHS™ Copilot',
+    siteName: 'Pimlico Solutions',
     type: 'website',
     images: ['/og-default.jpg'],
   },

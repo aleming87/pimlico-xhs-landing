@@ -23,16 +23,16 @@ export async function generateMetadata({ params }) {
       title: `${f.abbr} — XHS™ Copilot`,
       description,
       url: `https://pimlicosolutions.com/frameworks/${f.slug}`,
-      siteName: 'XHS™ Copilot',
+      siteName: 'Pimlico Solutions',
       type: 'article',
-      images: ['/og-default.jpg'],
+      images: ['/og-frameworks.jpg'],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@pimlicoxhs',
       title: `${f.abbr} — XHS™ Copilot`,
       description,
-      images: ['/og-default.jpg'],
+      images: ['/og-frameworks.jpg'],
     },
   }
 }
