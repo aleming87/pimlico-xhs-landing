@@ -24,10 +24,58 @@ const breadcrumbSchema = {
   ],
 };
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What gambling regulations does XHS™ Copilot monitor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XHS™ Copilot tracks UKGC, MGA, GRA, GSC, Swedish SGA, Dutch KSA, Danish DGA, German GGL, Curaçao GCB, Anjouan AGLB, Philippine PAGCOR, Romanian ONJN and 150+ other gaming authorities. Coverage includes licensing, responsible gambling, AML, advertising, technical standards, and enforcement across every licensed market."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What payments regulations are covered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PSD2, PSD3, EMD2, DORA, open banking, state-level money transmission in the US, and emerging frameworks in APAC and the Middle East. XHS™ Copilot tracks licensing, AML, operational resilience, and supervisory expectations across 100+ jurisdictions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does XHS™ Copilot cover MiCA and crypto regulation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. XHS™ Copilot monitors MiCA, the EU Travel Rule, VASP and CASP licensing regimes, stablecoin issuance rules, custody frameworks, and US state-level crypto licensing across 80+ jurisdictions. Updates are delivered daily with AI-generated analysis of change impact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What AI regulations are tracked?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The EU AI Act (including high-risk system obligations and GPAI requirements), NIST AI RMF, state-level AI legislation in the US (Colorado, California, New York), and sectoral AI rules in financial services and healthcare. XHS™ Copilot delivers plain-English impact notes for every material change."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often are regulatory changes detected?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Continuously. XHS™ Copilot ingests 12,000+ primary sources — regulator bulletins, legislative texts, enforcement orders — and surfaces changes within hours of publication. Teams receive alerts via Slack, Microsoft Teams, or email."
+      }
+    }
+  ]
+};
+
 export default function VerticalsLayout({ children }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {children}
     </>
   )

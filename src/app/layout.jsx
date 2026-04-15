@@ -141,11 +141,14 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Organization",
+              "@type": ["Organization", "Corporation"],
+              "@id": "https://pimlicosolutions.com/#organization",
               "name": "Pimlico Solutions",
               "legalName": "Pimlico Solutions Ltd",
-              "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot"],
+              "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot", "Pimlico XHS Copilot"],
               "url": "https://pimlicosolutions.com",
+              "slogan": "Every regulatory change. Analyzed.",
+              "disambiguatingDescription": "Pimlico Solutions Ltd is a UK-based regulatory technology (regtech) company registered at Companies House under number 15725938. It builds XHS™ Copilot, a software platform for compliance teams. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://pimlicosolutions.com/Pimlico_SI_Brandmark.png",
@@ -159,7 +162,14 @@ export default function RootLayout({ children }) {
                 "width": 1920,
                 "height": 1278
               },
-              "description": "Pimlico Solutions is a regulatory technology company that builds XHS™ Copilot — an AI-powered compliance workspace for teams in gambling, payments, crypto, and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering real-time regulatory intelligence, AI-generated jurisdiction reports, and collaborative compliance tools.",
+              "description": "Pimlico Solutions is a regulatory technology (regtech) company that builds XHS™ Copilot — an AI-powered compliance workspace for teams in gambling, payments, crypto, and AI regulation. The platform monitors 275+ jurisdictions worldwide, delivering real-time regulatory intelligence, AI-generated jurisdiction reports, and collaborative compliance tools.",
+              "identifier": [
+                {
+                  "@type": "PropertyValue",
+                  "propertyID": "UK Companies House",
+                  "value": "15725938"
+                }
+              ],
               "foundingDate": "2024",
               "foundingLocation": {
                 "@type": "Place",
