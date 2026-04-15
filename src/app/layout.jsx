@@ -305,6 +305,7 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
+              "@id": "https://pimlicosolutions.com/#website",
               "name": "XHS™ Copilot",
               "alternateName": ["Pimlico XHS", "Pimlico Solutions", "XHS Copilot"],
               "url": "https://pimlicosolutions.com",

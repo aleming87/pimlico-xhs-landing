@@ -61,6 +61,29 @@ const breadcrumbSchema = {
   ]
 };
 
+// AboutPage explicitly anchors this page to the Organization entity
+// (matches the @id used in the root layout) so AI Overviews and the
+// Knowledge Graph treat Pimlico Solutions as one canonical entity.
+//
+// Speakable selectors mark the sentences we most want voice search
+// and AI Overviews to lift verbatim — the disambiguation summary,
+// the founding facts, and the headquarters statement.
+const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "https://pimlicosolutions.com/about#webpage",
+  "url": "https://pimlicosolutions.com/about",
+  "name": "About Pimlico Solutions",
+  "isPartOf": { "@id": "https://pimlicosolutions.com/#website" },
+  "about": { "@id": "https://pimlicosolutions.com/#organization" },
+  "mainEntity": { "@id": "https://pimlicosolutions.com/#organization" },
+  "inLanguage": "en",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["#company-facts", "#company-facts-heading"],
+  },
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -117,6 +140,10 @@ export default function AboutPage() {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {/* Hero */}
@@ -150,6 +177,75 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Key Facts — extractable structured facts that AI Overviews
+          and SGE can lift verbatim into answer boxes. Every value is
+          phrased to be re-quotable as a complete sentence. */}
+      <section
+        id="company-facts"
+        className="border-b border-[var(--color-border-default)]/20 py-16 sm:py-20"
+        aria-labelledby="company-facts-heading"
+      >
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ COMPANY FACTS ]
+          </p>
+          <h2
+            id="company-facts-heading"
+            className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-10"
+          >
+            Pimlico Solutions at a glance.
+          </h2>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 text-base">
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Legal name</dt>
+              <dd className="text-[var(--color-text-primary)]">Pimlico Solutions Ltd</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Headquarters</dt>
+              <dd className="text-[var(--color-text-primary)]">London, United Kingdom</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Registered office</dt>
+              <dd className="text-[var(--color-text-primary)]">71-75 Shelton Street, Covent Garden, London WC2H 9JQ</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Companies House</dt>
+              <dd className="text-[var(--color-text-primary)]">
+                <a
+                  href="https://find-and-update.company-information.service.gov.uk/company/15725938"
+                  className="underline decoration-[var(--color-border-default)] underline-offset-4 hover:decoration-[var(--color-text-primary)]"
+                  rel="noopener"
+                >15725938</a>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Founded</dt>
+              <dd className="text-[var(--color-text-primary)]">2024</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Industry</dt>
+              <dd className="text-[var(--color-text-primary)]">Regulatory technology (regtech)</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Product</dt>
+              <dd className="text-[var(--color-text-primary)]">XHS™ Copilot — AI-powered regulatory compliance workspace</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Verticals covered</dt>
+              <dd className="text-[var(--color-text-primary)]">Gambling, Payments, Crypto, Artificial Intelligence</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Coverage</dt>
+              <dd className="text-[var(--color-text-primary)]">275+ jurisdictions, 12,000+ primary sources</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Status</dt>
+              <dd className="text-[var(--color-text-primary)]">Generally available — not affiliated with Pimlico Plumbers, Pimlico Journal, or any other unrelated entity that shares the Pimlico name</dd>
+            </div>
+          </dl>
         </div>
       </section>
 
