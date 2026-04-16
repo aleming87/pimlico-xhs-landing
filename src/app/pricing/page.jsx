@@ -197,7 +197,7 @@ export default function PricingPage() {
             <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
               [ PRICING ]
             </p>
-            <h1 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
+            <h1 className="font-display text-3xl font-medium tracking-tight text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl leading-[1.1]">
               Pricing built around your scope.
             </h1>
             <p className="mt-5 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mx-auto">
@@ -503,7 +503,7 @@ export default function PricingPage() {
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
             [ IN EVERY PLAN ]
           </p>
-          <h2 className="text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-12">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-12">
             The full platform. No tiers on features.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -530,7 +530,7 @@ export default function PricingPage() {
           <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
             [ FAQ ]
           </p>
-          <h2 className="text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-10">
+          <h2 className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl leading-[1.1] mb-10">
             Questions, answered.
           </h2>
           <div>
@@ -544,7 +544,7 @@ export default function PricingPage() {
       {/* CTA */}
       <section className="border-t border-[var(--color-border-default)]/20 py-20 sm:py-28">
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-medium text-[var(--color-text-primary)] sm:text-4xl">
+          <h2 className="font-display text-3xl font-medium tracking-tight text-[var(--color-text-primary)] sm:text-4xl leading-[1.1]">
             See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
