@@ -201,7 +201,7 @@ export default function PricingPage() {
               Pricing built around your scope.
             </h1>
             <p className="mt-5 text-base text-[var(--color-text-tertiary)] leading-relaxed max-w-xl mx-auto">
-              Team size, verticals, coverage. 14-day trial, no credit card.
+              Priced by team size, verticals, and jurisdictional coverage. 14-day trial, no commitment required.
             </p>
             <p className="mt-5 text-sm text-[var(--color-text-tertiary)]">
               Need something custom?{" "}
