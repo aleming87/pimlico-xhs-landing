@@ -1,6 +1,22 @@
 export const metadata = {
   title: 'Privacy Policy - Pimlico XHS',
   description: 'Privacy Policy for Pimlico Solutions Ltd. Learn how we collect, use, and protect your personal data.',
+  alternates: { canonical: '/privacy' },
+  openGraph: {
+    title: 'Privacy Policy — Pimlico Solutions',
+    description: 'How Pimlico Solutions Ltd collects, uses, and protects your personal data under UK GDPR.',
+    url: 'https://pimlicosolutions.com/privacy',
+    siteName: 'Pimlico Solutions',
+    type: 'website',
+    images: ['/og-default.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@pimlicoxhs',
+    title: 'Privacy Policy — Pimlico Solutions',
+    description: 'How Pimlico Solutions Ltd collects, uses, and protects your personal data under UK GDPR.',
+    images: ['/og-default.jpg'],
+  },
   robots: {
     index: true,
     follow: true,

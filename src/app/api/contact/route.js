@@ -2,6 +2,8 @@ export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
 import { renderEmail, renderAdminNotification, escapeHtml } from '@/lib/emailTemplate';
+import { trackedLink } from '@/lib/trackedLink';
+import { sender, teamRecipient } from '@/lib/email';
 
 export async function POST(request) {
   try {
@@ -16,7 +18,7 @@ export async function POST(request) {
     if (process.env.RESEND_API_KEY) {
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
-      const recipientEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
+      const recipientEmail = teamRecipient();
 
       try {
         // Admin notification
@@ -36,7 +38,7 @@ export async function POST(request) {
         });
 
         await resend.emails.send({
-          from: 'Pimlico XHS Contact <onboarding@resend.dev>',
+          from: sender('Pimlico XHS Contact'),
           to: recipientEmail,
           subject: `CONTACT · ${data.firstName} ${data.lastName} · ${data.company || 'Unknown'}`,
           html: adminHtml,
@@ -53,15 +55,19 @@ export async function POST(request) {
             <p style="margin: 0; color: #94a3b8; font-size: 14px;">Every regulatory change. Tracked. Sourced. Verified. Delivered.</p>
           `,
           ctaLabel: 'Start your 14-day trial',
-          ctaHref: 'https://xhsdata.ai/register',
+          ctaHref: trackedLink('https://xhsdata.ai/register', {
+            campaign: 'contact_confirmation',
+            content: 'cta_button',
+          }),
           footerNote: 'Reply directly to this email if you need anything. We read every message.',
         });
 
         await resend.emails.send({
-          from: 'Pimlico XHS <onboarding@resend.dev>',
+          from: sender('Pimlico XHS'),
           to: data.email,
           subject: 'Thanks for contacting Pimlico XHS\u2122',
           html: userHtml,
+          replyTo: recipientEmail,
         });
 
         console.log('Contact emails sent successfully');

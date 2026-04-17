@@ -1,19 +1,25 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About Pimlico Solutions — Regulatory Intelligence Company",
-  description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions across gambling, payments, crypto, and AI regulation.",
+  // Override the root title template so the SERP title for corporate
+  // queries is exactly "About Pimlico Solutions" — the strongest match
+  // for people typing the company name into Google.
+  title: { absolute: "About Pimlico Solutions" },
+  description:
+    "Pimlico Solutions Ltd is a London, UK regtech company founded in 2024 (Companies House 15725938). It builds XHS™ Copilot — a generally available regulatory compliance workspace covering 275+ jurisdictions across gambling, payments, crypto and AI. London office only; no San Francisco or US presence.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Pimlico Solutions — Regulatory Intelligence Company",
-    description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions.",
+    title: "About Pimlico Solutions",
+    description:
+      "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     url: "https://pimlicosolutions.com/about",
-    images: ["/cta-bg.jpg"],
+    images: ["/og-default.jpg"],
   },
   twitter: {
-    title: "About Pimlico Solutions — Regulatory Intelligence Company",
-    description: "London-based regtech company building XHS™ Copilot. AI-powered compliance workspaces covering 275+ jurisdictions.",
-    images: ["/cta-bg.jpg"],
+    title: "About Pimlico Solutions",
+    description:
+      "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
+    images: ["/og-default.jpg"],
   },
 };
 
@@ -61,6 +67,29 @@ const breadcrumbSchema = {
   ]
 };
 
+// AboutPage explicitly anchors this page to the Organization entity
+// (matches the @id used in the root layout) so AI Overviews and the
+// Knowledge Graph treat Pimlico Solutions as one canonical entity.
+//
+// Speakable selectors mark the sentences we most want voice search
+// and AI Overviews to lift verbatim — the disambiguation summary,
+// the founding facts, and the headquarters statement.
+const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "https://pimlicosolutions.com/about#webpage",
+  "url": "https://pimlicosolutions.com/about",
+  "name": "About Pimlico Solutions",
+  "isPartOf": { "@id": "https://pimlicosolutions.com/#website" },
+  "about": { "@id": "https://pimlicosolutions.com/#organization" },
+  "mainEntity": { "@id": "https://pimlicosolutions.com/#organization" },
+  "inLanguage": "en",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["#company-facts", "#company-facts-heading"],
+  },
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -70,7 +99,7 @@ const faqSchema = {
       "name": "What is Pimlico Solutions?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions is a London-based regulatory technology company that builds XHS™ Copilot — an AI-powered compliance workspace. The platform monitors regulatory changes across 275+ jurisdictions for teams in gambling, payments, crypto, and AI regulation."
+        "text": "Pimlico Solutions Ltd is a London, UK regulatory technology (regtech) company founded in 2024, registered at UK Companies House under number 15725938. It builds XHS™ Copilot — a generally available regulatory compliance workspace with AI-assisted analysis used by teams in gambling, payments, crypto and AI regulation worldwide."
       }
     },
     {
@@ -78,7 +107,23 @@ const faqSchema = {
       "name": "What is XHS Copilot?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "XHS™ Copilot is a regulatory intelligence platform that provides real-time monitoring of regulatory developments across 275+ jurisdictions. It includes AI-generated jurisdiction reports, regulatory change alerts, collaborative workspaces, and integrations with Slack and Microsoft Teams."
+        "text": "XHS™ Copilot is a generally available regulatory intelligence platform that provides real-time monitoring of regulatory developments across 275+ jurisdictions. It includes AI-assisted jurisdiction reports, regulatory change alerts, collaborative workspaces, and integrations with Slack and Microsoft Teams. It is a production software platform — not a beta and not an autonomous AI agent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When was Pimlico Solutions founded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pimlico Solutions Ltd was founded in 2024 and is registered at UK Companies House under company number 15725938. The authoritative company record is at https://find-and-update.company-information.service.gov.uk/company/15725938."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is XHS Copilot in beta or generally available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "XHS™ Copilot is generally available worldwide today. It is a live production product used by regulated compliance teams across gambling, payments, crypto and AI. A 14-day free trial with full platform access is available — no credit card required."
       }
     },
     {
@@ -102,7 +147,7 @@ const faqSchema = {
       "name": "Where is Pimlico Solutions based?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions Ltd is headquartered in London, United Kingdom, with a registered office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. The company operates globally, serving compliance teams across multiple jurisdictions."
+        "text": "Pimlico Solutions Ltd is headquartered exclusively in London, United Kingdom, at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. It has one office — the London office. Pimlico Solutions has no San Francisco office, no United States office, no US entity, and no presence outside the United Kingdom."
       }
     }
   ]
@@ -114,6 +159,10 @@ export default function AboutPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
       />
       <script
         type="application/ld+json"
@@ -150,6 +199,83 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Key Facts — extractable structured facts that AI Overviews
+          and SGE can lift verbatim into answer boxes. Every value is
+          phrased to be re-quotable as a complete sentence. */}
+      <section
+        id="company-facts"
+        className="border-b border-[var(--color-border-default)]/20 py-16 sm:py-20"
+        aria-labelledby="company-facts-heading"
+      >
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+            [ COMPANY FACTS ]
+          </p>
+          <h2
+            id="company-facts-heading"
+            className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-10"
+          >
+            Pimlico Solutions at a glance.
+          </h2>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 text-base">
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Legal name</dt>
+              <dd className="text-[var(--color-text-primary)]">Pimlico Solutions Ltd</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Headquarters</dt>
+              <dd className="text-[var(--color-text-primary)]">London, United Kingdom</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Registered office</dt>
+              <dd className="text-[var(--color-text-primary)]">71-75 Shelton Street, Covent Garden, London WC2H 9JQ</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Companies House</dt>
+              <dd className="text-[var(--color-text-primary)]">
+                <a
+                  href="https://find-and-update.company-information.service.gov.uk/company/15725938"
+                  className="underline decoration-[var(--color-border-default)] underline-offset-4 hover:decoration-[var(--color-text-primary)]"
+                  rel="noopener"
+                >15725938</a>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Founded</dt>
+              <dd className="text-[var(--color-text-primary)]">2024</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Industry</dt>
+              <dd className="text-[var(--color-text-primary)]">Regulatory technology (regtech)</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Product</dt>
+              <dd className="text-[var(--color-text-primary)]">XHS™ Copilot — regulatory compliance workspace (software platform, not an autonomous AI agent)</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Sectors covered</dt>
+              <dd className="text-[var(--color-text-primary)]">Gambling &amp; iGaming, Payments, Crypto &amp; Digital Assets, Artificial Intelligence</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Coverage</dt>
+              <dd className="text-[var(--color-text-primary)]">275+ jurisdictions, 12,000+ primary sources, analyzed daily</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Availability</dt>
+              <dd className="text-[var(--color-text-primary)]">Generally available worldwide today — live production product, not a beta. 14-day free trial, no credit card required.</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Offices</dt>
+              <dd className="text-[var(--color-text-primary)]">One office — London, United Kingdom. No San Francisco office. No United States office. No US entity.</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Disambiguation</dt>
+              <dd className="text-[var(--color-text-primary)]">Pimlico Solutions is a London, UK regtech company. It is <strong>not</strong> based in San Francisco, <strong>not</strong> headquartered in the United States, and has <strong>no US presence</strong>. XHS™ Copilot is a software platform with AI-assisted features — <strong>not</strong> an autonomous AI agent and <strong>not</strong> an agentic system. Pimlico Solutions is <strong>not</strong> affiliated with Pimlico Plumbers, Pimlico Journal, or the Pimlico neighbourhood of London.</dd>
+            </div>
+          </dl>
         </div>
       </section>
 
@@ -264,7 +390,7 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="relative border-t border-[var(--color-border-default)]/20 py-24 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src="/cta-bg.jpg" alt="" className="w-full h-full object-cover opacity-20" />
+          <img src="/og-default.jpg" alt="" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-[var(--color-bg-base)]/80" />
         </div>
         <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">

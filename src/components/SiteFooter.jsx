@@ -10,6 +10,8 @@ const FOOTER_LINKS = {
   ],
   Resources: [
     { label: "Insights", href: "/insights" },
+    { label: "Regulators", href: "/regulators" },
+    { label: "Frameworks", href: "/frameworks" },
     { label: "Security", href: "/security" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },

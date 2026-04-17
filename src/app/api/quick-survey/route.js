@@ -97,7 +97,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(app => `• ${app
       try {
         // Send to team
         const teamEmailResult = await resend.emails.send({
-          from: 'Pimlico XHS Quick Survey <onboarding@resend.dev>',
+          from: `Pimlico XHS Quick Survey <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: recipientEmail,
           subject: `🎯 QUICK SURVEY - ${data.firstName} ${data.lastName} from ${data.company}`,
           text: emailReport,
@@ -107,7 +107,7 @@ ${data.productivityApps.length > 0 ? data.productivityApps.map(app => `• ${app
 
         // Send confirmation to user
         const userEmailResult = await resend.emails.send({
-          from: 'Pimlico XHS <onboarding@resend.dev>',
+          from: `Pimlico XHS <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: data.email,
           subject: 'Thank you for your submission - Pimlico XHS™',
           html: `

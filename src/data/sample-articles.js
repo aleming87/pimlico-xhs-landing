@@ -115,7 +115,7 @@ Finland's new Gambling Act represents a significant opportunity for operators wi
     author: 'Pimlico XHS™ Team',
     date: '2026-02-01',
     readTime: '8 min read',
-    image: '/AIProduct.png',
+    image: '/AIProduct.webp',
     featured: false,
     tags: ['eu-ai-act', 'artificial-intelligence', 'compliance', 'financial-services', 'risk-classification'],
     content: `
@@ -316,7 +316,7 @@ Operators should review their current practices against the new guidance and imp
     author: 'Pimlico XHS™ Team',
     date: '2026-01-20',
     readTime: '7 min read',
-    image: '/AI4.png',
+    image: '/AI4.webp',
     featured: false,
     tags: ['mica', 'crypto', 'digital-assets', 'european-union', 'licensing'],
     content: `
@@ -359,7 +359,7 @@ Organizations should develop a structured approach to MiCA compliance, including
     author: 'Pimlico XHS™ Team',
     date: '2026-01-15',
     readTime: '10 min read',
-    image: '/AIProduct.png',
+    image: '/AIProduct.webp',
     featured: false,
     tags: ['ai-documentation', 'model-cards', 'compliance', 'financial-services', 'risk-assessment'],
     content: `

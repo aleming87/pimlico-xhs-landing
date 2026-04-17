@@ -1,6 +1,22 @@
 export const metadata = {
   title: 'Terms and Conditions - Pimlico Solutions',
   description: 'Terms and Conditions for Pimlico Solutions Ltd. Read our terms of service for using the XHS Service platform.',
+  alternates: { canonical: '/terms-and-conditions' },
+  openGraph: {
+    title: 'Terms and Conditions — Pimlico Solutions',
+    description: 'Terms of service for using XHS™ Copilot and the Pimlico Solutions platform.',
+    url: 'https://pimlicosolutions.com/terms-and-conditions',
+    siteName: 'Pimlico Solutions',
+    type: 'website',
+    images: ['/og-default.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@pimlicoxhs',
+    title: 'Terms and Conditions — Pimlico Solutions',
+    description: 'Terms of service for using XHS™ Copilot and the Pimlico Solutions platform.',
+    images: ['/og-default.jpg'],
+  },
   robots: {
     index: false,
     follow: false,

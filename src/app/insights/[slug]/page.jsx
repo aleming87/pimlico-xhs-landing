@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
         title: 'Article Not Found - XHS™ Copilot',
         description: 'The requested article could not be found.',
         url: `${baseUrl}/insights/${slug}`,
-        siteName: 'XHS™ Copilot',
+        siteName: 'Pimlico Solutions',
         type: 'website',
       },
     };
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }) {
       title: article.title,
       description: description,
       url: `${baseUrl}/insights/${slug}`,
-      siteName: 'XHS™ Copilot',
+      siteName: 'Pimlico Solutions',
       type: 'article',
       publishedTime: article.date,
       modifiedTime: article.date,
@@ -119,19 +119,35 @@ export default async function ArticlePage({ params }) {
   const articleSchema = article
     ? {
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": "NewsArticle",
         "headline": article.title,
         "description": article.excerpt || '',
-        "image": article.ogImage || article.image || `${baseUrl}/cta-bg.jpg`,
+        "image": [article.ogImage || article.image || `${baseUrl}/og-default.jpg`],
         "datePublished": article.date,
         "dateModified": article.date,
-        "author": { "@type": "Organization", "name": "Pimlico Solutions", "url": baseUrl },
+        "inLanguage": "en",
+        "articleSection": article.category || undefined,
+        "keywords": Array.isArray(article.tags) ? article.tags.join(", ") : undefined,
+        "author": {
+          "@type": "Organization",
+          "name": "Pimlico Solutions",
+          "url": baseUrl,
+        },
         "publisher": {
           "@type": "Organization",
           "name": "Pimlico Solutions",
-          "logo": { "@type": "ImageObject", "url": `${baseUrl}/dual-logo.png` },
+          "url": baseUrl,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${baseUrl}/pimlico-logo-square.png`,
+            "width": 1200,
+            "height": 1200,
+          },
         },
-        "mainEntityOfPage": `${baseUrl}/insights/${slug}`,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `${baseUrl}/insights/${slug}`,
+        },
       }
     : null;
 

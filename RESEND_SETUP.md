@@ -42,7 +42,28 @@ To send emails from `@pimlicosolutions.com`:
 4. Add the DNS records Resend provides to your domain's DNS settings
 5. Wait for verification (usually a few minutes)
 
-**Until domain is verified**, emails will be sent from `onboarding@resend.dev` (Resend's default domain)
+All routes now read the sender from `SENDER_EMAIL` (default
+`noreply@pimlicosolutions.com`). The Resend sandbox (`onboarding@resend.dev`)
+is no longer hard-coded anywhere.
+
+### 4a. Configure Webhooks (for analytics)
+
+Go to [Resend Webhooks](https://resend.com/webhooks) → Add endpoint:
+
+- **URL**: `https://pimlicosolutions.com/api/webhooks/resend`
+- **Events**: `email.delivered`, `email.opened`, `email.clicked`,
+  `email.bounced`, `email.complained`
+
+Copy the signing secret (starts with `whsec_`) and add it to Cloudflare
+Pages env vars as `RESEND_WEBHOOK_SECRET`.
+
+Each event is forwarded to GA4 via the Measurement Protocol so you
+can see email engagement (opens / clicks) alongside web conversions
+in GA4 → Reports → Engagement → Events.
+
+Also enable **account-level** open + click tracking in
+Resend → Settings → Email so the tracking pixel + link rewriting are
+applied to every outbound email.
 
 ### 5. Test the Integration
 
@@ -69,16 +90,25 @@ To send emails from `@pimlicosolutions.com`:
 
 ## Production Deployment
 
-### Vercel (Recommended)
-1. Go to your Vercel project settings
-2. Navigate to "Environment Variables"
-3. Add:
-   - `RESEND_API_KEY` = your API key
-   - `CONTACT_EMAIL` = your team email
-4. Redeploy the project
+### Cloudflare Pages (current)
 
-### Other Platforms
-Add the same environment variables to your hosting platform's settings.
+Set the following in **Cloudflare Pages → Settings → Environment Variables**
+(both Production and Preview):
+
+| Variable | Type | Value |
+|---|---|---|
+| `RESEND_API_KEY` | Secret | `re_...` from Resend → API Keys |
+| `RESEND_WEBHOOK_SECRET` | Secret | `whsec_...` from Resend → Webhooks → endpoint |
+| `SENDER_EMAIL` | Plain | `noreply@pimlicosolutions.com` (already in wrangler.toml as fallback) |
+| `CONTACT_EMAIL` | Plain | `contact@pimlicosolutions.com` or whichever inbox should receive form submissions |
+| `NEXT_PUBLIC_GA_ID` | Plain | `G-XXXXXXXXXX` from GA4 → Admin → Data Streams |
+| `GA_MEASUREMENT_API_SECRET` | Secret | from GA4 → Admin → Data Streams → Measurement Protocol |
+| `NEXT_PUBLIC_GSC_VERIFICATION` | Plain | `content="..."` value from Google Search Console verification meta tag |
+| `NEXT_PUBLIC_BING_VERIFICATION` | Plain | `content="..."` value from Bing Webmaster meta tag |
+| `ARTICLES_API_KEY` | Secret | strong random string for the agent-publishing endpoint |
+
+Then redeploy. The webhook endpoint and analytics will start receiving
+data immediately.
 
 ## Troubleshooting
 

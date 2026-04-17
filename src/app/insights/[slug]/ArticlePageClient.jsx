@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import RelatedArticles from '@/components/RelatedArticles';
 
 // Gift link token generator — must match the one in admin/articles/page.jsx
 function generateGiftToken(slug) {
@@ -551,11 +552,20 @@ export default function ArticlePageClient() {
             </div>
           )}
 
+          {/* Related Articles — internal linking + dwell time */}
+          {(!article.isPremium || hasFullAccess) && (
+            <RelatedArticles
+              currentSlug={article.slug}
+              currentCategory={article.category}
+              currentTags={article.tags || []}
+            />
+          )}
+
           {/* Back to Insights */}
           {(!article.isPremium || hasFullAccess) && (
             <div className="mt-8">
-              <Link 
-                href="/insights" 
+              <Link
+                href="/insights"
                 className="inline-flex items-center text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] font-medium"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -17,14 +17,26 @@ export function CookieConsent() {
     }
   }, [])
 
+  const emit = (value) => {
+    localStorage.setItem('cookieConsent', value)
+    // Notify other components (Analytics) in the same tab without polling.
+    // `storage` events only fire cross-tab, so we dispatch a custom event.
+    try {
+      window.dispatchEvent(new CustomEvent('consent:updated', { detail: value }))
+    } catch {
+      // Older browsers: fall back silently; Analytics will catch up on
+      // the next route change or full reload.
+    }
+  }
+
   const handleAccept = () => {
-    localStorage.setItem('cookieConsent', 'accepted')
+    emit('accepted')
     setIsClosing(true)
     setTimeout(() => setIsVisible(false), 300)
   }
 
   const handleReject = () => {
-    localStorage.setItem('cookieConsent', 'rejected')
+    emit('rejected')
     setIsClosing(true)
     setTimeout(() => setIsVisible(false), 300)
   }

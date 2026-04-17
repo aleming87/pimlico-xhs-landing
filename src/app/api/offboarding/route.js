@@ -409,7 +409,7 @@ Submitted: ${new Date().toISOString()}
           Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from: 'Pimlico XHS™ Feedback <onboarding@resend.dev>',
+          from: `Pimlico XHS™ Feedback <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: [toEmail],
           subject: `XHS™ Trial Completion - ${name} ${company ? `(${company})` : ''} - ${avgRating}/5 avg`.trim(),
           html: htmlReport,

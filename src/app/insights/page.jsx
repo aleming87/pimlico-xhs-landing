@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 
 const categories = ["All", "AI Regulation", "Payments", "Crypto", "Gambling"];
 
@@ -10,6 +11,27 @@ export default function InsightsPage() {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Seed search from ?q= so Google's sitelinks searchbox (SearchAction
+  // in WebSite schema) and external search-result deep links work.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    if (q) setSearchQuery(q);
+  }, []);
+
+  // Debounced view_search_results event for GA4 (standard event name).
+  useEffect(() => {
+    if (!searchQuery.trim()) return;
+    const t = setTimeout(() => {
+      trackEvent("view_search_results", {
+        search_term: searchQuery.trim(),
+        category_filter: selectedCategory,
+      });
+    }, 600);
+    return () => clearTimeout(t);
+  }, [searchQuery, selectedCategory]);
 
   useEffect(() => {
     const loadArticles = async () => {

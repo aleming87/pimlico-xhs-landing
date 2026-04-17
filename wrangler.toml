@@ -2,5 +2,20 @@ name = "pimlico-xhs-landing"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
+# Non-secret defaults that ship in source. Override per-environment in
+# Cloudflare Pages dashboard (Settings → Environment Variables).
+#
+# Secrets MUST be set in the dashboard (encrypted at rest) — never here:
+#   RESEND_API_KEY              transactional email
+#   RESEND_WEBHOOK_SECRET       webhook signature verification
+#   GA_MEASUREMENT_API_SECRET   server-side GA4 events
+#   ARTICLES_API_KEY            agent-publishing auth
+#
+# Public env (NEXT_PUBLIC_*) are safe to ship but should still be set
+# per-environment in the dashboard so prod/preview can differ:
+#   NEXT_PUBLIC_GA_ID
+#   NEXT_PUBLIC_GSC_VERIFICATION
+#   NEXT_PUBLIC_BING_VERIFICATION
 [vars]
 CONTACT_EMAIL = "andrew@pimlicosolutions.com"
+SENDER_EMAIL  = "noreply@pimlicosolutions.com"

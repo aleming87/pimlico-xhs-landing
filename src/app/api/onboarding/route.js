@@ -197,7 +197,7 @@ export async function POST(request) {
           console.log('📧 RESEND_API_KEY found, attempting to send onboarding email...');
           const { Resend } = await import('resend');
           const resend = new Resend(process.env.RESEND_API_KEY);
-          const senderEmail = process.env.SENDER_EMAIL || 'onboarding@resend.dev';
+          const senderEmail = process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com';
           const recipientEmail = process.env.CONTACT_EMAIL || 'andrew@pimlicosolutions.com';
           const recipientEmails = [recipientEmail];
           console.log(`📧 Sending from: ${senderEmail}, to: ${recipientEmails.join(', ')}`);
@@ -288,8 +288,7 @@ ${submission.additionalNotes ? `💬 NOTES:\n${submission.additionalNotes}` : ''
           }
         } catch (emailError) {
           console.error('❌ Onboarding email error:', emailError?.message || emailError);
-          console.error('💡 If using onboarding@resend.dev, emails can only be sent to the Resend account owner email.');
-          console.error('💡 To fix: verify your domain in Resend dashboard and set SENDER_EMAIL=noreply@yourdomain.com');
+          console.error('💡 Sender domain may not be verified in Resend. Check the verified domain in Resend dashboard.');
         }
       }
 
