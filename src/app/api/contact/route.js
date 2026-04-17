@@ -58,6 +58,7 @@ export async function POST(request) {
           ctaHref: trackedLink('https://xhsdata.ai/register', {
             campaign: 'contact_confirmation',
             content: 'cta_button',
+            clickParams: data.clickParams || {},
           }),
           footerNote: 'Reply directly to this email if you need anything. We read every message.',
         });

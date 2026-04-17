@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { trackEvent, trackOutbound } from "@/lib/analytics";
+import { buildTrialUrl, getStoredInboundParams } from "@/lib/trialUrl";
 
 export default function ContactPage() {
   return (
@@ -18,13 +19,21 @@ function ContactPageInner() {
   const [emailError, setEmailError] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  // Trial requests go straight to xhsdata.ai/register
+  // Trial requests go straight to xhsdata.ai/register. Use buildTrialUrl so
+  // the stored gclid/gbraid/wbraid from a paid-traffic session gets carried
+  // across the domain boundary — ConversionTracker can't catch a programmatic
+  // window.location.href assignment, only anchor clicks.
   const isTrial = searchParams.get("trial") === "true";
   if (typeof window !== "undefined" && isTrial) {
-    trackOutbound("begin_trial", "https://xhsdata.ai/register", {
+    const trialUrl = buildTrialUrl({
+      utm_source: "site",
+      utm_medium: "internal",
+      utm_campaign: "contact_trial_redirect",
+    });
+    trackOutbound("begin_trial", trialUrl, {
       source_section: "contact_trial_redirect",
     });
-    window.location.href = "https://xhsdata.ai/register?utm_source=site&utm_medium=internal&utm_campaign=contact_trial_redirect";
+    window.location.href = trialUrl;
     return null;
   }
 
@@ -83,6 +92,9 @@ function ContactPageInner() {
       message: formData.get("message"),
       agreedToPolicy: formData.get("agree-to-policies") === "on",
       marketingConsent: formData.get("marketing-consent") === "on",
+      // Stored gclid/gbraid/utm_* from the session so the confirmation
+      // email CTA can carry paid-click attribution through to xhsdata.ai.
+      clickParams: getStoredInboundParams(),
     };
 
     localStorage.setItem("contactFormData", JSON.stringify(data));

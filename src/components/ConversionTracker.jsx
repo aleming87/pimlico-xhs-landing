@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { trackEvent } from '@/lib/analytics'
+import { getStoredInboundParams } from '@/lib/trialUrl'
 
 /**
  * Site-wide click delegation for conversion tracking.
@@ -38,9 +39,36 @@ export default function ConversionTracker() {
     function appendUtm(url, campaign) {
       try {
         const u = new URL(url)
-        if (!u.searchParams.has('utm_source')) u.searchParams.set('utm_source', 'site')
-        if (!u.searchParams.has('utm_medium')) u.searchParams.set('utm_medium', 'internal')
-        if (!u.searchParams.has('utm_campaign')) u.searchParams.set('utm_campaign', campaign || 'site_link')
+        const stored = getStoredInboundParams()
+
+        // Click identifiers (gclid etc) — always add if stored, never clobber
+        // anything already on the URL.
+        for (const key of ['gclid', 'gbraid', 'wbraid', 'fbclid', 'msclkid']) {
+          if (stored[key] && !u.searchParams.has(key)) {
+            u.searchParams.set(key, stored[key])
+          }
+        }
+
+        // UTMs — fill missing keys, preferring stored values (original
+        // traffic source) over the site/internal/<page> fallback.
+        const utmDefaults = {
+          utm_source: 'site',
+          utm_medium: 'internal',
+          utm_campaign: campaign || 'site_link',
+        }
+        for (const [key, fallback] of Object.entries(utmDefaults)) {
+          if (!u.searchParams.has(key)) {
+            u.searchParams.set(key, stored[key] || fallback)
+          }
+        }
+
+        // Propagate stored utm_content / utm_term when present and not overridden.
+        for (const key of ['utm_content', 'utm_term']) {
+          if (stored[key] && !u.searchParams.has(key)) {
+            u.searchParams.set(key, stored[key])
+          }
+        }
+
         return u.toString()
       } catch {
         return url

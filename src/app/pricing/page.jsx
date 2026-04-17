@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
+import { getStoredInboundParams } from "@/lib/trialUrl";
 
 // ── Pricing model (mirrored from platform commercialPricingModel.ts) ──
 
@@ -481,6 +482,8 @@ export default function PricingPage() {
                                 monthlyPrice: price.monthly,
                                 annualPrice: price.annual,
                                 plan: users <= 3 ? "Professional" : users <= 25 ? "Team" : "Enterprise",
+                                // Carry paid-click attribution through to the email CTA
+                                clickParams: getStoredInboundParams(),
                               }),
                             });
                             setQuoteSent(true);

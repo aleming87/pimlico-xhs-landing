@@ -8,7 +8,7 @@ import { sender, teamRecipient } from '@/lib/email';
 export async function POST(request) {
   try {
     const data = await request.json();
-    const { name, email, company, users, verticals, coverage, billing, monthlyPrice, annualPrice, plan } = data;
+    const { name, email, company, users, verticals, coverage, billing, monthlyPrice, annualPrice, plan, clickParams } = data;
 
     const verticalsList = (verticals || []).join(', ');
     const coverageList = (coverage || []).join(', ');
@@ -70,6 +70,7 @@ export async function POST(request) {
             campaign: 'quote_confirmation',
             content: 'cta_button',
             term: plan || undefined,
+            clickParams: clickParams || {},
           }),
           footerNote: 'A member of our team will be in touch shortly to walk you through the configuration and answer any questions. Reply to this email if you need anything in the meantime.',
         });

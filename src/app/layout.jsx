@@ -5,6 +5,7 @@ import { CurrencyProvider } from '@/contexts/CurrencyContext'
 import { LazyConsent } from '@/components/LazyConsent'
 import Analytics from '@/components/Analytics'
 import ConversionTracker from '@/components/ConversionTracker'
+import InboundParamCapture from '@/components/InboundParamCapture'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
 
@@ -358,6 +359,7 @@ export default function RootLayout({ children }) {
         <Suspense fallback={null}>
           <Analytics />
         </Suspense>
+        <InboundParamCapture />
         <ConversionTracker />
       </body>
     </html>
