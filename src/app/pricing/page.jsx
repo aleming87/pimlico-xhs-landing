@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
-import { getStoredInboundParams } from "@/lib/trialUrl";
+import { buildContactUrl, buildTrialUrl, getStoredInboundParams } from "@/lib/trialUrl";
 
 // ── Pricing model (mirrored from platform commercialPricingModel.ts) ──
 
@@ -137,6 +137,7 @@ export default function PricingPage() {
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [quoteSubmitting, setQuoteSubmitting] = useState(false);
   const [quoteSent, setQuoteSent] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
   const [selectedVerticals, setSelectedVerticals] = useState(["Gambling"]);
   const [selectedRegions, setSelectedRegions] = useState(["europe"]);
   const [billing, setBilling] = useState("monthly");
@@ -437,28 +438,30 @@ export default function PricingPage() {
                       </div>
                     </div>
 
-                    <div className="mt-auto space-y-2">
-                      <a
-                        href={`https://xhsdata.ai/register?plan=${users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise"}&users=${users}&verticals=${encodeURIComponent(selectedVerticals.join(","))}&coverage=${encodeURIComponent(selectedRegions.join(","))}&billing=${billing}`}
-                        className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
-                      >
-                        Start your trial
-                      </a>
-                      <Link
-                        href="/contact?interest=pricing"
-                        className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40"
-                      >
-                        Contact sales
-                      </Link>
-                      {!showQuoteForm && !quoteSent && (
-                        <button
-                          onClick={() => setShowQuoteForm(true)}
-                          className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
+                    {!quoteSent && (
+                      <div className="mt-auto space-y-2">
+                        <a
+                          href={`https://xhsdata.ai/register?plan=${users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise"}&users=${users}&verticals=${encodeURIComponent(selectedVerticals.join(","))}&coverage=${encodeURIComponent(selectedRegions.join(","))}&billing=${billing}`}
+                          className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
                         >
-                          Email this quote to me &rarr;
-                        </button>
-                      )}
-                    </div>
+                          Start your trial
+                        </a>
+                        <Link
+                          href="/contact?interest=pricing"
+                          className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40"
+                        >
+                          Contact sales
+                        </Link>
+                        {!showQuoteForm && (
+                          <button
+                            onClick={() => setShowQuoteForm(true)}
+                            className="block w-full text-center text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors py-1"
+                          >
+                            Email this quote to me &rarr;
+                          </button>
+                        )}
+                      </div>
+                    )}
 
                     {showQuoteForm && !quoteSent && (
                       <form
@@ -486,6 +489,7 @@ export default function PricingPage() {
                                 clickParams: getStoredInboundParams(),
                               }),
                             });
+                            setSubmittedEmail(String(fd.get("email") || ""));
                             setQuoteSent(true);
                           } catch (err) {
                             console.error(err);
@@ -507,9 +511,39 @@ export default function PricingPage() {
                     )}
 
                     {quoteSent && (
-                      <p className="mt-3 text-xs text-center text-[var(--color-text-tertiary)]">
-                        Quote sent. Check your inbox.
-                      </p>
+                      <div className="mt-auto space-y-3">
+                        <div className="rounded-lg border border-[var(--color-border-default)]/40 bg-[var(--color-bg-elevated)]/40 px-4 py-3">
+                          <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-[var(--color-text-muted)] mb-1">
+                            [ QUOTE SENT ]
+                          </p>
+                          <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                            Check{" "}
+                            <span className="font-mono text-[var(--color-text-primary)] break-all">
+                              {submittedEmail || "your inbox"}
+                            </span>
+                            . Here's what to do next.
+                          </p>
+                        </div>
+                        <a
+                          href={buildTrialUrl({
+                            plan: users <= 3 ? "professional" : users <= 25 ? "team" : "enterprise",
+                            users,
+                            verticals: selectedVerticals.join(","),
+                            coverage: selectedRegions.join(","),
+                            billing,
+                            utm_content: "quote_submitted",
+                          })}
+                          className="block w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
+                        >
+                          Start your trial
+                        </a>
+                        <a
+                          href={buildContactUrl({ interest: "demo" })}
+                          className="block w-full rounded-lg border border-[var(--color-border-subtle)] px-6 py-2.5 text-center text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)] hover:bg-[var(--color-bg-elevated)]/40"
+                        >
+                          Book a 15-min walkthrough
+                        </a>
+                      </div>
                     )}
                   </>
                 )}
