@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getRegulator, listRegulators } from '@/data/regulators'
+import InlineCTA from '@/components/InlineCTA'
 
 export const dynamic = 'force-static'
 
@@ -250,6 +251,13 @@ export default async function RegulatorPage({ params }) {
           </ol>
         </div>
       </section>
+
+      {/* Inline CTA — mid-content conversion surface */}
+      <InlineCTA
+        eyebrow="TRY IT"
+        headline={`Track ${r.abbr} change-detection alongside your other authorities.`}
+        subhead={`14-day trial. Full access to ${r.abbr} and 270+ other regulators, in one workspace.`}
+      />
 
       {/* Licences */}
       <section className="border-t border-[var(--color-border-default)]/20 py-16 sm:py-20">

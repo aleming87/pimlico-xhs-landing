@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { listRegulators } from '@/data/regulators'
+import InlineCTA from '@/components/InlineCTA'
 
 export const metadata = {
   title: 'Regulators',
@@ -131,6 +132,12 @@ export default function RegulatorsIndex() {
           ))}
         </div>
       </section>
+
+      <InlineCTA
+        eyebrow="SEE IT LIVE"
+        headline="Every authority, one workspace."
+        subhead="14-day trial. Track change detection across every regulator above — and 270+ more."
+      />
     </main>
   )
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { listGlossaryTerms } from '@/data/glossary'
+import InlineCTA from '@/components/InlineCTA'
 
 export const metadata = {
   title: 'Compliance glossary — key regulatory terms explained',
@@ -154,6 +155,12 @@ export default function GlossaryIndex() {
           </ul>
         </div>
       </section>
+
+      <InlineCTA
+        eyebrow="SEE IT LIVE"
+        headline="Every term, tracked in context."
+        subhead="14-day trial. Each concept above mapped to live regulator updates, frameworks and enforcement across your jurisdictions."
+      />
     </main>
   )
 }

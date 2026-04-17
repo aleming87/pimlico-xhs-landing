@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getFramework, listFrameworks } from '@/data/frameworks'
 import { listRegulators } from '@/data/regulators'
+import InlineCTA from '@/components/InlineCTA'
 
 export const dynamic = 'force-static'
 
@@ -248,6 +249,13 @@ export default async function FrameworkPage({ params }) {
           </ol>
         </div>
       </section>
+
+      {/* Inline CTA — mid-content conversion surface */}
+      <InlineCTA
+        eyebrow="TRY IT"
+        headline={`See every ${f.abbr} obligation in your workspace.`}
+        subhead={`14-day trial. Full access to the ${f.abbr} surface area — Level 2 standards, NCA guidance, enforcement.`}
+      />
 
       {/* What XHS tracks */}
       <section className="border-t border-[var(--color-border-default)]/20 py-16 sm:py-20">

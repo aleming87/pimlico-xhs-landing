@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getGlossaryTerm, listGlossaryTerms } from '@/data/glossary'
+import InlineCTA from '@/components/InlineCTA'
 
 export const dynamic = 'force-static'
 
@@ -161,6 +162,13 @@ export default async function GlossaryTermPage({ params }) {
               {t.context}
             </p>
           </div>
+
+          {/* Inline CTA — mid-content conversion surface */}
+          <InlineCTA
+            eyebrow="SEE IT LIVE"
+            headline={`${t.abbr || t.term} is one of thousands of signals XHS™ Copilot tracks.`}
+            subhead="14-day trial. Every regulator, framework and jurisdiction change, in one workspace."
+          />
 
           {/* See also (external) */}
           {t.seeAlso?.length > 0 && (

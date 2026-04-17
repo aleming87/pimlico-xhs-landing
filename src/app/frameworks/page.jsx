@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { listFrameworks } from '@/data/frameworks'
+import InlineCTA from '@/components/InlineCTA'
 
 export const metadata = {
   title: 'Frameworks',
@@ -128,6 +129,12 @@ export default function FrameworksIndex() {
           ))}
         </div>
       </section>
+
+      <InlineCTA
+        eyebrow="SEE IT LIVE"
+        headline="Every framework, one workspace."
+        subhead="14-day trial. Full access to every framework above — Level 2 through enforcement, across 275+ jurisdictions."
+      />
     </main>
   )
 }
