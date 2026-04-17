@@ -64,7 +64,7 @@ export default function SiteFooter() {
               href="https://xhsdata.ai/register"
               className="rounded-lg bg-[var(--color-text-primary)] px-5 py-2 text-xs font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
             >
-              Start free trial
+              Start your trial
             </Link>
             <a
               href="https://xhsdata.ai/login"

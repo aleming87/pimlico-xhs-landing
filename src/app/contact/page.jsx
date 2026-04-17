@@ -263,7 +263,7 @@ function ContactPageInner() {
                 disabled={isSubmitting}
                 className="mt-8 w-full rounded-lg bg-[var(--color-text-primary)] px-6 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Sending..." : isTrial ? "Start free trial" : "Book a demo"}
+                {isSubmitting ? "Sending..." : isTrial ? "Start your trial" : "Book a demo"}
               </button>
             </form>
           </div>

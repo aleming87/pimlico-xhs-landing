@@ -51,6 +51,27 @@ export default function RegulatorsIndex() {
     })),
   }
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Regulators tracked by XHS™ Copilot',
+    description:
+      'Every regulator XHS™ Copilot tracks — UKGC, MGA, FCA, EBA, MAS, FINMA and 270+ more authorities across gambling, payments, crypto and AI compliance.',
+    url: 'https://pimlicosolutions.com/regulators',
+    isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico Solutions' },
+    inLanguage: 'en-GB',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: items.length,
+      itemListElement: items.map((r, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `https://pimlicosolutions.com/regulators/${r.slug}`,
+        name: `${r.abbr} — ${r.name}`,
+      })),
+    },
+  }
+
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
       <script
@@ -60,6 +81,10 @@ export default function RegulatorsIndex() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
       />
 
       <section className="relative overflow-hidden">

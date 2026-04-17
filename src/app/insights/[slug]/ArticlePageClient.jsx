@@ -464,7 +464,7 @@ export default function ArticlePageClient() {
                       </div>
                       
                       <p className="text-white text-lg font-medium mb-8">
-                        Try free for 14 days
+                        14-day trial. Full access.
                       </p>
                       
                       <Link

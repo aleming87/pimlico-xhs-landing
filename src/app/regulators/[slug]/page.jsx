@@ -158,7 +158,7 @@ export default async function RegulatorPage({ params }) {
               href="/contact?trial=true"
               className="rounded-lg border border-[var(--color-border-default)]/40 px-6 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)]"
             >
-              Start free trial
+              Start your trial
             </Link>
           </div>
         </div>
@@ -359,7 +359,7 @@ export default async function RegulatorPage({ params }) {
               href="/contact?trial=true"
               className="rounded-lg border border-[var(--color-border-default)]/40 px-8 py-3 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-text-tertiary)]"
             >
-              Start free trial
+              Start your trial
             </Link>
           </div>
         </div>

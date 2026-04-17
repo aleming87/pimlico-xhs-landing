@@ -85,7 +85,7 @@ export default function ThankYouPage() {
             href="https://xhsdata.ai/register"
             className="rounded-lg bg-white px-6 py-2.5 text-sm font-medium text-[#020617] transition-all hover:opacity-90"
           >
-            Start free trial
+            Start your trial
           </a>
           <Link
             href="/"

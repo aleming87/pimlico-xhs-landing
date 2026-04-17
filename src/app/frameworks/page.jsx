@@ -48,6 +48,27 @@ export default function FrameworksIndex() {
     })),
   }
 
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Frameworks tracked by XHS™ Copilot',
+    description:
+      'Every major regulatory framework XHS™ Copilot tracks — from Level 1 legislation through technical standards and national competent authority guidance.',
+    url: 'https://pimlicosolutions.com/frameworks',
+    isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico Solutions' },
+    inLanguage: 'en-GB',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: items.length,
+      itemListElement: items.map((f, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `https://pimlicosolutions.com/frameworks/${f.slug}`,
+        name: `${f.abbr} — ${f.name}`,
+      })),
+    },
+  }
+
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
       <script
@@ -57,6 +78,10 @@ export default function FrameworksIndex() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
       />
 
       <section className="relative overflow-hidden">

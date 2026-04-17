@@ -141,7 +141,7 @@ export default function Hero() {
                 href="https://xhsdata.ai/register"
                 className="rounded-lg bg-[var(--color-text-primary)] px-8 py-3 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90"
               >
-                Start free trial
+                Start your trial
               </Link>
               <Link
                 href="/contact"

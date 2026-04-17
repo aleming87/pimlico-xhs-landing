@@ -56,6 +56,45 @@ export default function GlossaryIndex() {
     })),
   }
 
+  const definedTermSetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'Pimlico compliance glossary',
+    description:
+      'Plain-language definitions of the regulatory concepts that matter most to gambling, payments, crypto and AI compliance teams.',
+    url: `${BASE}/glossary`,
+    hasDefinedTerm: terms.map((t) => ({
+      '@type': 'DefinedTerm',
+      '@id': `${BASE}/glossary/${t.slug}`,
+      name: t.term,
+      alternateName: t.abbr || undefined,
+      description: t.definition,
+      url: `${BASE}/glossary/${t.slug}`,
+      inDefinedTermSet: `${BASE}/glossary`,
+    })),
+  }
+
+  const collectionPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Compliance glossary',
+    description:
+      'Plain-language definitions of the regulatory concepts that matter most to gambling, payments, crypto and AI compliance teams.',
+    url: `${BASE}/glossary`,
+    isPartOf: { '@type': 'WebSite', url: BASE, name: 'Pimlico Solutions' },
+    inLanguage: 'en-GB',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: terms.length,
+      itemListElement: terms.map((t, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${BASE}/glossary/${t.slug}`,
+        name: t.abbr ? `${t.abbr} — ${t.term}` : t.term,
+      })),
+    },
+  }
+
   return (
     <main className="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] pt-24">
       <script
@@ -65,6 +104,14 @@ export default function GlossaryIndex() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSetSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
       />
 
       <section className="relative overflow-hidden">
