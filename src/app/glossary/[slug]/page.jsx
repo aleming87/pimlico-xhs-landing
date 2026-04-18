@@ -91,6 +91,15 @@ function buildSchema(t) {
       name: 'Pimlico Solutions',
       url: BASE,
     },
+    // Mirrors regulators/[slug]/page.jsx — flags the definition + context
+    // paragraphs as Speakable so Google Assistant / Alexa flows can read
+    // them aloud cleanly in a voice-search answer. The CSS selectors must
+    // match the IDs on the rendered <div>s below, otherwise the schema
+    // points at nothing.
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['#glossary-definition', '#glossary-context'],
+    },
   }
 
   return [breadcrumb, definedTerm, webPage]
@@ -143,8 +152,8 @@ export default async function GlossaryTermPage({ params }) {
       {/* Content */}
       <section className="border-t border-[var(--color-border-default)]/20 py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-6 lg:px-8 space-y-12">
-          {/* Definition */}
-          <div>
+          {/* Definition — id targeted by SpeakableSpecification in schema */}
+          <div id="glossary-definition">
             <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
               Definition
             </h2>
@@ -153,8 +162,8 @@ export default async function GlossaryTermPage({ params }) {
             </p>
           </div>
 
-          {/* Why it matters */}
-          <div>
+          {/* Why it matters — id targeted by SpeakableSpecification in schema */}
+          <div id="glossary-context">
             <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
               Why it matters
             </h2>
