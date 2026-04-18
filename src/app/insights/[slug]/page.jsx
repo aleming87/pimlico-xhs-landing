@@ -1,6 +1,7 @@
 export const runtime = 'edge';
 
 import ArticlePageClient from './ArticlePageClient';
+import { getArticleFaqs } from '@/data/article-faqs';
 
 // Category-specific default OG images
 const categoryImages = {
@@ -161,12 +162,35 @@ export default async function ArticlePage({ params }) {
     ],
   };
 
+  // FAQPage schema — emit only when an authored FAQ block exists for this slug
+  // AND the visible <FaqSection /> in ArticlePageClient.jsx will render the
+  // same questions. Mismatched FAQ schema (in JSON-LD but not on the page) is
+  // a Google manual-action trigger; keep these two in lockstep.
+  const faqs = getArticleFaqs(slug);
+  const faqSchema = faqs
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(({ question, answer }) => ({
+          "@type": "Question",
+          "name": question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": answer,
+          },
+        })),
+      }
+    : null;
+
   return (
     <>
       {articleSchema && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
       <ArticlePageClient />
     </>
   );

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import RelatedArticles from '@/components/RelatedArticles';
+import { getArticleFaqs } from '@/data/article-faqs';
 
 // Gift link token generator — must match the one in admin/articles/page.jsx
 function generateGiftToken(slug) {
@@ -525,6 +526,36 @@ export default function ArticlePageClient() {
               </div>
             </div>
           )}
+
+          {/* Frequently asked questions — emitted as FAQPage JSON-LD in the
+              SSR page.jsx. The two MUST stay in sync (Google manual action
+              trigger if schema mentions Qs that aren't visible on the page). */}
+          {(!article.isPremium || hasFullAccess) && (() => {
+            const faqs = getArticleFaqs(article.slug);
+            if (!faqs) return null;
+            return (
+              <section className="mt-12 pt-10 border-t border-[var(--color-border-default)]">
+                <p className="text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] mb-4">
+                  [ FAQ ]
+                </p>
+                <h2 className="font-display text-2xl sm:text-3xl font-medium text-[var(--color-text-primary)] mb-8 leading-[1.15]">
+                  Frequently asked questions
+                </h2>
+                <dl className="space-y-6">
+                  {faqs.map(({ question, answer }, i) => (
+                    <div key={i} className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-surface)] p-5 sm:p-6">
+                      <dt className="text-base sm:text-lg font-medium text-[var(--color-text-primary)] mb-2 leading-snug">
+                        {question}
+                      </dt>
+                      <dd className="text-sm sm:text-base text-[var(--color-text-tertiary)] leading-relaxed">
+                        {answer}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            );
+          })()}
 
           {/* Trial CTA Section - show for non-premium or when full access granted */}
           {(!article.isPremium || hasFullAccess) && (
