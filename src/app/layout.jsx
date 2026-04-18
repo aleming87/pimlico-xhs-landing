@@ -205,6 +205,12 @@ export default function RootLayout({ children }) {
                 "minValue": 2,
                 "maxValue": 10
               },
+              "founder": {
+                "@type": "Person",
+                "name": "Andrew Leming",
+                "jobTitle": "Founder & CEO",
+                "worksFor": { "@id": "https://pimlicosolutions.com/#organization" }
+              },
               "knowsAbout": [
                 "Regulatory compliance",
                 "Gambling regulation",
