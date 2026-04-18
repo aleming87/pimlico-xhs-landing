@@ -25,9 +25,9 @@ export function TrustedBy() {
 
 export function Sectors() {
   const sectors = [
-    { title: "Gambling", desc: "Licensing, responsible gaming, advertising, and AML across global markets.", href: "/verticals#gambling", image: "/sector-gambling.jpg" },
-    { title: "Payments & Crypto", desc: "PSD2, MiCA, DORA, cross-border licensing, and operational resilience.", href: "/verticals#payments", image: "/sector-payments.jpg" },
-    { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, risk classification, and conformity assessment.", href: "/verticals#ai", image: "/sector-ai.jpg" },
+    { title: "Gambling", desc: "Licensing, responsible gaming, advertising, and AML across global markets.", href: "/verticals#gambling", image: "/sector-gambling.webp" },
+    { title: "Payments & Crypto", desc: "PSD2, MiCA, DORA, cross-border licensing, and operational resilience.", href: "/verticals#payments", image: "/sector-payments.webp" },
+    { title: "Artificial Intelligence", desc: "EU AI Act, national frameworks, risk classification, and conformity assessment.", href: "/verticals#ai", image: "/sector-ai.webp" },
   ];
 
   return (
@@ -291,7 +291,7 @@ export function FinalCTA() {
     <div id="contact" className="relative border-t border-[var(--color-border-default)]/20 py-28 sm:py-36 overflow-hidden">
       {/* Background image with overlay */}
       <div className="absolute inset-0 -z-10">
-        <img src="/cta-bg.jpg" alt="" className="w-full h-full object-cover opacity-20" />
+        <img src="/cta-bg.webp" alt="" className="w-full h-full object-cover opacity-20" />
         <div className="absolute inset-0 bg-[var(--color-bg-base)]/80" />
       </div>
       <div className="mx-auto max-w-3xl px-6 lg:px-8 text-center">

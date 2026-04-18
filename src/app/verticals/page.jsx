@@ -10,7 +10,7 @@ const VERTICALS = [
   {
     id: "gambling",
     label: "Gambling",
-    image: "/vertical-gambling-hero.jpg",
+    image: "/vertical-gambling-hero.webp",
     headline: "Stay compliant across global gaming markets.",
     desc: "Licensing regimes, responsible gambling requirements, advertising standards, and AML controls. From the UKGC and MGA to emerging US state-by-state frameworks and Latin American markets.",
     stats: [
@@ -55,7 +55,7 @@ const VERTICALS = [
   {
     id: "payments",
     label: "Payments & Crypto",
-    image: "/vertical-payments-hero.jpg",
+    image: "/vertical-payments-hero.webp",
     headline: "Manage payments and crypto licensing end to end.",
     desc: "PSD2, MiCA, and DORA in Europe, state-level money transmission in the US, and emerging frameworks across APAC and the Middle East. Licensing, AML, operational resilience, and supervisory expectations.",
     stats: [
@@ -100,7 +100,7 @@ const VERTICALS = [
   {
     id: "ai",
     label: "Artificial Intelligence",
-    image: "/vertical-ai-hero.jpg",
+    image: "/vertical-ai-hero.webp",
     headline: "Stay ahead of fast-moving AI regulation.",
     desc: "EU AI Act, national frameworks, and emerging governance requirements. High-risk classification, conformity assessment, transparency obligations, and algorithmic accountability.",
     stats: [
