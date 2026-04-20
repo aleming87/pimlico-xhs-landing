@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * MarketingChat — Matthew on pimlicosolutions.com landing.
+ * MarketingChat — Nadia on pimlicosolutions.com landing.
  *
  * Port of web/src/components/chat/MarketingChat.tsx. Shares the
  * marketing-chat edge function at sup.xhsdata.ai — CORS already
@@ -10,7 +10,7 @@
  * Trigger: 45 seconds of page dwell on /.
  * Behaviour:
  *   - Pimlico-logo bubble fades in bottom-right
- *   - Panel auto-opens with Matthew's greeting + 5 quick-reply pills
+ *   - Panel auto-opens with Nadia's greeting + 5 quick-reply pills
  *   - 24h auto-open cooldown so returning visitors don't get popped at
  *   - 24h hard-dismiss cooldown if they close via the X
  *
@@ -26,6 +26,10 @@ const SESSION_KEY = "xhs:marketing-chat-session-id";
 const OPEN_KEY = "xhs:marketing-chat-was-open";
 const DISMISSED_KEY = "xhs:marketing-chat-dismissed-at";
 const AUTO_OPENED_KEY = "xhs:marketing-chat-auto-opened-at";
+// Rev 48d6 — persist the last N messages so a reload doesn't wipe the
+//   thread. Keyed by session_id so the same session rehydrates on return.
+const HISTORY_KEY = "xhs:marketing-chat-history";
+const HISTORY_MAX = 20;
 // Session-scoped: once the bubble has fired this tab, keep it visible
 //   across page navigations (every page of pimlicosolutions.com, not
 //   just the landing). Cleared when the tab closes.
@@ -40,10 +44,13 @@ const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 //   Shortened from 45s \u2192 22s per Andrew: "45 seconds is too long".
 const FALLBACK_DWELL_MS = 22_000;
 
-// Matthew\u2019s portrait lives in /public/personas/ (copied from the
-//   platform). Using a local asset avoids cross-origin image loads
-//   and the Supabase Storage round-trip.
-const MATTHEW_PORTRAIT_SRC = "/personas/matthew-langston.png";
+// Rev 48d6 \u2014 Nadia Olsson (Enterprise Account Lead) replaces Nadia
+//   as the marketing chat anchor. Andrew: "I'm not sure what else,
+//   Nadia intends [seniority]" \u2014 swapping to Nadia because the
+//   role (Enterprise AE) actually matches what a chat-widget greeter
+//   does, and it gives gender parity with Eleanor on the product side.
+//   Nadia stays in the roster for signatories / escalations.
+const NADIA_PORTRAIT_SRC = "/personas/nadia-olsson.png";
 // CSS selector the observer watches on pages that have it. When this
 //   element crosses into the viewport the bubble opens. Matches the
 //   "From regulatory change to team action" section on the landing.
@@ -55,12 +62,19 @@ const SCROLL_TRIGGER_SELECTOR = "#differentiators";
 const SUPABASE_URL = "https://sup.xhsdata.ai";
 const SUPABASE_ANON_KEY = "sb_publishable_vd8k7yq856LAm9OgDLMw9w_wHIE4ptd";
 
+// Rev 48d6 \u2014 four pills only. Decisional intents only. Dropped
+//   "Check jurisdictions" (specification question, comes up naturally
+//   inside "Discuss our use case"). Two pills now DIRECT-REDIRECT
+//   instead of routing through the LLM:
+//     - start_trial \u2192 /start-trial (no LLM dependency)
+//     - book_demo   \u2192 /contact?intent=demo (lands them in the form)
+//   The two conversational pills (see_pricing, use_case) stay as
+//   prompts because they produce value inside the chat.
 const QUICK_REPLIES = [
-  { id: "see_pricing",  label: "See pricing",          prompt: "Can you show me pricing for our team size?" },
-  { id: "book_demo",    label: "Book a demo",          prompt: "I\u2019d like to book a 20-minute demo." },
-  { id: "start_trial",  label: "Start a free trial",   prompt: "How do I start a free trial?" },
-  { id: "coverage",     label: "Check jurisdictions",  prompt: "Which jurisdictions do you cover?" },
-  { id: "use_case",     label: "Discuss our use case", prompt: "I\u2019d like to chat through our specific regulatory use case." },
+  { id: "see_pricing", label: "See pricing",            prompt: "Can you show me pricing for our team size?" },
+  { id: "book_demo",   label: "Book a demo",            redirect: "/contact?intent=demo&from=marketing-chat" },
+  { id: "start_trial", label: "Start a free trial",     redirect: "/start-trial?from=marketing-chat" },
+  { id: "use_case",    label: "Discuss our use case",   prompt: "I\u2019d like to chat through our specific regulatory use case." },
 ];
 
 function getOrCreateSessionId() {
@@ -115,6 +129,43 @@ function markBubbleSeenThisSession() {
   catch { /* ignore */ }
 }
 
+// Rev 48d6 — cookie-consent gate for GA4. Landing already has a
+//   CookieConsent component that sets `xhs-consent` in localStorage
+//   (values: "granted" | "denied" | absent). We only ping GA4 when
+//   consent is granted. Supabase event logging continues regardless
+//   because it\u2019s first-party + we disclose it in the privacy policy.
+function hasAnalyticsConsent() {
+  try {
+    return window.localStorage.getItem("xhs-consent") === "granted";
+  } catch {
+    return false;
+  }
+}
+
+// Rev 48d6 — chat history persistence. Stores the last N turns keyed
+//   by session_id so a reload doesn\u2019t wipe the thread. Also survives
+//   closing + reopening the panel in the same tab.
+function readHistory(sessionId) {
+  try {
+    const raw = window.localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!parsed || parsed.session_id !== sessionId) return [];
+    return Array.isArray(parsed.messages) ? parsed.messages : [];
+  } catch { return []; }
+}
+
+function writeHistory(sessionId, messages) {
+  try {
+    const trimmed = messages.slice(-HISTORY_MAX);
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify({
+      session_id: sessionId,
+      messages: trimmed,
+      saved_at: Date.now(),
+    }));
+  } catch { /* quota — ignore */ }
+}
+
 // GA4 passthrough. The landing site already mounts <Analytics /> which
 //   loads gtag; we just push events onto the same dataLayer / gtag
 //   pipeline so the marketing-chat funnel is visible in GA4 reports
@@ -123,10 +174,15 @@ function markBubbleSeenThisSession() {
 function sendGA4(eventType, metadata = {}) {
   try {
     if (typeof window === "undefined") return;
+    // Rev 48d6 \u2014 consent gate. Only ping GA4 once the visitor has
+    //   granted analytics consent via the CookieConsent component.
+    //   Supabase event logging (trackEvent) continues regardless
+    //   because it\u2019s first-party + covered by the privacy policy.
+    if (!hasAnalyticsConsent()) return;
     const w = window;
     const params = {
       event_category: "marketing_chat",
-      persona_id: "matthew-langston",
+      persona_id: "nadia-olsson",
       origin_site: "pimlicosolutions.com",
       ...metadata,
     };
@@ -150,7 +206,7 @@ function trackEvent(sessionId, eventType, metadata = {}) {
       event_type: eventType,
       session_id: sessionId,
       source_path: typeof window !== "undefined" ? window.location.pathname + window.location.search : null,
-      persona_id: "matthew-langston",
+      persona_id: "nadia-olsson",
       origin_site: "pimlicosolutions.com",
       ts: Date.now(),
       ...utm,
@@ -187,7 +243,19 @@ export default function MarketingChat() {
 
   useEffect(() => {
     sessionIdRef.current = getOrCreateSessionId();
+    // Rev 48d6 \u2014 rehydrate thread from localStorage. If the visitor
+    //   had a conversation going on the previous page load, the bubble
+    //   re-opens with the thread intact rather than a blank hero.
+    const saved = readHistory(sessionIdRef.current);
+    if (saved.length > 0) setMessages(saved);
   }, []);
+
+  // Persist every message-list change.
+  useEffect(() => {
+    if (!sessionIdRef.current) return;
+    if (messages.length === 0) return;
+    writeHistory(sessionIdRef.current, messages);
+  }, [messages]);
 
   // Trigger strategy:
   //   1. If the visitor has already seen the bubble this session
@@ -336,6 +404,19 @@ export default function MarketingChat() {
         }),
         signal: AbortSignal.timeout(35_000),
       });
+      // Rev 48d6 \u2014 specific handoff on rate-limit (429) or capacity
+      //   blocks (503). The edge function returns 429 after 30 msgs
+      //   per IP per hour or 40 turns per session. Rather than the
+      //   generic error, tell the visitor clearly + give them email.
+      if (res.status === 429 || res.status === 503) {
+        trackEvent(sessionIdRef.current, "rate_limited", { status: res.status });
+        setMessages((curr) => [...curr, {
+          role: "assistant",
+          content: "Looks like we\u2019ve hit the limit for this session. Email hello@pimlicosolutions.com and I\u2019ll pick it up there \u2014 usually under an hour during UK business hours.",
+          ts: Date.now(),
+        }]);
+        return;
+      }
       const data = await res.json().catch(() => null);
       const replyText = data?.text ?? "Sorry, I\u2019m having trouble connecting right now. Try again in a moment, or drop us a note at hello@pimlicosolutions.com.";
       const replyTurn = { role: "assistant", content: replyText, ts: Date.now(), toolInvocations: data?.tool_invocations };
@@ -365,7 +446,17 @@ export default function MarketingChat() {
     trackEvent(sessionIdRef.current, "quick_reply_clicked", {
       option_id: option.id,
       option_label: option.label,
+      action: option.redirect ? "redirect" : "prompt",
     });
+    // Rev 48d6 \u2014 direct-redirect pills (start_trial, book_demo) skip
+    //   the LLM entirely and send the user straight to the conversion
+    //   surface. More reliable than hoping Haiku emits the right tool
+    //   invocation. GA4 + edge-fn analytics still fire so the funnel
+    //   report sees the click.
+    if (option.redirect) {
+      window.location.href = option.redirect;
+      return;
+    }
     void sendMessage(option.prompt, { via: "quick_reply", option_id: option.id });
   }, [sendMessage]);
 
@@ -389,7 +480,7 @@ export default function MarketingChat() {
             trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
           }
         }}
-        aria-label={open ? "Close chat" : "Open chat with Matthew Langston"}
+        aria-label={open ? "Close chat" : "Open chat with Nadia Olsson"}
         className={`fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 overflow-hidden ${
           open
             ? "bg-white text-[#0b1738] border border-gray-200 hover:scale-105"
@@ -415,12 +506,12 @@ export default function MarketingChat() {
           with close, then a CENTERED hero (big portrait with online
           dot, name, role), then a big centered "How can I help you"
           heading, then a 2-column grid of pill options, then composer.
-          Andrew: "structure fucking Matthew\u2019s in the same goddamn
+          Andrew: "structure fucking Nadia\u2019s in the same goddamn
           way". */}
       {open && (
         <div
           role="dialog"
-          aria-label="Chat with Matthew Langston"
+          aria-label="Chat with Nadia Olsson"
           className="fixed bottom-20 right-4 z-40 w-[400px] max-w-[calc(100vw-2rem)] h-[640px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
         >
           {/* Top bar \u2014 back arrow (if in thread view) + Pimlico wordmark + close. */}
@@ -453,29 +544,31 @@ export default function MarketingChat() {
             </button>
           </div>
 
-          {/* When the conversation hasn\u2019t started (just Matthew\u2019s
+          {/* When the conversation hasn\u2019t started (just Nadia\u2019s
               opener is in the queue), render the Eleanor-style hero.
               Once the user has sent a message or clicked a pill, the
               layout switches to the regular message thread view. */}
           {messages.length <= 1 && !sending ? (
             <div className="flex-1 overflow-y-auto flex flex-col">
-              {/* Hero \u2014 big centred portrait + name + role. */}
+              {/* Hero — big centred portrait + name + role. AI-native
+                  platform, global regulatory intelligence — the dot
+                  is always green. */}
               <div className="flex flex-col items-center pt-8 pb-5 px-6">
                 <div className="relative">
                   <img
-                    src={MATTHEW_PORTRAIT_SRC}
-                    alt="Matthew Langston"
+                    src={NADIA_PORTRAIT_SRC}
+                    alt="Nadia Olsson"
                     className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-lg"
                     loading="eager"
                     decoding="async"
                   />
                   <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-white" />
                 </div>
-                <p className="mt-3 text-[17px] font-semibold text-[#0b1738]">Matthew Langston</p>
-                <p className="text-[13px] text-gray-600">VP Sales</p>
+                <p className="mt-3 text-[17px] font-semibold text-[#0b1738]">Nadia Olsson</p>
+                <p className="text-[13px] text-gray-600">Enterprise Account Lead</p>
               </div>
 
-              {/* Greeting heading \u2014 no "I\u2019m Matthew" (name is already
+              {/* Greeting heading \u2014 no "I\u2019m Nadia" (name is already
                   above). Centered question. Andrew: "maybe what can
                   I help you with today would probably be better". */}
               <div className="px-6 pb-4 text-center">
@@ -502,7 +595,7 @@ export default function MarketingChat() {
             </div>
           ) : (
             // Thread view \u2014 conventional chat list once the user
-            //   engages. Matthew avatar next to his replies.
+            //   engages. Nadia avatar next to his replies.
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
               {messages.map((m, i) => {
                 const isUser = m.role === "user";
@@ -510,7 +603,7 @@ export default function MarketingChat() {
                   <div key={i} className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
                     {!isUser && (
                       <img
-                        src={MATTHEW_PORTRAIT_SRC}
+                        src={NADIA_PORTRAIT_SRC}
                         alt=""
                         aria-hidden="true"
                         className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-gray-200"
@@ -531,7 +624,7 @@ export default function MarketingChat() {
               {sending && (
                 <div className="flex items-end gap-2 justify-start">
                   <img
-                    src={MATTHEW_PORTRAIT_SRC}
+                    src={NADIA_PORTRAIT_SRC}
                     alt=""
                     aria-hidden="true"
                     className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-gray-200"
