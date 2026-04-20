@@ -273,17 +273,22 @@ export default function MarketingChat() {
   useEffect(() => {
     try { window.localStorage.setItem(OPEN_KEY, open ? "1" : "0"); } catch {}
     if (open) {
-      setMessages((curr) => {
-        if (curr.length > 0) return curr;
-        return [{
-          role: "assistant",
-          content: "Hi \u2014 I\u2019m Matthew, I lead sales at Pimlico. How can I help you today?",
-          ts: Date.now(),
-        }];
-      });
+      // Rev 48d5 \u2014 no seeded greeting message. The hero already shows
+      //   name + role + "What can I help you with today?", so any
+      //   seeded assistant bubble was just redundant ("How can I help
+      //   today?" right after "What can I help you with today?").
+      //   Thread view opens clean on first user message.
       window.setTimeout(() => inputRef.current?.focus(), 120);
     }
   }, [open]);
+
+  /** Reset conversation back to the hero view (portrait + pills). */
+  const handleBackToHero = useCallback(() => {
+    setMessages([]);
+    setTrialUrl(null);
+    trackEvent(sessionIdRef.current, "back_to_hero", {});
+    window.setTimeout(() => inputRef.current?.focus(), 120);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -368,9 +373,12 @@ export default function MarketingChat() {
 
   return (
     <>
-      {/* Pimlico bubble \u2014 pill-shaped so the full wordmark + archway
-          fits. Andrew: "it was just the archway when it should be
-          the full logo". When open, collapses to a circle with X. */}
+      {/* Pimlico bubble \u2014 circular, matching the platform
+          ChatFloatingBubble exactly (h-16 w-16 navy circle with the
+          full wordmark scaled via object-contain so nothing crops).
+          Andrew: "I want the Pimlico logo in the bubble like we
+          fucking have on the side you made it into some big fucking
+          pill". */}
       <button
         type="button"
         onClick={() => {
@@ -382,24 +390,22 @@ export default function MarketingChat() {
           }
         }}
         aria-label={open ? "Close chat" : "Open chat with Matthew Langston"}
-        className={`fixed bottom-5 right-5 z-40 shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 ${
+        className={`fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 overflow-hidden ${
           open
-            ? "h-14 w-14 rounded-full bg-white text-[#0b1738] border border-gray-200 hover:scale-105"
-            : "h-14 px-5 rounded-full bg-[#0b1738] text-white hover:scale-[1.02]"
+            ? "bg-white text-[#0b1738] border border-gray-200 hover:scale-105"
+            : "bg-[#0b1738] text-white hover:scale-105"
         }`}
         style={{ animation: "fadeIn 0.4s ease-out" }}
       >
         {open
           ? <XIcon className="h-5 w-5" />
           : (
-            // Full Pimlico wordmark (archway + "Pimlico" text), inverted
-            //   for the navy pill. Pill shape gives the wordmark room
-            //   to breathe instead of cropping against a circle edge.
             <img
               src="/Pimlico_Logo_Inverted.png"
               alt="Pimlico"
-              className="h-7 w-auto object-contain"
+              className="max-h-9 max-w-[44px] object-contain pointer-events-none select-none"
               loading="eager"
+              draggable={false}
             />
           )}
       </button>
@@ -417,14 +423,26 @@ export default function MarketingChat() {
           aria-label="Chat with Matthew Langston"
           className="fixed bottom-20 right-4 z-40 w-[400px] max-w-[calc(100vw-2rem)] h-[640px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
         >
-          {/* Top bar \u2014 navy Pimlico wordmark + close. */}
+          {/* Top bar \u2014 back arrow (if in thread view) + Pimlico wordmark + close. */}
           <div className="flex items-center justify-between gap-2 px-4 py-3 bg-[#0b1738]">
-            <img
-              src="/Pimlico_Logo_Inverted.png"
-              alt="Pimlico Solutions"
-              className="h-5 w-auto"
-              loading="eager"
-            />
+            <div className="flex items-center gap-2 min-w-0">
+              {messages.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleBackToHero}
+                  aria-label="Back to menu"
+                  className="text-white/70 hover:text-white transition-colors p-1 -ml-1"
+                >
+                  <BackIcon className="h-4 w-4" />
+                </button>
+              )}
+              <img
+                src="/Pimlico_Logo_Inverted.png"
+                alt="Pimlico Solutions"
+                className="h-5 w-auto"
+                loading="eager"
+              />
+            </div>
             <button
               type="button"
               onClick={handleDismiss}
@@ -458,10 +476,11 @@ export default function MarketingChat() {
               </div>
 
               {/* Greeting heading \u2014 no "I\u2019m Matthew" (name is already
-                  above). Centered question. */}
+                  above). Centered question. Andrew: "maybe what can
+                  I help you with today would probably be better". */}
               <div className="px-6 pb-4 text-center">
                 <h2 className="text-[22px] font-semibold text-[#0b1738] leading-snug">
-                  How can I help you?
+                  What can I help you with today?
                 </h2>
               </div>
 
@@ -600,6 +619,15 @@ function SendIcon({ className }) {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <line x1="22" y1="2" x2="11" y2="13" />
       <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  );
+}
+
+function BackIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
     </svg>
   );
 }
