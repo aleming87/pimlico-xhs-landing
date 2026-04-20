@@ -41,8 +41,10 @@ const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 //   (/about, /pricing, etc). Gives the bubble a way to appear there
 //   too once a visitor lingers. On the landing page proper the
 //   IntersectionObserver trigger almost always fires first.
-//   Shortened from 45s \u2192 22s per Andrew: "45 seconds is too long".
-const FALLBACK_DWELL_MS = 22_000;
+//   Rev 48d9 \u2014 Andrew reported Nadia wasn\u2019t triggering at all.
+//   Reduced 22s \u2192 8s so there\u2019s no perceived dead time, and so it
+//   beats the scroll observer on impatient scrollers too.
+const FALLBACK_DWELL_MS = 8_000;
 
 // Rev 48d6 \u2014 Nadia Olsson (Enterprise Account Lead) replaces Nadia
 //   as the marketing chat anchor. Andrew: "I'm not sure what else,
