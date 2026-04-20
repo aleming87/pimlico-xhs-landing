@@ -84,12 +84,45 @@ const SUPABASE_ANON_KEY = "sb_publishable_vd8k7yq856LAm9OgDLMw9w_wHIE4ptd";
 //   same-origin paths; absolute URLs aren\u2019t needed here because the
 //   landing is one domain. The xhsdata.ai (web repo) version uses
 //   absolute pimlicosolutions.com URLs for its matching pills.
+// Rev 48e0 \u2014 order reflects buying psychology:
+//   1. Start a free trial  \u2014 highest intent, lowest friction. Try before buy.
+//   2. Book a demo         \u2014 qualified prospect wanting a human walkthrough.
+//   3. See pricing         \u2014 exploration, calculator on /pricing.
+//   4. Chat with Nadia     \u2014 open-ended consultative route (contact-sales).
+// Andrew: "start a free trial higher than book demo, contact sales at bottom."
 const QUICK_REPLIES = [
-  { id: "see_pricing", label: "See pricing",          redirect: "/pricing" },
-  { id: "book_demo",   label: "Book a demo",          redirect: "/contact?intent=demo" },
-  { id: "start_trial", label: "Start a free trial",   redirect: "/start-trial" },
-  { id: "use_case",    label: "Discuss our use case", prompt: "I\u2019d like to chat through our specific regulatory use case." },
+  { id: "start_trial", label: "Start a free trial",    redirect: "/start-trial" },
+  { id: "book_demo",   label: "Book a demo",           redirect: "/contact?intent=demo" },
+  { id: "see_pricing", label: "See pricing",           redirect: "/pricing" },
+  { id: "use_case",    label: "Chat with Nadia",       prompt: "I\u2019d like to talk through our regulatory use case and work out the right fit." },
 ];
+
+// Rev 48e0 \u2014 per-page contextual tip. When a visitor arrives with
+//   chat=continue (clicked a pill from a prior page), we show a small
+//   speech bubble extending from Nadia so she feels like a guide, not
+//   a dropped-the-ball redirect. Auto-dismisses after 14s or on tap.
+//   Keep lines short \u2014 one-sentence guidance, plain English, no hype.
+//   Never invent features or jurisdictions here; this is signposting
+//   only. Tap-through opens the full panel so the guide message then
+//   continues as a chat thread.
+const POST_REDIRECT_TIPS = {
+  "/pricing":
+    "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live. Tap me if anything\u2019s unclear.",
+  "/start-trial":
+    "Fourteen days, all Pro features, no card. I\u2019m here if you hit anything weird \u2014 tap me any time.",
+  "/contact":
+    "Pop your details in and the team comes back within a UK business day. Happy to pre-qualify \u2014 tap me with a question.",
+  "/quote":
+    "I\u2019ll pull together a tailored number. Tap me if you want to walk through coverage or seat assumptions first.",
+};
+
+function pickPostRedirectTip(pathname) {
+  if (!pathname) return null;
+  for (const prefix of Object.keys(POST_REDIRECT_TIPS)) {
+    if (pathname.startsWith(prefix)) return POST_REDIRECT_TIPS[prefix];
+  }
+  return null;
+}
 
 // Build the final redirect URL for a pill click. Appends:
 //   - from=marketing-chat \u2014 traffic attribution on the landing page
@@ -271,6 +304,10 @@ export default function MarketingChat() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [trialUrl, setTrialUrl] = useState(null);
+  // Rev 48e0 \u2014 contextual speech-bubble that pops out of Nadia on
+  //   focused-page arrivals (post-redirect). Acts as a guide. Null
+  //   when not showing.
+  const [peekTip, setPeekTip] = useState(null);
   const sessionIdRef = useRef("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -334,6 +371,21 @@ export default function MarketingChat() {
             is_focused_page: isFocusedPage,
             is_mobile: isMobile,
           });
+          // Rev 48e0 \u2014 surface a contextual guide tip alongside the
+          //   bubble on focused pages so Nadia feels like she\u2019s
+          //   walking the visitor through, not dumping them. Mobile
+          //   gets a tip too (same rules as above \u2014 no panel auto-
+          //   open, just an unobtrusive speech bubble they can tap
+          //   through or dismiss).
+          const tip = pickPostRedirectTip(path);
+          if (tip) {
+            // Small delay so the bubble fade-in and peek feel
+            //   choreographed rather than landing simultaneously.
+            window.setTimeout(() => {
+              setPeekTip(tip);
+              trackEvent(sessionIdRef.current, "peek_tip_shown", { path });
+            }, 900);
+          }
         }
         // Strip the chat + mchat_session params from the URL without
         //   a reload so a back-button doesn\u2019t re-trigger.
@@ -453,8 +505,20 @@ export default function MarketingChat() {
       //   today?" right after "What can I help you with today?").
       //   Thread view opens clean on first user message.
       window.setTimeout(() => inputRef.current?.focus(), 120);
+      // Opening the panel supersedes any peek tip \u2014 the guidance
+      //   now lives in the full chat surface.
+      setPeekTip(null);
     }
   }, [open]);
+
+  // Rev 48e0 \u2014 auto-dismiss the peek tip after 14s. Long enough to
+  //   actually read, short enough that it doesn\u2019t become visual
+  //   noise. Visitor can also dismiss manually via the peek\u2019s X.
+  useEffect(() => {
+    if (!peekTip) return;
+    const t = window.setTimeout(() => setPeekTip(null), 14_000);
+    return () => window.clearTimeout(t);
+  }, [peekTip]);
 
   /** Reset conversation back to the hero view (portrait + pills). */
   const handleBackToHero = useCallback(() => {
@@ -572,42 +636,88 @@ export default function MarketingChat() {
 
   return (
     <>
-      {/* Pimlico bubble \u2014 circular, matching the platform
-          ChatFloatingBubble exactly (h-16 w-16 navy circle with the
-          full wordmark scaled via object-contain so nothing crops).
-          Andrew: "I want the Pimlico logo in the bubble like we
-          fucking have on the side you made it into some big fucking
-          pill". */}
-      <button
-        type="button"
-        onClick={() => {
-          if (open) {
-            handleClose();
-          } else {
+      {/* Rev 48e0 \u2014 bubble is hidden when the panel is open. The
+          panel\u2019s own X handles close, and earlier we had both the
+          bubble rendering a big X icon AND the panel header X, which
+          Andrew flagged as a duplicate close affordance. Single close
+          surface now. Bubble always shows the Pimlico brandmark
+          (never transforms), so Nadia\u2019s presence reads as stable
+          across pages.
+       */}
+      {!open && (
+        <button
+          type="button"
+          onClick={() => {
             setOpen(true);
             trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
-          }
-        }}
-        aria-label={open ? "Close chat" : "Open chat with Nadia Olsson"}
-        className={`fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 overflow-hidden ${
-          open
-            ? "bg-white text-[#0b1738] border border-gray-200 hover:scale-105"
-            : "bg-[#0b1738] text-white hover:scale-105"
-        }`}
-        style={{ animation: "fadeIn 0.4s ease-out" }}
-      >
-        {open
-          ? <XIcon className="h-5 w-5" />
-          : (
-            <img
-              src="/Pimlico_Logo_Inverted.png"
-              alt="Pimlico"
-              className="max-h-9 max-w-[44px] object-contain pointer-events-none select-none"
-              loading="eager"
-              draggable={false}
-            />
-          )}
-      </button>
+          }}
+          aria-label="Open chat with Nadia Olsson"
+          className="fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 overflow-hidden bg-[#0b1738] text-white hover:scale-105"
+          style={{ animation: "fadeIn 0.4s ease-out" }}
+        >
+          <img
+            src="/Pimlico_Logo_Inverted.png"
+            alt="Pimlico"
+            className="max-h-9 max-w-[44px] object-contain pointer-events-none select-none"
+            loading="eager"
+            draggable={false}
+          />
+          {/* Rev 48e0 \u2014 subtle online indicator. Andrew: "I think
+              Nadia is the little green dot flash, just lightweight
+              so she\u2019s online and she\u2019s there." Soft pulse, not a
+              hard blink. */}
+          <span
+            aria-hidden="true"
+            className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-[#0b1738]"
+            style={{ animation: "onlinePulse 2.2s ease-in-out infinite" }}
+          />
+        </button>
+      )}
+
+      {/* Peek speech bubble \u2014 contextual guide tip that extends from
+          Nadia on focused-page arrivals. Only renders when the full
+          panel is closed so it doesn\u2019t stack. */}
+      {!open && bubbleVisible && peekTip && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-24 right-5 z-40 max-w-[290px] rounded-2xl bg-white text-[#0b1738] shadow-xl ring-1 ring-black/5 border border-gray-200"
+          style={{ animation: "fadeIn 0.35s ease-out" }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              setPeekTip(null);
+              trackEvent(sessionIdRef.current, "peek_tip_dismissed", {});
+            }}
+            aria-label="Dismiss tip"
+            className="absolute top-1.5 right-1.5 text-gray-400 hover:text-gray-700 transition-colors p-1"
+          >
+            <XIcon className="h-3 w-3" />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(true);
+              trackEvent(sessionIdRef.current, "peek_tip_expanded", {});
+              setPeekTip(null);
+            }}
+            className="block w-full text-left px-4 py-3 pr-7"
+          >
+            <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#0b1738]/60 mb-1">
+              Nadia \u2014 Enterprise Account Lead
+            </span>
+            <span className="block text-[13px] leading-relaxed">
+              {peekTip}
+            </span>
+          </button>
+          {/* Little tail pointing down towards the bubble */}
+          <span
+            aria-hidden="true"
+            className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 bg-white border-r border-b border-gray-200"
+          />
+        </div>
+      )}
 
       {/* Panel \u2014 Rev 48d4. Structure matches the platform in-product
           chat (Eleanor) pattern 1:1: slim Pimlico-wordmark bar at top
@@ -672,17 +782,21 @@ export default function MarketingChat() {
                   />
                   <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-white" />
                 </div>
-                <p className="mt-3 text-[17px] font-semibold text-[#0b1738]">Nadia Olsson</p>
+                <p className="mt-3 font-display text-[18px] font-medium text-[#0b1738]">Nadia Olsson</p>
                 <p className="text-[13px] text-gray-600">Enterprise Account Lead</p>
               </div>
 
               {/* Greeting heading \u2014 no "I\u2019m Nadia" (name is already
-                  above). Centered question. Andrew: "maybe what can
-                  I help you with today would probably be better". */}
+                  above). Rev 48e0 \u2014 font-display (Playfair) to match
+                  the serious editorial brand. Subhead makes clear the
+                  pills are quick routes, not the only route. */}
               <div className="px-6 pb-4 text-center">
-                <h2 className="text-[22px] font-semibold text-[#0b1738] leading-snug">
+                <h2 className="font-display text-[22px] font-medium text-[#0b1738] leading-snug">
                   What can I help you with today?
                 </h2>
+                <p className="mt-1.5 text-[12px] text-gray-500">
+                  Pick a quick route \u2014 or just ask me anything.
+                </p>
               </div>
 
               {/* Stacked single-column pill grid. Andrew: "they should be
@@ -799,6 +913,10 @@ export default function MarketingChat() {
         @keyframes fadeIn {
           from { opacity: 0; transform: scale(0.9); }
           to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes onlinePulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50%      { opacity: 0.75; transform: scale(0.9); }
         }
       `}</style>
     </>

@@ -133,14 +133,24 @@ function FAQ({ q, a }) {
 // ── Page ──
 
 export default function PricingPage() {
+  // Rev 48e0 \u2014 default assumptions reflect the most common serious-
+  //   prospect shape: team of 3, annual billing (the discounted price
+  //   we\u2019d actually quote), global coverage (regulatory intelligence
+  //   is inherently a global proposition, and most new customers want
+  //   to see the all-in number first, then narrow if they need to).
+  //   Previous defaults (monthly + Europe) buried the calculator\u2019s
+  //   own value \u2014 you had to toggle your way into a reasonable
+  //   number before the page told you anything useful. Andrew:
+  //   "right now it starts weirdly and you kind of toggle your way
+  //   into it".
   const [users, setUsers] = useState(3);
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [quoteSubmitting, setQuoteSubmitting] = useState(false);
   const [quoteSent, setQuoteSent] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [selectedVerticals, setSelectedVerticals] = useState(["Gambling"]);
-  const [selectedRegions, setSelectedRegions] = useState(["europe"]);
-  const [billing, setBilling] = useState("monthly");
+  const [selectedRegions, setSelectedRegions] = useState(["global"]);
+  const [billing, setBilling] = useState("annual");
   const isBundle = selectedVerticals.length >= 3 && selectedRegions.includes("global");
 
   // Debounced configure_quote event so we can see what users
