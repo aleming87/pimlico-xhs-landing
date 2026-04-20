@@ -2,7 +2,10 @@ import Hero from "@/components/Hero";
 import Differentiators from "@/components/Differentiators";
 import ProductShowcase from "@/components/ProductShowcase";
 import DatamapScripts from "@/components/DatamapScripts";
-import { CookieConsent } from "@/components/CookieConsent";
+// Rev 48e3 \u2014 CookieConsent is already mounted in the root layout
+//   via <LazyConsent />. Importing + rendering it again here caused
+//   two stacked cookie banners (Andrew spotted the duplicate). Left
+//   the import/mount off this page; layout covers the whole app.
 import { TrustedBy, Sectors, Coverage, Security, Testimonials, FinalCTA } from "@/components/HomeSections";
 
 export const metadata = {
@@ -215,7 +218,8 @@ export default function Page() {
         <Security />
         <FinalCTA />
       </main>
-      <CookieConsent />
+      {/* Rev 48e3 \u2014 removed the duplicate <CookieConsent /> render.
+          LazyConsent in layout.jsx handles it app-wide. */}
       <DatamapScripts />
     </>
   );

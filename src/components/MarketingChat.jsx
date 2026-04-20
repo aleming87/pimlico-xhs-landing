@@ -99,7 +99,12 @@ const QUICK_REPLIES = [
   { id: "start_trial", label: "Start a free trial",    redirect: `${APP_HOST}/start-trial` },
   { id: "book_demo",   label: "Book a demo",           redirect: "/contact?intent=demo" },
   { id: "see_pricing", label: "See pricing",           redirect: "/pricing" },
-  { id: "use_case",    label: "Chat with Nadia",       prompt: "I\u2019d like to talk through our regulatory use case and work out the right fit." },
+  /* Rev 48e3 \u2014 renamed "Chat with Nadia" \u2192 "Contact sales."
+     Andrew: you\u2019re ALREADY chatting with Nadia when you see this
+     pill, so naming it after her creates confusion. Contact sales
+     names the funnel destination (her role) and keeps the four
+     pills as a clean set of conversion surfaces. */
+  { id: "use_case",    label: "Contact sales",         prompt: "I\u2019d like to talk to sales about our use case." },
 ];
 
 // Rev 48e0 \u2014 per-page contextual tip. When a visitor arrives with
@@ -380,6 +385,12 @@ export default function MarketingChat() {
   //   focused-page arrivals (post-redirect). Acts as a guide. Null
   //   when not showing.
   const [peekTip, setPeekTip] = useState(null);
+  // Rev 48e3 \u2014 soft idle nudge rendered as a banner above the
+  //   composer (not another assistant bubble). Fires after 120s
+  //   idle. Dismissed sticks for the session so it doesn\u2019t keep
+  //   re-appearing.
+  const [idleNudgeVisible, setIdleNudgeVisible] = useState(false);
+  const [idleNudgeDismissed, setIdleNudgeDismissed] = useState(false);
   const sessionIdRef = useRef("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -592,41 +603,29 @@ export default function MarketingChat() {
     return () => window.clearTimeout(t);
   }, [peekTip]);
 
-  // Rev 48e1 \u2014 idle auto-message. If the thread has at least one
-  //   assistant turn AND the user hasn\u2019t typed or sent anything for
-  //   45 seconds, Nadia surfaces a gentle nudge with structured
-  //   follow-up pills so the visitor doesn\u2019t feel abandoned. One-
-  //   shot: the nudge message itself doesn\u2019t re-fire the timer,
-  //   otherwise we\u2019d loop. Andrew: "there needs to be some sort of
-  //   timeout, some sort of auto-message if someone doesn\u2019t respond
-  //   for a certain amount of time."
+  // Rev 48e3 \u2014 idle nudge. Andrew: previous 45s-chat-message version
+  //   "feels pushy" and "should probably be a slightly different
+  //   screen, not just another message under this." Now:
+  //     1. Delay bumped 45s \u2192 120s so the nudge only fires when
+  //        the visitor is genuinely stalled, not mid-thought.
+  //     2. Rendered as a slim inline banner ABOVE the composer, not
+  //        as a fresh assistant bubble in the thread. Two actions +
+  //        a dismiss X; feels like a softer shoulder-tap.
+  //     3. One-shot per open session \u2014 once dismissed or actioned,
+  //        it doesn\u2019t re-fire.
   useEffect(() => {
     if (!open) return;
+    if (idleNudgeVisible) return;
+    if (idleNudgeDismissed) return;
     if (messages.length === 0) return;
     const last = messages[messages.length - 1];
     if (last.role !== "assistant") return;
-    if (last.__autoNudge) return; // don\u2019t nudge off a nudge
     const t = window.setTimeout(() => {
-      setMessages((curr) => {
-        const latest = curr[curr.length - 1];
-        if (!latest || latest.role !== "assistant") return curr;
-        return [...curr, {
-          role: "assistant",
-          content: "Still there? Happy to keep going \u2014 or if you\u2019d rather wrap, I can summarise what we\u2019ve covered and send the next step to your email.",
-          followUps: [
-            "Keep going",
-            "Summarise and email me",
-            "See pricing",
-            "Book a demo",
-          ],
-          ts: Date.now(),
-          __autoNudge: true,
-        }];
-      });
+      setIdleNudgeVisible(true);
       trackEvent(sessionIdRef.current, "idle_nudge_shown", { after_turn_index: messages.length - 1 });
-    }, 45_000);
+    }, 120_000);
     return () => window.clearTimeout(t);
-  }, [messages, open]);
+  }, [messages, open, idleNudgeVisible, idleNudgeDismissed]);
 
   /** Reset conversation back to the hero view (portrait + pills). */
   const handleBackToHero = useCallback(() => {
@@ -656,6 +655,9 @@ export default function MarketingChat() {
     if (!text || sending) return;
     setInput("");
     setSending(true);
+    // Rev 48e3 \u2014 any user send resets the idle nudge state so if
+    //   they hit another quiet window later, the nudge can re-arm.
+    setIdleNudgeVisible(false);
     const userTurn = { role: "user", content: text, ts: Date.now() };
     setMessages((curr) => [...curr, userTurn]);
     trackEvent(sessionIdRef.current, "message_sent", {
@@ -948,8 +950,12 @@ export default function MarketingChat() {
                   </div>
                   <div className="min-w-0 leading-tight">
                     <p className="text-[13px] font-semibold text-white truncate">Nadia Olsson</p>
+                    {/* Rev 48e3 \u2014 "\u00b7 online" removed. Andrew: "I don\u2019t
+                        think 'online' is really necessary \u2014 we see that
+                        she is." The green dot on the avatar already
+                        signals presence. */}
                     <p className="text-[10px] text-white/60 truncate">
-                      Enterprise Account Lead {"\u00b7"} online
+                      Enterprise Account Lead
                     </p>
                   </div>
                 </div>
@@ -1134,6 +1140,45 @@ export default function MarketingChat() {
                 <span>Start your 14-day trial &mdash; no card required</span>
                 <ExternalLinkIcon className="h-3 w-3" />
               </a>
+            </div>
+          )}
+
+          {/* Rev 48e3 \u2014 idle nudge banner. Sits above the composer so
+              the visitor sees a gentle shoulder-tap without another
+              chat bubble landing in the thread. Subtle background +
+              two link-style actions + dismiss X. */}
+          {idleNudgeVisible && !idleNudgeDismissed && (
+            <div className="px-3 py-2 border-t border-gray-200 bg-[#0b1738]/[0.03]">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-gray-600 flex-1 truncate">
+                  Still there? I can summarise or send the next step to your email.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIdleNudgeVisible(false);
+                    setIdleNudgeDismissed(true);
+                    trackEvent(sessionIdRef.current, "idle_nudge_actioned", { action: "summarise_email" });
+                    void sendMessage("Summarise what we\u2019ve covered and send the next step to my email.", { via: "quick_reply", option_id: "idle_nudge_summarise" });
+                  }}
+                  className="text-[11px] font-semibold text-[#0b1738] hover:underline underline-offset-2"
+                >
+                  Summarise & email
+                </button>
+                <span className="text-gray-300" aria-hidden="true">{"\u00b7"}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIdleNudgeVisible(false);
+                    setIdleNudgeDismissed(true);
+                    trackEvent(sessionIdRef.current, "idle_nudge_dismissed", {});
+                  }}
+                  aria-label="Dismiss nudge"
+                  className="text-gray-400 hover:text-gray-700 p-0.5"
+                >
+                  <XIcon className="h-3 w-3" />
+                </button>
+              </div>
             </div>
           )}
 
