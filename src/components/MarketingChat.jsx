@@ -129,6 +129,45 @@ function pickPostRedirectTip(pathname) {
   return null;
 }
 
+// Rev 48e2 \u2014 when the visitor taps the peek or the bubble on a
+//   focused page, seed the panel with a context-aware first assistant
+//   turn + structured follow-ups SO SHE ACTUALLY ENGAGES WITH THE
+//   TOPIC SHE JUST RAISED. Andrew: "when I click her again she just
+//   goes back to the normal options, she\u2019s not engaging in the
+//   discussion at all." The seed uses the same framing as the peek
+//   tip but adds a sharp qualifying question so the conversation has
+//   forward motion immediately.
+const PAGE_SEED_MESSAGES = {
+  "/pricing": {
+    content:
+      "Defaults to annual billing + global coverage so the number you see is what we\u2019d actually quote. Tweak team size, regions, or verticals and it updates live. What\u2019s the team shape you\u2019re sizing for?",
+    followUps: ["Under 5 people", "5\u201325 people", "25+ people", "What\u2019s in the trial?"],
+  },
+  "/contact": {
+    content:
+      "Quickest route is the form \u2014 I\u2019ll come back within a UK business day. I can also pre-qualify right here if it\u2019s faster \u2014 what\u2019s the shape of what you\u2019re looking for?",
+    followUps: ["Evaluating vendors", "Replacing a tool", "Scoping a trial", "Just curious"],
+  },
+  "/start-trial": {
+    content:
+      "Fourteen days, all Pro features, no card \u2014 full jurisdictional coverage on your chosen verticals. What\u2019s the first thing you want to pressure-test?",
+    followUps: ["Jurisdiction coverage", "The daily feed", "Slack alerts", "Lens\u2122 analysis"],
+  },
+  "/quote": {
+    content:
+      "Tailored quotes take a minute \u2014 team size, regions, verticals. Tell me your shape and I\u2019ll stitch it together; or walk through the calculator and I\u2019ll match it.",
+    followUps: ["Start from team size", "Start from coverage", "Match an existing vendor", "Enterprise procurement"],
+  },
+};
+
+function pickPageSeed(pathname) {
+  if (!pathname) return null;
+  for (const prefix of Object.keys(PAGE_SEED_MESSAGES)) {
+    if (pathname.startsWith(prefix)) return PAGE_SEED_MESSAGES[prefix];
+  }
+  return null;
+}
+
 // Rev 48e1 \u2014 extract the trailing "NEXT: A | B | C" line from a
 //   Claude reply. Returns clean text (reply with NEXT: line removed)
 //   + an array of up to 4 follow-up options, de-duped and trimmed.
@@ -725,36 +764,60 @@ export default function MarketingChat() {
           across pages.
        */}
       {!open && (
-        <button
-          type="button"
-          onClick={() => {
-            setOpen(true);
-            trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
-          }}
-          aria-label="Open chat with Nadia Olsson"
-          /* Rev 48e1 \u2014 ring-white/30 so the bubble is visible on any
-             background (including our own dark pages where the prior
-             ring-black/5 vanished into navy-on-navy). */
-          className="fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-2 ring-white/30 overflow-hidden bg-[#0b1738] text-white hover:scale-105"
+        <div
+          className="fixed bottom-5 right-5 z-40"
           style={{ animation: "fadeIn 0.4s ease-out" }}
         >
-          <img
-            src="/Pimlico_Logo_Inverted.png"
-            alt="Pimlico"
-            className="max-h-9 max-w-[44px] object-contain pointer-events-none select-none"
-            loading="eager"
-            draggable={false}
-          />
-          {/* Rev 48e0 \u2014 subtle online indicator. Andrew: "I think
-              Nadia is the little green dot flash, just lightweight
-              so she\u2019s online and she\u2019s there." Soft pulse, not a
-              hard blink. */}
+          <button
+            type="button"
+            onClick={() => {
+              /* Rev 48e2 \u2014 if this is a focused page + the thread
+                 is empty, seed the panel with a page-specific opener
+                 + structured follow-ups so the visitor actually gets
+                 into a conversation instead of a 4-pill menu. Andrew:
+                 "she just goes back to normal options, she\u2019s not
+                 engaging." */
+              const path = typeof window !== "undefined" ? window.location.pathname : "";
+              const seed = pickPageSeed(path);
+              if (seed && messages.length === 0) {
+                setMessages([{
+                  role: "assistant",
+                  content: seed.content,
+                  followUps: seed.followUps,
+                  ts: Date.now(),
+                }]);
+                trackEvent(sessionIdRef.current, "panel_seeded_on_open", { path, via: "bubble_click" });
+              }
+              setOpen(true);
+              trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
+            }}
+            aria-label="Open chat with Nadia Olsson"
+            /* Rev 48e2 \u2014 overflow-hidden removed. On a rounded-full
+               element overflow-hidden clips to the CIRCLE SHAPE, which
+               half-ate the green online dot. The Pimlico logo inside
+               is already constrained by object-contain + max-h/max-w
+               so no clipping is needed for the image. */
+            className="relative h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-2 ring-white/30 bg-[#0b1738] text-white hover:scale-105"
+          >
+            <img
+              src="/Pimlico_Logo_Inverted.png"
+              alt="Pimlico"
+              className="max-h-9 max-w-[44px] object-contain pointer-events-none select-none"
+              loading="eager"
+              draggable={false}
+            />
+          </button>
+          {/* Green online dot \u2014 sits at the edge of the bubble with
+              a small offset so it extends cleanly beyond the circle.
+              Ring uses the bubble colour to create a visual gap
+              between dot and bubble. pointer-events-none so clicks
+              pass through to the bubble. */}
           <span
             aria-hidden="true"
-            className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-[#0b1738]"
+            className="absolute bottom-0.5 right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-[#0b1738] pointer-events-none"
             style={{ animation: "onlinePulse 2.2s ease-in-out infinite" }}
           />
-        </button>
+        </div>
       )}
 
       {/* Peek speech bubble \u2014 contextual guide tip that extends from
@@ -781,6 +844,21 @@ export default function MarketingChat() {
           <button
             type="button"
             onClick={() => {
+              /* Rev 48e2 \u2014 seed the panel with the same framing as
+                 the peek + a sharp qualifying question so tapping
+                 through lands in an active conversation, not the
+                 4-pill menu. */
+              const path = typeof window !== "undefined" ? window.location.pathname : "";
+              const seed = pickPageSeed(path);
+              if (seed && messages.length === 0) {
+                setMessages([{
+                  role: "assistant",
+                  content: seed.content,
+                  followUps: seed.followUps,
+                  ts: Date.now(),
+                }]);
+                trackEvent(sessionIdRef.current, "panel_seeded_on_open", { path, via: "peek_tap" });
+              }
               setOpen(true);
               trackEvent(sessionIdRef.current, "peek_tip_expanded", {});
               setPeekTip(null);
@@ -889,11 +967,13 @@ export default function MarketingChat() {
             </button>
           </div>
 
-          {/* When the conversation hasn\u2019t started (just Nadia\u2019s
-              opener is in the queue), render the Eleanor-style hero.
-              Once the user has sent a message or clicked a pill, the
-              layout switches to the regular message thread view. */}
-          {messages.length <= 1 && !sending ? (
+          {/* Rev 48e2 \u2014 hero only when the thread is genuinely empty.
+              A seeded page-context opener (messages.length === 1 with
+              role: "assistant") should show the thread view so the
+              visitor sees the opener + follow-up pills and can engage
+              immediately \u2014 not the 4-pill menu which was the dead-
+              end Andrew flagged. */}
+          {messages.length === 0 && !sending ? (
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Hero — big centred portrait + name + role. AI-native
                   platform, global regulatory intelligence — the dot
@@ -922,7 +1002,7 @@ export default function MarketingChat() {
                   What can I help you with today?
                 </h2>
                 <p className="mt-1.5 text-[12px] text-gray-500">
-                  Pick a quick route \u2014 or just ask me anything.
+                  {"Pick a quick route \u2014 or just ask me anything."}
                 </p>
               </div>
 
