@@ -8,6 +8,7 @@ import ConversionTracker from '@/components/ConversionTracker'
 import InboundParamCapture from '@/components/InboundParamCapture'
 import SiteHeader from '@/components/SiteHeader'
 import SiteFooter from '@/components/SiteFooter'
+import MarketingChat from '@/components/MarketingChat'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -367,6 +368,24 @@ export default function RootLayout({ children }) {
         </Suspense>
         <InboundParamCapture />
         <ConversionTracker />
+        {/* Matthew (VP Sales) — shared chat widget.
+            - Trigger: IntersectionObserver on #differentiators (the
+              "From regulatory change to team action" section on the
+              landing). Fires the first time that section enters the
+              viewport.
+            - Fallback: 45s dwell on any page that doesn't have
+              #differentiators (so Matthew can still surface on
+              subpages if the visitor lingers).
+            - Persistence: once the bubble has appeared this tab,
+              sessionStorage keeps it visible across page navigations
+              — no re-trigger needed on /pricing or /about.
+            - 24h auto-open cooldown + 24h hard-dismiss cooldown so
+              returning visitors aren't badgered on every reload.
+            - Analytics: every event dual-fires to sup.xhsdata.ai's
+              marketing-chat edge function (for in-product admin
+              analytics) AND GA4 (window.gtag) with event name
+              `mchat_<type>` for cross-funnel attribution. */}
+        <MarketingChat />
       </body>
     </html>
   )

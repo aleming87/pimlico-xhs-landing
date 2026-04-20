@@ -26,10 +26,22 @@ const SESSION_KEY = "xhs:marketing-chat-session-id";
 const OPEN_KEY = "xhs:marketing-chat-was-open";
 const DISMISSED_KEY = "xhs:marketing-chat-dismissed-at";
 const AUTO_OPENED_KEY = "xhs:marketing-chat-auto-opened-at";
+// Session-scoped: once the bubble has fired this tab, keep it visible
+//   across page navigations (every page of pimlicosolutions.com, not
+//   just the landing). Cleared when the tab closes.
+const BUBBLE_SEEN_SESSION_KEY = "xhs:marketing-chat-bubble-seen";
 
 const DISMISS_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
-const ENGAGEMENT_DWELL_MS = 45_000;
+// Fallback dwell — used on pages that DON\u2019T have #differentiators
+//   (/about, /pricing, etc). Gives the bubble a way to appear there
+//   too once a visitor lingers. On the landing page proper the
+//   IntersectionObserver trigger almost always fires first.
+const FALLBACK_DWELL_MS = 45_000;
+// CSS selector the observer watches on pages that have it. When this
+//   element crosses into the viewport the bubble opens. Matches the
+//   "From regulatory change to team action" section on the landing.
+const SCROLL_TRIGGER_SELECTOR = "#differentiators";
 
 // sup.xhsdata.ai is a custom-domain alias for our Supabase project.
 // marketing-chat edge function already allowlists pimlicosolutions.com
@@ -87,7 +99,44 @@ function autoOpenedRecently() {
   } catch { return false; }
 }
 
+function bubbleSeenThisSession() {
+  try { return window.sessionStorage.getItem(BUBBLE_SEEN_SESSION_KEY) === "1"; }
+  catch { return false; }
+}
+
+function markBubbleSeenThisSession() {
+  try { window.sessionStorage.setItem(BUBBLE_SEEN_SESSION_KEY, "1"); }
+  catch { /* ignore */ }
+}
+
+// GA4 passthrough. The landing site already mounts <Analytics /> which
+//   loads gtag; we just push events onto the same dataLayer / gtag
+//   pipeline so the marketing-chat funnel is visible in GA4 reports
+//   alongside the existing site-wide events. Silent no-op if gtag
+//   hasn\u2019t loaded yet.
+function sendGA4(eventType, metadata = {}) {
+  try {
+    if (typeof window === "undefined") return;
+    const w = window;
+    const params = {
+      event_category: "marketing_chat",
+      persona_id: "matthew-langston",
+      origin_site: "pimlicosolutions.com",
+      ...metadata,
+    };
+    if (typeof w.gtag === "function") {
+      w.gtag("event", `mchat_${eventType}`, params);
+    } else if (Array.isArray(w.dataLayer)) {
+      w.dataLayer.push({ event: `mchat_${eventType}`, ...params });
+    }
+  } catch {}
+}
+
 function trackEvent(sessionId, eventType, metadata = {}) {
+  // Fan-out: Supabase edge function for the in-product admin analytics
+  //   surface + GA4 for cross-funnel attribution. Both are best-effort;
+  //   analytics never blocks UX.
+  sendGA4(eventType, metadata);
   try {
     const utm = readUtm();
     const payload = {
@@ -125,28 +174,77 @@ export default function MarketingChat() {
   const sessionIdRef = useRef("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  // Ref mirror of bubbleVisible so the IntersectionObserver callback
+  //   can early-exit without depending on React state inside its
+  //   stable closure.
+  const bubbleVisibleRef = useRef(false);
 
   useEffect(() => {
     sessionIdRef.current = getOrCreateSessionId();
   }, []);
 
-  // 45s dwell → bubble + auto-open (unless cooldown).
+  // Trigger strategy:
+  //   1. If the visitor has already seen the bubble this session
+  //      (navigating between pages), keep it visible immediately.
+  //      No re-trigger needed \u2014 it's been established.
+  //   2. If #differentiators exists on THIS page (landing only), arm
+  //      an IntersectionObserver that fires when the section crosses
+  //      50% into the viewport. Andrew's ask: "pops up automatically
+  //      once an individual has scrolled down to Regulatory Change
+  //      to Team Action".
+  //   3. Otherwise (subpages), fall back to a 45s dwell so the bubble
+  //      still surfaces for users who linger without scrolling into
+  //      the trigger zone.
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!sessionIdRef.current) return;
     if (dismissedRecently()) return;
 
-    const timer = window.setTimeout(() => {
+    // Case 1: already seen this session \u2014 persist across page loads.
+    if (bubbleSeenThisSession()) {
       setBubbleVisible(true);
-      trackEvent(sessionIdRef.current, "bubble_appeared", { dwell_ms: ENGAGEMENT_DWELL_MS });
+      return;
+    }
+
+    const fire = (triggerReason) => {
+      if (bubbleVisibleRef.current) return; // already fired, don't re-announce
+      setBubbleVisible(true);
+      bubbleVisibleRef.current = true;
+      markBubbleSeenThisSession();
+      trackEvent(sessionIdRef.current, "bubble_appeared", { trigger: triggerReason });
       if (!autoOpenedRecently()) {
         setOpen(true);
         try { window.localStorage.setItem(AUTO_OPENED_KEY, String(Date.now())); } catch {}
-        trackEvent(sessionIdRef.current, "auto_opened", { dwell_ms: ENGAGEMENT_DWELL_MS });
+        trackEvent(sessionIdRef.current, "auto_opened", { trigger: triggerReason });
       }
-    }, ENGAGEMENT_DWELL_MS);
+    };
 
-    return () => window.clearTimeout(timer);
+    // Case 2: scroll-based trigger on the landing page section.
+    const triggerEl = document.querySelector(SCROLL_TRIGGER_SELECTOR);
+    let observer = null;
+    if (triggerEl && typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+            fire("scroll_into_view_differentiators");
+            observer?.disconnect();
+            break;
+          }
+        }
+      }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+      observer.observe(triggerEl);
+    }
+
+    // Case 3: fallback dwell \u2014 fires on pages without the trigger
+    //   section, or if the user never scrolls to it.
+    const dwellTimer = window.setTimeout(() => {
+      fire("fallback_dwell_45s");
+    }, FALLBACK_DWELL_MS);
+
+    return () => {
+      observer?.disconnect();
+      window.clearTimeout(dwellTimer);
+    };
   }, []);
 
   useEffect(() => {
