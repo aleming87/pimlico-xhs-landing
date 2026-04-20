@@ -303,18 +303,39 @@ export default function MarketingChat() {
 
     // Rev 48d8 \u2014 "chat=continue" URL param means the visitor was
     //   mid-conversation on a prior page and clicked a redirect pill.
-    //   Open the panel immediately so Nadia follows them.
+    //   Show bubble immediately so Nadia follows. Whether the panel
+    //   also OPENS depends on what page we landed on:
+    //     - focused conversion pages (/pricing /contact etc.): bubble
+    //       only, panel stays closed. Calculator/form is the focus.
+    //     - mobile (< 768px): bubble only. Full-screen takeover too
+    //       aggressive when the visitor is already engaged elsewhere.
+    //     - everywhere else: open the panel, Nadia picks up where
+    //       the conversation was.
     try {
       const params = new URLSearchParams(window.location.search);
       if (params.get("chat") === "continue") {
-        setOpen(true);
         setBubbleVisible(true);
         bubbleVisibleRef.current = true;
         markBubbleSeenThisSession();
-        trackEvent(sessionIdRef.current, "panel_continued_on_navigation", {
-          from_path: document.referrer || null,
-        });
-        // Strip the chat+mchat_session params from the URL without
+        const path = window.location.pathname;
+        const FOCUSED_PAGES = ["/pricing", "/contact", "/start-trial", "/quote"];
+        const isFocusedPage = FOCUSED_PAGES.some((p) => path.startsWith(p));
+        const isMobile = window.matchMedia?.("(max-width: 767px)").matches ?? false;
+        const shouldOpenPanel = !isFocusedPage && !isMobile;
+        if (shouldOpenPanel) {
+          setOpen(true);
+          trackEvent(sessionIdRef.current, "panel_continued_on_navigation", {
+            from_path: document.referrer || null,
+          });
+        } else {
+          trackEvent(sessionIdRef.current, "bubble_continued_on_navigation", {
+            from_path: document.referrer || null,
+            path,
+            is_focused_page: isFocusedPage,
+            is_mobile: isMobile,
+          });
+        }
+        // Strip the chat + mchat_session params from the URL without
         //   a reload so a back-button doesn\u2019t re-trigger.
         params.delete("chat");
         params.delete("mchat_session");
@@ -367,12 +388,14 @@ export default function MarketingChat() {
 
     // Rev 48d8 \u2014 suppress auto-open on pages where the visitor is
     //   focused on a conversion tool of their own (calculator, form).
-    //   Bubble still appears so Nadia is reachable, but she doesn\u2019t
-    //   pop at them. "chat=continue" arrivals (post-pill-click) bypass
-    //   this via the mount-effect above, so the flow feels seamless.
+    //   Rev 48d9 \u2014 also suppress on mobile. Full-screen takeover is
+    //   too aggressive when the visitor isn\u2019t expecting it. Bubble
+    //   still appears so Nadia is reachable.
     const currentPath = window.location.pathname;
     const FOCUSED_PAGES = ["/pricing", "/contact", "/start-trial", "/quote"];
-    const suppressAutoOpen = FOCUSED_PAGES.some((p) => currentPath.startsWith(p));
+    const isFocusedPage = FOCUSED_PAGES.some((p) => currentPath.startsWith(p));
+    const isMobile = window.matchMedia?.("(max-width: 767px)").matches ?? false;
+    const suppressAutoOpen = isFocusedPage || isMobile;
 
     const fire = (triggerReason) => {
       if (bubbleVisibleRef.current) return; // already fired, don't re-announce
