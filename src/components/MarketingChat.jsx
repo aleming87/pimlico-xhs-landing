@@ -114,7 +114,7 @@ const POST_REDIRECT_TIPS = {
   "/pricing":
     "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live. Tap me if anything\u2019s unclear.",
   "/start-trial":
-    "Fourteen days, all Pro features, no card. I\u2019m here if you hit anything weird \u2014 tap me any time.",
+    "I\u2019ll stay alongside while you set up. Any step trips you up, tap me \u2014 or tap for a quick pre-flight.",
   "/contact":
     "Pop your details in and the team comes back within a UK business day. Happy to pre-qualify \u2014 tap me with a question.",
   "/quote":
@@ -150,8 +150,13 @@ const PAGE_SEED_MESSAGES = {
   },
   "/start-trial": {
     content:
-      "Fourteen days, all Pro features, no card \u2014 full jurisdictional coverage on your chosen verticals. What\u2019s the first thing you want to pressure-test?",
-    followUps: ["Jurisdiction coverage", "The daily feed", "Slack alerts", "Lens\u2122 analysis"],
+      "You\u2019re in the right place \u2014 fourteen days, all Pro features, no card. I\u2019ll stay alongside while you set up. Shout if any step trips you up, or if you\u2019d rather pre-chat the setup.",
+    followUps: [
+      "What plan should I pick?",
+      "How many seats should I add?",
+      "Which regions do I need?",
+      "Skip setup, book a demo",
+    ],
   },
   "/quote": {
     content:
