@@ -193,18 +193,29 @@ export default function MarketingChat() {
   //   1. If the visitor has already seen the bubble this session
   //      (navigating between pages), keep it visible immediately.
   //      No re-trigger needed \u2014 it's been established.
-  //   2. If #differentiators exists on THIS page (landing only), arm
-  //      an IntersectionObserver that fires when the section crosses
-  //      50% into the viewport. Andrew's ask: "pops up automatically
-  //      once an individual has scrolled down to Regulatory Change
-  //      to Team Action".
-  //   3. Otherwise (subpages), fall back to a 45s dwell so the bubble
+  //   2. If they dismissed within the last 24h, still show the bubble
+  //      (so they can re-engage if they change their mind) but skip
+  //      the auto-open. Previous behaviour hid the bubble entirely,
+  //      which made the widget feel broken after a single dismiss.
+  //   3. If #differentiators exists on THIS page (landing only), arm
+  //      an IntersectionObserver that fires when the section enters
+  //      the viewport. Andrew's ask: "pops up automatically once an
+  //      individual has scrolled down to Regulatory Change to Team
+  //      Action".
+  //   4. Otherwise (subpages), fall back to a 22s dwell so the bubble
   //      still surfaces for users who linger without scrolling into
   //      the trigger zone.
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!sessionIdRef.current) return;
-    if (dismissedRecently()) return;
+
+    // Case 2: hard-dismissed within 24h \u2014 show the bubble but don't
+    //   auto-open. User can click it if they want to re-engage.
+    if (dismissedRecently()) {
+      setBubbleVisible(true);
+      bubbleVisibleRef.current = true;
+      return;
+    }
 
     // Case 1: already seen this session \u2014 persist across page loads.
     if (bubbleSeenThisSession()) {
