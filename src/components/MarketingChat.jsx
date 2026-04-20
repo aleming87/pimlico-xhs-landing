@@ -70,11 +70,17 @@ const SUPABASE_ANON_KEY = "sb_publishable_vd8k7yq856LAm9OgDLMw9w_wHIE4ptd";
 //     - book_demo   \u2192 /contact?intent=demo (lands them in the form)
 //   The two conversational pills (see_pricing, use_case) stay as
 //   prompts because they produce value inside the chat.
+// Rev 48d7 — three direct-conversion redirects + one consultative
+//   prompt. "See pricing" moved to a redirect because the /pricing
+//   page already has a full calculator (team-size slider + verticals
+//   + regions + monthly/annual toggle + quote form). Sending the
+//   visitor straight there is a cleaner experience than a Haiku
+//   summary that leaves them guessing how to actually calculate.
 const QUICK_REPLIES = [
-  { id: "see_pricing", label: "See pricing",            prompt: "Can you show me pricing for our team size?" },
-  { id: "book_demo",   label: "Book a demo",            redirect: "/contact?intent=demo&from=marketing-chat" },
-  { id: "start_trial", label: "Start a free trial",     redirect: "/start-trial?from=marketing-chat" },
-  { id: "use_case",    label: "Discuss our use case",   prompt: "I\u2019d like to chat through our specific regulatory use case." },
+  { id: "see_pricing", label: "See pricing",          redirect: "/pricing?from=marketing-chat" },
+  { id: "book_demo",   label: "Book a demo",          redirect: "/contact?intent=demo&from=marketing-chat" },
+  { id: "start_trial", label: "Start a free trial",   redirect: "/start-trial?from=marketing-chat" },
+  { id: "use_case",    label: "Discuss our use case", prompt: "I\u2019d like to chat through our specific regulatory use case." },
 ];
 
 function getOrCreateSessionId() {
