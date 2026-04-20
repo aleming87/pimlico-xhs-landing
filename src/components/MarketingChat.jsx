@@ -44,7 +44,12 @@ const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 //   Rev 48d9 \u2014 Andrew reported Nadia wasn\u2019t triggering at all.
 //   Reduced 22s \u2192 8s so there\u2019s no perceived dead time, and so it
 //   beats the scroll observer on impatient scrollers too.
-const FALLBACK_DWELL_MS = 8_000;
+// Rev 48e4 \u2014 dwell at 12s. Intercom/Drift default band is 10\u201315s.
+//   Below 8s interrupts visitors still reading; above 20s misses
+//   short-attention visitors. 12s is the middle \u2014 enough time to
+//   read the hero + scan a jurisdiction, short enough to catch
+//   bouncers. Tunable here.
+const FALLBACK_DWELL_MS = 12_000;
 
 // Rev 48d6 \u2014 Nadia Olsson (Enterprise Account Lead) replaces Nadia
 //   as the marketing chat anchor. Andrew: "I'm not sure what else,
@@ -99,12 +104,11 @@ const QUICK_REPLIES = [
   { id: "start_trial", label: "Start a free trial",    redirect: `${APP_HOST}/start-trial` },
   { id: "book_demo",   label: "Book a demo",           redirect: "/contact?intent=demo" },
   { id: "see_pricing", label: "See pricing",           redirect: "/pricing" },
-  /* Rev 48e3 \u2014 renamed "Chat with Nadia" \u2192 "Contact sales."
-     Andrew: you\u2019re ALREADY chatting with Nadia when you see this
-     pill, so naming it after her creates confusion. Contact sales
-     names the funnel destination (her role) and keeps the four
-     pills as a clean set of conversion surfaces. */
-  { id: "use_case",    label: "Contact sales",         prompt: "I\u2019d like to talk to sales about our use case." },
+  /* Rev 48e4 \u2014 Contact sales renders an inline mini-form in the
+     thread instead of routing through the LLM. Andrew: "just
+     include a form here, she says happy to assist and they fill
+     it out." Prompt drops "about our use case." */
+  { id: "use_case",    label: "Contact sales",         contactForm: true,                      prompt: "I\u2019d like to talk to sales." },
 ];
 
 // Rev 48e0 \u2014 per-page contextual tip. When a visitor arrives with
@@ -742,21 +746,76 @@ export default function MarketingChat() {
     trackEvent(sessionIdRef.current, "quick_reply_clicked", {
       option_id: option.id,
       option_label: option.label,
-      action: option.redirect ? "redirect" : "prompt",
+      action: option.redirect ? "redirect" : option.contactForm ? "contact_form" : "prompt",
     });
-    // Rev 48d6 \u2014 direct-redirect pills (start_trial, book_demo) skip
-    //   the LLM entirely and send the user straight to the conversion
-    //   surface. More reliable than hoping Haiku emits the right tool
-    //   invocation. GA4 + edge-fn analytics still fire so the funnel
-    //   report sees the click.
-    // Rev 48d8 \u2014 append mchat_session + chat=continue so Nadia stays
-    //   alongside the visitor on the next page.
     if (option.redirect) {
       window.location.href = buildRedirectUrl(option.redirect, sessionIdRef.current);
       return;
     }
+    // Rev 48e4 \u2014 contact-form pill bypasses the LLM. Pushes a
+    //   deterministic user-turn + assistant-turn with an inline form
+    //   so the visitor goes straight from pill click to capture.
+    if (option.contactForm) {
+      setMessages((curr) => [
+        ...curr,
+        { role: "user", content: option.prompt ?? "I\u2019d like to talk to sales.", ts: Date.now() },
+        {
+          role: "assistant",
+          content: "Happy to assist. Pop your details in below and I\u2019ll come back within a UK business day.",
+          contactForm: true,
+          contactFormStatus: "idle",
+          ts: Date.now() + 1,
+        },
+      ]);
+      setIdleNudgeVisible(false);
+      return;
+    }
     void sendMessage(option.prompt, { via: "quick_reply", option_id: option.id });
   }, [sendMessage]);
+
+  // Rev 48e4 \u2014 contact-form submit handler. Fires the marketing-chat
+  //   event endpoint with contact_form_submitted + form fields.
+  //   Backend inserts into marketing_leads and pings the BD pipeline.
+  //   Client flips the turn\u2019s status from idle \u2192 submitting \u2192
+  //   submitted (or error) to swap form for a confirmation.
+  const submitContactForm = useCallback(async (turnIndex, form) => {
+    setMessages((curr) => curr.map((m, i) => i === turnIndex ? { ...m, contactFormStatus: "submitting" } : m));
+    try {
+      const utm = readUtm();
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/marketing-chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          event: true,
+          event_type: "contact_form_submitted",
+          session_id: sessionIdRef.current,
+          source_path: window.location.pathname + window.location.search,
+          persona_id: "nadia-olsson",
+          origin_site: "pimlicosolutions.com",
+          ts: Date.now(),
+          contact_name: form.name,
+          contact_email: form.email,
+          contact_company: form.company,
+          contact_message: form.message,
+          ...utm,
+        }),
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (!res.ok) throw new Error(`status_${res.status}`);
+      setMessages((curr) => curr.map((m, i) => i === turnIndex ? {
+        ...m,
+        contactFormStatus: "submitted",
+        content: "Got it \u2014 your details are with the team. Someone will come back within a UK business day.",
+      } : m));
+    } catch (err) {
+      console.error("[MarketingChat] contact form submit failed", err);
+      setMessages((curr) => curr.map((m, i) => i === turnIndex ? { ...m, contactFormStatus: "error" } : m));
+    }
+  }, []);
 
   if (!bubbleVisible && !open) return null;
 
@@ -1075,8 +1134,10 @@ export default function MarketingChat() {
                         renders on the most recent assistant turn so
                         stale pills from earlier turns don\u2019t clutter
                         the thread. Tap sends the pill text as a new
-                        user message and lets Nadia pick it up. */}
-                    {isLastAssistant && Array.isArray(m.followUps) && m.followUps.length > 0 && (
+                        user message and lets Nadia pick it up.
+                        Rev 48e4 \u2014 suppressed on contact-form turns
+                        (the form is the action). */}
+                    {isLastAssistant && Array.isArray(m.followUps) && m.followUps.length > 0 && !m.contactForm && (
                       <div className="flex flex-wrap gap-1.5 pl-10">
                         {m.followUps.map((fu, j) => (
                           <button
@@ -1094,6 +1155,19 @@ export default function MarketingChat() {
                             {fu}
                           </button>
                         ))}
+                      </div>
+                    )}
+                    {/* Rev 48e4 \u2014 inline contact-sales form. Renders
+                        when the assistant turn has contactForm: true
+                        AND the form hasn\u2019t been submitted. After
+                        submission the turn\u2019s content swaps to the
+                        confirmation and this block stops rendering. */}
+                    {m.contactForm && m.contactFormStatus !== "submitted" && (
+                      <div className="pl-10">
+                        <ContactSalesForm
+                          status={m.contactFormStatus ?? "idle"}
+                          onSubmit={(form) => submitContactForm(i, form)}
+                        />
                       </div>
                     )}
                   </div>
@@ -1259,5 +1333,93 @@ function ExternalLinkIcon({ className }) {
       <polyline points="15 3 21 3 21 9" />
       <line x1="10" y1="14" x2="21" y2="3" />
     </svg>
+  );
+}
+
+// Rev 48e4 \u2014 inline contact-sales form rendered directly in the
+//   chat thread under Nadia\u2019s "Happy to assist" bubble. Four fields
+//   (name, company, work email, optional message). Lightweight
+//   validation \u2014 required + basic email regex. Submit delegates
+//   to parent; status controls the visual state.
+function ContactSalesForm({ status, onSubmit }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [message, setMessage] = useState("");
+
+  const disabled = status === "submitting" || status === "submitted";
+  const emailLooksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const canSubmit = !disabled && name.trim() && emailLooksValid && company.trim();
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!canSubmit) return;
+        void onSubmit({ name: name.trim(), email: email.trim(), company: company.trim(), message: message.trim() });
+      }}
+      className="mt-2 rounded-xl border border-gray-200 bg-white p-3 shadow-sm space-y-2"
+    >
+      <div className="grid grid-cols-2 gap-2">
+        <label className="block">
+          <span className="block text-[10px] font-semibold uppercase tracking-wide text-[#0b1738]/60 mb-0.5">Name</span>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={disabled}
+            required
+            autoComplete="name"
+            className="w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-[12px] text-[#0b1738] focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-50"
+          />
+        </label>
+        <label className="block">
+          <span className="block text-[10px] font-semibold uppercase tracking-wide text-[#0b1738]/60 mb-0.5">Company</span>
+          <input
+            type="text"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            disabled={disabled}
+            required
+            autoComplete="organization"
+            className="w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-[12px] text-[#0b1738] focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-50"
+          />
+        </label>
+      </div>
+      <label className="block">
+        <span className="block text-[10px] font-semibold uppercase tracking-wide text-[#0b1738]/60 mb-0.5">Work email</span>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={disabled}
+          required
+          autoComplete="email"
+          className="w-full rounded-md border border-gray-200 bg-white px-2 py-1.5 text-[12px] text-[#0b1738] focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-50"
+        />
+      </label>
+      <label className="block">
+        <span className="block text-[10px] font-semibold uppercase tracking-wide text-[#0b1738]/60 mb-0.5">Anything helpful to know? <span className="text-[#0b1738]/40 font-normal">(optional)</span></span>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          disabled={disabled}
+          rows={2}
+          className="w-full resize-none rounded-md border border-gray-200 bg-white px-2 py-1.5 text-[12px] text-[#0b1738] focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-50"
+        />
+      </label>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[10px] text-gray-500">
+          {status === "error" ? "Couldn\u2019t send \u2014 try once more?" : "UK business day reply."}
+        </span>
+        <button
+          type="submit"
+          disabled={!canSubmit}
+          className="inline-flex items-center rounded-full bg-[#0b1738] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#0b1738]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >
+          {status === "submitting" ? "Sending\u2026" : "Send to sales"}
+        </button>
+      </div>
+    </form>
   );
 }
