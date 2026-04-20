@@ -583,16 +583,17 @@ export default function MarketingChat() {
                 </h2>
               </div>
 
-              {/* Stacked 2-column pill grid. Each tile is a card-sized
-                  button, not a thin chip, so the marketing funnel has
-                  clear branches. */}
-              <div className="px-4 pb-4 grid grid-cols-2 gap-2">
+              {/* Stacked single-column pill grid. Andrew: "they should be
+                  stacked on top of one another, you can make the text a
+                  bit larger". Each tile is full-width so the label has
+                  breathing room and the intent is unambiguous. */}
+              <div className="px-4 pb-4 flex flex-col gap-2">
                 {QUICK_REPLIES.map((qr) => (
                   <button
                     key={qr.id}
                     type="button"
                     onClick={() => handleQuickReply(qr)}
-                    className="text-left rounded-xl border border-gray-200 bg-white px-3 py-3 text-[13px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                    className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
                   >
                     {qr.label}
                   </button>
