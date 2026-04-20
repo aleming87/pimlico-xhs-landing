@@ -4,6 +4,7 @@ import ProductShowcase from "@/components/ProductShowcase";
 import DatamapScripts from "@/components/DatamapScripts";
 import { CookieConsent } from "@/components/CookieConsent";
 import { TrustedBy, Sectors, Coverage, Security, Testimonials, FinalCTA } from "@/components/HomeSections";
+import MarketingChat from "@/components/MarketingChat";
 
 export const metadata = {
   title: "XHS™ Copilot — Every regulatory change. Analyzed.",
@@ -217,6 +218,14 @@ export default function Page() {
       </main>
       <CookieConsent />
       <DatamapScripts />
+      {/* Matthew (VP Sales) \u2014 Pimlico-logo bubble appears at 45s dwell
+          and auto-opens with a structured quick-reply flow. Shares the
+          sup.xhsdata.ai marketing-chat edge function with xhsdata.ai\u2019s
+          product landing so analytics + conversations live in one
+          place. Mounted only on this landing page \u2014 not on subpages
+          (pricing, about, login etc) to avoid Matthew popping where
+          visitors have already committed to a path. */}
+      <MarketingChat />
     </>
   );
 }
