@@ -44,12 +44,24 @@ const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 //   Rev 48d9 \u2014 Andrew reported Nadia wasn\u2019t triggering at all.
 //   Reduced 22s \u2192 8s so there\u2019s no perceived dead time, and so it
 //   beats the scroll observer on impatient scrollers too.
-// Rev 48e4 \u2014 dwell at 12s. Intercom/Drift default band is 10\u201315s.
-//   Below 8s interrupts visitors still reading; above 20s misses
-//   short-attention visitors. 12s is the middle \u2014 enough time to
-//   read the hero + scan a jurisdiction, short enough to catch
-//   bouncers. Tunable here.
-const FALLBACK_DWELL_MS = 12_000;
+// Rev 48e5 \u2014 two-stage trigger. Andrew: "I want the bubble there
+//   almost from the very beginning \u2014 subtle, not obtrusive \u2014 then
+//   once you scroll or after a bit of time Nadia comes out a little
+//   more gradually."
+//
+//   STAGE 1: bubble fades in 1.5s after first paint. No panel pop,
+//   no peek tip. Just a quiet presence signal \u2014 "someone\u2019s here
+//   if you need them."
+//
+//   STAGE 2: engagement (peek tip or panel auto-open) fires on
+//   scroll into #differentiators OR after 25s dwell, whichever
+//   first. Scroll trigger gets a 2s settle so it doesn\u2019t feel
+//   abrupt the instant a visitor scrolls past.
+const BUBBLE_APPEAR_MS = 1_500;
+const ENGAGEMENT_DWELL_MS = 25_000;
+const SCROLL_SETTLE_MS = 2_000;
+// Retained alias for any existing call-sites expecting the old name.
+const FALLBACK_DWELL_MS = ENGAGEMENT_DWELL_MS;
 
 // Rev 48d6 \u2014 Nadia Olsson (Enterprise Account Lead) replaces Nadia
 //   as the marketing chat anchor. Andrew: "I'm not sure what else,
@@ -123,7 +135,7 @@ const POST_REDIRECT_TIPS = {
   "/pricing":
     "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live. Tap me if anything\u2019s unclear.",
   "/start-trial":
-    "I\u2019ll stay alongside while you set up. Any step trips you up, tap me \u2014 or tap for a quick pre-flight.",
+    "I\u2019ll stay alongside while you set up. Any step trips you up or questions pop up, just tap me.",
   "/contact":
     "Pop your details in and the team comes back within a UK business day. Happy to pre-qualify \u2014 tap me with a question.",
   "/quote":
@@ -159,7 +171,7 @@ const PAGE_SEED_MESSAGES = {
   },
   "/start-trial": {
     content:
-      "You\u2019re in the right place \u2014 fourteen days, all Pro features, no card. I\u2019ll stay alongside while you set up. Shout if any step trips you up, or if you\u2019d rather pre-chat the setup.",
+      "You\u2019re in the right place \u2014 fourteen days, all Pro features, no card. I\u2019ll stay alongside. Any step trips you up or questions pop up, just tap me.",
     followUps: [
       "What plan should I pick?",
       "How many seats should I add?",
@@ -389,12 +401,14 @@ export default function MarketingChat() {
   //   focused-page arrivals (post-redirect). Acts as a guide. Null
   //   when not showing.
   const [peekTip, setPeekTip] = useState(null);
-  // Rev 48e3 \u2014 soft idle nudge rendered as a banner above the
-  //   composer (not another assistant bubble). Fires after 120s
-  //   idle. Dismissed sticks for the session so it doesn\u2019t keep
-  //   re-appearing.
+  // Rev 48e5 \u2014 soft idle nudge above the composer. Two fires max:
+  //   first at 120s idle, second at 240s after dismissal. After two
+  //   dismissals we stop. Andrew: "it doesn\u2019t have to happen if
+  //   they close it out unless we think it should \u2014 I\u2019m open." My
+  //   view: one re-fire is the right balance. Respects their first
+  //   dismissal, but catches people who are genuinely stuck.
   const [idleNudgeVisible, setIdleNudgeVisible] = useState(false);
-  const [idleNudgeDismissed, setIdleNudgeDismissed] = useState(false);
+  const [idleNudgeDismissCount, setIdleNudgeDismissCount] = useState(0);
   const sessionIdRef = useRef("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -536,33 +550,63 @@ export default function MarketingChat() {
     const isMobile = window.matchMedia?.("(max-width: 767px)").matches ?? false;
     const suppressAutoOpen = isFocusedPage || isMobile;
 
-    const fire = (triggerReason) => {
-      if (bubbleVisibleRef.current) return; // already fired, don't re-announce
+    // Rev 48e5 \u2014 two-stage trigger.
+    //
+    //   STAGE 1 (showBubble): subtle presence. Bubble fades in at
+    //   BUBBLE_APPEAR_MS. Just the brand circle + green dot. No
+    //   panel, no peek tip. Visitor sees "someone is here" without
+    //   interruption. Equivalent to an Intercom launcher always-on.
+    //
+    //   STAGE 2 (engage): the panel auto-opens or the peek tip
+    //   appears. Fires either on scroll into #differentiators
+    //   (after a 2s settle so it doesn\u2019t feel abrupt mid-scroll)
+    //   or at ENGAGEMENT_DWELL_MS dwell total, whichever first.
+    const showBubble = (triggerReason) => {
+      if (bubbleVisibleRef.current) return;
       setBubbleVisible(true);
       bubbleVisibleRef.current = true;
       markBubbleSeenThisSession();
       trackEvent(sessionIdRef.current, "bubble_appeared", { trigger: triggerReason, path: currentPath });
+    };
+
+    const engage = (triggerReason) => {
+      // Must have bubble shown already; if not, show it now so the
+      //   visitor sees a coherent sequence (bubble \u2192 panel/peek).
+      if (!bubbleVisibleRef.current) showBubble(triggerReason);
       if (!autoOpenedRecently() && !suppressAutoOpen) {
         setOpen(true);
         try { window.localStorage.setItem(AUTO_OPENED_KEY, String(Date.now())); } catch {}
         trackEvent(sessionIdRef.current, "auto_opened", { trigger: triggerReason });
+        return;
+      }
+      // Auto-open suppressed (focused page or mobile). Surface a
+      //   contextual peek so Nadia is present but quiet.
+      const tip = pickPostRedirectTip(currentPath);
+      if (tip && !peekTip) {
+        setPeekTip(tip);
+        trackEvent(sessionIdRef.current, "peek_tip_shown", { trigger: triggerReason, path: currentPath });
       }
     };
 
-    // Case 2: scroll-based trigger on the landing page section.
-    //   Loosened threshold \u2014 fires the moment ANY part of the section
-    //   enters the viewport. Earlier version required 40% visibility
-    //   which never triggered if the section was taller than the
-    //   viewport (a common case on short laptops / scrolling fast).
-    //   rootMargin adds a small upward buffer so we fire just before
-    //   the heading reaches centre-of-screen.
+    // STAGE 1 \u2014 bubble appears quickly, as a subtle presence.
+    const bubbleTimer = window.setTimeout(() => {
+      showBubble("initial_dwell");
+    }, BUBBLE_APPEAR_MS);
+
+    // STAGE 2a \u2014 scroll trigger. When #differentiators enters the
+    //   viewport, wait 2s (SCROLL_SETTLE_MS) before engaging so the
+    //   visitor has a moment to stop scrolling and land on the
+    //   section first.
     const triggerEl = document.querySelector(SCROLL_TRIGGER_SELECTOR);
     let observer = null;
+    let scrollSettleTimer = null;
     if (triggerEl && typeof IntersectionObserver !== "undefined") {
       observer = new IntersectionObserver((entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            fire("scroll_into_view_differentiators");
+            scrollSettleTimer = window.setTimeout(() => {
+              engage("scroll_into_view_differentiators");
+            }, SCROLL_SETTLE_MS);
             observer?.disconnect();
             break;
           }
@@ -571,15 +615,17 @@ export default function MarketingChat() {
       observer.observe(triggerEl);
     }
 
-    // Case 3: fallback dwell \u2014 fires on pages without the trigger
-    //   section, or if the user never scrolls to it.
+    // STAGE 2b \u2014 long-dwell fallback in case the visitor never
+    //   scrolls to the trigger section.
     const dwellTimer = window.setTimeout(() => {
-      fire("fallback_dwell_45s");
-    }, FALLBACK_DWELL_MS);
+      engage("engagement_dwell_25s");
+    }, ENGAGEMENT_DWELL_MS);
 
     return () => {
       observer?.disconnect();
+      window.clearTimeout(bubbleTimer);
       window.clearTimeout(dwellTimer);
+      if (scrollSettleTimer) window.clearTimeout(scrollSettleTimer);
     };
   }, []);
 
@@ -620,16 +666,22 @@ export default function MarketingChat() {
   useEffect(() => {
     if (!open) return;
     if (idleNudgeVisible) return;
-    if (idleNudgeDismissed) return;
+    if (idleNudgeDismissCount >= 2) return; // two-strikes rule: quit after the re-fire
     if (messages.length === 0) return;
     const last = messages[messages.length - 1];
     if (last.role !== "assistant") return;
+    // First fire at 120s idle. Re-fire waits 240s after the prior
+    //   dismissal to give proper breathing room before nudging again.
+    const delay = idleNudgeDismissCount === 0 ? 120_000 : 240_000;
     const t = window.setTimeout(() => {
       setIdleNudgeVisible(true);
-      trackEvent(sessionIdRef.current, "idle_nudge_shown", { after_turn_index: messages.length - 1 });
-    }, 120_000);
+      trackEvent(sessionIdRef.current, "idle_nudge_shown", {
+        after_turn_index: messages.length - 1,
+        fire_number: idleNudgeDismissCount + 1,
+      });
+    }, delay);
     return () => window.clearTimeout(t);
-  }, [messages, open, idleNudgeVisible, idleNudgeDismissed]);
+  }, [messages, open, idleNudgeVisible, idleNudgeDismissCount]);
 
   /** Reset conversation back to the hero view (portrait + pills). */
   const handleBackToHero = useCallback(() => {
@@ -761,7 +813,7 @@ export default function MarketingChat() {
         { role: "user", content: option.prompt ?? "I\u2019d like to talk to sales.", ts: Date.now() },
         {
           role: "assistant",
-          content: "Happy to assist. Pop your details in below and I\u2019ll come back within a UK business day.",
+          content: "Happy to assist. Pop your details in below and we\u2019ll come back within one business day.",
           contactForm: true,
           contactFormStatus: "idle",
           ts: Date.now() + 1,
@@ -809,7 +861,7 @@ export default function MarketingChat() {
       setMessages((curr) => curr.map((m, i) => i === turnIndex ? {
         ...m,
         contactFormStatus: "submitted",
-        content: "Got it \u2014 your details are with the team. Someone will come back within a UK business day.",
+        content: "Got it \u2014 your details are with the team. We\u2019ll come back within one business day.",
       } : m));
     } catch (err) {
       console.error("[MarketingChat] contact form submit failed", err);
@@ -1217,38 +1269,46 @@ export default function MarketingChat() {
             </div>
           )}
 
-          {/* Rev 48e3 \u2014 idle nudge banner. Sits above the composer so
-              the visitor sees a gentle shoulder-tap without another
-              chat bubble landing in the thread. Subtle background +
-              two link-style actions + dismiss X. */}
-          {idleNudgeVisible && !idleNudgeDismissed && (
-            <div className="px-3 py-2 border-t border-gray-200 bg-[#0b1738]/[0.03]">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] text-gray-600 flex-1 truncate">
+          {/* Rev 48e5 \u2014 idle nudge banner. Slightly more prominent
+              than the prior thin-text row: adds a small Nadia avatar,
+              bumps text to 12px, and warms the bg to navy/0.06 so
+              it reads as an active shoulder-tap without turning into
+              another chat bubble. Two-fire policy: first dismissal
+              schedules a re-fire in 4 minutes; second dismissal
+              sticks. */}
+          {idleNudgeVisible && (
+            <div className="px-3 py-2.5 border-t border-gray-200 bg-[#0b1738]/[0.06]">
+              <div className="flex items-center gap-2.5">
+                <img
+                  src={NADIA_PORTRAIT_SRC}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-5 w-5 rounded-full object-cover ring-1 ring-white shrink-0"
+                />
+                <span className="text-[12px] text-[#0b1738] flex-1 leading-snug">
                   Still there? I can summarise or send the next step to your email.
                 </span>
                 <button
                   type="button"
                   onClick={() => {
                     setIdleNudgeVisible(false);
-                    setIdleNudgeDismissed(true);
+                    setIdleNudgeDismissCount((c) => c + 1);
                     trackEvent(sessionIdRef.current, "idle_nudge_actioned", { action: "summarise_email" });
                     void sendMessage("Summarise what we\u2019ve covered and send the next step to my email.", { via: "quick_reply", option_id: "idle_nudge_summarise" });
                   }}
-                  className="text-[11px] font-semibold text-[#0b1738] hover:underline underline-offset-2"
+                  className="text-[12px] font-semibold text-[#0b1738] hover:underline underline-offset-2 whitespace-nowrap"
                 >
                   Summarise & email
                 </button>
-                <span className="text-gray-300" aria-hidden="true">{"\u00b7"}</span>
                 <button
                   type="button"
                   onClick={() => {
                     setIdleNudgeVisible(false);
-                    setIdleNudgeDismissed(true);
-                    trackEvent(sessionIdRef.current, "idle_nudge_dismissed", {});
+                    setIdleNudgeDismissCount((c) => c + 1);
+                    trackEvent(sessionIdRef.current, "idle_nudge_dismissed", { fire_number: idleNudgeDismissCount + 1 });
                   }}
                   aria-label="Dismiss nudge"
-                  className="text-gray-400 hover:text-gray-700 p-0.5"
+                  className="text-gray-400 hover:text-gray-700 p-0.5 shrink-0"
                 >
                   <XIcon className="h-3 w-3" />
                 </button>
@@ -1410,7 +1470,7 @@ function ContactSalesForm({ status, onSubmit }) {
       </label>
       <div className="flex items-center justify-between gap-2">
         <span className="text-[10px] text-gray-500">
-          {status === "error" ? "Couldn\u2019t send \u2014 try once more?" : "UK business day reply."}
+          {status === "error" ? "Couldn\u2019t send \u2014 try once more?" : "Reply within one business day."}
         </span>
         <button
           type="submit"

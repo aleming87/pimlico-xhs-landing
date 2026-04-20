@@ -58,7 +58,10 @@ export function CookieConsent() {
   return (
     <div
       className={clsx(
-        'fixed bottom-4 left-4 z-50 max-w-[320px]',
+        // Rev 48e5 \u2014 centred. Andrew: "it could be a little more
+        //   central." Still bottom-anchored + compact so it doesn\u2019t
+        //   cover content; just no longer glued to the left edge.
+        'fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[min(380px,calc(100vw-2rem))]',
         'transition-all duration-300 ease-in-out',
         isClosing ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
       )}
