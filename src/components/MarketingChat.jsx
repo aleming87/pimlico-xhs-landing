@@ -90,8 +90,13 @@ const SUPABASE_ANON_KEY = "sb_publishable_vd8k7yq856LAm9OgDLMw9w_wHIE4ptd";
 //   3. See pricing         \u2014 exploration, calculator on /pricing.
 //   4. Chat with Nadia     \u2014 open-ended consultative route (contact-sales).
 // Andrew: "start a free trial higher than book demo, contact sales at bottom."
+// Rev 48e1 \u2014 /start-trial is a web-app route on xhsdata.ai, NOT a
+//   landing-page route on pimlicosolutions.com. Previous rev sent the
+//   visitor to pimlicosolutions.com/start-trial which 404\u2019d. Must be
+//   an absolute URL to the xhsdata.ai sign-up flow.
+const APP_HOST = "https://xhsdata.ai";
 const QUICK_REPLIES = [
-  { id: "start_trial", label: "Start a free trial",    redirect: "/start-trial" },
+  { id: "start_trial", label: "Start a free trial",    redirect: `${APP_HOST}/start-trial` },
   { id: "book_demo",   label: "Book a demo",           redirect: "/contact?intent=demo" },
   { id: "see_pricing", label: "See pricing",           redirect: "/pricing" },
   { id: "use_case",    label: "Chat with Nadia",       prompt: "I\u2019d like to talk through our regulatory use case and work out the right fit." },
@@ -122,6 +127,29 @@ function pickPostRedirectTip(pathname) {
     if (pathname.startsWith(prefix)) return POST_REDIRECT_TIPS[prefix];
   }
   return null;
+}
+
+// Rev 48e1 \u2014 extract the trailing "NEXT: A | B | C" line from a
+//   Claude reply. Returns clean text (reply with NEXT: line removed)
+//   + an array of up to 4 follow-up options, de-duped and trimmed.
+//   Safe: if no NEXT: line is present, returns the original text +
+//   an empty array, so the UI simply renders a free-text bubble.
+function parseFollowUps(rawReply) {
+  if (typeof rawReply !== "string" || !rawReply.trim()) {
+    return { cleanText: String(rawReply ?? ""), followUps: [] };
+  }
+  // Match NEXT: line either at the very end or on its own line. Case
+  //   insensitive. Tolerant of trailing whitespace / multiple newlines.
+  const match = rawReply.match(/\n?\s*NEXT:\s*(.+?)\s*$/im);
+  if (!match) return { cleanText: rawReply.trim(), followUps: [] };
+  const cleanText = rawReply.slice(0, match.index).trim();
+  const raw = match[1];
+  const followUps = raw
+    .split("|")
+    .map((o) => o.trim().replace(/^[-*]\s*/, ""))
+    .filter((o) => o.length > 0 && o.length <= 80)
+    .slice(0, 4);
+  return { cleanText, followUps };
 }
 
 // Build the final redirect URL for a pill click. Appends:
@@ -520,6 +548,42 @@ export default function MarketingChat() {
     return () => window.clearTimeout(t);
   }, [peekTip]);
 
+  // Rev 48e1 \u2014 idle auto-message. If the thread has at least one
+  //   assistant turn AND the user hasn\u2019t typed or sent anything for
+  //   45 seconds, Nadia surfaces a gentle nudge with structured
+  //   follow-up pills so the visitor doesn\u2019t feel abandoned. One-
+  //   shot: the nudge message itself doesn\u2019t re-fire the timer,
+  //   otherwise we\u2019d loop. Andrew: "there needs to be some sort of
+  //   timeout, some sort of auto-message if someone doesn\u2019t respond
+  //   for a certain amount of time."
+  useEffect(() => {
+    if (!open) return;
+    if (messages.length === 0) return;
+    const last = messages[messages.length - 1];
+    if (last.role !== "assistant") return;
+    if (last.__autoNudge) return; // don\u2019t nudge off a nudge
+    const t = window.setTimeout(() => {
+      setMessages((curr) => {
+        const latest = curr[curr.length - 1];
+        if (!latest || latest.role !== "assistant") return curr;
+        return [...curr, {
+          role: "assistant",
+          content: "Still there? Happy to keep going \u2014 or if you\u2019d rather wrap, I can summarise what we\u2019ve covered and send the next step to your email.",
+          followUps: [
+            "Keep going",
+            "Summarise and email me",
+            "See pricing",
+            "Book a demo",
+          ],
+          ts: Date.now(),
+          __autoNudge: true,
+        }];
+      });
+      trackEvent(sessionIdRef.current, "idle_nudge_shown", { after_turn_index: messages.length - 1 });
+    }, 45_000);
+    return () => window.clearTimeout(t);
+  }, [messages, open]);
+
   /** Reset conversation back to the hero view (portrait + pills). */
   const handleBackToHero = useCallback(() => {
     setMessages([]);
@@ -588,8 +652,24 @@ export default function MarketingChat() {
         return;
       }
       const data = await res.json().catch(() => null);
-      const replyText = data?.text ?? "Sorry, I\u2019m having trouble connecting right now. Try again in a moment, or drop us a note at hello@pimlicosolutions.com.";
-      const replyTurn = { role: "assistant", content: replyText, ts: Date.now(), toolInvocations: data?.tool_invocations };
+      const rawReply = data?.text ?? "Sorry, I\u2019m having trouble connecting right now. Try again in a moment, or drop us a note at hello@pimlicosolutions.com.";
+      // Rev 48e1 \u2014 parse structured NEXT: options from the reply so
+      //   every assistant turn offers 2\u20134 tappable follow-ups. Andrew:
+      //   "everything Nadia does should be structured, I should always
+      //   be routed in the direction we need and want to." The edge
+      //   function system prompt instructs Claude to append a line of
+      //   the form:  NEXT: Option A | Option B | Option C
+      //   We split the reply there, render the clean text as the
+      //   bubble, and render the pipe-separated options as pills
+      //   underneath.
+      const { cleanText, followUps } = parseFollowUps(rawReply);
+      const replyTurn = {
+        role: "assistant",
+        content: cleanText,
+        followUps,
+        ts: Date.now(),
+        toolInvocations: data?.tool_invocations,
+      };
       setMessages((curr) => [...curr, replyTurn]);
       const trialLink = data?.tool_invocations?.find((t) => t.sideEffect?.kind === "trial_link");
       if (trialLink?.sideEffect?.url) setTrialUrl(trialLink.sideEffect.url);
@@ -652,7 +732,10 @@ export default function MarketingChat() {
             trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
           }}
           aria-label="Open chat with Nadia Olsson"
-          className="fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 overflow-hidden bg-[#0b1738] text-white hover:scale-105"
+          /* Rev 48e1 \u2014 ring-white/30 so the bubble is visible on any
+             background (including our own dark pages where the prior
+             ring-black/5 vanished into navy-on-navy). */
+          className="fixed bottom-5 right-5 z-40 h-16 w-16 rounded-full shadow-xl flex items-center justify-center transition-all ring-2 ring-white/30 overflow-hidden bg-[#0b1738] text-white hover:scale-105"
           style={{ animation: "fadeIn 0.4s ease-out" }}
         >
           <img
@@ -675,13 +758,13 @@ export default function MarketingChat() {
       )}
 
       {/* Peek speech bubble \u2014 contextual guide tip that extends from
-          Nadia on focused-page arrivals. Only renders when the full
-          panel is closed so it doesn\u2019t stack. */}
+          Nadia on focused-page arrivals. Rev 48e1 \u2014 now includes
+          Nadia\u2019s portrait so she feels present, not anonymous. */}
       {!open && bubbleVisible && peekTip && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-24 right-5 z-40 max-w-[290px] rounded-2xl bg-white text-[#0b1738] shadow-xl ring-1 ring-black/5 border border-gray-200"
+          className="fixed bottom-24 right-5 z-40 max-w-[320px] rounded-2xl bg-white text-[#0b1738] shadow-xl ring-1 ring-black/5 border border-gray-200"
           style={{ animation: "fadeIn 0.35s ease-out" }}
         >
           <button
@@ -702,14 +785,29 @@ export default function MarketingChat() {
               trackEvent(sessionIdRef.current, "peek_tip_expanded", {});
               setPeekTip(null);
             }}
-            className="block w-full text-left px-4 py-3 pr-7"
+            className="flex w-full items-start gap-3 px-4 py-3 pr-7 text-left"
           >
-            <span className="block text-[11px] font-semibold uppercase tracking-wide text-[#0b1738]/60 mb-1">
-              Nadia \u2014 Enterprise Account Lead
-            </span>
-            <span className="block text-[13px] leading-relaxed">
-              {peekTip}
-            </span>
+            <div className="relative shrink-0">
+              <img
+                src={NADIA_PORTRAIT_SRC}
+                alt=""
+                aria-hidden="true"
+                className="h-10 w-10 rounded-full object-cover ring-2 ring-white shadow-sm"
+                loading="eager"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white"
+              />
+            </div>
+            <div className="min-w-0">
+              <span className="block text-[11px] font-semibold tracking-wide text-[#0b1738]/60 mb-0.5">
+                Nadia {"\u2014"} Enterprise Account Lead
+              </span>
+              <span className="block text-[13px] leading-relaxed">
+                {peekTip}
+              </span>
+            </div>
           </button>
           {/* Little tail pointing down towards the bubble */}
           <span
@@ -732,7 +830,12 @@ export default function MarketingChat() {
           aria-label="Chat with Nadia Olsson"
           className="fixed bottom-20 right-4 z-40 w-[400px] max-w-[calc(100vw-2rem)] h-[640px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
         >
-          {/* Top bar \u2014 back arrow (if in thread view) + Pimlico wordmark + close. */}
+          {/* Top bar \u2014 Rev 48e1 \u2014 shows Nadia\u2019s face + name + online
+              dot when the visitor is in thread view, so they know
+              who they\u2019re talking to at a glance. On the hero view
+              (no messages yet) we keep the clean Pimlico wordmark
+              because the big centred portrait below takes care of
+              identity. */}
           <div className="flex items-center justify-between gap-2 px-4 py-3 bg-[#0b1738]">
             <div className="flex items-center gap-2 min-w-0">
               {messages.length > 0 && (
@@ -745,12 +848,36 @@ export default function MarketingChat() {
                   <BackIcon className="h-4 w-4" />
                 </button>
               )}
-              <img
-                src="/Pimlico_Logo_Inverted.png"
-                alt="Pimlico Solutions"
-                className="h-5 w-auto"
-                loading="eager"
-              />
+              {messages.length > 0 ? (
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="relative shrink-0">
+                    <img
+                      src={NADIA_PORTRAIT_SRC}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-7 w-7 rounded-full object-cover ring-1 ring-white/20"
+                      loading="eager"
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 ring-[1.5px] ring-[#0b1738]"
+                    />
+                  </div>
+                  <div className="min-w-0 leading-tight">
+                    <p className="text-[13px] font-semibold text-white truncate">Nadia Olsson</p>
+                    <p className="text-[10px] text-white/60 truncate">
+                      Enterprise Account Lead {"\u00b7"} online
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src="/Pimlico_Logo_Inverted.png"
+                  alt="Pimlico Solutions"
+                  className="h-5 w-auto"
+                  loading="eager"
+                />
+              )}
             </div>
             <button
               type="button"
@@ -818,40 +945,83 @@ export default function MarketingChat() {
             </div>
           ) : (
             // Thread view \u2014 conventional chat list once the user
-            //   engages. Nadia avatar next to his replies.
+            //   engages. Rev 48e1 \u2014 enlarged avatars (h-8 w-8) + green
+            //   dot so Nadia\u2019s presence carries through the thread.
+            //   Also renders structured NEXT: follow-up pills under
+            //   the most recent assistant turn that has any.
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
               {messages.map((m, i) => {
                 const isUser = m.role === "user";
+                const isLastAssistant = !isUser && i === messages.length - 1;
                 return (
-                  <div key={i} className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
-                    {!isUser && (
-                      <img
-                        src={NADIA_PORTRAIT_SRC}
-                        alt=""
-                        aria-hidden="true"
-                        className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-gray-200"
-                      />
-                    )}
-                    <div
-                      className={`max-w-[80%] rounded-2xl px-3 py-2 text-[13px] leading-relaxed whitespace-pre-wrap ${
-                        isUser
-                          ? "bg-[#0b1738] text-white rounded-br-md"
-                          : "bg-white border border-gray-200 text-[#0b1738] rounded-bl-md shadow-sm"
-                      }`}
-                    >
-                      {m.content}
+                  <div key={i} className="space-y-2">
+                    <div className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
+                      {!isUser && (
+                        <div className="relative shrink-0">
+                          <img
+                            src={NADIA_PORTRAIT_SRC}
+                            alt=""
+                            aria-hidden="true"
+                            className="h-8 w-8 rounded-full object-cover ring-1 ring-gray-200"
+                          />
+                          <span
+                            aria-hidden="true"
+                            className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-gray-50"
+                          />
+                        </div>
+                      )}
+                      <div
+                        className={`max-w-[80%] rounded-2xl px-3 py-2 text-[13px] leading-relaxed whitespace-pre-wrap ${
+                          isUser
+                            ? "bg-[#0b1738] text-white rounded-br-md"
+                            : "bg-white border border-gray-200 text-[#0b1738] rounded-bl-md shadow-sm"
+                        }`}
+                      >
+                        {m.content}
+                      </div>
                     </div>
+                    {/* Rev 48e1 \u2014 structured follow-up pills. Only
+                        renders on the most recent assistant turn so
+                        stale pills from earlier turns don\u2019t clutter
+                        the thread. Tap sends the pill text as a new
+                        user message and lets Nadia pick it up. */}
+                    {isLastAssistant && Array.isArray(m.followUps) && m.followUps.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pl-10">
+                        {m.followUps.map((fu, j) => (
+                          <button
+                            key={j}
+                            type="button"
+                            onClick={() => {
+                              trackEvent(sessionIdRef.current, "follow_up_clicked", {
+                                option: fu,
+                                turn_index: i,
+                              });
+                              void sendMessage(fu, { via: "quick_reply", option_id: "follow_up" });
+                            }}
+                            className="rounded-full border border-[#0b1738]/20 bg-white px-3 py-1 text-[12px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                          >
+                            {fu}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
               {sending && (
                 <div className="flex items-end gap-2 justify-start">
-                  <img
-                    src={NADIA_PORTRAIT_SRC}
-                    alt=""
-                    aria-hidden="true"
-                    className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-gray-200"
-                  />
+                  <div className="relative shrink-0">
+                    <img
+                      src={NADIA_PORTRAIT_SRC}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-8 w-8 rounded-full object-cover ring-1 ring-gray-200"
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-gray-50"
+                    />
+                  </div>
                   <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-3 py-2.5 shadow-sm">
                     <div className="flex items-center gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-[#0b1738]/60 animate-bounce" />
