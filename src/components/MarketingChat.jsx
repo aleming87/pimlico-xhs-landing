@@ -37,7 +37,13 @@ const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 //   (/about, /pricing, etc). Gives the bubble a way to appear there
 //   too once a visitor lingers. On the landing page proper the
 //   IntersectionObserver trigger almost always fires first.
-const FALLBACK_DWELL_MS = 45_000;
+//   Shortened from 45s \u2192 22s per Andrew: "45 seconds is too long".
+const FALLBACK_DWELL_MS = 22_000;
+
+// Matthew\u2019s portrait lives in /public/personas/ (copied from the
+//   platform). Using a local asset avoids cross-origin image loads
+//   and the Supabase Storage round-trip.
+const MATTHEW_PORTRAIT_SRC = "/personas/matthew-langston.png";
 // CSS selector the observer watches on pages that have it. When this
 //   element crosses into the viewport the bubble opens. Matches the
 //   "From regulatory change to team action" section on the landing.
@@ -345,7 +351,9 @@ export default function MarketingChat() {
 
   return (
     <>
-      {/* Pimlico-logo bubble */}
+      {/* Pimlico-logo bubble. Bigger (56px) to register as a real
+          presence, not a throwaway icon. Ring shadow + subtle scale
+          hover. Same pattern used on the platform. */}
       <button
         type="button"
         onClick={() => {
@@ -356,10 +364,10 @@ export default function MarketingChat() {
             trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
           }
         }}
-        aria-label={open ? "Close chat" : "Open chat with Matthew"}
-        className={`fixed bottom-4 right-4 z-40 h-12 w-12 rounded-full shadow-lg flex items-center justify-center transition-all ${
+        aria-label={open ? "Close chat" : "Open chat with Matthew Langston"}
+        className={`fixed bottom-5 right-5 z-40 h-14 w-14 rounded-full shadow-xl flex items-center justify-center transition-all ring-1 ring-black/5 ${
           open
-            ? "bg-white text-[#0b1738] border border-gray-200"
+            ? "bg-white text-[#0b1738] border border-gray-200 hover:scale-105"
             : "bg-[#0b1738] text-white hover:scale-105"
         }`}
         style={{ animation: "fadeIn 0.4s ease-out" }}
@@ -370,56 +378,103 @@ export default function MarketingChat() {
             <img
               src="/Pimlico_Logo_Inverted.png"
               alt="Pimlico"
-              className="h-7 w-auto"
+              className="h-8 w-auto"
               loading="eager"
             />
           )}
       </button>
 
-      {/* Panel */}
+      {/* Panel — Rev 48d3. Structured to mirror the platform in-product
+          chat: Pimlico wordmark bar at the top, then a proper hero band
+          with Matthew\u2019s portrait + name + title, then the greeting +
+          pills, then composer. Andrew: "when Eleanor comes up on the
+          main platform and we see her photo we see her title we got
+          the Pimlico logo at the top and we can you know get some
+          information some pills structured below that \u2014 it needs to
+          be structured in the exact same way for this". */}
       {open && (
         <div
           role="dialog"
-          aria-label="Chat with Matthew"
-          className="fixed bottom-20 right-4 z-40 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
+          aria-label="Chat with Matthew Langston"
+          className="fixed bottom-20 right-4 z-40 w-[400px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
         >
-          {/* Header */}
-          <div className="px-4 py-3 border-b border-gray-200 flex items-center gap-3 bg-[#0b1738] text-white">
-            <div className="h-8 w-8 rounded-full bg-white/15 flex items-center justify-center text-xs font-semibold">
-              ML
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold leading-tight">Matthew Langston</p>
-              <p className="text-[11px] opacity-75">VP Sales &middot; Pimlico Solutions</p>
-            </div>
+          {/* Pimlico wordmark bar \u2014 brand anchor at the very top. */}
+          <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-[#0b1738]">
+            <img
+              src="/Pimlico_Logo_Inverted.png"
+              alt="Pimlico Solutions"
+              className="h-5 w-auto"
+              loading="eager"
+            />
             <button
               type="button"
               onClick={handleDismiss}
               aria-label="Dismiss chat"
-              className="text-white/70 hover:text-white transition-colors"
+              className="text-white/70 hover:text-white transition-colors p-1 -mr-1"
             >
               <XIcon className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-gray-50">
-            {messages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div
-                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap ${
-                    m.role === "user"
-                      ? "bg-[#0b1738] text-white rounded-br-md"
-                      : "bg-white border border-gray-200 text-[#0b1738] rounded-bl-md shadow-sm"
-                  }`}
-                >
-                  {m.content}
+          {/* Hero band \u2014 portrait + name + title, same pattern as
+              the platform persona surfaces. Portrait is large enough
+              to register as a real person, not a tiny icon. */}
+          <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-200 bg-gradient-to-b from-[#0b1738]/[0.03] to-transparent">
+            <img
+              src={MATTHEW_PORTRAIT_SRC}
+              alt="Matthew Langston"
+              className="h-14 w-14 rounded-full object-cover ring-2 ring-white shadow-md shrink-0"
+              loading="eager"
+              decoding="async"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-semibold text-[#0b1738] leading-tight">Matthew Langston</p>
+              <p className="text-[12px] text-gray-600 leading-tight mt-0.5">VP Sales</p>
+              <p className="text-[11px] text-gray-500 leading-tight mt-0.5">Pimlico Solutions &middot; London, UK</p>
+            </div>
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-[9px] uppercase tracking-wider text-gray-500 font-medium">Online</span>
+            </div>
+          </div>
+
+          {/* Messages — assistant messages show a small Matthew avatar
+              so the user can track who they\u2019re talking to across
+              longer conversations. */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+            {messages.map((m, i) => {
+              const isUser = m.role === "user";
+              return (
+                <div key={i} className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
+                  {!isUser && (
+                    <img
+                      src={MATTHEW_PORTRAIT_SRC}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-gray-200"
+                    />
+                  )}
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-3 py-2 text-[13px] leading-relaxed whitespace-pre-wrap ${
+                      isUser
+                        ? "bg-[#0b1738] text-white rounded-br-md"
+                        : "bg-white border border-gray-200 text-[#0b1738] rounded-bl-md shadow-sm"
+                    }`}
+                  >
+                    {m.content}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {sending && (
-              <div className="flex justify-start">
-                <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-3 py-2 shadow-sm">
+              <div className="flex items-end gap-2 justify-start">
+                <img
+                  src={MATTHEW_PORTRAIT_SRC}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-6 w-6 rounded-full object-cover shrink-0 ring-1 ring-gray-200"
+                />
+                <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-3 py-2.5 shadow-sm">
                   <div className="flex items-center gap-1">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#0b1738]/60 animate-bounce" />
                     <span className="h-1.5 w-1.5 rounded-full bg-[#0b1738]/60 animate-bounce" style={{ animationDelay: "0.15s" }} />
@@ -429,19 +484,27 @@ export default function MarketingChat() {
               </div>
             )}
 
-            {/* Quick-reply chips — only while conversation is one-turn deep */}
+            {/* Quick-reply chips \u2014 structured pill options below Matthew\u2019s
+                greeting. Only shown while the conversation is one-turn
+                deep so they don\u2019t hover around once a thread is
+                underway. */}
             {messages.length === 1 && !sending && (
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {QUICK_REPLIES.map((qr) => (
-                  <button
-                    key={qr.id}
-                    type="button"
-                    onClick={() => handleQuickReply(qr)}
-                    className="rounded-full border border-[#0b1738]/30 bg-white px-2.5 py-1 text-[11px] font-medium text-[#0b1738] hover:bg-[#0b1738] hover:text-white transition-colors"
-                  >
-                    {qr.label}
-                  </button>
-                ))}
+              <div className="pt-2 space-y-1.5">
+                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold ml-8 mb-1">
+                  Pick a topic or type your own
+                </p>
+                <div className="flex flex-wrap gap-1.5 ml-8">
+                  {QUICK_REPLIES.map((qr) => (
+                    <button
+                      key={qr.id}
+                      type="button"
+                      onClick={() => handleQuickReply(qr)}
+                      className="rounded-full border border-[#0b1738]/25 bg-white px-3 py-1.5 text-[12px] font-medium text-[#0b1738] hover:bg-[#0b1738] hover:text-white hover:border-[#0b1738] transition-colors shadow-sm"
+                    >
+                      {qr.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             <div ref={messagesEndRef} aria-hidden="true" />
