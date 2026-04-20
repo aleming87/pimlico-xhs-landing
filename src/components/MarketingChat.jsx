@@ -381,10 +381,14 @@ export default function MarketingChat() {
         {open
           ? <XIcon className="h-5 w-5" />
           : (
+            // Pimlico SI Brandmark \u2014 symbol-only (not the wordmark).
+            //   The wordmark was getting cropped in the circular bubble.
+            //   The brandmark is designed to sit in a small square /
+            //   circle so it reads cleanly at this size.
             <img
-              src="/Pimlico_Logo_Inverted.png"
+              src="/Pimlico_SI_Brandmark_Inverted.png"
               alt="Pimlico"
-              className="h-8 w-auto"
+              className="h-7 w-7 object-contain"
               loading="eager"
             />
           )}
@@ -436,11 +440,10 @@ export default function MarketingChat() {
             <div className="min-w-0 flex-1">
               <p className="text-[15px] font-semibold text-[#0b1738] leading-tight">Matthew Langston</p>
               <p className="text-[12px] text-gray-600 leading-tight mt-0.5">VP Sales</p>
-              <p className="text-[11px] text-gray-500 leading-tight mt-0.5">Pimlico Solutions &middot; London, UK</p>
             </div>
-            <div className="flex flex-col items-center gap-0.5">
+            <div className="flex items-center gap-1.5 shrink-0">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-[9px] uppercase tracking-wider text-gray-500 font-medium">Online</span>
+              <span className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">Online</span>
             </div>
           </div>
 
@@ -556,9 +559,6 @@ export default function MarketingChat() {
                 <SendIcon className="h-3.5 w-3.5" />
               </button>
             </div>
-            <p className="text-[10px] text-gray-400 mt-1.5">
-              Anonymous chat. We never share your details &mdash; you choose what to give us.
-            </p>
           </div>
         </div>
       )}
