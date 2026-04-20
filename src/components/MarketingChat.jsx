@@ -226,18 +226,24 @@ export default function MarketingChat() {
     };
 
     // Case 2: scroll-based trigger on the landing page section.
+    //   Loosened threshold \u2014 fires the moment ANY part of the section
+    //   enters the viewport. Earlier version required 40% visibility
+    //   which never triggered if the section was taller than the
+    //   viewport (a common case on short laptops / scrolling fast).
+    //   rootMargin adds a small upward buffer so we fire just before
+    //   the heading reaches centre-of-screen.
     const triggerEl = document.querySelector(SCROLL_TRIGGER_SELECTOR);
     let observer = null;
     if (triggerEl && typeof IntersectionObserver !== "undefined") {
       observer = new IntersectionObserver((entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+          if (entry.isIntersecting) {
             fire("scroll_into_view_differentiators");
             observer?.disconnect();
             break;
           }
         }
-      }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+      }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
       observer.observe(triggerEl);
     }
 
