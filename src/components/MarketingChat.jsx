@@ -1046,7 +1046,7 @@ export default function MarketingChat() {
                 })}
                 className="flex items-center justify-between gap-2 text-xs font-medium text-emerald-700 hover:text-emerald-800 transition-colors"
               >
-                <span>Start your 7-day trial &mdash; no card required</span>
+                <span>Start your 14-day trial &mdash; no card required</span>
                 <ExternalLinkIcon className="h-3 w-3" />
               </a>
             </div>
