@@ -76,12 +76,42 @@ const SUPABASE_ANON_KEY = "sb_publishable_vd8k7yq856LAm9OgDLMw9w_wHIE4ptd";
 //   + regions + monthly/annual toggle + quote form). Sending the
 //   visitor straight there is a cleaner experience than a Haiku
 //   summary that leaves them guessing how to actually calculate.
+// Rev 48d8 \u2014 redirect paths only. The session_id and chat=continue
+//   flag are appended at click time so they\u2019re current for whichever
+//   session triggered the pill. On pimlicosolutions.com these are
+//   same-origin paths; absolute URLs aren\u2019t needed here because the
+//   landing is one domain. The xhsdata.ai (web repo) version uses
+//   absolute pimlicosolutions.com URLs for its matching pills.
 const QUICK_REPLIES = [
-  { id: "see_pricing", label: "See pricing",          redirect: "/pricing?from=marketing-chat" },
-  { id: "book_demo",   label: "Book a demo",          redirect: "/contact?intent=demo&from=marketing-chat" },
-  { id: "start_trial", label: "Start a free trial",   redirect: "/start-trial?from=marketing-chat" },
+  { id: "see_pricing", label: "See pricing",          redirect: "/pricing" },
+  { id: "book_demo",   label: "Book a demo",          redirect: "/contact?intent=demo" },
+  { id: "start_trial", label: "Start a free trial",   redirect: "/start-trial" },
   { id: "use_case",    label: "Discuss our use case", prompt: "I\u2019d like to chat through our specific regulatory use case." },
 ];
+
+// Build the final redirect URL for a pill click. Appends:
+//   - from=marketing-chat \u2014 traffic attribution on the landing page
+//   - mchat_session=<id>  \u2014 lets /pricing, /start-trial, /contact join
+//                            their own logs back to the chat session
+//   - chat=continue       \u2014 signals to the MarketingChat on the next
+//                            page that the visitor was mid-conversation,
+//                            so the panel opens immediately instead of
+//                            waiting for the dwell timer
+function buildRedirectUrl(baseUrl, sessionId) {
+  try {
+    const url = new URL(baseUrl, typeof window !== "undefined" ? window.location.origin : "https://pimlicosolutions.com");
+    url.searchParams.set("from", "marketing-chat");
+    if (sessionId) url.searchParams.set("mchat_session", sessionId);
+    url.searchParams.set("chat", "continue");
+    // Return relative when same-origin so the navigation feels native.
+    if (typeof window !== "undefined" && url.origin === window.location.origin) {
+      return url.pathname + url.search + url.hash;
+    }
+    return url.toString();
+  } catch {
+    return baseUrl;
+  }
+}
 
 function getOrCreateSessionId() {
   try {
@@ -248,12 +278,48 @@ export default function MarketingChat() {
   const bubbleVisibleRef = useRef(false);
 
   useEffect(() => {
-    sessionIdRef.current = getOrCreateSessionId();
-    // Rev 48d6 \u2014 rehydrate thread from localStorage. If the visitor
-    //   had a conversation going on the previous page load, the bubble
+    // Rev 48d8 \u2014 if the visitor arrived with ?mchat_session=<id>,
+    //   prefer that over the local session so the thread rehydrates
+    //   correctly across a pill-click navigation. Cross-domain safe
+    //   (xhsdata.ai \u2192 pimlicosolutions.com handoff).
+    let sessionId = null;
+    try {
+      sessionId = new URLSearchParams(window.location.search).get("mchat_session");
+    } catch { /* ignore */ }
+    if (sessionId) {
+      try { window.localStorage.setItem(SESSION_KEY, sessionId); } catch {}
+      sessionIdRef.current = sessionId;
+    } else {
+      sessionIdRef.current = getOrCreateSessionId();
+    }
+
+    // Rehydrate thread from localStorage. If the visitor had a
+    //   conversation going on the previous page load, the bubble
     //   re-opens with the thread intact rather than a blank hero.
     const saved = readHistory(sessionIdRef.current);
     if (saved.length > 0) setMessages(saved);
+
+    // Rev 48d8 \u2014 "chat=continue" URL param means the visitor was
+    //   mid-conversation on a prior page and clicked a redirect pill.
+    //   Open the panel immediately so Nadia follows them.
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("chat") === "continue") {
+        setOpen(true);
+        setBubbleVisible(true);
+        bubbleVisibleRef.current = true;
+        markBubbleSeenThisSession();
+        trackEvent(sessionIdRef.current, "panel_continued_on_navigation", {
+          from_path: document.referrer || null,
+        });
+        // Strip the chat+mchat_session params from the URL without
+        //   a reload so a back-button doesn\u2019t re-trigger.
+        params.delete("chat");
+        params.delete("mchat_session");
+        const clean = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + window.location.hash;
+        window.history.replaceState({}, "", clean);
+      }
+    } catch { /* ignore */ }
   }, []);
 
   // Persist every message-list change.
@@ -297,13 +363,22 @@ export default function MarketingChat() {
       return;
     }
 
+    // Rev 48d8 \u2014 suppress auto-open on pages where the visitor is
+    //   focused on a conversion tool of their own (calculator, form).
+    //   Bubble still appears so Nadia is reachable, but she doesn\u2019t
+    //   pop at them. "chat=continue" arrivals (post-pill-click) bypass
+    //   this via the mount-effect above, so the flow feels seamless.
+    const currentPath = window.location.pathname;
+    const FOCUSED_PAGES = ["/pricing", "/contact", "/start-trial", "/quote"];
+    const suppressAutoOpen = FOCUSED_PAGES.some((p) => currentPath.startsWith(p));
+
     const fire = (triggerReason) => {
       if (bubbleVisibleRef.current) return; // already fired, don't re-announce
       setBubbleVisible(true);
       bubbleVisibleRef.current = true;
       markBubbleSeenThisSession();
-      trackEvent(sessionIdRef.current, "bubble_appeared", { trigger: triggerReason });
-      if (!autoOpenedRecently()) {
+      trackEvent(sessionIdRef.current, "bubble_appeared", { trigger: triggerReason, path: currentPath });
+      if (!autoOpenedRecently() && !suppressAutoOpen) {
         setOpen(true);
         try { window.localStorage.setItem(AUTO_OPENED_KEY, String(Date.now())); } catch {}
         trackEvent(sessionIdRef.current, "auto_opened", { trigger: triggerReason });
@@ -459,8 +534,10 @@ export default function MarketingChat() {
     //   surface. More reliable than hoping Haiku emits the right tool
     //   invocation. GA4 + edge-fn analytics still fire so the funnel
     //   report sees the click.
+    // Rev 48d8 \u2014 append mchat_session + chat=continue so Nadia stays
+    //   alongside the visitor on the next page.
     if (option.redirect) {
-      window.location.href = option.redirect;
+      window.location.href = buildRedirectUrl(option.redirect, sessionIdRef.current);
       return;
     }
     void sendMessage(option.prompt, { via: "quick_reply", option_id: option.id });
