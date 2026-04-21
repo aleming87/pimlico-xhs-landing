@@ -133,7 +133,7 @@ export default function FrameworksIndex() {
       <InlineCTA
         eyebrow="SEE IT LIVE"
         headline="Every framework, one workspace."
-        subhead="14-day trial. Full access to every framework above — Level 2 through enforcement, across 275+ jurisdictions."
+        subhead="14-day trial across up to 8 jurisdictions. Every framework tracked — Level 2 through enforcement. No credit card."
       />
     </main>
   )

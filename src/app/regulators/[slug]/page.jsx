@@ -256,7 +256,7 @@ export default async function RegulatorPage({ params }) {
       <InlineCTA
         eyebrow="TRY IT"
         headline={`Track ${r.abbr} change-detection alongside your other authorities.`}
-        subhead={`14-day trial. Full access to ${r.abbr} and 270+ other regulators, in one workspace.`}
+        subhead={`14-day trial. Pick up to 8 jurisdictions including ${r.abbr}. No credit card required.`}
       />
 
       {/* Licences */}

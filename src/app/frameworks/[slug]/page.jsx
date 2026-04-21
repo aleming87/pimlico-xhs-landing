@@ -254,7 +254,7 @@ export default async function FrameworkPage({ params }) {
       <InlineCTA
         eyebrow="TRY IT"
         headline={`See every ${f.abbr} obligation in your workspace.`}
-        subhead={`14-day trial. Full access to the ${f.abbr} surface area — Level 2 standards, NCA guidance, enforcement.`}
+        subhead={`14-day trial across up to 8 jurisdictions. ${f.abbr} Level 2 standards, guidance, and enforcement — all tracked.`}
       />
 
       {/* What XHS tracks */}

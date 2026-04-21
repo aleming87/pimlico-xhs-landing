@@ -91,7 +91,7 @@ function calculatePrice(users, verticals, regions, billing) {
 const FAQS = [
   {
     q: "What's in the trial?",
-    a: "Full access for 14 days. Up to 10 jurisdictions, every feature, no credit card.",
+    a: "14 days across up to 8 jurisdictions. Database, watchlists, country reports, Slack/Teams alerts, CSV/PDF exports. No credit card.",
   },
   {
     q: "Can I change plan later?",
