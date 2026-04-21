@@ -858,10 +858,14 @@ export default function MarketingChat() {
         signal: AbortSignal.timeout(15_000),
       });
       if (!res.ok) throw new Error(`status_${res.status}`);
+      // Rev 48e6 \u2014 post-submit keeps momentum. The visitor just gave
+      //   us their details; they\u2019re high intent. Instead of going
+      //   silent, offer three concrete routes + a graceful out.
       setMessages((curr) => curr.map((m, i) => i === turnIndex ? {
         ...m,
         contactFormStatus: "submitted",
-        content: "Got it \u2014 your details are with the team. We\u2019ll come back within one business day.",
+        content: "Got it \u2014 your details are with the team. We\u2019ll come back within one business day. While you wait, happy to point you somewhere useful.",
+        followUps: ["See pricing", "Start a 14-day trial", "Tell me about coverage", "I\u2019m good for now"],
       } : m));
     } catch (err) {
       console.error("[MarketingChat] contact form submit failed", err);
@@ -1189,13 +1193,25 @@ export default function MarketingChat() {
                         user message and lets Nadia pick it up.
                         Rev 48e4 \u2014 suppressed on contact-form turns
                         (the form is the action). */}
-                    {isLastAssistant && Array.isArray(m.followUps) && m.followUps.length > 0 && !m.contactForm && (
+                    {/* Rev 48e6 \u2014 follow-ups render on a contact-form
+                        turn IF status === submitted, so after the
+                        form is sent the pills take over as the
+                        post-action menu. */}
+                    {isLastAssistant && Array.isArray(m.followUps) && m.followUps.length > 0 && (!m.contactForm || m.contactFormStatus === "submitted") && (
                       <div className="flex flex-wrap gap-1.5 pl-10">
                         {m.followUps.map((fu, j) => (
                           <button
                             key={j}
                             type="button"
                             onClick={() => {
+                              /* Rev 48e6 \u2014 dismissal pills close the panel
+                                 locally; save a Claude turn. */
+                              const lower = fu.toLowerCase();
+                              if (lower.includes("i\u2019m good") || lower.includes("im good") || lower.includes("no thanks")) {
+                                trackEvent(sessionIdRef.current, "follow_up_dismissed", { option: fu, turn_index: i });
+                                handleDismiss();
+                                return;
+                              }
                               trackEvent(sessionIdRef.current, "follow_up_clicked", {
                                 option: fu,
                                 turn_index: i,
@@ -1324,7 +1340,9 @@ export default function MarketingChat() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask a question&hellip;"
+                /* Rev 48e6 \u2014 placeholder reframed so the text input
+                   reads as a secondary affordance vs the pills. */
+                placeholder="Or type something else&hellip;"
                 rows={2}
                 disabled={sending}
                 className="flex-1 resize-none rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-[#0b1738] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-60"
