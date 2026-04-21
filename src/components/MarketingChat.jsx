@@ -135,7 +135,7 @@ const POST_REDIRECT_TIPS = {
   "/pricing":
     "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live. Tap me if anything\u2019s unclear.",
   "/start-trial":
-    "I\u2019ll stay alongside while you set up. Any step trips you up or questions pop up, just tap me.",
+    "I\u2019ll stay alongside while you set up. Got a question, just tap me.",
   "/contact":
     "The form gets you a reply within one business day. If you have a question I can answer right now, just tap me.",
   "/quote":
@@ -171,12 +171,13 @@ const PAGE_SEED_MESSAGES = {
   },
   "/start-trial": {
     content:
-      "You\u2019re in the right place \u2014 fourteen days, all Pro features, no card. I\u2019ll stay alongside. Any step trips you up or questions pop up, just tap me.",
+      "Fourteen days, all Pro features, no card. I can help you pick the right plan + coverage. What\u2019s the team size?",
     followUps: [
-      "What plan should I pick?",
-      "How many seats should I add?",
-      "Which regions do I need?",
-      "Skip setup, book a demo",
+      "Just me",
+      "Team of 2\u20135",
+      "Team of 6\u201310",
+      "11\u201325",
+      "25+ (talk to sales)",
     ],
   },
   "/quote": {
@@ -206,6 +207,11 @@ function classifyFollowUp(label) {
   }
   if (/\b(book|schedule)\b.*\bdemo\b/.test(lower) || lower.includes("walkthrough demo")) {
     return { kind: "redirect", url: "/contact?intent=demo" };
+  }
+  // Rev 48f0 \u2014 "25+ (talk to sales)" / "Talk to sales" routes
+  //   straight to contact form with sales intent + size hint.
+  if (/\btalk to sales\b/.test(lower) || /\b25\+/.test(lower) || /\bcontact sales\b/.test(lower)) {
+    return { kind: "redirect", url: "/contact?intent=sales&size=25plus" };
   }
   if (lower === "see pricing" || lower === "show pricing" || lower === "pricing" || lower === "see pricing calculator") {
     return { kind: "redirect", url: "/pricing" };
@@ -1373,7 +1379,7 @@ export default function MarketingChat() {
                 onKeyDown={handleKeyDown}
                 /* Rev 48e6 \u2014 placeholder reframed so the text input
                    reads as a secondary affordance vs the pills. */
-                placeholder="Or type something else&hellip;"
+                placeholder={"Or type something else\u2026"}
                 rows={2}
                 disabled={sending}
                 className="flex-1 resize-none rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-[#0b1738] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-60"
