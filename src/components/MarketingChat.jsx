@@ -783,13 +783,14 @@ export default function MarketingChat() {
         trackEvent(sessionIdRef.current, "rate_limited", { status: res.status });
         setMessages((curr) => [...curr, {
           role: "assistant",
-          content: "Looks like we\u2019ve hit the limit for this session. Email hello@pimlicosolutions.com and I\u2019ll pick it up there \u2014 usually under an hour during UK business hours.",
+          content: "Chat is briefly over capacity. Pick a route below and I'll still get you where you need to go.",
+          followUps: ["Book a demo", "Start a 14-day trial", "See pricing", "Talk to sales"],
           ts: Date.now(),
         }]);
         return;
       }
       const data = await res.json().catch(() => null);
-      const rawReply = data?.text ?? "Sorry, I\u2019m having trouble connecting right now. Try again in a moment, or drop us a note at hello@pimlicosolutions.com.";
+      const rawReply = data?.text ?? "Connection is slow right now. Pick a route below and I'll still route you properly.\n\nNEXT: Book a demo | Start a 14-day trial | See pricing | Talk to sales";
       // Rev 48e1 \u2014 parse structured NEXT: options from the reply so
       //   every assistant turn offers 2\u20134 tappable follow-ups. Andrew:
       //   "everything Nadia does should be structured, I should always
@@ -814,7 +815,8 @@ export default function MarketingChat() {
       console.error("[MarketingChat] send failed", err);
       setMessages((curr) => [...curr, {
         role: "assistant",
-        content: "Something\u2019s gone sideways on my end. Drop us a note at hello@pimlicosolutions.com and we\u2019ll come back to you.",
+        content: "Something went sideways on my end. Pick a route below and I'll still route you properly.",
+        followUps: ["Book a demo", "Start a 14-day trial", "Talk to sales"],
         ts: Date.now(),
       }]);
     } finally {
@@ -1042,7 +1044,7 @@ export default function MarketingChat() {
         <div
           role="dialog"
           aria-label="Chat with Nadia Olsson"
-          className="fixed bottom-20 right-4 z-40 w-[400px] max-w-[calc(100vw-2rem)] h-[640px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
+          className="fixed bottom-20 right-4 z-40 w-[400px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-6rem)] rounded-2xl shadow-2xl border border-gray-200 bg-white overflow-hidden flex flex-col"
         >
           {/* Top bar \u2014 Rev 48e1 \u2014 shows Nadia\u2019s face + name + online
               dot when the visitor is in thread view, so they know
@@ -1122,7 +1124,7 @@ export default function MarketingChat() {
             const heroPath = typeof window !== "undefined" ? window.location.pathname : "";
             const heroSeed = pickPageSeed(heroPath);
             const heroHeading = heroSeed?.content ?? "What can I help you with today?";
-            const heroSubhead = heroSeed ? null : "Pick a quick route \u2014 or just ask me anything.";
+            const heroSubhead = heroSeed ? null : "Pick a route to get started.";
             return (
               <div className="flex-1 overflow-y-auto flex flex-col">
                 <div className="flex flex-col items-center pt-8 pb-5 px-6">
