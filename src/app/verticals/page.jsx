@@ -347,7 +347,7 @@ export default function VerticalsPage() {
             See it in your jurisdictions.
           </h2>
           <p className="mt-6 text-base text-[var(--color-text-tertiary)] leading-relaxed">
-            14-day trial. Full access.
+            14-day trial. No credit card.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
