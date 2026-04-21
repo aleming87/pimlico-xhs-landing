@@ -42,7 +42,7 @@ export default function ShowcaseWorkflow() {
             </span>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">\u2699\ufe0f</span>
+                <span className="text-2xl">{'\u2699\ufe0f'}</span>
                 <h2
                   className="text-3xl sm:text-4xl font-medium tracking-tight text-white"
                   style={{ fontFamily: "var(--font-display)" }}

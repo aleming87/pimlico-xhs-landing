@@ -89,7 +89,7 @@ export default function ShowcaseWorkspace() {
                 </div>
                 <div className="inline-flex items-center gap-2.5 rounded-full bg-[var(--color-bg-surface)] border border-[var(--color-border-default)]/40 pl-3 pr-4 py-2">
                   <span className="relative flex items-center justify-center h-6 w-6 rounded-full bg-blue-500/10 shrink-0">
-                    <span className="text-xs">\u2699\ufe0f</span>
+                    <span className="text-xs">{'\u2699\ufe0f'}</span>
                     <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-blue-500" />
                   </span>
                   <span className="text-sm font-medium text-[var(--color-text-primary)]">Workflow Builder</span>

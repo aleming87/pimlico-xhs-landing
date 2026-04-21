@@ -104,7 +104,7 @@ export default function ShowcaseCountry() {
                             className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0]"
                           >
                             <div className="h-8 w-8 rounded-lg bg-[#0f172a]/5 flex items-center justify-center shrink-0">
-                              <span className="text-xs">\ud83c\udfe6</span>
+                              <span className="text-xs">{'\ud83c\udfe6'}</span>
                             </div>
                             <span className="text-sm font-medium text-[#0f172a]">{reg}</span>
                           </div>
