@@ -137,7 +137,7 @@ const POST_REDIRECT_TIPS = {
   "/start-trial":
     "I\u2019ll stay alongside while you set up. Any step trips you up or questions pop up, just tap me.",
   "/contact":
-    "Pop your details in and the team comes back within a UK business day. Happy to pre-qualify \u2014 tap me with a question.",
+    "The form gets you a reply within one business day. If you have a question I can answer right now, just tap me.",
   "/quote":
     "I\u2019ll pull together a tailored number. Tap me if you want to walk through coverage or seat assumptions first.",
 };
@@ -166,7 +166,7 @@ const PAGE_SEED_MESSAGES = {
   },
   "/contact": {
     content:
-      "Quickest route is the form \u2014 I\u2019ll come back within a UK business day. I can also pre-qualify right here if it\u2019s faster \u2014 what\u2019s the shape of what you\u2019re looking for?",
+      "The form gets you a reply within one business day. If you\u2019d rather talk it through now, tell me what you\u2019re exploring \u2014 pricing for a specific team, a trial, or scoping a custom setup.",
     followUps: ["Evaluating vendors", "Replacing a tool", "Scoping a trial", "Just curious"],
   },
   "/start-trial": {
@@ -190,6 +190,25 @@ function pickPageSeed(pathname) {
   if (!pathname) return null;
   for (const prefix of Object.keys(PAGE_SEED_MESSAGES)) {
     if (pathname.startsWith(prefix)) return PAGE_SEED_MESSAGES[prefix];
+  }
+  return null;
+}
+
+/* Rev 48ed \u2014 classify a follow-up pill and redirect to the right
+   conversion surface instead of wasting a Claude turn on a text-plus-
+   link reply. Pattern-matches the pill label. Landing uses APP_HOST
+   for trial (xhsdata.ai/start-trial, cross-domain) and same-origin
+   paths for demo + pricing. */
+function classifyFollowUp(label) {
+  const lower = String(label).toLowerCase().trim();
+  if (/\b(start|begin|kick\s*off)\b.*\btrial\b/.test(lower) || lower === "14-day trial") {
+    return { kind: "redirect", url: `${APP_HOST}/start-trial` };
+  }
+  if (/\b(book|schedule)\b.*\bdemo\b/.test(lower) || lower.includes("walkthrough demo")) {
+    return { kind: "redirect", url: "/contact?intent=demo" };
+  }
+  if (lower === "see pricing" || lower === "show pricing" || lower === "pricing" || lower === "see pricing calculator") {
+    return { kind: "redirect", url: "/pricing" };
   }
   return null;
 }
@@ -1204,12 +1223,24 @@ export default function MarketingChat() {
                             key={j}
                             type="button"
                             onClick={() => {
-                              /* Rev 48e6 \u2014 dismissal pills close the panel
-                                 locally; save a Claude turn. */
+                              /* Rev 48e6 \u2014 dismissal pills close locally. */
                               const lower = fu.toLowerCase();
                               if (lower.includes("i\u2019m good") || lower.includes("im good") || lower.includes("no thanks")) {
                                 trackEvent(sessionIdRef.current, "follow_up_dismissed", { option: fu, turn_index: i });
                                 handleDismiss();
+                                return;
+                              }
+                              /* Rev 48ed \u2014 trial / demo / generic pricing
+                                 pills redirect directly; don\u2019t waste a
+                                 Claude turn. */
+                              const classified = classifyFollowUp(fu);
+                              if (classified) {
+                                trackEvent(sessionIdRef.current, "follow_up_redirect", {
+                                  option: fu,
+                                  turn_index: i,
+                                  target_url: classified.url,
+                                });
+                                window.location.href = buildRedirectUrl(classified.url, sessionIdRef.current);
                                 return;
                               }
                               trackEvent(sessionIdRef.current, "follow_up_clicked", {
