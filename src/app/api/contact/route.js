@@ -51,7 +51,7 @@ export async function POST(request) {
           heading: 'Thanks for getting in touch.',
           intro: `Hi ${escapeHtml(data.firstName)}, we've received your message and a member of the Pimlico team will be in touch shortly.`,
           body: `
-            <p style="margin: 0 0 16px; color: #cbd5e1;">In the meantime, you can start your 14-day trial with full platform access — no credit card required.</p>
+            <p style="margin: 0 0 16px; color: #cbd5e1;">In the meantime, you can start your 14-day trial — up to 8 jurisdictions, no credit card required.</p>
             <p style="margin: 0; color: #94a3b8; font-size: 14px;">Every regulatory change. Tracked. Sourced. Verified. Delivered.</p>
           `,
           ctaLabel: 'Start your 14-day trial',

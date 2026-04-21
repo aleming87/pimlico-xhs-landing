@@ -72,7 +72,7 @@ const faqSchema = {
       name: 'Is there a free trial of XHS™ Copilot?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. XHS™ Copilot includes a 14-day free trial with full platform access, up to 10 jurisdictions of coverage and every feature enabled. No credit card is required to start the trial.',
+        text: 'Yes. XHS™ Copilot includes a 14-day free trial with up to 8 jurisdictions of coverage, full database access, Slack/Teams alerts, and CSV/PDF exports. Projects™ and Briefings are paid-only. No credit card is required to start the trial.',
       },
     },
     {

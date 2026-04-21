@@ -119,7 +119,7 @@ export default function Page() {
         "name": "Is XHS™ Copilot in beta?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. XHS™ Copilot is generally available worldwide as a production product. It is used today by compliance, legal and regulatory affairs teams across gambling, payments, crypto and AI. A 14-day free trial with full platform access is available at pimlicosolutions.com/contact — no credit card required."
+          "text": "No. XHS™ Copilot is generally available worldwide as a production product. It is used today by compliance, legal and regulatory affairs teams across gambling, payments, crypto and AI. A 14-day free trial covering up to 8 jurisdictions is available at pimlicosolutions.com/contact — no credit card required."
         }
       },
       {
@@ -167,7 +167,7 @@ export default function Page() {
         "name": "Is XHS™ Copilot available now?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. XHS™ Copilot is live and generally available to regulated teams worldwide today. It is a production product, not a beta. Teams can start immediately with a 14-day free trial at pimlicosolutions.com/contact — full platform access, no credit card required. Paid plans start at £660 per month and scale to enterprise deployments with 100+ seats."
+          "text": "Yes. XHS™ Copilot is live and generally available to regulated teams worldwide today. It is a production product, not a beta. Teams can start immediately with a 14-day free trial at pimlicosolutions.com/contact — up to 8 jurisdictions, no credit card required. Paid plans start at £660 per month and scale to enterprise deployments with 100+ seats."
         }
       },
       {

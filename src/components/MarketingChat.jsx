@@ -1234,7 +1234,7 @@ export default function MarketingChat() {
                         form is sent the pills take over as the
                         post-action menu. */}
                     {isLastAssistant && Array.isArray(m.followUps) && m.followUps.length > 0 && (!m.contactForm || m.contactFormStatus === "submitted") && (
-                      <div className="flex flex-wrap gap-1.5 pl-10">
+                      <div className="flex flex-col gap-2 pl-10">
                         {m.followUps.map((fu, j) => (
                           <button
                             key={j}
@@ -1266,7 +1266,7 @@ export default function MarketingChat() {
                               });
                               void sendMessage(fu, { via: "quick_reply", option_id: "follow_up" });
                             }}
-                            className="rounded-full border border-[#0b1738]/20 bg-white px-3 py-1 text-[12px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                            className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
                           >
                             {fu}
                           </button>
@@ -1333,53 +1333,6 @@ export default function MarketingChat() {
             </div>
           )}
 
-          {/* Rev 48e5 \u2014 idle nudge banner. Slightly more prominent
-              than the prior thin-text row: adds a small Nadia avatar,
-              bumps text to 12px, and warms the bg to navy/0.06 so
-              it reads as an active shoulder-tap without turning into
-              another chat bubble. Two-fire policy: first dismissal
-              schedules a re-fire in 4 minutes; second dismissal
-              sticks. */}
-          {idleNudgeVisible && (
-            <div className="px-3 py-2.5 border-t border-gray-200 bg-[#0b1738]/[0.06]">
-              <div className="flex items-center gap-2.5">
-                <img
-                  src={NADIA_PORTRAIT_SRC}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-5 w-5 rounded-full object-cover ring-1 ring-white shrink-0"
-                />
-                <span className="text-[12px] text-[#0b1738] flex-1 leading-snug">
-                  Still there? I can summarise or send the next step to your email.
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIdleNudgeVisible(false);
-                    setIdleNudgeDismissCount((c) => c + 1);
-                    trackEvent(sessionIdRef.current, "idle_nudge_actioned", { action: "summarise_email" });
-                    void sendMessage("Summarise what we\u2019ve covered and send the next step to my email.", { via: "quick_reply", option_id: "idle_nudge_summarise" });
-                  }}
-                  className="text-[12px] font-semibold text-[#0b1738] hover:underline underline-offset-2 whitespace-nowrap"
-                >
-                  Summarise & email
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIdleNudgeVisible(false);
-                    setIdleNudgeDismissCount((c) => c + 1);
-                    trackEvent(sessionIdRef.current, "idle_nudge_dismissed", { fire_number: idleNudgeDismissCount + 1 });
-                  }}
-                  aria-label="Dismiss nudge"
-                  className="text-gray-400 hover:text-gray-700 p-0.5 shrink-0"
-                >
-                  <XIcon className="h-3 w-3" />
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Composer */}
           <div className="px-3 py-2 border-t border-gray-200 bg-white">
             <div className="flex items-end gap-2">
@@ -1406,6 +1359,77 @@ export default function MarketingChat() {
               </button>
             </div>
           </div>
+
+          {/* Rev 48f4 \u2014 idle nudge modal overlay (replaces the thin
+              banner-above-composer treatment). Andrew: "the still-there
+              thing should be something that pops up over the whole
+              chat window." Backdrop-blurs the thread, centred card,
+              two stacked CTAs. Dismiss-sticky via idleNudgeDismissCount
+              (two fires per session max). */}
+          {idleNudgeVisible && (
+            <div
+              role="dialog"
+              aria-label="Still there?"
+              className="absolute inset-0 z-50 flex items-center justify-center px-5 bg-[#020617]/55 backdrop-blur-[2px]"
+              style={{ animation: "fadeIn 0.2s ease-out" }}
+            >
+              <div className="w-full rounded-2xl bg-white shadow-xl border border-gray-200 p-5">
+                <div className="flex items-start gap-3">
+                  <img
+                    src={NADIA_PORTRAIT_SRC}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-10 w-10 rounded-full object-cover ring-2 ring-white shrink-0"
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[#0b1738]">Still there?</p>
+                    <p className="mt-1 text-[13px] text-[#475569] leading-snug">
+                      Happy to summarise what we&rsquo;ve covered and email you the next step &mdash; or carry on whenever you&rsquo;re ready.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIdleNudgeVisible(false);
+                      setIdleNudgeDismissCount((c) => c + 1);
+                      trackEvent(sessionIdRef.current, "idle_nudge_dismissed", { fire_number: idleNudgeDismissCount + 1 });
+                    }}
+                    aria-label="Dismiss"
+                    className="shrink-0 text-gray-400 hover:text-gray-700 -mt-1 -mr-1 p-1"
+                  >
+                    <XIcon className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="mt-4 flex flex-col gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIdleNudgeVisible(false);
+                      setIdleNudgeDismissCount((c) => c + 1);
+                      trackEvent(sessionIdRef.current, "idle_nudge_actioned", { action: "summarise_email" });
+                      void sendMessage("Summarise what we\u2019ve covered and send the next step to my email.", { via: "quick_reply", option_id: "idle_nudge_summarise" });
+                    }}
+                    className="w-full rounded-xl bg-[#0b1738] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#0b1738]/90 transition-colors"
+                  >
+                    Summarise & email me
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIdleNudgeVisible(false);
+                      setIdleNudgeDismissCount((c) => c + 1);
+                      trackEvent(sessionIdRef.current, "idle_nudge_dismissed", { fire_number: idleNudgeDismissCount + 1, via: "still_here" });
+                    }}
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-[13px] font-medium text-[#0b1738] hover:bg-gray-50 transition-colors"
+                  >
+                    I&rsquo;m still here
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

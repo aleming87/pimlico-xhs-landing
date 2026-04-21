@@ -382,7 +382,7 @@ export default async function FrameworkPage({ params }) {
             See every {f.abbr} change in your workspace.
           </h2>
           <p className="text-base text-[var(--color-text-tertiary)] mb-10 max-w-xl mx-auto">
-            14-day free trial. Full platform access. Cancel any time. No credit card.
+            14-day free trial. Up to 8 jurisdictions. Cancel any time. No credit card.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link

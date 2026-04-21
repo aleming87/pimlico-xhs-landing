@@ -162,7 +162,7 @@ function ContactPageInner() {
                 { label: "275+ jurisdictions", desc: "Gambling, Payments, Crypto, and AI regulation monitored continuously." },
                 { label: "Team economics", desc: "Scaling seat pricing across plans. Your full compliance team, day one." },
                 { label: "Slack & Teams", desc: "Regulatory updates delivered where your team already works." },
-                { label: "14-day trial", desc: "Full platform access. Cancel any time. No commitment." },
+                { label: "14-day trial", desc: "Up to 8 jurisdictions. Slack/Teams alerts and exports included. No credit card." },
               ].map((item) => (
                 <div key={item.label} className="flex gap-3">
                   <svg className="h-5 w-5 text-[var(--color-accent-secondary)] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>

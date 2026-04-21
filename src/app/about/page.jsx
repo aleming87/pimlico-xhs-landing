@@ -123,7 +123,7 @@ const faqSchema = {
       "name": "Is XHS Copilot in beta or generally available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "XHS™ Copilot is generally available worldwide today. It is a live production product used by regulated compliance teams across gambling, payments, crypto and AI. A 14-day free trial with full platform access is available — no credit card required."
+        "text": "XHS™ Copilot is generally available worldwide today. It is a live production product used by regulated compliance teams across gambling, payments, crypto and AI. A 14-day free trial covering up to 8 jurisdictions is available — no credit card required."
       }
     },
     {
