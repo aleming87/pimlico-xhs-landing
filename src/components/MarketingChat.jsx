@@ -928,25 +928,14 @@ export default function MarketingChat() {
           <button
             type="button"
             onClick={() => {
-              /* Rev 48e2 \u2014 if this is a focused page + the thread
-                 is empty, seed the panel with a page-specific opener
-                 + structured follow-ups so the visitor actually gets
-                 into a conversation instead of a 4-pill menu. Andrew:
-                 "she just goes back to normal options, she\u2019s not
-                 engaging." */
-              const path = typeof window !== "undefined" ? window.location.pathname : "";
-              const seed = pickPageSeed(path);
-              if (seed && messages.length === 0) {
-                setMessages([{
-                  role: "assistant",
-                  content: seed.content,
-                  followUps: seed.followUps,
-                  ts: Date.now(),
-                }]);
-                trackEvent(sessionIdRef.current, "panel_seeded_on_open", { path, via: "bubble_click" });
-              }
+              /* Rev 48f3 \u2014 bubble click just opens the panel; hero
+                 adapts to page context while preserving full layout.
+                 No more pushing a synthetic assistant message. */
               setOpen(true);
-              trackEvent(sessionIdRef.current, "manually_opened", { messages_in_conversation: messages.length });
+              trackEvent(sessionIdRef.current, "manually_opened", {
+                messages_in_conversation: messages.length,
+                path: typeof window !== "undefined" ? window.location.pathname : null,
+              });
             }}
             aria-label="Open chat with Nadia Olsson"
             /* Rev 48e2 \u2014 overflow-hidden removed. On a rounded-full
@@ -1001,23 +990,13 @@ export default function MarketingChat() {
           <button
             type="button"
             onClick={() => {
-              /* Rev 48e2 \u2014 seed the panel with the same framing as
-                 the peek + a sharp qualifying question so tapping
-                 through lands in an active conversation, not the
-                 4-pill menu. */
-              const path = typeof window !== "undefined" ? window.location.pathname : "";
-              const seed = pickPageSeed(path);
-              if (seed && messages.length === 0) {
-                setMessages([{
-                  role: "assistant",
-                  content: seed.content,
-                  followUps: seed.followUps,
-                  ts: Date.now(),
-                }]);
-                trackEvent(sessionIdRef.current, "panel_seeded_on_open", { path, via: "peek_tap" });
-              }
+              /* Rev 48f3 \u2014 peek tap opens the panel; hero adapts to
+                 page context while preserving full portrait-name-
+                 heading-pills layout. No synthetic message push. */
               setOpen(true);
-              trackEvent(sessionIdRef.current, "peek_tip_expanded", {});
+              trackEvent(sessionIdRef.current, "peek_tip_expanded", {
+                path: typeof window !== "undefined" ? window.location.pathname : null,
+              });
               setPeekTip(null);
             }}
             className="flex w-full items-start gap-3 px-4 py-3 pr-7 text-left"
@@ -1134,57 +1113,79 @@ export default function MarketingChat() {
               visitor sees the opener + follow-up pills and can engage
               immediately \u2014 not the 4-pill menu which was the dead-
               end Andrew flagged. */}
-          {messages.length === 0 && !sending ? (
-            <div className="flex-1 overflow-y-auto flex flex-col">
-              {/* Hero — big centred portrait + name + role. AI-native
-                  platform, global regulatory intelligence — the dot
-                  is always green. */}
-              <div className="flex flex-col items-center pt-8 pb-5 px-6">
-                <div className="relative">
-                  <img
-                    src={NADIA_PORTRAIT_SRC}
-                    alt="Nadia Olsson"
-                    className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-lg"
-                    loading="eager"
-                    decoding="async"
-                  />
-                  <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+          {messages.length === 0 && !sending ? (() => {
+            /* Rev 48f3 \u2014 hero stays the full layout on every page;
+               only the heading + pills adapt to page context.
+               Andrew: "when I tap Nadia I want her to look like she
+               did on the front page but with new pills adapted to
+               this context." */
+            const heroPath = typeof window !== "undefined" ? window.location.pathname : "";
+            const heroSeed = pickPageSeed(heroPath);
+            const heroHeading = heroSeed?.content ?? "What can I help you with today?";
+            const heroSubhead = heroSeed ? null : "Pick a quick route \u2014 or just ask me anything.";
+            return (
+              <div className="flex-1 overflow-y-auto flex flex-col">
+                <div className="flex flex-col items-center pt-8 pb-5 px-6">
+                  <div className="relative">
+                    <img
+                      src={NADIA_PORTRAIT_SRC}
+                      alt="Nadia Olsson"
+                      className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-lg"
+                      loading="eager"
+                      decoding="async"
+                    />
+                    <span className="absolute bottom-1 right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-white" />
+                  </div>
+                  <p className="mt-3 font-display text-[18px] font-medium text-[#0b1738]">Nadia Olsson</p>
+                  <p className="text-[13px] text-gray-600">Enterprise Account Lead</p>
                 </div>
-                <p className="mt-3 font-display text-[18px] font-medium text-[#0b1738]">Nadia Olsson</p>
-                <p className="text-[13px] text-gray-600">Enterprise Account Lead</p>
-              </div>
 
-              {/* Greeting heading \u2014 no "I\u2019m Nadia" (name is already
-                  above). Rev 48e0 \u2014 font-display (Playfair) to match
-                  the serious editorial brand. Subhead makes clear the
-                  pills are quick routes, not the only route. */}
-              <div className="px-6 pb-4 text-center">
-                <h2 className="font-display text-[22px] font-medium text-[#0b1738] leading-snug">
-                  What can I help you with today?
-                </h2>
-                <p className="mt-1.5 text-[12px] text-gray-500">
-                  {"Pick a quick route \u2014 or just ask me anything."}
-                </p>
-              </div>
+                <div className="px-6 pb-4 text-center">
+                  <h2 className="font-display text-[22px] font-medium text-[#0b1738] leading-snug">
+                    {heroHeading}
+                  </h2>
+                  {heroSubhead && (
+                    <p className="mt-1.5 text-[12px] text-gray-500">
+                      {heroSubhead}
+                    </p>
+                  )}
+                </div>
 
-              {/* Stacked single-column pill grid. Andrew: "they should be
-                  stacked on top of one another, you can make the text a
-                  bit larger". Each tile is full-width so the label has
-                  breathing room and the intent is unambiguous. */}
-              <div className="px-4 pb-4 flex flex-col gap-2">
-                {QUICK_REPLIES.map((qr) => (
-                  <button
-                    key={qr.id}
-                    type="button"
-                    onClick={() => handleQuickReply(qr)}
-                    className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
-                  >
-                    {qr.label}
-                  </button>
-                ))}
+                <div className="px-4 pb-4 flex flex-col gap-2">
+                  {heroSeed
+                    ? heroSeed.followUps.map((fu, idx) => (
+                        <button
+                          key={`seed-${idx}-${fu}`}
+                          type="button"
+                          onClick={() => {
+                            const classified = classifyFollowUp(fu);
+                            if (classified) {
+                              trackEvent(sessionIdRef.current, "page_seed_pill_redirect", { label: fu, path: heroPath, target_url: classified.url });
+                              window.location.href = buildRedirectUrl(classified.url, sessionIdRef.current);
+                              return;
+                            }
+                            trackEvent(sessionIdRef.current, "page_seed_pill_clicked", { label: fu, path: heroPath });
+                            void sendMessage(fu, { via: "quick_reply", option_id: "page_seed" });
+                          }}
+                          className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                        >
+                          {fu}
+                        </button>
+                      ))
+                    : QUICK_REPLIES.map((qr) => (
+                        <button
+                          key={qr.id}
+                          type="button"
+                          onClick={() => handleQuickReply(qr)}
+                          className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                        >
+                          {qr.label}
+                        </button>
+                      ))}
+                </div>
               </div>
-            </div>
-          ) : (
+            );
+          })() : (
             // Thread view \u2014 conventional chat list once the user
             //   engages. Rev 48e1 \u2014 enlarged avatars (h-8 w-8) + green
             //   dot so Nadia\u2019s presence carries through the thread.
