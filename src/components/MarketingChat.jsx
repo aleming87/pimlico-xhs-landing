@@ -142,13 +142,13 @@ const QUICK_REPLIES = [
 //   continues as a chat thread.
 const POST_REDIRECT_TIPS = {
   "/pricing":
-    "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live. Tap me if anything\u2019s unclear.",
+    "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live.",
   "/start-trial":
-    "I\u2019ll stay alongside while you set up. If you have a question, just let me know.",
+    "I\u2019ll stay alongside while you set up. Reopen this chat for a walk-through.",
   "/contact":
-    "The form gets you a reply within one business day. If you have a question I can answer right now, just tap me.",
+    "The form gets a reply within one business day. Reopen this chat for anything else.",
   "/quote":
-    "I\u2019ll pull together a tailored number. Tap me if you want to walk through coverage or seat assumptions first.",
+    "I\u2019ll pull together a tailored number. Reopen this chat to walk through coverage or seat assumptions.",
 };
 
 function pickPostRedirectTip(pathname) {
@@ -848,7 +848,7 @@ export default function MarketingChat() {
         { role: "user", content: option.prompt ?? "I\u2019d like to talk to sales.", ts: Date.now() },
         {
           role: "assistant",
-          content: "Happy to assist. Pop your details in below and we\u2019ll come back within one business day.",
+          content: "Pop your details in below and the sales team will come back within one business day.",
           contactForm: true,
           contactFormStatus: "idle",
           ts: Date.now() + 1,
@@ -899,8 +899,8 @@ export default function MarketingChat() {
       setMessages((curr) => curr.map((m, i) => i === turnIndex ? {
         ...m,
         contactFormStatus: "submitted",
-        content: "Got it \u2014 your details are with the team. We\u2019ll come back within one business day. While you wait, happy to point you somewhere useful.",
-        followUps: ["See pricing", "Start a 14-day trial", "Tell me about coverage", "I\u2019m good for now"],
+        content: "Got it \u2014 your details are with the team. They\u2019ll come back within one business day. In the meantime, pick a path below.",
+        followUps: ["See pricing", "Start a 14-day trial", "Which jurisdictions are covered?", "I\u2019m good for now"],
       } : m));
     } catch (err) {
       console.error("[MarketingChat] contact form submit failed", err);
@@ -1333,32 +1333,12 @@ export default function MarketingChat() {
             </div>
           )}
 
-          {/* Composer */}
-          <div className="px-3 py-2 border-t border-gray-200 bg-white">
-            <div className="flex items-end gap-2">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                /* Rev 48e6 \u2014 placeholder reframed so the text input
-                   reads as a secondary affordance vs the pills. */
-                placeholder={"Or type something else\u2026"}
-                rows={2}
-                disabled={sending}
-                className="flex-1 resize-none rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-[#0b1738] placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#0b1738] disabled:opacity-60"
-              />
-              <button
-                type="button"
-                onClick={() => void sendMessage()}
-                disabled={!input.trim() || sending}
-                aria-label="Send"
-                className="h-8 w-8 rounded-full bg-[#0b1738] text-white flex items-center justify-center disabled:opacity-40 hover:scale-105 transition-transform"
-              >
-                <SendIcon className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
+          {/* Rev 48f5 \u2014 Nadia is pill-guided only. No free-text composer.
+              Andrew: "I don't want to give everybody that option just to type
+              \u2014 it creates odd lots of problems." Every path routes
+              through pills, NEXT: follow-ups, or the ContactSalesForm.
+              If the user needs to say something the pills don't cover,
+              they pick "Talk to sales" which opens the structured form. */}
 
           {/* Rev 48f4 \u2014 idle nudge modal overlay (replaces the thin
               banner-above-composer treatment). Andrew: "the still-there
@@ -1386,7 +1366,7 @@ export default function MarketingChat() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#0b1738]">Still there?</p>
                     <p className="mt-1 text-[13px] text-[#475569] leading-snug">
-                      Happy to summarise what we&rsquo;ve covered and email you the next step &mdash; or carry on whenever you&rsquo;re ready.
+                      Want me to summarise what we&rsquo;ve covered and email you the next step? Or carry on whenever you&rsquo;re ready.
                     </p>
                   </div>
                   <button
