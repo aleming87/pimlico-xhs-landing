@@ -130,6 +130,9 @@ const QUICK_REPLIES = [
      include a form here, she says happy to assist and they fill
      it out." Prompt drops "about our use case." */
   { id: "use_case",    label: "Contact sales",         contactForm: true,                      prompt: "I\u2019d like to talk to sales." },
+  /* Rev 48f8 \u2014 IA audit: dedicated security/privacy path. Without
+     this, vuln disclosures and DSARs had no surface on Nadia. */
+  { id: "security_privacy", label: "Security or privacy", redirect: "/contact?intent=security" },
 ];
 
 // Rev 48e0 \u2014 per-page contextual tip. When a visitor arrives with
