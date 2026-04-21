@@ -50,43 +50,42 @@ export function CookieConsent() {
      bottom-left, compact, dark navy matching the site brand, tight
      1-line copy with a link to the full policy. Also doesn\u2019t fight
      the Nadia bubble which sits bottom-right. */
-  /* Rev 48e4 \u2014 more subtle. Single-line copy at XS size, compact
-     padding, and the whole card sits semi-transparent so it reads
-     as a system-level notice rather than a splash. Still accessible,
-     still clickable \u2014 just quieter. Andrew: "you can make it a
-     little more subtle." */
+  /* Rev 48f2 \u2014 redesigned per Andrew: "this bar could be longer,
+     a thin line, kind of see-through, and the blue doesn\u2019t match."
+     Now a wider strip (560px) with tighter vertical padding, much
+     lower bg opacity (/70 with backdrop blur so the content behind
+     shows through), and a 1px top accent in the brand navy so it
+     reads as a system notice instead of a coloured card. Privacy
+     link uses the same white underline pattern \u2014 no competing
+     blue. Still centred, still dismissable. */
   return (
     <div
       className={clsx(
-        // Rev 48e5 \u2014 centred. Andrew: "it could be a little more
-        //   central." Still bottom-anchored + compact so it doesn\u2019t
-        //   cover content; just no longer glued to the left edge.
-        'fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[min(380px,calc(100vw-2rem))]',
+        'fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[min(560px,calc(100vw-2rem))]',
         'transition-all duration-300 ease-in-out',
         isClosing ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'
       )}
       role="dialog"
       aria-label="Cookie notice"
     >
-      <div className="rounded-lg bg-[#0b1738]/95 backdrop-blur text-white/90 shadow-lg ring-1 ring-white/10 px-3 py-2.5">
-        <div className="flex items-center gap-2">
-          <p className="text-[11px] leading-snug text-white/75 flex-1">
+      <div className="rounded-full bg-[#0b1738]/70 backdrop-blur-md ring-1 ring-white/10 px-4 py-1.5">
+        <div className="flex items-center gap-3">
+          <p className="text-[11px] leading-snug text-white/75 flex-1 truncate">
             We use cookies to improve your experience.{' '}
             <Link href="/privacy" className="text-white underline underline-offset-2 hover:text-white/80">
               Privacy
             </Link>
-            .
           </p>
           <button
             onClick={handleAccept}
-            className="inline-flex items-center justify-center rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-[#0b1738] hover:bg-white/90 transition-colors"
+            className="shrink-0 inline-flex items-center justify-center rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-[#0b1738] hover:bg-white/90 transition-colors"
           >
             Accept
           </button>
           <button
             onClick={handleReject}
             aria-label="Reject cookies"
-            className="text-white/50 hover:text-white/90 text-[11px] transition-colors px-1"
+            className="shrink-0 text-white/50 hover:text-white/90 text-[11px] transition-colors px-1"
           >
             No
           </button>

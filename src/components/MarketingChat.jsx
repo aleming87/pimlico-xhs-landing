@@ -57,8 +57,17 @@ const AUTO_OPEN_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 //   scroll into #differentiators OR after 25s dwell, whichever
 //   first. Scroll trigger gets a 2s settle so it doesn\u2019t feel
 //   abrupt the instant a visitor scrolls past.
-const BUBBLE_APPEAR_MS = 1_500;
-const ENGAGEMENT_DWELL_MS = 25_000;
+// Rev 48f2 \u2014 timing bumped. Andrew: "time Nadia a little bit longer
+//   so she's not interrupting someone's thought path while they look
+//   at something." Bubble now 3s (from 1.5) so the visitor has time
+//   to begin reading the hero before any visual element appears.
+//   Engagement (peek or auto-open) now 45s (from 25) so her overture
+//   lands when the visitor has actually had a chance to absorb the
+//   page. Scroll-settle stays tight at 2s because that one fires only
+//   when the visitor has actively scrolled into the CTA section \u2014
+//   they're past "reading the hero" at that point.
+const BUBBLE_APPEAR_MS = 3_000;
+const ENGAGEMENT_DWELL_MS = 45_000;
 const SCROLL_SETTLE_MS = 2_000;
 // Retained alias for any existing call-sites expecting the old name.
 const FALLBACK_DWELL_MS = ENGAGEMENT_DWELL_MS;
@@ -135,7 +144,7 @@ const POST_REDIRECT_TIPS = {
   "/pricing":
     "Defaults to annual + global coverage. Tweak the slider + regions, then the calculator updates live. Tap me if anything\u2019s unclear.",
   "/start-trial":
-    "I\u2019ll stay alongside while you set up. Got a question, just tap me.",
+    "I\u2019ll stay alongside while you set up. If you have a question, just let me know.",
   "/contact":
     "The form gets you a reply within one business day. If you have a question I can answer right now, just tap me.",
   "/quote":
@@ -171,13 +180,13 @@ const PAGE_SEED_MESSAGES = {
   },
   "/start-trial": {
     content:
-      "Fourteen days, all Pro features, no card. I can help you pick the right plan + coverage. What\u2019s the team size?",
+      "How can I help you?",
     followUps: [
-      "Just me",
-      "Team of 2\u20135",
-      "Team of 6\u201310",
-      "11\u201325",
-      "25+ (talk to sales)",
+      "Pick the right plan for my team",
+      "Walk me through the trial setup",
+      "Tell me what\u2019s in the trial",
+      "Talk to sales",
+      "Book a demo",
     ],
   },
   "/quote": {
@@ -208,10 +217,11 @@ function classifyFollowUp(label) {
   if (/\b(book|schedule)\b.*\bdemo\b/.test(lower) || lower.includes("walkthrough demo")) {
     return { kind: "redirect", url: "/contact?intent=demo" };
   }
-  // Rev 48f0 \u2014 "25+ (talk to sales)" / "Talk to sales" routes
-  //   straight to contact form with sales intent + size hint.
-  if (/\btalk to sales\b/.test(lower) || /\b25\+/.test(lower) || /\bcontact sales\b/.test(lower)) {
-    return { kind: "redirect", url: "/contact?intent=sales&size=25plus" };
+  // Rev 48f2 \u2014 only explicit "Talk to sales" / "Contact sales"
+  //   auto-redirect. "25+" team-size pill stays with Claude so
+  //   context drives the recommendation, not the numeric suffix.
+  if (/\btalk to sales\b/.test(lower) || /\bcontact sales\b/.test(lower)) {
+    return { kind: "redirect", url: "/contact?intent=sales" };
   }
   if (lower === "see pricing" || lower === "show pricing" || lower === "pricing" || lower === "see pricing calculator") {
     return { kind: "redirect", url: "/pricing" };
