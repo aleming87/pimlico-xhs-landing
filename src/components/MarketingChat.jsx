@@ -180,13 +180,12 @@ const PAGE_SEED_MESSAGES = {
   },
   "/start-trial": {
     content:
-      "How can I help you?",
+      "You\u2019re one form away from a live workspace. I can walk you through what\u2019s gated on the trial, match a plan shape to your team, or book a proper scoping call \u2014 whichever is more useful right now.",
     followUps: [
+      "What\u2019s in the trial?",
       "Pick the right plan for my team",
-      "Walk me through the trial setup",
-      "Tell me what\u2019s in the trial",
-      "Talk to sales",
       "Book a demo",
+      "Talk to sales",
     ],
   },
   "/quote": {
@@ -850,7 +849,7 @@ export default function MarketingChat() {
         { role: "user", content: option.prompt ?? "I\u2019d like to talk to sales.", ts: Date.now() },
         {
           role: "assistant",
-          content: "Pop your details in below and the sales team will come back within one business day.",
+          content: "Drop your details in. I\u2019ll pick it up with the team and come back inside a business day.",
           contactForm: true,
           contactFormStatus: "idle",
           ts: Date.now() + 1,
@@ -901,8 +900,8 @@ export default function MarketingChat() {
       setMessages((curr) => curr.map((m, i) => i === turnIndex ? {
         ...m,
         contactFormStatus: "submitted",
-        content: "Got it \u2014 your details are with the team. They\u2019ll come back within one business day. In the meantime, pick a path below.",
-        followUps: ["See pricing", "Start a 14-day trial", "Which jurisdictions are covered?", "I\u2019m good for now"],
+        content: "Got your note \u2014 I\u2019ve flagged it with the team and we\u2019ll come back inside a business day. While you\u2019re here, what\u2019s the biggest unknown I can close off?",
+        followUps: ["What\u2019s in the trial?", "Which jurisdictions are covered?", "See pricing shape", "I\u2019m good for now"],
       } : m));
     } catch (err) {
       console.error("[MarketingChat] contact form submit failed", err);
