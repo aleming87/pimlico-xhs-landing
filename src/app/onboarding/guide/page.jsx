@@ -42,7 +42,7 @@ const TIMELINE = [
       'Check-in call to review usage, answer questions and gather feedback',
       'Product review opportunity for in-depth feedback on specific tools',
       'Workspace optimisation based on your team\'s observed workflows',
-      'Full platform access confirmed \u2014 ongoing support continues',
+      'Onboarding complete \u2014 dedicated support continues',
     ],
   },
 ];
@@ -115,8 +115,8 @@ export default function OnboardingGuidePage() {
 
           {/* Products */}
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
-            <h2 className="text-xl font-medium text-slate-900 mb-2">XHS\u2122 Platform Products</h2>
-            <p className="text-sm text-slate-500 mb-6">The tools available in your XHS\u2122 workspace</p>
+            <h2 className="text-xl font-medium text-slate-900 mb-2">XHS{'\u2122'} Platform Products</h2>
+            <p className="text-sm text-slate-500 mb-6">The tools available in your XHS{'\u2122'} workspace</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {PRODUCTS.map(p => (
                 <div key={p.label} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
@@ -162,7 +162,7 @@ export default function OnboardingGuidePage() {
           <section className="bg-blue-50 rounded-2xl p-6 sm:p-8 border border-blue-200 mb-6">
             <h2 className="text-xl font-medium text-blue-900 mb-4">What We Ask of You</h2>
             <p className="text-sm text-blue-800 leading-relaxed mb-5">
-              Getting the most out of XHS\u2122 is a two-way process. Here{'\u2019'}s how your team can help us deliver the best experience:
+              Getting the most out of XHS{'\u2122'} is a two-way process. Here{'\u2019'}s how your team can help us deliver the best experience:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white rounded-xl p-4 border border-blue-200">

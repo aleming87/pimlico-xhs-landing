@@ -148,7 +148,7 @@ function ContactPageInner() {
             </h1>
             <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed mb-10">
               {isTrial
-                ? "Full access to the XHS\u2122 Copilot platform. Your team can be onboarded in minutes."
+                ? "Your team onboarded in minutes. No credit card required."
                 : defaultInterest === "pricing"
                   ? "Custom pricing, procurement, and enterprise packages. We\u2019ll scope your requirements and put together a proposal."
                   : defaultInterest === "partnership"
