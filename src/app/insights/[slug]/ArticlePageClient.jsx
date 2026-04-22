@@ -153,8 +153,18 @@ export default function ArticlePageClient() {
   const giftParam = searchParams.get('gift');
   const hasGiftAccess = !!(params.slug && giftParam && giftParam === generateGiftToken(params.slug));
 
-  // All articles are now fully accessible — premium paywall disabled
-  const hasFullAccess = true;
+  // Rev 2026-04-22: premium paywall re-enabled. Previously hardcoded
+  // `hasFullAccess = true` which made the is_premium flag decorative.
+  // Full access now granted when:
+  //   - article is not premium (free) — always
+  //   - admin session (sessionStorage flag)
+  //   - gift link (?gift=TOKEN matches generateGiftToken(slug))
+  // Otherwise: teaser + paywall gate (see block at ~line 388).
+  const hasFullAccess = !article?.isPremium || isAdmin || hasGiftAccess;
+  // Default cutoff when article is premium but no explicit premiumCutoff
+  // set: show first 40% of content, gate the rest. Per-article override
+  // still respected when present.
+  const effectivePremiumCutoff = article?.premiumCutoff ?? (article?.isPremium ? 40 : 100);
 
   useEffect(() => {
     // Set current URL for sharing
@@ -385,7 +395,7 @@ export default function ArticlePageClient() {
 
           {/* Article Body - with justified text */}
           <div className="prose prose-lg max-w-none">
-            {article.isPremium && article.premiumCutoff && !hasFullAccess ? (
+            {article.isPremium && effectivePremiumCutoff && !hasFullAccess ? (
               <>
                 {/* Show only the cutoff percentage of content with blur effect */}
                 <div className="relative">
