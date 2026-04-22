@@ -81,7 +81,7 @@ export default function PartnersPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6"
               style={{ color: "var(--color-text-primary)" }}
             >
-              Stay close to our regulatory work.
+              Bring Pimlico's regulatory intelligence closer.
             </h1>
             <p
               className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-8"
@@ -89,7 +89,7 @@ export default function PartnersPage() {
             >
               An invitation-only programme for people affiliated with Pimlico. Early access to
               what we're researching, a direct line to the team, and a first look at what we're
-              building next. No trial clock, no quota.
+              building next. No trial clock.
             </p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <a
