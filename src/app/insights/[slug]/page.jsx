@@ -117,6 +117,15 @@ export default async function ArticlePage({ params }) {
   const article = await getArticleBySlug(slug);
   const baseUrl = 'https://pimlicosolutions.com';
 
+  // Rev 48db.49 (2026-04-22): previously articleBody was omitted from
+  // this JSON-LD and the body was only rendered client-side, so Google
+  // crawled a page with zero article text. Now the full Markdown body
+  // is emitted via articleBody + wordCount; <NoscriptArticleBody> below
+  // also renders the HTML so any non-JS client (crawler, old browser,
+  // email-link fetcher) sees real regulatory prose.
+  const bodyPlainText = (article?.content ?? '').replace(/[#*_`>[\]()!]/g, '').replace(/\n{2,}/g, '\n\n').trim();
+  const wordCount = bodyPlainText ? bodyPlainText.split(/\s+/).filter(Boolean).length : 0;
+
   const articleSchema = article
     ? {
         "@context": "https://schema.org",
@@ -149,6 +158,19 @@ export default async function ArticlePage({ params }) {
           "@type": "WebPage",
           "@id": `${baseUrl}/insights/${slug}`,
         },
+        // Rev 48db.49 (2026-04-22): articleBody + wordCount so Google
+        // Search can actually index the regulatory prose instead of
+        // reading just the headline + metadata.
+        "articleBody": bodyPlainText,
+        "wordCount": wordCount,
+        "isAccessibleForFree": !article.isPremium,
+        ...(article.isPremium ? {
+          "hasPart": {
+            "@type": "WebPageElement",
+            "isAccessibleForFree": false,
+            "cssSelector": ".paywalled-content",
+          },
+        } : {}),
       }
     : null;
 
@@ -190,6 +212,26 @@ export default async function ArticlePage({ params }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
+      {/* Rev 48db.49: <noscript> body so crawlers + any JS-blocked
+          reader get a text version of the article. Visible only when
+          JavaScript is disabled; JS clients render the full interactive
+          article via ArticlePageClient below (hydration takes over). */}
+      {article && (
+        <noscript>
+          <main style={{ maxWidth: '720px', margin: '120px auto 80px', padding: '0 24px', color: '#111', fontFamily: 'system-ui, sans-serif', lineHeight: 1.6 }}>
+            <p style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#666' }}>{article.category}</p>
+            <h1 style={{ fontSize: '28px', fontWeight: 500, marginTop: '8px' }}>{article.title}</h1>
+            {article.excerpt && <p style={{ fontSize: '18px', color: '#444', marginTop: '16px' }}>{article.excerpt}</p>}
+            <p style={{ fontSize: '13px', color: '#777', marginTop: '12px' }}>{article.date} · {article.readTime}</p>
+            <hr style={{ margin: '24px 0', border: 0, borderTop: '1px solid #ddd' }} />
+            <div style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>
+              {article.isPremium
+                ? `${(article.excerpt || '').slice(0, 500)}\n\n---\n\nThis is a premium article. Subscribe to XHS™ Copilot at xhsdata.ai for full access.`
+                : bodyPlainText}
+            </div>
+          </main>
+        </noscript>
       )}
       <ArticlePageClient />
     </>
