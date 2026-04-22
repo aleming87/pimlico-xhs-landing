@@ -1551,7 +1551,7 @@ function ContactSalesForm({ status, onSubmit }) {
           disabled={!canSubmit}
           className="inline-flex items-center rounded-full bg-[#0b1738] px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-[#0b1738]/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          {status === "submitting" ? "Sending\u2026" : "Send to sales"}
+          {status === "submitting" ? "Sending\u2026" : "Send it to Nadia"}
         </button>
       </div>
     </form>
