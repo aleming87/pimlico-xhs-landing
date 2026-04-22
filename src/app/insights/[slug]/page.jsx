@@ -64,10 +64,19 @@ export async function generateMetadata({ params }) {
 
   const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from XHS™ Copilot';
 
+  // Rev 2026-04-23 — surface the real journalist persona (e.g. "Daniel
+  // Yoon", "Priya Desai") in metadata + OG tags for SEO / social
+  // attribution. Falls back to "Pimlico editorial desk" when the DB
+  // row has no persona set or still carries the old generic author.
+  const genericAuthors = ['Pimlico XHS™ Team', 'XHS™ Team', 'Pimlico XHS Team'];
+  const bylineName = article.author && !genericAuthors.includes(article.author)
+    ? article.author
+    : 'Pimlico editorial desk';
+
   const metadata = {
     title: `${article.title} - XHS™ Copilot`,
     description: description,
-    authors: [{ name: 'XHS™ Copilot Team' }],
+    authors: [{ name: bylineName }],
     openGraph: {
       title: article.title,
       description: description,
@@ -76,7 +85,7 @@ export async function generateMetadata({ params }) {
       type: 'article',
       publishedTime: article.date,
       modifiedTime: article.date,
-      authors: ['XHS™ Copilot Team'],
+      authors: [bylineName],
       locale: 'en_US',
     },
     twitter: {
@@ -138,11 +147,25 @@ export default async function ArticlePage({ params }) {
         "inLanguage": "en",
         "articleSection": article.category || undefined,
         "keywords": Array.isArray(article.tags) ? article.tags.join(", ") : undefined,
-        "author": {
-          "@type": "Organization",
-          "name": "Pimlico Solutions",
-          "url": baseUrl,
-        },
+        "author": (() => {
+          const genericAuthors = ['Pimlico XHS™ Team', 'XHS™ Team', 'Pimlico XHS Team'];
+          if (article.author && !genericAuthors.includes(article.author)) {
+            return {
+              "@type": "Person",
+              "name": article.author,
+              "affiliation": {
+                "@type": "Organization",
+                "name": "Pimlico Solutions",
+                "url": baseUrl,
+              },
+            };
+          }
+          return {
+            "@type": "Organization",
+            "name": "Pimlico Solutions",
+            "url": baseUrl,
+          };
+        })(),
         "publisher": {
           "@type": "Organization",
           "name": "Pimlico Solutions",

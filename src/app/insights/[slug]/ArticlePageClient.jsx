@@ -492,15 +492,35 @@ export default function ArticlePageClient() {
                         Start your 14-day free trial.
                       </p>
                       
-                      <Link
-                        href="/contact?trial=true&source=premium-article"
-                        className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
-                      >
-                        Start your trial
-                        <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                      </Link>
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <Link
+                          href="/contact?trial=true&source=premium-article"
+                          className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                        >
+                          Start your trial
+                          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (typeof window === "undefined") return;
+                            window.dispatchEvent(new CustomEvent("pimlico:open-nadia", {
+                              detail: {
+                                source: "premium-paywall",
+                                hint: `I hit the paywall on "${article.title}" — can you tell me what's in the rest and whether a trial makes sense?`,
+                              },
+                            }));
+                          }}
+                          className="inline-flex items-center justify-center px-6 py-4 text-base font-medium text-white bg-white/10 border border-white/40 rounded-lg hover:bg-white/20 transition-all duration-200"
+                        >
+                          Talk to Nadia
+                          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -593,15 +613,35 @@ export default function ArticlePageClient() {
                   <p className="text-blue-100 text-base sm:text-lg mb-6 max-w-2xl">
                     Get real-time alerts and in-depth analysis with a <span className="text-white font-medium">14-day free trial</span>.
                   </p>
-                  <Link
-                    href="/contact?trial=true"
-                    className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
-                  >
-                    Start your trial
-                    <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </Link>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                      href="/contact?trial=true&source=article-footer"
+                      className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                    >
+                      Start your trial
+                      <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof window === "undefined") return;
+                        const country = extractCountryFromArticle(article);
+                        window.dispatchEvent(new CustomEvent("pimlico:open-nadia", {
+                          detail: {
+                            source: "article-footer",
+                            hint: country
+                              ? `How does XHS Copilot cover regulatory change in ${country}?`
+                              : `How does XHS Copilot help me track regulatory change like in this article?`,
+                          },
+                        }));
+                      }}
+                      className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-white bg-white/10 border border-white/40 rounded-lg hover:bg-white/20 transition-all duration-200"
+                    >
+                      Talk to Nadia
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

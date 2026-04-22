@@ -666,6 +666,34 @@ export default function MarketingChat() {
     };
   }, []);
 
+  // Rev 2026-04-23 — external-trigger bridge. Any surface on the marketing
+  //   site (paywall CTA, pricing CTA, etc.) can open Nadia by firing
+  //   `window.dispatchEvent(new CustomEvent("pimlico:open-nadia", {
+  //     detail: { hint?: string, source?: string } }))`. `hint` seeds a
+  //   user-side message so Nadia has context on what they want guidance
+  //   on; `source` is attribution for analytics.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handler = (ev) => {
+      const detail = (ev && ev.detail) || {};
+      setBubbleVisible(true);
+      bubbleVisibleRef.current = true;
+      markBubbleSeenThisSession();
+      setOpen(true);
+      setPeekTip(null);
+      trackEvent(sessionIdRef.current, "auto_opened", {
+        trigger: "external_event",
+        source: typeof detail.source === "string" ? detail.source.slice(0, 60) : null,
+      });
+      if (typeof detail.hint === "string" && detail.hint.trim().length > 0) {
+        const hint = detail.hint.trim().slice(0, 240);
+        setInput(hint);
+      }
+    };
+    window.addEventListener("pimlico:open-nadia", handler);
+    return () => window.removeEventListener("pimlico:open-nadia", handler);
+  }, []);
+
   useEffect(() => {
     try { window.localStorage.setItem(OPEN_KEY, open ? "1" : "0"); } catch {}
     if (open) {
