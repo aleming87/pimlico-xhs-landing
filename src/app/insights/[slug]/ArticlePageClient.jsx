@@ -223,8 +223,8 @@ export default function ArticlePageClient() {
     return (
       <div className="bg-[var(--color-bg-base)] min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-[var(--color-text-muted)]">Loading article...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-[var(--color-border-subtle)] border-t-[var(--color-text-primary)] mb-4"></div>
+          <p className="text-sm text-[var(--color-text-muted)]">Loading article…</p>
         </div>
       </div>
     );
@@ -253,10 +253,17 @@ export default function ArticlePageClient() {
       {/* Article Content */}
       <article className="pt-24 pb-16">
         <div className="mx-auto max-w-3xl px-6 lg:px-8">
-          {/* Breadcrumb */}
+          {/* Breadcrumb — mono uppercase to echo the [ NEWS & INSIGHTS ] treatment
+              on the listing page. Ties the detail page to its parent surface. */}
           <nav className="mb-8">
-            <Link href="/insights" className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] text-sm">
-              ← Back to Insights
+            <Link
+              href="/insights"
+              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              News &amp; Insights
             </Link>
           </nav>
 
@@ -264,145 +271,170 @@ export default function ArticlePageClient() {
           <header className="mb-10">
             {/* Cover Image - Above Title */}
             {article.image && (
-              <div className="mb-6 rounded-xl overflow-hidden">
+              <div className="mb-8 rounded-xl overflow-hidden border border-[var(--color-border-default)]/40">
                 <img src={article.image} alt={article.title} className="w-full h-auto object-cover" />
               </div>
             )}
-            
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3 text-sm text-[var(--color-text-muted)] flex-wrap">
-                <span className="bg-[var(--color-bg-elevated)] text-[var(--color-text-tertiary)] px-2.5 py-1 rounded-md font-medium">{article.category}</span>
+
+            {/* Rev 2026-04-23 — meta row refactored:
+                - builds the date/readTime/views line with a join so there's
+                  never a double-bullet when a field is missing (the prior
+                  "2026-04-21 • • 144 views" regression).
+                - Category badge + premium badge stay as a distinct group;
+                  timing metadata is rendered as a separate tighter line so
+                  the badges don't collide with free-form text.
+                - Share icons go monochrome (fill=currentColor → text-muted)
+                  with brand color surfacing on hover only — removes the
+                  rainbow against the near-black background. */}
+            <div className="flex items-start justify-between gap-4 mb-5 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="bg-[var(--color-bg-elevated)] text-[var(--color-text-tertiary)] px-2.5 py-1 rounded-md text-xs font-medium tracking-wide">
+                  {article.category}
+                </span>
                 {article.isPremium && (
-                  <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-2.5 py-1 rounded-md font-medium">
-                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-2.5 py-1 rounded-md text-xs font-medium">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                     Premium
                   </span>
                 )}
-                <span>{article.date}</span>
-                <span>•</span>
-                <span>{article.readTime}</span>
-                <span>•</span>
-                <span className="flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                  {viewCount.toLocaleString()} views
-                </span>
               </div>
-              
-              {/* Share buttons - full color icons, compact */}
-              <div className="flex items-center gap-0.5">
-                {/* LinkedIn */}
+
+              {/* Share icons — monochrome muted row. Hover lifts each icon
+                  to its brand color, so the affordance is still there but
+                  the page reads as a single calm row of glyphs rather than
+                  a rainbow. */}
+              <div className="flex items-center gap-0.5 -mr-1">
                 <a
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
-                  title="Share on LinkedIn"
+                  target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[#0A66C2] hover:bg-[var(--color-bg-elevated)] transition-colors"
+                  title="Share on LinkedIn" aria-label="Share on LinkedIn"
                 >
-                  <svg className="w-4 h-4" fill="#0A66C2" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                   </svg>
                 </a>
-                
-                {/* X (Twitter) */}
                 <a
                   href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
-                  title="Share on X"
+                  target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-elevated)] transition-colors"
+                  title="Share on X" aria-label="Share on X"
                 >
-                  <svg className="w-4 h-4" fill="#000000" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </a>
-                
-                {/* WhatsApp */}
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(`${shareTitle}\n\n${article.excerpt || ''}\n\n${shareUrl}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
-                  title="Share on WhatsApp"
+                  target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[#25D366] hover:bg-[var(--color-bg-elevated)] transition-colors"
+                  title="Share on WhatsApp" aria-label="Share on WhatsApp"
                 >
-                  <svg className="w-4 h-4" fill="#25D366" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
                 </a>
-                
-                {/* Telegram */}
                 <a
                   href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
-                  title="Share on Telegram"
+                  target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[#26A5E4] hover:bg-[var(--color-bg-elevated)] transition-colors"
+                  title="Share on Telegram" aria-label="Share on Telegram"
                 >
-                  <svg className="w-4 h-4" fill="#26A5E4" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                   </svg>
                 </a>
-                
-                {/* Gmail */}
                 <a
                   href={`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(`${shareText}\n\nRead more: ${shareUrl}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-1.5 hover:bg-[var(--color-bg-elevated)] rounded-lg transition-colors"
-                  title="Share via Gmail"
+                  target="_blank" rel="noopener noreferrer"
+                  className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[#EA4335] hover:bg-[var(--color-bg-elevated)] transition-colors"
+                  title="Share via Gmail" aria-label="Share via Gmail"
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="#EA4335">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
                   </svg>
                 </a>
               </div>
             </div>
-            
-            <h1 className="text-3xl sm:text-4xl font-medium text-[var(--color-text-primary)] mb-4">
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[var(--color-text-primary)] mb-5 leading-[1.15] tracking-tight">
               {article.title}
             </h1>
-            <p className="text-xl text-[var(--color-text-tertiary)]">{article.excerpt}</p>
-            
-            <div className="mt-6 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full border-2 border-[var(--color-border-default)] flex items-center justify-center bg-[var(--color-bg-base)] p-1 overflow-hidden">
-                <Image src="/Pimlico_Logo.png" alt="Pimlico" width={32} height={32} className="h-7 w-7 object-contain" />
-              </div>
-              <div>
-                {/* Rev 2026-04-22: real journalist byline from article.author
-                    (pipeline stamps persona name e.g. "Daniel Yoon",
-                    "Priya Desai", "Eleanor Chen"). Previously hardcoded
-                    "XHS™ Team" made every piece look generic. Desk
-                    attribution surfaces below when provided. */}
-                <p className="text-[var(--color-text-primary)] font-medium">
-                  {article.author && article.author !== 'Pimlico XHS™ Team' && article.author !== 'XHS™ Team'
-                    ? article.author
-                    : 'Pimlico editorial desk'}
-                </p>
-                {article.category && (
-                  <p className="text-xs text-[var(--color-text-tertiary)] mt-0.5">
-                    {article.category} desk · {article.date}
-                  </p>
-                )}
-              </div>
-            </div>
+            <p className="text-lg sm:text-xl text-[var(--color-text-tertiary)] leading-relaxed max-w-3xl">
+              {article.excerpt}
+            </p>
+
+            {/* Byline — Rev 2026-04-23. Previous version put a tiny Pimlico
+                logo inside a light circle that read as decorative noise on
+                the dark page. New treatment:
+                  • thin top rule to separate byline from the dek visually
+                  • monogram initials in a neutral elevated-bg circle
+                  • "By {name}" prefix so it reads as an attribution, not
+                    an orphan proper noun
+                  • single date line in "{Category} desk · {date} · {reads}"
+                    format — no duplicate date in the meta row above.
+                No avatar image so the byline never suggests these are
+                individually-profileable people. */}
+            {(() => {
+              const genericAuthors = ['Pimlico XHS™ Team', 'XHS™ Team', 'Pimlico XHS Team'];
+              const bylineName = article.author && !genericAuthors.includes(article.author)
+                ? article.author
+                : 'The Pimlico editorial desk';
+              const initials = bylineName
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((w) => w[0])
+                .join('')
+                .toUpperCase();
+              const metaBits = [
+                article.category ? `${article.category} desk` : null,
+                article.date || null,
+                article.readTime || null,
+                Number.isFinite(viewCount) && viewCount > 0 ? `${viewCount.toLocaleString()} reads` : null,
+              ].filter(Boolean);
+              return (
+                <div className="mt-8 pt-6 border-t border-[var(--color-border-default)]/40 flex items-center gap-4">
+                  <div
+                    aria-hidden="true"
+                    className="w-11 h-11 rounded-full bg-[var(--color-bg-elevated)] border border-[var(--color-border-default)]/40 flex items-center justify-center text-sm font-medium text-[var(--color-text-secondary)] tracking-wider shrink-0"
+                  >
+                    {initials || '··'}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm text-[var(--color-text-primary)]">
+                      <span className="text-[var(--color-text-muted)]">By </span>
+                      <span className="font-medium">{bylineName}</span>
+                    </p>
+                    {metaBits.length > 0 && (
+                      <p className="text-xs text-[var(--color-text-tertiary)] mt-0.5 truncate">
+                        {metaBits.join(' · ')}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
           </header>
 
-          {/* Admin / Gift access banner */}
+          {/* Admin / Gift access banner — Rev 2026-04-23. Previous bg-indigo-50
+              / bg-amber-50 washes were built for light mode and rendered as
+              near-white slabs against the dark page, blowing out the hero.
+              Swapped to surface tokens with a coloured left border so the
+              banner reads as an inline note, not a document overlay. */}
           {article.isPremium && hasFullAccess && (
-            <div className={`mb-6 rounded-xl px-4 py-3 flex items-center gap-3 text-sm font-medium ${
+            <div className={`mb-6 rounded-lg border-l-2 bg-[var(--color-bg-surface)] border border-[var(--color-border-default)]/40 px-4 py-3 flex items-center gap-3 text-sm ${
               isAdmin
-                ? 'bg-indigo-50 border border-indigo-200 text-indigo-700'
-                : 'bg-amber-50 border border-amber-200 text-amber-700'
+                ? 'border-l-indigo-400 text-indigo-300'
+                : 'border-l-amber-400 text-amber-300'
             }`}>
-              <span>{isAdmin ? '🔓' : '🎁'}</span>
-              <span>
+              <span className="text-base shrink-0">{isAdmin ? '🔓' : '🎁'}</span>
+              <span className="text-[var(--color-text-secondary)]">
                 {isAdmin
-                  ? 'Admin access — viewing full premium article'
-                  : 'Gift link — you have full access to this article'}
+                  ? <><span className="font-medium text-[var(--color-text-primary)]">Admin access</span> — viewing full premium article</>
+                  : <><span className="font-medium text-[var(--color-text-primary)]">Gift link</span> — you have full access to this article</>}
               </span>
             </div>
           )}
@@ -415,91 +447,93 @@ export default function ArticlePageClient() {
                 <div className="relative">
                   <div className="blur-[2px] select-none">
                     {article.contentType === 'html' ? (
-                      <div 
-                        className="article-content"
-                        dangerouslySetInnerHTML={{ 
-                          __html: article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100))) 
-                        }}
-                        style={{
-                          '--prose-headings-color': '#111827',
-                          '--prose-text-color': '#4B5563',
+                      <div
+                        className="article-content [&>h1]:text-3xl [&>h1]:font-medium [&>h1]:text-[var(--color-text-primary)] [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-medium [&>h2]:text-[var(--color-text-primary)] [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:text-[var(--color-text-primary)] [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-[var(--color-text-secondary)] [&>p]:mb-4 [&>p]:leading-relaxed [&>strong]:text-[var(--color-text-primary)] [&>strong]:font-medium [&_a]:text-[var(--color-accent-secondary)] [&_a]:pointer-events-none"
+                        dangerouslySetInnerHTML={{
+                          __html: article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100)))
                         }}
                       />
                     ) : (
                       <ReactMarkdown
                         components={{
-                          h2: ({children}) => <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
-                          h3: ({children}) => <h3 className="text-xl font-medium text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
-                          p: ({children}) => <p className="text-[var(--color-text-tertiary)] mb-4 leading-relaxed text-justify">{children}</p>,
-                          ul: ({children}) => <ul className="list-disc list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ul>,
-                          ol: ({children}) => <ol className="list-decimal list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ol>,
-                          li: ({children}) => <li className="text-[var(--color-text-tertiary)]">{children}</li>,
+                          h2: ({children}) => <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mt-10 mb-4 leading-snug">{children}</h2>,
+                          h3: ({children}) => <h3 className="text-xl font-medium text-[var(--color-text-primary)] mt-8 mb-3 leading-snug">{children}</h3>,
+                          p: ({children}) => <p className="text-[var(--color-text-secondary)] mb-4 leading-relaxed">{children}</p>,
+                          ul: ({children}) => <ul className="list-disc list-outside ml-5 text-[var(--color-text-secondary)] mb-4 space-y-2">{children}</ul>,
+                          ol: ({children}) => <ol className="list-decimal list-outside ml-5 text-[var(--color-text-secondary)] mb-4 space-y-2">{children}</ol>,
+                          li: ({children}) => <li className="text-[var(--color-text-secondary)] pl-1">{children}</li>,
                           strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-medium">{children}</strong>,
-                          a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] pointer-events-none">{children}</a>,
-                          blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-[var(--color-text-muted)]">{children}</blockquote>,
-                          code: ({children}) => <code className="bg-[var(--color-bg-elevated)] px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
-                          hr: () => <hr className="border-[var(--color-border-default)] my-8" />,
-                          table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
-                          th: ({children}) => <th className="border border-[var(--color-border-default)] px-4 py-2 bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] text-left">{children}</th>,
-                          td: ({children}) => <td className="border border-[var(--color-border-default)] px-4 py-2 text-[var(--color-text-tertiary)]">{children}</td>,
+                          a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] underline underline-offset-2 pointer-events-none">{children}</a>,
+                          blockquote: ({children}) => <blockquote className="border-l-2 border-[var(--color-border-subtle)] pl-5 my-6 italic text-[var(--color-text-tertiary)]">{children}</blockquote>,
+                          code: ({children}) => <code className="bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded text-[0.9em] font-mono">{children}</code>,
+                          hr: () => <hr className="border-[var(--color-border-default)]/60 my-10" />,
+                          table: ({children}) => <div className="overflow-x-auto my-6"><table className="w-full border-collapse text-sm">{children}</table></div>,
+                          th: ({children}) => <th className="border border-[var(--color-border-default)] px-4 py-2 bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] text-left font-medium">{children}</th>,
+                          td: ({children}) => <td className="border border-[var(--color-border-default)] px-4 py-2 text-[var(--color-text-secondary)]">{children}</td>,
                         }}
                       >
                         {article.content.slice(0, Math.floor(article.content.length * (article.premiumCutoff / 100)))}
                       </ReactMarkdown>
                     )}
                   </div>
-                  
-                  {/* Fade-out gradient overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/95 to-transparent pointer-events-none" />
+
+                  {/* Fade-out gradient overlay — fades from the page background,
+                      not from white. The previous `from-white` rendered as a
+                      bright sheet laid over dark text because the page bg
+                      token resolves to near-black in this theme. */}
+                  <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[var(--color-bg-base)] via-[var(--color-bg-base)]/90 to-transparent pointer-events-none" />
                 </div>
 
                 {/* Premium Paywall CTA - matching the blue gradient style */}
                 <div className="relative mt-8">
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 py-16 px-8 sm:py-20 sm:px-12">
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 py-12 px-8 sm:py-14 sm:px-12">
                     <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
-                    <div className="relative text-center">
-                      <h3 className="text-2xl sm:text-3xl font-medium text-white mb-6">
-                        Unlock Full Access with XHS™
+                    <div className="relative text-center max-w-2xl mx-auto">
+                      <p className="text-xs font-mono uppercase tracking-[0.2em] text-blue-200 mb-4">[ Premium ]</p>
+                      <h3 className="text-2xl sm:text-3xl font-medium text-white mb-4 leading-tight">
+                        Keep reading with a 14-day free trial
                       </h3>
-                      
-                      <p className="text-blue-100 text-lg sm:text-xl mb-8 max-w-2xl mx-auto">
-                        Monitor. Analyze. Collaborate. Integrate.
+                      <p className="text-blue-100 text-base sm:text-lg mb-8 leading-relaxed">
+                        Real-time alerts, expert analysis, and API integrations for the jurisdictions you cover.
                       </p>
-                      
-                      {/* Features in a row */}
-                      <div className="flex flex-wrap justify-center gap-6 sm:gap-8 mb-10 text-base">
-                        <div className="flex items-center gap-2 text-white">
-                          <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+
+                      {/* Features row — compact single-line inline chips */}
+                      <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 mb-8 text-sm text-white/90">
+                        <span className="inline-flex items-center gap-1.5">
+                          <svg className="w-3.5 h-3.5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
-                          <span>Real-time alerts</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-white">
-                          <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                          Real-time alerts
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <svg className="w-3.5 h-3.5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
-                          <span>Expert analysis</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-white">
-                          <svg className="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                          Expert analysis
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <svg className="w-3.5 h-3.5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
-                          <span>API integrations</span>
-                        </div>
+                          API integrations
+                        </span>
                       </div>
-                      
-                      <p className="text-white text-lg font-medium mb-8">
-                        Start your 14-day free trial.
-                      </p>
-                      
-                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+
+
+                      {/* Rev 2026-04-23 — CTA pair normalised. Primary is a
+                          solid white pill with dark-navy text (never black
+                          against the blue gradient — the old bg-[--color-
+                          bg-base] resolved to near-black in dark mode).
+                          Secondary is a white-outlined ghost of the same
+                          height so both buttons optically balance. */}
+                      <div className="flex flex-col sm:flex-row items-stretch justify-center gap-3">
                         <Link
                           href="/contact?trial=true&source=premium-article"
-                          className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                          className="inline-flex items-center justify-center px-6 py-3.5 text-base font-medium text-[#0b1738] bg-white rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-sm"
                         >
                           Start your trial
-                          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                           </svg>
                         </Link>
                         <button
@@ -513,11 +547,11 @@ export default function ArticlePageClient() {
                               },
                             }));
                           }}
-                          className="inline-flex items-center justify-center px-6 py-4 text-base font-medium text-white bg-white/10 border border-white/40 rounded-lg hover:bg-white/20 transition-all duration-200"
+                          className="inline-flex items-center justify-center px-6 py-3.5 text-base font-medium text-white bg-transparent border border-white/50 rounded-lg hover:bg-white/10 hover:border-white/80 transition-all duration-200"
                         >
                           Talk to Nadia
-                          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                           </svg>
                         </button>
                       </div>
@@ -526,27 +560,27 @@ export default function ArticlePageClient() {
                 </div>
               </>
                         ) : article.contentType === 'html' ? (
-              <div 
-                className="article-content [&>h1]:text-3xl [&>h1]:font-medium [&>h1]:text-[var(--color-text-primary)] [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-medium [&>h2]:text-[var(--color-text-primary)] [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:text-[var(--color-text-primary)] [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-[var(--color-text-tertiary)] [&>p]:mb-4 [&>p]:leading-relaxed [&>p]:text-justify [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-[var(--color-text-tertiary)] [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-[var(--color-text-tertiary)] [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-[var(--color-text-tertiary)] [&>strong]:text-[var(--color-text-primary)] [&>strong]:font-medium [&_a]:text-[var(--color-accent-secondary)] [&_a:hover]:text-[var(--color-accent-secondary)] [&>blockquote]:border-l-4 [&>blockquote]:border-blue-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-[var(--color-text-muted)] [&>hr]:border-[var(--color-border-default)] [&>hr]:my-8"
+              <div
+                className="article-content [&>h1]:text-3xl [&>h1]:font-medium [&>h1]:text-[var(--color-text-primary)] [&>h1]:mt-10 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-medium [&>h2]:text-[var(--color-text-primary)] [&>h2]:mt-10 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:text-[var(--color-text-primary)] [&>h3]:mt-8 [&>h3]:mb-3 [&>p]:text-[var(--color-text-secondary)] [&>p]:mb-4 [&>p]:leading-relaxed [&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-[var(--color-text-secondary)] [&>ul]:mb-4 [&>ul]:space-y-2 [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-[var(--color-text-secondary)] [&>ol]:mb-4 [&>ol]:space-y-2 [&>li]:text-[var(--color-text-secondary)] [&>strong]:text-[var(--color-text-primary)] [&>strong]:font-medium [&_a]:text-[var(--color-accent-secondary)] [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:opacity-80 [&>blockquote]:border-l-2 [&>blockquote]:border-[var(--color-border-subtle)] [&>blockquote]:pl-5 [&>blockquote]:italic [&>blockquote]:text-[var(--color-text-tertiary)] [&>hr]:border-[var(--color-border-default)]/60 [&>hr]:my-10"
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />
             ) : (
               <ReactMarkdown
                 components={{
-                  h2: ({children}) => <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mt-10 mb-4">{children}</h2>,
-                  h3: ({children}) => <h3 className="text-xl font-medium text-[var(--color-text-primary)] mt-8 mb-3">{children}</h3>,
-                  p: ({children}) => <p className="text-[var(--color-text-tertiary)] mb-4 leading-relaxed text-justify">{children}</p>,
-                  ul: ({children}) => <ul className="list-disc list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ul>,
-                  ol: ({children}) => <ol className="list-decimal list-inside text-[var(--color-text-tertiary)] mb-4 space-y-2">{children}</ol>,
-                  li: ({children}) => <li className="text-[var(--color-text-tertiary)]">{children}</li>,
+                  h2: ({children}) => <h2 className="text-2xl font-medium text-[var(--color-text-primary)] mt-10 mb-4 leading-snug">{children}</h2>,
+                  h3: ({children}) => <h3 className="text-xl font-medium text-[var(--color-text-primary)] mt-8 mb-3 leading-snug">{children}</h3>,
+                  p: ({children}) => <p className="text-[var(--color-text-secondary)] mb-4 leading-relaxed">{children}</p>,
+                  ul: ({children}) => <ul className="list-disc list-outside ml-5 text-[var(--color-text-secondary)] mb-4 space-y-2">{children}</ul>,
+                  ol: ({children}) => <ol className="list-decimal list-outside ml-5 text-[var(--color-text-secondary)] mb-4 space-y-2">{children}</ol>,
+                  li: ({children}) => <li className="text-[var(--color-text-secondary)] pl-1">{children}</li>,
                   strong: ({children}) => <strong className="text-[var(--color-text-primary)] font-medium">{children}</strong>,
-                  a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)]">{children}</a>,
-                  blockquote: ({children}) => <blockquote className="border-l-4 border-blue-500 pl-4 italic text-[var(--color-text-muted)]">{children}</blockquote>,
-                  code: ({children}) => <code className="bg-[var(--color-bg-elevated)] px-2 py-1 rounded text-sm text-blue-700">{children}</code>,
-                  hr: () => <hr className="border-[var(--color-border-default)] my-8" />,
-                  table: ({children}) => <table className="w-full border-collapse my-6">{children}</table>,
-                  th: ({children}) => <th className="border border-[var(--color-border-default)] px-4 py-2 bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] text-left">{children}</th>,
-                  td: ({children}) => <td className="border border-[var(--color-border-default)] px-4 py-2 text-[var(--color-text-tertiary)]">{children}</td>,
+                  a: ({href, children}) => <a href={href} className="text-[var(--color-accent-secondary)] underline underline-offset-2 decoration-[var(--color-border-subtle)] hover:decoration-[var(--color-accent-secondary)] transition-colors">{children}</a>,
+                  blockquote: ({children}) => <blockquote className="border-l-2 border-[var(--color-border-subtle)] pl-5 my-6 italic text-[var(--color-text-tertiary)]">{children}</blockquote>,
+                  code: ({children}) => <code className="bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] px-1.5 py-0.5 rounded text-[0.9em] font-mono">{children}</code>,
+                  hr: () => <hr className="border-[var(--color-border-default)]/60 my-10" />,
+                  table: ({children}) => <div className="overflow-x-auto my-6"><table className="w-full border-collapse text-sm">{children}</table></div>,
+                  th: ({children}) => <th className="border border-[var(--color-border-default)] px-4 py-2 bg-[var(--color-bg-surface)] text-[var(--color-text-primary)] text-left font-medium">{children}</th>,
+                  td: ({children}) => <td className="border border-[var(--color-border-default)] px-4 py-2 text-[var(--color-text-secondary)]">{children}</td>,
                 }}
               >
                 {article.content}
@@ -556,13 +590,13 @@ export default function ArticlePageClient() {
 
           {/* Tags Section - hidden for paywalled premium articles, shown for admin/gift */}
           {(!article.isPremium || hasFullAccess) && article.tags && article.tags.length > 0 && (
-            <div className="mt-8 pt-6 border-t border-gray-100">
+            <div className="mt-10 pt-6 border-t border-[var(--color-border-default)]/40">
               <div className="flex items-center flex-wrap gap-2">
-                <span className="text-sm font-medium text-[var(--color-text-muted)] mr-1">Tags:</span>
+                <span className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mr-2">Tags</span>
                 {article.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] hover:bg-gray-200 transition-colors"
+                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[var(--color-bg-elevated)] text-[var(--color-text-secondary)] border border-[var(--color-border-default)]/40"
                   >
                     #{tag.replace(/^#/, '')}
                   </span>
@@ -601,26 +635,35 @@ export default function ArticlePageClient() {
             );
           })()}
 
-          {/* Trial CTA Section - show for non-premium or when full access granted */}
+          {/* Trial CTA Section — Rev 2026-04-23. Previous card used dark
+              "black" primary button against the blue gradient because the
+              bg-base token resolves near-black. Normalised:
+                • primary is solid white + dark-navy text
+                • secondary is a transparent pill matched to the primary
+                  so both stack cleanly at the same height
+                • title + dek sizes tightened for a footer placement
+                  (it's not the main CTA — the paywall is) */}
           {(!article.isPremium || hasFullAccess) && (
-            <div className="mt-10">
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 sm:p-10">
+            <div className="mt-12">
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-7 sm:p-9">
                 <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
-                <div className="relative">
-                  <h3 className="text-xl sm:text-2xl font-medium text-white mb-3">
-                    Tracking regulatory change in {extractCountryFromArticle(article)}?
-                  </h3>
-                  <p className="text-blue-100 text-base sm:text-lg mb-6 max-w-2xl">
-                    Get real-time alerts and in-depth analysis with a <span className="text-white font-medium">14-day free trial</span>.
-                  </p>
-                  <div className="flex flex-wrap items-center gap-3">
+                <div className="relative flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-8">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-2 leading-snug">
+                      Tracking regulatory change in {extractCountryFromArticle(article)}?
+                    </h3>
+                    <p className="text-sm sm:text-base text-blue-100 leading-relaxed">
+                      Get real-time alerts and in-depth analysis. <span className="text-white font-medium">14-day free trial</span>.
+                    </p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-stretch gap-3 shrink-0">
                     <Link
                       href="/contact?trial=true&source=article-footer"
-                      className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-[var(--color-accent-secondary)] bg-[var(--color-bg-base)] rounded-lg hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl"
+                      className="inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-[#0b1738] bg-white rounded-lg hover:bg-blue-50 transition-colors shadow-sm whitespace-nowrap"
                     >
                       Start your trial
-                      <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
                     </Link>
                     <button
@@ -637,7 +680,7 @@ export default function ArticlePageClient() {
                           },
                         }));
                       }}
-                      className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-white bg-white/10 border border-white/40 rounded-lg hover:bg-white/20 transition-all duration-200"
+                      className="inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-white bg-transparent border border-white/50 rounded-lg hover:bg-white/10 hover:border-white/80 transition-colors whitespace-nowrap"
                     >
                       Talk to Nadia
                     </button>
@@ -656,17 +699,17 @@ export default function ArticlePageClient() {
             />
           )}
 
-          {/* Back to Insights */}
+          {/* Back to Insights — mono uppercase to echo the top breadcrumb. */}
           {(!article.isPremium || hasFullAccess) && (
-            <div className="mt-8">
+            <div className="mt-12 pt-6 border-t border-[var(--color-border-default)]/40">
               <Link
                 href="/insights"
-                className="inline-flex items-center text-[var(--color-accent-secondary)] hover:text-[var(--color-accent-secondary)] font-medium"
+                className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                 </svg>
-                Browse more articles
+                Back to News &amp; Insights
               </Link>
             </div>
           )}
