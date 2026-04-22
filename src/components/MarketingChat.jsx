@@ -852,7 +852,7 @@ export default function MarketingChat() {
         { role: "user", content: option.prompt ?? "I\u2019d like to talk to sales.", ts: Date.now() },
         {
           role: "assistant",
-          content: "Drop your details in. I\u2019ll pick it up with the team and come back inside a business day.",
+          content: "Drop your details in. I\u2019ll pick it up personally and come back inside a business day.",
           contactForm: true,
           contactFormStatus: "idle",
           ts: Date.now() + 1,
@@ -903,7 +903,7 @@ export default function MarketingChat() {
       setMessages((curr) => curr.map((m, i) => i === turnIndex ? {
         ...m,
         contactFormStatus: "submitted",
-        content: "Got your note \u2014 I\u2019ve flagged it with the team and we\u2019ll come back inside a business day. While you\u2019re here, what\u2019s the biggest unknown I can close off?",
+        content: "Got your note. I\u2019ve logged it and I\u2019ll come back inside a business day. While you\u2019re here, anything I can clarify about pricing, trial, or coverage?",
         followUps: ["What\u2019s in the trial?", "Which jurisdictions are covered?", "See pricing shape", "I\u2019m good for now"],
       } : m));
     } catch (err) {
