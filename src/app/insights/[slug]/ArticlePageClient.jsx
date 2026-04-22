@@ -368,11 +368,25 @@ export default function ArticlePageClient() {
             <p className="text-xl text-[var(--color-text-tertiary)]">{article.excerpt}</p>
             
             <div className="mt-6 flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full border-2 border-[var(--color-border-default)] flex items-center justify-center bg-[var(--color-bg-base)] p-1">
+              <div className="w-11 h-11 rounded-full border-2 border-[var(--color-border-default)] flex items-center justify-center bg-[var(--color-bg-base)] p-1 overflow-hidden">
                 <Image src="/Pimlico_Logo.png" alt="Pimlico" width={32} height={32} className="h-7 w-7 object-contain" />
               </div>
               <div>
-                <p className="text-[var(--color-text-primary)] font-medium">XHS™ Team</p>
+                {/* Rev 2026-04-22: real journalist byline from article.author
+                    (pipeline stamps persona name e.g. "Daniel Yoon",
+                    "Priya Desai", "Eleanor Chen"). Previously hardcoded
+                    "XHS™ Team" made every piece look generic. Desk
+                    attribution surfaces below when provided. */}
+                <p className="text-[var(--color-text-primary)] font-medium">
+                  {article.author && article.author !== 'Pimlico XHS™ Team' && article.author !== 'XHS™ Team'
+                    ? article.author
+                    : 'Pimlico editorial desk'}
+                </p>
+                {article.category && (
+                  <p className="text-xs text-[var(--color-text-tertiary)] mt-0.5">
+                    {article.category} desk · {article.date}
+                  </p>
+                )}
               </div>
             </div>
           </header>
