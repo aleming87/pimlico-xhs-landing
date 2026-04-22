@@ -271,7 +271,7 @@ export default function ArticlePageClient() {
             
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3 text-sm text-[var(--color-text-muted)] flex-wrap">
-                <span className="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-md font-medium">{article.category}</span>
+                <span className="bg-[var(--color-bg-elevated)] text-[var(--color-text-tertiary)] px-2.5 py-1 rounded-md font-medium">{article.category}</span>
                 {article.isPremium && (
                   <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-2.5 py-1 rounded-md font-medium">
                     <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">

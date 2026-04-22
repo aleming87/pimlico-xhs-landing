@@ -147,25 +147,18 @@ export default async function ArticlePage({ params }) {
         "inLanguage": "en",
         "articleSection": article.category || undefined,
         "keywords": Array.isArray(article.tags) ? article.tags.join(", ") : undefined,
-        "author": (() => {
-          const genericAuthors = ['Pimlico XHS™ Team', 'XHS™ Team', 'Pimlico XHS Team'];
-          if (article.author && !genericAuthors.includes(article.author)) {
-            return {
-              "@type": "Person",
-              "name": article.author,
-              "affiliation": {
-                "@type": "Organization",
-                "name": "Pimlico Solutions",
-                "url": baseUrl,
-              },
-            };
-          }
-          return {
-            "@type": "Organization",
-            "name": "Pimlico Solutions",
-            "url": baseUrl,
-          };
-        })(),
+        "author": {
+          // Rev 2026-04-23 — author schema stays pinned to the org.
+          // Andrew: "we don't want [users] to be able to view our agents
+          // in detail". Exposing @type=Person in structured data would
+          // signal to Google + SEO tools that these are discoverable
+          // individuals. The visible byline on the page still credits
+          // the correspondent — that's enough for reader attribution
+          // without creating a crawlable persona footprint.
+          "@type": "Organization",
+          "name": "Pimlico Solutions",
+          "url": baseUrl,
+        },
         "publisher": {
           "@type": "Organization",
           "name": "Pimlico Solutions",
