@@ -24,9 +24,11 @@ export async function GET(request) {
 
     let endpoint = `${SUPABASE_URL}/rest/v1/news_articles?status=eq.published&order=date.desc&limit=50`;
 
-    // If slug provided, fetch single article
+    // If slug provided, fetch single article — status=eq.published so
+    // manually archived pieces (e.g. low-operational-payoff pulls) 404
+    // on direct URL, not just on the listing. Rev 2026-04-22.
     if (slug) {
-      endpoint = `${SUPABASE_URL}/rest/v1/news_articles?slug=eq.${encodeURIComponent(slug)}&limit=1`;
+      endpoint = `${SUPABASE_URL}/rest/v1/news_articles?slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`;
     }
 
     const res = await fetch(endpoint, {
