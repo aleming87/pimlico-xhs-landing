@@ -1,14 +1,14 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Pimlico Partner Programme — Bring regulatory intelligence to your clients",
+  title: "Pimlico Collaborators — Stay close to our regulatory work",
   description:
-    "Invitation-only programme for consultancies, advisory firms and in-house teams who run regulatory work on behalf of their clients. Shared workspace, API + MCP access, and a named Pimlico account manager.",
+    "Invitation-only programme for people and firms affiliated with Pimlico. Early access to our regulatory research, direct contact with the team, and a first look at what we're building.",
   alternates: { canonical: "https://pimlicosolutions.com/partners" },
   openGraph: {
-    title: "Pimlico Partner Programme",
+    title: "Pimlico Collaborators",
     description:
-      "Invitation-only programme for firms that manage regulatory work on behalf of their clients.",
+      "Invitation-only programme for people affiliated with Pimlico who want to stay close to our regulatory work.",
     url: "https://pimlicosolutions.com/partners",
     type: "website",
   },
@@ -16,16 +16,16 @@ export const metadata = {
 
 const VALUE_PROPS = [
   {
-    title: "One workspace for every client you manage",
-    body: "Manage 1 or 100 client organisations from a single Pimlico workspace. Each client keeps their own data scope; you keep the overview. No duplicate logins, no copy-paste across accounts.",
+    title: "Early access to our regulatory research",
+    body: "See the daily feed, the country desks, and the watchlists we run for customers. Useful if regulatory change is part of your day job and you'd rather see our take first than chase it in the press.",
   },
   {
-    title: "Web, API or MCP — integrate however you already work",
-    body: "Use the dashboard with your team. Pipe our data into your own tools via the XHS™ API. Or let your AI agents reach our research desks directly via MCP. Self-serve keys from day one.",
+    title: "A direct line to the Pimlico team",
+    body: "No support queue. Ping us with questions on a jurisdiction you care about, a regulator you're tracking, or a change that landed this week. We reply from a real inbox, not a bot.",
   },
   {
-    title: "A named account manager, not a queue",
-    body: "Every partner firm gets a dedicated Pimlico contact. Human triage on urgent client questions, proactive briefings on jurisdictions you cover, and a private channel for escalations.",
+    title: "A first look at what we're building",
+    body: "New research desks, new products and new integrations go to collaborators before they go wide. You get to tell us what's useful — and what we got wrong — while it's still cheap to change.",
   },
 ];
 
@@ -33,26 +33,26 @@ const STEPS = [
   {
     n: "01",
     title: "Get invited",
-    body: "Reach out, or be approached. We run the programme invitation-only to keep the roster tight and the service quality high.",
+    body: "We keep the roster small. If you already work with someone at Pimlico, ask them. If not, email us a few lines about what you do and we'll take a look.",
   },
   {
     n: "02",
-    title: "Set up your workspace",
-    body: "Click the magic link in your invite email. Set a password. Tell us which jurisdictions you cover and how you like to work. Takes under three minutes.",
+    title: "Click the magic link",
+    body: "Your invite email carries a one-time link. One click, set a password, tell us how you want to use the research. Under three minutes, start to finish.",
   },
   {
     n: "03",
-    title: "Link your clients",
-    body: "We attach the client organisations you manage to your partner workspace. Clients opt-in once; after that you see their regulatory feed alongside your own desks.",
+    title: "Start reading",
+    body: "Your workspace is ready the moment you finish onboarding. The feed, the country pages and the watchlists are live from day one.",
   },
 ];
 
 const AUDIENCE = [
-  "Regulatory consultancies and advisory boutiques",
-  "Law firms with financial-services and gaming practices",
-  "Compliance-as-a-service providers and MLRO bureaus",
-  "Big 4 and mid-market advisory teams covering payments, crypto, gambling or AI",
-  "In-house compliance leads who support sister companies or portfolio investments",
+  "Advisors and consultants who want to stay current on our jurisdictions",
+  "In-house compliance leads at firms we already work with",
+  "Operators who asked for a deeper look behind the product",
+  "Researchers, lawyers and former regulators who trade notes with us",
+  "People we've met at conferences who keep asking smart questions",
 ];
 
 export default function PartnersPage() {
@@ -77,45 +77,30 @@ export default function PartnersPage() {
         />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-16 sm:pb-24">
           <div className="max-w-3xl">
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider mb-6"
-              style={{
-                background: "var(--color-bg-elevated)",
-                color: "var(--color-accent-primary)",
-                border: "1px solid var(--color-border-default)",
-              }}
-            >
-              <span
-                aria-hidden
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ background: "var(--color-accent-primary)" }}
-              />
-              Pimlico Partner Programme
-            </div>
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6"
               style={{ color: "var(--color-text-primary)" }}
             >
-              Bring regulatory intelligence to every client you manage.
+              Stay close to our regulatory work.
             </h1>
             <p
               className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-8"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              An invitation-only programme for consultancies, law firms and advisory teams who
-              run regulatory work on behalf of others. Shared workspace. API + MCP access. A
-              named Pimlico contact. No trial clock.
+              An invitation-only programme for people affiliated with Pimlico. Early access to
+              what we're researching, a direct line to the team, and a first look at what we're
+              building next. No trial clock, no quota.
             </p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <a
-                href="mailto:hello@pimlicosolutions.com?subject=Partner%20programme%20enquiry&body=Firm%20name%3A%0AYour%20role%3A%0AClients%20we%20manage%20(approx)%3A%0AJurisdictions%20we%20cover%3A%0AWhy%20now%3A"
+                href="mailto:hello@pimlicosolutions.com?subject=Collaborator%20programme%20enquiry&body=Name%3A%0AWhat%20you%20do%3A%0AHow%20you%20know%20Pimlico%3A%0AJurisdictions%20you%20care%20about%3A%0AAnything%20else%3A"
                 className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
                 style={{
                   background: "var(--color-text-primary)",
                   color: "var(--color-bg-base)",
                 }}
               >
-                Request an invite
+                Ask about an invite
                 <span aria-hidden>→</span>
               </a>
               <Link
@@ -126,14 +111,14 @@ export default function PartnersPage() {
                   border: "1px solid var(--color-border-default)",
                 }}
               >
-                Talk to us first
+                Just say hi
               </Link>
             </div>
             <p
               className="text-xs mt-5"
               style={{ color: "var(--color-text-tertiary)" }}
             >
-              Typical response time: under one business day.
+              Typical response time: under a business day.
             </p>
           </div>
         </div>
@@ -145,7 +130,7 @@ export default function PartnersPage() {
           className="text-sm font-semibold uppercase tracking-wider mb-10"
           style={{ color: "var(--color-text-tertiary)" }}
         >
-          What partners get
+          What collaborators get
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {VALUE_PROPS.map((v, i) => (
@@ -197,9 +182,8 @@ export default function PartnersPage() {
               className="text-base leading-relaxed"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              We keep the roster tight so every partner gets a real account manager. The
-              onboarding is three steps. No trial clock — access is indefinite while the
-              relationship is active.
+              Three steps. We keep the roster tight so every collaborator gets actual human
+              attention when they ask a question.
             </p>
           </div>
           <ol className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -244,21 +228,21 @@ export default function PartnersPage() {
               className="text-3xl sm:text-4xl font-semibold mb-4 leading-tight"
               style={{ color: "var(--color-text-primary)" }}
             >
-              Who the programme is for.
+              Who it's for.
             </h2>
             <p
               className="text-base leading-relaxed mb-6"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              Firms that manage regulatory workload on behalf of their clients — not end-user
-              compliance teams. If you're the go-to advisor or the firm that other firms rely
-              on, this is for you.
+              People who already care about regulatory change in the sectors we cover, and who
+              we think will get real use out of our research. Usually people we've met or worked
+              with in some way already.
             </p>
             <p
               className="text-sm leading-relaxed"
               style={{ color: "var(--color-text-tertiary)" }}
             >
-              Not a fit? Our{" "}
+              Buying for a compliance team? Our{" "}
               <Link
                 href="/pricing"
                 className="underline underline-offset-4"
@@ -266,7 +250,7 @@ export default function PartnersPage() {
               >
                 standard pricing
               </Link>{" "}
-              covers in-house compliance teams at every size.
+              covers that separately.
             </p>
           </div>
           <ul
@@ -304,17 +288,17 @@ export default function PartnersPage() {
             className="text-3xl sm:text-4xl font-semibold mb-4 leading-tight"
             style={{ color: "var(--color-text-primary)" }}
           >
-            Ready to talk?
+            Want in?
           </h2>
           <p
             className="text-base leading-relaxed mb-8"
             style={{ color: "var(--color-text-secondary)" }}
           >
-            Tell us about your firm and the clients you manage. If there's a fit, we'll send
-            an invite within a business day.
+            Send us a short note. Who you are, what you do, and what you'd want out of it. If
+            there's a fit, we'll send an invite within a business day.
           </p>
           <a
-            href="mailto:hello@pimlicosolutions.com?subject=Partner%20programme%20enquiry&body=Firm%20name%3A%0AYour%20role%3A%0AClients%20we%20manage%20(approx)%3A%0AJurisdictions%20we%20cover%3A%0AWhy%20now%3A"
+            href="mailto:hello@pimlicosolutions.com?subject=Collaborator%20programme%20enquiry&body=Name%3A%0AWhat%20you%20do%3A%0AHow%20you%20know%20Pimlico%3A%0AJurisdictions%20you%20care%20about%3A%0AAnything%20else%3A"
             className="inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold transition-opacity hover:opacity-90"
             style={{
               background: "var(--color-text-primary)",
