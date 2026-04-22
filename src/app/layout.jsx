@@ -368,13 +368,13 @@ export default function RootLayout({ children }) {
         </Suspense>
         <InboundParamCapture />
         <ConversionTracker />
-        {/* Matthew (VP Sales) — shared chat widget.
+        {/* Nadia Olsson (Enterprise Account Lead) — shared chat widget.
             - Trigger: IntersectionObserver on #differentiators (the
               "From regulatory change to team action" section on the
               landing). Fires the first time that section enters the
               viewport.
             - Fallback: 45s dwell on any page that doesn't have
-              #differentiators (so Matthew can still surface on
+              #differentiators (so Nadia can still surface on
               subpages if the visitor lingers).
             - Persistence: once the bubble has appeared this tab,
               sessionStorage keeps it visible across page navigations
