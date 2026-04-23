@@ -489,34 +489,49 @@ export default function ArticlePageClient() {
                 </div>
 
                 {/* Premium Paywall CTA - matching the blue gradient style */}
+                {/* Paywall card — Rev 2026-04-23. Previous iteration used
+                    Tailwind's generic blue-600→indigo-700 gradient which was
+                    off-brand (Pimlico brand-primary is #0b1738 navy, not
+                    SaaS blue). Now uses brand-primary navy + brand-primary-
+                    hover as the gradient, with amber gold reserved for the
+                    [ PREMIUM ] label and feature checks. Same palette the
+                    Premium badge at the top of the article uses, so the
+                    top badge and the bottom paywall read as one signal. */}
                 <div className="relative mt-8">
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 py-12 px-8 sm:py-14 sm:px-12">
+                  <div
+                    className="relative overflow-hidden rounded-2xl py-12 px-8 sm:py-14 sm:px-12 border border-amber-400/20"
+                    style={{
+                      background: 'linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-primary-hover) 100%)',
+                    }}
+                  >
                     <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
+                    {/* soft amber glow from the top so the premium cue is felt, not shouted */}
+                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-amber-400/10 to-transparent pointer-events-none" />
                     <div className="relative text-center max-w-2xl mx-auto">
-                      <p className="text-xs font-mono uppercase tracking-[0.2em] text-blue-200 mb-4">[ Premium ]</p>
-                      <h3 className="text-2xl sm:text-3xl font-medium text-white mb-4 leading-tight">
+                      <p className="text-xs font-mono uppercase tracking-[0.2em] text-amber-400 mb-4">[ Premium ]</p>
+                      <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4 leading-tight tracking-tight">
                         Keep reading with a 14-day free trial
                       </h3>
-                      <p className="text-blue-100 text-base sm:text-lg mb-8 leading-relaxed">
+                      <p className="text-white/75 text-base sm:text-lg mb-8 leading-relaxed">
                         Real-time alerts, expert analysis, and API integrations for the jurisdictions you cover.
                       </p>
 
                       {/* Features row — compact single-line inline chips */}
-                      <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 mb-8 text-sm text-white/90">
+                      <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 mb-8 text-sm text-white/85">
                         <span className="inline-flex items-center gap-1.5">
-                          <svg className="w-3.5 h-3.5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                           Real-time alerts
                         </span>
                         <span className="inline-flex items-center gap-1.5">
-                          <svg className="w-3.5 h-3.5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                           Expert analysis
                         </span>
                         <span className="inline-flex items-center gap-1.5">
-                          <svg className="w-3.5 h-3.5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                           API integrations
@@ -639,24 +654,29 @@ export default function ArticlePageClient() {
             );
           })()}
 
-          {/* Trial CTA Section — Rev 2026-04-23. Previous card used dark
-              "black" primary button against the blue gradient because the
-              bg-base token resolves near-black. Normalised:
-                • primary is solid white + dark-navy text
-                • secondary is a transparent pill matched to the primary
-                  so both stack cleanly at the same height
-                • title + dek sizes tightened for a footer placement
-                  (it's not the main CTA — the paywall is) */}
+          {/* Trial CTA Section — Rev 2026-04-23b. Rebranded to match the
+              paywall card: brand-navy gradient instead of generic blue-600/
+              indigo-700. Accent trim is a subtle white/5% border so the
+              card reads as part of the page chrome rather than a pop-up
+              ad. Paywall uses amber (the premium signal); the free-article
+              footer CTA uses white-only accents so the two cards are
+              visually distinct — paywall = premium/gold, footer = trial/
+              neutral. */}
           {(!article.isPremium || hasFullAccess) && (
             <div className="mt-12">
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-7 sm:p-9">
+              <div
+                className="relative overflow-hidden rounded-2xl p-7 sm:p-9 border border-white/10"
+                style={{
+                  background: 'linear-gradient(135deg, var(--color-brand-primary) 0%, var(--color-brand-primary-hover) 100%)',
+                }}
+              >
                 <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.5))]" />
                 <div className="relative flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-8">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg sm:text-xl font-medium text-white mb-2 leading-snug">
+                    <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 leading-snug tracking-tight">
                       Tracking regulatory change in {extractCountryFromArticle(article)}?
                     </h3>
-                    <p className="text-sm sm:text-base text-blue-100 leading-relaxed">
+                    <p className="text-sm sm:text-base text-white/70 leading-relaxed">
                       Get real-time alerts and in-depth analysis. <span className="text-white font-medium">14-day free trial</span>.
                     </p>
                   </div>
