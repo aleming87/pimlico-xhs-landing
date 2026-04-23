@@ -359,10 +359,10 @@ export default function ArticlePageClient() {
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[var(--color-text-primary)] mb-5 leading-[1.15] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[var(--color-text-primary)] mb-5 leading-[1.15] tracking-tight">
               {article.title}
             </h1>
-            <p className="text-lg sm:text-xl text-[var(--color-text-tertiary)] leading-relaxed max-w-3xl">
+            <p className="text-lg sm:text-xl text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
               {article.excerpt}
             </p>
 
@@ -443,8 +443,12 @@ export default function ArticlePageClient() {
           <div className="prose prose-lg max-w-none">
             {article.isPremium && effectivePremiumCutoff && !hasFullAccess ? (
               <>
-                {/* Show only the cutoff percentage of content with blur effect */}
-                <div className="relative">
+                {/* Paywalled teaser — marked with `paywalled-content` class so the
+                    NewsArticle hasPart.cssSelector in page.jsx resolves. Google
+                    News and Discover use this selector to understand which part
+                    of the page is behind the paywall, which is how premium
+                    articles avoid being penalised as cloaked content. */}
+                <div className="relative paywalled-content">
                   <div className="blur-[2px] select-none">
                     {article.contentType === 'html' ? (
                       <div
