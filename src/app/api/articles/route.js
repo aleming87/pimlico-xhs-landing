@@ -45,29 +45,39 @@ export async function GET(request) {
 
     const data = await res.json();
 
-    // Single article request
-    if (slug) {
-      const article = data[0] || null;
-      return NextResponse.json({ article }, { headers: corsHeaders });
-    }
-
-    // Map to the format the website expects
-    const articles = data.map(a => ({
+    // Rev 2026-04-23 — the single-slug path previously returned the raw
+    // DB row, which left is_premium/read_time in snake_case. The client
+    // reads article.isPremium + article.readTime, so the paywall silently
+    // never triggered (!undefined → true → hasFullAccess=true). Collapse
+    // both paths through the same mapper so the shape is identical.
+    const mapArticle = (a) => a && ({
       id: a.id,
       title: a.title,
       slug: a.slug,
       excerpt: a.excerpt,
       content: a.content,
+      contentType: a.content_type,
       category: a.category,
       author: a.author,
       date: a.date,
       readTime: a.read_time,
       image: a.image,
+      ogImage: a.og_image,
       tags: a.tags || [],
-      isPremium: a.is_premium,
+      isPremium: a.is_premium ?? a.premium ?? false,
+      premiumCutoff: a.premium_cutoff ?? null,
       featured: a.featured,
       status: a.status,
-    }));
+      scheduledAt: a.scheduled_at,
+    });
+
+    // Single article request
+    if (slug) {
+      const article = mapArticle(data[0] || null);
+      return NextResponse.json({ article }, { headers: corsHeaders });
+    }
+
+    const articles = data.map(mapArticle);
 
     return NextResponse.json({ articles }, { headers: corsHeaders });
   } catch (error) {
