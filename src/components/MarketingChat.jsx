@@ -1173,7 +1173,11 @@ export default function MarketingChat() {
                 </div>
 
                 <div className="px-6 pb-4 text-center">
-                  <h2 className="font-display text-[22px] font-medium text-[#0b1738] leading-snug">
+                  {/* Rev 2026-04-23 pt14 — Andrew: "why is this bold,
+                      please fix". Dropped from font-medium → font-normal
+                      and size from 22px → 18px so the hero copy reads
+                      as a conversational greeting, not a headline slab. */}
+                  <h2 className="font-display text-[18px] font-normal text-[#0b1738] leading-snug">
                     {heroHeading}
                   </h2>
                   {heroSubhead && (
@@ -1184,6 +1188,12 @@ export default function MarketingChat() {
                 </div>
 
                 <div className="px-4 pb-4 flex flex-col gap-2">
+                  {/* Rev 2026-04-23 pt14 — Andrew: "these boxes should be
+                      a lighter colour so people can see them". Bumped
+                      border from gray-200 → gray-300 + switched bg from
+                      pure white → gray-50 tint so the cards sit visibly
+                      on the white panel instead of disappearing into it.
+                      Kept navy text for contrast. */}
                   {heroSeed
                     ? heroSeed.followUps.map((fu, idx) => (
                         <button
@@ -1199,7 +1209,7 @@ export default function MarketingChat() {
                             trackEvent(sessionIdRef.current, "page_seed_pill_clicked", { label: fu, path: heroPath });
                             void sendMessage(fu, { via: "quick_reply", option_id: "page_seed" });
                           }}
-                          className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                          className="text-left rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-white transition-colors shadow-sm"
                         >
                           {fu}
                         </button>
@@ -1209,7 +1219,7 @@ export default function MarketingChat() {
                           key={qr.id}
                           type="button"
                           onClick={() => handleQuickReply(qr)}
-                          className="text-left rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-[#0b1738]/[0.03] transition-colors shadow-sm"
+                          className="text-left rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-[14px] font-medium text-[#0b1738] hover:border-[#0b1738] hover:bg-white transition-colors shadow-sm"
                         >
                           {qr.label}
                         </button>
