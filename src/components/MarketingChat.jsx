@@ -78,7 +78,7 @@ const FALLBACK_DWELL_MS = ENGAGEMENT_DWELL_MS;
 //   role (Enterprise AE) actually matches what a chat-widget greeter
 //   does, and it gives gender parity with Eleanor on the product side.
 //   Nadia stays in the roster for signatories / escalations.
-const NADIA_PORTRAIT_SRC = "/personas/nadia-olsson.png";
+const NADIA_PORTRAIT_SRC = "/personas/nadia-olsson.webp";
 // CSS selector the observer watches on pages that have it. When this
 //   element crosses into the viewport the bubble opens. Matches the
 //   "From regulatory change to team action" section on the landing.
