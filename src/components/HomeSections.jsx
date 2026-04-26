@@ -12,12 +12,12 @@ export function TrustedBy() {
           <p className="text-center text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-8">
             Trusted by teams at
           </p>
-          <div className="mx-auto flex items-center justify-center gap-x-6 sm:gap-x-12">
+          <div className="mx-auto flex items-center justify-center gap-x-5 sm:gap-x-10">
             <img src="/microsoft.png" alt="Microsoft" className="max-h-5 sm:max-h-7 w-auto object-contain" />
             <img src="/BVNK.svg" alt="BVNK" className="max-h-4 sm:max-h-5 w-auto object-contain brightness-0 invert" />
-            <img src="/mastercard.png" alt="Mastercard" className="max-h-7 sm:max-h-10 w-auto object-contain" />
-            <img src="/mozzart.png" alt="Mozzart" className="max-h-6 sm:max-h-8 w-auto object-contain" />
-            <img src="/bet365.png" alt="bet365" className="max-h-6 sm:max-h-8 w-auto object-contain" />
+            <img src="/mastercard.png" alt="Mastercard" className="max-h-5 sm:max-h-7 w-auto object-contain" />
+            <img src="/mozzart.png" alt="Mozzart" className="max-h-4 sm:max-h-6 w-auto object-contain" />
+            <img src="/bet365.png" alt="bet365" className="max-h-4 sm:max-h-6 w-auto object-contain" />
           </div>
         </div>
       </div>
