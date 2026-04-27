@@ -29,26 +29,59 @@
 
 const PIMLICO_INGEST_URL = 'https://sup.xhsdata.ai/functions/v1/record-marketing-activity'
 const ANON_COOKIE = 'anon_visitor_id'
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365 // 1 year
+const SESSION_COOKIE = 'mkt_session_id'
+const SESSION_LAST_TS_COOKIE = 'mkt_session_last_ts'
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365 // 1 year for visitor
+const SESSION_IDLE_MS = 30 * 60 * 1000     // 30min idle = new session (Pro v3 §2C)
 const FLUSH_INTERVAL = 10_000
 const MAX_BUFFER = 50
 
 let buffer = []
 let flushTimer = null
 
-function getAnonVisitorId() {
+function uuidv4() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
+function getCookie(name) {
   if (typeof document === 'undefined') return null
-  const match = document.cookie.match(new RegExp(`(?:^|; )${ANON_COOKIE}=([^;]+)`))
-  if (match) return decodeURIComponent(match[1])
-  // Generate UUIDv4
-  const id = crypto.randomUUID
-    ? crypto.randomUUID()
-    : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        const r = (Math.random() * 16) | 0
-        const v = c === 'x' ? r : (r & 0x3) | 0x8
-        return v.toString(16)
-      })
-  document.cookie = `${ANON_COOKIE}=${id}; max-age=${COOKIE_MAX_AGE}; path=/; secure; samesite=lax`
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]+)`))
+  return match ? decodeURIComponent(match[1]) : null
+}
+
+function setCookie(name, value, maxAge) {
+  if (typeof document === 'undefined') return
+  document.cookie = `${name}=${value}; max-age=${maxAge}; path=/; secure; samesite=lax`
+}
+
+function getAnonVisitorId() {
+  const existing = getCookie(ANON_COOKIE)
+  if (existing) return existing
+  const id = uuidv4()
+  setCookie(ANON_COOKIE, id, COOKIE_MAX_AGE)
+  return id
+}
+
+// Pro v3 §2C: a marketing session is a contiguous run of events with no
+// 30-minute idle gap. We need this so attribution_touches can pin first/
+// last touch per visit, not just per visitor lifetime.
+function getMarketingSessionId() {
+  if (typeof document === 'undefined') return null
+  const now = Date.now()
+  const lastTs = parseInt(getCookie(SESSION_LAST_TS_COOKIE) ?? '0', 10) || 0
+  const existing = getCookie(SESSION_COOKIE)
+  if (existing && now - lastTs < SESSION_IDLE_MS) {
+    setCookie(SESSION_LAST_TS_COOKIE, String(now), 60 * 60 * 24)
+    return existing
+  }
+  const id = uuidv4()
+  setCookie(SESSION_COOKIE, id, 60 * 60 * 24)
+  setCookie(SESSION_LAST_TS_COOKIE, String(now), 60 * 60 * 24)
   return id
 }
 
@@ -74,6 +107,7 @@ function flushPimlicoEvents(useBeacon = false) {
   if (!anonId) return
   const body = JSON.stringify({
     anon_visitor_id: anonId,
+    marketing_session_id: getMarketingSessionId(),
     events,
     utm: getUtmParams(),
   })
@@ -125,12 +159,22 @@ export function trackEvent(name, params = {}) {
 
   // 2. Pimlico canonical stream
   try {
+    // Pro v3 idempotency: synthetic key from anon + name + ts so retried
+    // beacons dedupe at the activity_ingest_receipts layer.
+    const anonId = getAnonVisitorId()
+    const occurredAt = new Date().toISOString()
     buffer.push({
       event_type: name,
       page_path: typeof window !== 'undefined' ? window.location.pathname : null,
-      occurred_at: new Date().toISOString(),
+      occurred_at: occurredAt,
       duration_ms: typeof params.value === 'number' ? params.value : null,
-      metadata: params,
+      idempotency_key: `${anonId}:${name}:${occurredAt}`,
+      metadata: {
+        ...params,
+        referrer: typeof document !== 'undefined' ? document.referrer || null : null,
+        title: typeof document !== 'undefined' ? document.title || null : null,
+        user_agent: typeof navigator !== 'undefined' ? navigator.userAgent || null : null,
+      },
     })
     if (buffer.length >= MAX_BUFFER) {
       flushPimlicoEvents(false)
@@ -155,5 +199,37 @@ export function trackOutbound(name, href, params = {}) {
   })
 }
 
+/**
+ * Expose anonymous visitor + session IDs to outbound CTAs that need to
+ * carry them across the domain hop into xhsdata.ai for merge_visitor_to_user.
+ *
+ * Usage in a signup CTA (or anywhere outbound to /register):
+ *   const url = appendIdentityParams('https://xhsdata.ai/register?plan=trial')
+ *   window.location.href = url
+ *
+ * The /register flow on the app domain reads ?avid=… and ?msid=… off the
+ * URL and stashes them in localStorage for the start-trial edge function
+ * to pass into public.merge_visitor_to_user(). That stitches the
+ * pre-signup marketing timeline to the post-signup customer one.
+ */
+export function appendIdentityParams(url) {
+  if (typeof window === 'undefined') return url
+  try {
+    const u = new URL(url, window.location.origin)
+    const anonId = getAnonVisitorId()
+    const sessionId = getMarketingSessionId()
+    if (anonId) u.searchParams.set('avid', anonId)
+    if (sessionId) u.searchParams.set('msid', sessionId)
+    return u.toString()
+  } catch {
+    return url
+  }
+}
+
 // Expose for tests / debugging
-export const _internal = { flushPimlicoEvents, getAnonVisitorId }
+export const _internal = {
+  flushPimlicoEvents,
+  getAnonVisitorId,
+  getMarketingSessionId,
+  appendIdentityParams,
+}
