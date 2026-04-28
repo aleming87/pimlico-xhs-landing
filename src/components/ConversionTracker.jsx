@@ -69,6 +69,22 @@ export default function ConversionTracker() {
           }
         }
 
+        // Pro v3 Batch 3 / v4 — stamp Pimlico anonymous_visitor_id +
+        // marketing_session_id from the analytics.js cookies so the SPA's
+        // captureVisitorIdentity picks them up at /register page-load and
+        // forwards into start-trial → merge_visitor_to_user. This is THE
+        // wire that turns the marketing identity bridge from a lab demo
+        // into a live conversion-path producer.
+        try {
+          const ck = (n) => document.cookie.match(new RegExp(`(?:^|; )${n}=([^;]+)`))?.[1]
+          const avid = ck('anon_visitor_id')
+          const msid = ck('mkt_session_id')
+          if (avid && !u.searchParams.has('avid')) u.searchParams.set('avid', decodeURIComponent(avid))
+          if (msid && !u.searchParams.has('msid')) u.searchParams.set('msid', decodeURIComponent(msid))
+        } catch {
+          // silent
+        }
+
         return u.toString()
       } catch {
         return url

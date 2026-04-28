@@ -142,5 +142,24 @@ function buildUrlWithStoredParams(base, extraParams) {
     }
   }
 
+  // Pro v3 Batch 3 / v4 (2026-04-28) — stamp marketing-site visitor identity
+  // (?avid=&msid=) on the outbound xhsdata.ai link so the SPA's
+  // captureVisitorIdentity reads it at /register page-load and stashes for
+  // start-trial → merge_visitor_to_user. Server-side rendering doesn't have
+  // window.* access, so guard.
+  if (typeof window !== 'undefined') {
+    try {
+      const ANON_COOKIE = 'anon_visitor_id';
+      const SESSION_COOKIE = 'mkt_session_id';
+      const re = (n) => document.cookie.match(new RegExp(`(?:^|; )${n}=([^;]+)`));
+      const avid = re(ANON_COOKIE)?.[1];
+      const msid = re(SESSION_COOKIE)?.[1];
+      if (avid && !url.searchParams.has('avid')) url.searchParams.set('avid', decodeURIComponent(avid));
+      if (msid && !url.searchParams.has('msid')) url.searchParams.set('msid', decodeURIComponent(msid));
+    } catch {
+      // silent — never break the CTA on identity capture failure
+    }
+  }
+
   return url.toString();
 }
