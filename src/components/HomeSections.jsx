@@ -4,20 +4,49 @@ import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Reveal, StaggerGroup, StaggerItem } from "./motion";
 
+const TRUSTED_LOGOS = [
+  { src: "/microsoft.png", alt: "Microsoft", className: "max-h-5 sm:max-h-7" },
+  { src: "/BVNK.svg", alt: "BVNK", className: "max-h-4 sm:max-h-5 brightness-0 invert" },
+  { src: "/mastercard.png", alt: "Mastercard", className: "max-h-5 sm:max-h-7" },
+  { src: "/mozzart.png", alt: "Mozzart", className: "max-h-4 sm:max-h-6" },
+  { src: "/bet365.png", alt: "bet365", className: "max-h-4 sm:max-h-6" },
+];
+
 export function TrustedBy() {
+  // Duplicate the list so the marquee can translate -50% for a seamless loop.
+  const track = [...TRUSTED_LOGOS, ...TRUSTED_LOGOS];
   return (
     <Reveal>
       <div className="border-t border-b border-[var(--color-border-default)]/20 py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <p className="text-center text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-8">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-center text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-8 px-6 lg:px-8">
             Trusted by teams at
           </p>
-          <div className="mx-auto flex items-center justify-center gap-x-5 sm:gap-x-10">
-            <img src="/microsoft.png" alt="Microsoft" className="max-h-5 sm:max-h-7 w-auto object-contain" />
-            <img src="/BVNK.svg" alt="BVNK" className="max-h-4 sm:max-h-5 w-auto object-contain brightness-0 invert" />
-            <img src="/mastercard.png" alt="Mastercard" className="max-h-5 sm:max-h-7 w-auto object-contain" />
-            <img src="/mozzart.png" alt="Mozzart" className="max-h-4 sm:max-h-6 w-auto object-contain" />
-            <img src="/bet365.png" alt="bet365" className="max-h-4 sm:max-h-6 w-auto object-contain" />
+          <div className="marquee-pause group relative w-full overflow-hidden">
+            {/* Edge fade masks so logos enter/exit softly instead of clipping. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 sm:w-20 bg-gradient-to-r from-[var(--color-bg-base)] to-transparent"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 sm:w-20 bg-gradient-to-l from-[var(--color-bg-base)] to-transparent"
+            />
+            <div
+              className="animate-marquee flex w-max items-center gap-x-10 sm:gap-x-16"
+              role="list"
+              aria-label="Customers and partners"
+            >
+              {track.map((logo, i) => (
+                <img
+                  key={`${logo.alt}-${i}`}
+                  src={logo.src}
+                  alt={i < TRUSTED_LOGOS.length ? logo.alt : ""}
+                  aria-hidden={i >= TRUSTED_LOGOS.length ? "true" : undefined}
+                  className={`shrink-0 w-auto object-contain ${logo.className}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
