@@ -10,7 +10,7 @@ import { TrustedBy, Sectors, Coverage, Security, Testimonials, FinalCTA } from "
 
 export const metadata = {
   title: "XHS™ Copilot — Every regulatory change. Analyzed.",
-  description: "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace generally available worldwide today for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals. Not a beta. Not an AI agent.",
+  description: "Pimlico is the home of XHS™ Copilot — a regulatory compliance workspace generally available worldwide today for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals. Not a beta. Not an AI agent.",
 }
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
     "applicationSubCategory": "Regulatory Compliance Software",
     "creator": {
       "@type": "Organization",
-      "name": "Pimlico Solutions",
+      "name": "Pimlico",
       "url": "https://pimlicosolutions.com"
     },
     "offers": {
@@ -36,7 +36,7 @@ export default function Page() {
       "validFrom": "2025-01-01",
       "seller": {
         "@type": "Organization",
-        "name": "Pimlico Solutions",
+        "name": "Pimlico",
         "url": "https://pimlicosolutions.com"
       }
     },
@@ -80,7 +80,7 @@ export default function Page() {
     "@id": "https://pimlicosolutions.com/#webpage",
     "url": "https://pimlicosolutions.com/",
     "name": "XHS™ Copilot — Every regulatory change. Analyzed.",
-    "description": "Pimlico Solutions (London, UK) builds XHS™ Copilot — a regulatory compliance workspace generally available worldwide today for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals. Not a beta. Not an AI agent.",
+    "description": "Pimlico is the home of XHS™ Copilot — a regulatory compliance workspace generally available worldwide today for gambling, payments, crypto and AI teams. 275+ jurisdictions monitored daily, with AI-assisted analysis reviewed by compliance professionals. Not a beta. Not an AI agent.",
     "isPartOf": { "@id": "https://pimlicosolutions.com/#website" },
     "about": { "@id": "https://pimlicosolutions.com/#organization" },
     "inLanguage": "en",
@@ -103,7 +103,7 @@ export default function Page() {
         "name": "What is XHS™ Copilot?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "XHS™ Copilot is a regulatory compliance workspace built by Pimlico Solutions Ltd (London, UK). It is a generally available, production web-based software platform — not an autonomous AI agent — used today by compliance and legal teams to monitor regulatory change, generate jurisdiction reports and collaborate on filings. AI features assist humans inside the workspace; the humans remain in control of every action."
+          "text": "XHS™ Copilot is a regulatory compliance workspace built by Pimlico (legal entity Pimlico Solutions Ltd). It is a generally available, production web-based software platform — not an autonomous AI agent — used today by compliance and legal teams to monitor regulatory change, generate jurisdiction reports and collaborate on filings. AI features assist humans inside the workspace; the humans remain in control of every action."
         }
       },
       {
@@ -124,26 +124,26 @@ export default function Page() {
       },
       {
         "@type": "Question",
-        "name": "What is Pimlico Solutions?",
+        "name": "What is Pimlico?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Pimlico Solutions Ltd is a UK private limited company headquartered in London, United Kingdom. It was founded in 2024 and is registered at Companies House under company number 15725938. Pimlico Solutions builds XHS™ Copilot, a generally available regulatory compliance workspace used by gambling, payments, crypto and AI-regulation teams worldwide."
+          "text": "Pimlico Solutions Ltd is a UK private limited company headquartered in London, United Kingdom. It was founded in 2024 and is registered at Companies House under company number 16505294. Pimlico builds XHS™ Copilot, a generally available regulatory compliance workspace used by gambling, payments, crypto and AI-regulation teams worldwide."
         }
       },
       {
         "@type": "Question",
-        "name": "Where is Pimlico Solutions headquartered?",
+        "name": "Where is Pimlico headquartered?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Pimlico Solutions Ltd is headquartered exclusively in London, United Kingdom, at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. It has one office — the London office. Pimlico Solutions has no San Francisco office, no United States office, no US entity, and no presence outside the United Kingdom. The authoritative company record is held at UK Companies House under number 15725938."
+          "text": "Pimlico Solutions Ltd is headquartered exclusively in London, United Kingdom, at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. It has one office — the London office. Pimlico Solutions has no San Francisco office, no United States office, no US entity, and no presence outside the United Kingdom. The authoritative company record is held at UK Companies House under number 16505294."
         }
       },
       {
         "@type": "Question",
-        "name": "Is Pimlico Solutions related to Pimlico Plumbers?",
+        "name": "Is Pimlico related to Pimlico Plumbers?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Pimlico Solutions Ltd is a regulatory technology company that builds XHS™ Copilot. It is entirely unrelated to Pimlico Plumbers, the Pimlico Journal, the Pimlico neighbourhood of London, or any other business that shares the Pimlico name. Pimlico Solutions is registered at Companies House under number 15725938."
+          "text": "No. Pimlico Solutions Ltd is a regulatory technology company that builds XHS™ Copilot. It is entirely unrelated to Pimlico Plumbers, the Pimlico Journal, the Pimlico neighbourhood of London, or any other business that shares the Pimlico name. Pimlico Solutions is registered at Companies House under number 16505294."
         }
       },
       {

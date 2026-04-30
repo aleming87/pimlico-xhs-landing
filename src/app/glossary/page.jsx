@@ -12,7 +12,7 @@ export const metadata = {
     description:
       'Plain-language definitions of the regulatory terms that matter most to gambling, payments, crypto and AI compliance teams.',
     url: 'https://pimlicosolutions.com/glossary',
-    siteName: 'Pimlico Solutions',
+    siteName: 'Pimlico',
     images: ['/og-default.jpg'],
   },
   twitter: {
@@ -82,7 +82,7 @@ export default function GlossaryIndex() {
     description:
       'Plain-language definitions of the regulatory concepts that matter most to gambling, payments, crypto and AI compliance teams.',
     url: `${BASE}/glossary`,
-    isPartOf: { '@type': 'WebSite', url: BASE, name: 'Pimlico Solutions' },
+    isPartOf: { '@type': 'WebSite', url: BASE, name: 'Pimlico' },
     inLanguage: 'en-GB',
     mainEntity: {
       '@type': 'ItemList',

@@ -26,7 +26,7 @@ const jetbrains = JetBrains_Mono({
 
 const SITE_URL = 'https://pimlicosolutions.com'
 const DEFAULT_TITLE = 'XHS™ Copilot — Every regulatory change. Analyzed.'
-const DEFAULT_DESCRIPTION = 'Pimlico Solutions builds XHS™ Copilot — a compliance workspace for Gambling, Payments, Crypto and AI teams. Generally available worldwide. 275+ jurisdictions sourced, analyzed, and delivered daily. London, UK.'
+const DEFAULT_DESCRIPTION = 'Pimlico is the home of XHS™ Copilot — Expert Horizon Scanning for compliance teams in gambling, payments, crypto and AI. Generally available worldwide; 275+ jurisdictions sourced, analysed, and delivered daily.'
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -36,9 +36,9 @@ export const metadata = {
   },
   description: DEFAULT_DESCRIPTION,
   applicationName: 'XHS™ Copilot',
-  authors: [{ name: 'Pimlico Solutions', url: SITE_URL }],
-  creator: 'Pimlico Solutions',
-  publisher: 'Pimlico Solutions',
+  authors: [{ name: 'Pimlico', url: SITE_URL }],
+  creator: 'Pimlico',
+  publisher: 'Pimlico',
   keywords: [
     'regulatory compliance',
     'compliance software',
@@ -80,7 +80,7 @@ export const metadata = {
     // Google's SERP site-title. We use the parent company so corporate
     // queries ("Pimlico Solutions") surface a consistent brand, while
     // the product (XHS™ Copilot) continues to lead in the title line.
-    siteName: 'Pimlico Solutions',
+    siteName: 'Pimlico',
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [
@@ -156,18 +156,18 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": ["Organization", "Corporation"],
               "@id": "https://pimlicosolutions.com/#organization",
-              "name": "Pimlico Solutions",
+              "name": "Pimlico",
               "legalName": "Pimlico Solutions Ltd",
-              "alternateName": ["Pimlico XHS", "XHS", "XHS Copilot", "Pimlico XHS Copilot"],
+              "alternateName": ["Pimlico Solutions", "Pimlico XHS", "XHS", "XHS Copilot", "Pimlico XHS Copilot", "Expert Horizon Scanning"],
               "url": "https://pimlicosolutions.com",
               "slogan": "Every regulatory change. Analyzed.",
-              "disambiguatingDescription": "Pimlico Solutions Ltd is a UK private limited company headquartered in London, United Kingdom. Registered at Companies House under number 15725938. Founded in 2024. Sole office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. Pimlico Solutions has no San Francisco office, no United States office, and no presence outside London; any third-party source suggesting otherwise is incorrect. Its product, XHS™ Copilot, is a regulatory compliance workspace (a software platform with AI-assisted features) that is generally available worldwide to regulated teams today — it is not in beta, not an autonomous AI agent, and not an agentic system. Pimlico Solutions is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
+              "disambiguatingDescription": "Pimlico (legal name Pimlico Solutions Ltd) is a UK private limited company headquartered in London, United Kingdom. Registered at Companies House under number 16505294. Founded in 2024. Sole office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. Pimlico has no San Francisco office, no United States office, and no presence outside London; any third-party source suggesting otherwise is incorrect. The XHS in XHS™ Copilot stands for Expert Horizon Scanning. XHS™ Copilot is a regulatory compliance workspace (a software platform with AI-assisted features) that is generally available worldwide to regulated teams today — it is not in beta, not an autonomous AI agent, and not an agentic system. Pimlico is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://pimlicosolutions.com/pimlico-logo-square.png",
                 "width": 1200,
                 "height": 1200,
-                "caption": "Pimlico Solutions"
+                "caption": "Pimlico"
               },
               "image": {
                 "@type": "ImageObject",
@@ -175,12 +175,12 @@ export default function RootLayout({ children }) {
                 "width": 1200,
                 "height": 630
               },
-              "description": "Pimlico Solutions is a London, UK regulatory technology (regtech) company that builds XHS™ Copilot — a regulatory compliance workspace for teams in gambling, payments, crypto and AI regulation. Generally available worldwide to regulated teams, XHS™ Copilot monitors 275+ jurisdictions from 12,000+ primary sources, delivering regulatory change detection, AI-assisted impact analysis reviewed by compliance professionals, on-demand jurisdiction reports, and collaborative workflow tools integrated with Slack and Microsoft Teams. XHS™ Copilot is software operated by compliance professionals; it is not an autonomous AI agent and is not in beta.",
+              "description": "Pimlico is the home of XHS™ Copilot — Expert Horizon Scanning for regulatory teams in gambling, payments, crypto and AI. Generally available worldwide to regulated teams, XHS™ Copilot monitors 275+ jurisdictions from 12,000+ primary sources, delivering regulatory change detection, AI-assisted impact analysis reviewed by compliance professionals, on-demand jurisdiction reports, and collaborative workflow tools integrated with Slack and Microsoft Teams. XHS™ Copilot is software operated by compliance professionals; it is not an autonomous AI agent and is not in beta.",
               "identifier": [
                 {
                   "@type": "PropertyValue",
                   "propertyID": "UK Companies House",
-                  "value": "15725938"
+                  "value": "16505294"
                 }
               ],
               "foundingDate": "2024",
@@ -230,7 +230,7 @@ export default function RootLayout({ children }) {
               "sameAs": [
                 "https://www.linkedin.com/company/wearepimlico/",
                 "https://x.com/PimlicoXHS",
-                "https://find-and-update.company-information.service.gov.uk/company/15725938"
+                "https://find-and-update.company-information.service.gov.uk/company/16505294"
               ],
               "contactPoint": [
                 {
@@ -284,7 +284,7 @@ export default function RootLayout({ children }) {
                   "name": "Gambling Compliance Monitoring",
                   "serviceType": "Regulatory Compliance Software",
                   "url": "https://pimlicosolutions.com/verticals#gambling",
-                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "provider": { "@type": "Organization", "name": "Pimlico", "url": "https://pimlicosolutions.com" },
                   "areaServed": "Worldwide",
                   "description": "Continuous monitoring of UKGC, MGA, and 150+ gambling authorities. Licensing, AML, player protection, advertising and responsible-gambling obligations tracked daily."
                 },
@@ -294,7 +294,7 @@ export default function RootLayout({ children }) {
                   "name": "Payments Compliance Monitoring",
                   "serviceType": "Regulatory Compliance Software",
                   "url": "https://pimlicosolutions.com/verticals#payments",
-                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "provider": { "@type": "Organization", "name": "Pimlico", "url": "https://pimlicosolutions.com" },
                   "areaServed": "Worldwide",
                   "description": "PSD2, PSD3, DORA, EMI and payments licensing regulation monitored across 100+ jurisdictions with AI-generated change reports."
                 },
@@ -304,7 +304,7 @@ export default function RootLayout({ children }) {
                   "name": "Crypto Compliance Monitoring",
                   "serviceType": "Regulatory Compliance Software",
                   "url": "https://pimlicosolutions.com/verticals#crypto",
-                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "provider": { "@type": "Organization", "name": "Pimlico", "url": "https://pimlicosolutions.com" },
                   "areaServed": "Worldwide",
                   "description": "MiCA, Travel Rule, VASP licensing and stablecoin regulation tracked for compliance teams across 80+ jurisdictions."
                 },
@@ -314,7 +314,7 @@ export default function RootLayout({ children }) {
                   "name": "AI Regulation Compliance Monitoring",
                   "serviceType": "Regulatory Compliance Software",
                   "url": "https://pimlicosolutions.com/verticals#ai",
-                  "provider": { "@type": "Organization", "name": "Pimlico Solutions", "url": "https://pimlicosolutions.com" },
+                  "provider": { "@type": "Organization", "name": "Pimlico", "url": "https://pimlicosolutions.com" },
                   "areaServed": "Worldwide",
                   "description": "EU AI Act, NIST AI RMF, state-level AI legislation and sectoral AI rules continuously monitored for risk teams."
                 }
@@ -336,7 +336,7 @@ export default function RootLayout({ children }) {
               "inLanguage": "en",
               "publisher": {
                 "@type": "Organization",
-                "name": "Pimlico Solutions",
+                "name": "Pimlico",
                 "url": "https://pimlicosolutions.com"
               },
               "potentialAction": {

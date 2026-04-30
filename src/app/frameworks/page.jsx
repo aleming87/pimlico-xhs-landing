@@ -56,7 +56,7 @@ export default function FrameworksIndex() {
     description:
       'Every major regulatory framework XHS™ Copilot tracks — from Level 1 legislation through technical standards and national competent authority guidance.',
     url: 'https://pimlicosolutions.com/frameworks',
-    isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico Solutions' },
+    isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico' },
     inLanguage: 'en-GB',
     mainEntity: {
       '@type': 'ItemList',

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
       title: `${heading} — Compliance glossary`,
       description,
       url: `${BASE}/glossary/${t.slug}`,
-      siteName: 'Pimlico Solutions',
+      siteName: 'Pimlico',
       type: 'article',
       images: ['/og-default.jpg'],
     },
@@ -88,7 +88,7 @@ function buildSchema(t) {
     about: { '@id': `${pageUrl}#term` },
     publisher: {
       '@type': 'Organization',
-      name: 'Pimlico Solutions',
+      name: 'Pimlico',
       url: BASE,
     },
     // Mirrors regulators/[slug]/page.jsx — flags the definition + context

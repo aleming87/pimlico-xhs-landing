@@ -41,7 +41,7 @@ export async function generateMetadata({ params }) {
         title: 'Article Not Found - XHS™ Copilot',
         description: 'The requested article could not be found.',
         url: `${baseUrl}/insights/${slug}`,
-        siteName: 'Pimlico Solutions',
+        siteName: 'Pimlico',
         type: 'website',
       },
     };
@@ -81,7 +81,7 @@ export async function generateMetadata({ params }) {
       title: article.title,
       description: description,
       url: `${baseUrl}/insights/${slug}`,
-      siteName: 'Pimlico Solutions',
+      siteName: 'Pimlico',
       type: 'article',
       publishedTime: article.date,
       modifiedTime: article.date,
@@ -156,12 +156,12 @@ export default async function ArticlePage({ params }) {
           // the correspondent — that's enough for reader attribution
           // without creating a crawlable persona footprint.
           "@type": "Organization",
-          "name": "Pimlico Solutions",
+          "name": "Pimlico",
           "url": baseUrl,
         },
         "publisher": {
           "@type": "Organization",
-          "name": "Pimlico Solutions",
+          "name": "Pimlico",
           "url": baseUrl,
           "logo": {
             "@type": "ImageObject",

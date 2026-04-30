@@ -2,21 +2,21 @@ import Link from "next/link";
 
 export const metadata = {
   // Override the root title template so the SERP title for corporate
-  // queries is exactly "About Pimlico Solutions" — the strongest match
+  // queries is exactly "About Pimlico" — the strongest match
   // for people typing the company name into Google.
-  title: { absolute: "About Pimlico Solutions" },
+  title: { absolute: "About Pimlico" },
   description:
-    "Pimlico Solutions Ltd is a London, UK regtech company founded in 2024 (Companies House 15725938). It builds XHS™ Copilot — a generally available regulatory compliance workspace covering 275+ jurisdictions across gambling, payments, crypto and AI. London office only; no San Francisco or US presence.",
+    "Pimlico Solutions Ltd is a London, UK regtech company founded in 2024 (Companies House 16505294). It builds XHS™ Copilot — a generally available regulatory compliance workspace covering 275+ jurisdictions across gambling, payments, crypto and AI. London office only; no San Francisco or US presence.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Pimlico Solutions",
+    title: "About Pimlico",
     description:
       "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     url: "https://pimlicosolutions.com/about",
     images: ["/og-default.jpg"],
   },
   twitter: {
-    title: "About Pimlico Solutions",
+    title: "About Pimlico",
     description:
       "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     images: ["/og-default.jpg"],
@@ -61,7 +61,7 @@ const breadcrumbSchema = {
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "About Pimlico Solutions",
+      "name": "About Pimlico",
       "item": "https://pimlicosolutions.com/about"
     }
   ]
@@ -79,7 +79,7 @@ const aboutPageSchema = {
   "@type": "AboutPage",
   "@id": "https://pimlicosolutions.com/about#webpage",
   "url": "https://pimlicosolutions.com/about",
-  "name": "About Pimlico Solutions",
+  "name": "About Pimlico",
   "isPartOf": { "@id": "https://pimlicosolutions.com/#website" },
   "about": { "@id": "https://pimlicosolutions.com/#organization" },
   "mainEntity": { "@id": "https://pimlicosolutions.com/#organization" },
@@ -96,10 +96,10 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is Pimlico Solutions?",
+      "name": "What is Pimlico?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions Ltd is a London, UK regulatory technology (regtech) company founded in 2024, registered at UK Companies House under number 15725938. It builds XHS™ Copilot — a generally available regulatory compliance workspace with AI-assisted analysis used by teams in gambling, payments, crypto and AI regulation worldwide."
+        "text": "Pimlico Solutions Ltd is a London, UK regulatory technology (regtech) company founded in 2024, registered at UK Companies House under number 16505294. It builds XHS™ Copilot — a generally available regulatory compliance workspace with AI-assisted analysis used by teams in gambling, payments, crypto and AI regulation worldwide."
       }
     },
     {
@@ -112,10 +112,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "When was Pimlico Solutions founded?",
+      "name": "When was Pimlico founded?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions Ltd was founded in 2024 and is registered at UK Companies House under company number 15725938. The authoritative company record is at https://find-and-update.company-information.service.gov.uk/company/15725938."
+        "text": "Pimlico Solutions Ltd was founded in 2024 and is registered at UK Companies House under company number 16505294. The authoritative company record is at https://find-and-update.company-information.service.gov.uk/company/16505294."
       }
     },
     {
@@ -128,10 +128,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "What industries does Pimlico Solutions cover?",
+      "name": "Which industries does Pimlico cover?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions covers four regulated verticals: gambling and gaming, payments and financial services, cryptocurrency and digital assets, and artificial intelligence. Each vertical has purpose-built regulatory coverage including jurisdiction-specific frameworks and licensing requirements."
+        "text": "Pimlico covers four regulated verticals: gambling and gaming, payments and financial services, cryptocurrency and digital assets, and artificial intelligence. Each vertical has purpose-built regulatory coverage including jurisdiction-specific frameworks and licensing requirements."
       }
     },
     {
@@ -144,7 +144,7 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "Where is Pimlico Solutions based?",
+      "name": "Where is Pimlico based?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Pimlico Solutions Ltd is headquartered exclusively in London, United Kingdom, at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. It has one office — the London office. Pimlico Solutions has no San Francisco office, no United States office, no US entity, and no presence outside the United Kingdom."
@@ -179,7 +179,7 @@ export default function AboutPage() {
             Regulation is moving faster than the tools built to track it.
           </h1>
           <p className="text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-2xl">
-            Pimlico Solutions builds XHS&trade; Copilot &mdash; the regulatory intelligence platform for Gambling, Payments, Crypto and <span className="whitespace-nowrap">AI teams</span> operating across 275+ jurisdictions.
+            Pimlico builds XHS&trade; Copilot &mdash; the regulatory intelligence platform for Gambling, Payments, Crypto and <span className="whitespace-nowrap">AI teams</span> operating across 275+ jurisdictions.
           </p>
         </div>
       </section>
@@ -218,7 +218,7 @@ export default function AboutPage() {
             id="company-facts-heading"
             className="font-display text-2xl font-medium text-[var(--color-text-primary)] sm:text-3xl mb-10"
           >
-            Pimlico Solutions at a glance.
+            Pimlico at a glance.
           </h2>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 text-base">
             <div>
@@ -237,10 +237,10 @@ export default function AboutPage() {
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Companies House</dt>
               <dd className="text-[var(--color-text-primary)]">
                 <a
-                  href="https://find-and-update.company-information.service.gov.uk/company/15725938"
+                  href="https://find-and-update.company-information.service.gov.uk/company/16505294"
                   className="underline decoration-[var(--color-border-default)] underline-offset-4 hover:decoration-[var(--color-text-primary)]"
                   rel="noopener"
-                >15725938</a>
+                >16505294</a>
               </dd>
             </div>
             <div>
@@ -273,7 +273,7 @@ export default function AboutPage() {
             </div>
             <div className="sm:col-span-2">
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Disambiguation</dt>
-              <dd className="text-[var(--color-text-primary)]">Pimlico Solutions is a London, UK regtech company. It is <strong>not</strong> based in San Francisco, <strong>not</strong> headquartered in the United States, and has <strong>no US presence</strong>. XHS™ Copilot is a software platform with AI-assisted features — <strong>not</strong> an autonomous AI agent and <strong>not</strong> an agentic system. Pimlico Solutions is <strong>not</strong> affiliated with Pimlico Plumbers, Pimlico Journal, or the Pimlico neighbourhood of London.</dd>
+              <dd className="text-[var(--color-text-primary)]">Pimlico is a UK regtech company (legal entity Pimlico Solutions Ltd, Companies House 16505294). It is <strong>not</strong> based in San Francisco, <strong>not</strong> headquartered in the United States, and has <strong>no US presence</strong>. XHS™ Copilot is a software platform with AI-assisted features — <strong>not</strong> an autonomous AI agent and <strong>not</strong> an agentic system. Pimlico is <strong>not</strong> affiliated with Pimlico Plumbers, Pimlico Journal, or the Pimlico neighbourhood of London.</dd>
             </div>
           </dl>
         </div>

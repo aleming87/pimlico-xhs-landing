@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
       title: `${r.abbr} compliance — XHS™ Copilot`,
       description,
       url: `https://pimlicosolutions.com/regulators/${r.slug}`,
-      siteName: 'Pimlico Solutions',
+      siteName: 'Pimlico',
       type: 'article',
       images: ['/og-regulators.jpg'],
     },

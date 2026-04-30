@@ -6,7 +6,7 @@ export const metadata = {
     title: 'Privacy Policy — Pimlico Solutions',
     description: 'How Pimlico Solutions Ltd collects, uses, and protects your personal data under UK GDPR.',
     url: 'https://pimlicosolutions.com/privacy',
-    siteName: 'Pimlico Solutions',
+    siteName: 'Pimlico',
     type: 'website',
     images: ['/og-default.jpg'],
   },

@@ -32,7 +32,7 @@ const collectionPageSchema = {
   "name": "News & Insights",
   "description": "Regulatory briefings, sector analysis and implementation notes from the Pimlico research team — gambling, payments, crypto and AI compliance intelligence.",
   "url": `${BASE}/insights`,
-  "isPartOf": { "@type": "WebSite", "url": BASE, "name": "Pimlico Solutions" },
+  "isPartOf": { "@type": "WebSite", "url": BASE, "name": "Pimlico" },
   "inLanguage": "en-GB",
   "about": [
     { "@type": "Thing", "name": "AI Regulation" },

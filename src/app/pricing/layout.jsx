@@ -38,7 +38,7 @@ const productSchema = {
   name: 'XHS™ Copilot',
   description:
     'Regulatory compliance workspace for gambling, payments, crypto and AI teams.',
-  brand: { '@type': 'Brand', name: 'Pimlico Solutions' },
+  brand: { '@type': 'Brand', name: 'Pimlico' },
   url: 'https://pimlicosolutions.com/pricing',
   offers: {
     '@type': 'AggregateOffer',
@@ -48,7 +48,7 @@ const productSchema = {
     offerCount: '5',
     availability: 'https://schema.org/InStock',
     priceValidUntil: '2026-12-31',
-    seller: { '@type': 'Organization', name: 'Pimlico Solutions' },
+    seller: { '@type': 'Organization', name: 'Pimlico' },
   },
 }
 

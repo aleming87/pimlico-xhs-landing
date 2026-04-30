@@ -59,7 +59,7 @@ export default function RegulatorsIndex() {
     description:
       'Every regulator XHS™ Copilot tracks — UKGC, MGA, FCA, EBA, MAS, FINMA and 270+ more authorities across gambling, payments, crypto and AI compliance.',
     url: 'https://pimlicosolutions.com/regulators',
-    isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico Solutions' },
+    isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico' },
     inLanguage: 'en-GB',
     mainEntity: {
       '@type': 'ItemList',

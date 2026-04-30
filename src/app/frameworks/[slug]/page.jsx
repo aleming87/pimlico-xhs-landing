@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
       title: `${f.abbr} — XHS™ Copilot`,
       description,
       url: `https://pimlicosolutions.com/frameworks/${f.slug}`,
-      siteName: 'Pimlico Solutions',
+      siteName: 'Pimlico',
       type: 'article',
       images: ['/og-frameworks.jpg'],
     },
