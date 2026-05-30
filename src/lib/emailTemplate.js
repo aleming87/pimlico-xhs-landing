@@ -129,7 +129,7 @@ export function renderEmail({
               <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
                   <td align="left" style="font-family: 'Courier New', Courier, monospace; font-size: 10px; font-weight: 500; color: ${BRAND.textMuted}; text-transform: uppercase; letter-spacing: 0.16em;">
-                    PIMLICO&nbsp;&nbsp;·&nbsp;&nbsp;XHS&trade; COPILOT
+                    PIMLICO&nbsp;&nbsp;·&nbsp;&nbsp;XHS&trade; ATLAS
                   </td>
                   <td align="right" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 400; color: ${BRAND.textMuted};">
                     <a href="https://pimlicosolutions.com" style="color: ${BRAND.textTertiary}; text-decoration: none;">pimlicosolutions.com</a>
@@ -199,7 +199,7 @@ export function renderAdminNotification({ title, subtitle, fields = [] }) {
           </tr>
           <tr>
             <td style="background-color: ${BRAND.heroBg}; padding: 18px 36px; border-top: 1px solid ${BRAND.border}; font-family: 'Courier New', Courier, monospace; font-size: 10px; color: ${BRAND.textMuted}; text-transform: uppercase; letter-spacing: 0.14em;">
-              PIMLICO&nbsp;·&nbsp;XHS&trade; COPILOT&nbsp;·&nbsp;${year}
+              PIMLICO&nbsp;·&nbsp;XHS&trade; ATLAS&nbsp;·&nbsp;${year}
             </td>
           </tr>
         </table>
