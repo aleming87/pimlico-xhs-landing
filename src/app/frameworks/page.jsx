@@ -5,19 +5,19 @@ import InlineCTA from '@/components/InlineCTA'
 export const metadata = {
   title: 'Frameworks',
   description:
-    'MiCA, PSD2, DORA, the EU AI Act and every framework XHS™ Copilot tracks — from Level 2 technical standards to national competent authority guidance.',
+    'MiCA, PSD2, DORA, the EU AI Act and every framework XHS™ Atlas tracks — from Level 2 technical standards to national competent authority guidance.',
   alternates: { canonical: '/frameworks' },
   openGraph: {
-    title: 'Frameworks — XHS™ Copilot',
-    description: 'MiCA, PSD2, DORA, EU AI Act and more — tracked end-to-end by XHS™ Copilot.',
+    title: 'Frameworks — XHS™ Atlas',
+    description: 'MiCA, PSD2, DORA, EU AI Act and more — tracked end-to-end by XHS™ Atlas.',
     url: 'https://pimlicosolutions.com/frameworks',
     images: ['/og-frameworks.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@pimlicoxhs',
-    title: 'Frameworks — XHS™ Copilot',
-    description: 'MiCA, PSD2, DORA, EU AI Act and more — tracked end-to-end by XHS™ Copilot.',
+    title: 'Frameworks — XHS™ Atlas',
+    description: 'MiCA, PSD2, DORA, EU AI Act and more — tracked end-to-end by XHS™ Atlas.',
     images: ['/og-frameworks.jpg'],
   },
 }
@@ -52,9 +52,9 @@ export default function FrameworksIndex() {
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Frameworks tracked by XHS™ Copilot',
+    name: 'Frameworks tracked by XHS™ Atlas',
     description:
-      'Every major regulatory framework XHS™ Copilot tracks — from Level 1 legislation through technical standards and national competent authority guidance.',
+      'Every major regulatory framework XHS™ Atlas tracks — from Level 1 legislation through technical standards and national competent authority guidance.',
     url: 'https://pimlicosolutions.com/frameworks',
     isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico' },
     inLanguage: 'en-GB',
@@ -95,7 +95,7 @@ export default function FrameworksIndex() {
             Every major framework. Level 2 to enforcement.
           </h1>
           <p className="text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-2xl">
-            XHS™ Copilot tracks the full lifecycle of each framework — from Level 1 legislation through Level 2 technical standards, Level 3 guidelines and national competent authority decisions.
+            XHS™ Atlas tracks the full lifecycle of each framework — from Level 1 legislation through Level 2 technical standards, Level 3 guidelines and national competent authority decisions.
           </p>
         </div>
       </section>

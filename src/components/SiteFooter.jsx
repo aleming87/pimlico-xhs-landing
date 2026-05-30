@@ -129,7 +129,7 @@ export default function SiteFooter() {
               ))}
             </div>
             <p className="text-xs font-mono text-[var(--color-text-muted)]/60 tracking-wide">
-              XHS{"\u2122"} Copilot
+              XHS{"\u2122"} Atlas
             </p>
           </div>
         </div>

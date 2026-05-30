@@ -17,7 +17,7 @@
  *   summary          one-paragraph overview, doubles as meta description
  *   appliesTo        who has to comply
  *   keyRequirements  the binding obligations
- *   coverageAreas    what XHS Copilot tracks on this framework
+ *   coverageAreas    what XHS Atlas tracks on this framework
  *   milestones       phased dates / implementation deadlines
  *   faqs             Q/A pairs for FAQPage schema
  *   relatedSlugs     adjacent frameworks
@@ -66,8 +66,8 @@ export const frameworks = [
     ],
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with MiCA compliance?',
-        a: 'XHS™ Copilot tracks every EBA and ESMA technical standard, Q&A and guideline under MiCA, plus national competent authority decisions and transitional measures. Lens™ AI maps each change to the obligations specific to your entity type (CASP, ART issuer, EMT issuer, offeror).',
+        q: 'How does XHS™ Atlas help with MiCA compliance?',
+        a: 'XHS™ Atlas tracks every EBA and ESMA technical standard, Q&A and guideline under MiCA, plus national competent authority decisions and transitional measures. Lens™ AI maps each change to the obligations specific to your entity type (CASP, ART issuer, EMT issuer, offeror).',
       },
       {
         q: 'When did MiCA come into force?',
@@ -132,8 +132,8 @@ export const frameworks = [
     ],
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with PSD2 compliance?',
-        a: 'XHS™ Copilot tracks every EBA Guideline, Commission Delegated Regulation, and NCA decision under PSD2 — SCA, incident reporting, outsourcing, fraud reporting, API access — and delivers plain-English impact notes keyed to your payment-institution type.',
+        q: 'How does XHS™ Atlas help with PSD2 compliance?',
+        a: 'XHS™ Atlas tracks every EBA Guideline, Commission Delegated Regulation, and NCA decision under PSD2 — SCA, incident reporting, outsourcing, fraud reporting, API access — and delivers plain-English impact notes keyed to your payment-institution type.',
       },
       {
         q: 'What is Strong Customer Authentication (SCA)?',
@@ -198,8 +198,8 @@ export const frameworks = [
     ],
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with DORA compliance?',
-        a: 'XHS™ Copilot tracks every ESAs Level 2 and Level 3 deliverable, joint committee publication and NCA guidance under DORA. Lens™ AI maps each change to your firm type and flags obligations where the implementation window is tight.',
+        q: 'How does XHS™ Atlas help with DORA compliance?',
+        a: 'XHS™ Atlas tracks every ESAs Level 2 and Level 3 deliverable, joint committee publication and NCA guidance under DORA. Lens™ AI maps each change to your firm type and flags obligations where the implementation window is tight.',
       },
       {
         q: 'When did DORA come into force?',
@@ -265,8 +265,8 @@ export const frameworks = [
     ],
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with EU AI Act compliance?',
-        a: 'XHS™ Copilot tracks every Commission delegated and implementing act, AI Office code of practice, EAIB output and national market-surveillance guidance under the AI Act. Lens™ AI maps each update to your AI system\'s risk classification (prohibited, high-risk, limited-risk, minimal-risk, or GPAI).',
+        q: 'How does XHS™ Atlas help with EU AI Act compliance?',
+        a: 'XHS™ Atlas tracks every Commission delegated and implementing act, AI Office code of practice, EAIB output and national market-surveillance guidance under the AI Act. Lens™ AI maps each update to your AI system\'s risk classification (prohibited, high-risk, limited-risk, minimal-risk, or GPAI).',
       },
       {
         q: 'When does the EU AI Act apply?',

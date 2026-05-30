@@ -17,7 +17,7 @@
  *   summary             one-paragraph overview (160-200 chars), used in
  *                       meta description AND first body paragraph
  *   keyObligations      bullet list — what regulated firms must do
- *   coverageAreas       what XHS Copilot monitors for this authority
+ *   coverageAreas       what XHS Atlas monitors for this authority
  *   licences            named licence/permit categories the authority issues
  *   recentFocus         what the authority has been emphasizing recently
  *   faqs                question/answer pairs for FAQPage schema
@@ -63,8 +63,8 @@ export const regulators = [
       'Implementation of the gambling white paper, financial risk and affordability checks, the statutory levy on operators, marketing and direct-marketing reform, and game-design changes for online slots.',
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with UKGC compliance?',
-        a: 'XHS™ Copilot monitors every UKGC publication — LCCP changes, RTS updates, public statements, enforcement actions and consultations — and pushes plain-English impact notes into your team workspace within hours of release. AI-generated jurisdiction reports summarise the obligations specific to your licence type.',
+        q: 'How does XHS™ Atlas help with UKGC compliance?',
+        a: 'XHS™ Atlas monitors every UKGC publication — LCCP changes, RTS updates, public statements, enforcement actions and consultations — and pushes plain-English impact notes into your team workspace within hours of release. AI-generated jurisdiction reports summarise the obligations specific to your licence type.',
       },
       {
         q: 'What licences does the UK Gambling Commission issue?',
@@ -79,8 +79,8 @@ export const regulators = [
         a: 'The Licence Conditions and Codes of Practice (LCCP) is the rulebook that every UKGC licensee must follow. It sets out social responsibility requirements, customer protection, anti-money laundering controls, marketing rules, complaints handling and reporting obligations.',
       },
       {
-        q: 'How frequently does XHS™ Copilot detect UKGC changes?',
-        a: 'Continuously. XHS™ Copilot ingests the UKGC website, the Public Register, statutory consultation feeds and the Regulatory Returns portal, and detects new content within hours of publication. Material changes are summarised by Lens™ AI and delivered to your Slack, Teams or email channel.',
+        q: 'How frequently does XHS™ Atlas detect UKGC changes?',
+        a: 'Continuously. XHS™ Atlas ingests the UKGC website, the Public Register, statutory consultation feeds and the Regulatory Returns portal, and detects new content within hours of publication. Material changes are summarised by Lens™ AI and delivered to your Slack, Teams or email channel.',
       },
       {
         q: 'Is the UK Gambling Commission part of UK government?',
@@ -127,8 +127,8 @@ export const regulators = [
       'Affordability and player-protection enhancements, tighter KYC for high-risk jurisdictions, FIAU AML compliance reviews, and the continued expansion of B2B oversight over platform providers and game studios.',
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with MGA compliance?',
-        a: 'XHS™ Copilot ingests every MGA publication — Gaming Act amendments, directives, policy documents, public-enforcement notices and FIAU AML guidance — and converts them into plain-English impact notes delivered to your team workspace. Lens™ AI generates jurisdiction reports keyed to your specific MGA licence type.',
+        q: 'How does XHS™ Atlas help with MGA compliance?',
+        a: 'XHS™ Atlas ingests every MGA publication — Gaming Act amendments, directives, policy documents, public-enforcement notices and FIAU AML guidance — and converts them into plain-English impact notes delivered to your team workspace. Lens™ AI generates jurisdiction reports keyed to your specific MGA licence type.',
       },
       {
         q: 'What licences does the Malta Gaming Authority issue?',
@@ -187,8 +187,8 @@ export const regulators = [
       'The B2B licensing regime, crackdowns on unlicensed operators targeting Swedish players, refinements to the bonus rules, heightened AML scrutiny, and continued pressure on advertising standards — particularly social-media influencer promotion.',
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with Spelinspektionen compliance?',
-        a: 'XHS™ Copilot tracks every Spelinspektionen publication — sanction decisions, guidance notes, technical specifications, Spelpaus updates and Consumer Agency advertising rulings — and delivers plain-English impact notes to your team. Lens™ AI cross-references changes against your existing Swedish operations.',
+        q: 'How does XHS™ Atlas help with Spelinspektionen compliance?',
+        a: 'XHS™ Atlas tracks every Spelinspektionen publication — sanction decisions, guidance notes, technical specifications, Spelpaus updates and Consumer Agency advertising rulings — and delivers plain-English impact notes to your team. Lens™ AI cross-references changes against your existing Swedish operations.',
       },
       {
         q: 'What is the Swedish Gambling Act?',
@@ -247,8 +247,8 @@ export const regulators = [
       'Consumer Duty enforcement and supervision, the cryptoasset financial-promotions regime, AI governance expectations for regulated firms, operational resilience under the DORA-equivalent rules, and the permissions-gateway "tougher authorisations" programme.',
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with FCA compliance?',
-        a: 'XHS™ Copilot ingests the FCA Handbook delta feed, all policy and consultation papers, Dear CEO letters, enforcement notices and speeches. Every material change is summarised by Lens™ AI with impact notes targeted at your firm\'s permissions and business model.',
+        q: 'How does XHS™ Atlas help with FCA compliance?',
+        a: 'XHS™ Atlas ingests the FCA Handbook delta feed, all policy and consultation papers, Dear CEO letters, enforcement notices and speeches. Every material change is summarised by Lens™ AI with impact notes targeted at your firm\'s permissions and business model.',
       },
       {
         q: 'What is the FCA Consumer Duty?',
@@ -307,8 +307,8 @@ export const regulators = [
       'MiCA Level 2 and Level 3 output, DORA technical standards on ICT risk management and third-party oversight, PSD3/PSR preparation, AI-enabled banking supervision, and the integrated reporting framework simplifying bank supervisory reporting.',
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with EBA compliance?',
-        a: 'XHS™ Copilot tracks every EBA consultation, draft and final RTS/ITS, Guidelines, Opinions and Q&A. Lens™ AI maps each change to the underlying Level 1 framework (CRD/CRR, PSD2, EMD2, MiCA, DORA) so your team sees exactly which obligations are moving.',
+        q: 'How does XHS™ Atlas help with EBA compliance?',
+        a: 'XHS™ Atlas tracks every EBA consultation, draft and final RTS/ITS, Guidelines, Opinions and Q&A. Lens™ AI maps each change to the underlying Level 1 framework (CRD/CRR, PSD2, EMD2, MiCA, DORA) so your team sees exactly which obligations are moving.',
       },
       {
         q: 'Does the EBA issue licences to banks?',
@@ -367,8 +367,8 @@ export const regulators = [
       'Stablecoin regulation (SCS framework), expanded DPT service-provider rules, Project Guardian tokenisation work, AI risk-management expectations, cross-border retail payment linkages, and operational-resilience standards aligned with global peers.',
     faqs: [
       {
-        q: 'How does XHS™ Copilot help with MAS compliance?',
-        a: 'XHS™ Copilot tracks every MAS Notice, Guideline, Code, consultation and enforcement action across banking, capital markets, insurance, payments and digital assets. Lens™ AI maps each change to your firm\'s licence class and business activities.',
+        q: 'How does XHS™ Atlas help with MAS compliance?',
+        a: 'XHS™ Atlas tracks every MAS Notice, Guideline, Code, consultation and enforcement action across banking, capital markets, insurance, payments and digital assets. Lens™ AI maps each change to your firm\'s licence class and business activities.',
       },
       {
         q: 'When was MAS established?',

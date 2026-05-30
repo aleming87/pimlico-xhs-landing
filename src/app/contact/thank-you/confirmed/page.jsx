@@ -30,7 +30,7 @@ export default function ConfirmedPage() {
             </p>
             <div className="space-y-4">
               {[
-                "A 30-minute walkthrough of the XHS\u2122 Copilot platform tailored to your compliance needs.",
+                "A 30-minute walkthrough of the XHS\u2122 Atlas platform tailored to your compliance needs.",
                 "Discussion of your jurisdictions, verticals, and team requirements.",
                 "Live demonstration of monitoring, research, and workspace tools.",
                 "Pricing and onboarding options for your organization.",

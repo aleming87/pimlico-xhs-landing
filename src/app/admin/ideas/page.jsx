@@ -24,7 +24,7 @@ export default function IdeasPage() {
   const [mdImportCount, setMdImportCount] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
 
-  const LLM_PROMPT = `You are helping me generate ideas for Pimlico XHS, a cross-border regulatory intelligence platform covering AI Regulation, Payments, Crypto, and Gambling.
+  const LLM_PROMPT = `You are helping me generate ideas for Pimlico XHS, a cross-border regulatory and market data workspace covering AI Regulation, Payments, Crypto, and Gambling.
 
 For each idea, provide:
 - TITLE: Specific headline (max 120 chars) — include regulation name, jurisdiction, and angle
@@ -325,7 +325,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-medium text-white flex items-center gap-2">💡 Ideas</h1>
-          <p className="text-sm text-gray-400 mt-0.5">Capture regulatory intelligence ideas and topics to develop</p>
+          <p className="text-sm text-gray-400 mt-0.5">Capture regulatory and market data ideas and topics to develop</p>
         </div>
         <div className="flex items-center gap-2">
           {mdImportCount > 0 && <span className="px-3 py-1.5 bg-green-500/15 text-green-300 text-xs font-medium rounded-lg animate-pulse">✓ {mdImportCount} idea{mdImportCount !== 1 ? 's' : ''} imported</span>}
@@ -356,7 +356,7 @@ NOTES: Source: EU AI Office press release (Jan 2026)`;
       {showPrompt && (
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Copy this into ChatGPT / Claude / Copilot</h3>
+            <h3 className="text-sm font-medium text-amber-300 flex items-center gap-2">🤖 LLM Prompt — Copy this into ChatGPT / Claude / Atlas</h3>
             <button onClick={() => { navigator.clipboard.writeText(LLM_PROMPT); }}
               className="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-medium rounded-lg hover:bg-amber-500/30 transition-colors">
               📋 Copy Prompt

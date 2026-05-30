@@ -11,13 +11,13 @@ export const runtime = 'edge';
 export const revalidate = 300; // 5-min ISR at the edge
 
 export const metadata = {
-  title: 'News & Insights — XHS™ Copilot',
+  title: 'News & Insights — XHS™ Atlas',
   description: 'Regulatory briefings, sector analysis, and implementation notes from the Pimlico research team. Daily coverage of gambling, payments, crypto, and AI regulation from global authorities.',
   openGraph: {
-    title: 'News & Insights — XHS™ Copilot',
+    title: 'News & Insights — XHS™ Atlas',
     description: 'Regulatory briefings, sector analysis, and implementation notes from the Pimlico research team.',
     url: 'https://pimlicosolutions.com/insights',
-    siteName: 'XHS™ Copilot',
+    siteName: 'XHS™ Atlas',
     type: 'website',
   },
   alternates: {

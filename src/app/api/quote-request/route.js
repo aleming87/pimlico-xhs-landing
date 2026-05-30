@@ -60,9 +60,9 @@ export async function POST(request) {
         `;
 
         const userHtml = renderEmail({
-          preheader: `Your XHS Copilot quote · £${monthlyStr}/mo`,
+          preheader: `Your XHS™ Atlas quote · £${monthlyStr}/mo`,
           eyebrow: 'QUOTE',
-          heading: 'Your XHS\u2122 Copilot quote.',
+          heading: 'Your XHS\u2122 Atlas quote.',
           intro: `Hi ${escapeHtml(name)}, thanks for configuring a quote on pimlicosolutions.com. Here's the summary based on your selection.`,
           body: summaryHtml,
           ctaLabel: 'Start your 14-day trial',
@@ -78,7 +78,7 @@ export async function POST(request) {
         await resend.emails.send({
           from: sender('Pimlico XHS'),
           to: email,
-          subject: 'Your XHS\u2122 Copilot quote',
+          subject: 'Your XHS\u2122 Atlas quote',
           html: userHtml,
           replyTo: recipientEmail,
         });

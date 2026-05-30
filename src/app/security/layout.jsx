@@ -3,13 +3,13 @@ export const metadata = {
   description: 'SOC 2 Type II infrastructure, EU data residency, AES-256 encryption, row-level isolation and GDPR-compliant processing. Built for regulated compliance teams.',
   alternates: { canonical: '/security' },
   openGraph: {
-    title: 'Security — XHS™ Copilot',
+    title: 'Security — XHS™ Atlas',
     description: 'SOC 2 Type II, EU data residency, AES-256 encryption, GDPR-compliant processing. Built for regulated teams.',
     url: 'https://pimlicosolutions.com/security',
     images: ['/og-default.jpg'],
   },
   twitter: {
-    title: 'Security — XHS™ Copilot',
+    title: 'Security — XHS™ Atlas',
     description: 'SOC 2 Type II, EU data residency, AES-256 encryption, GDPR-compliant processing. Built for regulated teams.',
     images: ['/og-default.jpg'],
   },
@@ -30,15 +30,15 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Is XHS™ Copilot SOC 2 compliant?",
+      "name": "Is XHS™ Atlas SOC 2 compliant?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. XHS™ Copilot is built on SOC 2 Type II infrastructure with annual audit attestations. Security controls cover confidentiality, integrity, and availability of customer data."
+        "text": "Yes. XHS™ Atlas is built on SOC 2 Type II infrastructure with annual audit attestations. Security controls cover confidentiality, integrity, and availability of customer data."
       }
     },
     {
       "@type": "Question",
-      "name": "Is XHS™ Copilot GDPR compliant?",
+      "name": "Is XHS™ Atlas GDPR compliant?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Yes. Pimlico Solutions is the data controller, EU data residency is available, and all processing follows UK GDPR and EU GDPR requirements. Customer data is never used to train shared AI models."
@@ -49,7 +49,7 @@ const faqSchema = {
       "name": "Where is customer data stored?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "XHS™ Copilot offers EU data residency by default, with row-level isolation between customer tenants. Enterprise plans support UK-only or region-specific data residency on request."
+        "text": "XHS™ Atlas offers EU data residency by default, with row-level isolation between customer tenants. Enterprise plans support UK-only or region-specific data residency on request."
       }
     },
     {
@@ -70,18 +70,18 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "Does XHS™ Copilot act autonomously?",
+      "name": "Does XHS™ Atlas act autonomously?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. XHS™ Copilot is a compliance workspace with AI-assisted features, not an autonomous AI agent. It does not take actions on a user's behalf without explicit instruction. AI features — summarisation, impact notes, jurisdiction reports — are drafts that a compliance professional reviews, edits and approves before they are used."
+        "text": "No. XHS™ Atlas is a compliance workspace with AI-assisted features, not an autonomous AI agent. It does not take actions on a user's behalf without explicit instruction. AI features — summarisation, impact notes, jurisdiction reports — are drafts that a compliance professional reviews, edits and approves before they are used."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I audit what XHS™ Copilot does with our data?",
+      "name": "Can I audit what XHS™ Atlas does with our data?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. XHS™ Copilot keeps an immutable audit log of every user action, document upload, AI inference and data export. Audit logs are customer-accessible in the workspace and can be exported to a SIEM. Enterprise customers can configure retention and region-specific storage."
+        "text": "Yes. XHS™ Atlas keeps an immutable audit log of every user action, document upload, AI inference and data export. Audit logs are customer-accessible in the workspace and can be exported to a SIEM. Enterprise customers can configure retention and region-specific storage."
       }
     }
   ]

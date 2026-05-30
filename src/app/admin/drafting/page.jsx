@@ -1354,7 +1354,7 @@ export default function DraftingPage() {
               />
               {/* Preview Footer */}
               <div className="mt-8 pt-4 border-t border-gray-200 text-center text-[11px] text-gray-400">
-                © {new Date().getFullYear()} Pimlico XHS™ — Cross-Border Regulatory Intelligence
+                © {new Date().getFullYear()} Pimlico XHS™ — Cross-Border Regulatory & Market Data
               </div>
             </div>
           ) : editorMode === 'visual' ? (

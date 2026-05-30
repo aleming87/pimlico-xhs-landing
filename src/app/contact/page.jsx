@@ -153,7 +153,7 @@ function ContactPageInner() {
                   ? "Custom pricing, procurement, and enterprise packages. We\u2019ll scope your requirements and put together a proposal."
                   : defaultInterest === "partnership"
                     ? "Integration, implementation, and channel relationships. Tell us what you have in mind."
-                    : "We\u2019ll walk you through XHS\u2122 Copilot in your jurisdictions and answer every question your team has."}
+                    : "We\u2019ll walk you through XHS\u2122 Atlas in your jurisdictions and answer every question your team has."}
             </p>
 
             {/* Value props */}

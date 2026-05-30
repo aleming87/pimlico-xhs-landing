@@ -1,17 +1,17 @@
 export const metadata = {
   title: 'Pricing',
   description:
-    'Transparent pricing for XHS™ Copilot. From £660/month for 1-3 seat teams to enterprise plans at £8,800+/month. Pick your sectors, jurisdictions and team size. 14-day free trial, no credit card.',
+    'Transparent pricing for XHS™ Atlas. From £660/month for 1-3 seat teams to enterprise plans at £8,800+/month. Pick your sectors, jurisdictions and team size. 14-day free trial, no credit card.',
   alternates: { canonical: '/pricing' },
   openGraph: {
-    title: 'Pricing — XHS™ Copilot',
+    title: 'Pricing — XHS™ Atlas',
     description:
       'Transparent pricing from £660/month. Pick your sectors, jurisdictions and team size. 14-day free trial.',
     url: 'https://pimlicosolutions.com/pricing',
     images: ['/og-default.jpg'],
   },
   twitter: {
-    title: 'Pricing — XHS™ Copilot',
+    title: 'Pricing — XHS™ Atlas',
     description:
       'Transparent pricing from £660/month. 14-day free trial, no credit card.',
     images: ['/og-default.jpg'],
@@ -28,16 +28,16 @@ const breadcrumbSchema = {
 }
 
 // Schema.org Product with AggregateOffer gives Google the canonical
-// price range for XHS™ Copilot. The same numbers are used on the
+// price range for XHS™ Atlas. The same numbers are used on the
 // homepage SoftwareApplication schema; keep them in sync if the
 // pricing model in src/app/pricing/page.jsx changes.
 const productSchema = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   '@id': 'https://pimlicosolutions.com/pricing#product',
-  name: 'XHS™ Copilot',
+  name: 'XHS™ Atlas',
   description:
-    'Regulatory compliance workspace for gambling, payments, crypto and AI teams.',
+    'Regulatory and market data workspace for gambling, payments, crypto and AI teams.',
   brand: { '@type': 'Brand', name: 'Pimlico' },
   url: 'https://pimlicosolutions.com/pricing',
   offers: {
@@ -53,7 +53,7 @@ const productSchema = {
 }
 
 // FAQ schema is a strong signal for AI Overview pricing answers
-// ("how much does XHS Copilot cost", "is there a free trial", etc.).
+// ("how much does XHS Atlas cost", "is there a free trial", etc.).
 // Kept in sync with the visible FAQs in src/app/pricing/page.jsx.
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -61,18 +61,18 @@ const faqSchema = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'How much does XHS™ Copilot cost?',
+      name: 'How much does XHS™ Atlas cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'XHS™ Copilot pricing starts at £660 per month for teams of 1-3 seats with a single vertical and region, and scales to around £8,800 per month for enterprise deployments with 101+ seats, all four sectors and global coverage. The interactive configurator at pimlicosolutions.com/pricing produces an instant quote based on your exact team size, vertical mix and jurisdictional coverage.',
+        text: 'XHS™ Atlas pricing starts at £660 per month for teams of 1-3 seats with a single vertical and region, and scales to around £8,800 per month for enterprise deployments with 101+ seats, all four sectors and global coverage. The interactive configurator at pimlicosolutions.com/pricing produces an instant quote based on your exact team size, vertical mix and jurisdictional coverage.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Is there a free trial of XHS™ Copilot?',
+      name: 'Is there a free trial of XHS™ Atlas?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. XHS™ Copilot includes a 14-day free trial with up to 8 jurisdictions of coverage, full database access, Slack/Teams alerts, and CSV/PDF exports. Projects™ and Briefings are paid-only. No credit card is required to start the trial.',
+        text: 'Yes. XHS™ Atlas includes a 14-day free trial with up to 8 jurisdictions of coverage, full database access, Slack/Teams alerts, and CSV/PDF exports. Projects™ and Briefings are paid-only. No credit card is required to start the trial.',
       },
     },
     {

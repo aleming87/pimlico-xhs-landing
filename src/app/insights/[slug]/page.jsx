@@ -35,10 +35,10 @@ export async function generateMetadata({ params }) {
 
   if (!article) {
     return {
-      title: 'Article Not Found - XHS™ Copilot',
+      title: 'Article Not Found - XHS™ Atlas',
       description: 'The requested article could not be found.',
       openGraph: {
-        title: 'Article Not Found - XHS™ Copilot',
+        title: 'Article Not Found - XHS™ Atlas',
         description: 'The requested article could not be found.',
         url: `${baseUrl}/insights/${slug}`,
         siteName: 'Pimlico',
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }) {
     }
   }
 
-  const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from XHS™ Copilot';
+  const description = article.excerpt?.slice(0, 200) || 'Read the latest regulatory insights from XHS™ Atlas';
 
   // Rev 2026-04-23 — surface the real journalist persona (e.g. "Daniel
   // Yoon", "Priya Desai") in metadata + OG tags for SEO / social
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }) {
     : 'Pimlico editorial desk';
 
   const metadata = {
-    title: `${article.title} - XHS™ Copilot`,
+    title: `${article.title} - XHS™ Atlas`,
     description: description,
     authors: [{ name: bylineName }],
     openGraph: {
@@ -243,7 +243,7 @@ export default async function ArticlePage({ params }) {
             <hr style={{ margin: '24px 0', border: 0, borderTop: '1px solid #ddd' }} />
             <div style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>
               {article.isPremium
-                ? `${(article.excerpt || '').slice(0, 500)}\n\n---\n\nThis is a premium article. Subscribe to XHS™ Copilot at xhsdata.ai for full access.`
+                ? `${(article.excerpt || '').slice(0, 500)}\n\n---\n\nThis is a premium article. Subscribe to XHS™ Atlas at xhsdata.ai for full access.`
                 : bodyPlainText}
             </div>
           </main>

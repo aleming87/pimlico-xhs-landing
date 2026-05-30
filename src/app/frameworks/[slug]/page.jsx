@@ -15,13 +15,13 @@ export async function generateMetadata({ params }) {
   const f = getFramework(slug)
   if (!f) return { title: 'Framework not found', robots: { index: false, follow: true } }
   const title = `${f.abbr} — ${f.name}`
-  const description = `${f.summary} XHS™ Copilot tracks every change, guidance note and NCA decision.`
+  const description = `${f.summary} XHS™ Atlas tracks every change, guidance note and NCA decision.`
   return {
     title,
     description,
     alternates: { canonical: `/frameworks/${f.slug}` },
     openGraph: {
-      title: `${f.abbr} — XHS™ Copilot`,
+      title: `${f.abbr} — XHS™ Atlas`,
       description,
       url: `https://pimlicosolutions.com/frameworks/${f.slug}`,
       siteName: 'Pimlico',
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }) {
     twitter: {
       card: 'summary_large_image',
       site: '@pimlicoxhs',
-      title: `${f.abbr} — XHS™ Copilot`,
+      title: `${f.abbr} — XHS™ Atlas`,
       description,
       images: ['/og-frameworks.jpg'],
     },

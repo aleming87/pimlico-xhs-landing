@@ -131,7 +131,7 @@ function SectionRatingsInline({ section, label }) {
    ═══════════════════════════════════════════════════════════════════ */
 export default function SurveyDashboard() {
   const [trialResponses, setTrialResponses] = useState([]);
-  const [copilotResponses, setCopilotResponses] = useState([]);
+  const [copilotResponses, setAtlasResponses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [source, setSource] = useState('trial'); // 'trial' | 'copilot'
@@ -146,7 +146,7 @@ export default function SurveyDashboard() {
           fetch('/api/xhs-monitoring-survey', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ responses: [] })),
         ]);
         setTrialResponses(trialRes.responses || []);
-        setCopilotResponses(copilotRes.responses || []);
+        setAtlasResponses(copilotRes.responses || []);
       } catch (e) {
         setError(e.message);
       } finally {
@@ -261,7 +261,7 @@ export default function SurveyDashboard() {
             </button>
             <button onClick={() => { setSource('copilot'); setExpandedId(null); }}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${source === 'copilot' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-gray-200'}`}>
-              Copilot Feedback ({copilotResponses.length})
+              Atlas Feedback ({copilotResponses.length})
             </button>
           </div>
           {/* View toggle */}

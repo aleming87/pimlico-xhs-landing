@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Support - XHS\u2122 Copilot",
-  description: "Troubleshooting and self-help for XHS\u2122 Copilot users.",
+  title: "Support - XHS\u2122 Atlas",
+  description: "Troubleshooting and self-help for XHS\u2122 Atlas users.",
 };
 
 const TROUBLESHOOTING = [
@@ -41,7 +41,7 @@ const TROUBLESHOOTING = [
   {
     id: "incognito",
     title: "Try incognito / private mode",
-    desc: "If the issue persists, try opening XHS\u2122 Copilot in a private window. This rules out browser extensions or cached data causing problems.",
+    desc: "If the issue persists, try opening XHS\u2122 Atlas in a private window. This rules out browser extensions or cached data causing problems.",
     steps: [
       { platform: "Chrome", keys: "Ctrl/\u2318 + Shift + N" },
       { platform: "Safari", keys: "\u2318 + Shift + N" },
@@ -81,7 +81,7 @@ export default function SupportPage() {
           Troubleshooting & support
         </h1>
         <p className="text-base text-[var(--color-text-tertiary)] leading-relaxed mb-12">
-          Common fixes for issues with XHS{"\u2122"} Copilot. If these don't resolve your problem, contact us directly.
+          Common fixes for issues with XHS{"\u2122"} Atlas. If these don't resolve your problem, contact us directly.
         </p>
 
         {/* Quick links */}
@@ -128,7 +128,7 @@ export default function SupportPage() {
             Contact us on WhatsApp or email and we'll get back to you within a few hours.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://wa.me/447961642867?text=Hi%2C%20I%20need%20help%20with%20XHS%E2%84%A2%20Copilot" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">
+            <a href="https://wa.me/447961642867?text=Hi%2C%20I%20need%20help%20with%20XHS%E2%84%A2%20Atlas" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-[var(--color-text-primary)] px-6 py-2.5 text-sm font-medium text-[var(--color-bg-base)] transition-all hover:opacity-90">
               Message us on WhatsApp
             </a>
             <a href="mailto:support@pimlicosolutions.com" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">

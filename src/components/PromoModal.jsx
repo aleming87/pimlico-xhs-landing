@@ -66,7 +66,7 @@ export default function PromoModal() {
               Save 50%
             </div>
             <div className="text-[11px] text-gray-300 leading-tight">
-              on regulatory intelligence costs
+              on regulatory and market data costs
             </div>
             <div className="text-[10px] text-gray-500 mt-1">
               Ends Mar 31
@@ -126,7 +126,7 @@ export default function PromoModal() {
               Save up to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">50%</span>
             </h2>
             <p className="text-xl text-gray-300 mt-1">
-              on regulatory intelligence costs
+              on regulatory and market data costs
             </p>
           </div>
 

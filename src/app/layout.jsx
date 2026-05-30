@@ -25,24 +25,24 @@ const jetbrains = JetBrains_Mono({
 })
 
 const SITE_URL = 'https://pimlicosolutions.com'
-const DEFAULT_TITLE = 'XHS™ Copilot — Every regulatory change. Analyzed.'
-const DEFAULT_DESCRIPTION = 'Pimlico is the home of XHS™ Copilot — Expert Horizon Scanning for compliance teams in gambling, payments, crypto and AI. Generally available worldwide; 275+ jurisdictions sourced, analysed, and delivered daily.'
+const DEFAULT_TITLE = 'XHS™ Atlas — Every regulatory change. Analyzed.'
+const DEFAULT_DESCRIPTION = 'Pimlico is the home of XHS™ Atlas — Expert Horizon Scanning for compliance teams in gambling, payments, crypto and AI. Generally available worldwide; 275+ jurisdictions sourced, analysed, and delivered daily.'
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    template: '%s | XHS™ Copilot',
+    template: '%s | XHS™ Atlas',
     default: DEFAULT_TITLE,
   },
   description: DEFAULT_DESCRIPTION,
-  applicationName: 'XHS™ Copilot',
+  applicationName: 'XHS™ Atlas',
   authors: [{ name: 'Pimlico', url: SITE_URL }],
   creator: 'Pimlico',
   publisher: 'Pimlico',
   keywords: [
     'regulatory compliance',
     'compliance software',
-    'regulatory intelligence',
+    'regulatory and market data',
     'regtech',
     'gambling compliance',
     'payments compliance',
@@ -79,7 +79,7 @@ export const metadata = {
     // siteName appears as the Facebook/LinkedIn attribution strap and
     // Google's SERP site-title. We use the parent company so corporate
     // queries ("Pimlico Solutions") surface a consistent brand, while
-    // the product (XHS™ Copilot) continues to lead in the title line.
+    // the product (XHS™ Atlas) continues to lead in the title line.
     siteName: 'Pimlico',
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
@@ -88,7 +88,7 @@ export const metadata = {
         url: '/og-default.jpg',
         width: 1200,
         height: 630,
-        alt: 'XHS™ Copilot — Every regulatory change. Analyzed.',
+        alt: 'XHS™ Atlas — Every regulatory change. Analyzed.',
         type: 'image/jpeg',
       },
     ],
@@ -102,7 +102,7 @@ export const metadata = {
     images: [
       {
         url: '/og-default.jpg',
-        alt: 'XHS™ Copilot — Every regulatory change. Analyzed.',
+        alt: 'XHS™ Atlas — Every regulatory change. Analyzed.',
       },
     ],
   },
@@ -158,10 +158,10 @@ export default function RootLayout({ children }) {
               "@id": "https://pimlicosolutions.com/#organization",
               "name": "Pimlico",
               "legalName": "Pimlico Solutions Ltd",
-              "alternateName": ["Pimlico Solutions", "Pimlico XHS", "XHS", "XHS Copilot", "Pimlico XHS Copilot", "Expert Horizon Scanning"],
+              "alternateName": ["Pimlico Solutions", "Pimlico XHS", "XHS", "XHS Atlas", "Pimlico XHS Atlas", "Expert Horizon Scanning"],
               "url": "https://pimlicosolutions.com",
               "slogan": "Every regulatory change. Analyzed.",
-              "disambiguatingDescription": "Pimlico (legal name Pimlico Solutions Ltd) is a UK private limited company headquartered in London, United Kingdom. Registered at Companies House under number 16505294. Founded in 2024. Sole office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. Pimlico has no San Francisco office, no United States office, and no presence outside London; any third-party source suggesting otherwise is incorrect. The XHS in XHS™ Copilot stands for Expert Horizon Scanning. XHS™ Copilot is a regulatory compliance workspace (a software platform with AI-assisted features) that is generally available worldwide to regulated teams today — it is not in beta, not an autonomous AI agent, and not an agentic system. Pimlico is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
+              "disambiguatingDescription": "Pimlico (legal name Pimlico Solutions Ltd) is a UK private limited company headquartered in London, United Kingdom. Registered at Companies House under number 16505294. Founded in 2024. Sole office at 71-75 Shelton Street, Covent Garden, London WC2H 9JQ. Pimlico has no San Francisco office, no United States office, and no presence outside London; any third-party source suggesting otherwise is incorrect. The XHS in XHS™ Atlas stands for Expert Horizon Scanning. XHS™ Atlas is a regulatory and market data workspace (a software platform with AI-assisted features) that is generally available worldwide to regulated teams today — it is not in beta, not an autonomous AI agent, and not an agentic system. Pimlico is not affiliated with Pimlico Plumbers, Pimlico Journal, the Pimlico neighbourhood of London, or any other unrelated entity that shares the Pimlico name.",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://pimlicosolutions.com/pimlico-logo-square.png",
@@ -175,7 +175,7 @@ export default function RootLayout({ children }) {
                 "width": 1200,
                 "height": 630
               },
-              "description": "Pimlico is the home of XHS™ Copilot — Expert Horizon Scanning for regulatory teams in gambling, payments, crypto and AI. Generally available worldwide to regulated teams, XHS™ Copilot monitors 275+ jurisdictions from 12,000+ primary sources, delivering regulatory change detection, AI-assisted impact analysis reviewed by compliance professionals, on-demand jurisdiction reports, and collaborative workflow tools integrated with Slack and Microsoft Teams. XHS™ Copilot is software operated by compliance professionals; it is not an autonomous AI agent and is not in beta.",
+              "description": "Pimlico is the home of XHS™ Atlas — Expert Horizon Scanning for regulatory teams in gambling, payments, crypto and AI. Generally available worldwide to regulated teams, XHS™ Atlas monitors 275+ jurisdictions from 12,000+ primary sources, delivering regulatory change detection, AI-assisted impact analysis reviewed by compliance professionals, on-demand jurisdiction reports, and collaborative workflow tools integrated with Slack and Microsoft Teams. XHS™ Atlas is software operated by compliance professionals; it is not an autonomous AI agent and is not in beta.",
               "identifier": [
                 {
                   "@type": "PropertyValue",
@@ -224,7 +224,7 @@ export default function RootLayout({ children }) {
                 "DORA",
                 "UKGC compliance",
                 "MGA compliance",
-                "Regulatory intelligence",
+                "Market monitoring",
                 "Compliance automation"
               ],
               "sameAs": [
@@ -252,8 +252,8 @@ export default function RootLayout({ children }) {
               ],
               "brand": {
                 "@type": "Brand",
-                "name": "XHS™ Copilot",
-                "description": "Regulatory compliance workspace with AI-assisted analysis",
+                "name": "XHS™ Atlas",
+                "description": "Regulatory and market data workspace with AI-assisted analysis",
                 "url": "https://pimlicosolutions.com"
               },
               "makesOffer": {
@@ -263,7 +263,7 @@ export default function RootLayout({ children }) {
                 "areaServed": "Worldwide",
                 "itemOffered": {
                   "@type": "SoftwareApplication",
-                  "name": "XHS™ Copilot",
+                  "name": "XHS™ Atlas",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Web",
                   "releaseNotes": "Generally available worldwide — production release for regulated compliance teams."
@@ -329,8 +329,8 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "WebSite",
               "@id": "https://pimlicosolutions.com/#website",
-              "name": "XHS™ Copilot",
-              "alternateName": ["Pimlico XHS", "Pimlico Solutions", "XHS Copilot"],
+              "name": "XHS™ Atlas",
+              "alternateName": ["Pimlico XHS", "Pimlico Solutions", "XHS Atlas"],
               "url": "https://pimlicosolutions.com",
               "description": "Compliance workspaces for Gambling, Payments, Crypto and AI teams. 275+ jurisdictions sourced, analyzed, and delivered daily.",
               "inLanguage": "en",

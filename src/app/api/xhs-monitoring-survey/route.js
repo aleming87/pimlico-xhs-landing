@@ -70,7 +70,7 @@ export async function POST(request) {
       console.error('⚠️ Failed to persist to blob (continuing with email):', blobError);
     }
     
-    console.log('📧 XHS™ Copilot Feedback Data Received');
+    console.log('📧 XHS™ Atlas Feedback Data Received');
     console.log('- RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
     console.log('- CONTACT_EMAIL:', process.env.CONTACT_EMAIL || 'NOT SET');
     
@@ -202,7 +202,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
       try {
         // Send to team
         const teamEmailResult = await resend.emails.send({
-          from: `Pimlico XHS™ Copilot Survey <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
+          from: `Pimlico XHS™ Atlas Survey <${process.env.SENDER_EMAIL || 'noreply@pimlicosolutions.com'}>`,
           to: recipientEmails,
           subject: `📊 XHS™ COPILOT FEEDBACK - ${data.firstName} ${data.lastName} from ${data.company} | NPS: ${data.npsScore}/10`,
           html: `
@@ -211,7 +211,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XHS™ Copilot Survey Submission</title>
+  <title>XHS™ Atlas Survey Submission</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; color: #1e293b;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc;">
@@ -222,7 +222,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
           <!-- Header -->
           <tr>
             <td style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); padding: 30px; text-align: center;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">📊 XHS™ Copilot Feedback</h1>
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">📊 XHS™ Atlas Feedback</h1>
               <p style="margin: 8px 0 0; color: #bfdbfe; font-size: 14px;">Individual User Survey Response</p>
             </td>
           </tr>
@@ -433,7 +433,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
               </p>
               
               <p style="margin: 0 0 20px; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
-                Thank you for taking the time to share your feedback on XHS™ Copilot. Your input is invaluable in helping us improve the platform and build the features that matter most to you.
+                Thank you for taking the time to share your feedback on XHS™ Atlas. Your input is invaluable in helping us improve the platform and build the features that matter most to you.
               </p>
               
               <p style="margin: 0 0 20px; font-size: 16px; color: #cbd5e1; line-height: 1.6;">
@@ -500,7 +500,7 @@ Likelihood to Recommend (NPS): ${data.npsScore}/10
       });
     }
   } catch (error) {
-    console.error('❌ XHS™ Copilot Feedback submission error:', error);
+    console.error('❌ XHS™ Atlas Feedback submission error:', error);
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }

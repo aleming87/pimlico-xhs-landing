@@ -5,21 +5,21 @@ import InlineCTA from '@/components/InlineCTA'
 export const metadata = {
   title: 'Regulators',
   description:
-    'Every regulator XHS™ Copilot tracks — UKGC, MGA, FCA, EBA, MAS, FINMA and 270+ more — with daily change detection across gambling, payments, crypto and AI compliance.',
+    'Every regulator XHS™ Atlas tracks — UKGC, MGA, FCA, EBA, MAS, FINMA and 270+ more — with daily change detection across gambling, payments, crypto and AI compliance.',
   alternates: { canonical: '/regulators' },
   openGraph: {
-    title: 'Regulators — XHS™ Copilot',
+    title: 'Regulators — XHS™ Atlas',
     description:
-      'Every regulator XHS™ Copilot tracks across gambling, payments, crypto and AI compliance.',
+      'Every regulator XHS™ Atlas tracks across gambling, payments, crypto and AI compliance.',
     url: 'https://pimlicosolutions.com/regulators',
     images: ['/og-regulators.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@pimlicoxhs',
-    title: 'Regulators — XHS™ Copilot',
+    title: 'Regulators — XHS™ Atlas',
     description:
-      'Every regulator XHS™ Copilot tracks across gambling, payments, crypto and AI compliance.',
+      'Every regulator XHS™ Atlas tracks across gambling, payments, crypto and AI compliance.',
     images: ['/og-regulators.jpg'],
   },
 }
@@ -55,9 +55,9 @@ export default function RegulatorsIndex() {
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Regulators tracked by XHS™ Copilot',
+    name: 'Regulators tracked by XHS™ Atlas',
     description:
-      'Every regulator XHS™ Copilot tracks — UKGC, MGA, FCA, EBA, MAS, FINMA and 270+ more authorities across gambling, payments, crypto and AI compliance.',
+      'Every regulator XHS™ Atlas tracks — UKGC, MGA, FCA, EBA, MAS, FINMA and 270+ more authorities across gambling, payments, crypto and AI compliance.',
     url: 'https://pimlicosolutions.com/regulators',
     isPartOf: { '@type': 'WebSite', url: 'https://pimlicosolutions.com', name: 'Pimlico' },
     inLanguage: 'en-GB',
@@ -98,7 +98,7 @@ export default function RegulatorsIndex() {
             Every authority. One workspace.
           </h1>
           <p className="text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-2xl">
-            XHS™ Copilot tracks {items.length === 1 ? 'this authority' : `${items.length} authorities`} today and 275+ more across gambling, payments, crypto and AI regulation. Every page below is updated as the authority publishes.
+            XHS™ Atlas tracks {items.length === 1 ? 'this authority' : `${items.length} authorities`} today and 275+ more across gambling, payments, crypto and AI regulation. Every page below is updated as the authority publishes.
           </p>
         </div>
       </section>

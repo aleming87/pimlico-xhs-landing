@@ -16,13 +16,13 @@ export async function generateMetadata({ params }) {
     return { title: 'Regulator not found', robots: { index: false, follow: true } }
   }
   const title = `${r.abbr} compliance — ${r.name}`
-  const description = `${r.summary} XHS™ Copilot tracks every change daily across licensing, AML, advertising and enforcement.`
+  const description = `${r.summary} XHS™ Atlas tracks every change daily across licensing, AML, advertising and enforcement.`
   return {
     title,
     description,
     alternates: { canonical: `/regulators/${r.slug}` },
     openGraph: {
-      title: `${r.abbr} compliance — XHS™ Copilot`,
+      title: `${r.abbr} compliance — XHS™ Atlas`,
       description,
       url: `https://pimlicosolutions.com/regulators/${r.slug}`,
       siteName: 'Pimlico',
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
     twitter: {
       card: 'summary_large_image',
       site: '@pimlicoxhs',
-      title: `${r.abbr} compliance — XHS™ Copilot`,
+      title: `${r.abbr} compliance — XHS™ Atlas`,
       description,
       images: ['/og-regulators.jpg'],
     },

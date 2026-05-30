@@ -8,7 +8,7 @@ export const metadata = {
     'Plain-language definitions of KYC, AML, CDD, EDD, PEP, SAR, Travel Rule, SCA, Consumer Duty, CASP, VASP and stablecoin — the terms every compliance team needs to know.',
   alternates: { canonical: '/glossary' },
   openGraph: {
-    title: 'Compliance glossary — XHS™ Copilot',
+    title: 'Compliance glossary — XHS™ Atlas',
     description:
       'Plain-language definitions of the regulatory terms that matter most to gambling, payments, crypto and AI compliance teams.',
     url: 'https://pimlicosolutions.com/glossary',
@@ -18,7 +18,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     site: '@pimlicoxhs',
-    title: 'Compliance glossary — XHS™ Copilot',
+    title: 'Compliance glossary — XHS™ Atlas',
     description:
       'Plain-language definitions of the regulatory terms that matter most.',
     images: ['/og-default.jpg'],

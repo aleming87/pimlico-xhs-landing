@@ -135,7 +135,7 @@ function FAQ({ q, a }) {
 export default function PricingPage() {
   // Rev 48e0 \u2014 default assumptions reflect the most common serious-
   //   prospect shape: team of 3, annual billing (the discounted price
-  //   we\u2019d actually quote), global coverage (regulatory intelligence
+  //   we\u2019d actually quote), global coverage (regulatory and market data
   //   is inherently a global proposition, and most new customers want
   //   to see the all-in number first, then narrow if they need to).
   //   Previous defaults (monthly + Europe) buried the calculator\u2019s

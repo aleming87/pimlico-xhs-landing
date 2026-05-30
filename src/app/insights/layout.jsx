@@ -1,15 +1,15 @@
 export const metadata = {
   title: 'Insights',
-  description: 'Regulatory briefings, sector analysis and implementation notes from the Pimlico research team — gambling, payments, crypto and AI compliance intelligence.',
+  description: 'Regulatory briefings, sector analysis and implementation notes from the Pimlico research team — gambling, payments, crypto and AI compliance coverage.',
   alternates: { canonical: '/insights' },
   openGraph: {
-    title: 'Insights — XHS™ Copilot',
+    title: 'Insights — XHS™ Atlas',
     description: 'Regulatory briefings and compliance analysis covering gambling, payments, crypto and AI.',
     url: 'https://pimlicosolutions.com/insights',
     images: ['/og-default.jpg'],
   },
   twitter: {
-    title: 'Insights — XHS™ Copilot',
+    title: 'Insights — XHS™ Atlas',
     description: 'Regulatory briefings and compliance analysis covering gambling, payments, crypto and AI.',
     images: ['/og-default.jpg'],
   },
@@ -30,7 +30,7 @@ const collectionPageSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "News & Insights",
-  "description": "Regulatory briefings, sector analysis and implementation notes from the Pimlico research team — gambling, payments, crypto and AI compliance intelligence.",
+  "description": "Regulatory briefings, sector analysis and implementation notes from the Pimlico research team — gambling, payments, crypto and AI compliance coverage.",
   "url": `${BASE}/insights`,
   "isPartOf": { "@type": "WebSite", "url": BASE, "name": "Pimlico" },
   "inLanguage": "en-GB",

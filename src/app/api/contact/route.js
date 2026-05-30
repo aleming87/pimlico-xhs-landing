@@ -46,7 +46,7 @@ export async function POST(request) {
 
         // User confirmation
         const userHtml = renderEmail({
-          preheader: 'Thanks for getting in touch with Pimlico XHS\u2122 Copilot',
+          preheader: 'Thanks for getting in touch with Pimlico XHS\u2122 Atlas',
           eyebrow: 'RECEIVED',
           heading: 'Thanks for getting in touch.',
           intro: `Hi ${escapeHtml(data.firstName)}, we've received your message and a member of the Pimlico team will be in touch shortly.`,

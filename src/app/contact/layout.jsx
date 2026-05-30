@@ -1,15 +1,15 @@
 export const metadata = {
   title: 'Contact',
-  description: 'Talk to the XHS™ Copilot team. Book a demo, start a 14-day free trial, or get answers on pricing, procurement and partnerships.',
+  description: 'Talk to the XHS™ Atlas team. Book a demo, start a 14-day free trial, or get answers on pricing, procurement and partnerships.',
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: 'Contact — XHS™ Copilot',
+    title: 'Contact — XHS™ Atlas',
     description: 'Book a demo, start a 14-day free trial, or get answers on pricing and partnerships.',
     url: 'https://pimlicosolutions.com/contact',
     images: ['/og-default.jpg'],
   },
   twitter: {
-    title: 'Contact — XHS™ Copilot',
+    title: 'Contact — XHS™ Atlas',
     description: 'Book a demo, start a 14-day free trial, or get answers on pricing and partnerships.',
     images: ['/og-default.jpg'],
   },

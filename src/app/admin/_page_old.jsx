@@ -2023,7 +2023,7 @@ export default function AdminPage() {
         `${leadSentence}`,
         secondSentence ? `\n${secondSentence}` : '',
         ``,
-        `Pimlico XHS™ — regulatory intelligence for teams that can't afford to fall behind.`,
+        `Pimlico XHS™ — regulatory and market data for teams that can't afford to fall behind.`,
         ``,
         `📖 Link in bio for the full analysis`,
         ``,

@@ -41,7 +41,7 @@ export default function CopyPage() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [storageLoaded, setStorageLoaded] = useState(false);
 
-  const LLM_PROMPT = `You are helping me create social media and email copy for Pimlico XHS, a cross-border regulatory intelligence platform.
+  const LLM_PROMPT = `You are helping me create social media and email copy for Pimlico XHS, a cross-border regulatory and market data workspace.
 
 I will give you an article title, excerpt, and category. Generate copy for each platform:
 

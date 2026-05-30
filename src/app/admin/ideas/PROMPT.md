@@ -1,7 +1,7 @@
 # 💡 Ideas Page — LLM Prompt Guide
 
 ## What This Feature Does
-The Ideas page is the **entry point** of the Pimlico XHS content pipeline. It captures regulatory intelligence ideas — topics, angles, enforcement actions, market trends — that will be developed into full articles.
+The Ideas page is the **entry point** of the Pimlico XHS content pipeline. It captures regulatory and market data ideas — topics, angles, enforcement actions, market trends — that will be developed into full articles.
 
 Ideas flow: **Ideas → Drafting → Collateral → Copy → Publishing**
 

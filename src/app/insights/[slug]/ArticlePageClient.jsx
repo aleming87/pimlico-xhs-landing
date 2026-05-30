@@ -699,8 +699,8 @@ export default function ArticlePageClient() {
                           detail: {
                             source: "article-footer",
                             hint: country
-                              ? `How does XHS Copilot cover regulatory change in ${country}?`
-                              : `How does XHS Copilot help me track regulatory change like in this article?`,
+                              ? `How does XHS™ Atlas cover regulatory change in ${country}?`
+                              : `How does XHS™ Atlas help me track regulatory change like in this article?`,
                           },
                         }));
                       }}

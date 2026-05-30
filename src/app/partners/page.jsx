@@ -65,7 +65,7 @@ export default function PartnersPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6"
               style={{ color: "var(--color-text-primary)" }}
             >
-              Bring Pimlico's regulatory intelligence closer.
+              Bring Pimlico's regulatory and market data closer.
             </h1>
             <p
               className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-8"

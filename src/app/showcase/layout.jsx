@@ -4,7 +4,7 @@
  * Add ?capture=1 to URL to hide even the scene nav.
  */
 export const metadata = {
-  title: "XHS Copilot — Product Showcase",
+  title: "XHS™ Atlas — Product Showcase",
   robots: { index: false, follow: false },
 };
 

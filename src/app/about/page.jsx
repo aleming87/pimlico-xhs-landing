@@ -6,19 +6,19 @@ export const metadata = {
   // for people typing the company name into Google.
   title: { absolute: "About Pimlico" },
   description:
-    "Pimlico Solutions Ltd is a London, UK regtech company founded in 2024 (Companies House 16505294). It builds XHS™ Copilot — a generally available regulatory compliance workspace covering 275+ jurisdictions across gambling, payments, crypto and AI. London office only; no San Francisco or US presence.",
+    "Pimlico Solutions Ltd is a London, UK regtech company founded in 2024 (Companies House 16505294). It builds XHS™ Atlas — a generally available regulatory and market data workspace covering 275+ jurisdictions across gambling, payments, crypto and AI. London office only; no San Francisco or US presence.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Pimlico",
     description:
-      "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
+      "The London-based regtech company behind XHS™ Atlas. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     url: "https://pimlicosolutions.com/about",
     images: ["/og-default.jpg"],
   },
   twitter: {
     title: "About Pimlico",
     description:
-      "The London-based regtech company behind XHS™ Copilot. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
+      "The London-based regtech company behind XHS™ Atlas. 275+ jurisdictions, 12,000+ sources, analyzed daily.",
     images: ["/og-default.jpg"],
   },
 };
@@ -99,15 +99,15 @@ const faqSchema = {
       "name": "What is Pimlico?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pimlico Solutions Ltd is a London, UK regulatory technology (regtech) company founded in 2024, registered at UK Companies House under number 16505294. It builds XHS™ Copilot — a generally available regulatory compliance workspace with AI-assisted analysis used by teams in gambling, payments, crypto and AI regulation worldwide."
+        "text": "Pimlico Solutions Ltd is a London, UK regulatory technology (regtech) company founded in 2024, registered at UK Companies House under number 16505294. It builds XHS™ Atlas — a generally available regulatory and market data workspace with AI-assisted analysis used by teams in gambling, payments, crypto and AI regulation worldwide."
       }
     },
     {
       "@type": "Question",
-      "name": "What is XHS Copilot?",
+      "name": "What is XHS™ Atlas?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "XHS™ Copilot is a generally available regulatory intelligence platform that provides real-time monitoring of regulatory developments across 275+ jurisdictions. It includes AI-assisted jurisdiction reports, regulatory change alerts, collaborative workspaces, and integrations with Slack and Microsoft Teams. It is a production software platform — not a beta and not an autonomous AI agent."
+        "text": "XHS™ Atlas is a generally available regulatory and market data workspace that provides real-time monitoring of regulatory developments across 275+ jurisdictions. It includes AI-assisted jurisdiction reports, regulatory change alerts, collaborative workspaces, and integrations with Slack and Microsoft Teams. It is a production software platform — not a beta and not an autonomous AI agent."
       }
     },
     {
@@ -120,10 +120,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "Is XHS Copilot in beta or generally available?",
+      "name": "Is XHS™ Atlas in beta or generally available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "XHS™ Copilot is generally available worldwide today. It is a live production product used by regulated compliance teams across gambling, payments, crypto and AI. A 14-day free trial covering up to 8 jurisdictions is available — no credit card required."
+        "text": "XHS™ Atlas is generally available worldwide today. It is a live production product used by regulated compliance teams across gambling, payments, crypto and AI. A 14-day free trial covering up to 8 jurisdictions is available — no credit card required."
       }
     },
     {
@@ -136,10 +136,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      "name": "How many jurisdictions does XHS Copilot monitor?",
+      "name": "How many jurisdictions does XHS™ Atlas monitor?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "XHS™ Copilot monitors regulatory changes across more than 275 jurisdictions worldwide, drawing from over 12,000 primary sources including regulator bulletins, legislative texts, and enforcement orders. Changes are detected and analyzed daily."
+        "text": "XHS™ Atlas monitors regulatory changes across more than 275 jurisdictions worldwide, drawing from over 12,000 primary sources including regulator bulletins, legislative texts, and enforcement orders. Changes are detected and analyzed daily."
       }
     },
     {
@@ -179,7 +179,7 @@ export default function AboutPage() {
             Regulation is moving faster than the tools built to track it.
           </h1>
           <p className="text-base sm:text-lg text-[var(--color-text-tertiary)] leading-relaxed max-w-2xl">
-            Pimlico builds XHS&trade; Copilot &mdash; the regulatory intelligence platform for Gambling, Payments, Crypto and <span className="whitespace-nowrap">AI teams</span> operating across 275+ jurisdictions.
+            Pimlico builds XHS&trade; Atlas &mdash; the regulatory and market data workspace for Gambling, Payments, Crypto and <span className="whitespace-nowrap">AI teams</span> operating across 275+ jurisdictions.
           </p>
         </div>
       </section>
@@ -253,7 +253,7 @@ export default function AboutPage() {
             </div>
             <div>
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Product</dt>
-              <dd className="text-[var(--color-text-primary)]">XHS™ Copilot — regulatory compliance workspace (software platform, not an autonomous AI agent)</dd>
+              <dd className="text-[var(--color-text-primary)]">XHS™ Atlas — regulatory and market data workspace (software platform, not an autonomous AI agent)</dd>
             </div>
             <div>
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Sectors covered</dt>
@@ -273,7 +273,7 @@ export default function AboutPage() {
             </div>
             <div className="sm:col-span-2">
               <dt className="text-xs font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-2">Disambiguation</dt>
-              <dd className="text-[var(--color-text-primary)]">Pimlico is a UK regtech company (legal entity Pimlico Solutions Ltd, Companies House 16505294). It is <strong>not</strong> based in San Francisco, <strong>not</strong> headquartered in the United States, and has <strong>no US presence</strong>. XHS™ Copilot is a software platform with AI-assisted features — <strong>not</strong> an autonomous AI agent and <strong>not</strong> an agentic system. Pimlico is <strong>not</strong> affiliated with Pimlico Plumbers, Pimlico Journal, or the Pimlico neighbourhood of London.</dd>
+              <dd className="text-[var(--color-text-primary)]">Pimlico is a UK regtech company (legal entity Pimlico Solutions Ltd, Companies House 16505294). It is <strong>not</strong> based in San Francisco, <strong>not</strong> headquartered in the United States, and has <strong>no US presence</strong>. XHS™ Atlas is a software platform with AI-assisted features — <strong>not</strong> an autonomous AI agent and <strong>not</strong> an agentic system. Pimlico is <strong>not</strong> affiliated with Pimlico Plumbers, Pimlico Journal, or the Pimlico neighbourhood of London.</dd>
             </div>
           </dl>
         </div>
@@ -293,7 +293,7 @@ export default function AboutPage() {
               Gambling, Payments, Crypto and AI are the four sectors where regulation is expanding fastest and the consequences of getting it wrong are most severe. Teams operating across them are expected to track hundreds of jurisdictions, read thousands of sources, and translate raw regulatory change into decisions their business can act on.
             </p>
             <p>
-              We built XHS&trade; Copilot because we believe that work deserves a serious tool &mdash; primary-source monitoring, expert-curated jurisdiction reports, and Lens&trade; AI that operates on your own policies and context. One workspace your team actually uses, not another tab you avoid opening.
+              We built XHS&trade; Atlas because we believe that work deserves a serious tool &mdash; primary-source monitoring, expert-curated jurisdiction reports, and Lens&trade; AI that operates on your own policies and context. One workspace your team actually uses, not another tab you avoid opening.
             </p>
             <p className="text-[var(--color-text-secondary)]">
               Every regulatory change. Analyzed.
@@ -352,7 +352,7 @@ export default function AboutPage() {
               </div>
               <div>
                 <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Product</dt>
-                <dd className="text-[var(--color-text-secondary)]">XHS&trade; Copilot</dd>
+                <dd className="text-[var(--color-text-secondary)]">XHS&trade; Atlas</dd>
               </div>
               <div>
                 <dt className="text-[10px] font-mono uppercase tracking-[0.15em] text-[var(--color-text-muted)] mb-1">Coverage</dt>

@@ -106,7 +106,7 @@ export default function OnboardingGuidePage() {
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-6">
             <h2 className="text-xl font-medium text-slate-900 mb-4">What is Pimlico XHS{'\u2122'}?</h2>
             <p className="text-sm text-slate-600 leading-relaxed mb-4">
-              Pimlico XHS{'\u2122'} is a regulatory intelligence platform that helps compliance, legal, and public affairs teams monitor, track, and act on regulatory changes across multiple jurisdictions. From real-time blocklist monitoring to competitor analysis and technical standards tracking, XHS gives your team the tools to stay ahead.
+              Pimlico XHS{'\u2122'} is a regulatory and market data workspace that helps compliance, legal, and public affairs teams monitor, track, and act on regulatory changes across multiple jurisdictions. From real-time blocklist monitoring to competitor analysis and technical standards tracking, XHS gives your team the tools to stay ahead.
             </p>
             <p className="text-sm text-slate-600 leading-relaxed">
               Your workspace is configured with the jurisdictions and verticals most relevant to your organization, so you only see what matters.

@@ -71,7 +71,7 @@ function buildSchema(t) {
     description: t.definition,
     inDefinedTermSet: {
       '@type': 'DefinedTermSet',
-      name: 'XHS Copilot Compliance Glossary',
+      name: 'XHS™ Atlas Compliance Glossary',
       url: `${BASE}/glossary`,
     },
     url: pageUrl,
@@ -175,7 +175,7 @@ export default async function GlossaryTermPage({ params }) {
           {/* Inline CTA — mid-content conversion surface */}
           <InlineCTA
             eyebrow="SEE IT LIVE"
-            headline={`${t.abbr || t.term} is one of thousands of signals XHS™ Copilot tracks.`}
+            headline={`${t.abbr || t.term} is one of thousands of signals XHS™ Atlas tracks.`}
             subhead="14-day trial. Every regulator, framework and jurisdiction change, in one workspace."
           />
 

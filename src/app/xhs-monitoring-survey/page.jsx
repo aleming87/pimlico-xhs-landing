@@ -372,7 +372,7 @@ export default function XHSMonitoringSurveyPage() {
         <div className="mx-auto max-w-3xl">
           <div className="text-center mb-12 pt-12">
             <h1 className="text-4xl font-medium tracking-tight text-white sm:text-5xl mb-4">
-              XHS™ Copilot Feedback
+              XHS™ Atlas Feedback
             </h1>
             <p className="text-lg text-gray-300 mb-2">
               Help us understand how you're finding the platform so we can continue to improve it for you
@@ -507,7 +507,7 @@ export default function XHSMonitoringSurveyPage() {
               <StarRating
                 value={depthRating}
                 onChange={setDepthRating}
-                label="Depth & detail of regulatory intelligence"
+                label="Depth & detail of regulatory and market data"
                 required
               />
               <StarRating

@@ -138,7 +138,7 @@ export function renderEmail({
                 <tr>
                   <td colspan="2" style="padding-top: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 400; color: ${BRAND.textMuted}; line-height: 1.6;">
                     &copy; ${year} Pimlico Solutions Ltd. All rights reserved.<br>
-                    You're receiving this email because you contacted Pimlico XHS&trade; Copilot.
+                    You're receiving this email because you contacted Pimlico XHS&trade; Atlas.
                   </td>
                 </tr>
               </table>

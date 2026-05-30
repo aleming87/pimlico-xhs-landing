@@ -390,7 +390,7 @@ export default function ArticlesPage() {
     ${tagsHtml ? `<div class="tags">${tagsHtml}</div>` : ''}
   </div>
   <div class="content">${bodyHtml}</div>
-  <div class="footer">\u00A9 ${new Date().getFullYear()} Pimlico XHS\u2122 \u2014 Cross-Border Regulatory Intelligence \u2014 pimlicosolutions.com</div>
+  <div class="footer">\u00A9 ${new Date().getFullYear()} Pimlico XHS\u2122 \u2014 Cross-Border Regulatory & Market Data \u2014 pimlicosolutions.com</div>
 </body></html>`;
 
     const printWin = window.open('', '_blank', 'width=800,height=900');
