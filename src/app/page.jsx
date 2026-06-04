@@ -28,8 +28,8 @@ export default function Page() {
     },
     "offers": {
       "@type": "AggregateOffer",
-      "lowPrice": "660",
-      "highPrice": "8800",
+      "lowPrice": "710",
+      "highPrice": "9400",
       "priceCurrency": "GBP",
       "offerCount": "4",
       "availability": "https://schema.org/InStock",
@@ -167,7 +167,7 @@ export default function Page() {
         "name": "Is XHS™ Atlas available now?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. XHS™ Atlas is live and generally available to regulated teams worldwide today. It is a production product, not a beta. Teams can start immediately with a 14-day free trial at pimlicosolutions.com/contact — up to 8 jurisdictions, no credit card required. Paid plans start at £660 per month and scale to enterprise deployments with 100+ seats."
+          "text": "Yes. XHS™ Atlas is live and generally available to regulated teams worldwide today. It is a production product, not a beta. Teams can start immediately with a 14-day free trial at pimlicosolutions.com/contact — up to 8 jurisdictions, no credit card required. Paid plans start at £710 per month and scale to enterprise deployments with 100+ seats."
         }
       },
       {

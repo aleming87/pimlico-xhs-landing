@@ -9,11 +9,11 @@ import { buildContactUrl, buildTrialUrl, getStoredInboundParams } from "@/lib/tr
 // ── Pricing model (mirrored from platform commercialPricingModel.ts) ──
 
 const USER_BANDS = [
-  { key: "1_3", min: 1, max: 3, included: 3, baseAnnual: 7950, seatMonthly: 31 },
-  { key: "4_10", min: 4, max: 10, included: 10, baseAnnual: 12500, seatMonthly: 22 },
-  { key: "11_25", min: 11, max: 25, included: 15, baseAnnual: 24000, seatMonthly: 18 },
-  { key: "26_100", min: 26, max: 100, included: 50, baseAnnual: 48000, seatMonthly: 13 },
-  { key: "101_plus", min: 101, max: 150, included: 100, baseAnnual: 105570, seatMonthly: 11 },
+  { key: "1_3", min: 1, max: 3, included: 3, baseAnnual: 8500, seatMonthly: 33 },
+  { key: "4_10", min: 4, max: 10, included: 10, baseAnnual: 13400, seatMonthly: 24 },
+  { key: "11_25", min: 11, max: 25, included: 15, baseAnnual: 25700, seatMonthly: 19 },
+  { key: "26_100", min: 26, max: 100, included: 50, baseAnnual: 51400, seatMonthly: 14 },
+  { key: "101_plus", min: 101, max: 150, included: 100, baseAnnual: 113000, seatMonthly: 12 },
 ];
 
 const COVERAGE = [
@@ -337,7 +337,7 @@ export default function PricingPage() {
                     </p>
                     <div className="mb-2 flex items-baseline gap-2">
                       <span className="text-3xl font-medium tabular-nums text-[var(--color-text-primary)] font-mono">
-                        £3k&ndash;8k
+                        £3k&ndash;9k
                       </span>
                       <span className="text-xs text-[var(--color-text-muted)]">/mo typical</span>
                     </div>

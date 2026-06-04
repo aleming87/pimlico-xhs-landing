@@ -1,19 +1,19 @@
 export const metadata = {
   title: 'Pricing',
   description:
-    'Transparent pricing for XHS™ Atlas. From £660/month for 1-3 seat teams to enterprise plans at £8,800+/month. Pick your sectors, jurisdictions and team size. 14-day free trial, no credit card.',
+    'Transparent pricing for XHS™ Atlas. From £710/month for 1-3 seat teams to enterprise plans at £9,400+/month. Pick your sectors, jurisdictions and team size. 14-day free trial, no credit card.',
   alternates: { canonical: '/pricing' },
   openGraph: {
     title: 'Pricing — XHS™ Atlas',
     description:
-      'Transparent pricing from £660/month. Pick your sectors, jurisdictions and team size. 14-day free trial.',
+      'Transparent pricing from £710/month. Pick your sectors, jurisdictions and team size. 14-day free trial.',
     url: 'https://pimlicosolutions.com/pricing',
     images: ['/og-default.jpg'],
   },
   twitter: {
     title: 'Pricing — XHS™ Atlas',
     description:
-      'Transparent pricing from £660/month. 14-day free trial, no credit card.',
+      'Transparent pricing from £710/month. 14-day free trial, no credit card.',
     images: ['/og-default.jpg'],
   },
 }
@@ -43,8 +43,8 @@ const productSchema = {
   offers: {
     '@type': 'AggregateOffer',
     priceCurrency: 'GBP',
-    lowPrice: '660',
-    highPrice: '8800',
+    lowPrice: '710',
+    highPrice: '9400',
     offerCount: '5',
     availability: 'https://schema.org/InStock',
     priceValidUntil: '2026-12-31',
@@ -64,7 +64,7 @@ const faqSchema = {
       name: 'How much does XHS™ Atlas cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'XHS™ Atlas pricing starts at £660 per month for teams of 1-3 seats with a single vertical and region, and scales to around £8,800 per month for enterprise deployments with 101+ seats, all four sectors and global coverage. The interactive configurator at pimlicosolutions.com/pricing produces an instant quote based on your exact team size, vertical mix and jurisdictional coverage.',
+        text: 'XHS™ Atlas pricing starts at £710 per month for teams of 1-3 seats with a single vertical and region, and scales to around £9,400 per month for enterprise deployments with 101+ seats, all four sectors and global coverage. The interactive configurator at pimlicosolutions.com/pricing produces an instant quote based on your exact team size, vertical mix and jurisdictional coverage.',
       },
     },
     {
@@ -88,7 +88,7 @@ const faqSchema = {
       name: 'How does per-seat pricing work?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Each plan includes a base seat count — 3 seats on the starter plan, up to 100 on the enterprise plan. Additional seats beyond the included allocation are billed monthly at a per-seat rate that decreases as team size grows (£31/seat at 1-3 seats, down to £11/seat at 101+ seats).',
+        text: 'Each plan includes a base seat count — 3 seats on the starter plan, up to 100 on the enterprise plan. Additional seats beyond the included allocation are billed monthly at a per-seat rate that decreases as team size grows (£33/seat at 1-3 seats, down to £12/seat at 101+ seats).',
       },
     },
     {
